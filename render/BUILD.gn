@@ -4,10 +4,6 @@ static_library("azer_devil_util") {
     "util/ilimage_wrapper.cc",
     "util/ilimage_wrapper.h",
   ]
-  deps = [
-    "//third_party/devil:devil",
-    "//third_party/devil:devilu",
-  ]
 }
 
 source_set("azer_skia") {
@@ -23,13 +19,11 @@ source_set("azer_skia") {
     "skia/device.cc",
     "skia/device.h",
   ]
-  deps = [
-    "//third_party/skia/gn:skia"
-  ]
-
-  configs += ["//build/config/win:d3d11",]
-  defines = ["BUILD_AZER_RENDER", "SK_ANGLE"]
-  include_dirs = ["//third_party/skia/src/gpu", ]
+  deps = ["//skia"]
+  configs += ["//azer/build/config/win:d3d11"]
+  configs += ["//azer/build/config/win:utf8src"]
+  defines = ["BUILD_AZER_RENDER"]
+  
 }
 
 shared_library("render") {
@@ -37,13 +31,6 @@ shared_library("render") {
     "../animation/bone.cc",
     "../animation/skeleton.cc",
     "../align.h",
-    "../base/hierarchy_transform.h",
-    "../base/movable.h",
-    "../base/string.cc",
-    "../base/string.h",
-    "../base/tree_node.h",
-    "../base/image.cc",
-    "../base/image.h",
     "../resources/content.h",
     "../resources/file_system.cc",
     "../resources/file_system.h",
@@ -128,6 +115,8 @@ shared_library("render") {
 
   deps = [
     "//azer/math:math",
+    "//azer/base:azer_build_info",
+    "//azer/base:base",
     "//azer/ui/widget:azer_ui_widget",
     "//ui/gfx:gfx",
     "//base:base",
@@ -135,6 +124,7 @@ shared_library("render") {
     ":azer_skia",
   ]
 
+  configs += ["//azer/build/config/win:utf8src"]
   defines = ["BUILD_AZER_RENDER"]
   forward_dependent_configs_from = deps
 }
@@ -154,14 +144,14 @@ test("render_unittest") {
   ]
 
   defines = ["AZER_UNITTEST"]
-
   deps = [
     "//azer/math:math",
-    "//base:test_main",
-    "//third_party/glm:glm",
-    "//third_party/gtest:gtest",
+    "//azer/third_party/glm:glm",
+    "//base/test:run_all_unittests",
+    "//testing/gtest",
     ":render",
   ]
 
   if (is_win) {deps += ["//azer/render_system/d3d11:d3d11_render_system"]}
+  configs += ["//azer/build/config/win:utf8src"]
 }

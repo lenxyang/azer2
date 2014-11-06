@@ -3,21 +3,11 @@ group("azer") {
   deps = [
     "//azer/math:math",
     "//azer/render:render",
-    "//azer/afx:afx",
+    "//azer/afx:afxlib",
+    "//azer/afx:afxc",
     "//azer/render_system/d3d11:d3d11_render_system",
   ]
 }
-
-group("azer_unittest") {
-  deps = [
-    "//azer/afx:afx_unittest",
-    "//azer/math:math_unittest",
-    "//azer/render:render_unittest",
-  ]
-}
-
-
-
 
 
 

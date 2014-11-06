@@ -1,16 +1,17 @@
 #include "azer/render/util/ilimage_wrapper.h"
 
-#include "base/file_util.h"
+#include "base/files/file_util.h"
 #include "base/files/file_path.h"
 #include "base/logging.h"
 #include "base/strings/string16.h"
 #include "base/strings/string_util.h"
 #include "azer/base/string.h"
 
-#include "IL/ilu.h"
+// #include "IL/ilu.h"
 
 namespace azer {
 namespace detail {
+/*
 ilImageWrapper::~ilImageWrapper() {
   if (image_id_ != (uint32)-1) {
     ilDeleteImages(1, &image_id_);
@@ -231,5 +232,6 @@ void ilImageWrapper::CreateImage(std::vector<ImageDataPtr>* imgs) {
     Create2DImage(imgs);
   }
 }
+*/
 }  // namespace detail
 }  // namespace azer

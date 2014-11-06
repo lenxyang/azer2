@@ -4,7 +4,6 @@
 #include "gl/GrGLDefines.h"
 #include "gl/GrGLUtil.h"
 #include "gl/GrGLInterface.h"
-#include "gl/SkGLContextHelper.h"
 #include "SkCanvas.h"
 #include "SkGpuDevice.h"
 #include "GrTexture.h"
@@ -36,7 +35,7 @@ Context::~Context() {
 bool Context::Init() {
   // code reference: skia/include/gpu/GrContextFactory.h
   helper_ = new AzerSkiaGrContext(1, 1);
-  SkGLContextHelper* glctx = helper_;
+  SkGLContext* glctx = helper_;
   static const int kBogusSize = 1;
   if (!glctx->init(kBogusSize, kBogusSize)) {
     LOG(ERROR) << "Failed to init GrContext";

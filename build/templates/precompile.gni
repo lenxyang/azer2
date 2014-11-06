@@ -1,0 +1,49 @@
+#
+# precompile("wxbase_config") {
+#   prehpp = ""
+#   precpp  = ""
+#   cppconfigs  = []
+# }
+#
+template("precompile") {
+  assert(defined(invoker.precpp))
+  assert(defined(invoker.prehpp))
+
+  library_name = target_name
+  mkdir_target = target_name + "_path"
+  prec_target = target_name + "_prec"
+  config_target = target_name + "_config"
+  action(mkdir_target) {
+    script = "//azer/build/tools/shell/mkdir.py"
+    outputs = [target_gen_dir]
+    args = [target_gen_dir]
+  }
+
+  source_set(prec_target) {
+    sources = [invoker.precpp]
+    cflags = [
+      "/Yc\"" + invoker.prehpp + "\"",
+      "/Fp\"$target_gen_dir/$library_name.pch\"",
+    ]
+    include_dirs = ["$target_gen_dir"]
+    deps = [":$mkdir_target"]
+  }
+
+  config(config_target) {
+    cflags = [
+      "/Yu\"" + invoker.prehpp + "\"",
+      "/Fp\"$target_gen_dir/$target_name.pch\"",
+    ]
+  }
+
+  source_set(library_name) {
+    sources = [invoker.precpp]
+    direct_dependent_configs = [":$config_target"]
+    if (defined(invoker.direct_dependent_configs)) {
+      direct_dependent_configs += invoker.direct_dependent_configs
+    }
+    deps = [":$prec_target"]
+    configs -= ["//build/config/win:lean_and_mean"]
+    if (defined(invoker.cppconfigs)) { configs += invoker.cppconfigs}
+  }
+}

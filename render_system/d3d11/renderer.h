@@ -25,54 +25,54 @@ class D3D11Renderer : public Renderer {
   D3D11Renderer(ID3D11DeviceContext* context, D3D11RenderSystem* rs);
   ~D3D11Renderer();
 
-  virtual void Reset() OVERRIDE;
-  virtual void Use() OVERRIDE;
-  virtual const std::string& name() const OVERRIDE;
+  virtual void Reset() override;
+  virtual void Use() override;
+  virtual const std::string& name() const override;
 
-  virtual bool IsDepthTestEnable() OVERRIDE;
-  virtual void EnableDepthTest(bool enable) OVERRIDE;
+  virtual bool IsDepthTestEnable() override;
+  virtual void EnableDepthTest(bool enable) override;
 
-  virtual FillMode GetFillMode(void) OVERRIDE;
-  virtual void SetFillMode(FillMode mode) OVERRIDE;
-  virtual CullingMode GetCullingMode(void) OVERRIDE;
-  virtual void SetCullingMode(CullingMode mode) OVERRIDE;
-  virtual FrontFace GetFrontFace() OVERRIDE;
-  virtual void SetFrontFace(FrontFace mode) OVERRIDE;
-  virtual void EnableMultisampleAntiAliasing(bool enable) OVERRIDE;
-  virtual bool IsMultisampleAntiAliasingEnabled() OVERRIDE;
-  virtual void EnableLineAntialiasing(bool enable) OVERRIDE;
-  virtual bool IsLineAntialiasingEnabled() OVERRIDE;
+  virtual FillMode GetFillMode(void) override;
+  virtual void SetFillMode(FillMode mode) override;
+  virtual CullingMode GetCullingMode(void) override;
+  virtual void SetCullingMode(CullingMode mode) override;
+  virtual FrontFace GetFrontFace() override;
+  virtual void SetFrontFace(FrontFace mode) override;
+  virtual void EnableMultisampleAntiAliasing(bool enable) override;
+  virtual bool IsMultisampleAntiAliasingEnabled() override;
+  virtual void EnableLineAntialiasing(bool enable) override;
+  virtual bool IsLineAntialiasingEnabled() override;
 
-  virtual void UseBlending(Blending* blending, float* factor, uint32 mask) OVERRIDE;
-  virtual void ResetBlending() OVERRIDE;
+  virtual void UseBlending(Blending* blending, float* factor, uint32 mask) override;
+  virtual void ResetBlending() override;
 
   virtual void UseConstantsTable(RenderPipelineStage stage,
-                                 GpuConstantsTable* table) OVERRIDE;
+                                 GpuConstantsTable* table) override;
 
   // texutre functions
-  virtual void UseTexture(RenderPipelineStage stage, int index, Texture* texture) OVERRIDE;
-  virtual void ResetShader(RenderPipelineStage stage) OVERRIDE;
+  virtual void UseTexture(RenderPipelineStage stage, int index, Texture* texture) override;
+  virtual void ResetShader(RenderPipelineStage stage) override;
 
-  virtual void Clear(const azer::Vector4& color) OVERRIDE;
+  virtual void Clear(const azer::Vector4& color) override;
   virtual void ClearDepthAndStencil(DepthBuffer::ClearFlag,
-                                    float depth_val, int stencil_val) OVERRIDE;
+                                    float depth_val, int stencil_val) override;
   
   virtual void Draw(VertexBuffer* vb, PrimitiveTopology primitive,
-                      int32 num_of_vertices, int32 first_vertex) OVERRIDE;
+                      int32 num_of_vertices, int32 first_vertex) override;
   virtual void DrawIndex(VertexBuffer* vb, IndicesBuffer* ib,
                          PrimitiveTopology primitive, int32 num_of_indices,
-                         int32 first_indices, int32 index_base) OVERRIDE;
+                         int32 first_indices, int32 index_base) override;
   virtual void DrawInstanced(int32 instance_num, VertexBuffer* vb,
                              PrimitiveTopology primitive,
                              int32 num_of_vertices, int32 first_vertex,
-                             int32 instance_start_index) OVERRIDE;
+                             int32 instance_start_index) override;
   virtual void DrawIndexInstanced(int32 instance_num, VertexBuffer* vb,
                                   IndicesBuffer* ib, PrimitiveTopology primitive,
                                   int32 num_of_indices, int32 first_indices,
                                   int32 index_base,
-                                  int32 instance_start_index) OVERRIDE;
+                                  int32 instance_start_index) override;
 
-  virtual void SetViewport(const Viewport& viewport) OVERRIDE;
+  virtual void SetViewport(const Viewport& viewport) override;
   
   ID3D11DeviceContext* GetContext() {
     CHECK(NULL != d3d_context_);

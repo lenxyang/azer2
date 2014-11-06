@@ -51,10 +51,10 @@ class AZER_EXPORT Mesh : public Renderable {
 
   void Add(SubMeshPtr ptr) { subs_.push_back(ptr);}
 
-  virtual void PrepareEffect(Renderer* renderer, Effect* effect) OVERRIDE {
+  virtual void PrepareEffect(Renderer* renderer, Effect* effect) override {
     effect_ = effect;
   }
-  virtual void Render(Renderer* renderer) OVERRIDE;
+  virtual void Render(Renderer* renderer) override;
 
   virtual void RenderBoundingVolumn(Renderer* renderer, const Matrix4& wvp,
                                     const Camera& camera);

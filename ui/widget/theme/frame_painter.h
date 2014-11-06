@@ -18,8 +18,8 @@ class AZER_WIDGET_EXPORT FramePainter : public Painter {
 class AZER_WIDGET_EXPORT SingleLineFramePainter : public Painter {
  public:
   SingleLineFramePainter(int32 width, uint32 color);
-  ~SingleLineFramePainter();
-  virtual void Paint(Widget* widget, const gfx::Rect& rect, Context* ctx) OVERRIDE;
+  virtual ~SingleLineFramePainter();
+  virtual void Paint(Widget* widget, const gfx::Rect& rect, Context* ctx) override;
  private:
   uint32 width_;
   uint32 color_;

@@ -21,8 +21,8 @@ class AZER_WIDGET_EXPORT Label : public Control {
   void SetText(const StringType& str) {text_ = str;}
   const StringType text() const { return text_;}
  public:
-  virtual void Redraw(bool force) OVERRIDE;
-  virtual void OnStyleChangled(StyleGroup* group) OVERRIDE;
+  virtual void Redraw(bool force) override;
+  virtual void OnStyleChangled(StyleGroup* group) override;
 
   static const std::string kTextPainterName;
   static const std::string kBorderPainterName;

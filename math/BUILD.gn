@@ -35,6 +35,7 @@ static_library("math") {
   ]
 
   deps = ["//base:base"]
+  configs += ["//azer/build/config/win:utf8src"]
 }
 
 test("math_unittest") {
@@ -48,9 +49,9 @@ test("math_unittest") {
     "transform_unittest.cc",
   ]
   deps = [
-    "//third_party/glm:glm",
-    "//third_party/gtest:gtest",
-    "//base:test_main",
+    "//azer/third_party/glm:glm",
+    "//base/test:run_all_unittests",
     ":math",
   ]
+  configs += ["//azer/build/config/win:utf8src"]
 }

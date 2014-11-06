@@ -28,7 +28,7 @@ class D3D11VertexGpuProgram : public VertexGpuProgram {
     SAFE_RELEASE(input_layout_);
   }
 
-  virtual bool Init(RenderSystem* rs) OVERRIDE;
+  virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11VertexShader* shader_;
   ID3D11InputLayout *input_layout_;
@@ -49,7 +49,7 @@ class D3D11PixelGpuProgram : public GpuProgram {
     SAFE_RELEASE(shader_);
   }
 
-  virtual bool Init(RenderSystem* rs) OVERRIDE;
+  virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11PixelShader* shader_;
   friend class D3D11Renderer;
@@ -68,7 +68,7 @@ class D3D11GeometryGpuProgram : public GpuProgram {
     SAFE_RELEASE(shader_);
   }
 
-  virtual bool Init(RenderSystem* rs) OVERRIDE;
+  virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11GeometryShader* shader_;
 

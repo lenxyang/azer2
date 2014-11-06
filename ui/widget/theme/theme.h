@@ -45,7 +45,7 @@ class AZER_EXPORT DefaultTheme : public Theme {
  public:
   DefaultTheme();
   virtual ~DefaultTheme();
-  virtual bool Init() OVERRIDE;
+  virtual bool Init() override;
 
   StyleGroup* control_group() { return control_group_.get();}
 

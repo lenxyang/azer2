@@ -19,6 +19,8 @@
 namespace azer {
 namespace skia {
 
+using ::base::FilePath;
+
 // class Canvas
 Canvas::Canvas(int width, int height, Context* ctx)
     : width_(width)
@@ -51,7 +53,7 @@ TexturePtr& Canvas::GetTexture() {
 }
 
 namespace {
-SkImageEncoder::Type ImageType(const ::base::FilePath::StringType& ext) {
+SkImageEncoder::Type ImageType(const FilePath::StringType& ext) {
   if (ext ==  FILE_PATH_LITERAL(".bmp")) {
     return SkImageEncoder::kBMP_Type;
   } else if (ext == FILE_PATH_LITERAL(".png")) {
@@ -67,13 +69,15 @@ SkImageEncoder::Type ImageType(const ::base::FilePath::StringType& ext) {
 }
 }
 
-bool Canvas::Save(const ::base::FilePath& path) {
+bool Canvas::Save(const FilePath& path) {
   DCHECK(device_ != NULL);
-  const ::base::FilePath::StringType ext = StringToLowerASCII(path.Extension());
+  const FilePath::StringType ext = ::base::StringToLowerASCII(path.Extension());
   SkImageEncoder::Type type = ImageType(ext);
   std::string pathstr = ::base::WideToUTF8(path.value());
   SkBitmap bitmap;
-  bitmap.setConfig(SkBitmap::kARGB_8888_Config, width(), height());
+  SkImageInfo info = SkImageInfo::Make(width(), height(), kRGBA_8888_SkColorType,
+                                       kOpaque_SkAlphaType);
+  bitmap.setInfo(info);
   bitmap.allocPixels();
   device_->GetCanvas()->readPixels(&bitmap, 0, 0);
   return SkImageEncoder::EncodeFile(pathstr.c_str(), bitmap, type, 100);

@@ -25,37 +25,37 @@ class D3D11RenderSystem : public RenderSystem {
   ~D3D11RenderSystem();
 
   bool Init();
-  virtual const StringType& name() const OVERRIDE;
-  virtual const StringType& short_name() const OVERRIDE;
+  virtual const StringType& name() const override;
+  virtual const StringType& short_name() const override;
 
-  virtual Renderer* CreateRenderer(const Texture::Options& opt) OVERRIDE;
-  virtual Renderer* CreateDeferredRenderer(const Texture::Options& opt) OVERRIDE;
-  virtual Blending* CreateBlending(const Blending::Desc& desc) OVERRIDE;
+  virtual Renderer* CreateRenderer(const Texture::Options& opt) override;
+  virtual Renderer* CreateDeferredRenderer(const Texture::Options& opt) override;
+  virtual Blending* CreateBlending(const Blending::Desc& desc) override;
   virtual VertexBuffer* CreateVertexBuffer(const VertexBuffer::Options& opt,
-                                           VertexData*) OVERRIDE;
+                                           VertexData*) override;
   virtual IndicesBuffer* CreateIndicesBuffer(const IndicesBuffer::Options& opt,
-                                             IndicesData*) OVERRIDE;
+                                             IndicesData*) override;
   virtual GpuConstantsTable* CreateGpuConstantsTable(
-      int32 num, const GpuConstantsTable::Desc* desc) OVERRIDE;
+      int32 num, const GpuConstantsTable::Desc* desc) override;
 
   // texutre functions
-  virtual Texture* CreateTexture(const Texture::Options& opt) OVERRIDE;
+  virtual Texture* CreateTexture(const Texture::Options& opt) override;
   virtual Texture* CreateTexture(const Texture::Options& opt,
-                                 const Image* image) OVERRIDE;
+                                 const Image* image) override;
   // virtual RenderTarget* CreateRenderTarget(const Texture::Options& opt);
   // virtual DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
 
   virtual VertexGpuProgram* CreateVertexGpuProgram(VertexDescPtr desc,
-                                                   const std::string& str) OVERRIDE;
+                                                   const std::string& str) override;
   virtual GpuProgram* CreateGpuProgram(RenderPipelineStage stage,
-                                       const std::string& program) OVERRIDE;
-  virtual Overlay* CreateOverlay(const gfx::RectF& rect) OVERRIDE;
-  virtual Technique* CreateTechnique() OVERRIDE;
+                                       const std::string& program) override;
+  virtual Overlay* CreateOverlay(const gfx::RectF& rect) override;
+  virtual Technique* CreateTechnique() override;
 
-  virtual bool Present() OVERRIDE;
-  virtual bool reset() OVERRIDE;
+  virtual bool Present() override;
+  virtual bool reset() override;
 
-  virtual AzerEGLInterface* GetEGLInterface() OVERRIDE;
+  virtual AzerEGLInterface* GetEGLInterface() override;
 
   /**
    * direct3d relevent

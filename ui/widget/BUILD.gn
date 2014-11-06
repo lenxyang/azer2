@@ -15,7 +15,7 @@ source_set("azer_ui_widget") {
     "coordinate_transform.h",
     "context.cc",
     "context.h",
-    "export.h"
+    "export.h",
     "theme/border.cc",
     "theme/border.h",
     "theme/common_painter.cc",
@@ -43,11 +43,8 @@ source_set("azer_ui_widget") {
     "widget.h",
   ]
 
-  deps = [
-    "//third_party/skia/gn:skia"
-  ]
+  deps = ["//skia" ]
 
-  configs += ["//build/config/win:d3d11",]
-  defines = ["BUILD_AZER_RENDER", "SK_ANGLE", "BUILD_AZER_WIDGET"]
-  include_dirs = ["//third_party/skia/src/gpu", ]
+  configs += ["//azer/build/config/win:d3d11",]
+  defines = ["BUILD_AZER_RENDER", "BUILD_AZER_WIDGET"]
 }

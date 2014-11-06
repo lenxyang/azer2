@@ -1,0 +1,62 @@
+
+#
+# bison("glsl_parser") {
+#   sources = "a.flex"
+#   hpp = "a.h";
+#   cpp = "a.cpp";
+#   bison_flags = ["-y", "-v", "-p", "_mesa_glsl_"]
+#   bison_include_dirs
+# }
+#
+
+bison_binary_path = "//third_party/cygwin/bin/bison.exe"
+
+template("bison") {
+  assert(defined(invoker.source))
+  assert(defined(invoker.cpp))
+  assert(defined(invoker.hpp))
+
+  # where is source for static library when write BUILD.gn
+  bison_gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")
+  bison_src_dir = rebase_path(target_gen_dir, ".", root_build_dir)
+
+  bison_action_target = target_name + "_action"
+  action(bison_action_target) {
+    exec_script("//azer/build/tools/shell/mkdir.py", ["bison_gen_dir"])
+    script = "//build/gn_run_binary.py"
+    outputs = [
+      "$target_gen_dir/" + invoker.hpp,
+      "$target_gen_dir/" + invoker.cpp,
+    ]
+
+    bison_file_path = rebase_path(invoker.source, root_build_dir)
+    bison_path = rebase_path("$bison_binary_path", root_build_dir, ".")
+    args = [
+      bison_path,
+      bison_file_path,
+      "--defines=$bison_gen_dir/" + invoker.hpp,
+      "-o", "$bison_gen_dir/" + invoker.cpp,
+    ]
+    if(defined(invoker.bison_flags)) {args += invoker.bison_flags }
+  }
+
+  bison_config = target_name + "_action_config"
+  config(bison_config) {
+    include_dirs = [ bison_src_dir ]
+  }
+
+  static_library(target_name) {
+    sources = [
+      "$bison_src_dir/" + invoker.cpp,
+      "$bison_src_dir/" + invoker.hpp,
+    ]
+    defines = invoker.defines
+    deps = [":$bison_action_target"]
+    if (defined(invoker.direct_dependent_configs)) {
+      direct_dependent_configs = invoker.direct_dependent_configs
+    }
+    if (defined(invoker.bison_include_dirs)) {
+      include_dirs = invoker.bison_include_dirs
+    }
+  }
+}

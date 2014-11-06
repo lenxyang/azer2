@@ -20,8 +20,8 @@ class AZER_WIDGET_EXPORT Control : public Widget {
 
   Widget* parent() { return parent_;}
 
-  virtual void OnBoundsChanging(const gfx::Rect& newrect) OVERRIDE;
-  virtual void OnBoundsChanged(const gfx::Rect& newrect) OVERRIDE;
+  virtual void OnBoundsChanging(const gfx::Rect& newrect) override;
+  virtual void OnBoundsChanged(const gfx::Rect& newrect) override;
 
   static const std::string kTextPainterName;
   static const std::string kBorderPainterName;

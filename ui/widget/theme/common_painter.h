@@ -25,7 +25,7 @@ class AZER_WIDGET_EXPORT BackgroundPainter : public Painter {
  public:
   BackgroundPainter(uint32 bgcolor_argb);
   virtual ~BackgroundPainter();
-  virtual void Paint(Widget* widget, const gfx::Rect& rect, Context* ctx) OVERRIDE;
+  virtual void Paint(Widget* widget, const gfx::Rect& rect, Context* ctx) override;
  private:
   uint32 color_;
   DISALLOW_COPY_AND_ASSIGN(BackgroundPainter);
@@ -43,7 +43,7 @@ class AZER_WIDGET_EXPORT TextPainter : public Painter {
 
   TextPainter(uint32 font_argb, const std::string& fontstr);
   virtual ~TextPainter();
-  virtual void Paint(Widget* widget, const gfx::Rect& rect, Context* ctx) OVERRIDE;
+  virtual void Paint(Widget* widget, const gfx::Rect& rect, Context* ctx) override;
  private:
   uint32 color_;
   gfx::FontList fontlist_;

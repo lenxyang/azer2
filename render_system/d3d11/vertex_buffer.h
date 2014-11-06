@@ -17,8 +17,8 @@ class D3D11VertexBuffer : public VertexBuffer {
   /**
    * 对于 VertexBuffer 来说，它是不分行和列的， 仅仅知道大小
    */
-  virtual HardwareBufferDataPtr map(MapType flags) OVERRIDE;
-  virtual void unmap() OVERRIDE;
+  virtual HardwareBufferDataPtr map(MapType flags) override;
+  virtual void unmap() override;
 
   bool Initialized() const { return NULL != buffer_;}
  private:

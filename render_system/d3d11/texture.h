@@ -18,11 +18,11 @@ class D3D11Texture: public Texture {
 
   virtual ~D3D11Texture();
   virtual bool Init(const D3D11_SUBRESOURCE_DATA* data, int num);
-  virtual void GenerateMips(int level) OVERRIDE;
-  virtual bool SetSamplerState(const SamplerState& sampler_state) OVERRIDE;
+  virtual void GenerateMips(int level) override;
+  virtual bool SetSamplerState(const SamplerState& sampler_state) override;
 
-  virtual MapData map(MapType type) OVERRIDE;
-  virtual void unmap() OVERRIDE;
+  virtual MapData map(MapType type) override;
+  virtual void unmap() override;
 
   void UseForStage(RenderPipelineStage stage, int index, D3D11Renderer* renderer);
   void SetVSSampler(int index, D3D11Renderer* renderer);
@@ -58,10 +58,10 @@ class D3D11Texture2D : public D3D11Texture {
       : D3D11Texture(opt, rs) {
   }
 
-  virtual bool InitFromImage(const Image* image) OVERRIDE;
+  virtual bool InitFromImage(const Image* image) override;
  protected:
-  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) OVERRIDE;
-  virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) OVERRIDE;
+  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
+  virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
   friend class D3D11RenderTarget;
   friend class D3D11DepthBuffer;
   DISALLOW_COPY_AND_ASSIGN(D3D11Texture2D);
@@ -79,7 +79,7 @@ class D3D11Texture2DShared : public D3D11Texture2D {
   ID3D11Resource* GetSharedResource();
   HANDLE GetSharedHanle();
  protected:
-  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) OVERRIDE;
+  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
   virtual bool InitFromImage(const Image* image) { return false;}
 
   bool InitSharedResource();
@@ -97,7 +97,7 @@ class D3D11Texture2DExtern : public D3D11Texture2D {
   static D3D11Texture2DExtern* Create(HANDLE handle, D3D11RenderSystem* rs);
  private:
   void Attach(ID3D11Texture2D* tex);
-  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) OVERRIDE;
+  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
   virtual bool InitFromImage(const Image* image) { return false;}
   DISALLOW_COPY_AND_ASSIGN(D3D11Texture2DExtern);
 };
@@ -108,10 +108,10 @@ class D3D11TextureCubeMap : public D3D11Texture {
       : D3D11Texture(opt, rs) {
     
   }
-  virtual bool InitFromImage(const Image* image) OVERRIDE;
+  virtual bool InitFromImage(const Image* image) override;
  protected:
-  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) OVERRIDE;
-  virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) OVERRIDE;
+  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
+  virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
   DISALLOW_COPY_AND_ASSIGN(D3D11TextureCubeMap);
 };
 

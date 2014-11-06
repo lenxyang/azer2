@@ -43,7 +43,7 @@ class AZER_WIDGET_EXPORT Panel : public Control {
   Panel(PanelStylePtr& style, const gfx::Rect& rect, Widget* parent);
   virtual ~Panel() {}
 
-  virtual void Redraw(bool force) OVERRIDE;
+  virtual void Redraw(bool force) override;
  protected:
   PanelStylePtr style_;
  private:

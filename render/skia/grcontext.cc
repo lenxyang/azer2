@@ -11,6 +11,18 @@ AzerSkiaGrContext::AzerSkiaGrContext(int width, int height)
     : width_(width), height_(height) {
   DCHECK_GT(width_, 0);
   DCHECK_GT(height_, 0);
+  fGL.reset(createGLContext());
+  if (fGL.get() == NULL) {
+    destroyGLContext();
+    DLOG(ERROR) << "Failed to create GLContext";
+    return;
+  }
+
+  if (!fGL->validate()) {
+    DLOG(ERROR) << "Could valid ANGLE interface.\n";
+    destroyGLContext();
+    return;
+  }
 }
 
 AzerSkiaGrContext::~AzerSkiaGrContext() {
@@ -39,6 +51,7 @@ const GrGLInterface* AzerSkiaGrContext::createGLContext() {
 }
 
 void AzerSkiaGrContext::destroyGLContext() {
+  fGL.reset(NULL);
   if (agl_interface_) {
     agl_interface_->Destroy(&context_);
   }
@@ -47,8 +60,10 @@ void AzerSkiaGrContext::destroyGLContext() {
 void AzerSkiaGrContext::makeCurrent() const {
   DCHECK(agl_interface_ != NULL);
   if (!agl_interface_->MakeCurrent(&context_)) {
-    LOG(INFO) << "cannot set context!";
+    DLOG(ERROR) << "cannot set context!";
   }
+
+  DLOG(INFO) << "egl::makeCurrent on ANGLE interface!";
 }
 
 void AzerSkiaGrContext::swapBuffers() const {

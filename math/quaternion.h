@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include "azer/math/degree.h"
+#include "azer/math/logging.h"
 
 namespace azer {
 

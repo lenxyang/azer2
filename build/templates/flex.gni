@@ -1,0 +1,68 @@
+
+#
+# flex("glsl_parser") {
+#   source = "a.flex"
+#   hpp = "a.h";
+#   cpp = "a.cc";
+#   flex_flags = ["-y", "-v", "-p", "_mesa_glsl_"]
+#   flex_include_dirs
+# }
+#
+
+flex_binary_path = "//third_party/cygwin/bin/flex.exe"
+
+template("flex") {
+  assert(defined(invoker.source))
+  assert(defined(invoker.cpp))
+  assert(defined(invoker.hpp))
+
+  # where is source for static library when write BUILD.gn
+  flex_gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")
+  flex_src_dir = rebase_path(target_gen_dir, ".", root_build_dir)
+
+  flex_custom_target = target_name + "_custom"
+  action(flex_custom_target) {
+    exec_script("//azer/build/tools/shell/mkdir.py", ["$flex_gen_dir"])
+    script = "//build/gn_run_binary.py"
+    outputs = [
+      "$target_gen_dir/" + invoker.hpp,
+      "$target_gen_dir/" + invoker.cpp,
+    ]
+
+    flex_file_path = rebase_path(invoker.source, root_build_dir)
+    flex_path = rebase_path("$flex_binary_path", root_build_dir, ".")
+    args = [
+      flex_path,
+      flex_file_path,
+      "--header-file=$flex_gen_dir/" + invoker.hpp,
+      "-o", "$flex_gen_dir/" + invoker.cpp,
+    ]
+    if (defined(invoker.flex_flags)) { args += invoker.flex_flags }
+    args += ["$flex_file_path"]
+  }
+
+  flex_config = target_name + "_custom_config"
+  config(flex_config) {
+    defines = ["YY_NO_UNISTD_H"]
+    include_dirs = [ flex_src_dir ]
+  }
+
+  source_set(target_name) {
+    sources = [
+      "$flex_src_dir/" + invoker.hpp,
+      "$flex_src_dir/" + invoker.cpp,
+    ]
+    deps = [":$flex_custom_target"]
+    if (is_win) {
+      cflags = ["/FI io.h", "/wd 4003"]
+    }
+
+    direct_dependent_configs = [":$flex_config"]
+    if (defined(invoker.direct_dependent_configs)) {
+      direct_dependent_configs += invoker.direct_dependent_configs
+    }
+    if (defined(invoker.flex_include_dirs)) {
+      include_dirs = invoker.flex_include_dirs
+    }
+  }
+}

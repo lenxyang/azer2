@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <string.h>
-#include "base/build_info.h"
+#include "azer/base/build_info.h"
 #include "base/logging.h"
 
 
@@ -13,9 +13,9 @@ class NullStream {
 };
 
 inline const char* DebugRelativePath(const char* path) {
-  DCHECK_EQ(strstr(path, ::base::kBuildRootDir), path);
-  DCHECK_GT(strlen(path), ::base::kBuildRootDirLength + 1);
-  return path + ::base::kBuildRootDirLength + 1;
+  DCHECK_EQ(strstr(path, kBuildRootDir), path);
+  DCHECK_GT(strlen(path), kBuildRootDirLength + 1);
+  return path + kBuildRootDirLength + 1;
 }
 
 inline std::string RelativePath(const std::string& path) {

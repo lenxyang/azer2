@@ -1,0 +1,23 @@
+import("//azer/build/templates/bison.gni")
+
+bison("afx_preprocessor_parser") {
+  source = "preprocessor.y"
+  hpp = "preprocessor_tab.h"
+  cpp = "preprocessor_tab.cpp"
+  bison_flags = ["-t", "--report=state", "-Werror"]
+  defines = ["yyparse=preprocessor_yyparse", "yydebug=preprocessor_yydebug"]
+}
+
+
+source_set("afx_preprocessor") {
+  sources = [
+    "parser.cc",
+    "parser.h",
+    "tokenizer.cc",
+    "tokenizer.h",
+  ]
+  deps = [
+    ":afx_preprocessor_parser",
+    "//base:base",
+  ]
+}

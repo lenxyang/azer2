@@ -1,0 +1,59 @@
+import("//azer/build/templates/bison.gni")
+import("//azer/build/templates/flex.gni")
+
+config("afx_lexyacc_config") {
+  defines = [
+    "YY_DECL=int yylex(YYSTYPE* yylval, azer::afx::ParseContext* context)"
+  ]
+}
+
+bison("afx_effect_parser") {
+  source = "afxlang.y"
+  hpp = "afxlang_tab.h"
+  cpp = "afxlang_tab.cpp"
+  bison_flags = ["-t", "--report=state"]
+  direct_dependent_configs = [":afx_lexyacc_config"]
+  defines = ["yyparse=afx_yyparse", "yydebug=afx_yydebug"]
+}
+
+flex("afx_effect_lex") {
+  source = "tokenizer.lex"
+  hpp = "lex.h"
+  cpp = "lex.cc"
+  direct_dependent_configs = [":afx_lexyacc_config"]
+}
+
+source_set("afx_compiler") {
+  sources = [
+    "astdump.cc",
+    "astdump.h",
+    "astnode.cc",
+    "astnode.h",
+    "builtin.cc",
+    "builtin.h",
+    "context.cc",
+    "context.h",
+    "context_validator.cc",
+    "context_validator.h",
+    "debug.h",
+    "expression_validator.cc",
+    "expression_validator.h",
+    "parser.cc",
+    "parser.h",
+    "syntax_validator.cc",
+    "syntax_validator.h",
+    "type.cc",
+    "type.h",
+    "util.cc",
+    "util.h",
+    "value.cc",
+    "value.h",
+  ]
+
+  deps = [
+    "//base:base",
+    "//azer/base",
+    ":afx_effect_lex",
+    ":afx_effect_parser",
+  ]
+}

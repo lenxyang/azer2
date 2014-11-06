@@ -11,8 +11,8 @@ source_set("azer_angle11") {
   ]
 
   configs += [
-    "//third_party/angle:angle_libGLESv2_config"
-    "//build/config/win:d3d11",
+    "//azer/third_party/angle:angle_libGLESv2_config",
+    "//azer/build/config/win:d3d11",
   ]
   defines = ["BUILD_D3D11_AZER_RENDER_SYSTEM"]
 }
@@ -61,7 +61,7 @@ shared_library("d3d11_render_system") {
   ]
   defines = ["BUILD_D3D11_AZER_RENDER_SYSTEM"]
   configs += [
-    "//build/config/win:d3d11",
+    "//azer/build/config/win:d3d11",
   ]
   defpath = rebase_path("../render_system.def", ".", root_build_dir)
   if (is_win) { ldflags = ["/DEF:$defpath"]}

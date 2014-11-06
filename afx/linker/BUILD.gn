@@ -1,0 +1,18 @@
+
+source_set("afx_linker") {
+  sources = [
+    "afx_parser.cc",
+    "afx_parser.h",
+    "dependency_tree.cc",
+    "dependency_tree.h",
+    "depend_calactor.cc",
+    "depend_calactor.h",
+    "linker.cc",
+    "linker.h",
+    "program.cc",
+    "program.h",
+    "technique_parser.cc",
+    "technique_parser.h",
+  ]
+  deps = ["//base:base"]
+}

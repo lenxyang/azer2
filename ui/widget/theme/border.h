@@ -19,7 +19,7 @@ class AZER_WIDGET_EXPORT BorderPainter : public Painter {
 class AZER_WIDGET_EXPORT NoneBorderPainter : public Painter {
  public:
   NoneBorderPainter() {}
-  virtual void Paint(Widget* w, const gfx::Rect& r,  Context* ctx) OVERRIDE {};
+  virtual void Paint(Widget* w, const gfx::Rect& r,  Context* ctx) override {};
  private:
   DISALLOW_COPY_AND_ASSIGN(NoneBorderPainter);
 };
@@ -27,7 +27,7 @@ class AZER_WIDGET_EXPORT NoneBorderPainter : public Painter {
 class AZER_WIDGET_EXPORT SingeLineBorderPainter : public Painter {
  public:
   SingeLineBorderPainter(int32 width, uint32 color);
-  virtual void Paint(Widget* w, const gfx::Rect& r,  Context* ctx) OVERRIDE;
+  virtual void Paint(Widget* w, const gfx::Rect& r,  Context* ctx) override;
  private:
   int32 width_;
   uint32 color_;

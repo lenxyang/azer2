@@ -12,7 +12,7 @@ class AZER_WIDGET_EXPORT ShadowBorder : public BorderPainter {
   ShadowBorder(int32 blur, uint32 argb, int32 vertical_offset,
                int32 horizontal_offset);
   ~ShadowBorder();
-  virtual void Paint(Widget* widget, const gfx::Rect& rect, Context* ctx) OVERRIDE;
+  virtual void Paint(Widget* widget, const gfx::Rect& rect, Context* ctx) override;
   gfx::Insets GetInsets() const;
  private:
   // blur amount of pixel

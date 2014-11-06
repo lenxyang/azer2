@@ -15,8 +15,8 @@ class D3D11IndicesBuffer : public IndicesBuffer {
     SAFE_RELEASE(buffer_);
   }
 
-  virtual HardwareBufferDataPtr map(MapType flags) OVERRIDE;
-  virtual void unmap() OVERRIDE;
+  virtual HardwareBufferDataPtr map(MapType flags) override;
+  virtual void unmap() override;
 
   bool Initialized() { return NULL != buffer_;}
  private:

@@ -160,7 +160,7 @@ inline Quaternion Quaternion::Inverse() const {
 
 inline Quaternion Quaternion::UnitInverse() const {
   // assert:  'this' is unit length
-  DCHECK_FLOAT_EQ(length(), 1.0);
+  DCHECK_FLOAT_EQ(length(), 1.0f);
   return Quaternion(w,-x,-y,-z);
 }
 

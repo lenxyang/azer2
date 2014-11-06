@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gl/SkGLContextHelper.h"
+#include "gl/SkGLContext.h"
 #include "base/basictypes.h"
 #include "azer/render/render_system.h"
 #include "azer/render/glcontext.h"
@@ -10,19 +10,19 @@ struct GrGLInterface;
 namespace azer {
 namespace skia {
 
-class AzerSkiaGrContext : public SkGLContextHelper {
+class AzerSkiaGrContext : public SkGLContext {
  public:
   AzerSkiaGrContext(int width, int height);
   virtual ~AzerSkiaGrContext();
 
-  virtual void makeCurrent() const OVERRIDE;
-  virtual void swapBuffers() const OVERRIDE;
+  virtual void makeCurrent() const override;
+  virtual void swapBuffers() const override;
 
   AzerEGLContext* GetAzerEGLContext() { return &context_;}
   AzerEGLInterface* GetAzerEGLInterface() { return agl_interface_;}
  protected:
-  virtual const GrGLInterface* createGLContext() OVERRIDE;
-  virtual void destroyGLContext() OVERRIDE;
+  const GrGLInterface* createGLContext();
+  void destroyGLContext();
  private:
   // AutoContextRestore auto_restore_;
   AzerEGLContext context_;

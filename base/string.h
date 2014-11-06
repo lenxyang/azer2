@@ -29,11 +29,6 @@ typedef StringType::value_type CharType;
 #define AZER_LITERAL(x) L ## x
 #endif  // OS_WIN
 
-AZER_EXPORT std::ostream& operator << (std::ostream& os, const wchar_t* str);
-inline std::ostream& operator << (std::ostream& os, const std::wstring& str) {
-  return os << str.c_str();
-}
-
 template<class T>
 void ConvertPath(const char *path, T*);
 

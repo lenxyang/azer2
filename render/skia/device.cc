@@ -8,7 +8,6 @@
 #include "SkImageInfo.h"
 #include "SkImageEncoder.h"
 #include "gl/GrGLInterface.h"
-#include "gl/SkGLContextHelper.h"
 #include "gl/GrGLFunctions.h"
 #include "gl/GrGLDefines.h"
 #include "gl/GrGLUtil.h"

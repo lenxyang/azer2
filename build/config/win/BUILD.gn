@@ -1,0 +1,31 @@
+
+declare_args() {
+  d3dsdk_path = "D:\Program Files (x86)\Microsoft DirectX SDK (June 2010)"
+}
+
+config("utf8src") {
+  cflags = []
+  if (is_win) { cflags += ["/wd4819"] }
+}
+
+config("d3d11") {
+  include_dirs = ["$d3dsdk_path/include"]
+  lib_dirs = ["$d3dsdk_path/Lib/x86"]
+  libs = ["dxguid.lib", "d3dcompiler.lib", "d3d11.lib"]
+  if (is_debug) {
+    libs +=  ["d3dx11.lib", "d3dx10.lib", ]
+  } else {
+    libs +=  ["d3dx11d.lib", "d3dx10d.lib", ]
+  }
+}
+
+config("d3d9") {
+  include_dirs = ["$d3dsdk_path/include"]
+  lib_dirs = ["$d3dsdk_path/Lib/x86"]
+  libs = ["dxguid.lib", "d3dcompiler.lib", "d3d9.lib"]
+  if (is_debug) {
+    libs +=  ["d3dx9.lib"]
+  } else {
+    libs +=  ["d3dx9d.lib"]
+  }
+}

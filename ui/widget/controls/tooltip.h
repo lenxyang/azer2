@@ -15,7 +15,7 @@ class AZER_WIDGET_EXPORT Tooltip : public Control {
   virtual ~Tooltip();
 
   void SetText(const StringType& text);
-  virtual void Redraw(bool force) OVERRIDE;
+  virtual void Redraw(bool force) override;
  private:
   StringType text_;
   DISALLOW_COPY_AND_ASSIGN(Tooltip);

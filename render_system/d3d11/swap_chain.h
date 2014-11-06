@@ -20,9 +20,9 @@ class D3D11SwapChain : public SwapChain {
   virtual ~D3D11SwapChain();
 
   bool Init(int width, int height);
-  virtual bool reset(int width, int height) OVERRIDE;
-  virtual bool resize(int width, int height) OVERRIDE;
-  virtual bool Present() OVERRIDE;
+  virtual bool reset(int width, int height) override;
+  virtual bool resize(int width, int height) override;
+  virtual bool Present() override;
   
   IDXGISwapChain* GetD3D11SwapChain();
  private:

@@ -1,0 +1,46 @@
+
+action("azer_build_info_action") {
+  gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")
+  exec_script("//azer/build/tools/shell/mkdir.py", [gen_dir])
+  
+  script = "//azer/build/tools/shell/buildinfo.py"
+  src_absolute_dir = rebase_path("//")
+  outputs = ["$target_gen_dir/build_info.cc"]
+  print(gen_dir)
+  print(src_absolute_dir)
+  args = [gen_dir, "build_info", src_absolute_dir]
+}
+
+static_library("azer_build_info") {
+  sources = [
+    "$target_gen_dir/build_info.cc",
+    "build_info.h",
+  ]
+  deps = [":azer_build_info_action"]
+}
+                              
+
+source_set("azer_appinit") {
+  sources = [
+    "appinit.cc",
+    "appinit.h",
+  ]
+  deps = ["//base"]
+}
+
+source_set("base") {
+  sources = [
+    "hierarchy_transform.h",
+    "movable.h",
+    "string.cc",
+    "string.h",
+    "tree_node.h",
+    "image.cc",
+    "image.h",
+  ]
+  deps = [
+    ":azer_build_info",
+    "//base",
+  ]
+  configs += ["//azer/build/config/win:utf8src"]
+}
