@@ -1,15 +1,13 @@
 source_set("azer_angle11") {
   sources = [
-    "angle/angle.cc",
-    "angle/angle.h",
     "angle/egl.cc",
     "angle/egl.h",
     "angle/module.cc",
     "angle/module.h",
   ]
   deps = [
-    "//third_party/angle:libGLESv2",
-    "//third_party/angle:libEGL",
+    "//azer/third_party/angle:libGLESv2",
+    "//azer/third_party/angle:libEGL",
     "//azer/render:render",
     "//skia",
   ]
@@ -73,6 +71,6 @@ shared_library("d3d11_render_system") {
     "//azer/build/config:d3d11",
     "//azer/build/config:utf8src",
   ]
-  defpath = rebase_path("../render_system.def", ".", root_build_dir)
+  defpath = rebase_path("../render_system.def", root_build_dir)
   if (is_win) { ldflags = ["/DEF:$defpath"]}
 }

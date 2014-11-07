@@ -14,7 +14,6 @@ template("precompile") {
   config_target = target_name + "_config"
 
   gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")
-
   source_set(prec_target) {
     exec_script("//azer/build/tools/shell/mkdir.py", [gen_dir])
     sources = [invoker.precpp]
@@ -38,6 +37,7 @@ template("precompile") {
     if (defined(invoker.direct_dependent_configs)) {
       direct_dependent_configs += invoker.direct_dependent_configs
     }
+
     deps = [":$prec_target"]
     configs -= ["//build/config/win:lean_and_mean"]
     if (defined(invoker.cppconfigs)) { configs += invoker.cppconfigs}

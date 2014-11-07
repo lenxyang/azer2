@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
-#include "azer/render/glcontext.h"
+#include "azer/render/egl.h"
 #include "azer/render/texture.h"
 
 struct GrGLInterface;
@@ -13,7 +13,7 @@ namespace azer {
  * 此处完成的功能是初始化 ANGLE
  */
 class D3D11RenderSystem;
-class AngleEGL : public AzerEGLInterface {
+class AngleEGL : public EGL {
  public:
   AngleEGL(D3D11RenderSystem* rs)
       : render_system_(rs) {}
