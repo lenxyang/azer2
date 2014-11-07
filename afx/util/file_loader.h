@@ -41,5 +41,8 @@ class MemoryFileLoader : public FileLoader {
   std::map<azer::StringType, std::string> content_;
   DISALLOW_COPY_AND_ASSIGN(MemoryFileLoader);
 };
+
+bool LoadFileToString(const ::base::FilePath& path, std::string* content,
+                      int32 max_size= 0x8FFFFFFF);
 }  // namespace afx
 }  // namespace azer

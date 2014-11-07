@@ -26,8 +26,7 @@ bool AfxWrapper::Parse(const FilePath& path, std::string* err,
   AfxLinker::Options opt;
   opt.parse_astree = false;
   parser_.reset(new AfxParser(includes_, opt));
-  parser_->Parse(path);
-  if (!parser_->success()) {
+  if (!parser_->Parse(path)) {
     std::stringstream ss;
     const std::string& compile_err = parser_->GetCompileError();
     if (!compile_err.empty()) {

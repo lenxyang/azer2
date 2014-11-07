@@ -39,12 +39,10 @@ class AfxParser {
   }
 
   std::string GetCompileError() const {
-    DCHECK(initializer_);
     return linker_.GetCompileError();
   }
 
   const std::string GetErrorText() const {
-    DCHECK(initializer_);
     return linker_.GetErrorText();
   }
  private:
