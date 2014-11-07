@@ -8,7 +8,6 @@ if __name__ == "__main__":
     buildinfo_file = sys.argv[2]
     absolute_build_path = os.path.normpath(sys.argv[3]);
     path_encoded = absolute_build_path.encode("string_escape");
-    print sys.argv;
     if (not os.path.exists(os.path.dirname(gen_dir))):
         os.makedirs(os.path.dirname(gen_dir))
 

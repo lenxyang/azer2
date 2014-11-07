@@ -22,7 +22,7 @@ template("bison") {
 
   bison_action_target = target_name + "_action"
   action(bison_action_target) {
-    exec_script("//azer/build/tools/shell/mkdir.py", ["bison_gen_dir"])
+    exec_script("//azer/build/tools/shell/mkdir.py", [bison_gen_dir])
     script = "//build/gn_run_binary.py"
     outputs = [
       "$target_gen_dir/" + invoker.hpp,

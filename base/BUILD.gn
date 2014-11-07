@@ -6,8 +6,6 @@ action("azer_build_info_action") {
   script = "//azer/build/tools/shell/buildinfo.py"
   src_absolute_dir = rebase_path("//")
   outputs = ["$target_gen_dir/build_info.cc"]
-  print(gen_dir)
-  print(src_absolute_dir)
   args = [gen_dir, "build_info", src_absolute_dir]
 }
 
