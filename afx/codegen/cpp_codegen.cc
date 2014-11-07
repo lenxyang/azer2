@@ -664,7 +664,7 @@ std::string UniformTypeIndex(const TypePtr& type) {
 }
 
 std::string UniformTypeName(ASTNode* node) {
-  TypePtr& type = GetNodeType(node);
+  TypePtr type = GetNodeType(node);
   switch(type->type()) {
     case kShort: return "short";
     case kInt32: return "int32";

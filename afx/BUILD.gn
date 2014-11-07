@@ -24,8 +24,8 @@ executable("afxc") {
   ]
   deps = [
     ":afxlib",
-    "//azer/base:azer_appinit",
-    "//azer/base:azer_build_info",
+    "//azer/base:appinit",
+    "//azer/base:build_info",
     "//base:base",
   ]
 }

@@ -1,5 +1,5 @@
 
-action("azer_build_info_action") {
+action("build_info_action") {
   gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")
   exec_script("//azer/build/tools/shell/mkdir.py", [gen_dir])
   
@@ -9,15 +9,15 @@ action("azer_build_info_action") {
   args = [gen_dir, "build_info", src_absolute_dir]
 }
 
-static_library("azer_build_info") {
+static_library("build_info") {
   sources = [
     "$target_gen_dir/build_info.cc",
     "build_info.h",
   ]
-  deps = [":azer_build_info_action"]
+  deps = [":build_info_action"]
 }
 
-source_set("azer_appinit") {
+source_set("appinit") {
   sources = [
     "appinit.cc",
     "appinit.h",
