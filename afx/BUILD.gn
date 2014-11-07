@@ -7,10 +7,10 @@ static_library("afxlib") {
   ]
   deps = [
     "//base:base",
-    "compiler:afx_compiler",
-    "codegen:afx_codegen",
-    "linker:afx_linker",
-    "preprocessor:afx_preprocessor",
+    "compiler",
+    "codegen",
+    "linker",
+    "preprocessor",
   ]
 }
 
@@ -54,6 +54,7 @@ test("afx_unittest") {
     "//base:base",
     "//base/test:run_all_unittests",
     "//testing/gtest",
+    "preprocessor:preprocessor_parser",
   ]
 
   gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")

@@ -52,12 +52,11 @@ template("bison") {
     ]
     defines = invoker.defines
     deps = [":$bison_action_target"]
+    direct_dependent_configs = [":$bison_config"]
     if (defined(invoker.direct_dependent_configs)) {
-      direct_dependent_configs = invoker.direct_dependent_configs
+      direct_dependent_configs += invoker.direct_dependent_configs
     }
-    if (defined(invoker.bison_include_dirs)) {
-      include_dirs = invoker.bison_include_dirs
-    }
+  
     if (is_win) { cflags = ["/wd4065"] }
   }
 }

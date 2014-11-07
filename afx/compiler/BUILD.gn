@@ -23,7 +23,7 @@ flex("afx_effect_lex") {
   direct_dependent_configs = [":afx_lexyacc_config"]
 }
 
-source_set("afx_compiler") {
+source_set("compiler") {
   sources = [
     "astdump.cc",
     "astdump.h",

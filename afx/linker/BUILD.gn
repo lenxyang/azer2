@@ -1,5 +1,5 @@
 
-source_set("afx_linker") {
+source_set("linker") {
   sources = [
     "afx_parser.cc",
     "afx_parser.h",

@@ -3,6 +3,7 @@
 #include "azer/afx/compiler/astnode.h"
 #include "base/strings/string_util.h"
 #include "base/strings/string_split.h"
+#include "azer/afx/util/file_loader.h"
 #include "base/files/file_util.h"
 #include <sstream>
 
@@ -54,7 +55,7 @@ std::string FormatCode(const std::string& code) {
 
 bool CompareCode(const ::base::FilePath& path, const std::string& content) {
   std::string content1;
-  if (!::base::ReadFileToString(path, &content1)) {
+  if (!azer::afx::LoadFileToString(path, &content1)) {
     return false;
   }
 

@@ -7,7 +7,8 @@
 #include "azer/afx/linker/technique_parser.h"
 #include "azer/afx/linker/linker.h"
 #include "azer/afx/linker/testutil.h"
-#include "base/file_util.h"
+#include "azer/afx/util/file_loader.h"
+#include "base/files/file_util.h"
 #include "gtest/gtest.h"
 
 using azer::afx::AfxLinker;
@@ -35,7 +36,7 @@ TEST(AfxCppCodeGen, Material) {
   azer::afx::FileLoader loader(inc);
   AfxLinker linker(&loader, opt);
   std::string content;
-  ASSERT_TRUE(::base::ReadFileToString(
+  ASSERT_TRUE(azer::afx::LoadFileToString(
       ::base::FilePath(AZER_LITERAL("azer/afx/testdata/mtrl.afx")), &content));
   EXPECT_TRUE(linker.Load(content, AFXL("azer/afx/testdata/mtrl.afx")));
 
@@ -70,7 +71,7 @@ TEST(AfxCppCodeGen, UniformArray) {
   azer::afx::FileLoader loader(inc);
   AfxLinker linker(&loader, opt);
   std::string content;
-  ASSERT_TRUE(::base::ReadFileToString(
+  ASSERT_TRUE(azer::afx::LoadFileToString(
       ::base::FilePath(AZER_LITERAL("azer/afx/testdata/bone.afx")), &content));
   EXPECT_TRUE(linker.Load(content, AFXL("azer/afx/testdata/bone.afx")));
 
@@ -106,7 +107,7 @@ TEST(AfxCppCodeGen, PointLight) {
   azer::afx::FileLoader loader(inc);
   AfxLinker linker(&loader, opt);
   std::string content;
-  ASSERT_TRUE(::base::ReadFileToString(::base::FilePath(afx_path), &content));
+  ASSERT_TRUE(azer::afx::LoadFileToString(::base::FilePath(afx_path), &content));
   EXPECT_TRUE(linker.Load(content, afx_path));
 
   LOG_IF(ERROR, !linker.success()) << linker.GetErrorText();
@@ -141,7 +142,7 @@ TEST(AfxCppCodeGen, TextureAdParam) {
   azer::afx::FileLoader loader(inc);
   AfxLinker linker(&loader, opt);
   std::string content;
-  ASSERT_TRUE(::base::ReadFileToString(::base::FilePath(afx_path), &content));
+  ASSERT_TRUE(azer::afx::LoadFileToString(::base::FilePath(afx_path), &content));
   EXPECT_TRUE(linker.Load(content, afx_path));
 
   LOG_IF(ERROR, !linker.success()) << linker.GetErrorText();

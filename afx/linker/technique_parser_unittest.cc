@@ -3,7 +3,8 @@
 #include "azer/afx/linker/technique_parser.h"
 #include "azer/afx/linker/linker.h"
 #include "azer/afx/linker/testutil.h"
-#include "base/file_util.h"
+#include "azer/afx/util/file_loader.h"
+#include "base/files/file_util.h"
 #include "gtest/gtest.h"
 
 using azer::afx::TechniqueParser;
@@ -23,7 +24,7 @@ TEST(TechniqueParseTest, VertexShader) {
   azer::afx::FileLoader loader(inc);
   AfxLinker linker(&loader, opt);
   std::string content;
-  ASSERT_TRUE(::base::ReadFileToString(
+  ASSERT_TRUE(azer::afx::LoadFileToString(
       base::FilePath(AZER_LITERAL("azer/afx/testdata/diffuse.afx")), &content));
   EXPECT_TRUE(linker.Load(content, AFXL("diffuse.afx")));
   DumpLinkError(&linker);
@@ -57,7 +58,7 @@ TEST(TechniqueParseTest, PiexelShader) {
   
   AfxLinker linker(&loader, opt);
   std::string content;
-  ASSERT_TRUE(::base::ReadFileToString(
+  ASSERT_TRUE(azer::afx::LoadFileToString(
       base::FilePath(AZER_LITERAL("azer/afx/testdata/effect.afx")), &content));
   EXPECT_TRUE(linker.Load(content, AFXL("effect.afx")));
   DumpLinkError(&linker);

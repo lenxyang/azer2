@@ -1,5 +1,5 @@
 
-source_set("afx_codegen") {
+source_set("codegen") {
   sources = [
     "afx_codegen.cc",
     "afx_codegen.h",

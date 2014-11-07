@@ -34,7 +34,7 @@ bool FileLoader::LoadFileToString(const ::base::FilePath& path,
     return false;
   }
 
-  return ::base::ReadFileToString(path, content);
+  return LoadFileToString(path, content);
 }
 
 bool MemoryFileLoader::LoadFileToString(const ::base::FilePath& path,

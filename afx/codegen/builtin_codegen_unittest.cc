@@ -6,7 +6,7 @@
 #include "azer/afx/linker/linker.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/linker/afx_parser.h"
-#include "base/file_util.h"
+#include "base/files/file_util.h"
 #include "gtest/gtest.h"
 
 using azer::afx::AfxLinker;

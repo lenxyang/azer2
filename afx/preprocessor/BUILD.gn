@@ -1,6 +1,6 @@
 import("//azer/build/templates/bison.gni")
 
-bison("afx_preprocessor_parser") {
+bison("preprocessor_parser") {
   source = "preprocessor.y"
   hpp = "preprocessor_tab.h"
   cpp = "preprocessor_tab.cpp"
@@ -8,8 +8,7 @@ bison("afx_preprocessor_parser") {
   defines = ["yyparse=preprocessor_yyparse", "yydebug=preprocessor_yydebug"]
 }
 
-
-source_set("afx_preprocessor") {
+static_library("preprocessor") {
   sources = [
     "parser.cc",
     "parser.h",
@@ -17,8 +16,7 @@ source_set("afx_preprocessor") {
     "tokenizer.h",
   ]
   deps = [
-    ":afx_preprocessor_parser",
+    ":preprocessor_parser",
     "//base:base",
   ]
-  include_dirs = ["$target_gen_dir"]
 }
