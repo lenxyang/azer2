@@ -4,6 +4,7 @@
 #include "base/basictypes.h"
 #include "azer/render/render_system.h"
 #include "azer/render/glcontext.h"
+#include "base/logging.h"
 
 struct GrGLInterface;
 
@@ -18,15 +19,20 @@ class AzerSkiaGrContext : public SkGLContext {
   virtual void makeCurrent() const override;
   virtual void swapBuffers() const override;
 
+
+  const GrGLInterface* GetGrGlInterface() {
+    DCHECK(fGL.get() != NULL);
+    return fGL.get();
+  }
   AzerEGLContext* GetAzerEGLContext() { return &context_;}
-  AzerEGLInterface* GetAzerEGLInterface() { return agl_interface_;}
+  AzerEGLInterface* GetAzerEGLInterface() { return azer_egl_;}
  protected:
   const GrGLInterface* createGLContext();
   void destroyGLContext();
  private:
   // AutoContextRestore auto_restore_;
   AzerEGLContext context_;
-  AzerEGLInterface* agl_interface_;
+  AzerEGLInterface* azer_egl_;
   int width_, height_;
   DISALLOW_COPY_AND_ASSIGN(AzerSkiaGrContext);
 };

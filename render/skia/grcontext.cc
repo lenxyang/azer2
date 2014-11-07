@@ -33,15 +33,15 @@ const GrGLInterface* AzerSkiaGrContext::createGLContext() {
   RenderSystem* rs = RenderSystem::Current();
   context_.width = width_;
   context_.height = height_;
-  agl_interface_ = rs->GetEGLInterface();
-  if (!agl_interface_) {
+  azer_egl_ = rs->GetEGLInterface();
+  if (!azer_egl_) {
     return NULL;
   }
-  if (!agl_interface_->Init(&context_)) {
+  if (!azer_egl_->Init(&context_)) {
     return NULL;
   }
 
-  SkAutoTUnref<const GrGLInterface> grinterface(GrGLCreateANGLEInterface());
+  SkAutoTUnref<const GrGLInterface> grinterface(azer_egl_->AssimbleInterface());
   if (NULL == grinterface.get()) {
     LOG(ERROR) << "Failed to createANGLEInterface()";
     this->destroyGLContext();
@@ -52,14 +52,14 @@ const GrGLInterface* AzerSkiaGrContext::createGLContext() {
 
 void AzerSkiaGrContext::destroyGLContext() {
   fGL.reset(NULL);
-  if (agl_interface_) {
-    agl_interface_->Destroy(&context_);
+  if (azer_egl_) {
+    azer_egl_->Destroy(&context_);
   }
 }
 
 void AzerSkiaGrContext::makeCurrent() const {
-  DCHECK(agl_interface_ != NULL);
-  if (!agl_interface_->MakeCurrent(&context_)) {
+  DCHECK(azer_egl_ != NULL);
+  if (!azer_egl_->MakeCurrent(&context_)) {
     DLOG(ERROR) << "cannot set context!";
   }
 

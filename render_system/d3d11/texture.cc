@@ -173,7 +173,7 @@ bool D3D11Texture2D::InitFromImage(const Image* image) {
   const ImageDataPtr& data = image->data(0);
   uint32 expect_size = SizeofDataFormat(options_.format)
       * options_.width * options_.height;
-  if (data->data_size() != expect_size) {
+  if (data->data_size() != static_cast<int32>(expect_size)) {
     LOG(ERROR) << "unexpected size: " << data->data_size()
                << " expected: " << expect_size;
     return false;
@@ -207,7 +207,7 @@ bool D3D11TextureCubeMap::InitFromImage(const Image* image) {
   const ImageDataPtr& data = image->data(0);
   uint32 expect_size = SizeofDataFormat(options_.format)
       * options_.width * options_.height;
-  if (data->data_size() != expect_size) {
+  if (data->data_size() != static_cast<int32>(expect_size)) {
     LOG(ERROR) << "unexpected size: " << data->data_size()
                << " expected: " << expect_size;
     return false;

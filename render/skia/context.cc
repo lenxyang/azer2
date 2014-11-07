@@ -36,14 +36,8 @@ bool Context::Init() {
   // code reference: skia/include/gpu/GrContextFactory.h
   helper_ = new AzerSkiaGrContext(1, 1);
   SkGLContext* glctx = helper_;
-  static const int kBogusSize = 1;
-  if (!glctx->init(kBogusSize, kBogusSize)) {
-    LOG(ERROR) << "Failed to init GrContext";
-    return false;
-  }
 
-  interface_ = glctx->gl();
-  interface_ = GrGLInterfaceRemoveNVPR(interface_);
+  interface_ = helper_->GetGrGlInterface();
   if (!interface_) {
     return false;
   }

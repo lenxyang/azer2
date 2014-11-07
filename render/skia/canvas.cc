@@ -47,7 +47,7 @@ TexturePtr& Canvas::GetTexture() {
   if (!texture_.get()) {
     GrTexture* tex = device_->GetGrTex();
     texture_.reset(context_->GetAzerEGLInterface()->
-               GetShareTextureFromTex(tex->getTextureHandle()));
+                   GetShareTextureFromTex(tex->getTextureHandle()));
   }
   return texture_;
 }

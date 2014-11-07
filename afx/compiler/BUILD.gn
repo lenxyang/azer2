@@ -52,7 +52,7 @@ source_set("afx_compiler") {
 
   deps = [
     "//base:base",
-    "//azer/base",
+    "//azer/base:azer_build_info",
     ":afx_effect_lex",
     ":afx_effect_parser",
   ]

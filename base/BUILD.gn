@@ -22,26 +22,9 @@ source_set("azer_appinit") {
     "appinit.cc",
     "appinit.h",
   ]
-  deps = ["//base"]
+  deps = ["//base", "//base:i18n"]
 }
 config("azer_render_config") {
   defines = ["BUILD_AZER_RENDER"]
 }
 
-source_set("base") {
-  sources = [
-    "hierarchy_transform.h",
-    "movable.h",
-    "string.cc",
-    "string.h",
-    "tree_node.h",
-    "image.cc",
-    "image.h",
-  ]
-  deps = [
-    ":azer_build_info",
-    "//base",
-  ]
-  configs += ["//azer/build/config:utf8src"]
-  configs += [":azer_render_config"]
-}

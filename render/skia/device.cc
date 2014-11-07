@@ -22,7 +22,9 @@ bool AzerSkDevice::Init(Context* ctx, Canvas* canvas) {
   GrContext* context = ctx->gr_context_;
   grtex_ = CreateTex(ctx, canvas);
   // tex_.reset(ctx->GetAzerEGLInterface()->CreateTexture(gltex_->fbid()));
-  gr_device_.reset(SkGpuDevice::Create(grtex_));
+  SkSurfaceProps props(SkSurfaceProps::kDisallowAntiAlias_Flag,
+                       kRGB_H_SkPixelGeometry);
+  gr_device_.reset(SkGpuDevice::Create(grtex_, props, 0));
   if (gr_device_.get() == NULL) {
     LOG(ERROR) << "Failed to create SkGpuDevice";
     return false;
@@ -40,7 +42,7 @@ bool AzerSkDevice::Init(Context* ctx, Canvas* canvas) {
 GrTexture* AzerSkDevice::CreateTex(Context* ctx, Canvas* canvas) {
   GrContext* context = ctx->gr_context_;
   GrTextureDesc desc;
-  desc.fConfig = kSkia8888_GrPixelConfig;
+  desc.fConfig = kRGBA_8888_GrPixelConfig;
   desc.fFlags = kRenderTarget_GrTextureFlagBit;
   desc.fWidth = canvas->height();
   desc.fHeight = canvas->height();

@@ -22,49 +22,18 @@ azer::Vector4 SampleImage(float u, float v, Image* img) {
 }
 
 bool SaveImage(azer::ImageData* image, const ::base::FilePath& path) {
-  detail::ilImageWrapper ilimg;
-  ilimg.Create(image->width(), image->height());
-  ilimg.InitFromData(image->data());
-  return ilimg.Save(path);
+  return false;
 }
 
 Image* LoadImageFromFile(const ::base::FilePath& path) {
-  detail::ilImageWrapper ilimg;
-  if (!ilimg.Load(path)) {
-    return NULL;
-  }
-
-  std::vector<ImageDataPtr> vec;
-  ilimg.CreateImage(&vec);
-  if (ilimg.IsCubemap()) {
-    return new Image(vec, Image::kCubeMap);
-  } else {
-    return new Image(vec, Image::k2D);
-  }
+  return false;
 }
 
 ImageData* LoadImageData(const ::base::FilePath& path) {
-  detail::ilImageWrapper ilimg;
-  if (!ilimg.Load(path)) {
-    return NULL;
-  }
-
-  int32 size = ilimg.GetDataSize();
-  std::unique_ptr<ImageData> ptr(
-      new ImageData(ilimg.width(), ilimg.height(), kRGBAn8));
-  ilimg.CopyToImage(ptr.get(), 0);
-  return ptr.release();
+  return false;
 }
 
 Texture* CreateShaderTexture(const ::base::FilePath& path, azer::RenderSystem* rs) {
-  Texture::Options texopt;
-  texopt.target = Texture::kShaderResource;
-  std::unique_ptr<Image> imgptr(LoadImageFromFile(path));
-  if (imgptr.get()) {
-    return rs->CreateTexture(texopt, imgptr.get());
-  } else {
-    LOG(ERROR) << "failed to load texture: \"" << path.value() << "\"";
-    return NULL;
-  }
+  return NULL;
 }
 }  // namespace azer

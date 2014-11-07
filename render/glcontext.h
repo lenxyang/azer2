@@ -3,6 +3,8 @@
 #include "base/logging.h"
 #include "azer/render/texture.h"
 
+struct GrGLInterface;
+
 namespace azer {
 
 struct AzerEGLContext {
@@ -58,5 +60,6 @@ class AzerEGLInterface {
   virtual bool MakeCurrent(const AzerEGLContext* context) = 0;
   virtual void Destroy(AzerEGLContext* context) = 0;
   virtual Texture* GetShareTextureFromTex(uint32 texid)  = 0;
+  virtual const GrGLInterface* AssimbleInterface() = 0;
 };
 }  // namespace azer
