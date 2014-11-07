@@ -10,7 +10,7 @@
 namespace azer {
 
 void InitApp(int* argc, char** argv[], const char*) {
-  static ::base::AtExitManager at_exit;
+  ::base::AtExitManager at_exit;
   CommandLine::Init(*argc, *argv);
   base::FilePath path = CommandLine::ForCurrentProcess()->GetProgram();
 

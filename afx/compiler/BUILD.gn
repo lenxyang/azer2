@@ -14,6 +14,7 @@ bison("afx_effect_parser") {
   bison_flags = ["-t", "--report=state"]
   direct_dependent_configs = [":afx_lexyacc_config"]
   defines = ["yyparse=afx_yyparse", "yydebug=afx_yydebug"]
+  deps = ["//azer/base:build_info"]
 }
 
 flex("afx_effect_lex") {

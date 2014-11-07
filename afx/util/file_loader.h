@@ -19,7 +19,7 @@ class FileLoader {
   virtual bool Load(const ::base::FilePath& file, std::string* content,
                     ::base::FilePath* real);
  protected:
-  virtual bool LoadFileToString(const ::base::FilePath& path, std::string* content);
+  virtual bool LoadFile(const ::base::FilePath& path, std::string* content);
  private:
   const std::vector< ::base::FilePath::StringType>& include_dirs_;
 
@@ -36,8 +36,7 @@ class MemoryFileLoader : public FileLoader {
     content_.insert(std::make_pair(fullpath.value(), content));
   }
  protected:
-  virtual bool LoadFileToString(const ::base::FilePath& path,
-                                std::string* content) override;
+  virtual bool LoadFile(const ::base::FilePath& path, std::string* content) override;
   std::map<azer::StringType, std::string> content_;
   DISALLOW_COPY_AND_ASSIGN(MemoryFileLoader);
 };

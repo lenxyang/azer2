@@ -4,6 +4,7 @@
 #include "azer/base/render_export.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/files/file_path.h"
+#include "base/logging.h"
 
 namespace azer {
 
@@ -42,8 +43,10 @@ inline void ConvertPath<std::wstring>(const char *path, std::wstring* str) {
 }
 }  // namespace azer
 
-AZER_EXPORT extern std::ostream& operator << (std::ostream& os,
-                                              const ::base::FilePath& path);
+inline std::ostream& operator << (std::ostream& os, const ::base::FilePath& path) {
+  os << ::base::string16(path.value());
+  return os;
+}
 
 
 

@@ -8,9 +8,4 @@
 #include "base/logging.h"
 
 namespace azer {
-
-std::ostream& operator << (std::ostream& os, const ::base::FilePath& path) {
-  os << ::base::string16(path.value());
-  return os;
-}
 }  // namespace azer

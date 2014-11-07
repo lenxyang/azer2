@@ -50,8 +50,14 @@ template("bison") {
       "$bison_src_dir/" + invoker.cpp,
       "$bison_src_dir/" + invoker.hpp,
     ]
-    defines = invoker.defines
+
+    if (defined(invoker.defines)) {
+       defines = invoker.defines
+    }
     deps = [":$bison_action_target"]
+    if (defined(invoker.deps)) {
+      deps += invoker.deps
+    }
     direct_dependent_configs = [":$bison_config"]
     if (defined(invoker.direct_dependent_configs)) {
       direct_dependent_configs += invoker.direct_dependent_configs

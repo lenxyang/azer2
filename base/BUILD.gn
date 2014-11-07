@@ -12,6 +12,7 @@ action("build_info_action") {
 static_library("build_info") {
   sources = [
     "$target_gen_dir/build_info.cc",
+    "build_info.cc",
     "build_info.h",
   ]
   deps = [":build_info_action"]

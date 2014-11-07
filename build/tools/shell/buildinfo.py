@@ -15,11 +15,11 @@ if __name__ == "__main__":
     build_machine = socket.gethostname();
     build_time = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime());
     f = open("%s/%s.cc" % ( gen_dir, buildinfo_file), "w");
-    f.write("#include \"azer/base/%s.h\"\n\n" % (buildinfo_file))
+    f.write("#include \"base/files/file_path.h\"\n\n");
     f.write("namespace azer {\n\n");
-    f.write("const int kBuildRootDirLength = %d;\n" % (len(absolute_build_path)));
-    f.write("const char* kBuildRootDir = \"%s\";\n" % (path_encoded));
-    f.write("const char* kBuildTime=\"%s\";\n" % (build_time))
-    f.write("const char* kBuildMachine=\"%s\";\n" % (build_machine))
+    f.write("extern const int kBuildRootDirLength = %d;\n" % (len(absolute_build_path)));
+    f.write("extern const ::base::FilePath::StringType kBuildRootDir = FILE_PATH_LITERAL(\"%s\");\n" % (path_encoded));
+    f.write("extern const char* kBuildTime=\"%s\";\n" % (build_time))
+    f.write("extern const char* kBuildMachine=\"%s\";\n" % (build_machine))
     f.write("}  // namespace azer\n\n")
     

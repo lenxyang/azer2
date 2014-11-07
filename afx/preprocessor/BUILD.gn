@@ -5,6 +5,9 @@ bison("preprocessor_parser") {
   hpp = "preprocessor_tab.h"
   cpp = "preprocessor_tab.cpp"
   bison_flags = ["-t", "--report=state"]
+  deps = [
+    "//azer/base:build_info",
+  ]
   defines = ["yyparse=preprocessor_yyparse", "yydebug=preprocessor_yydebug"]
 }
 

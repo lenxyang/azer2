@@ -13,14 +13,14 @@ bool FileLoader::Load(const ::base::FilePath& file, std::string* content,
        ++iter) {
     ::base::FilePath fullpath(*iter);
     fullpath = fullpath.Append(file);
-    if (LoadFileToString(fullpath, content)) {
+    if (this->LoadFile(fullpath, content)) {
       *finalpath = fullpath.NormalizePathSeparators();
       return true;
     }
   }
 
   ::base::FilePath fullpath(file);
-  if (LoadFileToString(fullpath, content)) {
+  if (this->LoadFile(fullpath, content)) {
     *finalpath = fullpath;
     return true;
   } else {
@@ -28,8 +28,7 @@ bool FileLoader::Load(const ::base::FilePath& file, std::string* content,
   }
 }
 
-bool FileLoader::LoadFileToString(const ::base::FilePath& path,
-                                  std::string* content) {
+bool FileLoader::LoadFile(const ::base::FilePath& path, std::string* content) {
   if (! ::base::PathExists(path)) {
     return false;
   }
@@ -37,8 +36,7 @@ bool FileLoader::LoadFileToString(const ::base::FilePath& path,
   return LoadFileToString(path, content);
 }
 
-bool MemoryFileLoader::LoadFileToString(const ::base::FilePath& path,
-                                        std::string* content) {
+bool MemoryFileLoader::LoadFile(const ::base::FilePath& path, std::string* content) {
   auto iter = content_.find(path.value());
   if (iter != content_.end()) {
     *content = iter->second;
