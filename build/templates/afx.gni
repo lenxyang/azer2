@@ -35,9 +35,14 @@ template("afx") {
       "$target_gen_dir/$hpp",
       "$target_gen_dir/$cpp",
     ]
+    print("--output_dir=" + rebase_path(target_gen_dir, root_build_dir))
+    print("--afx=$afx_file_path")
+    print("--hlslang")
+    print("--includes=$afxlib_path,$azer_root_path")
+    print("--cpp_filename=$filename")
     args = [
       "$afxc_path",
-      "--output_dir=$target_gen_dir",
+      "--output_dir=" + rebase_path(target_gen_dir, root_build_dir),
       "--afx=$afx_file_path",
       "--hlslang",
       "--includes=$afxlib_path,$azer_root_path",
@@ -47,7 +52,7 @@ template("afx") {
   }
 
   config("$target_name"+ "_config") {
-    include_dirs = [rebase_path(gen_dir, ".")]
+    include_dirs = [target_gen_dir]
   }
   source_set(target_name) {
     sources = [
@@ -56,9 +61,9 @@ template("afx") {
     ]
     direct_dependent_configs = [":$target_name" + "_config"]
     deps = [
-      "//azer/render:render",
-      "//azer/math:math",
-      "//base:base",
+      "//azer/render",
+      "//azer/math",
+      "//base",
       ":$target_name" + "_afx_cppcode",
     ]
     if (is_win) {
