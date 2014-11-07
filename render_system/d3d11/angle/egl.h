@@ -13,11 +13,11 @@ namespace azer {
  * 此处完成的功能是初始化 ANGLE
  */
 class D3D11RenderSystem;
-class ANGLEGLInterface : public AzerEGLInterface {
+class AngleEGL : public AzerEGLInterface {
  public:
-  ANGLEGLInterface(D3D11RenderSystem* rs)
+  AngleEGL(D3D11RenderSystem* rs)
       : render_system_(rs) {}
-  ~ANGLEGLInterface() {}
+  ~AngleEGL() {}
   virtual bool Init(AzerEGLContext* context) override;
   virtual bool MakeCurrent(const AzerEGLContext* context) override;
   virtual void Destroy(AzerEGLContext* context) override;
@@ -27,6 +27,6 @@ class ANGLEGLInterface : public AzerEGLInterface {
   void* module_;
   GrGLInterface* interface_;
   D3D11RenderSystem* render_system_;
-  DISALLOW_COPY_AND_ASSIGN(ANGLEGLInterface);
+  DISALLOW_COPY_AND_ASSIGN(AngleEGL);
 };
 }  // namespace azer

@@ -2,7 +2,8 @@ source_set("azer_angle11") {
   sources = [
     "angle/angle.cc",
     "angle/angle.h",
-    "angle/glinterface.cc",
+    "angle/egl.cc",
+    "angle/egl.h",
     "angle/module.cc",
     "angle/module.h",
   ]

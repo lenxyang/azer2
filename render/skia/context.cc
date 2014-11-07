@@ -34,7 +34,7 @@ Context::~Context() {
 
 bool Context::Init() {
   // code reference: skia/include/gpu/GrContextFactory.h
-  helper_ = new AzerSkiaGrContext(1, 1);
+  helper_ = new ASkGLContext(1, 1);
   SkGLContext* glctx = helper_;
 
   interface_ = helper_->GetGrGlInterface();

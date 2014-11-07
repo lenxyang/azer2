@@ -4,8 +4,8 @@
 
 #include "base/basictypes.h"
 #include "base/files/file_path.h"
+#include "azer/render/egl.h"
 #include "azer/render/render_system.h"
-#include "azer/render/glcontext.h"
 #include "azer/render/skia/canvas.h"
 
 struct GrGLInterface;
@@ -16,7 +16,7 @@ class SkCanvas;
 namespace azer {
 namespace skia {
 
-class AzerSkiaGrContext;
+class ASkGLContext;
 class Context;
 class AzerSkDevice;
 
@@ -39,7 +39,7 @@ class AZER_EXPORT Context {
  private:
   GrContext* gr_context_;
   const GrGLInterface* interface_;
-  AzerSkiaGrContext* helper_;
+  ASkGLContext* helper_;
   friend class AzerSkDevice;
   DISALLOW_COPY_AND_ASSIGN(Context);
 };

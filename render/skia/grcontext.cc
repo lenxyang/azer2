@@ -2,12 +2,12 @@
 
 #include "gl/GrGLInterface.h"
 #include "azer/render/render_system.h"
-#include "azer/render/glcontext.h"
+#include "azer/render/egl.h"
 #include "base/logging.h"
 
 namespace azer {
 namespace skia {
-AzerSkiaGrContext::AzerSkiaGrContext(int width, int height)
+ASkGLContext::ASkGLContext(int width, int height)
     : width_(width), height_(height) {
   DCHECK_GT(width_, 0);
   DCHECK_GT(height_, 0);
@@ -25,11 +25,11 @@ AzerSkiaGrContext::AzerSkiaGrContext(int width, int height)
   }
 }
 
-AzerSkiaGrContext::~AzerSkiaGrContext() {
+ASkGLContext::~ASkGLContext() {
   destroyGLContext();
 }
 
-const GrGLInterface* AzerSkiaGrContext::createGLContext() {
+const GrGLInterface* ASkGLContext::createGLContext() {
   RenderSystem* rs = RenderSystem::Current();
   context_.width = width_;
   context_.height = height_;
@@ -50,14 +50,14 @@ const GrGLInterface* AzerSkiaGrContext::createGLContext() {
   return GrGLInterfaceRemoveNVPR(grinterface.get());
 }
 
-void AzerSkiaGrContext::destroyGLContext() {
+void ASkGLContext::destroyGLContext() {
   fGL.reset(NULL);
   if (azer_egl_) {
     azer_egl_->Destroy(&context_);
   }
 }
 
-void AzerSkiaGrContext::makeCurrent() const {
+void ASkGLContext::makeCurrent() const {
   DCHECK(azer_egl_ != NULL);
   if (!azer_egl_->MakeCurrent(&context_)) {
     DLOG(ERROR) << "cannot set context!";
@@ -66,7 +66,7 @@ void AzerSkiaGrContext::makeCurrent() const {
   DLOG(INFO) << "egl::makeCurrent on ANGLE interface!";
 }
 
-void AzerSkiaGrContext::swapBuffers() const {
+void ASkGLContext::swapBuffers() const {
 /*
   EGLContext context = (EGLContext)context_.context;
   EGLDisplay display = (EGLDisplay)context_.display;

@@ -21,7 +21,7 @@ class VertexBuffer;
 class RenderTarget;
 class DepthRenderTarget;
 class Image;
-class AzerEGLInterface;
+class EGL;
 
 typedef std::shared_ptr<IndicesData> IndicesDataPtr;
 
@@ -72,7 +72,7 @@ class AZER_EXPORT RenderSystem {
   virtual bool reset() = 0;
 
   // 
-  virtual AzerEGLInterface* GetEGLInterface() = 0;
+  virtual EGL* CreateEGL() = 0;
 
   const RenderSystemCapability& capability() const {
     return capability_;

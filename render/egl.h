@@ -52,10 +52,10 @@ class AzerGLTexture {
 
 typedef std::shared_ptr<AzerGLTexture> AzerGLTexturePtr;
 
-class AzerEGLInterface {
+class EGL {
  public:
-  AzerEGLInterface() {}
-  virtual ~AzerEGLInterface() {}
+  EGL() {}
+  virtual ~EGL() {}
   virtual bool Init(AzerEGLContext* context) = 0;
   virtual bool MakeCurrent(const AzerEGLContext* context) = 0;
   virtual void Destroy(AzerEGLContext* context) = 0;

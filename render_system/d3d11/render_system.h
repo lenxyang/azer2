@@ -55,7 +55,7 @@ class D3D11RenderSystem : public RenderSystem {
   virtual bool Present() override;
   virtual bool reset() override;
 
-  virtual AzerEGLInterface* GetEGLInterface() override;
+  virtual EGL* CreateEGL() override;
 
   /**
    * direct3d relevent
