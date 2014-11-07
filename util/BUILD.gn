@@ -1,7 +1,7 @@
-import("//build/templates/afx.gni")
+import("//azer/build/templates/afx.gni")
 
 
-static_library("azer_util") {
+static_library("util") {
   sources = [
     "tile.cc",
     "tile.h",
@@ -10,21 +10,21 @@ static_library("azer_util") {
     "sampleapp.h",
   ]
   deps = [
-    "//azer/render:render"
-    "//azer/math:math"
-    "//ui/gfx:gfx"
+    "//azer/render",
+    "//azer/math",
+    "//ui/gfx",
   ]
 }
 
-test("azer_util_unittest") {
+test("util_unittest") {
   sources = [
     "tile_test.cc",
   ]
   deps = [
-    "//azer/render:render",
-    "//third_party/gtest:gtest",
-    "//base:test_main",
-    ":azer_util",
+    "//azer/render",
+    "//testing/gtest",
+    "//base/test:run_all_unittests",
+    ":util",
   ]
   if (is_win) {deps += ["//azer/render_system/d3d11:d3d11_render_system"]}
 }

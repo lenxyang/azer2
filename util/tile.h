@@ -143,7 +143,7 @@ class FrustrumSplit : public Tile::QuadTree::Splitable {
  public:
   FrustrumSplit(const Tile* tile, const Frustrum* frustrum)
     : tile_(tile), frustrum_(frustrum) {}
-  virtual SplitRes Split(const Tile::QuadTree::Node& node) OVERRIDE;
+  virtual SplitRes Split(const Tile::QuadTree::Node& node) override;
  private:
   const Tile* tile_;
   const Frustrum* frustrum_;
