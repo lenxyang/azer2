@@ -19,9 +19,9 @@ inline const char* DebugRelativePath(const char* path) {
 }
 
 inline std::string RelativePath(const std::string& path) {
-  if (path.find(::base::kBuildRootDir) == 0) {
-    DCHECK_GT(path.length(), ::base::kBuildRootDirLength + 1);
-    return path.substr(::base::kBuildRootDirLength + 1);
+  if (path.find(kBuildRootDir) == 0) {
+    DCHECK_GT(path.length(), kBuildRootDirLength + 1);
+    return path.substr(kBuildRootDirLength + 1);
   } else {
     return path;
   }

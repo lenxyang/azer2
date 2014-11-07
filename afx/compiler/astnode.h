@@ -196,8 +196,8 @@ class AttributesNode : public ASTNode {
   AttributesNode(const std::string& source, const SourceLoc& loc)
       : ASTNode(source, loc, kAttributesNode) {
   }
-  virtual AttributesNode* ToAttributesNode() OVERRIDE { return this;}
-  virtual bool IsAttributesNode() OVERRIDE { return true;}
+  virtual AttributesNode* ToAttributesNode() override { return this;}
+  virtual bool IsAttributesNode() override { return true;}
   
   typedef std::map<std::string, std::string> AttributesDict;
   bool Add(const std::string& name, const std::string& field);
@@ -220,7 +220,7 @@ class AttributesNode : public ASTNode {
 class ExpressionNode : public ASTNode {
  public:
   ExpressionNode(const std::string& source, const SourceLoc& loc, ASTNodeType type);
-  virtual bool IsExpressionNode() OVERRIDE { return true;}
+  virtual bool IsExpressionNode() override { return true;}
   virtual ExpressionNode* ToExpressionNode() { return this;}
 
   void SetResultType(TypePtr ptr);
@@ -242,8 +242,8 @@ class ExpressionNode : public ASTNode {
 class BinaryOpNode : public ExpressionNode {
  public:
   BinaryOpNode(const std::string& source, const SourceLoc& loc);
-  virtual BinaryOpNode* ToBinaryOpNode() OVERRIDE { return this;}
-  virtual bool IsBinaryOpNode() OVERRIDE { return true;}
+  virtual BinaryOpNode* ToBinaryOpNode() override { return this;}
+  virtual bool IsBinaryOpNode() override { return true;}
   void SetOper1(ASTNode* oper);
   void SetOper2(ASTNode* oper);
   void SetOperator(Operator o);
@@ -265,8 +265,8 @@ class CaseNode : public ASTNode {
       , default_node_(false)
       , express_node_(NULL){
   }
-  virtual CaseNode* ToCaseNode() OVERRIDE { return this;}
-  virtual bool IsCaseNode() OVERRIDE { return true;}
+  virtual CaseNode* ToCaseNode() override { return this;}
+  virtual bool IsCaseNode() override { return true;}
 
   void SetExpressionNode(ASTNode* node) {}
   void SetAsDefaultNode() { default_node_ = true;}
@@ -279,8 +279,8 @@ class CaseNode : public ASTNode {
 class ConditionalOpNode : public ASTNode {
  public:
   ConditionalOpNode(const std::string& source, const SourceLoc& loc);
-  virtual ConditionalOpNode* ToConditionalOpNode() OVERRIDE { return this;}
-  virtual bool IsConditionalOpNode() OVERRIDE { return true;}
+  virtual ConditionalOpNode* ToConditionalOpNode() override { return this;}
+  virtual bool IsConditionalOpNode() override { return true;}
   void SetOper1(ASTNode* oper);
   void SetOper2(ASTNode* oper);
   void SetOper3(ASTNode* oper);
@@ -301,8 +301,8 @@ class ConstNode : public ExpressionNode {
   ConstNode(const std::string& source, const SourceLoc& loc)
       : ExpressionNode(source, loc, kConstNode) {
   }
-  virtual ConstNode* ToConstNode() OVERRIDE { return this;}
-  virtual bool IsConstNode() OVERRIDE { return true;}
+  virtual ConstNode* ToConstNode() override { return this;}
+  virtual bool IsConstNode() override { return true;}
   void SetBoolean(bool b);
   void SetChar(char b);
   void SetShort(short s);
@@ -321,8 +321,8 @@ class ConstNode : public ExpressionNode {
 class DeclarationNode : public ASTNode {
  public:
   DeclarationNode(const std::string& source, const SourceLoc& loc);
-  virtual DeclarationNode* ToDeclarationNode() OVERRIDE { return this;}
-  virtual bool IsDeclarationNode() OVERRIDE { return true;}
+  virtual DeclarationNode* ToDeclarationNode() override { return this;}
+  virtual bool IsDeclarationNode() override { return true;}
 
   void AddSymbol(ASTNode* node);
   TypePtr& GetType();
@@ -336,8 +336,8 @@ class DeclarationNode : public ASTNode {
 class FieldNode : public ASTNode {
  public:
   FieldNode(const std::string& source, const SourceLoc& loc);
-  virtual FieldNode* ToFieldNode() OVERRIDE { return this;}
-  virtual bool IsFieldNode() OVERRIDE { return true;}
+  virtual FieldNode* ToFieldNode() override { return this;}
+  virtual bool IsFieldNode() override { return true;}
 
   const std::string& fieldname() { return fieldname_;}
   void SetFieldName(const std::string& v) { fieldname_ = v;}
@@ -354,8 +354,8 @@ class FieldNode : public ASTNode {
 class ForLoopNode : public ASTNode {
  public:
   ForLoopNode(const std::string& source, const SourceLoc& loc);
-  virtual ForLoopNode* ToForLoopNode() OVERRIDE { return this;}
-  virtual bool IsForLoopNode() OVERRIDE { return true;}
+  virtual ForLoopNode* ToForLoopNode() override { return this;}
+  virtual bool IsForLoopNode() override { return true;}
 
   void SetInit(ASTNode* node);
   void SetCondition(ASTNode* node);
@@ -379,8 +379,8 @@ class ForLoopNode : public ASTNode {
 class FuncCallNode : public ExpressionNode {
  public:
   FuncCallNode(const std::string& source, const SourceLoc& loc);
-  virtual FuncCallNode* ToFuncCallNode() OVERRIDE { return this;}
-  virtual bool IsFuncCallNode() OVERRIDE { return true;}
+  virtual FuncCallNode* ToFuncCallNode() override { return this;}
+  virtual bool IsFuncCallNode() override { return true;}
   const std::string& funcname() const;
   const std::string& funcsync();
 
@@ -409,8 +409,8 @@ class FuncCallTypeInitNode : public FuncCallNode {
       : FuncCallNode(source, loc, kFuncCallTypeInitNode) {
   }
 
-  virtual FuncCallTypeInitNode* ToFuncCallTypeInitNode() OVERRIDE { return this;}
-  virtual bool IsFuncCallTypeInitNode() OVERRIDE { return true;}
+  virtual FuncCallTypeInitNode* ToFuncCallTypeInitNode() override { return this;}
+  virtual bool IsFuncCallTypeInitNode() override { return true;}
   void SetType(TypePtr type);
   TypePtr GetType() { return typeptr_;}
  private:
@@ -421,8 +421,8 @@ class FuncCallTypeInitNode : public FuncCallNode {
 class FuncDefNode : public ASTNode {
  public:
   FuncDefNode(const std::string& source, const SourceLoc& loc);
-  virtual FuncDefNode* ToFuncDefNode() OVERRIDE { return this;}
-  virtual bool IsFuncDefNode() OVERRIDE { return true;}
+  virtual FuncDefNode* ToFuncDefNode() override { return this;}
+  virtual bool IsFuncDefNode() override { return true;}
   void SetProtoNode(ASTNode* node);
   void SetStatements(ASTNode* node);
   FuncProtoNode* GetProtoNode();
@@ -436,8 +436,8 @@ class FuncDefNode : public ASTNode {
 class FuncProtoNode : public ASTNode {
  public:
   FuncProtoNode(const std::string& source, const SourceLoc& loc);
-  virtual FuncProtoNode* ToFuncProtoNode() OVERRIDE { return this;}
-  virtual bool IsFuncProtoNode() OVERRIDE { return true;}
+  virtual FuncProtoNode* ToFuncProtoNode() override { return this;}
+  virtual bool IsFuncProtoNode() override { return true;}
   
   const std::string& funcname() const { return func_name_;}
   /**
@@ -467,8 +467,8 @@ class InitializerNode : public ASTNode {
       : ASTNode(source, loc, kInitializerNode)
       , block_(false) {
   }
-  virtual InitializerNode* ToInitializerNode() OVERRIDE { return this;}
-  virtual bool IsInitializerNode() OVERRIDE { return true;}
+  virtual InitializerNode* ToInitializerNode() override { return this;}
+  virtual bool IsInitializerNode() override { return true;}
   void AddExpression(ASTNode* node);
   void AppendInitializerNode(ASTNode* node);
   ASTNode* DetchExpression();
@@ -484,8 +484,8 @@ class InitializerNode : public ASTNode {
 class IfElseNode : public ASTNode {
  public:
   IfElseNode(const std::string& source, const SourceLoc& loc);
-  virtual IfElseNode* ToIfElseNode() OVERRIDE { return this;}
-  virtual bool IsIfElseNode() OVERRIDE { return true;}
+  virtual IfElseNode* ToIfElseNode() override { return this;}
+  virtual bool IsIfElseNode() override { return true;}
   void SetSelectionExpr(ASTNode* node);
   void SetTrueStatements(ASTNode* node);
   void SetFalseStatements(ASTNode* node);
@@ -510,8 +510,8 @@ class JumpNode : public ASTNode {
   };
 
   JumpNode(const std::string& source, const SourceLoc& loc);
-  virtual JumpNode* ToJumpNode() OVERRIDE { return this;}
-  virtual bool IsJumpNode() OVERRIDE { return true;}
+  virtual JumpNode* ToJumpNode() override { return this;}
+  virtual bool IsJumpNode() override { return true;}
   void SetJumpType(JumpType t) { jump_type_ = t;}
   JumpType GetJumpType() const { return jump_type_;}
  private:
@@ -524,8 +524,8 @@ class NullNode : public ASTNode {
   NullNode(const std::string& source, const SourceLoc& loc)
       : ASTNode(source, loc, kNullNode) {
   }
-  virtual NullNode* ToNullNode() OVERRIDE { return this;}
-  virtual bool IsNullNode() OVERRIDE { return true;}
+  virtual NullNode* ToNullNode() override { return this;}
+  virtual bool IsNullNode() override { return true;}
  private:
   DISALLOW_COPY_AND_ASSIGN(NullNode);
 };
@@ -535,8 +535,8 @@ class PackageNode : public ASTNode {
   PackageNode(const std::string& source, const SourceLoc& loc)
       : ASTNode(source, loc, kPackageNode) {
   }
-  virtual PackageNode* ToPackageNode() OVERRIDE { return this;}
-  virtual bool IsPackageNode() OVERRIDE { return true;}
+  virtual PackageNode* ToPackageNode() override { return this;}
+  virtual bool IsPackageNode() override { return true;}
 
   const std::string& packagename() { return packagename_;}
  private:
@@ -547,8 +547,8 @@ class PackageNode : public ASTNode {
 class ParamNode : public ASTNode {
  public:
   ParamNode(const std::string& source, const SourceLoc& loc);
-  virtual ParamNode* ToParamNode() OVERRIDE { return this;}
-  virtual bool IsParamNode() OVERRIDE { return true;}
+  virtual ParamNode* ToParamNode() override { return this;}
+  virtual bool IsParamNode() override { return true;}
 
   const std::string& paramname() { return paramname_;}
   void SetParamName(const std::string& v) { paramname_ = v;}
@@ -565,8 +565,8 @@ class ParamNode : public ASTNode {
 class RefSymbolNode : public ASTNode {
  public:
   RefSymbolNode(const std::string& source, const SourceLoc& loc);
-  virtual RefSymbolNode* ToRefSymbolNode() OVERRIDE { return this;}
-  virtual bool IsRefSymbolNode() OVERRIDE { return true;}
+  virtual RefSymbolNode* ToRefSymbolNode() override { return this;}
+  virtual bool IsRefSymbolNode() override { return true;}
 
   void SetDeclNode(SymbolNode* node);
   SymbolNode* GetDeclNode() {return decl_node_;}
@@ -589,8 +589,8 @@ class ReturnNode : public ASTNode {
       : ASTNode(source, loc, kReturnNode)
       , expr_node_(NULL) {
   }
-  virtual ReturnNode* ToReturnNode() OVERRIDE { return this;}
-  virtual bool IsReturnNode() OVERRIDE { return true;}
+  virtual ReturnNode* ToReturnNode() override { return this;}
+  virtual bool IsReturnNode() override { return true;}
   void SetExprNode(ASTNode* node) {expr_node_ = node; AddChildren(node);}
  private:
   ASTNode* expr_node_;
@@ -602,8 +602,8 @@ class ScopedNode : public ASTNode {
   ScopedNode(const std::string& source, const SourceLoc& loc)
       : ASTNode(source, loc, kScopedNode) {
   }
-  virtual ScopedNode* ToScopedNode() OVERRIDE { return this;}
-  virtual bool IsScopedNode() OVERRIDE { return true;}
+  virtual ScopedNode* ToScopedNode() override { return this;}
+  virtual bool IsScopedNode() override { return true;}
   SymbolNode* LookupSymbol(const std::string& node);
   SymbolNode* LookupSymbolLocally(const std::string& node);
   void RegisteSymbolLocally(SymbolNode* node);
@@ -618,8 +618,8 @@ class StatementNode : public ASTNode {
   StatementNode(const std::string& source, const SourceLoc& loc)
       : ASTNode(source, loc, kStatementNode) {
   }
-  virtual StatementNode* ToStatementNode() OVERRIDE { return this;}
-  virtual bool IsStatementNode() OVERRIDE { return true;}
+  virtual StatementNode* ToStatementNode() override { return this;}
+  virtual bool IsStatementNode() override { return true;}
  private:
   DISALLOW_COPY_AND_ASSIGN(StatementNode);
 };
@@ -627,8 +627,8 @@ class StatementNode : public ASTNode {
 class StructDeclNode : public ASTNode {
  public:
   StructDeclNode(const std::string& source, const SourceLoc& loc);
-  virtual StructDeclNode* ToStructDeclNode() OVERRIDE {return this;}
-  virtual bool IsStructDeclNode() OVERRIDE {return true;}
+  virtual StructDeclNode* ToStructDeclNode() override {return this;}
+  virtual bool IsStructDeclNode() override {return true;}
 
   bool AddFields(ASTNode* field);
   const std::string& struct_name() const { return struct_name_;}
@@ -657,7 +657,7 @@ class StructExternDeclNode : public StructDeclNode {
       : StructDeclNode(source, loc, kStructExternDeclNode)
       , decl_node_(NULL) {
   }
-  virtual StructExternDeclNode* ToStructExternDeclNode() OVERRIDE {return this;}
+  virtual StructExternDeclNode* ToStructExternDeclNode() override {return this;}
   void SetDeclNode(StructDeclNode* node) {decl_node_ = node;}
   StructDeclNode* GetDeclNode() { return decl_node_;}
  private:
@@ -671,8 +671,8 @@ class SwitchNode : public ASTNode {
       : ASTNode(source, loc, kSwitchNode)
       , express_node_(NULL) {
   }
-  virtual SwitchNode* ToSwitchNode() OVERRIDE { return this;}
-  virtual bool IsSwitchNode() OVERRIDE { return true;}
+  virtual SwitchNode* ToSwitchNode() override { return this;}
+  virtual bool IsSwitchNode() override { return true;}
 
   void SetExpressionNode(ASTNode* node) { express_node_ = node;}
   void SetStatements(ASTNode* node) { AddChildren(node);}
@@ -685,8 +685,8 @@ class SymbolNode : public ASTNode {
  public:
   SymbolNode(const std::string& source, const SourceLoc& loc);
   
-  virtual SymbolNode* ToSymbolNode() OVERRIDE { return this;}
-  virtual bool IsSymbolNode() OVERRIDE { return true;}
+  virtual SymbolNode* ToSymbolNode() override { return this;}
+  virtual bool IsSymbolNode() override { return true;}
 
   // lookup from
   void SetDeclarationNode(ASTNode* node);
@@ -718,8 +718,8 @@ class ActParamNode : public SymbolNode {
       : SymbolNode(source, loc, kActParamNode)
       , param_(NULL) {
   }
-  virtual ActParamNode* ToActParamNode() OVERRIDE { return this;}
-  virtual bool IsActParamNode() OVERRIDE { return true;}
+  virtual ActParamNode* ToActParamNode() override { return this;}
+  virtual bool IsActParamNode() override { return true;}
   void SetParam(ParamNode* param) { param_ = param; }
   ParamNode* GetParamNode() { return param_;}
  private:
@@ -735,8 +735,8 @@ class ActParamNode : public SymbolNode {
 class TypedNode : public ASTNode {
  public:
   TypedNode(const std::string& source, const SourceLoc& loc);
-  virtual TypedNode* ToTypedNode() OVERRIDE {return this;}
-  virtual bool IsTypedNode() OVERRIDE {return true;}
+  virtual TypedNode* ToTypedNode() override {return this;}
+  virtual bool IsTypedNode() override {return true;}
 
   void SetBasicType(BasicType type);
   void SetStructType(const std::string& name);
@@ -770,8 +770,8 @@ class UnaryOpNode : public ExpressionNode {
       , op_(kOpNull)
       , oper_(NULL) {
   }
-  virtual UnaryOpNode* ToUnaryOpNode() OVERRIDE {return this;}
-  virtual bool IsUnaryOpNode() OVERRIDE {return true;}
+  virtual UnaryOpNode* ToUnaryOpNode() override {return this;}
+  virtual bool IsUnaryOpNode() override {return true;}
 
   void SetOper(ASTNode* oper);
   void SetOperator(Operator o);
@@ -788,8 +788,8 @@ class WhileLoopNode : public ASTNode {
  public:
   WhileLoopNode(const std::string& source, const SourceLoc& loc);
 
-  virtual WhileLoopNode* ToWhileLoopNode() OVERRIDE { return this;}
-  virtual bool IsWhileLoopNode() OVERRIDE { return true;}
+  virtual WhileLoopNode* ToWhileLoopNode() override { return this;}
+  virtual bool IsWhileLoopNode() override { return true;}
   
   void SetDoWhileStyle(bool do_while) { do_while_style_ = do_while;}
   void SetExprNode(ASTNode* node);

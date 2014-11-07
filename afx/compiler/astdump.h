@@ -12,8 +12,8 @@ class ASTreeDumper : public TreeNode<ASTNode>::Traverser {
   void Dump(ASTNode* node, std::string* str);
  private:
   int depth() const { return depth_;}
-  virtual bool OnVisitBegin(ASTNode* node) OVERRIDE;
-  virtual void OnVisitEnd(ASTNode* node) OVERRIDE;
+  virtual bool OnVisitBegin(ASTNode* node) override;
+  virtual void OnVisitEnd(ASTNode* node) override;
   std::string dump_str_;
   int depth_;
   DISALLOW_COPY_AND_ASSIGN(ASTreeDumper);

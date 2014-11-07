@@ -40,7 +40,7 @@ class AZER_EXPORT AABBEffect : public Effect {
     return technique_->GetVertexDesc();
   }
  private:
-  virtual void UseTexture(Renderer* renderer) OVERRIDE {}
+  virtual void UseTexture(Renderer* renderer) override {}
   void Init(RenderSystem* rs);
   DISALLOW_COPY_AND_ASSIGN(AABBEffect);
 };

@@ -15,7 +15,7 @@ class NativeFileSystem : public FileSystem {
       : FileSystem(FileSystem::kNativeFS, root) {
   }
 
-  virtual FileContentPtr LoadFile(const ResFilePath& path) OVERRIDE {
+  virtual FileContentPtr LoadFile(const ResFilePath& path) override {
     DCHECK(!path.empty());
     ::base::FilePath real_path = fs_root_.Append(path.value());
     int64 size = 0;
@@ -35,7 +35,7 @@ class NativeFileSystem : public FileSystem {
     return cptr;
   }
 
-  virtual bool IsPathExists(const ResFilePath& path) OVERRIDE {
+  virtual bool IsPathExists(const ResFilePath& path) override {
     DCHECK(!path.empty());
     ::base::FilePath real_path = fs_root_.Append(path.value());
     return base::PathExists(real_path);

@@ -18,8 +18,8 @@ class TextureNameGenerator : public TreeNode<ASTNode>::Traverser {
   const std::string& GetName() const { return code_gen_;}
   const std::vector<std::string>& GetFields() const { return fields_;}
  protected:
-  virtual bool OnVisitBegin(ASTNode* node) OVERRIDE;
-  virtual void OnVisitEnd(ASTNode* node) OVERRIDE;
+  virtual bool OnVisitBegin(ASTNode* node) override;
+  virtual void OnVisitEnd(ASTNode* node) override;
  private:
   std::string code_gen_;
   std::vector<std::string> fields_;

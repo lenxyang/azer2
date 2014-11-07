@@ -31,8 +31,8 @@ class DependCalactor : public TreeNode<ASTNode>::Traverser {
   void Swap(TechniqueParser::StageInfo* tech);
  protected:
   void CalcRecursive(ASTNode* node);
-  bool OnVisitBegin(ASTNode* node) OVERRIDE;
-  virtual void OnVisitEnd(ASTNode* node) OVERRIDE {}
+  bool OnVisitBegin(ASTNode* node) override;
+  virtual void OnVisitEnd(ASTNode* node) override {}
  private:
   void CheckUniformTexture(ASTNode* node);
   void AddTexture(ASTNode* node);

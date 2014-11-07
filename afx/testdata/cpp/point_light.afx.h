@@ -75,8 +75,8 @@ class PoingLightEffect: public azer::Effect {
  protected:
   void Init();
   void InitTechnique();
-  virtual void UseTexture(azer::Renderer* renderer) OVERRIDE;
-  virtual void SetMaterial(azer::MaterialPtr material) OVERRIDE;
+  virtual void UseTexture(azer::Renderer* renderer) override;
+  virtual void SetMaterial(azer::MaterialPtr material) override;
   const std::vector<std::string>& sources_;
 
 

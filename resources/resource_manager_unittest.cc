@@ -4,14 +4,14 @@
 
 class ResourceManagerTest : public testing::Test {
  public:
-  virtual void SetUp() OVERRIDE {
+  virtual void SetUp() override {
     render_system_ = azer::testing::CreateD3D11RenderSystemForTest();
     fs_ptr_.reset(azer::FileSystem::create(
         azer::FileSystem::kNativeFS,
         ::base::FilePath(AZER_LITERAL("azer/resources/testdata"))));
   };
 
-  virtual void TearDown() OVERRIDE {
+  virtual void TearDown() override {
     render_system_->Release();
   };
  protected:

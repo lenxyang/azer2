@@ -29,8 +29,8 @@ class ConstExpressValueCalculator : public TreeNode<ASTNode>::Traverser {
     double d;
   } value_;
 
-  virtual bool OnVisitBegin(ASTNode* node) OVERRIDE;
-  virtual void OnVisitEnd(ASTNode* node) OVERRIDE;
+  virtual bool OnVisitBegin(ASTNode* node) override;
+  virtual void OnVisitEnd(ASTNode* node) override;
   DISALLOW_COPY_AND_ASSIGN(ConstExpressValueCalculator);
 };
 

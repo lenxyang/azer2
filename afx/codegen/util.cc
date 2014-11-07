@@ -3,7 +3,7 @@
 #include "azer/afx/compiler/astnode.h"
 #include "base/strings/string_util.h"
 #include "base/strings/string_split.h"
-#include "base/file_util.h"
+#include "base/files/file_util.h"
 #include <sstream>
 
 namespace azer {
@@ -62,8 +62,8 @@ bool CompareCode(const ::base::FilePath& path, const std::string& content) {
   ::base::ReplaceChars(content1, "\r\n", "", &str1);
   ::base::ReplaceChars(content, "\r\n", "", &str2);
   std::string s1, s2;
-  TrimWhitespace(str1, TRIM_ALL, &s1);
-  TrimWhitespace(str2, TRIM_ALL, &s2);
+  ::base::TrimWhitespace(str1, ::base::TRIM_ALL, &s1);
+  ::base::TrimWhitespace(str2, ::base::TRIM_ALL, &s2);
   if (s1 == s2) {
     return true;
   } else {

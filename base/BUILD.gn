@@ -16,7 +16,6 @@ static_library("azer_build_info") {
   ]
   deps = [":azer_build_info_action"]
 }
-                              
 
 source_set("azer_appinit") {
   sources = [
@@ -24,6 +23,9 @@ source_set("azer_appinit") {
     "appinit.h",
   ]
   deps = ["//base"]
+}
+config("azer_render_config") {
+  defines = ["BUILD_AZER_RENDER"]
 }
 
 source_set("base") {
@@ -41,4 +43,5 @@ source_set("base") {
     "//base",
   ]
   configs += ["//azer/build/config/win:utf8src"]
+  configs += [":azer_render_config"]
 }

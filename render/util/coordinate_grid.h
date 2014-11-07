@@ -46,7 +46,7 @@ class AZER_EXPORT CoordinateGridEffect : public azer::Effect {
   static const azer::VertexDesc::Desc kVertexDesc[];
  protected:
   void Init(RenderSystem* rs);
-  virtual void UseTexture(azer::Renderer* renderer) OVERRIDE;
+  virtual void UseTexture(azer::Renderer* renderer) override;
   DISALLOW_COPY_AND_ASSIGN(CoordinateGridEffect);
 };
 

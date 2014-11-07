@@ -54,7 +54,7 @@ class AfxLinker : public PreprocessorParser::Delegate {
                 ::base::FilePath* finaly);
  private:
   virtual void OnAddInclude(PreprocessorParser* parser,
-                            const ::base::FilePath& path) OVERRIDE;
+                            const ::base::FilePath& path) override;
   void ReportError(const std::string& error);
 
   bool ParseASTreeRecursive(Program* program, Program* parent);

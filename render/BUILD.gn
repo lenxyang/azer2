@@ -125,7 +125,6 @@ shared_library("render") {
   ]
 
   configs += ["//azer/build/config/win:utf8src"]
-  defines = ["BUILD_AZER_RENDER"]
   forward_dependent_configs_from = deps
 }
 
@@ -154,4 +153,5 @@ test("render_unittest") {
 
   if (is_win) {deps += ["//azer/render_system/d3d11:d3d11_render_system"]}
   configs += ["//azer/build/config/win:utf8src"]
+  configs += ["//azer/base:azer_render_config"]
 }

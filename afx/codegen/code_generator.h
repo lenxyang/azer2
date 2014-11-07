@@ -35,8 +35,8 @@ class SnippetCodeGenerator : public TreeNode<ASTNode>::Traverser {
   void GenCode(ASTNode* node);
   const std::string& GetCode() const { return code_gen_;}
  private:
-  virtual bool OnVisitBegin(ASTNode* node) OVERRIDE;
-  virtual void OnVisitEnd(ASTNode* node) OVERRIDE;
+  virtual bool OnVisitBegin(ASTNode* node) override;
+  virtual void OnVisitEnd(ASTNode* node) override;
   std::string code_gen_;
   CodeGeneratorFactory* factory_;
 

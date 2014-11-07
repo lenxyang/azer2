@@ -17,7 +17,7 @@ class D3D11GpuConstantsTable : public GpuConstantsTable {
     SAFE_RELEASE(buffer_);
   }
 
-  virtual void flush(Renderer*) OVERRIDE;
+  virtual void flush(Renderer*) override;
  private:
   D3D11GpuConstantsTable(int32 num, const Desc* desc)
       : GpuConstantsTable(num, desc)

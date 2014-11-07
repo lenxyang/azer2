@@ -1,7 +1,7 @@
 #include "azer/base/image.h"
 
 #include <cmath>
-
+#include <algorithm>
 #include "base/files/file_path.h"
 #include "azer/render/util/image.h"
 

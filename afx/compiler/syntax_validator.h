@@ -19,8 +19,8 @@ class SyntaxValidator : public TreeNode<ASTNode>::Traverser {
   }
   bool Refactor();
  private:
-  virtual bool OnVisitBegin(ASTNode* node) OVERRIDE;
-  virtual void OnVisitEnd(ASTNode* node) OVERRIDE;
+  virtual bool OnVisitBegin(ASTNode* node) override;
+  virtual void OnVisitEnd(ASTNode* node) override;
 
   ParseContext* context_;
   ContextValidator context_validator_;

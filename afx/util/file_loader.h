@@ -37,7 +37,7 @@ class MemoryFileLoader : public FileLoader {
   }
  protected:
   virtual bool LoadFileToString(const ::base::FilePath& path,
-                                std::string* content) OVERRIDE;
+                                std::string* content) override;
   std::map<azer::StringType, std::string> content_;
   DISALLOW_COPY_AND_ASSIGN(MemoryFileLoader);
 };
