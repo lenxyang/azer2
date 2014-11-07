@@ -4,7 +4,7 @@ bison("afx_preprocessor_parser") {
   source = "preprocessor.y"
   hpp = "preprocessor_tab.h"
   cpp = "preprocessor_tab.cpp"
-  bison_flags = ["-t", "--report=state", "-Werror"]
+  bison_flags = ["-t", "--report=state"]
   defines = ["yyparse=preprocessor_yyparse", "yydebug=preprocessor_yydebug"]
 }
 
@@ -20,4 +20,5 @@ source_set("afx_preprocessor") {
     ":afx_preprocessor_parser",
     "//base:base",
   ]
+  include_dirs = ["$target_gen_dir"]
 }

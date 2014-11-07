@@ -2,18 +2,15 @@
 
 #include <sstream>
 
+#include "base/logging.h"
+#include "azer/base/string.h"
 #include "azer/afx/codegen/code_generator.h"
 #include "azer/afx/codegen/hlsl_util.h"
 #include "azer/afx/codegen/tex_util.h"
 #include "azer/afx/compiler/astnode.h"
 #include "azer/afx/compiler/debug.h"
 #include "azer/afx/compiler/afxl.h"
-#include "azer/base/string.h"
 #include "base/files/file_path.h"
-#include "base/strings/string16.h"
-#include "base/logging.h"
-
-using ::base::FilePath;
 
 namespace azer {
 namespace afx {

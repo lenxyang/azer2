@@ -20,8 +20,7 @@ source_set("azer_skia") {
     "skia/device.h",
   ]
   deps = ["//skia"]
-  configs += ["//azer/build/config/win:d3d11"]
-  configs += ["//azer/build/config/win:utf8src"]
+  configs += ["//azer/build/config:utf8src"]
   defines = ["BUILD_AZER_RENDER"]
   
 }
@@ -124,7 +123,8 @@ shared_library("render") {
     ":azer_skia",
   ]
 
-  configs += ["//azer/build/config/win:utf8src"]
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:azer_render_config"]
   forward_dependent_configs_from = deps
 }
 
@@ -152,6 +152,5 @@ test("render_unittest") {
   ]
 
   if (is_win) {deps += ["//azer/render_system/d3d11:d3d11_render_system"]}
-  configs += ["//azer/build/config/win:utf8src"]
-  configs += ["//azer/base:azer_render_config"]
+  configs += ["//azer/build/config:utf8src"]
 }

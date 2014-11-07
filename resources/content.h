@@ -1,6 +1,7 @@
 #pragma once
 
 #include <utility>
+#include <memory>
 #include "azer/base/render_export.h"
 
 namespace azer {

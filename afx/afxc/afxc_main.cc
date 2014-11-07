@@ -1,11 +1,11 @@
 #include <iostream>
 #include <fstream>
 
-#include "base/base.h"
+#include "azer/base/appinit.h"
 
 #include "base/logging.h"
 #include "base/files/file_path.h"
-#include "base/file_util.h"
+#include "base/files/file_util.h"
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
 #include "azer/render/render.h"
@@ -27,7 +27,7 @@ bool GenerateTechnique(const AfxWrapper::AfxResult& result) {
 }
 
 int main(int argc, char* argv[]) {
-  ::base::InitApp(&argc, &argv, "AfxCompiler");
+  ::azer::InitApp(&argc, &argv, "AfxCompiler");
   if (0 != ParseArgs()) {
     return -1;
   }
@@ -91,7 +91,7 @@ std::string stage_supfix(azer::RenderPipelineStage stage) {
 void WriteContent(const std::string& path, const std::string& content) {
   ::base::FilePath afxpath(::base::UTF8ToWide(path));
   if (!PathExists(afxpath)) {
-    if (::file_util::WriteFile(afxpath, content.c_str(), content.length())  == -1) {
+    if (::base::WriteFile(afxpath, content.c_str(), content.length())  == -1) {
       LOG(ERROR) << "failed to write file \"" << path << "\"";
     }
     return;
@@ -99,14 +99,14 @@ void WriteContent(const std::string& path, const std::string& content) {
 
   std::string tmp = path + ".afx.tmp";
   ::base::FilePath tmppath(::base::UTF8ToWide(tmp));
-  if (::file_util::WriteFile(tmppath, content.c_str(), content.length())  == -1) {
+  if (::base::WriteFile(tmppath, content.c_str(), content.length())  == -1) {
     LOG(ERROR) << "failed to write file \"" << tmp << "\"";
   }
 
   if (TextContentsEqual(afxpath, tmppath)) {
     ::base::DeleteFile(tmppath, false);
   } else {
-    ::base::PlatformFileError error;
+    ::base::File::Error error;
     if (!::base::ReplaceFile(tmppath, afxpath, &error)) {
       PLOG(ERROR) << "failed to replace file \"" << tmp << "\"";
     }

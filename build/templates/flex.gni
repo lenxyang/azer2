@@ -33,7 +33,6 @@ template("flex") {
     flex_path = rebase_path("$flex_binary_path", root_build_dir, ".")
     args = [
       flex_path,
-      flex_file_path,
       "--header-file=$flex_gen_dir/" + invoker.hpp,
       "-o", "$flex_gen_dir/" + invoker.cpp,
     ]

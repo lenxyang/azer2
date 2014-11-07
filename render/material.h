@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/base/align.h"

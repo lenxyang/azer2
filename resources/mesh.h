@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "base/basictypes.h"
 #include "azer/base/render_export.h"

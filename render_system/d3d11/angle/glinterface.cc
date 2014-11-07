@@ -22,7 +22,7 @@ bool ANGLEGLInterface::MakeCurrent(const AzerEGLContext* ctx) {
   EGLContext context = (EGLContext)ctx->context;
   EGLDisplay display = (EGLDisplay)ctx->display;
   EGLSurface surface = (EGLSurface)ctx->surface;
-  return eglMakeCurrent(display, surface, surface, context);
+  return EGL_FALSE == eglMakeCurrent(display, surface, surface, context);
 }
 
 void ANGLEGLInterface::Destroy(AzerEGLContext* context) {

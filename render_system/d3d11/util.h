@@ -2,12 +2,14 @@
 
 #include <string>
 #include <memory>
+#include <algorithm>
 
 #include <d3d11.h>
 
 #include "base/basictypes.h"
 #include "azer/render_system/d3d11/hr_msg.h"
 #include "azer/base/string.h"
+#include "base/logging.h"
 
 #define SAFE_RELEASE(res) \
   if ((res)) {            \

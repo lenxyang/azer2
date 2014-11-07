@@ -96,7 +96,7 @@ bool ParseMaterial(const char* buffer, int len, MaterialManager* mgr,
   std::vector<base::FilePath::StringType> texvec;
   for (int i = 0; i < root_list->GetSize(); ++i) {
     MaterialPtr mtrl(new Material);
-    const Value* value = NULL;
+    const ::base::Value* value = NULL;
     const ::base::DictionaryValue* dict = NULL;
     if (!root_list->Get(i, &value)) return false;
     if (!value->GetAsDictionary(&dict)) return false;

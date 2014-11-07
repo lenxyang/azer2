@@ -803,7 +803,7 @@ bool SplitSemantic(const std::string& str, std::string* sname,
 
   *sname = str.substr(0, semantic_index + 1);
   *sindex = str.substr(semantic_index + 1);
-  return semantic_index != str.length() - 1;
+  return semantic_index != static_cast<int32>(str.length() - 1);
 }
 
 std::string GetSemanticName(const std::string& name) {

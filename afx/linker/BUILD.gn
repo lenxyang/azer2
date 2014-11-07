@@ -15,4 +15,5 @@ source_set("afx_linker") {
     "technique_parser.h",
   ]
   deps = ["//base:base"]
+  configs += ["//azer/build/config:utf8src"]
 }

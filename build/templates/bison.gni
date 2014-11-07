@@ -58,5 +58,6 @@ template("bison") {
     if (defined(invoker.bison_include_dirs)) {
       include_dirs = invoker.bison_include_dirs
     }
+    if (is_win) { cflags = ["/wd4065"] }
   }
 }

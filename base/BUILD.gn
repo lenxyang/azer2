@@ -42,6 +42,6 @@ source_set("base") {
     ":azer_build_info",
     "//base",
   ]
-  configs += ["//azer/build/config/win:utf8src"]
+  configs += ["//azer/build/config:utf8src"]
   configs += [":azer_render_config"]
 }

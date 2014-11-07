@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "base/basictypes.h"
 #include "azer/base/render_export.h"
 #include "azer/render/texture.h"

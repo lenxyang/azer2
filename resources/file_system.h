@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "base/basictypes.h"
 #include "base/files/file_path.h"
 #include "azer/base/render_export.h"

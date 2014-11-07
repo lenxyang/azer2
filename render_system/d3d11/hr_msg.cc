@@ -5,6 +5,8 @@
 #include <comdef.h>
 
 #include "azer/base/string.h"
+#include "base/logging.h"
+#include "base/strings/string16.h"
 #include "base/strings/utf_string_conversions.h"
 
 namespace azer {
@@ -26,7 +28,7 @@ std::string HRMessage(uint32 hr) {
   */
   _com_error error(hr);
 
-  string16 msg = error.ErrorMessage();
+  ::base::string16 msg = error.ErrorMessage();
   std::string str(::base::UTF16ToUTF8(msg));
   return str;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <algorithm>
 #include "base/basictypes.h"
 #include "azer/math/math.h"
 #include "azer/base/render_export.h"

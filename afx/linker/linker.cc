@@ -1,11 +1,9 @@
 #include "azer/afx/linker/linker.h"
 
-#include "azer/afx/compiler/afxl.h"
 #include "azer/base/string.h"
+#include "azer/afx/compiler/afxl.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/files/file_path.h"
-
-using ::base::FilePath;
 
 namespace azer {
 namespace afx {
@@ -17,7 +15,8 @@ AfxLinker::~AfxLinker() {
   program_vec_.clear();
 }
 
-void AfxLinker::OnAddInclude(PreprocessorParser* parser, const FilePath& path) {
+void AfxLinker::OnAddInclude(PreprocessorParser* parser,
+                             const ::base::FilePath& path) {
   std::string code;
   ::base::FilePath finalpath;
   if (!LoadFile(path, &code, &finalpath)) {

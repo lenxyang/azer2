@@ -82,7 +82,7 @@ class AZER_EXPORT SceneNode : public HierarchyTransform<SceneNode>
   Scene* root() { return root_;}
 
   // Cullable
-  bool IsVisible(const Frustrum& frustrum) OVERRIDE;
+  bool IsVisible(const Frustrum& frustrum) override;
  protected:
   SceneNode(SceneNode* parent, const StringType& name, Type type,
             const Vector3& position, const Vector3& scale,

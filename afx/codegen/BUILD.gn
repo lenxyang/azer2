@@ -17,4 +17,5 @@ source_set("afx_codegen") {
     "util.h",
   ]
   deps = ["//base:base"]
+  configs += ["//azer/build/config:utf8src"]
 }

@@ -1,8 +1,8 @@
 #include "azer/resources/scene_manager.h"
 
+#include "base/values.h"
 #include "azer/resources/json_util.h"
 #include "azer/resources/resource_manager.h"
-
 #include "base/json/json_reader.h"
 
 
@@ -183,7 +183,7 @@ bool ParseSceneNodeInfo(const char* buffer, int len, const StringType& current,
   std::vector<base::FilePath::StringType> texvec;
   for (int i = 0; i < root_list->GetSize(); ++i) {
     SceneNode::NodeInfoPtr info(new SceneNode::NodeInfo);
-    const Value* value = NULL;
+    const ::base::Value* value = NULL;
     if (!root_list->Get(i, &value)) return false;
     const ::base::DictionaryValue* dict = NULL;
     if (!value->GetAsDictionary(&dict)) return false;
@@ -239,7 +239,7 @@ bool ParseLight(const char* buffer, int len, LightVec* vec) {
   std::string type;
   std::vector<base::FilePath::StringType> texvec;
   for (int i = 0; i < root_list->GetSize(); ++i) {
-    const Value* value = NULL;
+    const ::base::Value* value = NULL;
     if (!root_list->Get(i, &value)) return false;
     const ::base::DictionaryValue* dict = NULL;
     if (!value->GetAsDictionary(&dict)) return false;

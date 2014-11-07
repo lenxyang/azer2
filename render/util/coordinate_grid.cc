@@ -3,7 +3,7 @@
 #include "azer/math/math.h"
 
 #include "base/files/file_path.h"
-#include "base/file_util.h"
+#include "base/files/file_util.h"
 #include "azer/resources/resource_manager.h"
 
 namespace azer {

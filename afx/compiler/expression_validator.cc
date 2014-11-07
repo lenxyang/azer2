@@ -569,7 +569,7 @@ bool ExpressionValidator::CheckConstantExpression(ASTNode* node) {
   } else if (node->type() == ASTNode::kRefSymbolNode) {
     RefSymbolNode* ref = node->ToRefSymbolNode();
     DCHECK(ref->GetDeclNode());
-    return ref->GetDeclNode()->GetType()->storage_qualifier() & kConst;
+    return (bool)(ref->GetDeclNode()->GetType()->storage_qualifier() & kConst);
   } else if (node->type() == ASTNode::kUnaryOpNode) {
     UnaryOpNode* unary = node->ToUnaryOpNode();
     return CheckConstantExpression(unary->GetOper());
@@ -596,7 +596,7 @@ bool ExpressionValidator::ValidSwizzleExpression(const TypePtr& type,
   }
 
   if (type->type() == kVector2) {
-    if (ContainsOnlyChars(field->fieldname(), "xy")) {
+    if (::base::ContainsOnlyChars(field->fieldname(), "xy")) {
       return true;
     } else {
       std::stringstream ss;
@@ -605,8 +605,8 @@ bool ExpressionValidator::ValidSwizzleExpression(const TypePtr& type,
       return false;
     }
   } else if (type->type() == kVector3) {
-    if (ContainsOnlyChars(field->fieldname(), "xyz")
-        || ContainsOnlyChars(field->fieldname(), "rgb")) {
+    if (::base::ContainsOnlyChars(field->fieldname(), "xyz")
+        || ::base::ContainsOnlyChars(field->fieldname(), "rgb")) {
       return true;
     } else {
       std::stringstream ss;
@@ -616,8 +616,8 @@ bool ExpressionValidator::ValidSwizzleExpression(const TypePtr& type,
       return false;
     }
   } else if (type->type() == kVector4) {
-    if (ContainsOnlyChars(field->fieldname(), "xyzw")
-        || ContainsOnlyChars(field->fieldname(), "rgba")) {
+    if (::base::ContainsOnlyChars(field->fieldname(), "xyzw")
+        || ::base::ContainsOnlyChars(field->fieldname(), "rgba")) {
       return true;
     } else {
       std::stringstream ss;

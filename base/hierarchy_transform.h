@@ -38,10 +38,10 @@ class HierarchyTransform : public TreeNode<T>
   class Traverser : public TreeNode<T2>::Traverser {
    public:
     // member of traverser
-    virtual bool OnVisitBegin(T2* node) OVERRIDE {
+    virtual bool OnVisitBegin(T2* node) override {
       node->UpdateWorldMatrix(); return true;
     }
-    virtual void OnVisitEnd(T2* node) OVERRIDE {}
+    virtual void OnVisitEnd(T2* node) override {}
   };
   
   Vector3 scale_;
