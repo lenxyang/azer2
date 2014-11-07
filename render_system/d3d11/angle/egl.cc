@@ -19,8 +19,8 @@
 
 namespace azer {
 
-bool AngleEGL::Init(AzerEGLContext* context) {
-  if (! angle::Init((RenderSystem*)render_system_, context)) {
+bool AngleEGL::Init() {
+  if (! angle::Init((RenderSystem*)render_system_, &context_)) {
     return false;
   }
 
@@ -31,15 +31,15 @@ bool AngleEGL::Init(AzerEGLContext* context) {
   return true;
 }
 
-bool AngleEGL::MakeCurrent(const AzerEGLContext* ctx) {
-  EGLContext context = (EGLContext)ctx->context;
-  EGLDisplay display = (EGLDisplay)ctx->display;
-  EGLSurface surface = (EGLSurface)ctx->surface;
+bool AngleEGL::MakeCurrent() {
+  EGLContext context = (EGLContext)context_.context;
+  EGLDisplay display = (EGLDisplay)context_.display;
+  EGLSurface surface = (EGLSurface)context_.surface;
   return EGL_FALSE == eglMakeCurrent(display, surface, surface, context);
 }
 
-void AngleEGL::Destroy(AzerEGLContext* context) {
-  angle::Destroy(context);
+void AngleEGL::Destroy() {
+  angle::Destroy(context_);
 }
 
 Texture* AngleEGL::GetShareTextureFromTex(uint32 texid) {

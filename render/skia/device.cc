@@ -12,7 +12,7 @@
 #include "gl/GrGLDefines.h"
 #include "gl/GrGLUtil.h"
 
-#include "azer/render/glcontext.h"
+#include "azer/render/egl.h"
 #include "azer/render/texture.h"
 
 namespace azer {

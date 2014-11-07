@@ -8,8 +8,6 @@ static_library("azer_devil_util") {
 
 source_set("azer_skia") {
   sources = [
-    "skia/skia.cc",
-    "skia/skia.h",
     "skia/canvas.cc",
     "skia/canvas.h",
     "skia/context.cc",

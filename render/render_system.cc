@@ -1,10 +1,12 @@
 #include "azer/render/render_system.h"
 
+#include <memory>
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/math/math.h"
 #include "azer/ui/window/window_host.h"
 #include "azer/render/util/dynlib.h"
+#include "azer/render/skia/context.h"
 
 typedef azer::RenderSystem* (*CreateRenderSystemFunc)(azer::WindowHost* win);
 
@@ -40,10 +42,10 @@ class AutoRenderSystemInit {
       }
 
       win->SetRenderSystem(current_);
-      return current_;
+      return true;
     } else {
       PLOG(ERROR) << "not a RenderSystem shared library.";
-      return NULL;
+      return false;
     }
   }
 
@@ -76,4 +78,13 @@ void RenderSystem::Release() {
   s_render_system_env = NULL;
 }
 
+skia::Context* RenderSystem::GetSkiaContext() {
+  static EGL* egl = CreateEGL();
+  std::unique_ptr<skia::Context> ctx(new skia::Context());
+  if (ctx->Init(this)) {
+    return ctx.release();;
+  } else {
+    return NULL;
+  }
+}
 }  // namespace azer

@@ -13,7 +13,7 @@ namespace skia {
 
 class ASkGLContext : public SkGLContext {
  public:
-  ASkGLContext(int width, int height);
+  ASkGLContext(EGL* egl);
   virtual ~ASkGLContext();
 
   virtual void makeCurrent() const override;
@@ -24,15 +24,14 @@ class ASkGLContext : public SkGLContext {
     DCHECK(fGL.get() != NULL);
     return fGL.get();
   }
-  AzerEGLContext* GetAzerEGLContext() { return &context_;}
-  EGL* GetEGL() { return azer_egl_;}
+
+  bool Init();
  protected:
   const GrGLInterface* createGLContext();
   void destroyGLContext();
  private:
   // AutoContextRestore auto_restore_;
-  AzerEGLContext context_;
-  EGL* azer_egl_;
+  EGL* egl_;
   int width_, height_;
   DISALLOW_COPY_AND_ASSIGN(ASkGLContext);
 };

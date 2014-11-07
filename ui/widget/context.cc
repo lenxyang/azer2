@@ -3,9 +3,8 @@
 #include <memory>
 
 #include "base/logging.h"
-#include "azer/render/glcontext.h"
+#include "azer/render/egl.h"
 #include "azer/render/skia/context.h"
-#include "azer/render/skia/skia.h"
 #include "azer/render/skia/canvas.h"
 #include "azer/ui/window/window_host.h"
 #include "azer/ui/widget/widget_host.h"
@@ -42,7 +41,7 @@ Context* Context::Create(RenderSystem* rs) {
 
 bool Context::Init() {
   DCHECK(NULL == sk_context_.get());
-  sk_context_.reset(skia::Init());
+  sk_context_.reset(render_system_->GetSkiaContext());
   if (!sk_context_) {
     LOG(ERROR) << "failed to initialize skia.";
     return false;

@@ -32,11 +32,22 @@ Context::~Context() {
   }
 }
 
-bool Context::Init() {
+bool Context::Init(RenderSystem* rs) {
   // code reference: skia/include/gpu/GrContextFactory.h
-  helper_ = new ASkGLContext(1, 1);
-  SkGLContext* glctx = helper_;
+  egl_.reset(rs->CreateEGL());
+  if (!egl_.get()) {
+    return false;
+  }
+  if (!egl_->Init()) {
+    return false;
+  }
 
+  helper_ = new ASkGLContext(egl_.get());
+  if (helper_->Init()) {
+    return false;
+  }
+
+  SkGLContext* glctx = helper_;
   interface_ = helper_->GetGrGlInterface();
   if (!interface_) {
     return false;
@@ -59,16 +70,6 @@ CanvasPtr Context::CreateCanvas(int width, int height) {
   } else {
     return CanvasPtr();
   }
-}
-
-AzerEGLContext* Context::GetAzerEGLContext() {
-  DCHECK(helper_ != NULL);
-  return helper_->GetAzerEGLContext();
-}
-
-AzerEGLInterface* Context::GetAzerEGLInterface() {
-  DCHECK(helper_ != NULL);
-  return helper_->GetAzerEGLInterface();
 }
 
 void Context::flush() {

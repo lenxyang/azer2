@@ -14,6 +14,9 @@ class SkGpuDevice;
 class SkCanvas;
 
 namespace azer {
+
+class RenderSystem;
+
 namespace skia {
 
 class ASkGLContext;
@@ -25,24 +28,29 @@ class AZER_EXPORT Context {
   Context();
   ~Context();
 
-  bool Init();
+  bool Init(RenderSystem* rs);
   void flush();
   void wait();
 
   CanvasPtr CreateCanvas(int width, int height);
 
-  AzerEGLContext* GetAzerEGLContext();
-  AzerEGLInterface* GetAzerEGLInterface();
+  EGL* GetEGL();
 
   GrContext* GetGrContext() { return gr_context_;}
   const GrGLInterface* GetGrGLInterface() { return interface_;}
  private:
+  std::unique_ptr<EGL> egl_;
   GrContext* gr_context_;
   const GrGLInterface* interface_;
   ASkGLContext* helper_;
   friend class AzerSkDevice;
   DISALLOW_COPY_AND_ASSIGN(Context);
 };
+
+inline EGL* Context::GetEGL() {
+  DCHECK(egl_.get() != NULL);
+  return egl_.get();
+}
 
 }  // namespace skia
 }  // namespace azer

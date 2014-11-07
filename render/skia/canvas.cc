@@ -46,7 +46,7 @@ SkCanvas* Canvas::GetSkCanvas() {
 TexturePtr& Canvas::GetTexture() {
   if (!texture_.get()) {
     GrTexture* tex = device_->GetGrTex();
-    texture_.reset(context_->GetAzerEGLInterface()->
+    texture_.reset(context_->GetEGL()->
                    GetShareTextureFromTex(tex->getTextureHandle()));
   }
   return texture_;

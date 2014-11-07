@@ -1,6 +1,6 @@
 #include "azer/render/skia/context.h"
 
-#include "azer/render/glcontext.h"
+#include "azer/render/egl.h"
 
 struct GrGLInterface;
 class GrRenderTarget;

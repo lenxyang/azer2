@@ -18,9 +18,9 @@ class AngleEGL : public AzerEGLInterface {
   AngleEGL(D3D11RenderSystem* rs)
       : render_system_(rs) {}
   ~AngleEGL() {}
-  virtual bool Init(AzerEGLContext* context) override;
-  virtual bool MakeCurrent(const AzerEGLContext* context) override;
-  virtual void Destroy(AzerEGLContext* context) override;
+  virtual bool Init() override;
+  virtual bool MakeCurrent() override;
+  virtual void Destroy() override;
   virtual Texture* GetShareTextureFromTex(uint32 texid) override;
   virtual const GrGLInterface* AssimbleInterface() override;
  private:
