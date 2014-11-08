@@ -10,6 +10,8 @@
 #include "azer/render/skia/GrGLAssembleInterface.h"
 #include "azer/render/skia/GrGLUtil.h"
 
+#include "azer/render/egl.h"
+
 #define GET_PROC(F) functions->f ## F = (GrGL ## F ## Proc) get(ctx, "gl" #F)
 #define GET_PROC_SUFFIX(F, S) functions->f ## F = (GrGL ## F ## Proc) get(ctx, "gl" #F #S)
 #define GET_PROC_LOCAL(F) GrGL ## F ## Proc F = (GrGL ## F ## Proc) get(ctx, "gl" #F)

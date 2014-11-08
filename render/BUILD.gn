@@ -21,7 +21,10 @@ source_set("azer_skia") {
     "skia/GrGLAssembleInterface.cpp",
     "skia/GrGLAssembleInterface.h",
   ]
-  deps = ["//skia"]
+  include_dirs = [
+    "//third_party/angle/include",
+  ]
+  deps = ["//skia", "//third_party/angle:libGLESv2",]
   configs += ["//azer/build/config:utf8src"]
   defines = ["BUILD_AZER_RENDER"]
   visibility = [":render"]

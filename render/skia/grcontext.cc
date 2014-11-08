@@ -1,9 +1,11 @@
 #include "azer/render/skia/grcontext.h"
 
 #include "gl/GrGLInterface.h"
+#include "azer/render/skia/GrGLUtil.h"
 #include "azer/render/skia/GrGLAssembleInterface.h"
 #include "azer/render/render_system.h"
 #include "azer/render/egl.h"
+#include "GLES2/gl2.h"
 #include "base/logging.h"
 
 namespace azer {
@@ -53,6 +55,7 @@ ASkGLContext::ASkGLContext(EGL* egl) :
 ASkGLContext::~ASkGLContext() {
   destroyGLContext();
 }
+
 
 bool ASkGLContext::Init() {
   DCHECK(NULL != egl_);

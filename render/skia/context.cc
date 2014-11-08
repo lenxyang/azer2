@@ -43,7 +43,7 @@ bool Context::Init(RenderSystem* rs) {
   }
 
   helper_ = new ASkGLContext(egl_.get());
-  if (helper_->Init()) {
+  if (!helper_->Init()) {
     return false;
   }
 
