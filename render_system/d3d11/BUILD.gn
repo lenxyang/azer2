@@ -1,28 +1,3 @@
-source_set("azer_angle11") {
-  sources = [
-    "angle/egl.cc",
-    "angle/egl.h",
-    "angle/module.cc",
-    "angle/module.h",
-  ]
-  deps = [
-    "//azer/third_party/angle:libGLESv2",
-    "//azer/third_party/angle:libEGL",
-    "//azer/render:render",
-    "//skia",
-  ]
-
-  configs += [
-    "//azer/third_party/angle:angle_libGLESv2_config",
-    "//azer/build/config:d3d11",
-    "//azer/build/config:utf8src",
-  ]
-  defines = [
-    "BUILD_D3D11_AZER_RENDER_SYSTEM",
-    "ANGLE_GLNAME=L\"libGLESv2\"",
-    "ANGLE_EGLNAME=L\"libEGL\"",
-  ]
-}
 
 shared_library("d3d11_render_system") {
   sources = [
@@ -64,7 +39,7 @@ shared_library("d3d11_render_system") {
     "//base:base",
     "//azer/render:render",
     "//ui/gfx:gfx",
-    ":azer_angle11",
+    "angle",
   ]
   defines = ["BUILD_D3D11_AZER_RENDER_SYSTEM"]
   configs += [

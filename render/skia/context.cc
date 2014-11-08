@@ -2,7 +2,6 @@
 
 #include "gl/GrGLFunctions.h"
 #include "gl/GrGLDefines.h"
-#include "gl/GrGLUtil.h"
 #include "gl/GrGLInterface.h"
 #include "SkCanvas.h"
 #include "SkGpuDevice.h"
@@ -11,6 +10,7 @@
 #include "SkImageInfo.h"
 #include "SkImageEncoder.h"
 #include "azer/render/skia/grcontext.h"
+#include "azer/render/skia/GrGLUtil.h"
 
 namespace azer {
 namespace skia {

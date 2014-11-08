@@ -1,25 +1,27 @@
 #include "azer/render_system/d3d11/angle/egl.h"
 
-
 #if !defined(WIN32_LEAN_AND_MEAN)
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 
 #include "EGL/egl.h"
-#include "EGL/eglext.h"
 #include "GLES2/gl2.h"
 #include "GLES2/gl2ext.h"
-#include "libGLESv2/main.h"
+
 #include "gl/GrGLInterface.h"          // skia
-#include "gl/GrGLAssembleInterface.h"  // skia
 
 #include "azer/ui/window/window_host.h"
 #include "azer/render_system/d3d11/angle/module.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/render_system.h"
 
+extern "C" {
+typedef void (*FUNCGLGETTEXSHARED3DTEX)(GLenum target, GLuint fbhandle, void** val);
+}
+
 namespace azer {
+FUNCGLGETTEXSHARED3DTEX glGetTexShareD3DTexProc;
 
 bool AngleEGL::Init() {
   EGLint numConfigs;
@@ -90,11 +92,23 @@ bool AngleEGL::Init() {
   context_.surface = surface;
   context_.context = context;
 
-  module_ = (void*)ANGLEModule::GetInstance()->GetModule();
-  if (NULL == module_) {
+  module_ = ANGLEModule::GetInstance();
+  if (NULL == module_ || !module_->GetModule()) {
     return false;
   }
+
+  glGetTexShareD3DTexProc =
+      (FUNCGLGETTEXSHARED3DTEX)module_->GetProcAddress("glGetTexShareD3DTex");
+  if (!glGetTexShareD3DTexProc) {
+    return false;
+  }
+
   return true;
+}
+
+void* AngleEGL::GetProcAddress(const char* name) {
+  DCHECK(module_ != NULL && module_->GetModule() != NULL);
+  return module_->GetProcAddress(name);
 }
 
 bool AngleEGL::MakeCurrent() {
@@ -118,23 +132,10 @@ void AngleEGL::Destroy() {
 }
 
 Texture* AngleEGL::GetShareTextureFromTex(uint32 texid) {
+  DCHECK(glGetTexShareD3DTexProc != NULL);
   D3D11RenderSystem* rs = render_system_;
   HANDLE handle = 0;
-  glGetTexShareD3DTex(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
+  (*glGetTexShareD3DTexProc)(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
   return D3D11Texture2DExtern::Create(handle, rs);
-}
-
-static GrGLFuncPtr angle_get_gl_proc(void* ctx, const char name[]) {
-  GrGLFuncPtr proc = (GrGLFuncPtr) GetProcAddress((HMODULE)ctx, name);
-  if (proc) {
-    return proc;
-  }
-  return eglGetProcAddress(name);
-}
-
-
-const GrGLInterface* AngleEGL::AssimbleInterface() {
-  HMODULE module = (HMODULE)module_;
-  return GrGLAssembleGLESInterface(module_, angle_get_gl_proc);
 }
 }  // namespace

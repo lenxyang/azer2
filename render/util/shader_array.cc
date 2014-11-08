@@ -1,5 +1,5 @@
 #include "azer/render/util/shader_array.h"
-#include "base/files/file_util.h"
+#include "azer/base/file_util.h"
 #include "base/strings/utf_string_conversions.h"
 
 namespace azer {
@@ -23,7 +23,7 @@ bool LoadForStage(RenderPipelineStage stage, const base::FilePath& path,
                   ShaderArray* shaders) {
   DCHECK(shaders != NULL);
   std::string code;
-  if (!::base::ReadFileToString(path, &code)) {
+  if (!ReadFileToString(path, &code)) {
     return false;
   }
 

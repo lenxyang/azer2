@@ -1,0 +1,28 @@
+
+source_set("angle") {
+  sources = [
+    "egl.cc",
+    "egl.h",
+    "module.cc",
+    "module.h",
+  ]
+  deps = [
+    "//third_party/angle:libGLESv2",
+    "//third_party/angle:libEGL",
+    "//azer/render:render",
+    "//skia",
+  ]
+
+  configs += [
+    "//azer/build/config:d3d11",
+    "//azer/build/config:utf8src",
+  ]
+  include_dirs = [
+    "//third_party/angle/include",
+  ]
+  defines = [
+    "BUILD_D3D11_AZER_RENDER_SYSTEM",
+    "ANGLE_GLNAME=L\"libGLESv2\"",
+    "ANGLE_EGLNAME=L\"libEGL\"",
+  ]
+}

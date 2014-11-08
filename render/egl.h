@@ -28,7 +28,8 @@ class EGL {
   virtual bool MakeCurrent() = 0;
   virtual void Destroy() = 0;
   virtual Texture* GetShareTextureFromTex(uint32 texid)  = 0;
-  virtual const GrGLInterface* AssimbleInterface() = 0;
+
+  virtual void* GetProcAddress(const char* name) = 0;  
  protected:
   AEGLContext context_;
 };

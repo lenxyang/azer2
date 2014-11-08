@@ -16,11 +16,15 @@ source_set("azer_skia") {
     "skia/grcontext.h",
     "skia/device.cc",
     "skia/device.h",
+    "skia/GrGLUtil.cpp",
+    "skia/GrGLUtil.h",
+    "skia/GrGLAssembleInterface.cpp",
+    "skia/GrGLAssembleInterface.h",
   ]
   deps = ["//skia"]
   configs += ["//azer/build/config:utf8src"]
   defines = ["BUILD_AZER_RENDER"]
-  
+  visibility = [":render"]
 }
 
 shared_library("render") {
@@ -115,6 +119,8 @@ shared_library("render") {
     "../base/tree_node.h",
     "../base/image.cc",
     "../base/image.h",
+    "../base/file_util.cc",
+    "../base/file_util.h",
   ]
 
   deps = [

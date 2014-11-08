@@ -43,7 +43,7 @@ source_set("azer_ui_widget") {
     "widget.h",
   ]
 
-  deps = ["//skia" ]
+  deps = ["//skia", "//base", "//ui/gfx", "//ui/gfx/geometry"]
 
   configs += ["//azer/build/config:utf8src",]
   defines = ["BUILD_AZER_RENDER", "BUILD_AZER_WIDGET"]

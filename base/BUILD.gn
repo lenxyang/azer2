@@ -9,7 +9,7 @@ action("build_info_action") {
   args = [gen_dir, "build_info", src_absolute_dir]
 }
 
-static_library("build_info") {
+source_set("build_info") {
   sources = [
     "$target_gen_dir/build_info.cc",
     "build_info.cc",
@@ -25,7 +25,9 @@ source_set("appinit") {
   ]
   deps = ["//base", "//base:i18n"]
 }
+
 config("azer_render_config") {
   defines = ["BUILD_AZER_RENDER"]
 }
+
 

@@ -6,9 +6,12 @@
 
 #include <windows.h>
 
+#include <string>
+
 #include "base/basictypes.h"
 #include "base/lazy_instance.h"
 #include "azer/render_system/d3d11/export.h"
+#include "azer/base/string.h"
 
 namespace azer {
 class AZER_D3D11RS_EXPORT ANGLEModule {
@@ -16,6 +19,7 @@ class AZER_D3D11RS_EXPORT ANGLEModule {
   static ANGLEModule* GetInstance();
 
   HMODULE GetModule() { return module_;}
+  void* GetProcAddress(const std::string& name);
  private:
   ANGLEModule();
   ~ANGLEModule();
