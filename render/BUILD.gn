@@ -6,52 +6,11 @@ static_library("azer_devil_util") {
   ]
 }
 
-source_set("azer_skia") {
-  sources = [
-    "skia/canvas.cc",
-    "skia/canvas.h",
-    "skia/context.cc",
-    "skia/context.h",
-    "skia/grcontext.cc",
-    "skia/grcontext.h",
-    "skia/device.cc",
-    "skia/device.h",
-    "skia/GrGLUtil.cpp",
-    "skia/GrGLUtil.h",
-    "skia/GrGLAssembleInterface.cpp",
-    "skia/GrGLAssembleInterface.h",
-  ]
-  include_dirs = [
-    "//third_party/angle/include",
-  ]
-  deps = ["//skia", "//third_party/angle:libGLESv2",]
-  configs += ["//azer/build/config:utf8src"]
-  defines = ["BUILD_AZER_RENDER"]
-  visibility = [":render"]
-}
-
 shared_library("render") {
   sources = [
     "../animation/bone.cc",
     "../animation/skeleton.cc",
     "../align.h",
-    "../resources/content.h",
-    "../resources/file_system.cc",
-    "../resources/file_system.h",
-    "../resources/geometry_manager.cc",
-    "../resources/geometry_manager.h",
-    "../resources/json_util.cc",
-    "../resources/json_util.h",
-    "../resources/material_manager.cc",
-    "../resources/material_manager.h",
-    "../resources/mesh.cc",
-    "../resources/mesh.h",
-    "../resources/resource_manager.cc",
-    "../resources/resource_manager.h",
-    "../resources/scene_manager.cc",
-    "../resources/scene_manager.h",
-    "../resources/technique_manager.cc",
-    "../resources/technique_manager.h",
     "../scene/node.cc",
     "../scene/node.h",
     "../scene/scene.cc",
@@ -103,28 +62,19 @@ shared_library("render") {
     "util/shader_array.h",
     "util/image.cc",
     "util/image.h",
-    "../ui/window/handle.h",
-    "../ui/window/message_loop_win.cc",
-    "../ui/window/message_loop.h",
-    "../ui/window/native_event_handler.h",
-    "../ui/window/native_event_handler.cc",
-    "../ui/window/native_event.h",
-    "../ui/window/native_mouse_event.h",
-    "../ui/window/window_host.cc",
-    "../ui/window/window_host.h",
-    "../ui/window/window_host_win.cc",
-    "../ui/window/window_win.cc",
-    "../ui/window/window.h",
   ]
 
   deps = [
-    "//azer/math:math",
+    "//azer/math",
     "//azer/base",
-    "//azer/ui/widget:azer_ui_widget",
-    "//ui/gfx:gfx",
-    "//base:base",
+    "//azer/ui/widget",
+    "//azer/ui/window",
+    "//azer/resources",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//base",
+    "skia",
     ":azer_devil_util",
-    ":azer_skia",
   ]
 
   configs += ["//azer/build/config:utf8src"]

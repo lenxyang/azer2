@@ -5,7 +5,6 @@
 #include "azer/render/skia/GrGLAssembleInterface.h"
 #include "azer/render/render_system.h"
 #include "azer/render/egl.h"
-#include "GLES2/gl2.h"
 #include "base/logging.h"
 
 namespace azer {

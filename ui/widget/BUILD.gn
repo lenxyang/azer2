@@ -1,6 +1,6 @@
 
 
-source_set("azer_ui_widget") {
+source_set("widget") {
   sources = [
     "canvas.cc",
     "canvas.h",

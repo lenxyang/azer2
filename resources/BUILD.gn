@@ -1,0 +1,29 @@
+
+
+source_set("resources") {
+  sources = [
+    "content.h",
+    "file_system.cc",
+    "file_system.h",
+    "geometry_manager.cc",
+    "geometry_manager.h",
+    "json_util.cc",
+    "json_util.h",
+    "material_manager.cc",
+    "material_manager.h",
+    "mesh.cc",
+    "mesh.h",
+    "resource_manager.cc",
+    "resource_manager.h",
+    "scene_manager.cc",
+    "scene_manager.h",
+    "technique_manager.cc",
+    "technique_manager.h",
+  ]
+
+  deps = ["//base"]
+  defines = [
+    "BUILD_AZER_RENDER"
+  ]
+  visibility = ["//azer/render"]
+}

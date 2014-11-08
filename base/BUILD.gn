@@ -26,6 +26,12 @@ source_set("appinit") {
   deps = ["//base", "//base:i18n"]
 }
 
+config("base_config") {
+  if (is_win) {
+    cflags = ["/wd4819"]
+  }
+}
+
 source_set("base") {
   sources = [
     "hierarchy_transform.h",
@@ -45,6 +51,7 @@ source_set("base") {
     "BUILD_AZER_RENDER"
   ]
   visibility = ["//azer/render"]
+  public_configs = [":base_config"]
 }
 
 config("azer_render_config") {
