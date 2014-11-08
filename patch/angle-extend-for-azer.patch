@@ -1,0 +1,154 @@
+From 3129c2f0733cc8f609d45e8014ce04a29ae2703b Mon Sep 17 00:00:00 2001
+From: lenxyang <lenxyang@gmail.com>
+Date: Sat, 8 Nov 2014 19:29:40 +0800
+Subject: [PATCH]  extend for azer
+
+---
+ BUILD.gn                                           | 13 ++++--
+ src/libGLESv2/azer_ext.cpp                         | 52 ++++++++++++++++++++++
+ src/libGLESv2/libGLESv2.def                        |  2 +
+ .../renderer/d3d/d3d11/TextureStorage11.cpp        |  2 +-
+ 4 files changed, 65 insertions(+), 4 deletions(-)
+ create mode 100644 src/libGLESv2/azer_ext.cpp
+
+diff --git a/BUILD.gn b/BUILD.gn
+index 5d1bad5..3b06b19 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -144,7 +144,7 @@ action("commit_id") {
+ }
+ 
+ if (is_win) {
+-  angle_enable_d3d9 = true
++  angle_enable_d3d9 = false
+   angle_enable_d3d11 = true
+ 
+   shared_library("libGLESv2") {
+@@ -153,6 +153,7 @@ if (is_win) {
+       "src/libGLESv2/libGLESv2.cpp",
+       "src/libGLESv2/libGLESv2.def",
+       "src/libGLESv2/libGLESv2.rc",
++      "src/libGLESv2/azer_ext.cpp",
+     ]
+ 
+     defines = [
+@@ -196,7 +197,8 @@ if (is_win) {
+     ]
+ 
+     include_dirs = [ "src/libGLESv2" ]
+-
++    deffile = rebase_path("src/libGLESv2/libGLESv2.def", "$root_build_dir")
++    ldflags = ["/DEF:$deffile"]
+     deps = [
+       ":commit_id",
+       ":includes",
+@@ -207,6 +209,7 @@ if (is_win) {
+ 
+   shared_library("libEGL") {
+     sources = rebase_path(egl_gypi.angle_libegl_sources, ".", "src")
++    sources += rebase_path(egl_gypi.angle_libegl_win32_sources, ".", "src")
+ 
+     defines = [
+       "GL_APICALL=",
+@@ -223,12 +226,16 @@ if (is_win) {
+     if (is_debug) {
+       defines += [
+         "ANGLE_ENABLE_PERF",
+-        "ANGLE_GENERATE_SHADER_DEBUG_INFO"
++        "ANGLE_GENERATE_SHADER_DEBUG_INFO",
++        "ANGLE_ENABLE_D3D9",
++        "ANGLE_ENABLE_D3D11",
+       ]
+     }
+ 
+     include_dirs = [ "src/libGLESv2" ]
+     libs = [ "d3d9.lib" ]
++    deffile = rebase_path("src/libEGL/libEGL.def", "$root_build_dir")
++    ldflags = ["/DEF:$deffile"]
+ 
+     deps = [
+       ":commit_id",
+diff --git a/src/libGLESv2/azer_ext.cpp b/src/libGLESv2/azer_ext.cpp
+new file mode 100644
+index 0000000..32f7168
+--- /dev/null
++++ b/src/libGLESv2/azer_ext.cpp
+@@ -0,0 +1,52 @@
++#include "libGLESv2/main.h"
++#include "libGLESv2/Context.h"
++#include "libGLESv2/Framebuffer.h"
++#include "libGLESv2/Renderbuffer.h"
++#include "libGLESv2/renderer/RenderTarget.h"
++#include "libGLESv2/renderer/d3d/TextureD3D.h"
++#include "libGLESv2/renderer/d3d/d3d11/Renderer11.h"
++#include "libGLESv2/renderer/d3d/d3d11/RenderTarget11.h"
++#include "libGLESv2/renderer/d3d/d3d11/TextureStorage11.h"
++
++HANDLE createSharedHandle(ID3D11Resource* resource) {
++  HANDLE shared_handle;
++  HRESULT hr;
++  IDXGIResource* dxgi_res = NULL;
++  hr = resource->QueryInterface(__uuidof(IDXGIResource), (void**)&dxgi_res);
++  if (FAILED(hr)) {
++    return NULL;
++  }
++
++  hr = dxgi_res->GetSharedHandle(&shared_handle);
++  if (dxgi_res) {dxgi_res->Release();}
++  if (FAILED(hr)) {
++    return NULL;
++  }
++
++  return shared_handle;
++}
++
++extern "C" {
++void glGetTexShareD3DTex(GLenum target, GLuint fbhandle, void** val) {
++  *val = NULL;
++  gl::Context *context = gl::getNonLostContext();
++  if (target != GL_DRAW_FRAMEBUFFER_ANGLE) {
++    return gl::error(GL_INVALID_ENUM);
++  }
++
++  gl::Texture* fb = context->getTexture(fbhandle);
++  if (fb == NULL) {
++    return gl::error(GL_INVALID_ENUM);
++  }
++
++  rx::TextureD3D* d3dtex = (rx::TextureD3D*)fb->getImplementation();
++  rx::TextureStorage11* storage = (rx::TextureStorage11*)
++      d3dtex->getNativeTexture();
++  ID3D11Resource* resource = NULL;
++  gl::Error err = storage->getResource(&resource);
++  if (err.isError()) {
++    return;
++  }
++  *val = createSharedHandle(resource);
++}
++}
+diff --git a/src/libGLESv2/libGLESv2.def b/src/libGLESv2/libGLESv2.def
+index 88dceb3..a12cde3 100644
+--- a/src/libGLESv2/libGLESv2.def
++++ b/src/libGLESv2/libGLESv2.def
+@@ -297,3 +297,5 @@ EXPORTS
+ 
+     ; Setting up TRACE macro callbacks
+     SetTraceFunctionPointers        @284
++
++    glGetTexShareD3DTex             @300
+diff --git a/src/libGLESv2/renderer/d3d/d3d11/TextureStorage11.cpp b/src/libGLESv2/renderer/d3d/d3d11/TextureStorage11.cpp
+index 6998231..9907079 100644
+--- a/src/libGLESv2/renderer/d3d/d3d11/TextureStorage11.cpp
++++ b/src/libGLESv2/renderer/d3d/d3d11/TextureStorage11.cpp
+@@ -744,7 +744,7 @@ gl::Error TextureStorage11_2D::getResource(ID3D11Resource **outResource)
+         desc.Usage = D3D11_USAGE_DEFAULT;
+         desc.BindFlags = getBindFlags();
+         desc.CPUAccessFlags = 0;
+-        desc.MiscFlags = 0;
++        desc.MiscFlags = D3D11_RESOURCE_MISC_SHARED;
+ 
+         HRESULT result = device->CreateTexture2D(&desc, NULL, &mTexture);
+ 
+-- 
+1.8.4.3
+
