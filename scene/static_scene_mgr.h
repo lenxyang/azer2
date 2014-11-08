@@ -2,7 +2,7 @@
 
 #include "azer/scene/scene_mgr.h"
 #include "base/basictypes.h"
-#include "azer/render/render_export.h"
+#include "azer/render/export.h"
 
 namespace azer {
 /**

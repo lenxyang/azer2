@@ -4,7 +4,7 @@
 #include "base/basictypes.h"
 #include "azer/math/math.h"
 #include "azer/base/movable.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 
 namespace azer {
 template <class T>

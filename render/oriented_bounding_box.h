@@ -1,7 +1,7 @@
 #pragma once
 
 #include "azer/render/bounding_volumn.h"
-#include "azer/render/render_export.h"
+#include "azer/render/export.h"
 
 namespace azer {
 

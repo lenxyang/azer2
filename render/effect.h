@@ -4,7 +4,7 @@
 #include <memory>
 
 
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/material.h"
 #include "azer/render/renderer.h"

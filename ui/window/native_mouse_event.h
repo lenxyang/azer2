@@ -1,6 +1,6 @@
 #pragma once
 
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/ui/window/native_message.h"
 #include "ui/gfx/rect.h"
 #include "ui/gfx/point.h"

@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/resources/geometry_manager.h"
 #include "azer/resources/material_manager.h"

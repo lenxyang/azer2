@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/base/movable.h"
 #include "azer/math/math.h"
 #include "azer/render/frustrum.h"

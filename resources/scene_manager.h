@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #include "base/basictypes.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/render/light.h"
 #include "azer/scene/node.h"

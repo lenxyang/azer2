@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "base/logging.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_target.h"
 #include "azer/render/depth_buffer.h"

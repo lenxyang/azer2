@@ -4,7 +4,7 @@
 
 #include "base/basictypes.h"
 #include "base/files/file_path.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/resources/content.h"
 #include "base/lazy_instance.h"

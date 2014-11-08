@@ -7,7 +7,7 @@
 
 #include "base/basictypes.h"
 #include "base/logging.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/render/render_system_enum.h"
 
 namespace azer {

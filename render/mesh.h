@@ -1,6 +1,6 @@
 #pragma once
 
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/render/bounding_volumn.h"
 #include "azer/render/cullable.h"
 #include "azer/render/indices_buffer.h"

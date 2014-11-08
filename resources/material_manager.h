@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/render/texture.h"
 #include "azer/resources/file_system.h"

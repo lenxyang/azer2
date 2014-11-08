@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/render/effect.h"
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/indices_buffer.h"

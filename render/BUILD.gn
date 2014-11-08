@@ -10,7 +10,6 @@ shared_library("render") {
   sources = [
     "../animation/bone.cc",
     "../animation/skeleton.cc",
-    "../align.h",
     "../scene/node.cc",
     "../scene/node.h",
     "../scene/scene.cc",

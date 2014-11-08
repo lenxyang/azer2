@@ -2,7 +2,7 @@
 
 #include <deque>
 
-#include "azer/render/render_export.h"
+#include "azer/render/export.h"
 #include "azer/render/mesh.h"
 
 namespace azer {

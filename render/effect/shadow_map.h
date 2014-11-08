@@ -1,6 +1,6 @@
 #pragma once
 
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/render/light.h"
 #include "azer/render/depth_buffer.h"
 #include "azer/render/effect.h"

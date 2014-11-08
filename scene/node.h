@@ -10,7 +10,7 @@
 #include "azer/base/string.h"
 #include "azer/base/movable.h"
 #include "azer/base/hierarchy_transform.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/render/cullable.h"
 #include "azer/render/light.h"
 #include "azer/render/mesh.h"

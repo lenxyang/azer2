@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "base/files/file_path.h"
 
 namespace azer {

@@ -4,7 +4,7 @@
 
 #include "base/basictypes.h"
 #include "base/logging.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "azer/render/vertex_data.h"
 #include "azer/render/gpu_program.h"
 

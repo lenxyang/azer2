@@ -4,7 +4,7 @@
 
 #include "azer/render/render_system.h"
 #include "azer/render/renderer.h"
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 
 namespace azer {
 class TexRenderTarget {

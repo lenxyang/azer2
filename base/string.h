@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ostream>
-#include "azer/base/render_export.h"
+#include "azer/base/export.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/files/file_path.h"
 #include "base/logging.h"

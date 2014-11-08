@@ -34,6 +34,7 @@ config("base_config") {
 
 source_set("base") {
   sources = [
+    "align.h",
     "hierarchy_transform.h",
     "movable.h",
     "string.cc",
