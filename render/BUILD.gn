@@ -115,20 +115,11 @@ shared_library("render") {
     "../ui/window/window_host_win.cc",
     "../ui/window/window_win.cc",
     "../ui/window/window.h",
-    "../base/hierarchy_transform.h",
-    "../base/movable.h",
-    "../base/string.cc",
-    "../base/string.h",
-    "../base/tree_node.h",
-    "../base/image.cc",
-    "../base/image.h",
-    "../base/file_util.cc",
-    "../base/file_util.h",
   ]
 
   deps = [
     "//azer/math:math",
-    "//azer/base:build_info",
+    "//azer/base",
     "//azer/ui/widget:azer_ui_widget",
     "//ui/gfx:gfx",
     "//base:base",

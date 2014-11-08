@@ -9,7 +9,7 @@ action("build_info_action") {
   args = [gen_dir, "build_info", src_absolute_dir]
 }
 
-source_set("build_info") {
+static_library("build_info") {
   sources = [
     "$target_gen_dir/build_info.cc",
     "build_info.cc",
@@ -24,6 +24,27 @@ source_set("appinit") {
     "appinit.h",
   ]
   deps = ["//base", "//base:i18n"]
+}
+
+source_set("base") {
+  sources = [
+    "hierarchy_transform.h",
+    "movable.h",
+    "string.cc",
+    "string.h",
+    "tree_node.h",
+    "image.cc",
+    "image.h",
+    "file_util.cc",
+    "file_util.h",
+  ]
+  deps = ["//base",
+  ]
+
+  defines = [
+    "BUILD_AZER_RENDER"
+  ]
+  visibility = ["//azer/render"]
 }
 
 config("azer_render_config") {
