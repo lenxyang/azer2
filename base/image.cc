@@ -3,16 +3,8 @@
 #include <cmath>
 #include <algorithm>
 #include "base/files/file_path.h"
-#include "azer/render/util/image.h"
 
 namespace azer {
-ImageData* ImageData::Load(const ::base::FilePath& path) {
-  return LoadImageData(path);
-}
-
-Image* Image::Load(const ::base::FilePath& path) {
-  return LoadImageFromFile(path);
-}
 
 Vector4 ImageData::BoxSample(float tu, float tv) const {
   float x = width() * tu;

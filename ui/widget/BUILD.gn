@@ -46,5 +46,6 @@ source_set("widget") {
   deps = ["//skia", "//base", "//ui/gfx", "//ui/gfx/geometry"]
 
   configs += ["//azer/build/config:utf8src",]
-  defines = ["BUILD_AZER_RENDER", "BUILD_AZER_WIDGET"]
+  configs += ["//azer/base:build_render_config"]
+  defines = ["BUILD_AZER_WIDGET"]
 }

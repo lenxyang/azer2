@@ -1,11 +1,4 @@
 
-static_library("azer_devil_util") {
-  sources = [
-    "util/ilimage_wrapper.cc",
-    "util/ilimage_wrapper.h",
-  ]
-}
-
 shared_library("render") {
   sources = [
     "../animation/bone.cc",
@@ -59,8 +52,6 @@ shared_library("render") {
     "util/render_system_loader.h",
     "util/shader_array.cc",
     "util/shader_array.h",
-    "util/image.cc",
-    "util/image.h",
   ]
 
   deps = [
@@ -73,11 +64,10 @@ shared_library("render") {
     "//ui/gfx/geometry",
     "//base",
     "skia",
-    ":azer_devil_util",
   ]
 
   configs += ["//azer/build/config:utf8src"]
-  configs += ["//azer/base:azer_render_config"]
+  configs += ["//azer/base:build_render_config"]
   forward_dependent_configs_from = deps
 }
 

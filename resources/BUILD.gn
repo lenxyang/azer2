@@ -22,8 +22,6 @@ source_set("resources") {
   ]
 
   deps = ["//base"]
-  defines = [
-    "BUILD_AZER_RENDER"
-  ]
   visibility = ["//azer/render"]
+  configs += ["//azer/base:build_render_config"]
 }

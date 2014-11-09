@@ -34,7 +34,7 @@ TexturePtr MaterialManager::LoadTexture(const ResFilePath& path, RenderSystem* r
   CHECK(rs != NULL);
   ::base::FilePath abso_path;
   if (res_mgr_->GetAbsoluteFilePath(path, &abso_path)) {
-    return TexturePtr(Texture::LoadShaderTexture(abso_path, rs));
+    return TexturePtr(Texture::Load(Texture::k2D, abso_path, rs));
   }
   LOG(ERROR) << "No such filepath " << path.value() << " for texture";
   return NULL;

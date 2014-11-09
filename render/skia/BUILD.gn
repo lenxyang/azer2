@@ -16,6 +16,6 @@ source_set("skia") {
   ]
   deps = ["//skia"]
   configs += ["//azer/build/config:utf8src"]
-  defines = ["BUILD_AZER_RENDER"]
+  configs += ["//azer/base:build_render_config"]
   visibility = ["//azer/render"]
 }

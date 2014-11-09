@@ -32,6 +32,16 @@ config("base_config") {
   }
 }
 
+config("build_render_config") {
+  defines = ["BUILD_AZER_RENDER"]
+}
+
+source_set("image_load") {
+  sources = ["image_load.cc"]
+  deps = ["//base", "//azer/third_party/soil"]
+  configs += [":build_render_config"]
+}
+
 source_set("base") {
   sources = [
     "align.h",
@@ -45,18 +55,14 @@ source_set("base") {
     "file_util.cc",
     "file_util.h",
   ]
-  deps = ["//base",
+  deps = [
+    "//base",
+    ":image_load",
   ]
 
-  defines = [
-    "BUILD_AZER_RENDER"
-  ]
   visibility = ["//azer/render"]
   public_configs = [":base_config"]
-}
-
-config("azer_render_config") {
-  defines = ["BUILD_AZER_RENDER"]
+  configs += [":build_render_config"]
 }
 
 

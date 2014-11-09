@@ -5,6 +5,7 @@
 #include "base/files/file_path.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"
+#include "azer/base/string.h"
 #include "azer/render/render_system_enum.h"
 
 namespace azer {
@@ -13,7 +14,7 @@ class RenderSystem;
 class Image;
 
 class AZER_EXPORT Texture {
- public:
+public:
   enum BindTarget {
     kUnknown        = 0,
     kShaderResource = 0x8L,
@@ -100,16 +101,14 @@ class AZER_EXPORT Texture {
   explicit Texture(const Options& opt) : options_(opt) {}
   virtual ~Texture() {}
   
-  static Texture* LoadShaderTexture(const ::base::FilePath& path,
-                                      RenderSystem* rs);
-  static Texture* LoadShaderTexture(const ::base::FilePath::StringType& path,
-                                      RenderSystem* rs);
-  static Texture* LoadTexture(const Texture::Options& opt,
-                              const ::base::FilePath& path,
-                              RenderSystem* rs);
-  static Texture* LoadTexture(const Texture::Options& opt,
-                              const ::base::FilePath::StringType& path,
-                              RenderSystem* rs);
+  // not opt's width and height will be ignored
+  static Texture* Load(const Options& opt, const ::base::FilePath& path,
+                       RenderSystem* rs);
+  static Texture* Load(const Options& opt, const StringType& path,
+                       RenderSystem* rs);
+  static Texture* Load(Type type, const ::base::FilePath& path,
+                       RenderSystem* rs);
+  static Texture* Load(Type type, const StringType& path, RenderSystem* rs);
 
   const Options& option() const { return options_;}
 
@@ -131,21 +130,20 @@ class AZER_EXPORT Texture {
   virtual MapData map(MapType maptype) = 0;
   virtual void unmap() = 0;
   virtual bool InitFromImage(const Image* image) = 0;
- protected:
+protected:
   Options options_;
   DISALLOW_COPY_AND_ASSIGN(Texture);
 };
 
 typedef std::shared_ptr<Texture> TexturePtr;
 
-inline Texture* Texture::LoadShaderTexture(
-    const ::base::FilePath::StringType& path, RenderSystem* rs) {
-  return LoadShaderTexture(::base::FilePath(path), rs);
+inline Texture* Texture::Load(const Options& opt, const StringType& path,
+                              RenderSystem* rs) {
+  return Load(opt, ::base::FilePath(path), rs);
 }
 
-inline Texture* Texture::LoadTexture(const Texture::Options& opt,
-                                     const ::base::FilePath::StringType& path,
-                                     RenderSystem* rs) {
-  return LoadTexture(opt, ::base::FilePath(path), rs);
+inline Texture* Texture::Load(Type type, const StringType& path,
+                              RenderSystem* rs) {
+  return Load(type, ::base::FilePath(path), rs);
 }
 }  // namespace azer

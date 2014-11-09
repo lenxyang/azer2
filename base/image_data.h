@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "base/basictypes.h"
 #include "base/logging.h"
@@ -10,6 +11,10 @@
 #include "azer/render/render_system_enum.h"
 
 namespace azer {
+
+class ImageData;
+typedef std::shared_ptr<ImageData> ImageDataPtr;
+typedef std::vector<ImageDataPtr> ImageDataPtrVec;
 
 class AZER_EXPORT ImageData {
  public:
@@ -30,8 +35,13 @@ class AZER_EXPORT ImageData {
   // tu and tv [0, 1)
   Vector4 BoxSample(float tu, float tv) const;
 
-  static ImageData* Load(const ::base::FilePath& path);
-  static ImageData* Load(const ::base::FilePath::StringType& path);
+  
+  static ImageDataPtr Load2D(const ::base::FilePath& path);
+  static ImageDataPtr Load2D(const ::base::FilePath::StringType& path);
+
+  // cubemap's order
+  static ImageDataPtrVec LoadCubemap(const ::base::FilePath& path);
+  static ImageDataPtrVec LoadCubemap(const ::base::FilePath::StringType& path);
  private:
   int32 sizeof_dataformat(DataFormat format) const;
   std::unique_ptr<uint8> data_;
@@ -40,8 +50,6 @@ class AZER_EXPORT ImageData {
   const DataFormat format_;
   DISALLOW_COPY_AND_ASSIGN(ImageData);
 };
-
-typedef std::shared_ptr<ImageData> ImageDataPtr;
 
 inline ImageData::ImageData(int32 width, int32 height, DataFormat format)
     : width_(width)
@@ -99,9 +107,5 @@ inline uint32 ImageData::pixel(int x, int y) const {
 inline void ImageData::set_pixel(int x, int y, uint32 v) {
   uint8* ptr = data_.get() + (y * width() + x) * sizeof_dataformat(format());
   *(uint32*)ptr = v;
-}
-
-inline ImageData* ImageData::Load(const ::base::FilePath::StringType& path) {
-  return Load(::base::FilePath(path));
 }
 }  // namespace azer

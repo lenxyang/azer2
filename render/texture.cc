@@ -1,25 +1,24 @@
 #include "azer/render/texture.h"
-#include "azer/render/util/image.h"
+
+#include "base/files/file_path.h"
+#include "azer/base/image.h"
+#include "azer/render/render_system.h"
 
 namespace azer {
-Texture* Texture::LoadShaderTexture(const ::base::FilePath& path,
-                                    azer::RenderSystem* rs) {
-  Texture::Options texopt;
-  texopt.target = Texture::kShaderResource;
-  std::unique_ptr<Image> imgptr(LoadImageFromFile(path));
-  if (!imgptr.get()) {
-    return NULL;
-  }
-
-  texopt.type = (Texture::Type)imgptr->type();
-  return rs->CreateTexture(texopt, imgptr.get());
+Texture* Texture::Load(Type type, const ::base::FilePath& path, RenderSystem* rs) {
+  Texture::Options opt;
+  opt.target = Texture::kShaderResource;
+  opt.type = (Type)type;
+  return Load(opt, path, rs);
 }
 
-Texture* Texture::LoadTexture(const Texture::Options& opt,
-                              const ::base::FilePath& path,
-                              RenderSystem* rs) {
-  std::unique_ptr<Image> imgptr(LoadImageFromFile(path));
+Texture* Texture::Load(const Options& o, const ::base::FilePath& path,
+                       RenderSystem* rs) {
+  std::unique_ptr<Image> imgptr(Image::Load(path, (Image::Type)o.type));
   if (imgptr.get()) {
+    Texture::Options opt = o;
+    opt.width = imgptr->width();
+    opt.height = imgptr->height();
     return rs->CreateTexture(opt, imgptr.get());
   } else {
     LOG(ERROR) << "failed to load texture: \"" << path.value() << "\"";

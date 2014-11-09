@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "azer/base/image_data.h"
+#include "azer/base/string.h"
 #include "azer/render/texture.h"
 
 namespace azer {
@@ -16,12 +17,13 @@ class AZER_EXPORT Image {
     k3D = Texture::k3D,
     kCubeMap = Texture::kCubeMap,
   };
-  explicit Image(std::vector<ImageDataPtr>& image, Type type)
+
+  Image(ImageDataPtrVec& image, Type type)
       : type_(type) {
     data_.swap(image);
   }
 
-  explicit Image(const std::vector<ImageDataPtr>& image, Type type)
+  Image(const ImageDataPtrVec& image, Type type)
       : type_(type) {
     data_ = image;
   }
@@ -36,10 +38,10 @@ class AZER_EXPORT Image {
   ImageDataPtr& data(int index);
   const ImageDataPtr& data(int index) const;
 
-  static Image* Load(const ::base::FilePath& path);
-  static Image* Load(const ::base::FilePath::StringType& path);
+  static Image* Load(const ::base::FilePath& path, Type type);
+  static Image* Load(const StringType& path, Type type);
  private:
-  std::vector<ImageDataPtr> data_;
+  ImageDataPtrVec data_;
   Type type_;
   DISALLOW_COPY_AND_ASSIGN(Image);
 };
@@ -64,10 +66,6 @@ inline int32 Image::depth() const {
 inline DataFormat Image::format() const {
   DCHECK_GT(data_.size(), 0u);
   return data_[0]->format();
-}
-
-inline Image* Image::Load(const ::base::FilePath::StringType& path) {
-  return Load(::base::FilePath(path));
 }
 
 inline ImageDataPtr& Image::data(int index) {
