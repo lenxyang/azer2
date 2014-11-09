@@ -50,7 +50,7 @@ ImageDataPtrVec ImageData::LoadCubemap(const ::base::FilePath& path) {
 
   // single cube map must has 1:6 radio
   if ((single->width() != single->height() * 6)
-      || (single->width() * 6 != single->height())) {
+      && (single->width() * 6 != single->height())) {
     return vec;
   }
 

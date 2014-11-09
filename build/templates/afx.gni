@@ -26,7 +26,7 @@ template("afx") {
   gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")
   afx_file_path = rebase_path(invoker.source, root_build_dir)
   afxlib_path = rebase_path("//azer/azer/afx", root_build_dir)
-  azer_root_path = rebase_path("//", ".")
+  azer_root_path = rebase_path("//", root_build_dir)
 
   action(target_name+"_afx_cppcode") {
     exec_script("//azer/build/tools/shell/mkdir.py", [gen_dir])
