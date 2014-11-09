@@ -1,3 +1,5 @@
+#include("//build/config/features.gni)
+#include("//build/config/ui/gni)
 
 source_set("skia") {
   sources = [
@@ -9,11 +11,18 @@ source_set("skia") {
     "grcontext.h",
     "device.cc",
     "device.h",
-    "GrGLUtil.cpp",
-    "GrGLUtil.h",
-    "GrGLAssembleInterface.cpp",
-    "GrGLAssembleInterface.h",
   ]
+
+  if (component_mode == "shared_library") {
+    sources += [
+      "GrGLUtil.cpp",
+      "GrGLUtil.h",
+      "GrGLAssembleInterface.cpp",
+      "GrGLAssembleInterface.h",
+    ]
+    defines = ["AZER_SKIA_USE_DLL"]
+  }
+  
   deps = ["//skia"]
   configs += ["//azer/build/config:utf8src"]
   configs += ["//azer/base:build_render_config"]

@@ -1,8 +1,13 @@
 #include "azer/render/skia/grcontext.h"
 
 #include "gl/GrGLInterface.h"
+#if !defined(AZER_SKIA_USE_DLL)
+#include "gl/GrGLAssembleInterface.h"
+#else
 #include "azer/render/skia/GrGLUtil.h"
 #include "azer/render/skia/GrGLAssembleInterface.h"
+#endif
+
 #include "azer/render/render_system.h"
 #include "azer/render/egl.h"
 #include "base/logging.h"
@@ -11,36 +16,6 @@ namespace azer {
 namespace skia {
 
 namespace {
-const GrGLInterface* RemoveGrGLInterfaceNVPR(const GrGLInterface* interface) {
-    GrGLInterface* newInterface = GrGLInterface::NewClone(interface);
-
-    newInterface->fExtensions.remove("GL_NV_path_rendering");
-    newInterface->fFunctions.fPathCommands = NULL;
-    newInterface->fFunctions.fPathCoords = NULL;
-    newInterface->fFunctions.fPathParameteri = NULL;
-    newInterface->fFunctions.fPathParameterf = NULL;
-    newInterface->fFunctions.fGenPaths = NULL;
-    newInterface->fFunctions.fDeletePaths = NULL;
-    newInterface->fFunctions.fIsPath = NULL;
-    newInterface->fFunctions.fPathStencilFunc = NULL;
-    newInterface->fFunctions.fStencilFillPath = NULL;
-    newInterface->fFunctions.fStencilStrokePath = NULL;
-    newInterface->fFunctions.fStencilFillPathInstanced = NULL;
-    newInterface->fFunctions.fStencilStrokePathInstanced = NULL;
-    newInterface->fFunctions.fPathTexGen = NULL;
-    newInterface->fFunctions.fCoverFillPath = NULL;
-    newInterface->fFunctions.fCoverStrokePath = NULL;
-    newInterface->fFunctions.fCoverFillPathInstanced = NULL;
-    newInterface->fFunctions.fCoverStrokePathInstanced = NULL;
-    newInterface->fFunctions.fStencilThenCoverFillPath = NULL;
-    newInterface->fFunctions.fStencilThenCoverStrokePath = NULL;
-    newInterface->fFunctions.fStencilThenCoverFillPathInstanced = NULL;
-    newInterface->fFunctions.fStencilThenCoverStrokePathInstanced = NULL;
-    newInterface->fFunctions.fProgramPathFragmentInputGen = NULL;
-    newInterface->fFunctions.fPathMemoryGlyphIndexArray = NULL;
-    return newInterface;
-}
-
 GrGLFuncPtr angle_get_gl_proc(void* ctx, const char name[]) {
   EGL* egl = (EGL*)ctx;
   return (GrGLFuncPtr)egl->GetProcAddress(name);
@@ -65,8 +40,7 @@ bool ASkGLContext::Init() {
     this->destroyGLContext();
     return false;
   }
-  fGL.reset(RemoveGrGLInterfaceNVPR(intf.get()));
-  // fGL.reset(GrGLInterfaceRemoveNVPR(intf.get()));
+  fGL.reset(GrGLInterfaceRemoveNVPR(intf.get()));
   if (fGL.get() == NULL) {
     destroyGLContext();
     DLOG(ERROR) << "Failed to create GLContext";

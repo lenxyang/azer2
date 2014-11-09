@@ -520,3 +520,34 @@ const GrGLInterface* GrGLAssembleGLESInterface(void* ctx, GrGLGetProc get) {
 
     return interface;
 }
+
+
+const GrGLInterface* GrGLInterfaceRemoveNVPR(const GrGLInterface* interface) {
+    GrGLInterface* newInterface = GrGLInterface::NewClone(interface);
+
+    newInterface->fExtensions.remove("GL_NV_path_rendering");
+    newInterface->fFunctions.fPathCommands = NULL;
+    newInterface->fFunctions.fPathCoords = NULL;
+    newInterface->fFunctions.fPathParameteri = NULL;
+    newInterface->fFunctions.fPathParameterf = NULL;
+    newInterface->fFunctions.fGenPaths = NULL;
+    newInterface->fFunctions.fDeletePaths = NULL;
+    newInterface->fFunctions.fIsPath = NULL;
+    newInterface->fFunctions.fPathStencilFunc = NULL;
+    newInterface->fFunctions.fStencilFillPath = NULL;
+    newInterface->fFunctions.fStencilStrokePath = NULL;
+    newInterface->fFunctions.fStencilFillPathInstanced = NULL;
+    newInterface->fFunctions.fStencilStrokePathInstanced = NULL;
+    newInterface->fFunctions.fPathTexGen = NULL;
+    newInterface->fFunctions.fCoverFillPath = NULL;
+    newInterface->fFunctions.fCoverStrokePath = NULL;
+    newInterface->fFunctions.fCoverFillPathInstanced = NULL;
+    newInterface->fFunctions.fCoverStrokePathInstanced = NULL;
+    newInterface->fFunctions.fStencilThenCoverFillPath = NULL;
+    newInterface->fFunctions.fStencilThenCoverStrokePath = NULL;
+    newInterface->fFunctions.fStencilThenCoverFillPathInstanced = NULL;
+    newInterface->fFunctions.fStencilThenCoverStrokePathInstanced = NULL;
+    newInterface->fFunctions.fProgramPathFragmentInputGen = NULL;
+    newInterface->fFunctions.fPathMemoryGlyphIndexArray = NULL;
+    return newInterface;
+}

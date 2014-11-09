@@ -29,14 +29,17 @@ bool GenerateTechnique(const AfxWrapper::AfxResult& result) {
   return true;
 }
 
-int main(int argc, char* argv[]) {
+void Init(int* argc, char** argv[]) {
   static ::base::AtExitManager at_exit;
   CommandLine::Init(*argc, *argv);
   ::logging::LoggingSettings setting;
   setting.log_file = TEXT("afxc.log");
   ::logging::InitLogging(setting);
   base::i18n::InitializeICU();
+}
 
+int main(int argc, char* argv[]) {
+  Init(&argc, &argv);
   if (0 != ParseArgs()) {
     return -1;
   }
