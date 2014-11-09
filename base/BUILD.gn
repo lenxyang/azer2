@@ -18,14 +18,6 @@ static_library("build_info") {
   deps = [":build_info_action"]
 }
 
-source_set("appinit") {
-  sources = [
-    "appinit.cc",
-    "appinit.h",
-  ]
-  deps = ["//base", "//base:i18n"]
-}
-
 config("base_config") {
   if (is_win) {
     cflags = ["/wd4819"]
@@ -45,6 +37,8 @@ source_set("image_load") {
 source_set("base") {
   sources = [
     "align.h",
+    "appinit.cc",
+    "appinit.h",
     "hierarchy_transform.h",
     "movable.h",
     "resource.h",
@@ -58,6 +52,7 @@ source_set("base") {
   ]
   deps = [
     "//base",
+    "//base:i18n",
     ":image_load",
   ]
 

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "azer/base/appinit.h"
-
 #include "base/logging.h"
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
@@ -11,6 +9,11 @@
 #include "azer/render/render.h"
 #include "azer/afx/afxc/afx_wrapper.h"
 #include "azer/afx/afxc/flags.h"
+
+#include "base/command_line.h"
+#include "base/at_exit.h"
+#include "base/logging.h"
+#include "base/i18n/icu_util.h"
 
 using ::base::FilePath;
 using azer::afx::TechniqueParser;
@@ -27,7 +30,13 @@ bool GenerateTechnique(const AfxWrapper::AfxResult& result) {
 }
 
 int main(int argc, char* argv[]) {
-  ::azer::InitApp(&argc, &argv, "AfxCompiler");
+  static ::base::AtExitManager at_exit;
+  CommandLine::Init(*argc, *argv);
+  ::logging::LoggingSettings setting;
+  setting.log_file = TEXT("afxc.log");
+  ::logging::InitLogging(setting);
+  base::i18n::InitializeICU();
+
   if (0 != ParseArgs()) {
     return -1;
   }
