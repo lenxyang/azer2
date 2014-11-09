@@ -15,18 +15,12 @@ class AZER_EXPORT Image {
     k1D = Texture::k1D,
     k2D = Texture::k2D,
     k3D = Texture::k3D,
-    kCubeMap = Texture::kCubeMap,
+    kCubemap = Texture::kCubemap,
   };
 
-  Image(ImageDataPtrVec& image, Type type)
-      : type_(type) {
-    data_.swap(image);
-  }
-
-  Image(const ImageDataPtrVec& image, Type type)
-      : type_(type) {
-    data_ = image;
-  }
+  Image(ImageDataPtr& image, Type type);
+  Image(ImageDataPtrVec& image, Type type);
+  Image(const ImageDataPtrVec& image, Type type);
 
   int32 width() const;
   int32 height() const;
@@ -47,6 +41,22 @@ class AZER_EXPORT Image {
 };
 
 typedef std::shared_ptr<Image> ImagePtr;
+
+inline Image::Image(ImageDataPtr& image, Type type)
+    : type_(type) {
+  DCHECK(type == k2D || type == k1D);
+  data_.push_back(image);
+}
+
+inline Image::Image(ImageDataPtrVec& image, Type type)
+    : type_(type) {
+  data_.swap(image);
+}
+
+inline Image::Image(const ImageDataPtrVec& image, Type type)
+    : type_(type) {
+  data_ = image;
+}
 
 inline int32 Image::width() const {
   DCHECK_GT(data_.size(), 0u);
@@ -79,4 +89,5 @@ inline const ImageDataPtr& Image::data(int index) const {
   DCHECK_LT(index, data_.size());
   return data_[index];
 }
+
 }  // namespace azer

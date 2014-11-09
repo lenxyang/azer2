@@ -32,3 +32,8 @@ if (is_win) {
   }
 }
 
+config("opengl") {
+  if (is_win) {
+    libs = ["opengl32.lib"]
+  }
+}

@@ -13,7 +13,7 @@
 
 namespace azer {
 ImageDataPtr ImageData::Load2D(const ::base::FilePath& path) {
-  int widht = 0, height = 0, channels = 0;
+  int width = 0, height = 0, channels = 0;
   std::string rawdata;
   uint32 force_channel = SOIL_LOAD_RGBA;
   if (!ReadFileToString(path, &rawdata)) {
@@ -22,13 +22,13 @@ ImageDataPtr ImageData::Load2D(const ::base::FilePath& path) {
   }
 
   std::unique_ptr<uint8[]> data;
-  data.reset(SOIL_load_image_from_memory(rawdata.c_str(), rawdata.length(),
+  data.reset(SOIL_load_image_from_memory((const uint8*)rawdata.c_str(),
+                                         rawdata.length(),
                                          &width, &height, &channels,
                                          force_channel));
-  if (data.get() != NULL) {
+  if (data.get() == NULL) {
     return NULL;
   }
-
 
   const int32 datasize = width * height * 4 * sizeof(uint8);
   std::unique_ptr<ImageData> imgdata(new ImageData(width, height, kRGBAn8));
@@ -37,19 +37,19 @@ ImageDataPtr ImageData::Load2D(const ::base::FilePath& path) {
 }
 
 ImageDataPtr ImageData::Load2D(const ::base::FilePath::StringType& path) {
-  return ImageData::Load(::base::FilePath(path));
+  return ImageData::Load2D(::base::FilePath(path));
 }
 
 ImageDataPtrVec ImageData::LoadCubemap(const ::base::FilePath& path) {
   ImageDataPtrVec vec;
   
-  ImageDataPtr single(Load(path));
+  ImageDataPtr single(ImageData::Load2D(path));
   if (single.get() == NULL) {
     return vec;
   }
 
   // single cube map must has 1:6 radio
-  if ((singe->width() != single->height() * 6)
+  if ((single->width() != single->height() * 6)
       || (single->width() * 6 != single->height())) {
     return vec;
   }
@@ -71,7 +71,7 @@ ImageDataPtrVec ImageData::LoadCubemap(const ::base::FilePath& path) {
     int idx = 0;
     for (int y = i * dh; y < i * dh + sz; ++y) {
       for (int x = i * dw * 4; x < (i * dw + sz) * 4; ++x) {
-        ptr->data()[idx++] = single->data()[y * width * 4 + x];
+        ptr->data()[idx++] = single->data()[y * single->width() * 4 + x];
       }
     }
   }
@@ -85,9 +85,22 @@ ImageDataPtrVec ImageData::LoadCubemap(const ::base::FilePath::StringType& path)
 
 Image* Image::Load(const ::base::FilePath& path, Type type) {
   if (type == k2D) {
+    ImageDataPtr ptr(ImageData::Load2D(path));
+    if (ptr.get()) {
+      return new Image(ptr, type);
+    } else {
+      return NULL;
+    }
   } else if (type == kCubemap) {
+    ImageDataPtrVec vec = std::move(ImageData::LoadCubemap(path));
+    if (vec.size() == 6u) {
+      return new Image(vec, type);
+    } else {
+      return NULL;
+    }
   } else {
     NOTREACHED();
+    return NULL;
   }
 }
 

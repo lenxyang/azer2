@@ -242,8 +242,8 @@ inline D3D11_SRV_DIMENSION  GetViewDimensionFromTextureType(Texture::Type type) 
     case Texture::k2DMultiSample: return D3D11_SRV_DIMENSION_TEXTURE2DMS;
     case Texture::k2DArrayMultiSample: return D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
     case Texture::k3D: return D3D11_SRV_DIMENSION_TEXTURE3D;
-    case Texture::kCubeMap: return D3D11_SRV_DIMENSION_TEXTURECUBE;
-    case Texture::kCubeMapArray: return D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+    case Texture::kCubemap: return D3D11_SRV_DIMENSION_TEXTURECUBE;
+    case Texture::kCubemapArray: return D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
     default: CHECK(false); return (D3D11_SRV_DIMENSION)0;
   }
 }

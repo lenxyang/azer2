@@ -43,8 +43,8 @@ public:
     k2DMultiSample,
     k2DArrayMultiSample,
     k3D,
-    kCubeMap,
-    kCubeMapArray,
+    kCubemap,
+    kCubemapArray,
   };
 
   struct SamplerState {

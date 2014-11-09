@@ -172,7 +172,7 @@ Texture* D3D11RenderSystem::CreateTexture(const Texture::Options& opt,
   std::unique_ptr<D3D11Texture> tex;
   if (texopt.type == Texture::k2D) {
     tex.reset(new D3D11Texture2D(texopt, this));
-  } else if (texopt.type == Texture::kCubeMap) {
+  } else if (texopt.type == Texture::kCubemap) {
     tex.reset(new D3D11TextureCubeMap(texopt, this));
   } else {
     NOTREACHED();
