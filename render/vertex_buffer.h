@@ -4,8 +4,8 @@
 #include <string.h>
 
 #include "base/basictypes.h"
-#include "azer/render/vertex_data.h"
 #include "azer/base/export.h"
+#include "azer/render/vertex_data.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render/hardware_buffer.h"
 
@@ -25,13 +25,7 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
     }
   };
 
-  VertexBuffer(const Options &opt)
-      : options_(opt)
-      , element_size_(-1)
-      , buffer_size_(-1)
-      , vertex_num_(-1) {
-  }
-
+  explicit VertexBuffer(const Options &opt);
   virtual ~VertexBuffer() {}
 
   /**
@@ -52,4 +46,11 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
 };
 
 typedef std::shared_ptr<VertexBuffer> VertexBufferPtr;
+
+inline VertexBuffer::VertexBuffer(const Options &opt)
+    : options_(opt)
+    , element_size_(-1)
+    , buffer_size_(-1)
+    , vertex_num_(-1) {
+}
 }  // namespace azer

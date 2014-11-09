@@ -5,6 +5,7 @@
 #include "base/files/file_path.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"
+#include "azer/base/resource.h"
 #include "azer/base/string.h"
 #include "azer/render/render_system_enum.h"
 
@@ -13,7 +14,7 @@ namespace azer {
 class RenderSystem;
 class Image;
 
-class AZER_EXPORT Texture {
+class AZER_EXPORT Texture : public Resource {
 public:
   enum BindTarget {
     kUnknown        = 0,
@@ -98,7 +99,7 @@ public:
     }
   };
 
-  explicit Texture(const Options& opt) : options_(opt) {}
+  explicit Texture(const Options& opt);
   virtual ~Texture() {}
   
   // not opt's width and height will be ignored
@@ -136,6 +137,11 @@ protected:
 };
 
 typedef std::shared_ptr<Texture> TexturePtr;
+
+inline Texture::Texture(const Options& opt) 
+    : Resource(kTexture)
+    , options_(opt) {
+}
 
 inline Texture* Texture::Load(const Options& opt, const StringType& path,
                               RenderSystem* rs) {

@@ -6,7 +6,8 @@
 namespace azer {
 
 VertexDesc::VertexDesc(const Desc* desc, int desc_num)
-    : vertex_size_(0) {
+    : Resource(kVertexDesc)
+    , vertex_size_(0) {
   init(desc, desc_num);
 }
 

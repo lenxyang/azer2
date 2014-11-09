@@ -6,7 +6,8 @@
 
 namespace azer {
 Effect::Effect(RenderSystem* rs)
-    : render_system_(rs) {
+    : Resource(kEffect)
+    , render_system_(rs) {
   DCHECK(NULL != render_system_);
   gpu_table_.resize(kRenderPipelineStageNum);
 }

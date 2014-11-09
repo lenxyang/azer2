@@ -47,6 +47,7 @@ source_set("base") {
     "align.h",
     "hierarchy_transform.h",
     "movable.h",
+    "resource.h",
     "string.cc",
     "string.h",
     "tree_node.h",

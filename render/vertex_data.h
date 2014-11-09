@@ -8,6 +8,7 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/base/export.h"
+#include "azer/base/resource.h"
 #include "azer/render/render_system_enum.h"
 
 namespace azer {
@@ -17,7 +18,7 @@ class VertexDesc;
 typedef std::shared_ptr<VertexData> VertexDataPtr;
 typedef std::shared_ptr<VertexDesc> VertexDescPtr;
 
-class AZER_EXPORT VertexDesc {
+class AZER_EXPORT VertexDesc : public Resource {
  public:
   /**
    * 对定点结构的定义
@@ -77,7 +78,7 @@ class AZER_EXPORT VertexDesc {
   DISALLOW_COPY_AND_ASSIGN(VertexDesc);
 };
 
-class AZER_EXPORT VertexData {
+class AZER_EXPORT VertexData : public Resource {
  public:
   enum MemoryMode {
     kMainMemory,
@@ -127,7 +128,8 @@ class AZER_EXPORT VertexData {
 
 // class VertexData
 inline VertexData::VertexData(const VertexDescPtr& desc, int vertex_num)
-    : desc_ptr_(desc)
+    : Resource(kVertexData)
+    , desc_ptr_(desc)
     , vertex_num_(vertex_num) {
   data_.reset(new uint8[vertex_num_ * stride()]);
 }

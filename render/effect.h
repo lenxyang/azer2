@@ -5,6 +5,7 @@
 
 
 #include "azer/base/export.h"
+#include "azer/base/resource.h"
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/material.h"
 #include "azer/render/renderer.h"
@@ -22,9 +23,9 @@ class RenderSystem;
  * afxcompile 程序生成的
  * 子类会生成如何初始化 shader 及 如何与常量表交互的代码
  */
-class AZER_EXPORT Effect {
+class AZER_EXPORT Effect : public Resource {
  public:
-  Effect(RenderSystem* rs);
+  explicit Effect(RenderSystem* rs);
   virtual ~Effect() {}
 
   virtual void Use(Renderer* renderer);

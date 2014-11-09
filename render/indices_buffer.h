@@ -4,11 +4,12 @@
 
 #include "base/basictypes.h"
 #include "azer/base/export.h"
+#include "azer/base/resource.h"
 #include "azer/render/vertex_data.h"
 #include "azer/render/hardware_buffer.h"
 
 namespace azer {
-class AZER_EXPORT IndicesData {
+class AZER_EXPORT IndicesData : public Resource {
  public:
   enum IndexType {
     kUndefined = 0,
@@ -17,12 +18,7 @@ class AZER_EXPORT IndicesData {
     kUint32,
   };
 
-  IndicesData(int num, IndexType type)
-      : type_(type), size_(0) {
-    size_ = num * unit_size();
-    num_ = num;
-    data_.reset(new uint8[size_]);
-  }
+  IndicesData(int num, IndexType type);
 
   int32 size() const { return size_;}
   const uint8* pointer() const {
@@ -80,6 +76,14 @@ class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
   IndicesData::IndexType type_;
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);
 };
+
+inline IndicesData::IndicesData(int num, IndexType type)
+    : Resource(kIndicesData)
+    , type_(type), size_(0) {
+  size_ = num * unit_size();
+  num_ = num;
+  data_.reset(new uint8[size_]);
+}
 
 inline int32 IndicesData::unit_size() const {
   switch (type()) {
