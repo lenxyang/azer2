@@ -7,6 +7,11 @@
 
 bool FLAGS_hlslang = false;
 bool FLAGS_glslang = false;
+bool FLAGS_list_hpp = false;
+bool FLAGS_list_cpp = false;
+bool FLAGS_list_afx = false;
+bool FLAGS_list_effect = false;
+
 base::FilePath::StringType FLAGS_afxpath;
 base::FilePath::StringType FLAGS_includes;
 std::string FLAGS_output_dir;
@@ -19,7 +24,10 @@ void PrintHelp() {
             << "  --output_dir" << std::endl
             << "  --includes" << std::endl
             << "  --glslang: generate glslang code" << std::endl
-            << "  --hlslang: generate hlslang code" << std::endl;
+            << "  --hlslang: generate hlslang code" << std::endl
+            << "  --list_hpp: list hpp files generated" << std::endl
+            << "  --list_cpp: list cpp files generated" << std::endl
+            << "  --list_effect: list all effects" << std::endl;
 }
 
 int ParseArgs() {
@@ -34,6 +42,10 @@ int ParseArgs() {
   FLAGS_includes = cmd->GetSwitchValueNative("includes");
   FLAGS_hlslang = cmd->HasSwitch("hlslang");
   FLAGS_glslang = cmd->HasSwitch("glslang");
+  FLAGS_list_cpp = cmd->HasSwitch("list_cpp");
+  FLAGS_list_hpp = cmd->HasSwitch("list_hpp");
+  FLAGS_list_afx = cmd->HasSwitch("list_afx");
+  FLAGS_list_effect = cmd->HasSwitch("list_effect");
   FLAGS_cpp_filename = cmd->GetSwitchValueASCII("cpp_filename");
 
   if (FLAGS_includes.empty()) {

@@ -5,6 +5,10 @@
 
 extern bool FLAGS_hlslang;
 extern bool FLAGS_glslang;
+extern bool FLAGS_list_hpp;
+extern bool FLAGS_list_cpp;
+extern bool FLAGS_list_afx;
+extern bool FLAGS_list_effect;
 extern base::FilePath::StringType FLAGS_afxpath;
 extern base::FilePath::StringType FLAGS_includes;
 extern std::string FLAGS_output_dir;
