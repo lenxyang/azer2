@@ -43,7 +43,7 @@ template("afx") {
       "$target_gen_dir/$hpp",
       "$target_gen_dir/$cpp",
     ]
-  
+
     args = afx_args  
     deps = ["//azer/afx:afxc"]
   }

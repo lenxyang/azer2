@@ -80,7 +80,8 @@ bool Canvas::Save(const FilePath& path) {
   bitmap.setInfo(info);
   bitmap.allocPixels();
   device_->GetCanvas()->readPixels(&bitmap, 0, 0);
-  return SkImageEncoder::EncodeFile(pathstr.c_str(), bitmap, type, 100);
+  // return SkImageEncoder::EncodeFile(pathstr.c_str(), bitmap, type, 100);
+  return false;
 }
 
 void Canvas::flush() {
