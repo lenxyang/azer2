@@ -4,7 +4,6 @@
 #include "azer/render/bounding_volumn.h"
 #include "azer/render/cullable.h"
 #include "azer/render/indices_buffer.h"
-#include "azer/render/material.h"
 #include "azer/render/renderable.h"
 #include "azer/render/vertex_data.h"
 #include "azer/render/vertex_buffer.h"
@@ -27,8 +26,6 @@ class AZER_EXPORT Mesh : public Renderable {
     int32 num;
     GroupType type;
     PrimitiveTopology primitive;
-    MaterialPtr mtrl_ptr;
-
     Group()
         : first(0)
         , num(0)

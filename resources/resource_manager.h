@@ -6,7 +6,6 @@
 #include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/resources/geometry_manager.h"
-#include "azer/resources/material_manager.h"
 #include "azer/resources/scene_manager.h"
 #include "azer/resources/technique_manager.h"
 #include "azer/resources/file_system.h"

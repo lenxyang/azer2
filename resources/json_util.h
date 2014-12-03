@@ -5,8 +5,6 @@
 #include "base/values.h"
 #include "azer/base/string.h"
 #include "azer/math/math.h"
-#include "azer/render/light.h"
-#include "azer/render/material.h"
 #include "azer/render/vertex_data.h"
 #include "azer/scene/node.h"
 

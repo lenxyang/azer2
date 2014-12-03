@@ -12,7 +12,6 @@
 #include "azer/base/hierarchy_transform.h"
 #include "azer/base/export.h"
 #include "azer/render/cullable.h"
-#include "azer/render/light.h"
 #include "azer/render/mesh.h"
 #include "azer/render/renderable.h"
 #include "azer/render/axis_aligned_box.h"
@@ -74,7 +73,6 @@ class AZER_EXPORT SceneNode : public HierarchyTransform<SceneNode>
 
   // void Attach(RenderablePtr renderable);
   void AttachMesh(MeshPtr mesh);
-  void AttachLight(LightPtr light);
   void Detach();
 
   RenderablePtr& GetAttachedRenderable() { return renderable_;}
@@ -94,7 +92,6 @@ class AZER_EXPORT SceneNode : public HierarchyTransform<SceneNode>
   // attached object
   RenderablePtr renderable_;
   MeshPtr mesh_;
-  LightPtr light_;
 
   Scene* root_;
   AxisAlignedBox aabb_;
@@ -143,11 +140,6 @@ inline void SceneNode::Attach(RenderablePtr renderable) {
 inline void SceneNode::AttachMesh(MeshPtr ptr) {
   DCHECK(type() == kMesh);
   mesh_ = ptr;
-}
-
-inline void SceneNode::AttachLight(LightPtr light) {
-  DCHECK(type() == kLight);
-  light_ = light;
 }
 
 typedef TreeNode<SceneNode>::Traverser SceneTraverser;

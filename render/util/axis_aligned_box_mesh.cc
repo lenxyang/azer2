@@ -1,7 +1,7 @@
 #include "azer/render/util/axis_aligned_box_mesh.h"
 
 #include "azer/render/render.h"
-#include "azer/resources/resource_manager.h"
+// #include "azer/resources/resource_manager.h"
 #include "base/lazy_instance.h"
 
 namespace azer {
@@ -12,8 +12,11 @@ AABBEffect::AABBEffect(RenderSystem* rs)
 }
 
 void AABBEffect::Init(RenderSystem* rs) {
+  /*
   technique_ = ResourceManager::GetCommonResourceManager()->GetTechnique(
       AZER_LITERAL("technique/bounding_volumn.tech"), rs);
+  */
+  CHECK(false);
 
   GpuConstantsTable::Desc vs_table_desc[] = {
     GpuConstantsTable::Desc("vp", azer::GpuConstantsType::kMatrix4,

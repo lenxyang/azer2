@@ -1,5 +1,4 @@
 #include "azer/render/gpu_constants_table.h"
-#include "azer/render/light.h"
 #include "azer/base/align.h"
 
 namespace azer {
@@ -48,20 +47,6 @@ void GpuConstantsTable::SetValueWithOffset(int32 idx, int32 offset,
   SetData(variable.offset + offset, value, size);
 }
 
-void GpuConstantsTable::SetLight(int32 idx, const Light& light) {
-  return SetValue(idx, (void*)light.gpu_constant_data(), light.gpu_exchange_size());
-}
-
-void GpuConstantsTable::SetLightArrItem(int32 idx, int32 arridx,
-                                        const Light& light) {
-  DCHECK_LE(light.gpu_exchange_size(), constants_[idx].size);
-  DCHECK_EQ(constants_[idx].element_size, light.gpu_exchange_size());
-  return SetValueWithOffset(idx,
-                            light.gpu_exchange_size() * arridx,
-                            (void*)light.gpu_constant_data(),
-                            light.gpu_exchange_size());
-}
-
 int32 GpuTableItemTypeSize(const GpuConstantsType::Type type) {
   switch(type) {
     case GpuConstantsType::kFloat: return sizeof(float);
@@ -78,12 +63,6 @@ int32 GpuTableItemTypeSize(const GpuConstantsType::Type type) {
     case GpuConstantsType::kSampler2D: return sizeof(uint32);
     case GpuConstantsType::kSampler3D: return sizeof(uint32);
     case GpuConstantsType::kSamplerCube: return sizeof(uint32);
-    case GpuConstantsType::kDirectionalLight:
-      return Light::gpu_exchange_size(Light::kDirectionalLight);
-    case GpuConstantsType::kPointLight:
-      return Light::gpu_exchange_size(Light::kPointLight);
-    case GpuConstantsType::kSpotLight:
-      return Light::gpu_exchange_size(Light::kSpotLight);
     case GpuConstantsType::kSelfDefined:
       return -1;
     default:

@@ -1,11 +1,12 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "base/basictypes.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"
-#include "azer/render/material.h"
+#include "azer/render/render_system_enum.h"
 
 namespace azer {
 
@@ -38,10 +39,6 @@ class GpuConstantsType {
     kSampler2D,
     kSampler3D,
     kSamplerCube,
-    kDirectionalLight,
-    kPointLight,
-    kSpotLight,
-    kMaterial,
     kSelfDefined,
   };
 };
@@ -87,9 +84,6 @@ class AZER_EXPORT GpuConstantsTable {
   void SetValueWithOffset(int32 idx, int32 offset, const void* value, int32 size);
   void SetArrayItem(int32 idx, int32 arridx, const void* value, int32 size);
   void SetArrayMultiItem(int32 idx, int32 arridx, const void* value, int32 size);
-  void SetLight(int32 idx, const Light& light);
-  void SetLightArrItem(int32 idx, int32 arridx, const Light& light);
-  void SetMaterial(int32 idx, const Material& mtrl);
   void SetMatrix(int32 idx, const Matrix4* mtrl, int num);
 
   int32 offset(int32 index) const;
@@ -125,11 +119,6 @@ inline int32 GpuConstantsTable::offset(int32 index) const {
 
 inline void GpuConstantsTable::SetValue(int32 idx, const void* value, int32 size) {
   return SetValueWithOffset(idx, 0, value, size);
-}
-
-inline void GpuConstantsTable::SetMaterial(int32 idx, const Material& mtrl) {
-  return SetValue(idx, (const void*)&(mtrl.attributes()),
-                  sizeof(Material::material));
 }
 
 inline void GpuConstantsTable::SetMatrix(int32 idx, const Matrix4* matrices,

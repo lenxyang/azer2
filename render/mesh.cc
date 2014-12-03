@@ -7,7 +7,6 @@ namespace azer {
 
 inline void Mesh::RenderGroup(Renderer* renderer, SubMesh* sub, const Group& group) {
   if (effect_ != NULL) {
-    effect_->SetMaterial(group.mtrl_ptr);
     effect_->Use(renderer);
   }
 

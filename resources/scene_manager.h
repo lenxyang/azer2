@@ -7,7 +7,6 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "azer/base/string.h"
-#include "azer/render/light.h"
 #include "azer/scene/node.h"
 #include "azer/scene/scene.h"
 #include "azer/resources/file_system.h"
@@ -28,7 +27,6 @@ class AZER_EXPORT SceneManager {
    */
   SceneNode::NodeInfoPtr GetSceneNodeInfo(const StringType& name);
   ScenePtr GetScene(const StringType& name, RenderSystem* rs);
-  LightPtr GetLight(const StringType& path);
  private:
   typedef std::unordered_map<StringType, SceneNode::NodeInfoPtr> SceneNodeDict;
   SceneNodeDict scene_node_dict_;
@@ -37,11 +35,6 @@ class AZER_EXPORT SceneManager {
   bool AddSceneNode(const StringType& fullpath, SceneNode::NodeInfoPtr ptr);
   bool RecursiveCreateNode(SceneNode::NodeInfoPtr infoptr, SceneNode* parent,
                            RenderSystem* rs);
-
-  typedef std::unordered_map<StringType, LightPtr> LightDict;
-  bool LoadLight(const ResFilePath& path);
-  LightPtr FindLight(const StringType& name);
-  LightDict light_dict_;
 
   ResourceManager* res_mgr_;
   DISALLOW_COPY_AND_ASSIGN(SceneManager);

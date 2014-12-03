@@ -4,7 +4,7 @@
 
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
-#include "azer/resources/resource_manager.h"
+#include "azer/render/render_system.h"
 
 namespace azer {
 // class CoordinateGridEffect
@@ -20,8 +20,11 @@ CoordinateGridEffect::CoordinateGridEffect(RenderSystem* rs)
 }
 
 void CoordinateGridEffect::Init(RenderSystem* rs) {
+  /*
   technique_ = ResourceManager::GetCommonResourceManager()->GetTechnique(
       AZER_LITERAL("technique/coordinate_grid_effect.tech"), rs);
+  */
+  CHECK(false);
  
  
   GpuConstantsTable::Desc vs_table_desc[] = {
