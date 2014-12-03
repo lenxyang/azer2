@@ -13,6 +13,6 @@ bool LoadRenderSystem(WindowHost* host) {
   ::base::FilePath dllpath = path.DirName();
   dllpath = dllpath.Append(::base::UTF8ToWide("d3d11_render_system.dll"));
 
-  return RenderSystem::InitRenderSystem(dllpath, host);
+  return NULL != RenderSystem::InitRenderSystem(dllpath, host);
 }
 }  // namespace azer

@@ -414,8 +414,7 @@ void CppCodeGen::GenCppCode(const TechniqueParser::Technique& tech) {
      << "}\n\n"
      << std::move(GenInit(tech))
      << std::move(GenTechnique(tech))
-     << GenUseTexture(tech) << "\n"
-     << GenSetMaterial(tech) << "\n";
+     << GenUseTexture(tech) << "\n";
      
   cpp_code_ = std::move(ss.str());
 }
@@ -512,7 +511,6 @@ void CppCodeGen::GenHeadCode(const TechniqueParser::Technique& tech) {
      << "  void Init();\n"
      << "  void InitTechnique();\n"
      << "  virtual void UseTexture(azer::Renderer* renderer) override;\n"
-     << "  virtual void SetMaterial(azer::MaterialPtr material) override;\n"
      << "  const std::vector<std::string>& sources_;\n\n"
      << GenAllTextureMember(tech) << "\n"
      << "  azer::VertexDescPtr vertex_desc_ptr_;\n"
@@ -583,15 +581,6 @@ std::string CppCodeGen::GenStageTextureMember(RenderPipelineStage stage,
   return ss.str();
 }
 
-std::string CppCodeGen::GenSetMaterial(const TechniqueParser::Technique& tech) {
-  std::stringstream ss;
-  ss << "void " << GetClassName(tech)
-     << "::SetMaterial(azer::MaterialPtr material) {\n";
-  
-  ss << "}\n\n";
-  return ss.str();
-}
-
 namespace {
 const char* StageName(RenderPipelineStage stage) {
   switch (stage) {
@@ -639,17 +628,7 @@ std::string UniformTypeIndex(const TypePtr& type) {
     case kMatrix3: return "azer::kMat3";
     case kMatrix4: return "azer::kMat4";
     case kStructure:
-      if (type->name() == "afx::DirectionalLight") {
-        return "azer::Light";
-      } else if (type->name() == "afx::PointLight") {
-        return "azer::Light";
-      } else if (type->name() == "afx::SpotLight") {
-        return "azer::Light";
-      } else if (type->name() == "afx::Material") {
-        return "azer::Material::material";
-      } else {
-        NOTREACHED(); return "";
-      }
+      NOTREACHED(); return "";
     case kTexture1D:
     case kTexture2D:
     case kTexture3D:
