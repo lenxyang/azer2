@@ -52,7 +52,7 @@ template("afx") {
     include_dirs = [target_gen_dir]
   }
   source_set(target_name) {
-    exec_script("//azer/build/tools/shell/mkdir.py", afx_args)
+    # exec_script("//azer/build/tools/shell/mkdir.py", afx_args)
     sources = [
       "$target_gen_dir/$cpp",
       "$target_gen_dir/$hpp",
