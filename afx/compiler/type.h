@@ -120,6 +120,7 @@ class Type {
   bool IsIntVec() const;
   bool IsMatrix() const;
   bool IsScalar() const;
+  bool IsStream() const;
 
   void SetName(const std::string& name) {
     name_ = name;
@@ -183,6 +184,10 @@ inline bool Type::IsMatrix() const {
 inline bool Type::IsScalar() const {
   return !IsMatrix() && !IsVector() && !IsIntVec()
       && !IsArray() && !IsTexture() && !IsStructure();
+}
+
+inline bool Type::IsStream() const {
+  return type() == kStream;
 }
 
 uint32 SizeofType(const Type& type);

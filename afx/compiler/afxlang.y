@@ -766,6 +766,20 @@ parameter_declarator
   $$ = param;
   delete $2.identifier;
 }
+| STREAM '<' type_specifier '>' IDENTIFIER {
+  PARSER_TRACE << "STREAM<type_specifier>  []" << std::endl;
+  const SourceLoc& loc = $5.loc;
+  DCHECK($3->IsTypedNode());
+  TypedNode* typednode = $3->ToTypedNode();
+  if (typednode->GetType()->type() != kStructure) {
+    parseContext->ReportError($5.loc, "stream<> must be a structure");
+  }
+
+  typednode->SetType(TypePtr(new Type(kStream)));
+  ParamNode* param = CreateParamNode(*$5.identifier, typednode, loc, parseContext);
+  $$ = param;
+  delete $5.identifier;
+}
 ;
   
 
@@ -1023,7 +1037,15 @@ type_specifier_nonarray
   PARSER_TRACE << "type_specifier_nonarray " << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
   }
+| TEX1DARR {
+  PARSER_TRACE << "type_specifier_nonarray " << std::endl;
+  $$ = CreateTypedNode($1.type, $1.loc, parseContext);
+  }
 | TEX2D {
+  PARSER_TRACE << "type_specifier_nonarray " << std::endl;
+  $$ = CreateTypedNode($1.type, $1.loc, parseContext);
+  }
+| TEX2DARR {
   PARSER_TRACE << "type_specifier_nonarray " << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
   }
