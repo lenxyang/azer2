@@ -22,6 +22,7 @@ class CppCodeGen {
   const std::string& GetHeadCode() const { return head_code_;}
   const std::string& GetCppCode() const { return cpp_code_;}
  private:
+  std::string GenStructDecl(const std::string& name, StructDeclNode* decl) const;
   std::string GetClassName(const TechniqueParser::Technique& tech) const;
 
   /**

@@ -24,7 +24,9 @@ bool IsSelfDefinedStruct(const TypePtr& typeptr);
 std::string GetSemanticName(const std::string& name);
 int GetSemanticIndex(FieldNode* field);
 
+bool IsHasCppStruct(StructDeclNode* decl);
 bool IsExternCppStruct(StructDeclNode* node);
+
 std::string UniformTypeName(ASTNode* node);
 std::string UniformTypeIndex(const TypePtr& type);
 std::string GetStructTypeName(ASTNode* node);
@@ -213,29 +215,27 @@ StructDeclNode* CppCodeGen::GetVertexDecl(const TechniqueParser::Technique& tech
   return decl;
 }
 
-std::string CppCodeGen::GenVertexStruct(const TechniqueParser::Technique& tech) {
-  StructDeclNode* decl = GetVertexDecl(tech);
-
-  // if vertex is extend, then return directly
-  if (IsExternCppStruct(decl)) {
-    return "";
+std::string CppCodeGen::GenStructDecl(const std::string& name,
+                                      StructDeclNode* decl) const {
+  std::string struct_name = name;
+  if (name.empty()) {
+    if (IsHasCppStruct(decl)) {
+      struct_name = decl->attributes()->GetAttrValue("cppstruct");
+    } else {
+      struct_name = decl->struct_name();
+    }
   }
-
+  
   std::stringstream ss;
-  ss << "\n"
-     << "  /**\n"
-     << "  * struct of Vertex \n"
-     << "  * input of Vertex Shader\n"
-     << "  */\n"
-     << "  struct Vertex {\n";
+  ss << "  struct " << struct_name << " {\n";
   for (auto iter = decl->fields().begin(); iter != decl->fields().end(); ++iter) {
     DCHECK((*iter)->IsFieldNode());
     FieldNode* struct_field = (*iter)->ToFieldNode();
     ss << "    " << UniformTypeName(struct_field) << " "
        << struct_field->fieldname() << ";\n";
   }
-  ss << "    Vertex(){}\n"
-     << "    Vertex(";
+  ss << "    " << struct_name << "(){}\n"
+     << "    " << struct_name << "(";
   int cnt = 0;
   for (auto iter = decl->fields().begin(); iter != decl->fields().end();
        ++iter, ++cnt) {
@@ -254,6 +254,25 @@ std::string CppCodeGen::GenVertexStruct(const TechniqueParser::Technique& tech) 
   }
   ss << "      {}\n";
   ss << "  };\n";
+  return ss.str();
+}
+
+std::string CppCodeGen::GenVertexStruct(const TechniqueParser::Technique& tech) {
+  StructDeclNode* decl = GetVertexDecl(tech);
+
+  // if vertex is extend, then return directly
+  if (IsExternCppStruct(decl)) {
+    return "";
+  }
+
+  std::stringstream ss;
+  ss << "\n"
+     << "  /**\n"
+     << "  * struct of Vertex \n"
+     << "  * input of Vertex Shader\n"
+     << "  */\n"
+     << GenStructDecl("Vertex", decl);
+  
   return ss.str();
 }
 
@@ -678,7 +697,7 @@ std::string GetStructTypeName(ASTNode* node) {
   StructDeclNode* decl = NULL;
   if (node->IsStructDeclNode()) {
     decl = node->ToStructDeclNode();
-    if (IsExternCppStruct(decl)) {
+    if (IsHasCppStruct(decl)) {
       return decl->attributes()->GetAttrValue("cppstruct");
     }
   } else if (node->IsDeclarationNode()) {
@@ -686,7 +705,7 @@ std::string GetStructTypeName(ASTNode* node) {
     TypedNode* tnode = declare->GetTypedNode();
     DCHECK(tnode != NULL && tnode->GetStructDecl());
     decl = tnode->GetStructDecl()->ToStructDeclNode();
-    if (IsExternCppStruct(decl)) {
+    if (IsHasCppStruct(decl)) {
       return decl->attributes()->GetAttrValue("cppstruct");
     }
   } else {
@@ -812,9 +831,14 @@ int GetSemanticIndex(FieldNode* field) {
   }
 }
 
+bool IsHasCppStruct(StructDeclNode* decl) {
+  return decl->attributes() && decl->attributes()->HasAttr("cppstruct");
+}
+
 bool IsExternCppStruct(StructDeclNode* decl) {
   // check if the struct is declared in another cpp header
-  return decl->attributes() && decl->attributes()->HasAttr("cppstruct");
+  return decl->attributes() && decl->attributes()->HasAttr("cppstruct")
+      && decl->attributes()->HasAttr("cpphead");
 }
 }  // namespace
 }  // namespace afx
