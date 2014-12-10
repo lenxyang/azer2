@@ -1,5 +1,4 @@
 
-
 static_library("afxlib") {
   sources = [
     "util/file_loader.cc",

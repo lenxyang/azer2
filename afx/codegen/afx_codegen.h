@@ -43,6 +43,13 @@ class AfxCodegen {
   std::string GenUniDepend(ASTNode* node, bool comments);
   std::string GenUniformDeps(const TechniqueParser::StageInfo& shader,
                              bool comments);
+
+  std::string GenGeometryShaderCode(const TechniqueParser::StageInfo& shader,
+                                    bool comments);
+  std::string GenVertexAndPixelShaderCode(RenderPipelineStage stage,
+                                          const TechniqueParser::StageInfo& shader,
+                                          bool comments);
+  
   CodeGeneratorFactory* factory_;
   RenderPipelineStage stage_;
   /**
