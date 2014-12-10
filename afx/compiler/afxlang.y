@@ -1057,6 +1057,10 @@ type_specifier_nonarray
   PARSER_TRACE << "type_specifier_nonarray SamplerCube" << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
   }
+| STREAM {
+  PARSER_TRACE << "type_specifier_nonarray SamplerCube" << std::endl;
+  $$ = CreateTypedNode(kStream, $1.loc, parseContext);
+  }
 | struct_specifier {
   DCHECK($1->IsStructDeclNode());
   StructDeclNode* node = $1->ToStructDeclNode();

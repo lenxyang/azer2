@@ -29,6 +29,28 @@ TEST(AfxParser, Expression) {
   DUMP_AFXCOMPILE_ERROR(context);
 }
 
+TEST(AfxParser, Stream) {
+  const std::string str =
+      "struct Vertex {\n"
+      "  vec4 position;\n"
+      "  vec3 normal; \n"
+      "};\n"
+      "void psmain(inout stream<Vertex> s) {\n"
+      "}\n"
+      " // comments"
+      ;
+  ASTNodeFactory factory;
+  ParseContext::Options opt;
+  // opt.dump_parser = true;
+  // opt.dump_tokenizer = true;
+  // opt.syntax_valid = false;
+  ParseContext context(AFXL(""), "", str, &factory, opt);
+  Parser parser;
+  EXPECT_TRUE(parser.Parse(&context));
+  // DumpASTree(&context, std::cout);
+  DUMP_AFXCOMPILE_ERROR(context);
+}
+
 TEST(AfxParser, FuncExpression) {
   const std::string str =
       "vec4 clamp(vec4 v, float v1, float v2) { return v;}"
@@ -313,8 +335,8 @@ TEST(AfxParser, Texture) {
       "uniform Texture3D samp3d;\n"
       ;
   ParseContext::Options opt;
-  // opt.dump_parser = true;
-  // opt.dump_tokenizer = true;
+  opt.dump_parser = true;
+  opt.dump_tokenizer = true;
   ASTNodeFactory factory;
   ParseContext context(AFXL(""), "", str, &factory, opt);
   Parser parser;
