@@ -43,14 +43,19 @@
 "vec2"  {TYPE_INIT(VEC2, kVector2);}
 "vec3"  {TYPE_INIT(VEC3, kVector3);}
 "vec4"  {TYPE_INIT(VEC4, kVector4);}
+"mat2"  {TYPE_INIT(MAT2, kMatrix2);}
 "mat3"  {TYPE_INIT(MAT3, kMatrix3);}
 "mat4"  {TYPE_INIT(MAT4, kMatrix4);}
-"Texture1D"  {TYPE_INIT(MAT4, kTexture1D);}
-"Texture1DArray"  {TYPE_INIT(MAT4, kTexture1DArray);}
-"Texture2D"  {TYPE_INIT(MAT4, kTexture2D);}
-"Texture2DArray"  {TYPE_INIT(MAT4, kTexture2DArray);}
-"Texture3D"  {TYPE_INIT(MAT4, kTexture3D);}
-"TextureCube"  {TYPE_INIT(MAT4, kTextureCube);}
+"imat2"  {TYPE_INIT(IMAT2, kIMatrix2);}
+"imat3"  {TYPE_INIT(IMAT3, kIMatrix3);}
+"imat4"  {TYPE_INIT(IMAT4, kIMatrix4);}
+"stream"  {TYPE_INIT(STREAM, kStream);}
+"Texture1D"  {TYPE_INIT(TEX1D, kTexture1D);}
+"Texture1DArray"  {TYPE_INIT(TEX1DARR, kTexture1DArray);}
+"Texture2D"  {TYPE_INIT(TEX2D, kTexture2D);}
+"Texture2DArray"  {TYPE_INIT(TEX2DARR, kTexture2DArray);}
+"Texture3D"  {TYPE_INIT(TEX3D, kTexture3D);}
+"TextureCube"  {TYPE_INIT(TEXCUBE, kTextureCube);}
 
 "if"        {KEYWORD_INIT(IF);}
 "else"      {KEYWORD_INIT(ELSE);}

@@ -37,6 +37,9 @@ enum BasicType {
   kMatrix2,
   kMatrix3,
   kMatrix4,
+  kIMatrix2,
+  kIMatrix3,
+  kIMatrix4,
   kTexture1D,
   kTexture1DArray,
   kTexture2D,
@@ -44,6 +47,7 @@ enum BasicType {
   kTexture3D,
   kTextureCube,
   kStructure,
+  kStream,
   kAnonymouseStructure,
   kFunctional,
 };

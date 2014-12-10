@@ -108,8 +108,8 @@ extern char* yytext;
 
 // basic type
 %token<spec> VOID BOOL CHAR SHORT INT UINT FLOAT;
-%token<spec> VEC2 VEC3 VEC4 MAT2 MAT3 MAT4;
-%token<spec> SAMPLER1D SAMPLER2D SAMPLER3D SAMPLERCUBE;
+%token<spec> VEC2 VEC3 VEC4 MAT2 MAT3 MAT4 IMAT2 IMAT3 IMAT4 STREAM;
+%token<spec> TEX1D TEX1DARR TEX2D TEX2DARR TEX3D TEXCUBE;
 
 %type<astnode.node> fully_specifier_type;
 %type<astnode.node> type_specifier array_specifier type_specifier_nonarray;
@@ -709,7 +709,6 @@ attributed_function_definition
  }
 ;
 
-
 function_definition
 : function_prototype compound_statement_no_new_scope {
   DCHECK($1->IsFuncProtoNode());
@@ -1020,19 +1019,19 @@ type_specifier_nonarray
   PARSER_TRACE << "type_specifier_nonarray " << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
   }
-| SAMPLER1D {
+| TEX1D {
   PARSER_TRACE << "type_specifier_nonarray " << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
   }
-| SAMPLER2D {
+| TEX2D {
   PARSER_TRACE << "type_specifier_nonarray " << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
   }
-| SAMPLER3D {
+| TEX3D {
   PARSER_TRACE << "type_specifier_nonarray " << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
   }
-| SAMPLERCUBE {
+| TEXCUBE {
   PARSER_TRACE << "type_specifier_nonarray SamplerCube" << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
   }
