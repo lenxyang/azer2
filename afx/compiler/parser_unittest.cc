@@ -35,8 +35,11 @@ TEST(AfxParser, Stream) {
       "  vec4 position;\n"
       "  vec3 normal; \n"
       "};\n"
-      "void psmain(inout stream<Vertex> s) {\n"
-      "}\n"
+      "void gsmain1(inout point_stream<Vertex> s) {}\n"
+      "void gsmain2(inout line_stream<Vertex> s) {}\n"
+      "void gsmain3(inout line_adj_stream<Vertex> s) {}\n"
+      "void gsmain4(inout triangle_stream<Vertex> s) {}\n"
+      "void gsmain5(inout triangle_adj_stream<Vertex> s) {}\n"
       " // comments"
       ;
   ASTNodeFactory factory;

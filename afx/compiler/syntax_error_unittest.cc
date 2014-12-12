@@ -21,6 +21,18 @@ TEST(SyntaxError, DeclaredSymbol) {
   // dump_error(&context, std::cout);
 }
 
+TEST(SyntaxError, Stream) {
+
+  const std::string str[] = 
+      {"void gsmain1(inout point_stream<int> s) {}\n"};
+  for (uint32 i = 0; i < arraysize(str); ++i) {
+    ASTNodeFactory factory;
+    ParseContext context(AFXL(""), "", str[i], &factory);
+    Parser parser;
+    EXPECT_FALSE(parser.Parse(&context));
+  }
+}
+
 TEST(SyntaxError, ArrayInitWithVariable) {
   const std::string str = 
       "void func() {\n"
