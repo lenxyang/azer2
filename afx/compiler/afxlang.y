@@ -144,6 +144,9 @@ extern char* yytext;
 %type<astnode.node> conditional_expression assignment_expression;
 %type<astnode.node> expression integer_expression constant_expression;
 
+// stream
+%type<astnode.node> stream_type_specifier stream_declarator;
+
 // statement
 %type<astnode.node> expression_statement declaration_statement
 %type<astnode.node> attributed_declaration_statement;
@@ -742,7 +745,42 @@ parameter_declaration
 | parameter_type_specifier {
   $$ = $1;
   }
+| type_qualifier stream_declarator  {
+  ParamNode* param = $2->ToParamNode();
+  param->GetType()->SetStorageQualifier($1.storage_qualifier);
+  $$ = param;
+ }
+| stream_declarator {
+  $$ = $1;
+  }
 ;
+
+stream_declarator
+: stream_type_specifier IDENTIFIER {
+  PARSER_TRACE << "STREAM<type_specifier>  []" << std::endl;
+  const SourceLoc& loc = $2.loc;
+  DCHECK($1->IsTypedNode());
+  TypedNode* typednode = $1->ToTypedNode();
+  ParamNode* param = CreateParamNode(*$2.identifier, typednode, loc, parseContext);
+  $$ = param;
+  delete $2.identifier;
+}
+;
+
+stream_type_specifier
+: STREAM LEFT_ANGLE type_specifier_nonarray RIGHT_ANGLE {
+  PARSER_TRACE << "type_specifier_nonarray SamplerCube" << std::endl;
+  const SourceLoc& loc = $1.loc;
+  DCHECK($3->IsTypedNode());
+  TypedNode* typednode = $3->ToTypedNode();
+  if (typednode->GetType()->type() != kStructure) {
+    parseContext->ReportError(loc, "stream<> must be a structure");
+  }
+  TypedNode* node = CreateTypedNode(kStream, loc, parseContext);
+  node->GetType()->SetTemplateName(typednode->name());
+  $$ = node;
+}
+
 
 parameter_declarator
 : type_specifier IDENTIFIER {
@@ -765,20 +803,6 @@ parameter_declarator
   ParamNode* param = CreateParamNode(*$2.identifier, typednode, loc, parseContext);
   $$ = param;
   delete $2.identifier;
-}
-| STREAM '<' type_specifier '>' IDENTIFIER {
-  PARSER_TRACE << "STREAM<type_specifier>  []" << std::endl;
-  const SourceLoc& loc = $5.loc;
-  DCHECK($3->IsTypedNode());
-  TypedNode* typednode = $3->ToTypedNode();
-  if (typednode->GetType()->type() != kStructure) {
-    parseContext->ReportError($5.loc, "stream<> must be a structure");
-  }
-
-  typednode->SetType(TypePtr(new Type(kStream)));
-  ParamNode* param = CreateParamNode(*$5.identifier, typednode, loc, parseContext);
-  $$ = param;
-  delete $5.identifier;
 }
 ;
   
@@ -1056,10 +1080,6 @@ type_specifier_nonarray
 | TEXCUBE {
   PARSER_TRACE << "type_specifier_nonarray SamplerCube" << std::endl;
   $$ = CreateTypedNode($1.type, $1.loc, parseContext);
-  }
-| STREAM {
-  PARSER_TRACE << "type_specifier_nonarray SamplerCube" << std::endl;
-  $$ = CreateTypedNode(kStream, $1.loc, parseContext);
   }
 | struct_specifier {
   DCHECK($1->IsStructDeclNode());

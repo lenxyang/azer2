@@ -122,9 +122,8 @@ class Type {
   bool IsScalar() const;
   bool IsStream() const;
 
-  void SetName(const std::string& name) {
-    name_ = name;
-  }
+  void SetName(const std::string& name);
+  void SetTemplateName(const std::string& name);
 
   const std::string& name() const { return name_;}
 
@@ -134,18 +133,20 @@ class Type {
   StorageQualifier storage_qualifier() const { return storage_qualifier_; }
   const std::vector<int>& GetDimVec() const { return dim_;}
   void PushDim(int dim) { dim_.push_back(dim); }
-  void SetDim(int index, int dim) {
-    DCHECK_LT(index, (int)dim_.size());
-    dim_[index] = dim;
-  }
-  int GetDim(int index) const {
-    DCHECK_LT(index, (int)dim_.size());
-    return dim_[index];
-  }
+  void SetDim(int index, int dim);
+  int GetDim(int index) const;
  private:
   StorageQualifier storage_qualifier_;
   BasicType type_;
+
+  /** 
+   * 用于表示 structure 的名称
+   */
   std::string name_;
+  /**
+   * 用于表示 template 的名称
+   */
+  std::string template_name_;
   std::vector<int> dim_;
   DISALLOW_COPY_AND_ASSIGN(Type);
 };
@@ -190,6 +191,24 @@ inline bool Type::IsStream() const {
   return type() == kStream;
 }
 
+inline void Type::SetName(const std::string& name) {
+  name_ = name;
+}
+
+inline void Type::SetTemplateName(const std::string& name) {
+  template_name_ = name;
+}
+
+inline void Type::SetDim(int index, int dim) {
+  DCHECK_LT(index, (int)dim_.size());
+  dim_[index] = dim;
+}
+
+inline int Type::GetDim(int index) const {
+  DCHECK_LT(index, (int)dim_.size());
+  return dim_[index];
+}
+
 uint32 SizeofType(const Type& type);
 
 inline bool IsTypeSupportMemberOper(const TypePtr& type) {
@@ -203,5 +222,6 @@ inline bool IsIntegerScalar(const TypePtr& type) {
       || type->type() == kUint32
       || type->type() == kShort;
 }
+
 }  // namespace afx
 }  // namespace azer
