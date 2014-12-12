@@ -776,7 +776,7 @@ stream_type_specifier
   if (typednode->GetType()->type() != kStructure) {
     parseContext->ReportError(loc, "stream<> must be a structure");
   }
-  TypedNode* node = CreateTypedNode(kStream, loc, parseContext);
+  TypedNode* node = CreateTypedNode($1.type, loc, parseContext);
   node->GetType()->SetTemplateName(typednode->name());
   $$ = node;
 }

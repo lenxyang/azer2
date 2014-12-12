@@ -47,7 +47,11 @@ enum BasicType {
   kTexture3D,
   kTextureCube,
   kStructure,
-  kStream,
+  kPointStream,
+  kLineStream,
+  kLineAdjStream,
+  kTriangleStream,
+  kTriangleAdjStream,
   kAnonymouseStructure,
   kFunctional,
 };
@@ -188,7 +192,11 @@ inline bool Type::IsScalar() const {
 }
 
 inline bool Type::IsStream() const {
-  return type() == kStream;
+  return type() == kPointStream
+      || type() == kLineStream
+      || type() == kLineAdjStream
+      || type() == kTriangleStream
+      || type() == kTriangleAdjStream;
 }
 
 inline void Type::SetName(const std::string& name) {

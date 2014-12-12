@@ -30,32 +30,36 @@
 
 %%
 
-"void"  {TYPE_INIT(VOID, kVoid);}
-"bool"  {TYPE_INIT(BOOL, kBoolean);}
-"char"  {TYPE_INIT(CHAR, kChar);}
-"short" {TYPE_INIT(SHORT, kShort);}
-"int"   {TYPE_INIT(INT, kInt32);}
-"uint"  {TYPE_INIT(UINT, kUint32);}
-"float" {TYPE_INIT(FLOAT, kFloat);}
-"ivec2"  {TYPE_INIT(VEC2, kIntVec2);}
-"ivec3"  {TYPE_INIT(VEC3, kIntVec3);}
-"ivec4"  {TYPE_INIT(VEC4, kIntVec4);}
-"vec2"  {TYPE_INIT(VEC2, kVector2);}
-"vec3"  {TYPE_INIT(VEC3, kVector3);}
-"vec4"  {TYPE_INIT(VEC4, kVector4);}
-"mat2"  {TYPE_INIT(MAT2, kMatrix2);}
-"mat3"  {TYPE_INIT(MAT3, kMatrix3);}
-"mat4"  {TYPE_INIT(MAT4, kMatrix4);}
-"imat2"  {TYPE_INIT(IMAT2, kIMatrix2);}
-"imat3"  {TYPE_INIT(IMAT3, kIMatrix3);}
-"imat4"  {TYPE_INIT(IMAT4, kIMatrix4);}
-"stream"  {TYPE_INIT(STREAM, kStream);}
-"Texture1D"  {TYPE_INIT(TEX1D, kTexture1D);}
-"Texture1DArray"  {TYPE_INIT(TEX1DARR, kTexture1DArray);}
-"Texture2D"  {TYPE_INIT(TEX2D, kTexture2D);}
-"Texture2DArray"  {TYPE_INIT(TEX2DARR, kTexture2DArray);}
-"Texture3D"  {TYPE_INIT(TEX3D, kTexture3D);}
-"TextureCube"  {TYPE_INIT(TEXCUBE, kTextureCube);}
+"void"                 {TYPE_INIT(VOID, kVoid);}
+"bool"                 {TYPE_INIT(BOOL, kBoolean);}
+"char"                 {TYPE_INIT(CHAR, kChar);}
+"short"                {TYPE_INIT(SHORT, kShort);}
+"int"                  {TYPE_INIT(INT, kInt32);}
+"uint"                 {TYPE_INIT(UINT, kUint32);}
+"float"                {TYPE_INIT(FLOAT, kFloat);}
+"ivec2"                {TYPE_INIT(VEC2, kIntVec2);}
+"ivec3"                {TYPE_INIT(VEC3, kIntVec3);}
+"ivec4"                {TYPE_INIT(VEC4, kIntVec4);}
+"vec2"                 {TYPE_INIT(VEC2, kVector2);}
+"vec3"                 {TYPE_INIT(VEC3, kVector3);}
+"vec4"                 {TYPE_INIT(VEC4, kVector4);}
+"mat2"                 {TYPE_INIT(MAT2, kMatrix2);}
+"mat3"                 {TYPE_INIT(MAT3, kMatrix3);}
+"mat4"                 {TYPE_INIT(MAT4, kMatrix4);}
+"imat2"                {TYPE_INIT(IMAT2, kIMatrix2);}
+"imat3"                {TYPE_INIT(IMAT3, kIMatrix3);}
+"imat4"                {TYPE_INIT(IMAT4, kIMatrix4);}
+"point_stream"         {TYPE_INIT(STREAM, kPointStream);}
+"line_stream"          {TYPE_INIT(STREAM, kLineStream);}
+"line_adj_stream"      {TYPE_INIT(STREAM, kLineAdjStream);}
+"triangle_stream"      {TYPE_INIT(STREAM, kTriangleStream);}
+"triangle_adj_stream"  {TYPE_INIT(STREAM, kTriangleAdjStream);}
+"Texture1D"            {TYPE_INIT(TEX1D, kTexture1D);}
+"Texture1DArray"       {TYPE_INIT(TEX1DARR, kTexture1DArray);}
+"Texture2D"            {TYPE_INIT(TEX2D, kTexture2D);}
+"Texture2DArray"       {TYPE_INIT(TEX2DARR, kTexture2DArray);}
+"Texture3D"            {TYPE_INIT(TEX3D, kTexture3D);}
+"TextureCube"          {TYPE_INIT(TEXCUBE, kTextureCube);}
 
 "if"        {KEYWORD_INIT(IF);}
 "else"      {KEYWORD_INIT(ELSE);}
@@ -119,35 +123,35 @@
 "++"  { PUNCTUATION_INIT(INC_OP);}
 "--"  { PUNCTUATION_INIT(DEC_OP);}
 
-"&&" { PUNCTUATION_INIT(LAND_OP);}
-"||" { PUNCTUATION_INIT(LOR_OP);}
-"^^" { PUNCTUATION_INIT(LXOR_OP);}
-">=" { PUNCTUATION_INIT(GE_OP);}
+"&&"  { PUNCTUATION_INIT(LAND_OP);}
+"||"  { PUNCTUATION_INIT(LOR_OP);}
+"^^"  { PUNCTUATION_INIT(LXOR_OP);}
+">="  { PUNCTUATION_INIT(GE_OP);}
 
-"<=" { PUNCTUATION_INIT(LE_OP);}
-"!=" { PUNCTUATION_INIT(NE_OP);}
-"==" { PUNCTUATION_INIT(EQ_OP);}
-"<<" { PUNCTUATION_INIT(LSHIFT_OP);}
-">>" { PUNCTUATION_INIT(RSHIFT_OP);}
+"<="  { PUNCTUATION_INIT(LE_OP);}
+"!="  { PUNCTUATION_INIT(NE_OP);}
+"=="  { PUNCTUATION_INIT(EQ_OP);}
+"<<"  { PUNCTUATION_INIT(LSHIFT_OP);}
+">>"  { PUNCTUATION_INIT(RSHIFT_OP);}
 
-"=" { PUNCTUATION_INIT(EQUAL);}
-"+=" { PUNCTUATION_INIT(ADD_ASSIGN);}
-"-=" { PUNCTUATION_INIT(SUB_ASSIGN);}
-"*=" { PUNCTUATION_INIT(MUL_ASSIGN);}
-"/=" { PUNCTUATION_INIT(DIV_ASSIGN);}
-"%=" { PUNCTUATION_INIT(MOD_ASSIGN);}
-"&=" { PUNCTUATION_INIT(AND_ASSIGN);}
-"|=" { PUNCTUATION_INIT(OR_ASSIGN);}
-"^=" { PUNCTUATION_INIT(XOR_ASSIGN);}
+"="   { PUNCTUATION_INIT(EQUAL);}
+"+="  { PUNCTUATION_INIT(ADD_ASSIGN);}
+"-="  { PUNCTUATION_INIT(SUB_ASSIGN);}
+"*="  { PUNCTUATION_INIT(MUL_ASSIGN);}
+"/="  { PUNCTUATION_INIT(DIV_ASSIGN);}
+"%="  { PUNCTUATION_INIT(MOD_ASSIGN);}
+"&="  { PUNCTUATION_INIT(AND_ASSIGN);}
+"|="  { PUNCTUATION_INIT(OR_ASSIGN);}
+"^="  { PUNCTUATION_INIT(XOR_ASSIGN);}
 ">>=" { PUNCTUATION_INIT(RSHIFT_ASSIGN);}
 "<<=" { PUNCTUATION_INIT(LSHIFT_ASSIGN);}
 
-"(" { PUNCTUATION_INIT(LEFT_PAREN);}
-")" { PUNCTUATION_INIT(RIGHT_PAREN);}
-"[" { PUNCTUATION_INIT(LEFT_BRACKET);}
-"]" { PUNCTUATION_INIT(RIGHT_BRACKET);}
+"("   { PUNCTUATION_INIT(LEFT_PAREN);}
+")"   { PUNCTUATION_INIT(RIGHT_PAREN);}
+"["   { PUNCTUATION_INIT(LEFT_BRACKET);}
+"]"   { PUNCTUATION_INIT(RIGHT_BRACKET);}
 
-"!" { PUNCTUATION_INIT(BANG);}
+"!"   { PUNCTUATION_INIT(BANG);}
 "+"   { PUNCTUATION_INIT(PLUS);}
 "-"   { PUNCTUATION_INIT(DASH);}
 "*"   { PUNCTUATION_INIT(START);}
@@ -155,17 +159,17 @@
 "%"   { PUNCTUATION_INIT(PERCENT);}
 "&"   { PUNCTUATION_INIT(AMPERSAND);}
 "?"   { PUNCTUATION_INIT(QUESTION);}
-"|"  { PUNCTUATION_INIT(VERTICAL);}
-"^"  { PUNCTUATION_INIT(CARET);}
-"<"  { PUNCTUATION_INIT(LEFT_ANGLE);}
-">"  { PUNCTUATION_INIT(RIGHT_ANGLE);}
-";"  { PUNCTUATION_INIT(SEMICOLON);}
-":"  { PUNCTUATION_INIT(COLON);}
-","  { PUNCTUATION_INIT(COMMA);}
-"."  { PUNCTUATION_INIT(DOT);}
-"{"  { PUNCTUATION_INIT(LEFT_BRACE);}
-"}"  { PUNCTUATION_INIT(RIGHT_BRACE);}
-"#"  { PUNCTUATION_INIT(SHARP);}
+"|"   { PUNCTUATION_INIT(VERTICAL);}
+"^"   { PUNCTUATION_INIT(CARET);}
+"<"   { PUNCTUATION_INIT(LEFT_ANGLE);}
+">"   { PUNCTUATION_INIT(RIGHT_ANGLE);}
+";"   { PUNCTUATION_INIT(SEMICOLON);}
+":"   { PUNCTUATION_INIT(COLON);}
+","   { PUNCTUATION_INIT(COMMA);}
+"."   { PUNCTUATION_INIT(DOT);}
+"{"   { PUNCTUATION_INIT(LEFT_BRACE);}
+"}"   { PUNCTUATION_INIT(RIGHT_BRACE);}
+"#"   { PUNCTUATION_INIT(SHARP);}
 
 [0-9]+\.[0-9]+[f]?         {
   LEX_TRACE << "double: " << yytext << std::endl;

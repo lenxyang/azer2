@@ -33,9 +33,13 @@ const char* type_name(BasicType type) {
     case kTexture3D: return "Texture3D";
     case kTextureCube: return "TextureCube";
     case kStructure: return "structure";
+    case kPointStream: return "PointStream";
+    case kLineStream: return "LineStream";
+    case kLineAdjStream: return "LineAdjStream";
+    case kTriangleStream: return "TriangleStream";
+    case kTriangleAdjStream: return "TriangleAdjStream";
     case kAnonymouseStructure: return "AnonymouseStructure";
     case kFunctional: return "functional";
-    case kStream: return "stream";
     default: NOTREACHED(); return NULL;
   }
 }
