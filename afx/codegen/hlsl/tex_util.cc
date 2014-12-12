@@ -1,7 +1,7 @@
-#include "azer/afx/codegen/tex_util.h"
+#include "azer/afx/codegen/hlsl/tex_util.h"
 #include "azer/afx/compiler/astnode.h"
-#include "azer/afx/codegen/hlsl_codegen.h"
-#include "azer/afx/codegen/hlsl_util.h"
+#include "azer/afx/codegen/hlsl/hlsl_codegen.h"
+#include "azer/afx/codegen/hlsl/hlsl_util.h"
 #include "base/logging.h"
 
 namespace azer {

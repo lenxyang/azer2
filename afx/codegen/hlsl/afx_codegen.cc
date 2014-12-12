@@ -1,12 +1,12 @@
-#include "azer/afx/codegen/afx_codegen.h"
+#include "azer/afx/codegen/hlsl/afx_codegen.h"
 
 #include <sstream>
 
 #include "base/logging.h"
 #include "azer/base/string.h"
 #include "azer/afx/codegen/code_generator.h"
-#include "azer/afx/codegen/hlsl_util.h"
-#include "azer/afx/codegen/tex_util.h"
+#include "azer/afx/codegen/hlsl/hlsl_util.h"
+#include "azer/afx/codegen/hlsl/tex_util.h"
 #include "azer/afx/compiler/astnode.h"
 #include "azer/afx/compiler/debug.h"
 #include "azer/afx/compiler/afxl.h"
@@ -63,6 +63,7 @@ std::string AfxCodegen::GenGeometryShaderCode(
        << " */\n\n";
   }
 
+  ss << std::move(GenEntry(shader.entry, comments));
   return ss.str();
 }
 
