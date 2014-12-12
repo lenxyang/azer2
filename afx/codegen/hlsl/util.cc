@@ -4,7 +4,7 @@
 #include <string>
 
 #include "azer/afx/codegen/code_generator.h"
-#include "azer/afx/codegen/hlsl/hlsl_codegen.h"
+#include "azer/afx/codegen/hlsl/ast_codegen.h"
 #include "base/strings/string_util.h"
 
 namespace azer {

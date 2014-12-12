@@ -3,7 +3,7 @@
 #include "azer/afx/compiler/parser.h"
 #include "azer/afx/compiler/testutil.h"
 #include "azer/afx/codegen/code_generator.h"
-#include "azer/afx/codegen/hlsl/hlsl_codegen.h"
+#include "azer/afx/codegen/hlsl/ast_codegen.h"
 
 using azer::afx::ASTNode;
 using azer::afx::ASTNodeFactory;
