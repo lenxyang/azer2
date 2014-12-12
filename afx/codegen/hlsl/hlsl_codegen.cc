@@ -6,7 +6,7 @@
 
 #include "base/logging.h"
 #include "base/strings/string_util.h"
-#include "azer/afx/codegen/hlsl/hlsl_util.h"
+#include "azer/afx/codegen/hlsl/util.h"
 #include "azer/afx/codegen/hlsl/tex_util.h"
 #include "azer/afx/compiler/type.h"
 #include "azer/afx/compiler/context.h"

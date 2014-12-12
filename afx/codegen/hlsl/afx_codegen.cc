@@ -5,7 +5,7 @@
 #include "base/logging.h"
 #include "azer/base/string.h"
 #include "azer/afx/codegen/code_generator.h"
-#include "azer/afx/codegen/hlsl/hlsl_util.h"
+#include "azer/afx/codegen/hlsl/util.h"
 #include "azer/afx/codegen/hlsl/tex_util.h"
 #include "azer/afx/compiler/astnode.h"
 #include "azer/afx/compiler/debug.h"

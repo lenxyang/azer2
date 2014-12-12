@@ -1,4 +1,4 @@
-#include "azer/afx/codegen/hlsl/hlsl_util.h"
+#include "azer/afx/codegen/hlsl/util.h"
 
 #include <sstream>
 #include <string>
