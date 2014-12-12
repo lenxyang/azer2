@@ -27,12 +27,15 @@ const char* type_name(BasicType type) {
     case kMatrix3: return "matrix3";
     case kMatrix4: return "matrix4";
     case kTexture1D: return "Texture1D";
+    case kTexture1DArray: return "Texture1DArray";
     case kTexture2D: return "Texture2D";
+    case kTexture2DArray: return "Texture2DArray";
     case kTexture3D: return "Texture3D";
     case kTextureCube: return "TextureCube";
     case kStructure: return "structure";
     case kAnonymouseStructure: return "AnonymouseStructure";
     case kFunctional: return "functional";
+    case kStream: return "stream";
     default: NOTREACHED(); return NULL;
   }
 }
