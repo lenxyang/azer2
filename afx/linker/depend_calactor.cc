@@ -2,8 +2,9 @@
 
 #include <algorithm>
 #include "azer/afx/compiler/astnode.h"
+#include "azer/afx/compiler/astutil.h"
 #include "azer/afx/compiler/context.h"
-#include "azer/afx/codegen/tex_util.h"
+#include "azer/afx/codegen/util.h"
 
 namespace azer {
 namespace afx {

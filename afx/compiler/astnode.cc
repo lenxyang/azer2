@@ -5,6 +5,7 @@
 #include "base/strings/string16.h"
 #include "base/strings/string_util.h"
 #include "azer/afx/compiler/context.h"
+#include "azer/afx/compiler/astutil.h"
 #include "azer/afx/compiler/expression_validator.h"
 #include "azer/afx/compiler/util.h"
 

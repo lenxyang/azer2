@@ -79,11 +79,5 @@ class ExpressionValidator {
   bool failed_;
   DISALLOW_COPY_AND_ASSIGN(ExpressionValidator);
 };
-
-/**
- * 获得指定节点的类型（不进行任何计算）
- */
-TypePtr GetNodeType(ASTNode* node);
-TypedNode* GetTypedNode(ASTNode* node);
 }  // namespace afx
 }  // namespace azer

@@ -6,7 +6,7 @@
 
 using azer::afx::AfxParser;
 using azer::afx::AfxLinker;
-using azer::afx::AfxCodegen;
+using azer::afx::HLSLAfxCodegen;
 using azer::afx::ASTreeDumper;
 using azer::afx::FileLoader;
 using azer::afx::ParseContext;
@@ -15,7 +15,7 @@ using base::FilePath;
 
 const FilePath::StringType kTestdataDir = AFXL("azer/afx/testdata");
 
-TEST(AfxCodegen, EffectVertex) {
+TEST(HLSLAfxCodegen, EffectVertex) {
   const std::string expect = ""
       "// using row_major\n"
       "#pragma pack_matrix(row_major)\n\n"
@@ -49,13 +49,12 @@ TEST(AfxCodegen, EffectVertex) {
   const TechniqueParser::StageInfo& shader = technique->shader[azer::kVertexStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  azer::afx::HLSLCodeGeneratorFactory gen_factory;
-  AfxCodegen codegen(&gen_factory);
+  HLSLAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kVertexStage, shader), expect);
   // LOG(ERROR) << codegen.GenCode(shader);
 }
 
-TEST(AfxCodegen, EffectPixel) {
+TEST(HLSLAfxCodegen, EffectPixel) {
   const std::string expect = ""
       "// using row_major\n#pragma pack_matrix(row_major)\n\n"
       "struct VSOutput {"
@@ -83,12 +82,11 @@ TEST(AfxCodegen, EffectPixel) {
   const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  azer::afx::HLSLCodeGeneratorFactory gen_factory;
-  AfxCodegen codegen(&gen_factory);
+  HLSLAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 
-TEST(AfxCodegen, EffectPixelWithSampler) {
+TEST(HLSLAfxCodegen, EffectPixelWithSampler) {
   const std::string expect = ""
       "// using row_major\n"
       "#pragma pack_matrix(row_major)\n\n"
@@ -131,15 +129,14 @@ TEST(AfxCodegen, EffectPixelWithSampler) {
   const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  azer::afx::HLSLCodeGeneratorFactory gen_factory;
-  AfxCodegen codegen(&gen_factory);
+  HLSLAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 
-TEST(AfxCodegen, TextureAsParameter) {
+TEST(HLSLAfxCodegen, TextureAsParameter) {
 }
 
-TEST(AfxCodegen, TextureInStructure) {
+TEST(HLSLAfxCodegen, TextureInStructure) {
   const std::string expect = ""
       "// using row_major\n"
       "#pragma pack_matrix(row_major)\n\n"
@@ -182,12 +179,11 @@ TEST(AfxCodegen, TextureInStructure) {
   const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  azer::afx::HLSLCodeGeneratorFactory gen_factory;
-  AfxCodegen codegen(&gen_factory);
+  HLSLAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 
-TEST(AfxCodegen, LineEffect) {
+TEST(HLSLAfxCodegen, LineEffect) {
   const std::string expect = ""
       "// using row_major\n"
       "#pragma pack_matrix(row_major)\n\n"
@@ -220,12 +216,11 @@ TEST(AfxCodegen, LineEffect) {
   const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  azer::afx::HLSLCodeGeneratorFactory gen_factory;
-  AfxCodegen codegen(&gen_factory);
+  HLSLAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 
-TEST(AfxCodegen, Shadowmap) {
+TEST(HLSLAfxCodegen, Shadowmap) {
   const std::string expect = ""
       "// using row_major\n"
       "#pragma pack_matrix(row_major)\n\n"
@@ -260,8 +255,7 @@ TEST(AfxCodegen, Shadowmap) {
   const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  azer::afx::HLSLCodeGeneratorFactory gen_factory;
-  AfxCodegen codegen(&gen_factory);
+  HLSLAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 

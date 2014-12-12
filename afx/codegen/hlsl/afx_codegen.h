@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "azer/afx/linker/technique_parser.h"
-#include "base/basictypes.h"
+#include "azer/afx/codegen/afx_codegen.h"
+#include "azer/afx/codegen/hlsl/ast_codegen.h"
 
 namespace azer {
 namespace afx {
@@ -13,16 +13,13 @@ namespace afx {
 class ASTNode;
 class CodeGeneratorFactory;
 
-class AfxCodegen {
+class HLSLAfxCodegen : public AfxCodegen {
  public:
-  AfxCodegen(CodeGeneratorFactory* factory)
-      : factory_(factory)
-      , stage_(kStageNotSpec){
-  }
+  HLSLAfxCodegen() : stage_(kStageNotSpec) {}
 
   std::string GenCode(RenderPipelineStage stage,
                       const TechniqueParser::StageInfo& shader,
-                      bool comments = false);
+                      bool comments = false) override;
  private:
   /**
    * 生成 uniforms 类型相关的代码
@@ -50,14 +47,14 @@ class AfxCodegen {
                                           const TechniqueParser::StageInfo& shader,
                                           bool comments);
   
-  CodeGeneratorFactory* factory_;
+  HLSLCodeGeneratorFactory factory_;
   RenderPipelineStage stage_;
   /**
    * uniform 和 其他函数可能都依赖于某个指定的结构体， type_depends_
    * 用来对他们进行去重
    */
   std::set<std::string> type_depends_;
-  DISALLOW_COPY_AND_ASSIGN(AfxCodegen);
+  DISALLOW_COPY_AND_ASSIGN(HLSLAfxCodegen);
 };
 }  // namespace afx
 }  // namespace azer

@@ -9,6 +9,7 @@
 #include "azer/afx/codegen/hlsl/util.h"
 #include "azer/afx/codegen/hlsl/tex_util.h"
 #include "azer/afx/compiler/type.h"
+#include "azer/afx/compiler/astutil.h"
 #include "azer/afx/compiler/context.h"
 #include "azer/afx/compiler/expression_validator.h"
 

@@ -16,31 +16,10 @@ class TypedNode;
  */
 std::string GenReferredTextureVarName(ASTNode* node);
 
-bool IsTextureArray(ASTNode* node);
-
 /**
  * 判断 texture 是否属于 Material
  */
 bool IsMaterialTex(ASTNode* node);
-
-/**
- * 获得 texture 的声明 node
- * 如果是结构体的成员，则返回结构体的 symbol 节点
- * 如果仅仅是一个变量，则返回变量的声明节点
- */
-ASTNode* GetTexDeclNode(ASTNode* node);
-
-/**
- * 获取最终的 Texture 节点的类型节点
- * 例如 mtrl.tex.diffuse[0]， 最终节点是 diffuse 这个 FieldNode
- */
-TypedNode* GetTexNode(ASTNode* node);
-
-/**
- * 获取的 Texture 节点的 Type
- * 注： Texture 有可能是 Texture1D, Texture2D 等，还有可能是数组
- */
-TypePtr GetTextureType(ASTNode* node);
 
 /**
  * 为 node 产生一个完整的 texture 名称(包括数组后缀) 
@@ -75,21 +54,5 @@ std::string HLSLTextureUniformFuncName(ASTNode* node);
 std::string HLSLTextureArraySpecifier(ASTNode* node);
 
 std::string HLSLTextureTypeName(ASTNode* node);
-
-/**
- * 获取访问路径
- * a.b.tex 那么他将被分成一个 std::vector<std::string> = {a, b, tex}
- */
-void GetTexRefferPath(ASTNode* node, std::vector<std::string>* path);
-
-bool IsUniformTexture(ASTNode* node);
-
-/**
- * 判断函数的参数是否是 Texture(最终结果是否是 texture 类型)
- */
-bool IsNodeTypeTexture(ASTNode* node);
-
-bool HasTextureField(ASTNode* field);
-bool HasOnlyTextureField(ASTNode* node);
 }  // namespace afx
 }  // namespace azer

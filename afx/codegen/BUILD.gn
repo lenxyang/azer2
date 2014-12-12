@@ -1,18 +1,22 @@
 
 source_set("codegen") {
   sources = [
+    "afx_codegen.cc",
+    "afx_codegen.h",
+    "ast_code_generator.cc",
+    "ast_code_generator.h",
     "cpp_codegen.cc",
     "cpp_codegen.h",
-    "code_generator.cc",
-    "code_generator.h",
+    "code_format.cc",
+    "code_format.h",
     "hlsl/afx_codegen.cc",
     "hlsl/afx_codegen.h",
-    "hlsl/hlsl_util.cc",
-    "hlsl/hlsl_util.h",
+    "hlsl/ast_codegen.cc",
+    "hlsl/ast_codegen.h",
     "hlsl/tex_util.cc",
     "hlsl/tex_util.h",
-    "hlsl/hlsl_codegen.cc",
-    "hlsl/hlsl_codegen.h",
+    "hlsl/util.cc",
+    "hlsl/util.h",
     "util.cc",
     "util.h",
   ]

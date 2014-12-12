@@ -2,8 +2,8 @@
 
 #include "azer/afx/compiler/afxl.h"
 #include "azer/afx/codegen/afx_codegen.h"
-#include "azer/afx/codegen/hlsl_codegen.h"
 #include "azer/afx/codegen/cpp_codegen.h"
+#include "azer/afx/codegen/code_format.h"
 #include "azer/afx/codegen/util.h"
 #include "azer/base/string.h"
 #include "base/strings/string_util.h"
@@ -62,9 +62,8 @@ void AfxWrapper::GenHLSL(const TechniqueParser::Technique& tech, AfxResult* resu
 
     azer::RenderPipelineStage stage = (azer::RenderPipelineStage)cnt;
     std::stringstream ss;
-    HLSLCodeGeneratorFactory gen_factory;
-    AfxCodegen codegen(&gen_factory);
-    result->hlsl[cnt] = FormatCode(codegen.GenCode(stage, *iter, true));
+    std::unique_ptr<AfxCodegen> codegen(AfxCodegen::Create("hlsl"));
+    result->hlsl[cnt] = FormatCode(codegen->GenCode(stage, *iter, true));
   }
 }
 

@@ -1,5 +1,7 @@
 #include "azer/afx/codegen/hlsl/tex_util.h"
+
 #include "azer/afx/compiler/astnode.h"
+#include "azer/afx/compiler/astutil.h"
 #include "azer/afx/codegen/hlsl/ast_codegen.h"
 #include "azer/afx/codegen/hlsl/util.h"
 #include "base/logging.h"
@@ -9,85 +11,6 @@ namespace afx {
 namespace {
 
 const char* AfxD3DSamplerSupfix = "__d3d_sampler";
-
-class TextureNameGenerator : public TreeNode<ASTNode>::Traverser {
- public:
-  TextureNameGenerator() {}
-
-  void GenCode(ASTNode* node);
-  const std::string& GetName() const { return code_gen_;}
-  const std::vector<std::string>& GetFields() const { return fields_;}
- protected:
-  virtual bool OnVisitBegin(ASTNode* node) override;
-  virtual void OnVisitEnd(ASTNode* node) override;
- private:
-  std::string code_gen_;
-  std::vector<std::string> fields_;
-  DISALLOW_COPY_AND_ASSIGN(TextureNameGenerator);
-};
-
-void TextureNameGenerator::GenCode(ASTNode* node) {
-  code_gen_.clear();
-  node->traverse(this);
-}
-
-bool TextureNameGenerator::OnVisitBegin(ASTNode* node) {
-  if (node->IsBinaryOpNode()) {
-    TextureNameGenerator gen1;
-    TextureNameGenerator gen2;
-    BinaryOpNode* binary = node->ToBinaryOpNode();
-    if (binary->GetOperator() == kOpMember) {
-      gen1.GenCode(binary->GetOper1());
-      gen2.GenCode(binary->GetOper2());
-      code_gen_.append(gen1.GetName());
-      code_gen_.append("_");
-      code_gen_.append(gen2.GetName());
-
-      fields_.push_back(gen1.GetName());
-      fields_.push_back(gen2.GetName());
-    } else {
-      NOTREACHED();
-    }
-    return false;
-  } else if (node->IsRefSymbolNode()) {
-    RefSymbolNode* symbol = node->ToRefSymbolNode();
-    code_gen_.append(symbol->symbolname());
-    fields_.push_back(symbol->symbolname());
-    return false;
-  } else if (node->IsFieldNode()) {
-    FieldNode* field = node->ToFieldNode();
-    code_gen_.append("_");
-    code_gen_.append(field->fieldname());
-    fields_.push_back(field->fieldname());
-    return false;
-  } else {
-    NOTREACHED();
-    return false;
-  }
-}
-
-void TextureNameGenerator::OnVisitEnd(ASTNode* node)  {
-}
-}
-
-std::string GenReferredTextureVarName(ASTNode* node) {
-  DCHECK(IsNodeTypeTexture(node));
-  if (node->IsRefSymbolNode()) {
-    return node->ToRefSymbolNode()->symbolname();
-  } else if (node->IsSymbolNode()) {
-    return node->ToSymbolNode()->symbolname();
-  } else if (node->IsParamNode()) {
-    return node->ToParamNode()->paramname();
-  } else if (node->IsBinaryOpNode()) {
-    TextureNameGenerator gen;
-    BinaryOpNode* binary = node->ToBinaryOpNode();
-    DCHECK(binary);
-    gen.GenCode(binary->GetOper1());
-    return gen.GetName();
-  } else {
-    NOTREACHED();
-    return "";
-  }
 }
 
 std::string HLSLUniformTextureSamplerDeclFullName(ASTNode* node) {
@@ -113,59 +36,10 @@ std::string HLSLDeclaredTextureFullName(ASTNode* node) {
   return ss.str();
 }
 
-TypedNode* GetTexNode(ASTNode* node) {
-  DCHECK(IsNodeTypeTexture(node));
-  if (node->IsRefSymbolNode()) {
-    SymbolNode* symbol = node->ToRefSymbolNode()->GetDeclNode();
-    return symbol->GetTypedNode();
-  } else if (node->IsSymbolNode()) {
-    SymbolNode* symbol = node->ToSymbolNode();
-    return symbol->GetTypedNode();
-  } else if (node->IsFieldNode()) {
-    FieldNode* field = node->ToFieldNode();
-    return field->GetTypedNode();
-  } else if (node->IsBinaryOpNode()) {
-    BinaryOpNode* binary = node->ToBinaryOpNode();
-    if (binary->GetOperator() == kOpMember) {
-      return GetTexNode(binary->GetOper2());
-    } else if (binary->GetOperator() == kOpIndex) {
-      return GetTexNode(binary->GetOper1());
-    } else {
-      NOTREACHED();
-      return NULL;
-    }
-  } else {
-    NOTREACHED();
-    return NULL;
-  }
-}
-
-TypePtr GetTextureType(ASTNode* node) {
-  DCHECK(IsNodeTypeTexture(node));
-  if (node->IsRefSymbolNode()) {
-    SymbolNode* symbol = node->ToRefSymbolNode()->GetDeclNode();
-    TypePtr ptr = symbol->GetType();
-    return ptr;
-  } else if (node->IsSymbolNode()) {
-    SymbolNode* symbol = node->ToSymbolNode();
-    TypePtr ptr = symbol->GetType();
-    return ptr;
-  } else if (node->IsBinaryOpNode()) {
-    TypePtr ptr = node->ToBinaryOpNode()->GetResultType();
-    return ptr;
-  } else {
-    NOTREACHED();
-    return NULL;
-  }
-}
-
 std::string HLSLTextureTypeName(ASTNode* node) {
   DCHECK(IsNodeTypeTexture(node));
   TypePtr ptr = GetTextureType(node);
   return HLSLTypeName(ptr);
-}
-
-namespace {
 }
 
 std::string HLSLRefferedTextureFullName(ASTNode* node) {
@@ -185,54 +59,6 @@ std::string HLSLRefferedTextureFullName(ASTNode* node) {
   }
 
   return ss.str();
-}
-
-bool IsTextureArray(ASTNode* node) {
-  if (node->IsRefSymbolNode()) {
-    SymbolNode* symbol = node->ToRefSymbolNode()->GetDeclNode();
-    TypedNode* typed = symbol->GetTypedNode();
-    DCHECK(typed != NULL);
-    
-    return typed->IsArrayTyped();
-  } else if (node->IsFieldNode()) {
-    FieldNode* field = node->ToFieldNode();
-    TypedNode* typed = field->GetTypedNode();
-    DCHECK(typed != NULL);
-    
-    return typed->IsArrayTyped();
-  } else if (node->IsBinaryOpNode()) {
-    BinaryOpNode* binary = node->ToBinaryOpNode();
-    if (binary->GetOperator() == kOpMember) {
-      return IsTextureArray(binary->GetOper2());
-    } else if (binary->GetOperator() == kOpIndex) {
-      return IsTextureArray(binary->GetOper1());
-    } else {
-      NOTREACHED();
-      return false;
-    }
-  } else {
-    NOTREACHED();
-    return false;
-  }
-}
-
-void GetTexRefferPath(ASTNode* node, std::vector<std::string>* path) {
-  DCHECK(IsNodeTypeTexture(node));
-  if (node->IsRefSymbolNode()) {
-    path->push_back(node->ToRefSymbolNode()->symbolname());
-    return;
-  } else if (node->IsSymbolNode()) {
-    path->push_back(node->ToSymbolNode()->symbolname());
-    return;
-  } else if (node->IsBinaryOpNode()) {
-    TextureNameGenerator gen;
-    BinaryOpNode* binary = node->ToBinaryOpNode();
-    DCHECK(binary);
-    gen.GenCode(binary->GetOper1());
-    *path = gen.GetFields();
-  } else {
-    NOTREACHED();
-  }
 }
 
 std::string HLSLUniformTextureSamplerFullName(ASTNode* node) {
@@ -291,33 +117,6 @@ std::string HLSLTextureArraySpecifier(ASTNode* node) {
   }
 }
 
-ASTNode* GetTexDeclNode(ASTNode* node) {
-  if (node->IsRefSymbolNode()) {
-    SymbolNode* symbol = node->ToRefSymbolNode()->GetDeclNode();
-    return symbol;
-  } else if (node->IsFieldNode()) {
-    if (node->parent() && node->parent()->IsBinaryOpNode()) {
-      return GetTexDeclNode(node->parent());
-    } else {
-      NOTREACHED();
-      return NULL;
-    }
-  } else if (node->IsBinaryOpNode()) {
-    BinaryOpNode* binary = node->ToBinaryOpNode();
-    if (binary->GetOperator() == kOpMember) {
-      return GetTexDeclNode(binary->GetOper1());
-    } else if (binary->GetOperator() == kOpIndex) {
-      return GetTexDeclNode(binary->GetOper1());
-    } else {
-      NOTREACHED();
-      return NULL;
-    }
-  } else {
-    NOTREACHED();
-    return NULL;
-  }
-}
-
 bool IsMaterialTex(ASTNode* node) {
   ASTNode* decl = GetTexDeclNode(node);
   DCHECK(decl != NULL);
@@ -367,112 +166,6 @@ std::string HLSLTextureUniformFuncName(ASTNode* node) {
     NOTREACHED();
     return "";
   }
-}
-
-bool IsUniformTexture(ASTNode* node) {
-  if (!IsNodeTypeTexture(node)) {
-    return false;
-  }
-
-  if (node->IsActParamNode()) {
-    return false;
-  } else if (node->IsSymbolNode()) {
-    return true;
-  } else if (node->IsRefSymbolNode()) {
-    SymbolNode* symbol = node->ToRefSymbolNode()->GetDeclNode();
-    DCHECK(symbol != NULL);
-    return IsUniformTexture(symbol);
-  } else if (node->IsBinaryOpNode()) {
-    // cannot be uniform
-    // if texture is uniform, is will be put out of the uniform structure
-    BinaryOpNode* binary = node->ToBinaryOpNode();
-    if (binary->GetOperator() == kOpMember) {
-      TypePtr type1 = GetNodeType(binary->GetOper1());
-      return IsNodeTypeTexture(binary->GetOper2())
-          && (type1->storage_qualifier() & kUniform);
-      return true;
-    } else if (binary->GetOperator() == kOpIndex) {
-      return IsUniformTexture(binary->GetOper1());
-    } else {
-      return false;
-    }
-  } else {
-    NOTREACHED();
-    return false;
-  }
-}
-
-bool IsNodeTypeTexture(ASTNode* node) {
-  if (node->IsBinaryOpNode()) {
-    TypePtr ptr = node->ToBinaryOpNode()->GetResultType();
-    DCHECK(ptr.get() != NULL);
-    return ptr->IsTexture();
-  } else if (node->IsActParamNode()) {
-    SymbolNode* symbol = node->ToSymbolNode();
-    DCHECK(symbol != NULL);
-    TypePtr ptr = symbol->GetType();
-    return ptr->IsTexture();
-  } else if (node->IsSymbolNode()) {
-    // to generator SamplerState, symbolNode maybe as a parameters
-    SymbolNode* symbol = node->ToSymbolNode();
-    DCHECK(symbol != NULL);
-    TypePtr ptr = symbol->GetType();
-    DCHECK(ptr.get() != NULL);
-    return ptr->IsTexture();
-  } else if (node->IsRefSymbolNode()) {
-    SymbolNode* symbol = node->ToRefSymbolNode()->GetDeclNode();
-    DCHECK(symbol != NULL);
-    return IsNodeTypeTexture(symbol);
-  } else if (node->IsFieldNode()) {
-    TypedNode* typed = node->ToFieldNode()->GetTypedNode();
-    return typed->GetType()->IsTexture();
-  } else if (node->IsParamNode()) {
-    TypedNode* typed = node->ToParamNode()->GetTypedNode();
-    return typed->GetType()->IsTexture();
-  } else if (node->IsConstNode()) {
-    return false;
-  } else if (node->IsFuncCallNode()) {
-    return false;
-  } else if (node->IsUnaryOpNode()) {
-    return IsNodeTypeTexture(node->ToUnaryOpNode()->GetOper());
-  } else {
-    NOTREACHED();
-    return false;
-  }
-
-  return false;
-}
-
-bool HasTextureField(ASTNode* node) {
-  DCHECK(node->IsStructDeclNode());
-  ASTNode* cur = node->first_child();
-  while (cur) {
-    if (cur->IsFieldNode()) {
-      FieldNode* field = cur->ToFieldNode();
-      if (field->GetType()->IsTexture()) {
-        return true;
-      } else if (field->GetType()->IsStructure()) {
-        return HasTextureField(field->GetTypedNode()->GetStructDecl());
-      }
-    }
-    cur = cur->next_sibling();
-  }
-  return false;
-}
-
-bool HasOnlyTextureField(ASTNode* node) {
-  DCHECK(node->IsStructDeclNode());
-  ASTNode* cur = node->first_child();
-  while (cur) {
-    if (cur->IsFieldNode()) {
-      FieldNode* fieldnode = cur->ToFieldNode();
-      if (!fieldnode->GetType()->IsTexture()) {
-        return false;
-      }
-    }
-    cur = cur->next_sibling();
-  }
-  return true;
 }
 }  // namespace afx
 }  // namespace azer

@@ -3,7 +3,7 @@
 #include <string>
 
 #include "azer/afx/compiler/astnode.h"
-#include "azer/afx/codegen/code_generator.h"
+#include "azer/afx/codegen/ast_code_generator.h"
 
 namespace azer {
 namespace afx {

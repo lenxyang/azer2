@@ -1,14 +1,19 @@
 #pragma once
 
 #include <string>
-#include "base/files/file_path.h"
+#include <vector>
 
 namespace azer {
 namespace afx {
 
 class ASTNode;
-std::string FormatCode(const std::string& code);
+
+/**
+ * 获取访问路径
+ * a.b.tex 那么他将被分成一个 std::vector<std::string> = {a, b, tex}
+ */
+void GetTexRefferPath(ASTNode* node, std::vector<std::string>* path);
+std::string GenReferredTextureVarName(ASTNode* node);
+
 }  // namespace afx
 }  // namespace azer
-
-bool CompareCode(const ::base::FilePath& path, const std::string& content);

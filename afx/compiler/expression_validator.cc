@@ -1,6 +1,7 @@
 #include "azer/afx/compiler/expression_validator.h"
 
 #include "azer/afx/compiler/astnode.h"
+#include "azer/afx/compiler/astutil.h"
 #include "azer/afx/compiler/context.h"
 #include "azer/afx/compiler/value.h"
 #include "base/logging.h"
@@ -17,121 +18,6 @@ bool IsIntegerScalar(const Type* type) {
 bool IsReal(const TypePtr& type);
 BasicType GetSwizzleType(const std::string& fieldname);
 }  // namespace
-
-ValuePtr GetNodeValue(ASTNode* node) {
-  if (node->IsConstNode()) {
-    return ValuePtr(node->ToConstNode()->value());
-  } else if (node->IsBinaryOpNode()) {
-    return ValuePtr(node->ToBinaryOpNode()->value());
-  } else if (node->IsUnaryOpNode()) {
-    return ValuePtr(node->ToUnaryOpNode()->value());
-  } else if (node->IsRefSymbolNode()) {
-    RefSymbolNode* ref = node->ToRefSymbolNode();
-    return ValuePtr(new Value(ref->GetDeclNode()->GetType()));
-  } else if (node->IsFuncCallTypeInitNode()) {
-    FuncCallTypeInitNode* typeinit = node->ToFuncCallTypeInitNode();
-    DCHECK(typeinit->GetType().get() != NULL);
-    return ValuePtr(new Value(typeinit->GetType()));
-  } else if (node->IsFuncCallNode()) {
-    FuncCallNode* call = node->ToFuncCallNode();
-    DCHECK(call->GetFuncDefNode() && call->GetFuncDefNode()->IsFuncDefNode());
-    DCHECK(call->GetFuncDefNode()->GetProtoNode());
-    FuncProtoNode* proto = call->GetFuncDefNode()->GetProtoNode();
-    return ValuePtr(new Value(proto->rettype()->GetType()));
-  } else if (node->IsFieldNode()) {
-    return ValuePtr(new Value(node->ToFieldNode()->GetType()));
-  } else if (node->IsParamNode()) {
-    return ValuePtr(new Value(node->ToParamNode()->GetType()));
-  } else {
-    NOTREACHED();
-    return ValuePtr(new Value);
-  }
-}
-
-TypedNode* GetTypedNode(ASTNode* node) {
-  if (node->IsConstNode()) {
-    TypedNode* typed = node->GetContext()->Create(ASTNode::kTypedNode,
-                                                  node->loc())->ToTypedNode();
-    typed->SetType(node->ToConstNode()->GetResultType());
-    return typed;
-  } else if (node->IsFuncCallNode()) {
-    FuncCallNode* func = node->ToFuncCallNode();
-    FuncDefNode* funcdef = func->GetFuncDefNode();
-    DCHECK(funcdef != NULL);
-    FuncProtoNode* proto = funcdef->GetProtoNode();
-    DCHECK(proto != NULL);
-    return proto->rettype();
-  } else if (node->IsRefSymbolNode()) {
-    SymbolNode* symbol = node->ToRefSymbolNode()->GetDeclNode();
-    DCHECK(symbol != NULL);
-    TypedNode* typed = symbol->GetTypedNode();
-    DCHECK(typed != NULL);
-    // perhaps struct field or swizzle expression
-    if (typed->GetStructDecl() != NULL || typed->GetType()->IsVector()) {
-      return typed;
-    } else {
-      return NULL;
-    }
-  } else if (node->IsBinaryOpNode()) {
-    BinaryOpNode* binary = node->ToBinaryOpNode();
-    if (binary->GetOperator() == kOpMember
-        || binary->GetOperator() == kOpIndex) {
-      TypedNode* typed = node->GetContext()->Create(ASTNode::kTypedNode,
-                                                    node->loc())->ToTypedNode();
-      typed->SetType(binary->GetResultType());
-      return typed;
-    } else {
-      TypedNode* typed = node->GetContext()->Create(ASTNode::kTypedNode,
-                                                    node->loc())->ToTypedNode();
-      typed->SetType(binary->GetResultType());
-      return typed;
-    }
-  } else {
-    NOTREACHED();
-    return NULL;
-  }
-}
-
-TypePtr GetNodeType(ASTNode* node) {
-  if (node->type() == ASTNode::kConstNode) {
-    TypePtr typeptr(new Type(node->ToConstNode()->GetResultType()->type()));
-    typeptr->SetStorageQualifier(kConst);
-    return typeptr;
-  } else if (node->IsRefSymbolNode()) {
-    RefSymbolNode* ref = node->ToRefSymbolNode();
-    return ref->GetDeclNode()->GetType();
-  } else if (node->IsFuncCallTypeInitNode()) {
-    FuncCallTypeInitNode* typeinit = node->ToFuncCallTypeInitNode();
-    DCHECK(typeinit->GetType().get() != NULL);
-    return typeinit->GetType();
-  } else if (node->IsFuncCallNode()) {
-    FuncCallNode* call = node->ToFuncCallNode();
-    DCHECK(call->GetFuncDefNode() && call->GetFuncDefNode()->IsFuncDefNode());
-    DCHECK(call->GetFuncDefNode()->GetProtoNode());
-    FuncProtoNode* proto = call->GetFuncDefNode()->GetProtoNode();
-    return proto->rettype()->GetType();
-  } else if (node->IsUnaryOpNode()) {
-    DCHECK(node->ToUnaryOpNode()->GetResultType().get() != NULL);
-    return node->ToUnaryOpNode()->GetResultType();
-  } else if (node->IsBinaryOpNode()) {
-    DCHECK(node->ToBinaryOpNode()->GetResultType().get() != NULL);
-    return node->ToBinaryOpNode()->GetResultType();
-  } else if (node->IsFieldNode()) {
-    return node->ToFieldNode()->GetType();
-  } else if (node->IsParamNode()) {
-    return node->ToParamNode()->GetType();
-  } else if (node->IsStructDeclNode()) {
-    StructDeclNode* decl = node->ToStructDeclNode();
-    TypePtr type(new Type(kStructure));
-    type->SetName(decl->struct_name());
-    return type;
-  } else if (node->IsDeclarationNode()) {
-    return node->ToDeclarationNode()->GetType();
-  } else {
-    NOTREACHED();
-    return NULL;
-  }
-}
 
 bool ExpressionValidator::Valid(ASTNode* node) {
   if (HasError()) return false;

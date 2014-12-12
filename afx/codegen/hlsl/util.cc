@@ -3,7 +3,8 @@
 #include <sstream>
 #include <string>
 
-#include "azer/afx/codegen/code_generator.h"
+#include "azer/afx/compiler/astutil.h"
+#include "azer/afx/codegen/ast_code_generator.h"
 #include "azer/afx/codegen/hlsl/ast_codegen.h"
 #include "base/strings/string_util.h"
 

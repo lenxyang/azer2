@@ -6,7 +6,8 @@
 
 #include "azer/render/render_system_enum.h"
 #include "azer/afx/compiler/astnode.h"
-#include "azer/afx/codegen/hlsl/hlsl_util.h"
+#include "azer/afx/compiler/astutil.h"
+#include "azer/afx/codegen/hlsl/util.h"
 #include "azer/afx/codegen/hlsl/tex_util.h"
 #include "base/strings/string_util.h"
 #include "base/strings/string_number_conversions.h"

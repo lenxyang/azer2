@@ -4,10 +4,11 @@
 
 #include "base/logging.h"
 #include "azer/base/string.h"
-#include "azer/afx/codegen/code_generator.h"
+#include "azer/afx/codegen/ast_code_generator.h"
 #include "azer/afx/codegen/hlsl/util.h"
 #include "azer/afx/codegen/hlsl/tex_util.h"
 #include "azer/afx/compiler/astnode.h"
+#include "azer/afx/compiler/astutil.h"
 #include "azer/afx/compiler/debug.h"
 #include "azer/afx/compiler/afxl.h"
 #include "base/files/file_path.h"
@@ -29,7 +30,7 @@ bool IsConstBufferMember(ASTNode* node) {
   }
 }
 }  // namespace
-std::string AfxCodegen::GenDeps(const TechniqueParser::StageInfo& shader,
+std::string HLSLAfxCodegen::GenDeps(const TechniqueParser::StageInfo& shader,
                                 bool comments) {
   std::stringstream ss;
   for (auto iter = shader.depend.rbegin(); iter != shader.depend.rend(); ++iter) {
@@ -40,7 +41,7 @@ std::string AfxCodegen::GenDeps(const TechniqueParser::StageInfo& shader,
   return ss.str();
 }
 
-std::string AfxCodegen::GenUniformDeps(const TechniqueParser::StageInfo& shader,
+std::string HLSLAfxCodegen::GenUniformDeps(const TechniqueParser::StageInfo& shader,
                                        bool comments) {
   std::stringstream ss;
   for (auto iter = shader.uni_depend.rbegin();
@@ -52,7 +53,7 @@ std::string AfxCodegen::GenUniformDeps(const TechniqueParser::StageInfo& shader,
   return ss.str();
 }
 
-std::string AfxCodegen::GenGeometryShaderCode(
+std::string HLSLAfxCodegen::GenGeometryShaderCode(
     const TechniqueParser::StageInfo& shader, bool comments) {
   std::stringstream ss;
   if (comments) {
@@ -67,7 +68,7 @@ std::string AfxCodegen::GenGeometryShaderCode(
   return ss.str();
 }
 
-std::string AfxCodegen::GenVertexAndPixelShaderCode(
+std::string HLSLAfxCodegen::GenVertexAndPixelShaderCode(
     RenderPipelineStage stage, const TechniqueParser::StageInfo& shader,
     bool comments) {
   stage_ = stage;
@@ -93,7 +94,7 @@ std::string AfxCodegen::GenVertexAndPixelShaderCode(
   return ss.str();
 }
 
-std::string AfxCodegen::GenCode(RenderPipelineStage stage,
+std::string HLSLAfxCodegen::GenCode(RenderPipelineStage stage,
                                 const TechniqueParser::StageInfo& shader,
                                 bool comments) {
   if (stage == kVertexStage || stage == kPixelStage) {
@@ -106,14 +107,14 @@ std::string AfxCodegen::GenCode(RenderPipelineStage stage,
   }
 }
 
-std::string AfxCodegen::GenEntry(ASTNode* node, bool comments) {
-  SnippetCodeGenerator generator(factory_);
+std::string HLSLAfxCodegen::GenEntry(ASTNode* node, bool comments) {
+  SnippetCodeGenerator generator(&factory_);
   DCHECK(node);
   generator.GenCode(node);
   return std::move(generator.GetCode());
 }
 
-std::string AfxCodegen::GenTextures(const std::vector<ASTNode*>& textures,
+std::string HLSLAfxCodegen::GenTextures(const std::vector<ASTNode*>& textures,
                                     bool comments) {
   std::stringstream ss;
   for (auto iter = textures.begin(); iter != textures.end(); ++iter) {
@@ -127,7 +128,7 @@ std::string AfxCodegen::GenTextures(const std::vector<ASTNode*>& textures,
   return ss.str();
 }
 
-std::string AfxCodegen::GenUniform(const std::vector<ASTNode*> &uniforms,
+std::string HLSLAfxCodegen::GenUniform(const std::vector<ASTNode*> &uniforms,
                                    bool comments) {
   std::stringstream ss;
   // sort uniforms
@@ -140,7 +141,7 @@ std::string AfxCodegen::GenUniform(const std::vector<ASTNode*> &uniforms,
       continue;
     }
     DCHECK (!decl->GetType()->IsTexture());
-    SnippetCodeGenerator generator(factory_);
+    SnippetCodeGenerator generator(&factory_);
     generator.GenCode(decl);
     ss << std::move(generator.GetCode());
   }
@@ -148,15 +149,14 @@ std::string AfxCodegen::GenUniform(const std::vector<ASTNode*> &uniforms,
   return ss.str();
 }
 
-std::string AfxCodegen::GenDepend(ASTNode* node, bool comments) {
+std::string HLSLAfxCodegen::GenDepend(ASTNode* node, bool comments) {
   std::stringstream ss;
-  DCHECK(factory_ != NULL);
   if (comments) {
     ss << "// genereated code from for \"" << ASTNodeName(node->type()) << "\"\n"
        << "// which defined in file:\n"
        << "//   " << node->GetContext()->path().value() << "\n";
   }
-  SnippetCodeGenerator generator(factory_);
+  SnippetCodeGenerator generator(&factory_);
   generator.GenCode(node);
   ss << std::move(generator.GetCode());
   if (node->IsStructDeclNode()) {
@@ -165,7 +165,7 @@ std::string AfxCodegen::GenDepend(ASTNode* node, bool comments) {
   return ss.str();
 }
 
-std::string AfxCodegen::GenUniDepend(ASTNode* node, bool comments) {
+std::string HLSLAfxCodegen::GenUniDepend(ASTNode* node, bool comments) {
   if (HasOnlyTextureField(node)) {
     return "";
   }
@@ -176,13 +176,12 @@ std::string AfxCodegen::GenUniDepend(ASTNode* node, bool comments) {
   }
 
   std::stringstream ss;
-  DCHECK(factory_ != NULL);
   if (comments) {
     ss << "// genereated code from for \"" << ASTNodeName(node->type()) << "\"\n"
        << "// which defined in file:\n"
        << "//   " << node->GetContext()->path().value() << "\n";
   }
-  SnippetCodeGenerator generator(factory_);
+  SnippetCodeGenerator generator(&factory_);
   generator.GenCode(node);
   ss << std::move(generator.GetCode());
   return ss.str();

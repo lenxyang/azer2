@@ -30,6 +30,8 @@ source_set("compiler") {
     "astdump.h",
     "astnode.cc",
     "astnode.h",
+    "astutil.cc",
+    "astutil.h",
     "builtin.cc",
     "builtin.h",
     "context.cc",

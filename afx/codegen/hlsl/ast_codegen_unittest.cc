@@ -2,7 +2,7 @@
 #include "azer/afx/compiler/astdump.h"
 #include "azer/afx/compiler/parser.h"
 #include "azer/afx/compiler/testutil.h"
-#include "azer/afx/codegen/code_generator.h"
+#include "azer/afx/codegen/ast_code_generator.h"
 #include "azer/afx/codegen/hlsl/ast_codegen.h"
 
 using azer::afx::ASTNode;
