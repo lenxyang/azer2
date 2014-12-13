@@ -22,9 +22,11 @@ TEST(SyntaxError, DeclaredSymbol) {
 }
 
 TEST(SyntaxError, Stream) {
-
   const std::string str[] = 
-      {"void gsmain1(inout point_stream<int> s) {}\n"};
+      {"void gsmain1(inout point_stream<int> s) {}\n",
+       "void gsmain1(inout point_stream<int,int> s) {}\n",
+       "struct Vertex{vec4 p;}; void gsmain1(inout point_stream<Vertex,int> s) {}\n",
+      };
   for (uint32 i = 0; i < arraysize(str); ++i) {
     ASTNodeFactory factory;
     ParseContext context(AFXL(""), "", str[i], &factory);
@@ -32,6 +34,7 @@ TEST(SyntaxError, Stream) {
     EXPECT_FALSE(parser.Parse(&context));
   }
 }
+
 
 TEST(SyntaxError, ArrayInitWithVariable) {
   const std::string str = 

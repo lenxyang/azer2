@@ -57,6 +57,28 @@ bool ContextValidator::Valid(ASTNode* node) {
     DeclarationNode* decl = node->ToDeclarationNode();
     if (!ValidUniformDeclarationNode(decl)) return false;
   } else if (node->IsFieldNode()) {
+  } else if (node->IsParamNode()) {
+    TypedNode* typed = GetTypedNode(node);
+    if (typed->GetType()->IsStream()) {
+      // check if the stream just has one template args, and its 
+      // type is structure
+      TypePtr& ptr = typed->GetType();
+      if (ptr->GetTemplateArgs().size() != 1u) {
+        std::stringstream ss;
+        ss << " stream type \"" << type_name(ptr->type()) << "\" can has only one "
+           << " template arg.";
+        ReportError(node, ss.str());
+        return false;
+      }
+
+      if (!ptr->GetTemplateArg(0)->IsStructure()) {
+        std::stringstream ss;
+        ss << " stream type \"" << type_name(ptr->type()) << "\" can has only one "
+           << " struct template arg.";
+        ReportError(node, ss.str());
+        return false;
+      }
+    }
   }
   return !failed_;
 }
