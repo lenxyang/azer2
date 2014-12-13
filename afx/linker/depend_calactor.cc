@@ -108,8 +108,8 @@ void DependCalactor::AddSymbolNodeDep(ASTNode* node) {
   // symbol->GetDeclarationNode may be NULL, if symbol defiend in
   // function's parameters list
   if (type->IsStructure()) {
-    ASTNode* type_definition = node->GetContext()->LookupType(type->name());
-    DCHECK(type_definition) << "cannot find type: \"" << type->name() << "\"";
+    ASTNode* type_definition = node->GetContext()->LookupType(type->struct_name());
+    DCHECK(type_definition) << "cannot find type: \"" << type->struct_name() << "\"";
     if (type->storage_qualifier() == kUniform) {
       AddUniTypeDep(type, type_definition);
     } else {

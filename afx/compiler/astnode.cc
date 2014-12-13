@@ -589,7 +589,8 @@ bool StructDeclNode::AddFields(ASTNode* node) {
     if (HasField(field->fieldname())) {
       std::stringstream ss;
       ss << "[" << source() << ": " << lineno() << "] dumplicatio item \""
-         << field->fieldname() << "\" in structure " << field->GetType()->name();
+         << field->fieldname() << "\" in structure "
+         << field->GetType()->struct_name();
       SetError(ss.str());
       return false;
     }
@@ -675,7 +676,7 @@ void TypedNode::SetBasicType(BasicType type) {
 void TypedNode::SetStructType(const std::string& name) {
   DCHECK(type_.get() == NULL);
   type_.reset(new Type(kStructure));
-  type_->SetName(name);
+  type_->SetStructName(name);
 }
 
 void TypedNode::SetAnonymouseStruct(StructDeclNode* decl) {

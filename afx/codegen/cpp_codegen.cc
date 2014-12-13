@@ -729,10 +729,10 @@ inline std::string GpuTableDescVarName(RenderPipelineStage stage) {
 
 inline bool IsSelfDefinedStruct(const TypePtr& typeptr) {
   if (typeptr->IsStructure()) {
-    if ((typeptr->name() == "afx::DirectionalLight")
-        || (typeptr->name() == "afx::PointLight")
-        || (typeptr->name() == "afx::SpotLight")
-        || (typeptr->name() == "afx::Material")) {
+    if ((typeptr->struct_name() == "afx::DirectionalLight")
+        || (typeptr->struct_name() == "afx::PointLight")
+        || (typeptr->struct_name() == "afx::SpotLight")
+        || (typeptr->struct_name() == "afx::Material")) {
       return false;
     } else {
       return true;
@@ -745,13 +745,13 @@ inline bool IsSelfDefinedStruct(const TypePtr& typeptr) {
 const char* GpuConstantTypeFromUniform(const TypePtr& typeptr) {
   if (typeptr->IsStructure()) {
     /** 内置类型 */
-    if (typeptr->name() == "afx::DirectionalLight") {
+    if (typeptr->struct_name() == "afx::DirectionalLight") {
       return "azer::GpuConstantsType::kDirectionalLight";
-    } else if (typeptr->name() == "afx::PointLight") {
+    } else if (typeptr->struct_name() == "afx::PointLight") {
       return "azer::GpuConstantsType::kPointLight";
-    } else if (typeptr->name() == "afx::SpotLight") {
+    } else if (typeptr->struct_name() == "afx::SpotLight") {
       return "azer::GpuConstantsType::kSpotLight";
-    } else if (typeptr->name() == "afx::Material") {
+    } else if (typeptr->struct_name() == "afx::Material") {
       return "azer::GpuConstantsType::kMaterial";
     } else {
       NOTREACHED();

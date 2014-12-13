@@ -118,7 +118,7 @@ bool ContextValidator::LookupTypeDecl(ASTNode* node, TypedNode* typed) {
   if (!type->IsStructure()) return true;
   if (type->IsAnomyousStruct()) return true;
 
-  const std::string& type_name = type->name();
+  const std::string& type_name = type->struct_name();
   ASTNode* tmp = context_->LookupType(type_name);
   if (tmp != NULL) {
     DCHECK(tmp->IsStructDeclNode());

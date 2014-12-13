@@ -58,14 +58,18 @@ std::string HLSLTypeName(const TypePtr& type) {
     case kTexture2DArray: return "Texture2DArray";
     case kTexture3D: return "Texture3D";
     case kTextureCube: return "TextureCube";
-    case kStructure: return std::move(ReplaceDoubleColon(type->name()));
+    case kStructure: return std::move(ReplaceDoubleColon(type->struct_name()));
     case kPointStream:
     case kLineStream:
     case kLineAdjStream:
     case kTriangleStream:
-    case kTriangleAdjStream:
-      return "";
-    case kFunctional: return std::move(ReplaceDoubleColon(type->name()));
+    case kTriangleAdjStream: {
+      std::stringstream ss;
+      ss << HLSLStreamType(type->type()) << "<"
+         << type->GetTemplateArg(0)->struct_name() << ">";
+      return ss.str();
+    }
+    case kFunctional: return std::move(ReplaceDoubleColon(type->struct_name()));
     default: NOTREACHED() << "Unknown ASTNodeType"; return "";
   }
 }

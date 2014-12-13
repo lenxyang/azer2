@@ -648,7 +648,7 @@ function_identifier
     func->SetType(typeptr);
   } else {
     std::stringstream ss;
-    ss << " unkonwn type func \"" <<typeptr->name() << "\"";
+    ss << " unkonwn type func \"" << typeptr->struct_name() << "\"";
     parseContext->ReportError(loc, ss.str());
   }
   $$ = func;
@@ -777,7 +777,7 @@ stream_type_specifier
     parseContext->ReportError(loc, "stream<> must be a structure");
   }
   TypedNode* node = CreateTypedNode($1.type, loc, parseContext);
-  node->GetType()->AppendTemplateArgs(typednode->GetType());
+  node->GetType()->AppendTemplateArg(typednode->GetType());
   $$ = node;
 }
 

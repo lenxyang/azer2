@@ -119,7 +119,7 @@ class Type {
   Type(BasicType type, StorageQualifier q);
 
   bool IsStructure() const { return type_ == kStructure;}
-  bool IsAnomyousStruct() const { return name_.empty();}
+  bool IsAnomyousStruct() const { return struct_name_.empty();}
   bool IsBasicType() const;
   bool IsTexture() const;
   bool IsArray() const;
@@ -129,12 +129,14 @@ class Type {
   bool IsScalar() const;
   bool IsStream() const;
 
-  void SetName(const std::string& name);
-  void AppendTemplateArgs(TypePtr& ptr);
-  TypePtr& GetTemplateArgs(int index);
-  const TypePtr& GetTemplateArgs(int index) const;
+  void SetStructName(const std::string& name);
+  void AppendTemplateArg(TypePtr& ptr);
+  TypePtr& GetTemplateArg(int index);
+  const TypePtr& GetTemplateArg(int index) const;
+  std::vector<TypePtr>& GetTemplateArgs() { return template_args_;}
+  const std::vector<TypePtr>& GetTemplateArgs() const { return template_args_;}
 
-  const std::string& name() const { return name_;}
+  const std::string& struct_name() const { return struct_name_;}
 
   void SetType(BasicType t);
   BasicType type() const { return type_;}
@@ -151,7 +153,7 @@ class Type {
   /** 
    * 用于表示 structure 的名称
    */
-  std::string name_;
+  std::string struct_name_;
   /**
    * 用于表示 template 的名称
    */
@@ -202,21 +204,21 @@ inline bool Type::IsStream() const {
       || type() == kTriangleAdjStream;
 }
 
-inline void Type::SetName(const std::string& name) {
-  name_ = name;
+inline void Type::SetStructName(const std::string& name) {
+  struct_name_ = name;
 }
 
-inline void Type::AppendTemplateArgs(TypePtr& ptr) {
+inline void Type::AppendTemplateArg(TypePtr& ptr) {
   template_args_.push_back(ptr);
 }
 
-inline TypePtr& Type::GetTemplateArgs(int index) {
+inline TypePtr& Type::GetTemplateArg(int index) {
   CHECK_LT(index, static_cast<int32>(template_args_.size()));
   CHECK_GT(index, 0);
   return template_args_[index];
 }
 
-inline const TypePtr& Type::GetTemplateArgs(int index) const {
+inline const TypePtr& Type::GetTemplateArg(int index) const {
   CHECK_LT(index, static_cast<int32>(template_args_.size()));
   CHECK_GT(index, 0);
   return template_args_[index];
@@ -237,6 +239,19 @@ uint32 SizeofType(const Type& type);
 inline bool IsTypeSupportMemberOper(const TypePtr& type) {
   // float vector support swizzle expression
   return type->IsVector() || type->IsStructure();
+}
+
+inline bool IsTypeStream(const TypePtr& type) {
+  switch (type->type()) {
+    case kPointStream:
+    case kLineStream:
+    case kLineAdjStream:
+    case kTriangleStream:
+    case kTriangleAdjStream: 
+      return true;
+    default:
+      return false;
+  }
 }
 
 inline bool IsIntegerScalar(const TypePtr& type) {
