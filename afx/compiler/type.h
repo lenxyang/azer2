@@ -105,6 +105,9 @@ const char* operator_str(Operator op);
 class ASTNode;
 class StructDeclNode;
 
+class Type;
+typedef std::shared_ptr<Type> TypePtr;
+
 /**
  * Note: Type 如果保存的是 struct name, 那么他永远都应该使用完整名称
  * 即：带有 package 前缀
@@ -127,7 +130,9 @@ class Type {
   bool IsStream() const;
 
   void SetName(const std::string& name);
-  void SetTemplateName(const std::string& name);
+  void AppendTemplateArgs(TypePtr& ptr);
+  TypePtr& GetTemplateArgs(int index);
+  const TypePtr& GetTemplateArgs(int index) const;
 
   const std::string& name() const { return name_;}
 
@@ -150,12 +155,10 @@ class Type {
   /**
    * 用于表示 template 的名称
    */
-  std::string template_name_;
+  std::vector<TypePtr> template_args_;
   std::vector<int> dim_;
   DISALLOW_COPY_AND_ASSIGN(Type);
 };
-
-typedef std::shared_ptr<Type> TypePtr;
 
 inline void Type::SetType(BasicType t) {
   DCHECK_EQ(type_, kTypeNotSpec);
@@ -203,8 +206,20 @@ inline void Type::SetName(const std::string& name) {
   name_ = name;
 }
 
-inline void Type::SetTemplateName(const std::string& name) {
-  template_name_ = name;
+inline void Type::AppendTemplateArgs(TypePtr& ptr) {
+  template_args_.push_back(ptr);
+}
+
+inline TypePtr& Type::GetTemplateArgs(int index) {
+  CHECK_LT(index, static_cast<int32>(template_args_.size()));
+  CHECK_GT(index, 0);
+  return template_args_[index];
+}
+
+inline const TypePtr& Type::GetTemplateArgs(int index) const {
+  CHECK_LT(index, static_cast<int32>(template_args_.size()));
+  CHECK_GT(index, 0);
+  return template_args_[index];
 }
 
 inline void Type::SetDim(int index, int dim) {

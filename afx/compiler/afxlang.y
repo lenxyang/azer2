@@ -777,7 +777,7 @@ stream_type_specifier
     parseContext->ReportError(loc, "stream<> must be a structure");
   }
   TypedNode* node = CreateTypedNode($1.type, loc, parseContext);
-  node->GetType()->SetTemplateName(typednode->name());
+  node->GetType()->AppendTemplateArgs(typednode->GetType());
   $$ = node;
 }
 

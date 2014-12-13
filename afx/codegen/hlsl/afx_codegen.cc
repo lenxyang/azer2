@@ -63,7 +63,8 @@ std::string HLSLAfxCodegen::GenGeometryShaderCode(
        << " *   " << shader.entry->GetContext()->path().value() << "\n"
        << " */\n\n";
   }
-
+  // AttributesNode* attr = shader.entry->attributes();
+  // CHECK (attr && attr->HasAttr(""));
   ss << std::move(GenEntry(shader.entry, comments));
   return ss.str();
 }

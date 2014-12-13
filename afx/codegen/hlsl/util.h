@@ -16,5 +16,10 @@ std::string PackagePrefix(ParseContext* context);
 std::string AttributeSupfix(const std::string& default_name,
                             AttributesNode* attrnode);
 
+
+/**
+ * 打印 stream 的类型
+ */
+std::string HLSLStreamType(BasicType type);
 }  // namespace afx
 }  // namespace azer
