@@ -32,8 +32,8 @@ bool AfxParser::Parse(const std::string& content, const ::base::FilePath& path) 
   return true;
 }
 
-TechniqueParser::Technique* AfxParser::GetTechnique(const std::string& name) {
-  TechniqueParser::Technique* tech = NULL;
+Technique* AfxParser::GetTechnique(const std::string& name) {
+  Technique* tech = NULL;
   if (tparser_.GetTechnique(name, &tech)) {
     return tech;
   } else {

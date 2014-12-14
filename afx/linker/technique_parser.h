@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "azer/afx/compiler/astnode.h"
-#include "azer/render/render_system_enum.h"
+#include "base/basictypes.h"
+#include "azer/afx/linker/technique.h"
 
 namespace azer {
 namespace afx {
@@ -14,21 +14,6 @@ class TechniqueParser {
  public:
   TechniqueParser();
   ~TechniqueParser();
-
-  struct StageInfo {
-    ASTNode* entry;
-    ASTNodeVec depend;
-    ASTNodeVec uniforms;
-    ASTNodeVec uni_depend;
-    ASTNodeVec uni_textures;
-    StageInfo(): entry(NULL) {}
-  };
-
-  struct Technique {
-    std::string name;
-    std::vector<StageInfo> shader;
-    AttributesNode* attributes;
-  };
 
   /**
    * 根据 attributes 的定义找到入口点并由入口点开始生成代码

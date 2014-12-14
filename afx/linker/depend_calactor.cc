@@ -25,7 +25,7 @@ struct UniformSizeSort {
 bool IsUniformSymbol(ASTNode* node);
 }  // namespace
 
-void DependCalactor::Swap(TechniqueParser::StageInfo* stage) {
+void DependCalactor::Swap(Technique::StageInfo* stage) {
   depend_.swap(stage->depend);
   uniforms_.swap(stage->uniforms);
   std::sort(stage->uniforms.begin(), stage->uniforms.end(), UniformSizeSort());

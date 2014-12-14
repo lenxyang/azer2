@@ -10,6 +10,7 @@ using azer::afx::HLSLAfxCodegen;
 using azer::afx::ASTreeDumper;
 using azer::afx::FileLoader;
 using azer::afx::ParseContext;
+using azer::afx::Technique;
 using azer::afx::TechniqueParser;
 using base::FilePath;
 
@@ -43,10 +44,10 @@ TEST(HLSLAfxCodegen, EffectVertex) {
   LOG_IF(ERROR, !parser.success()) << parser.GetErrorText();
   ParseContext* context = parser.GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
-  TechniqueParser::Technique* technique = parser.GetTechnique("effect");
+  Technique* technique = parser.GetTechnique("effect");
   ASSERT_TRUE(NULL != technique);
   ASSERT_EQ(technique->name, "effect");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kVertexStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kVertexStage];
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLAfxCodegen codegen;
@@ -76,10 +77,10 @@ TEST(HLSLAfxCodegen, EffectPixel) {
   ParseContext* context = parser.GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
 
-  TechniqueParser::Technique* technique = parser.GetTechnique("effect");
+  Technique* technique = parser.GetTechnique("effect");
   ASSERT_TRUE(NULL != technique);
   ASSERT_EQ(technique->name, "effect");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLAfxCodegen codegen;
@@ -123,10 +124,10 @@ TEST(HLSLAfxCodegen, EffectPixelWithSampler) {
   DUMP_AFXCOMPILE_ERROR(*context);
   
 
-  TechniqueParser::Technique* technique = parser.GetTechnique("effect");
+  Technique* technique = parser.GetTechnique("effect");
   ASSERT_TRUE(NULL != technique);
   ASSERT_EQ(technique->name, "effect");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLAfxCodegen codegen;
@@ -172,11 +173,11 @@ TEST(HLSLAfxCodegen, TextureInStructure) {
   ParseContext* context = parser.GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
 
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   technique = parser.GetTechnique("effect");
   ASSERT_TRUE(technique != NULL);
   ASSERT_EQ(technique->name, "effect");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLAfxCodegen codegen;
@@ -209,11 +210,11 @@ TEST(HLSLAfxCodegen, LineEffect) {
   ParseContext* context = parser.GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
 
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   technique = parser.GetTechnique("line");
   ASSERT_TRUE(technique != NULL);
   ASSERT_EQ(technique->name, "line");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLAfxCodegen codegen;
@@ -248,11 +249,11 @@ TEST(HLSLAfxCodegen, Shadowmap) {
   ParseContext* context = parser.GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
 
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   technique = parser.GetTechnique("diffuse");
   ASSERT_TRUE(technique != NULL);
   ASSERT_EQ(technique->name, "diffuse");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLAfxCodegen codegen;

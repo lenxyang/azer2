@@ -7,6 +7,7 @@
 #include "base/files/file_util.h"
 #include "gtest/gtest.h"
 
+using azer::afx::Technique;
 using azer::afx::TechniqueParser;
 using azer::afx::ParseContext;
 using azer::afx::AfxLinker;
@@ -33,12 +34,12 @@ TEST(TechniqueParseTest, VertexShader) {
   ParseContext* context = linker.root()->GetContext();
   TechniqueParser tparser;
   ASSERT_TRUE(tparser.Parse(context));
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   ASSERT_TRUE(tparser.GetTechnique("effect", &technique));
 
   // two independent, VSInput and VSoutput
   ASSERT_EQ(technique->name, "effect");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kVertexStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kVertexStage];
   ASSERT_TRUE(shader.entry != NULL);
   ASSERT_EQ(shader.depend.size(), 2u);
   ASSERT_EQ(shader.depend[0]->type(), azer::afx::ASTNode::kStructDeclNode);
@@ -67,11 +68,11 @@ TEST(TechniqueParseTest, PiexelShader) {
   ParseContext* context = linker.root()->GetContext();
   TechniqueParser tparser;
   ASSERT_TRUE(tparser.Parse(context));
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   ASSERT_TRUE(tparser.GetTechnique("effect", &technique));
 
   ASSERT_EQ(technique->name, "effect");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
   ASSERT_EQ(shader.depend.size(), 1u);
   ASSERT_EQ(shader.uni_depend.size(), 1u);

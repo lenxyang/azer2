@@ -4,7 +4,7 @@
 
 #include "base/basictypes.h"
 #include "azer/afx/compiler/astnode.h"
-#include "azer/afx/linker/technique_parser.h"
+#include "azer/afx/linker/technique.h"
 
 namespace azer {
 namespace afx {
@@ -18,31 +18,31 @@ class CppCodeGen {
   CppCodeGen();
   ~CppCodeGen();
 
-  void GenCode(const TechniqueParser::Technique& tech);
+  void GenCode(const Technique& tech);
   const std::string& GetHeadCode() const { return head_code_;}
   const std::string& GetCppCode() const { return cpp_code_;}
  private:
   std::string GenStructDecl(const std::string& name, StructDeclNode* decl) const;
-  std::string GetClassName(const TechniqueParser::Technique& tech) const;
+  std::string GetClassName(const Technique& tech) const;
 
   /**
    * 生成制定 technique 的相关 c++ 代码
    */
-  std::string GenTechnique(const TechniqueParser::Technique& tech);
-  void GenHeadCode(const TechniqueParser::Technique& tech);
-  void GenCppCode(const TechniqueParser::Technique& tech);
+  std::string GenTechnique(const Technique& tech);
+  void GenHeadCode(const Technique& tech);
+  void GenCppCode(const Technique& tech);
 
   // generate include directive for external struct declaration 
-  std::string GenStructDepIncludeCode(const TechniqueParser::Technique& tech);
+  std::string GenStructDepIncludeCode(const Technique& tech);
 
-  std::string GenSetMaterial(const TechniqueParser::Technique& tech);
-  std::string GenInit(const TechniqueParser::Technique& tech);
-  std::string GenGpuTableInit(const TechniqueParser::Technique& tech);
-  std::string GenVertexStruct(const TechniqueParser::Technique& tech);
-  std::string GenVertexDesc(const TechniqueParser::Technique& tech);
+  std::string GenSetMaterial(const Technique& tech);
+  std::string GenInit(const Technique& tech);
+  std::string GenGpuTableInit(const Technique& tech);
+  std::string GenVertexStruct(const Technique& tech);
+  std::string GenVertexDesc(const Technique& tech);
 
   // generate structure of uniform variables
-  std::string GenExchangeBuffer(const TechniqueParser::Technique& tech) const;
+  std::string GenExchangeBuffer(const Technique& tech) const;
   std::string GenStageExchangeBuffer(RenderPipelineStage stage,
                                      const ASTNodeVec& uniforms) const;
   std::string GenStageGpuTable(RenderPipelineStage stage,
@@ -53,21 +53,21 @@ class CppCodeGen {
                                        const ASTNodeVec& uniforms) const;
 
   // generate function to set uniform variables
-  std::string GenUniformFuncs(const TechniqueParser::Technique& tech);
+  std::string GenUniformFuncs(const Technique& tech);
   std::string GenStageUniforms(RenderPipelineStage stage, const ASTNodeVec& unif);
   std::string GenStageTexture(RenderPipelineStage stage, const ASTNodeVec& unif);
-  std::string GenAllTextureMember(const TechniqueParser::Technique& tech);
+  std::string GenAllTextureMember(const Technique& tech);
   std::string GenStageTextureMember(RenderPipelineStage stage,
                                     const ASTNodeVec& uniforms);
 
   /**
    * 生成 Effect 的虚函数 UseTexture
    */
-  std::string GenUseTexture(const TechniqueParser::Technique& tech);
+  std::string GenUseTexture(const Technique& tech);
   std::string GenTextureStageUse(RenderPipelineStage stage,
                                  const ASTNodeVec& uniforms);
 
-  StructDeclNode* GetVertexDecl(const TechniqueParser::Technique& tech);
+  StructDeclNode* GetVertexDecl(const Technique& tech);
   std::string cpp_code_;
   std::string head_code_;
   DISALLOW_COPY_AND_ASSIGN(CppCodeGen);

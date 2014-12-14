@@ -28,7 +28,7 @@ class DependCalactor : public TreeNode<ASTNode>::Traverser {
    */
   void Calc(ASTNode* node);
   const ASTNodeVec& GetDepend() const { return depend_;}
-  void Swap(TechniqueParser::StageInfo* tech);
+  void Swap(Technique::StageInfo* tech);
  protected:
   void CalcRecursive(ASTNode* node);
   bool OnVisitBegin(ASTNode* node) override;

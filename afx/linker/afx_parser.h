@@ -6,11 +6,11 @@
 #include "azer/afx/codegen/hlsl/ast_codegen.h"
 #include "azer/afx/compiler/astdump.h"
 #include "azer/afx/compiler/testutil.h"
+#include "azer/afx/linker/technique.h"
 #include "azer/afx/linker/technique_parser.h"
 #include "azer/afx/linker/linker.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/util/file_loader.h"
-#include "azer/render/render_system_enum.h"
 #include "base/basictypes.h"
 #include "base/logging.h"
 
@@ -28,7 +28,7 @@ class AfxParser {
   bool Parse(const ::base::FilePath& path);
   bool Parse(const ::base::FilePath::StringType& path);
   bool Parse(const std::string& content, const ::base::FilePath& path);
-  TechniqueParser::Technique* GetTechnique(const std::string& name);
+  Technique* GetTechnique(const std::string& name);
   TechniqueParser* GetTechniques() { return &tparser_;}
 
   ParseContext* GetContext();

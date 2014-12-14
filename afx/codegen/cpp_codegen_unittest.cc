@@ -16,6 +16,7 @@ using azer::afx::AfxCodegen;
 using azer::afx::ASTreeDumper;
 using azer::afx::FileLoader;
 using azer::afx::ParseContext;
+using azer::afx::Technique;
 using azer::afx::TechniqueParser;
 using ::base::FilePath;
 
@@ -48,10 +49,10 @@ TEST(AfxCppCodeGen, Material) {
 
   TechniqueParser tparser;
   EXPECT_TRUE(tparser.Parse(context));
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   ASSERT_TRUE(tparser.GetTechnique("effect", &technique));
   ASSERT_EQ(technique->name, "effect");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
   azer::afx::CppCodeGen cppcodegen;
   cppcodegen.GenCode(*technique);
@@ -83,10 +84,10 @@ TEST(AfxCppCodeGen, UniformArray) {
 
   TechniqueParser tparser;
   EXPECT_TRUE(tparser.Parse(context));
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   ASSERT_TRUE(tparser.GetTechnique("haredware_skinned", &technique));
   ASSERT_EQ(technique->name, "haredware_skinned");
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
   azer::afx::CppCodeGen cppcodegen;
   cppcodegen.GenCode(*technique);
@@ -118,10 +119,10 @@ TEST(AfxCppCodeGen, PointLight) {
 
   TechniqueParser tparser;
   EXPECT_TRUE(tparser.Parse(context));
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   ASSERT_TRUE(tparser.GetTechnique(effect_name, &technique));
   ASSERT_EQ(technique->name, effect_name);
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
   azer::afx::CppCodeGen cppcodegen;
   cppcodegen.GenCode(*technique);
@@ -153,10 +154,10 @@ TEST(AfxCppCodeGen, TextureAdParam) {
 
   TechniqueParser tparser;
   EXPECT_TRUE(tparser.Parse(context));
-  TechniqueParser::Technique* technique = NULL;
+  Technique* technique = NULL;
   ASSERT_TRUE(tparser.GetTechnique(effect_name, &technique));
   ASSERT_EQ(technique->name, effect_name);
-  const TechniqueParser::StageInfo& shader = technique->shader[azer::kPixelStage];
+  const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
   azer::afx::CppCodeGen cppcodegen;
   cppcodegen.GenCode(*technique);

@@ -19,7 +19,7 @@ class AfxCodegen {
   virtual ~AfxCodegen() {}
 
   virtual std::string GenCode(RenderPipelineStage stage,
-                              const TechniqueParser::StageInfo& shader,
+                              const Technique::StageInfo& shader,
                               bool comments = false) = 0;
 
   static AfxCodegen* Create(const std::string& target_lan);

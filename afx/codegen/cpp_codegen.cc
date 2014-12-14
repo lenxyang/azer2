@@ -106,7 +106,7 @@ std::string CppCodeGen::GenStageUniforms(RenderPipelineStage stage,
   return ss.str();
 }
 
-std::string CppCodeGen::GenUniformFuncs(const TechniqueParser::Technique& tech) {
+std::string CppCodeGen::GenUniformFuncs(const Technique& tech) {
   std::stringstream ss;
   int cnt = 0;
   for (auto iter = tech.shader.begin(); iter != tech.shader.end(); ++iter, ++cnt) {
@@ -170,7 +170,7 @@ std::string CppCodeGen::GenStageGpuTable(RenderPipelineStage stage,
   return ss.str();
 }
 
-std::string CppCodeGen::GenTechnique(const TechniqueParser::Technique& tech) {
+std::string CppCodeGen::GenTechnique(const Technique& tech) {
   std::stringstream ss;
   ss << "void " << GetClassName(tech) << "::InitTechnique() {\n"
      << "  technique_.reset(render_system_->CreateTechnique());\n"
@@ -185,7 +185,7 @@ std::string CppCodeGen::GenTechnique(const TechniqueParser::Technique& tech) {
 
   for (int i = (int)(kVertexStage + 1); i < kRenderPipelineStageNum; ++i) {
     RenderPipelineStage stage = (RenderPipelineStage)i;
-    const TechniqueParser::StageInfo& shader = tech.shader[i];
+    const Technique::StageInfo& shader = tech.shader[i];
     if (shader.entry == NULL) { continue; }
     ss << "  {\n"
        << "    const std::string& source = sources_[" << StageName(stage) << "];\n"
@@ -201,8 +201,8 @@ std::string CppCodeGen::GenTechnique(const TechniqueParser::Technique& tech) {
   return ss.str();
 }
 
-StructDeclNode* CppCodeGen::GetVertexDecl(const TechniqueParser::Technique& tech) {
-  const TechniqueParser::StageInfo& stageinfo = tech.shader[kVertexStage];
+StructDeclNode* CppCodeGen::GetVertexDecl(const Technique& tech) {
+  const Technique::StageInfo& stageinfo = tech.shader[kVertexStage];
   DCHECK(stageinfo.entry != NULL);
   DCHECK(stageinfo.entry->IsFuncDefNode());
   FuncProtoNode* proto = stageinfo.entry->ToFuncDefNode()->GetProtoNode();
@@ -258,7 +258,7 @@ std::string CppCodeGen::GenStructDecl(const std::string& name,
   return ss.str();
 }
 
-std::string CppCodeGen::GenVertexStruct(const TechniqueParser::Technique& tech) {
+std::string CppCodeGen::GenVertexStruct(const Technique& tech) {
   StructDeclNode* decl = GetVertexDecl(tech);
 
   // if vertex is extend, then return directly
@@ -277,8 +277,8 @@ std::string CppCodeGen::GenVertexStruct(const TechniqueParser::Technique& tech) 
   return ss.str();
 }
 
-std::string CppCodeGen::GenVertexDesc(const TechniqueParser::Technique& tech) {
-  const TechniqueParser::StageInfo& stageinfo = tech.shader[kVertexStage];
+std::string CppCodeGen::GenVertexDesc(const Technique& tech) {
+  const Technique::StageInfo& stageinfo = tech.shader[kVertexStage];
   DCHECK(stageinfo.entry != NULL);
   DCHECK(stageinfo.entry->IsFuncDefNode());
   FuncProtoNode* proto = stageinfo.entry->ToFuncDefNode()->GetProtoNode();
@@ -307,7 +307,7 @@ std::string CppCodeGen::GenVertexDesc(const TechniqueParser::Technique& tech) {
   return ss.str();
 }
 
-std::string CppCodeGen::GenGpuTableInit(const TechniqueParser::Technique& tech) {
+std::string CppCodeGen::GenGpuTableInit(const Technique& tech) {
   std::stringstream ss;
   int cnt = 0;
   for (auto iter = tech.shader.begin(); iter != tech.shader.end(); ++iter, ++cnt) {
@@ -319,7 +319,7 @@ std::string CppCodeGen::GenGpuTableInit(const TechniqueParser::Technique& tech) 
   return ss.str();
 }
 
-std::string CppCodeGen::GenInit(const TechniqueParser::Technique& tech) {
+std::string CppCodeGen::GenInit(const Technique& tech) {
   std::stringstream ss;
   ss << "void " << GetClassName(tech) << "::Init() {\n"
      << "  InitTechnique();\n"
@@ -381,7 +381,7 @@ std::string CppCodeGen::GenStageExchangeBuffer(RenderPipelineStage s,
   return ss.str();
 }
 
-std::string CppCodeGen::GenExchangeBuffer(const TechniqueParser::Technique& tech)
+std::string CppCodeGen::GenExchangeBuffer(const Technique& tech)
     const {
   std::stringstream ss;
   ss << " /**" << std::endl
@@ -391,7 +391,7 @@ std::string CppCodeGen::GenExchangeBuffer(const TechniqueParser::Technique& tech
   int cnt = 0;
   for (auto tech_iter = tech.shader.begin();
        tech_iter != tech.shader.end(); ++tech_iter, ++cnt) {
-    const TechniqueParser::StageInfo& stage = *tech_iter;
+    const Technique::StageInfo& stage = *tech_iter;
     if (stage.entry == NULL) {
       continue;
     }
@@ -405,7 +405,7 @@ std::string CppCodeGen::GenExchangeBuffer(const TechniqueParser::Technique& tech
   return ss.str();
 }
 
-void CppCodeGen::GenCppCode(const TechniqueParser::Technique& tech) {
+void CppCodeGen::GenCppCode(const Technique& tech) {
   cpp_code_.clear();
   std::string classname = std::move(GetClassName(tech));
   std::stringstream ss;
@@ -439,12 +439,12 @@ void CppCodeGen::GenCppCode(const TechniqueParser::Technique& tech) {
   cpp_code_ = std::move(ss.str());
 }
 
-void CppCodeGen::GenCode(const TechniqueParser::Technique& tech) {
+void CppCodeGen::GenCode(const Technique& tech) {
   GenHeadCode(tech);
   GenCppCode(tech);
 }
 
-std::string CppCodeGen::GetClassName(const TechniqueParser::Technique& tech) const {
+std::string CppCodeGen::GetClassName(const Technique& tech) const {
   std::string classname;
   if (tech.attributes) {
     if (tech.attributes->HasAttr("class_name")) {
@@ -468,11 +468,11 @@ void GetAllDeclNode(std::vector<StructDeclNode*> *nodes,
 }
 
 std::string CppCodeGen::GenStructDepIncludeCode(
-    const TechniqueParser::Technique& tech) {
+    const Technique& tech) {
   std::vector<StructDeclNode*> decl_nodes;
   std::set<std::string> includes;
   for (auto iter = tech.shader.begin(); iter != tech.shader.end(); ++iter) {
-    const TechniqueParser::StageInfo& stage = *iter;
+    const Technique::StageInfo& stage = *iter;
     GetAllDeclNode(&decl_nodes, stage.uni_depend);
   }
 
@@ -502,7 +502,7 @@ std::string CppCodeGen::GenStructDepIncludeCode(
   return ss.str();
 }
 
-void CppCodeGen::GenHeadCode(const TechniqueParser::Technique& tech) {
+void CppCodeGen::GenHeadCode(const Technique& tech) {
   head_code_.clear();
   std::stringstream ss;
   ss << " /**" << std::endl
@@ -564,7 +564,7 @@ std::string CppCodeGen::GenTextureStageUse(RenderPipelineStage stage,
   return ss.str();
 }
 
-std::string CppCodeGen::GenUseTexture(const TechniqueParser::Technique& tech) {
+std::string CppCodeGen::GenUseTexture(const Technique& tech) {
   std::stringstream ss;
   std::string classname = std::move(GetClassName(tech));
   ss << "void " << classname << "::UseTexture(azer::Renderer* renderer) {\n";
@@ -579,7 +579,7 @@ std::string CppCodeGen::GenUseTexture(const TechniqueParser::Technique& tech) {
   return ss.str();
 }
 
-std::string CppCodeGen::GenAllTextureMember(const TechniqueParser::Technique& tech) {
+std::string CppCodeGen::GenAllTextureMember(const Technique& tech) {
   std::stringstream ss;
   int cnt = 0;
   for (auto iter = tech.shader.begin(); iter != tech.shader.end(); ++iter, ++cnt) {

@@ -30,7 +30,7 @@ bool IsConstBufferMember(ASTNode* node) {
   }
 }
 }  // namespace
-std::string HLSLAfxCodegen::GenDeps(const TechniqueParser::StageInfo& shader,
+std::string HLSLAfxCodegen::GenDeps(const Technique::StageInfo& shader,
                                 bool comments) {
   std::stringstream ss;
   for (auto iter = shader.depend.rbegin(); iter != shader.depend.rend(); ++iter) {
@@ -41,7 +41,7 @@ std::string HLSLAfxCodegen::GenDeps(const TechniqueParser::StageInfo& shader,
   return ss.str();
 }
 
-std::string HLSLAfxCodegen::GenUniformDeps(const TechniqueParser::StageInfo& shader,
+std::string HLSLAfxCodegen::GenUniformDeps(const Technique::StageInfo& shader,
                                        bool comments) {
   std::stringstream ss;
   for (auto iter = shader.uni_depend.rbegin();
@@ -54,7 +54,7 @@ std::string HLSLAfxCodegen::GenUniformDeps(const TechniqueParser::StageInfo& sha
 }
 
 std::string HLSLAfxCodegen::GenGeometryShaderCode(
-    const TechniqueParser::StageInfo& shader, bool comments) {
+    const Technique::StageInfo& shader, bool comments) {
   std::stringstream ss;
   if (comments) {
     ss << "/**\n"
@@ -70,7 +70,7 @@ std::string HLSLAfxCodegen::GenGeometryShaderCode(
 }
 
 std::string HLSLAfxCodegen::GenVertexAndPixelShaderCode(
-    RenderPipelineStage stage, const TechniqueParser::StageInfo& shader,
+    RenderPipelineStage stage, const Technique::StageInfo& shader,
     bool comments) {
   stage_ = stage;
   std::vector<ASTNode*> uniforms;
@@ -96,7 +96,7 @@ std::string HLSLAfxCodegen::GenVertexAndPixelShaderCode(
 }
 
 std::string HLSLAfxCodegen::GenCode(RenderPipelineStage stage,
-                                const TechniqueParser::StageInfo& shader,
+                                const Technique::StageInfo& shader,
                                 bool comments) {
   if (stage == kVertexStage || stage == kPixelStage) {
     return GenVertexAndPixelShaderCode(stage, shader, comments);

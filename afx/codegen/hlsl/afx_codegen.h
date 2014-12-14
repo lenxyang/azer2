@@ -18,7 +18,7 @@ class HLSLAfxCodegen : public AfxCodegen {
   HLSLAfxCodegen() : stage_(kStageNotSpec) {}
 
   std::string GenCode(RenderPipelineStage stage,
-                      const TechniqueParser::StageInfo& shader,
+                      const Technique::StageInfo& shader,
                       bool comments = false) override;
  private:
   /**
@@ -35,16 +35,16 @@ class HLSLAfxCodegen : public AfxCodegen {
    * 生成依赖项的代码，其中 uniform 类型的数据将被提取出来
    * 用作生成 cbuffer
    */
-  std::string GenDeps(const TechniqueParser::StageInfo& shader, bool comments);
+  std::string GenDeps(const Technique::StageInfo& shader, bool comments);
   std::string GenDepend(ASTNode* node, bool comments);
   std::string GenUniDepend(ASTNode* node, bool comments);
-  std::string GenUniformDeps(const TechniqueParser::StageInfo& shader,
+  std::string GenUniformDeps(const Technique::StageInfo& shader,
                              bool comments);
 
-  std::string GenGeometryShaderCode(const TechniqueParser::StageInfo& shader,
+  std::string GenGeometryShaderCode(const Technique::StageInfo& shader,
                                     bool comments);
   std::string GenVertexAndPixelShaderCode(RenderPipelineStage stage,
-                                          const TechniqueParser::StageInfo& shader,
+                                          const Technique::StageInfo& shader,
                                           bool comments);
   
   HLSLCodeGeneratorFactory factory_;
