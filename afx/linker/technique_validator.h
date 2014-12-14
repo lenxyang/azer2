@@ -18,7 +18,7 @@ class TechniqueValidator {
  public:
   bool Valid(const Technique& technique);
  private:
-  bool ValidGeometryShader(const Technique::ShaderInfo& shader);
+  bool ValidGeometryShader(const Technique::StageInfo& shader);
   DISALLOW_COPY_AND_ASSIGN(TechniqueValidator);
 };
 }  // namespace afx

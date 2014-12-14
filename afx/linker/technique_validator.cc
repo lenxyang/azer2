@@ -2,7 +2,7 @@
 
 #include "base/logging.h"
 #include "azer/afx/compiler/astnode.h"
-#include "azer/afx/compiler/technique_parser.h"
+#include "azer/afx/linker/technique_parser.h"
 #include "azer/render/render_system_enum.h"
 
 namespace azer {
@@ -17,7 +17,7 @@ bool TechniqueValidator::Valid(const Technique& technique) {
   return true;
 }
 
-bool TechniqueValidator::ValidGeometryShader(const Technique::ShaderInfo& shader) {
+bool TechniqueValidator::ValidGeometryShader(const Technique::StageInfo& shader) {
   return true;
 }
 }  // namespace afx
