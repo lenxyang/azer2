@@ -11,8 +11,11 @@ source_set("linker") {
     "linker.h",
     "program.cc",
     "program.h",
+    "technique.h",
     "technique_parser.cc",
     "technique_parser.h",
+    "technique_validator.cc",
+    "technique_validator.h",
   ]
   deps = ["//base:base"]
   configs += ["//azer/build/config:utf8src"]
