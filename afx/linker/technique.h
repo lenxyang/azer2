@@ -21,7 +21,13 @@ struct Technique {
 
   std::string name;
   std::vector<StageInfo> shader;
+  std::vector<std::string> entry;
   AttributesNode* attributes;
+
+  Technique() {
+    shader.resize(kRenderPipelineStageNum);
+    entry.resize(kRenderPipelineStageNum);
+  }
 };
 
 }  // namespace afx

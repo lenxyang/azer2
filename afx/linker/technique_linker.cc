@@ -25,44 +25,30 @@ bool TechniqueLinker::GenTechnique(AttributesNode* node, ParseContext* context) 
   DCHECK(context->success());
   Technique technique;
   const std::string& name = node->GetAttrValue(AttrNames::kName);
-  std::string ps_main = node->GetAttrValue(AttrNames::kPixelShaderEntry);
-  std::string vs_main = node->GetAttrValue(AttrNames::kVertexShaderEntry);
-  if (ps_main.empty()) {
-    std::stringstream ss;
-    ss << "technique \"" << name << "\"'s psmain is empty";
-    ReportError(ss.str());
-    return false;
-  }
-
-  if (vs_main.empty()) {
-    std::stringstream ss;
-    ss << "technique \"" << name << "\"'s vsmain is empty";
-    ReportError(ss.str());
-    return false;
-  }
-
-  ASTNode* ps_node = context->GetFunctionByName(ps_main);
-  ASTNode* vs_node = context->GetFunctionByName(vs_main);
-  if (!ps_node) {
-    std::stringstream ss;
-    ss << "technique \"" << name << "\"'s ps_main \""
-       << ps_main << "\" is not defined";
-    ReportError(ss.str());
-    return false;
-  }
-
-  if (!vs_node) {
-    std::stringstream ss;
-    ss << "technique \"" << name << "\"'s vs_main \""
-       << vs_main << "\" is not defined";
-    ReportError(ss.str());
-    return false;
-  }
-
-  technique.shader.resize(kRenderPipelineStageNum);
+  
+  std::string vs_entry = node->GetAttrValue(AttrNames::kVertexShaderEntry);
+  std::string hs_entry = node->GetAttrValue(AttrNames::kHullShaderEntry);
+  std::string ds_entry = node->GetAttrValue(AttrNames::kDomainShaderEntry);
+  std::string gs_entry = node->GetAttrValue(AttrNames::kGeometryShaderEntry);
+  std::string ps_entry = node->GetAttrValue(AttrNames::kPixelShaderEntry);
+  ASTNode* vs_node = vs_entry.empty() ? NULL : context->GetFunctionByName(vs_entry);
+  ASTNode* gs_node = gs_entry.empty() ? NULL : context->GetFunctionByName(gs_entry);
+  ASTNode* hs_node = hs_entry.empty() ? NULL : context->GetFunctionByName(gs_entry);
+  ASTNode* ds_node = ds_entry.empty() ? NULL : context->GetFunctionByName(gs_entry);
+  ASTNode* ps_node = ps_entry.empty() ? NULL : context->GetFunctionByName(ps_entry);
+  
   technique.attributes = node;
+  technique.entry[kVertexStage] = vs_entry;
+  technique.entry[kPixelStage] = ps_entry;
+  technique.entry[kGeometryStage] = gs_entry;
+  technique.entry[kHullStage] = hs_entry;
+  technique.entry[kDomainStage] = ds_entry;
+
   technique.shader[kVertexStage].entry = vs_node;
   technique.shader[kPixelStage].entry = ps_node;
+  technique.shader[kGeometryStage].entry = gs_node;
+  technique.shader[kHullStage].entry = hs_node;
+  technique.shader[kDomainStage].entry = ds_node;
   technique.name = name;
   CalcFuncDeps(&technique);
   TechniqueValidator validator(this);

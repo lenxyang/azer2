@@ -7,6 +7,8 @@ const std::string AttrNames::kMaxVertexCount = "maxvertexcount";
 
 const std::string AttrNames::kName = "name";
 const std::string AttrNames::kVertexShaderEntry = "vs_main";
+const std::string AttrNames::kHullShaderEntry = "hs_main";
+const std::string AttrNames::kDomainShaderEntry = "ds_main";
 const std::string AttrNames::kGeometryShaderEntry = "gs_main";
 const std::string AttrNames::kPixelShaderEntry = "ps_main";
 }  // namespace afx

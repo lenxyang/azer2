@@ -14,6 +14,8 @@ class AttrNames {
 
   static const std::string kName;
   static const std::string kVertexShaderEntry;
+  static const std::string kHullShaderEntry;
+  static const std::string kDomainShaderEntry;
   static const std::string kGeometryShaderEntry;
   static const std::string kPixelShaderEntry;
 };

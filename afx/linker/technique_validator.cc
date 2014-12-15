@@ -10,15 +10,33 @@ namespace azer {
 namespace afx {
 
 bool TechniqueValidator::Valid(const Technique& technique) {
-  if (technique.shader[kPixelStage].entry == NULL
-      || technique.shader[kVertexStage].entry == NULL) {
+  if (technique.shader[kVertexStage].entry == NULL) {
+    std::stringstream ss;
+    ss << "technique \"" << technique.name << "\"'s vs_main \""
+       << technique.entry[kVertexStage] << "\" is not defined";
+    linker_->ReportError(ss.str());
     return false;
   }
+
+  if (technique.shader[kPixelStage].entry == NULL) {
+    std::stringstream ss;
+    ss << "technique \"" << technique.name << "\"'s vs_main \""
+       << technique.entry[kPixelStage] << "\" is not defined";
+    linker_->ReportError(ss.str());
+    return false;
+  }
+
 
   if (technique.shader[kGeometryStage].entry != NULL) {
     if (!ValidGeometryShader(technique.shader[kGeometryStage])) {
       return false;
     }
+  } else if (!technique.entry[kGeometryStage].empty()) {
+    std::stringstream ss;
+    ss << "technique \"" << technique.name << "\"'s gs_main \""
+       << technique.entry[kGeometryStage] << "\" is not defined";
+    linker_->ReportError(ss.str());
+    return false;
   }
   return true;
 }
