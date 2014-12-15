@@ -7,6 +7,7 @@
 #include "azer/afx/codegen/ast_code_generator.h"
 #include "azer/afx/codegen/hlsl/util.h"
 #include "azer/afx/codegen/hlsl/tex_util.h"
+#include "azer/afx/linker/attribute_name.h"
 #include "azer/afx/compiler/astnode.h"
 #include "azer/afx/compiler/astutil.h"
 #include "azer/afx/compiler/debug.h"
@@ -63,8 +64,10 @@ std::string HLSLAfxCodegen::GenGeometryShaderCode(
        << " *   " << shader.entry->GetContext()->path().value() << "\n"
        << " */\n\n";
   }
-  // AttributesNode* attr = shader.entry->attributes();
-  // CHECK (attr && attr->HasAttr(""));
+  AttributesNode* attr = shader.entry->attributes();
+  CHECK (attr && attr->HasAttr(AttrNames::kGeometryShaderEntry));
+  ss << "[maxvertexcount(" << attr->GetAttrValue(AttrNames::kGeometryShaderEntry) 
+     <<")]" << std::endl;
   ss << std::move(GenEntry(shader.entry, comments));
   return ss.str();
 }
