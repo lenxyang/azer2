@@ -10,10 +10,10 @@ namespace azer {
 namespace afx {
 class ParseContext;
 
-class TechniqueParser {
+class TechniqueLinker {
  public:
-  TechniqueParser();
-  ~TechniqueParser();
+  TechniqueLinker();
+  ~TechniqueLinker();
 
   /**
    * 根据 attributes 的定义找到入口点并由入口点开始生成代码
@@ -40,7 +40,7 @@ class TechniqueParser {
   std::string error_text_;
 
   friend class TechniqueValidator;
-  DISALLOW_COPY_AND_ASSIGN(TechniqueParser);
+  DISALLOW_COPY_AND_ASSIGN(TechniqueLinker);
 };
 }  // namespace afx
 }  // namespace azer

@@ -2,7 +2,7 @@
 #include <string>
 
 #include "azer/afx/afx.h"
-#include "azer/afx/linker/linker.h"
+#include "azer/afx/linker/afx_linker.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/compiler/testutil.h"
 #include "azer/afx/util/file_loader.h"

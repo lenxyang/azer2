@@ -6,7 +6,7 @@
 namespace azer {
 namespace afx {
 
-class TechniqueParser;
+class TechniqueLinker;
 
 /**
  * class TechniqueValidator
@@ -18,17 +18,17 @@ class TechniqueParser;
  **/
 class TechniqueValidator {
  public:
-  TechniqueValidator(TechniqueParser* parser);
+  TechniqueValidator(TechniqueLinker* linker);
   bool Valid(const Technique& technique);
  private:
   bool ValidGeometryShader(const Technique::StageInfo& shader);
 
-  TechniqueParser* parser_;
+  TechniqueLinker* linker_;
   DISALLOW_COPY_AND_ASSIGN(TechniqueValidator);
 };
 
-inline TechniqueValidator::TechniqueValidator(TechniqueParser* parser)
-    : parser_(parser) {
+inline TechniqueValidator::TechniqueValidator(TechniqueLinker* linker)
+    : linker_(linker) {
 }
 }  // namespace afx
 }  // namespace azer

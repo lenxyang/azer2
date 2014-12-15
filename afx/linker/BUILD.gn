@@ -1,6 +1,8 @@
 
 source_set("linker") {
   sources = [
+    "afx_linker.cc",
+    "afx_linker.h",
     "afx_parser.cc",
     "afx_parser.h",
     "attribute_name.cc",
@@ -9,13 +11,11 @@ source_set("linker") {
     "dependency_tree.h",
     "depend_calactor.cc",
     "depend_calactor.h",
-    "linker.cc",
-    "linker.h",
     "program.cc",
     "program.h",
     "technique.h",
-    "technique_parser.cc",
-    "technique_parser.h",
+    "technique_linker.cc",
+    "technique_linker.h",
     "technique_validator.cc",
     "technique_validator.h",
   ]

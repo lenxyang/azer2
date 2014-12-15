@@ -7,8 +7,8 @@
 #include "azer/afx/compiler/astdump.h"
 #include "azer/afx/compiler/testutil.h"
 #include "azer/afx/linker/technique.h"
-#include "azer/afx/linker/technique_parser.h"
-#include "azer/afx/linker/linker.h"
+#include "azer/afx/linker/technique_linker.h"
+#include "azer/afx/linker/afx_linker.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/util/file_loader.h"
 #include "base/basictypes.h"
@@ -29,7 +29,7 @@ class AfxParser {
   bool Parse(const ::base::FilePath::StringType& path);
   bool Parse(const std::string& content, const ::base::FilePath& path);
   Technique* GetTechnique(const std::string& name);
-  TechniqueParser* GetTechniques() { return &tparser_;}
+  TechniqueLinker* GetTechniques() { return &tlinker_;}
 
   ParseContext* GetContext();
 
@@ -49,7 +49,7 @@ class AfxParser {
   bool initializer_;
   FileLoader loader_;
   AfxLinker linker_;
-  TechniqueParser tparser_;
+  TechniqueLinker tlinker_;
   DISALLOW_COPY_AND_ASSIGN(AfxParser);
 };
 

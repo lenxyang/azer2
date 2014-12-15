@@ -25,7 +25,7 @@ bool AfxParser::Parse(const std::string& content, const ::base::FilePath& path) 
   }
 
   ParseContext* context = linker_.root()->GetContext();
-  if (!tparser_.Parse(context)) {
+  if (!tlinker_.Parse(context)) {
     return false;
   }
 
@@ -34,7 +34,7 @@ bool AfxParser::Parse(const std::string& content, const ::base::FilePath& path) 
 
 Technique* AfxParser::GetTechnique(const std::string& name) {
   Technique* tech = NULL;
-  if (tparser_.GetTechnique(name, &tech)) {
+  if (tlinker_.GetTechnique(name, &tech)) {
     return tech;
   } else {
     return NULL;

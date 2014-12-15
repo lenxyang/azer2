@@ -6,7 +6,7 @@
 
 #include "azer/base/tree_node.h"
 #include "azer/afx/compiler/astnode.h"
-#include "azer/afx/linker/technique_parser.h"
+#include "azer/afx/linker/technique_linker.h"
 #include "base/basictypes.h"
 
 namespace azer {

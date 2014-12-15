@@ -4,7 +4,7 @@
 #include "azer/afx/codegen/code_format.h"
 #include "azer/afx/compiler/astdump.h"
 #include "azer/afx/compiler/testutil.h"
-#include "azer/afx/linker/technique_parser.h"
+#include "azer/afx/linker/technique_linker.h"
 #include "azer/afx/linker/linker.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/util/file_loader.h"
@@ -17,7 +17,7 @@ using azer::afx::ASTreeDumper;
 using azer::afx::FileLoader;
 using azer::afx::ParseContext;
 using azer::afx::Technique;
-using azer::afx::TechniqueParser;
+using azer::afx::TechniqueLinker;
 using ::base::FilePath;
 
 const ::base::FilePath::StringType kTestdataDir = AFXL("azer/afx/testdata");
@@ -47,10 +47,10 @@ TEST(AfxCppCodeGen, Material) {
   ParseContext* context = linker.root()->GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
 
-  TechniqueParser tparser;
-  EXPECT_TRUE(tparser.Parse(context));
+  TechniqueLinker tlinker;
+  EXPECT_TRUE(tlinker.Parse(context));
   Technique* technique = NULL;
-  ASSERT_TRUE(tparser.GetTechnique("effect", &technique));
+  ASSERT_TRUE(tlinker.GetTechnique("effect", &technique));
   ASSERT_EQ(technique->name, "effect");
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
@@ -82,10 +82,10 @@ TEST(AfxCppCodeGen, UniformArray) {
   ParseContext* context = linker.root()->GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
 
-  TechniqueParser tparser;
-  EXPECT_TRUE(tparser.Parse(context));
+  TechniqueLinker tlinker;
+  EXPECT_TRUE(tlinker.Parse(context));
   Technique* technique = NULL;
-  ASSERT_TRUE(tparser.GetTechnique("haredware_skinned", &technique));
+  ASSERT_TRUE(tlinker.GetTechnique("haredware_skinned", &technique));
   ASSERT_EQ(technique->name, "haredware_skinned");
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
@@ -117,10 +117,10 @@ TEST(AfxCppCodeGen, PointLight) {
   ParseContext* context = linker.root()->GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
 
-  TechniqueParser tparser;
-  EXPECT_TRUE(tparser.Parse(context));
+  TechniqueLinker tlinker;
+  EXPECT_TRUE(tlinker.Parse(context));
   Technique* technique = NULL;
-  ASSERT_TRUE(tparser.GetTechnique(effect_name, &technique));
+  ASSERT_TRUE(tlinker.GetTechnique(effect_name, &technique));
   ASSERT_EQ(technique->name, effect_name);
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
@@ -152,10 +152,10 @@ TEST(AfxCppCodeGen, TextureAdParam) {
   ParseContext* context = linker.root()->GetContext();
   DUMP_AFXCOMPILE_ERROR(*context);
 
-  TechniqueParser tparser;
-  EXPECT_TRUE(tparser.Parse(context));
+  TechniqueLinker tlinker;
+  EXPECT_TRUE(tlinker.Parse(context));
   Technique* technique = NULL;
-  ASSERT_TRUE(tparser.GetTechnique(effect_name, &technique));
+  ASSERT_TRUE(tlinker.GetTechnique(effect_name, &technique));
   ASSERT_EQ(technique->name, effect_name);
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);

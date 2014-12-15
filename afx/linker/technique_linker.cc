@@ -1,4 +1,4 @@
-#include "azer/afx/linker/technique_parser.h"
+#include "azer/afx/linker/technique_linker.h"
 
 #include <set>
 #include <sstream>

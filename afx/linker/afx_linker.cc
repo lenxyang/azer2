@@ -1,4 +1,4 @@
-#include "azer/afx/linker/linker.h"
+#include "azer/afx/linker/afx_linker.h"
 
 #include "azer/base/string.h"
 #include "azer/afx/compiler/afxl.h"

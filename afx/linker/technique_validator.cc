@@ -2,7 +2,7 @@
 
 #include "base/logging.h"
 #include "azer/afx/compiler/astnode.h"
-#include "azer/afx/linker/technique_parser.h"
+#include "azer/afx/linker/technique_linker.h"
 #include "azer/afx/linker/attribute_name.h"
 #include "azer/render/render_system_enum.h"
 

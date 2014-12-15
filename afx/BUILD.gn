@@ -42,7 +42,7 @@ test("afx_unittest") {
     "compiler/value_unittest.cc",
     "linker/dependency_tree_unittest.cc",
     "linker/linker_unittest.cc",
-    "linker/technique_parser_unittest.cc",
+    "linker/technique_linker_unittest.cc",
     "preprocessor/parser_unittest.cc",
     "preprocessor/recursive_unittest.cc",
     "preprocessor/tokenizer_unittest.cc",

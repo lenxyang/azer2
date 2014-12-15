@@ -1,6 +1,6 @@
 #include "azer/afx/compiler/astdump.h"
 #include "azer/afx/compiler/testutil.h"
-#include "azer/afx/linker/technique_parser.h"
+#include "azer/afx/linker/technique_linker.h"
 #include "azer/afx/linker/linker.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/util/file_loader.h"
@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 
 using azer::afx::Technique;
-using azer::afx::TechniqueParser;
+using azer::afx::TechniqueLinker;
 using azer::afx::ParseContext;
 using azer::afx::AfxLinker;
 using azer::afx::ASTreeDumper;
@@ -32,7 +32,7 @@ TEST(TechniqueParseTest, VertexShader) {
   // Dump(&linker);
 
   ParseContext* context = linker.root()->GetContext();
-  TechniqueParser tparser;
+  TechniqueLinker tparser;
   ASSERT_TRUE(tparser.Parse(context));
   Technique* technique = NULL;
   ASSERT_TRUE(tparser.GetTechnique("effect", &technique));
@@ -66,7 +66,7 @@ TEST(TechniqueParseTest, PiexelShader) {
   // Dump(&linker);
 
   ParseContext* context = linker.root()->GetContext();
-  TechniqueParser tparser;
+  TechniqueLinker tparser;
   ASSERT_TRUE(tparser.Parse(context));
   Technique* technique = NULL;
   ASSERT_TRUE(tparser.GetTechnique("effect", &technique));

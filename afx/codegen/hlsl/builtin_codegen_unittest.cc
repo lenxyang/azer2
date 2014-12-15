@@ -2,7 +2,7 @@
 #include "azer/afx/codegen/hlsl/ast_codegen.h"
 #include "azer/afx/compiler/astdump.h"
 #include "azer/afx/compiler/testutil.h"
-#include "azer/afx/linker/technique_parser.h"
+#include "azer/afx/linker/technique_linker.h"
 #include "azer/afx/linker/linker.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/linker/afx_parser.h"
@@ -14,7 +14,7 @@ using azer::afx::AfxCodegen;
 using azer::afx::ASTreeDumper;
 using azer::afx::FileLoader;
 using azer::afx::ParseContext;
-using azer::afx::TechniqueParser;
+using azer::afx::TechniqueLinker;
 
 const std::string kTestdataDir = "azer/afx/testdata";
 const std::string kAfxDir = "azer/afx/afx";

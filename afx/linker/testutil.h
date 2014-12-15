@@ -1,7 +1,7 @@
 #pragma once
 
 #include "azer/afx/compiler/astdump.h"
-#include "azer/afx/linker/linker.h"
+#include "azer/afx/linker/afx_linker.h"
 
 
 inline void Dump(azer::afx::AfxLinker* linker) {

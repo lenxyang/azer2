@@ -11,7 +11,7 @@ using azer::afx::ASTreeDumper;
 using azer::afx::FileLoader;
 using azer::afx::ParseContext;
 using azer::afx::Technique;
-using azer::afx::TechniqueParser;
+using azer::afx::TechniqueLinker;
 using base::FilePath;
 
 const FilePath::StringType kTestdataDir = AFXL("azer/afx/testdata");
