@@ -108,7 +108,7 @@ extern char* yytext;
 
 // basic type
 %token<spec> VOID BOOL CHAR SHORT INT UINT FLOAT;
-%token<spec> VEC2 VEC3 VEC4 MAT2 MAT3 MAT4 IMAT2 IMAT3 IMAT4 STREAM;
+%token<spec> VEC2 VEC3 VEC4 MAT2 MAT3 MAT4 IMAT2 IMAT3 IMAT4;
 %token<spec> TEX1D TEX1DARR TEX2D TEX2DARR TEX3D TEXCUBE;
 
 %type<astnode.node> fully_specifier_type;
@@ -143,9 +143,6 @@ extern char* yytext;
 %type<astnode.node> logical_xor_expression logical_or_expression;
 %type<astnode.node> conditional_expression assignment_expression;
 %type<astnode.node> expression integer_expression constant_expression;
-
-// stream
-%type<astnode.node> stream_type_specifier stream_declarator;
 
 // statement
 %type<astnode.node> expression_statement declaration_statement
@@ -745,42 +742,7 @@ parameter_declaration
 | parameter_type_specifier {
   $$ = $1;
   }
-| type_qualifier stream_declarator  {
-  ParamNode* param = $2->ToParamNode();
-  param->GetType()->SetStorageQualifier($1.storage_qualifier);
-  $$ = param;
- }
-| stream_declarator {
-  $$ = $1;
-  }
 ;
-
-stream_declarator
-: stream_type_specifier IDENTIFIER {
-  PARSER_TRACE << "STREAM<type_specifier>  []" << std::endl;
-  const SourceLoc& loc = $2.loc;
-  DCHECK($1->IsTypedNode());
-  TypedNode* typednode = $1->ToTypedNode();
-  ParamNode* param = CreateParamNode(*$2.identifier, typednode, loc, parseContext);
-  $$ = param;
-  delete $2.identifier;
-}
-;
-
-stream_type_specifier
-: STREAM LEFT_ANGLE type_specifier_nonarray RIGHT_ANGLE {
-  PARSER_TRACE << "type_specifier_nonarray SamplerCube" << std::endl;
-  const SourceLoc& loc = $1.loc;
-  DCHECK($3->IsTypedNode());
-  TypedNode* typednode = $3->ToTypedNode();
-  if (typednode->GetType()->type() != kStructure) {
-    parseContext->ReportError(loc, "stream<> must be a structure");
-  }
-  TypedNode* node = CreateTypedNode($1.type, loc, parseContext);
-  node->GetType()->AppendTemplateArg(typednode->GetType());
-  $$ = node;
-}
-
 
 parameter_declarator
 : type_specifier IDENTIFIER {

@@ -29,31 +29,6 @@ TEST(AfxParser, Expression) {
   DUMP_AFXCOMPILE_ERROR(context);
 }
 
-TEST(AfxParser, Stream) {
-  const std::string str =
-      "struct Vertex {\n"
-      "  vec4 position;\n"
-      "  vec3 normal; \n"
-      "};\n"
-      "void gsmain1(inout point_stream<Vertex> s) {}\n"
-      "void gsmain2(inout line_stream<Vertex> s) {}\n"
-      "void gsmain3(inout line_adj_stream<Vertex> s) {}\n"
-      "void gsmain4(inout triangle_stream<Vertex> s) {}\n"
-      "void gsmain5(inout triangle_adj_stream<Vertex> s) {}\n"
-      " // comments"
-      ;
-  ASTNodeFactory factory;
-  ParseContext::Options opt;
-  // opt.dump_parser = true;
-  // opt.dump_tokenizer = true;
-  // opt.syntax_valid = false;
-  ParseContext context(AFXL(""), "", str, &factory, opt);
-  Parser parser;
-  EXPECT_TRUE(parser.Parse(&context));
-  // DumpASTree(&context, std::cout);
-  DUMP_AFXCOMPILE_ERROR(context);
-}
-
 TEST(AfxParser, FuncExpression) {
   const std::string str =
       "vec4 clamp(vec4 v, float v1, float v2) { return v;}"

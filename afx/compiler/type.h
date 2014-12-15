@@ -47,11 +47,6 @@ enum BasicType {
   kTexture3D,
   kTextureCube,
   kStructure,
-  kPointStream,
-  kLineStream,
-  kLineAdjStream,
-  kTriangleStream,
-  kTriangleAdjStream,
   kAnonymouseStructure,
   kFunctional,
 };
@@ -127,7 +122,6 @@ class Type {
   bool IsIntVec() const;
   bool IsMatrix() const;
   bool IsScalar() const;
-  bool IsStream() const;
 
   void SetStructName(const std::string& name);
   void AppendTemplateArg(TypePtr& ptr);
@@ -196,14 +190,6 @@ inline bool Type::IsScalar() const {
       && !IsArray() && !IsTexture() && !IsStructure();
 }
 
-inline bool Type::IsStream() const {
-  return type() == kPointStream
-      || type() == kLineStream
-      || type() == kLineAdjStream
-      || type() == kTriangleStream
-      || type() == kTriangleAdjStream;
-}
-
 inline void Type::SetStructName(const std::string& name) {
   struct_name_ = name;
 }
@@ -239,19 +225,6 @@ uint32 SizeofType(const Type& type);
 inline bool IsTypeSupportMemberOper(const TypePtr& type) {
   // float vector support swizzle expression
   return type->IsVector() || type->IsStructure();
-}
-
-inline bool IsTypeStream(const TypePtr& type) {
-  switch (type->type()) {
-    case kPointStream:
-    case kLineStream:
-    case kLineAdjStream:
-    case kTriangleStream:
-    case kTriangleAdjStream: 
-      return true;
-    default:
-      return false;
-  }
 }
 
 inline bool IsIntegerScalar(const TypePtr& type) {

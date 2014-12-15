@@ -49,11 +49,6 @@
 "imat2"                {TYPE_INIT(IMAT2, kIMatrix2);}
 "imat3"                {TYPE_INIT(IMAT3, kIMatrix3);}
 "imat4"                {TYPE_INIT(IMAT4, kIMatrix4);}
-"point_stream"         {TYPE_INIT(STREAM, kPointStream);}
-"line_stream"          {TYPE_INIT(STREAM, kLineStream);}
-"line_adj_stream"      {TYPE_INIT(STREAM, kLineAdjStream);}
-"triangle_stream"      {TYPE_INIT(STREAM, kTriangleStream);}
-"triangle_adj_stream"  {TYPE_INIT(STREAM, kTriangleAdjStream);}
 "Texture1D"            {TYPE_INIT(TEX1D, kTexture1D);}
 "Texture1DArray"       {TYPE_INIT(TEX1DARR, kTexture1DArray);}
 "Texture2D"            {TYPE_INIT(TEX2D, kTexture2D);}
