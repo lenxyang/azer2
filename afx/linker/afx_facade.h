@@ -16,9 +16,9 @@
 
 namespace azer {
 namespace afx {
-class AfxParser {
+class AfxFacade {
  public:
-  AfxParser(const std::vector< ::base::FilePath::StringType>& incpath,
+  AfxFacade(const std::vector< ::base::FilePath::StringType>& incpath,
             const AfxLinker::Options& link_opt)
       : initializer_(false)
       , loader_(incpath)
@@ -50,10 +50,10 @@ class AfxParser {
   FileLoader loader_;
   AfxLinker linker_;
   TechniqueLinker tlinker_;
-  DISALLOW_COPY_AND_ASSIGN(AfxParser);
+  DISALLOW_COPY_AND_ASSIGN(AfxFacade);
 };
 
-inline bool AfxParser::Parse(const ::base::FilePath::StringType& path) {
+inline bool AfxFacade::Parse(const ::base::FilePath::StringType& path) {
   return Parse(::base::FilePath(path));
 }
 

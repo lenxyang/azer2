@@ -3,8 +3,8 @@ source_set("linker") {
   sources = [
     "afx_linker.cc",
     "afx_linker.h",
-    "afx_parser.cc",
-    "afx_parser.h",
+    "afx_facade.cc",
+    "afx_facade.h",
     "attribute_name.cc",
     "attribute_name.h",
     "dependency_tree.cc",

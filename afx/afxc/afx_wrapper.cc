@@ -22,17 +22,17 @@ AfxWrapper::AfxWrapper(const FilePath::StringType& includes) {
 
 bool AfxWrapper::Parse(const FilePath& path, std::string* err,
                        std::vector<AfxResult>* resvec) {
-  DCHECK(parser_.get() == NULL);
+  DCHECK(facade_.get() == NULL);
   AfxLinker::Options opt;
   opt.parse_astree = false;
-  parser_.reset(new AfxParser(includes_, opt));
-  if (!parser_->Parse(path)) {
+  facade_.reset(new AfxFacade(includes_, opt));
+  if (!facade_->Parse(path)) {
     std::stringstream ss;
-    const std::string& compile_err = parser_->GetCompileError();
+    const std::string& compile_err = facade_->GetCompileError();
     if (!compile_err.empty()) {
       ss << path.value() << " compiler error: " << compile_err << std::endl;
     }
-    const std::string& link_err = parser_->GetErrorText();
+    const std::string& link_err = facade_->GetErrorText();
     if (!link_err.empty()) {
       ss << path.value() << " link error: " << link_err << std::endl;
     }
@@ -40,10 +40,10 @@ bool AfxWrapper::Parse(const FilePath& path, std::string* err,
     return false;
   }
 
-  TechniqueParser* tparser = parser_->GetTechniques();
-  for (auto iter = tparser->GetTechniques().begin();
-       iter != tparser->GetTechniques().end(); ++iter) {
-    const TechniqueParser::Technique& tech = iter->second;
+  TechniqueLinker* tlinker = facade_->GetTechniques();
+  for (auto iter = tlinker->GetTechniques().begin();
+       iter != tlinker->GetTechniques().end(); ++iter) {
+    const Technique& tech = iter->second;
     AfxResult result;
     result.technique = &tech;
     GenHLSL(tech, &result);
@@ -54,7 +54,7 @@ bool AfxWrapper::Parse(const FilePath& path, std::string* err,
   return true;
 }
 
-void AfxWrapper::GenHLSL(const TechniqueParser::Technique& tech, AfxResult* result) {
+void AfxWrapper::GenHLSL(const Technique& tech, AfxResult* result) {
   int cnt = 0;
   result->hlsl.resize(kRenderPipelineStageNum);
   for (auto iter = tech.shader.begin(); iter != tech.shader.end(); ++iter, ++cnt) {
@@ -67,8 +67,7 @@ void AfxWrapper::GenHLSL(const TechniqueParser::Technique& tech, AfxResult* resu
   }
 }
 
-void AfxWrapper::GenCppCode(const TechniqueParser::Technique& tech,
-                            AfxResult* result) {
+void AfxWrapper::GenCppCode(const Technique& tech, AfxResult* result) {
   CppCodeGen codegen;
   codegen.GenCode(tech);
   result->hpp = codegen.GetHeadCode();

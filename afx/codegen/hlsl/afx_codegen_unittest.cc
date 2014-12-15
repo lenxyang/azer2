@@ -4,7 +4,7 @@
 #include "base/files/file_path.h"
 #include "gtest/gtest.h"
 
-using azer::afx::AfxParser;
+using azer::afx::AfxFacade;
 using azer::afx::AfxLinker;
 using azer::afx::HLSLAfxCodegen;
 using azer::afx::ASTreeDumper;
@@ -38,7 +38,7 @@ TEST(HLSLAfxCodegen, EffectVertex) {
   inc.push_back(kTestdataDir);
   AfxLinker::Options opt;
   opt.parse_astree = false;
-  AfxParser parser(inc, opt);
+  AfxFacade parser(inc, opt);
   ASSERT_TRUE(parser.Parse(AFXL("azer/afx/testdata/diffuse.afx")));
 
   LOG_IF(ERROR, !parser.success()) << parser.GetErrorText();
@@ -70,7 +70,7 @@ TEST(HLSLAfxCodegen, EffectPixel) {
   inc.push_back(kTestdataDir);
   AfxLinker::Options opt;
   opt.parse_astree = false;
-  AfxParser parser(inc, opt);
+  AfxFacade parser(inc, opt);
   ASSERT_TRUE(parser.Parse(AFXL("azer/afx/testdata/effect.afx")));
 
   LOG_IF(ERROR, !parser.success()) << parser.GetErrorText();
@@ -116,7 +116,7 @@ TEST(HLSLAfxCodegen, EffectPixelWithSampler) {
   inc.push_back(kTestdataDir);
   AfxLinker::Options opt;
   opt.parse_astree = false;
-  AfxParser parser(inc, opt);
+  AfxFacade parser(inc, opt);
   ASSERT_TRUE(parser.Parse(AFXL("azer/afx/testdata/texeffect.afx")));
 
   LOG_IF(ERROR, !parser.success()) << parser.GetErrorText();
@@ -166,7 +166,7 @@ TEST(HLSLAfxCodegen, TextureInStructure) {
   inc.push_back(kTestdataDir);
   AfxLinker::Options opt;
   opt.parse_astree = false;
-  AfxParser parser(inc, opt);
+  AfxFacade parser(inc, opt);
   ASSERT_TRUE(parser.Parse(AFXL("azer/afx/testdata/mtrl.afx")));
 
   LOG_IF(ERROR, !parser.success()) << parser.GetErrorText();
@@ -203,7 +203,7 @@ TEST(HLSLAfxCodegen, LineEffect) {
   inc.push_back(kTestdataDir);
   AfxLinker::Options opt;
   opt.parse_astree = false;
-  AfxParser parser(inc, opt);
+  AfxFacade parser(inc, opt);
   EXPECT_TRUE(parser.Parse(AFXL("azer/afx/testdata/line.afx")));
 
   LOG_IF(ERROR, !parser.success()) << parser.GetErrorText();
@@ -242,7 +242,7 @@ TEST(HLSLAfxCodegen, Shadowmap) {
   inc.push_back(kTestdataDir);
   AfxLinker::Options opt;
   opt.parse_astree = false;
-  AfxParser parser(inc, opt);
+  AfxFacade parser(inc, opt);
   EXPECT_TRUE(parser.Parse(AFXL("azer/afx/testdata/shadowmap.afx")));
 
   LOG_IF(ERROR, !parser.success()) << parser.GetErrorText();

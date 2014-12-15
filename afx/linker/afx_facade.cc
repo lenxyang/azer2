@@ -1,4 +1,4 @@
-#include "azer/afx/linker/afx_parser.h"
+#include "azer/afx/linker/afx_facade.h"
 
 #include "base/files/file_util.h"
 #include "base/files/file_path.h"
@@ -6,7 +6,7 @@
 
 namespace azer {
 namespace afx {
-bool AfxParser::Parse(const ::base::FilePath& path) {
+bool AfxFacade::Parse(const ::base::FilePath& path) {
   std::string content;
   DCHECK(initializer_ == false);
   if (!LoadFileToString(path, &content)) {
@@ -17,7 +17,7 @@ bool AfxParser::Parse(const ::base::FilePath& path) {
   return Parse(content, path);
 }
 
-bool AfxParser::Parse(const std::string& content, const ::base::FilePath& path) {
+bool AfxFacade::Parse(const std::string& content, const ::base::FilePath& path) {
   initializer_ = true;
   if (!linker_.Load(content, path)) {
     PLOG(ERROR) << "cannot read file: " << path.value();
@@ -32,7 +32,7 @@ bool AfxParser::Parse(const std::string& content, const ::base::FilePath& path) 
   return true;
 }
 
-Technique* AfxParser::GetTechnique(const std::string& name) {
+Technique* AfxFacade::GetTechnique(const std::string& name) {
   Technique* tech = NULL;
   if (tlinker_.GetTechnique(name, &tech)) {
     return tech;
@@ -41,7 +41,7 @@ Technique* AfxParser::GetTechnique(const std::string& name) {
   }
 }
 
-ParseContext* AfxParser::GetContext() {
+ParseContext* AfxFacade::GetContext() {
   DCHECK(linker_.root() != NULL);
   return linker_.root()->GetContext();
 }

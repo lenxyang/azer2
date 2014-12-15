@@ -27,7 +27,7 @@ bool TechniqueValidator::ValidGeometryShader(const Technique::StageInfo& shader)
   const ASTNode* entry = shader.entry;
   if (!entry->attributes() || 
       !entry->attributes()->HasAttr(AttrNames::kMaxVertexCount)) {
-    parser_->ReportError("geometry shader's entry not specified maxvertexcount");
+    linker_->ReportError("geometry shader's entry not specified maxvertexcount");
     return false;
   }
   return true;

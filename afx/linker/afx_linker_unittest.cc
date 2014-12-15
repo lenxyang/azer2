@@ -3,6 +3,7 @@
 
 #include "azer/afx/afx.h"
 #include "azer/afx/linker/afx_linker.h"
+#include "azer/afx/linker/afx_facade.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/compiler/testutil.h"
 #include "azer/afx/util/file_loader.h"
@@ -86,6 +87,6 @@ TEST(AfxLinkerTest, MultiLevelInclude) {
   inc.push_back(kTestdataDir);
   AfxLinker::Options opt;
   opt.parse_astree = false;
-  azer::afx::AfxParser parser(inc, opt);
+  azer::afx::AfxFacade parser(inc, opt);
   EXPECT_TRUE(parser.Parse(AFXL("azer/afx/testdata/multi_level_include/diffuse.afx")));
 }

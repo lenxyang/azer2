@@ -5,7 +5,7 @@
 #include <string>
 
 #include "base/basictypes.h"
-#include "azer/afx/linker/afx_parser.h"
+#include "azer/afx/linker/afx_facade.h"
 
 namespace azer {
 namespace afx {
@@ -19,16 +19,15 @@ class AfxWrapper {
     std::string hpp;
     std::vector<std::string> hlsl;
     std::vector<std::string> glsl;
-    const TechniqueParser::Technique* technique;
+    const Technique* technique;
   };
   bool Parse(const ::base::FilePath& path, std::string* str,
              std::vector<AfxResult>* result); 
  private:
-  void GenCppCode(const TechniqueParser::Technique& tech,
-                  AfxResult* result);
-  void GenHLSL(const TechniqueParser::Technique& tech, AfxResult* result);
+  void GenCppCode(const Technique& tech, AfxResult* result);
+  void GenHLSL(const Technique& tech, AfxResult* result);
   std::vector< ::base::FilePath::StringType> includes_;
-  std::unique_ptr<AfxParser> parser_;
+  std::unique_ptr<AfxFacade> facade_;
   DISALLOW_COPY_AND_ASSIGN(AfxWrapper);
 };
 

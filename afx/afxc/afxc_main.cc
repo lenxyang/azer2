@@ -17,7 +17,8 @@
 #include "base/i18n/icu_util.h"
 
 using ::base::FilePath;
-using azer::afx::TechniqueParser;
+using azer::afx::Technique;
+using azer::afx::TechniqueLinker;
 using azer::afx::AfxWrapper;
 
 void GenCppCode(const AfxWrapper::AfxResult& result);
@@ -41,7 +42,7 @@ void Init(int* argc, char** argv[]) {
 
 std::string ListFiles(const std::vector<AfxWrapper::AfxResult>& result);
 void GenEffectFiles(const std::vector<AfxWrapper::AfxResult>& result);
-std::string GetTechniqueFilePattern(const TechniqueParser::Technique& tech);
+std::string GetTechniqueFilePattern(const Technique& tech);
 
 int main(int argc, char* argv[]) {
   Init(&argc, &argv);
@@ -172,7 +173,7 @@ void GenEffectFiles(const std::vector<AfxWrapper::AfxResult>& resvec) {
   }
 }
 
-std::string GetTechniqueFilePattern(const TechniqueParser::Technique& tech) {
+std::string GetTechniqueFilePattern(const Technique& tech) {
   std::string pattern = tech.attributes->GetAttrValue("fpattern");
   if (pattern.empty()) {
     pattern = tech.name;
