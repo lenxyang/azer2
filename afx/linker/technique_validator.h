@@ -6,6 +6,8 @@
 namespace azer {
 namespace afx {
 
+class TechniqueParser;
+
 /**
  * class TechniqueValidator
  * 用于检测 Technique 是否有不合法的地方
@@ -16,10 +18,17 @@ namespace afx {
  **/
 class TechniqueValidator {
  public:
+  TechniqueValidator(TechniqueParser* parser);
   bool Valid(const Technique& technique);
  private:
   bool ValidGeometryShader(const Technique::StageInfo& shader);
+
+  TechniqueParser* parser_;
   DISALLOW_COPY_AND_ASSIGN(TechniqueValidator);
 };
+
+inline TechniqueValidator::TechniqueValidator(TechniqueParser* parser)
+    : parser_(parser) {
+}
 }  // namespace afx
 }  // namespace azer

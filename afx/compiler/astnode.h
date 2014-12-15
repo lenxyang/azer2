@@ -171,6 +171,7 @@ class ASTNode : public TreeNodeDownUp<ASTNode> {
   // attributes node
   void SetAttributes(ASTNode* node);
   AttributesNode* attributes() { return attributes_;}
+  const AttributesNode* attributes() const { return attributes_;}
  protected:
   void SetError(const std::string& errmsg) { error_msg_ = errmsg;}
   std::string error_msg_;

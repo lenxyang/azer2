@@ -38,6 +38,8 @@ class TechniqueParser {
   ASTNodeVec pipeline_;
   TechniqueDict techniques_;
   std::string error_text_;
+
+  friend class TechniqueValidator;
   DISALLOW_COPY_AND_ASSIGN(TechniqueParser);
 };
 }  // namespace afx

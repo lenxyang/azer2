@@ -4,6 +4,8 @@
 #include <sstream>
 
 #include "azer/afx/linker/depend_calactor.h"
+#include "azer/afx/linker/attribute_name.h"
+#include "azer/afx/linker/technique_validator.h"
 #include "azer/afx/compiler/astnode.h"
 #include "azer/afx/compiler/context.h"
 #include "azer/afx/compiler/util.h"
@@ -22,9 +24,9 @@ bool TechniqueParser::GenTechnique(AttributesNode* node, ParseContext* context) 
   DCHECK(context->root());
   DCHECK(context->success());
   Technique technique;
-  const std::string& name = node->GetAttrValue("name");
-  std::string ps_main = node->GetAttrValue("ps_main");
-  std::string vs_main = node->GetAttrValue("vs_main");
+  const std::string& name = node->GetAttrValue(AttrNames::kName);
+  std::string ps_main = node->GetAttrValue(AttrNames::kPixelShaderEntry);
+  std::string vs_main = node->GetAttrValue(AttrNames::kVertexShaderEntry);
   if (ps_main.empty()) {
     std::stringstream ss;
     ss << "technique \"" << name << "\"'s psmain is empty";
@@ -63,8 +65,13 @@ bool TechniqueParser::GenTechnique(AttributesNode* node, ParseContext* context) 
   technique.shader[kPixelStage].entry = ps_node;
   technique.name = name;
   CalcFuncDeps(&technique);
-  techniques_.insert(std::make_pair(name, technique));
-  return true;
+  TechniqueValidator validator(this);
+  if (validator.Valid(technique)) {
+    techniques_.insert(std::make_pair(name, technique));
+    return true;
+  } else {
+    return false;
+  }
 }
 
 void TechniqueParser::ReportError(const std::string& errtext) {
