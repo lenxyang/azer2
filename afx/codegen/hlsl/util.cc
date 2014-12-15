@@ -22,17 +22,6 @@ std::string DumpStorageQualifier(StorageQualifier qualifier) {
   }
 }
 
-std::string HLSLStreamType(BasicType type) {
-  switch (type) {
-    case kPointStream: return "PointStream";
-    case kLineStream: return "LineStream";
-    case kLineAdjStream: return "LineAdjStream";
-    case kTriangleStream: return "TriangleStream";
-    case kTriangleAdjStream: return "TriangleAdjStream";
-    default: CHECK(false); return "";
-  }
-}
-
 std::string HLSLTypeName(const TypePtr& type) {
   switch (type->type()) {
     case kVoid: return "void";
@@ -59,16 +48,6 @@ std::string HLSLTypeName(const TypePtr& type) {
     case kTexture3D: return "Texture3D";
     case kTextureCube: return "TextureCube";
     case kStructure: return std::move(ReplaceDoubleColon(type->struct_name()));
-    case kPointStream:
-    case kLineStream:
-    case kLineAdjStream:
-    case kTriangleStream:
-    case kTriangleAdjStream: {
-      std::stringstream ss;
-      ss << HLSLStreamType(type->type()) << "<"
-         << type->GetTemplateArg(0)->struct_name() << ">";
-      return ss.str();
-    }
     case kFunctional: return std::move(ReplaceDoubleColon(type->struct_name()));
     default: NOTREACHED() << "Unknown ASTNodeType"; return "";
   }

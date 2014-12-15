@@ -124,12 +124,6 @@ class Type {
   bool IsScalar() const;
 
   void SetStructName(const std::string& name);
-  void AppendTemplateArg(TypePtr& ptr);
-  TypePtr& GetTemplateArg(int index);
-  const TypePtr& GetTemplateArg(int index) const;
-  std::vector<TypePtr>& GetTemplateArgs() { return template_args_;}
-  const std::vector<TypePtr>& GetTemplateArgs() const { return template_args_;}
-
   const std::string& struct_name() const { return struct_name_;}
 
   void SetType(BasicType t);
@@ -148,10 +142,6 @@ class Type {
    * 用于表示 structure 的名称
    */
   std::string struct_name_;
-  /**
-   * 用于表示 template 的名称
-   */
-  std::vector<TypePtr> template_args_;
   std::vector<int> dim_;
   DISALLOW_COPY_AND_ASSIGN(Type);
 };
@@ -192,22 +182,6 @@ inline bool Type::IsScalar() const {
 
 inline void Type::SetStructName(const std::string& name) {
   struct_name_ = name;
-}
-
-inline void Type::AppendTemplateArg(TypePtr& ptr) {
-  template_args_.push_back(ptr);
-}
-
-inline TypePtr& Type::GetTemplateArg(int index) {
-  CHECK_LT(index, static_cast<int32>(template_args_.size()));
-  CHECK_GT(index, 0);
-  return template_args_[index];
-}
-
-inline const TypePtr& Type::GetTemplateArg(int index) const {
-  CHECK_LT(index, static_cast<int32>(template_args_.size()));
-  CHECK_GT(index, 0);
-  return template_args_[index];
 }
 
 inline void Type::SetDim(int index, int dim) {
