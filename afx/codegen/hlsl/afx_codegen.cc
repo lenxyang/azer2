@@ -233,7 +233,6 @@ std::string HLSLGSAfxCodegen::GenEntry(ASTNode* node) {
   ss << "[maxvertexcount(" << attr->GetAttrValue(AttrNames::kGSMaxVertexCount) 
      <<")]" << std::endl;
   ss << GenFuncProto(node) << GenFuncBody(node);
-  LOG(ERROR) << ss.str();
   return ss.str();
 }
 }  // namespace afx

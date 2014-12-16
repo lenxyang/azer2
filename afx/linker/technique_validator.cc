@@ -14,7 +14,7 @@ class EmitVariableFinder : public TreeNode<ASTNode>::Traverser {
  public:
   EmitVariableFinder()  {}
   virtual bool OnVisitBegin(ASTNode* node) override {
-    if (node->IsSymbolNode()) {
+	if (node->IsSymbolNode() && !node->IsActParamNode()) {
       SymbolNode* symbol = node->ToSymbolNode();
       CHECK(symbol && symbol->GetDeclarationNode());
       DeclarationNode* decl = symbol->GetDeclarationNode();
@@ -79,7 +79,6 @@ bool TechniqueValidator::ValidGeometryShader(Technique::StageInfo* shader) {
     AttrNames::kGSMaxVertexCount,
     AttrNames::kGSVertexType,
     AttrNames::kGSPrimitiveType,
-    AttrNames::kGSEmitVariable,
   };
   for (uint32 i = 0; i < arraysize(attrs); ++i) {
     if (!attr->HasAttr(attrs[i])) {

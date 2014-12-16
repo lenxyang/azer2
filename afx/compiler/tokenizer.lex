@@ -71,7 +71,8 @@
 "struct"    {KEYWORD_INIT(STRUCT);}
 
 "technique" {KEYWORD_INIT(TECHNIQUE);}
-"exchange"   {KEYWORD_INIT(EXCHANGE);}
+"exchange"  {KEYWORD_INIT(EXCHANGE);}
+"gsemit"    {KEYWORD_INIT(GSEMIT);}
 "package"   {KEYWORD_INIT(PACKAGE);}
 
 "in"      {
@@ -275,7 +276,7 @@
 \/\/[^\n]* {
 }
 
-"/*"         { BEGIN(C_COMMENT);}
+"/*"         { BEGIN(C_COMMENT); }
 <C_COMMENT>"*/" { BEGIN(INITIAL);}
 <C_COMMENT>.  {}
 

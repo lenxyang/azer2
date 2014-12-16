@@ -30,6 +30,7 @@ namespace {
 bool NeedBraceForOp(ASTNode* node);
 std::string MapBuiltInFunc(const std::string& name);
 std::string DumpParamList(FuncCallNode* func, int start);
+std::string DumpParamProtoList(FuncProtoNode* func);
 
 std::string HLSLGSStreamType(const std::string& str);
 
@@ -389,19 +390,7 @@ bool FuncProtoNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
   FuncProtoNode* func = node()->ToFuncProtoNode();
   ss << HLSLDumpFullType(func->rettype()) << " "
      << PackagePrefix(node()->GetContext()) << func->funcname() << "(";
-
-  for (auto iter = func->GetParams().begin();
-       iter != func->GetParams().end(); ++iter) {
-    if (iter != func->GetParams().begin()) {
-      ss << ", ";
-    }
-    DCHECK((*iter)->IsParamNode());
-    ParamNode* param = (*iter)->ToParamNode();
-    ss << HLSLDumpFullType(param->GetTypedNode()) << " " << param->paramname();
-    if (param->GetType()->IsTexture()) {
-      ss << ", SamplerState " << HLSLUniformTextureSamplerFullName(param);
-    }
-  }
+  ss << DumpParamProtoList(func);
 
   *code = ss.str();
   return true;
@@ -429,17 +418,14 @@ bool GSFuncProtoNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
   FuncProtoNode* func = node()->ToFuncProtoNode();
   if (attr && attr->GetAttrValue(AttrNames::kGeometryShaderEntry) == "true") {
     std::stringstream ss;
-    for (auto iter = func->GetParams().begin();
-         iter != func->GetParams().end(); ++iter) {
-      DCHECK((*iter)->IsParamNode());
-      ParamNode* param = (*iter)->ToParamNode();
-      ss << HLSLDumpFullType(param->GetTypedNode()) << " " << param->paramname();
-      ss << ", ";
-      CHECK(!param->GetType()->IsTexture());
-    }
 
+    ss << HLSLDumpFullType(func->rettype()) << " "
+       << PackagePrefix(node()->GetContext()) << func->funcname()
+       << "(" << DumpParamProtoList(func) << ",";
     std::string primitive_type = attr->GetAttrValue(AttrNames::kGSPrimitiveType);
-    ss << "inout " << HLSLGSStreamType(primitive_type) <<"<" << "> gs_ostream)";
+    std::string vertex_type = attr->GetAttrValue(AttrNames::kGSVertexType);
+    ss << "inout " << HLSLGSStreamType(primitive_type) 
+       << "<" << vertex_type << "> gs_ostream)";
     *code = ss.str();
     return false;
   } else {
@@ -816,6 +802,23 @@ std::string DumpParamListWithTexSampler(FuncCallNode* func, int start) {
     } else {
       codegen.GenCode(node);
       ss << codegen.GetCode();
+    }
+  }
+  return ss.str();
+}
+
+std::string DumpParamProtoList(FuncProtoNode* func) {
+  std::stringstream ss;
+  for (auto iter = func->GetParams().begin();
+       iter != func->GetParams().end(); ++iter) {
+    if (iter != func->GetParams().begin()) {
+      ss << ", ";
+    }
+    DCHECK((*iter)->IsParamNode());
+    ParamNode* param = (*iter)->ToParamNode();
+    ss << HLSLDumpFullType(param->GetTypedNode()) << " " << param->paramname();
+    if (param->GetType()->IsTexture()) {
+      ss << ", SamplerState " << HLSLUniformTextureSamplerFullName(param);
     }
   }
   return ss.str();

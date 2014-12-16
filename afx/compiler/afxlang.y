@@ -8,6 +8,7 @@
 #include "azer/afx/compiler/parser.h"
 #include "azer/afx/compiler/util.h"
 #include "azer/afx/compiler/syntax_validator.h"
+#include "azer/afx/linker/attribute_name.h"
 #include "base/logging.h"
 
 #ifdef _WIN32
@@ -87,7 +88,7 @@ extern char* yytext;
 %expect 1     // One shift reduce conflict because of if | else
 
 %token<lex> IF ELSE DO WHILE FOR SWITCH CASE CONTINUE BREAK RETURN;
-%token<lex> DISCARD DEFAULT STRUCT TECHNIQUE PACKAGE EXCHANGE STRUCT_TYPE;
+%token<lex> DISCARD DEFAULT STRUCT TECHNIQUE PACKAGE EXCHANGE GSEMIT STRUCT_TYPE;
 %token<lex> CHARCONST INTCONST UINTCONST FLOATCONST BOOLCONST STRING IDENTIFIER;
 %token<lex> EXTERN_PREFIX;
 %token<spec> STORAGE_QUALIFIER;
@@ -492,6 +493,14 @@ declaration
   $$ = $2;
   DCHECK($2->IsStructDeclNode());
   $$->ToStructDeclNode()->SetExchangeStruct();
+ }
+| GSEMIT init_declarator_list SEMICOLON {
+  PARSER_TRACE << "declaration: exchange struct_sepcifier ; " << std::endl;
+  AttributesNode* attr  = parseContext->Create(ASTNode::kAttributesNode, $1.loc)
+      ->ToAttributesNode();
+  attr->Add(azer::afx::AttrNames::kGSEmitVariable, "true");
+  $$ = $2;
+  $$->SetAttributes(attr);
  }
 ;
 
@@ -1590,7 +1599,7 @@ attribute_list : IDENTIFIER EQUAL STRING {
   delete $3.string;
   $$ = node;
  }
-| attribute_list  IDENTIFIER EQUAL STRING {
+| attribute_list IDENTIFIER EQUAL STRING {
   PARSER_TRACE << "attribute_list" << std::endl;
   if (!$$->Add(*$2.identifier, *$4.string)) {
     parseContext->ReportError($$->loc(), $$->GetErrorMessage());
