@@ -199,7 +199,7 @@ class AttributesNode : public ASTNode {
   }
   virtual AttributesNode* ToAttributesNode() override { return this;}
   virtual bool IsAttributesNode() override { return true;}
-  
+
   typedef std::map<std::string, std::string> AttributesDict;
   bool Add(const std::string& name, const std::string& field);
   const AttributesDict& GetDict() const { return fields_;}

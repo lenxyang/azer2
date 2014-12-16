@@ -63,7 +63,7 @@ void AfxWrapper::GenHLSL(const Technique& tech, AfxResult* result) {
     azer::RenderPipelineStage stage = (azer::RenderPipelineStage)cnt;
     std::stringstream ss;
     std::unique_ptr<AfxCodegen> codegen(AfxCodegen::Create("hlsl", stage));
-    result->hlsl[cnt] = FormatCode(codegen->GenCode(stage, *iter, true));
+    result->hlsl[cnt] = FormatCode(codegen->GenCode(*iter, true));
   }
 }
 

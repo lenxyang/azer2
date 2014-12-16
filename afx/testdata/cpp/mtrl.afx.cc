@@ -9,15 +9,15 @@
 
 #include "azer/render/render.h"
 
-const azer::VertexDesc::Desc PoingLightEffect::kVertexDesc[] = {
-  {"POSITION", 0, azer::kVec4},
-  {"COORDTEX", 0, azer::kVec2},
-  {"NORMAL", 0, azer::kVec4},
+const azer::VertexDesc::Desc effect::kVertexDesc[] = {
+  {"POSITION", 0, azer::kVec3},
+  {"NORMAL", 0, azer::kVec3},
+  {"TEXCOORD", 0, azer::kVec3},
 };
 
-const int PoingLightEffect::kVertexDescNum = arraysize(PoingLightEffect::kVertexDesc);
+const int effect::kVertexDescNum = arraysize(effect::kVertexDesc);
 
-PoingLightEffect::PoingLightEffect(const std::vector<std::string>& sources, azer::RenderSystem* rs) 
+effect::effect(const std::vector<std::string>& sources, azer::RenderSystem* rs) 
   : azer::Effect(rs) 
   , sources_(sources) {
   DCHECK(sources.size() == azer::kRenderPipelineStageNum);
@@ -26,32 +26,23 @@ PoingLightEffect::PoingLightEffect(const std::vector<std::string>& sources, azer
   Init();
 }
 
-PoingLightEffect::~PoingLightEffect() {
+effect::~effect() {
 }
 
-void PoingLightEffect::Init() {
+void effect::Init() {
   InitTechnique();
-  // generate GpuTable init for stage azer::kVertexStage
-  azer::GpuConstantsTable::Desc vs_table_desc[] = {
-    azer::GpuConstantsTable::Desc("pvw", azer::GpuConstantsType::kMatrix4,
-         offsetof(vs_cbuffer, pvw), 1),
-    azer::GpuConstantsTable::Desc("world", azer::GpuConstantsType::kMatrix4,
-         offsetof(vs_cbuffer, world), 1),
-  };
-  gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc));
   // generate GpuTable init for stage azer::kPixelStage
   azer::GpuConstantsTable::Desc ps_table_desc[] = {
-    azer::GpuConstantsTable::Desc("diffuse", azer::GpuConstantsType::kVector4,
-         offsetof(ps_cbuffer, diffuse), 1),
-    azer::GpuConstantsTable::Desc("light", offsetof(ps_cbuffer, light),
-         sizeof(PointLight), 1),
+    azer::GpuConstantsTable::Desc("light1", azer::GpuConstantsType::kSpotLight,
+         offsetof(ps_cbuffer, light1), 1),
+    azer::GpuConstantsTable::Desc("mtrl", offsetof(ps_cbuffer, mtrl),
+         sizeof(Material), 1),
   };
   gpu_table_[azer::kPixelStage].reset(render_system_->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc));
 }
 
-void PoingLightEffect::InitTechnique() {
+void effect::InitTechnique() {
   technique_.reset(render_system_->CreateTechnique());
   vertex_desc_ptr_.reset(new azer::VertexDesc(kVertexDesc, kVertexDescNum));
   const std::string& vs_shader_source = sources_[azer::kVertexStage];
@@ -71,5 +62,9 @@ void PoingLightEffect::InitTechnique() {
   technique_->Use(render_system_->GetDefaultRenderer());
 }
 
-void PoingLightEffect::UseTexture(azer::Renderer* renderer) {
+void effect::UseTexture(azer::Renderer* renderer) {
+  for (size_t i = 0; i < arraysize(ps_mtrl__difftex_); ++i) {
+    if (ps_mtrl__difftex_[i].get() == NULL) { break; }
+    renderer->UseTexture(azer::kPixelStage, i + 0, ps_mtrl__difftex_[i].get());
+  }
 }

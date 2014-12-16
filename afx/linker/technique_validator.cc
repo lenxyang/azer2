@@ -109,10 +109,27 @@ bool TechniqueValidator::ValidGeometryShader(Technique::StageInfo* shader) {
 }
 
 SymbolNode* GetGSEmitVariable(Technique::StageInfo* shader) {
+  return GetGSEmitVariable(shader->entry);
+}
+
+SymbolNode* GetGSEmitVariable(ASTNode* node)  {
   EmitVariableFinder finder;
-  shader->entry->traverse(&finder);
+  node->traverse(&finder);
   CHECK_EQ(finder.GetEmitVariable()->size(), 1u);
   return finder.GetEmitVariable()->at(0);
+}
+
+SymbolNode* GetGSEmitVariableUpstream(ASTNode* node) {
+  ASTNode* cur = node;
+  while (cur && !cur->IsFuncDefNode()) {
+    cur = cur->parent();
+  }
+  if (cur && cur->attributes()
+      && cur->attributes()->GetAttrValue(AttrNames::kGeometryShaderEntry) == "true") {
+    return GetGSEmitVariable(cur);
+  } else {
+    return NULL;
+  }
 }
 }  // namespace afx
 }  // namespace azer

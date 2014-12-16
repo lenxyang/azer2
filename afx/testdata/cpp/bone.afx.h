@@ -3,8 +3,10 @@
  * dont edit by hande
  */
 #pragma once
+
 #include "azer/render/render.h"
 #include "azer/math/math.h"
+
 
 
 class HaredwareSkinnedMeshEffect: public azer::Effect {
@@ -15,6 +17,7 @@ class HaredwareSkinnedMeshEffect: public azer::Effect {
    * uniform buffer
    */
   #pragma pack(push, 4)
+
   struct vs_cbuffer {
     azer::Matrix4 bone[100];
     azer::Matrix4 world;
@@ -69,7 +72,6 @@ class HaredwareSkinnedMeshEffect: public azer::Effect {
   void Init();
   void InitTechnique();
   virtual void UseTexture(azer::Renderer* renderer) override;
-  virtual void SetMaterial(azer::MaterialPtr material) override;
   const std::vector<std::string>& sources_;
 
   azer::TexturePtr ps_tex_;

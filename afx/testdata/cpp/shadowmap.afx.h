@@ -9,10 +9,10 @@
 
 
 
-class PoingLightEffect: public azer::Effect {
+class DiffuseEffect: public azer::Effect {
  public:
-  PoingLightEffect(const std::vector<std::string>& sources, azer::RenderSystem* rs);
-  ~PoingLightEffect();
+  DiffuseEffect(const std::vector<std::string>& sources, azer::RenderSystem* rs);
+  ~DiffuseEffect();
  /**
    * uniform buffer
    */
@@ -20,16 +20,7 @@ class PoingLightEffect: public azer::Effect {
 
   struct vs_cbuffer {
     azer::Matrix4 pvw;
-    azer::Matrix4 world;
-  };
-  struct PointLight{
-    azer::Vector4 direction;
-    azer::Vector4 diffuse;
-  };
-
-  struct ps_cbuffer {
-    azer::Vector4 diffuse;
-    PointLight light;
+    azer::Matrix4 shadowmap_pvw;
   };
   #pragma pack(pop)
 
@@ -38,20 +29,13 @@ class PoingLightEffect: public azer::Effect {
     DCHECK(tb != NULL);
     tb->SetValue(0, &value, sizeof(azer::Matrix4));
   }
-  void SetWorld(const azer::Matrix4& value) {
+  void SetShadowPVW(const azer::Matrix4& value) {
     azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(1, &value, sizeof(azer::Matrix4));
   }
-  void SetDiffuse(const azer::Vector4& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kPixelStage].get();
-    DCHECK(tb != NULL);
-    tb->SetValue(0, &value, sizeof(azer::Vector4));
-  }
-  void SetPointLight(const PointLight& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kPixelStage].get();
-    DCHECK(tb != NULL);
-    tb->SetValue(1, &value, sizeof(PointLight));
+  void SetShadowmapTexture(const azer::TexturePtr& texture) {
+    ps_shadowmap_tex_ = texture;
   }
 
 
@@ -60,14 +44,10 @@ class PoingLightEffect: public azer::Effect {
   * input of Vertex Shader
   */
   struct Vertex {
-    azer::Vector4 position;
-    azer::Vector2 coordtex;
-    azer::Vector4 normal;
+    azer::Vector3 position;
     Vertex(){}
-    Vertex(const azer::Vector4 p0, const azer::Vector2 p1, const azer::Vector4 p2)
+    Vertex(const azer::Vector3 p0)
       : position(p0)
-      , coordtex(p1)
-      , normal(p2)
       {}
   };
 
@@ -80,7 +60,8 @@ class PoingLightEffect: public azer::Effect {
   virtual void UseTexture(azer::Renderer* renderer) override;
   const std::vector<std::string>& sources_;
 
+  azer::TexturePtr ps_shadowmap_tex_;
 
   azer::VertexDescPtr vertex_desc_ptr_;
-  DISALLOW_COPY_AND_ASSIGN(PoingLightEffect);
+  DISALLOW_COPY_AND_ASSIGN(DiffuseEffect);
 };

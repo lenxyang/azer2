@@ -57,8 +57,8 @@ TEST(AfxCppCodeGen, Material) {
   azer::afx::CppCodeGen cppcodegen;
   cppcodegen.GenCode(*technique);
 
-  ::base::FilePath hpppath(AZER_LITERAL("azer/afx/testdata/cpp/mtrl.h"));
-  ::base::FilePath cpppath(AZER_LITERAL("azer/afx/testdata/cpp/mtrl.cc"));
+  ::base::FilePath hpppath(AZER_LITERAL("azer/afx/testdata/cpp/mtrl.afx.h"));
+  ::base::FilePath cpppath(AZER_LITERAL("azer/afx/testdata/cpp/mtrl.afx.cc"));
   ASSERT_TRUE(CompareCode(hpppath, cppcodegen.GetHeadCode()));
   ASSERT_TRUE(CompareCode(cpppath, cppcodegen.GetCppCode()));
 }

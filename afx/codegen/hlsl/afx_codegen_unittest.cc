@@ -52,7 +52,7 @@ TEST(HLSLAfxCodegen, EffectVertex) {
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLVSAfxCodegen codegen;
-  ASSERT_EQ(codegen.GenCode(azer::kVertexStage, shader), expect);
+  ASSERT_EQ(codegen.GenCode(shader), expect);
   // LOG(ERROR) << codegen.GenCode(shader);
 }
 
@@ -85,7 +85,7 @@ TEST(HLSLAfxCodegen, EffectPixel) {
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLPSAfxCodegen codegen;
-  ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
+  ASSERT_EQ(codegen.GenCode(shader), expect);
 }
 
 TEST(HLSLAfxCodegen, EffectPixelWithSampler) {
@@ -132,7 +132,7 @@ TEST(HLSLAfxCodegen, EffectPixelWithSampler) {
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLPSAfxCodegen codegen;
-  ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
+  ASSERT_EQ(codegen.GenCode(shader), expect);
 }
 
 TEST(HLSLAfxCodegen, TextureAsParameter) {
@@ -182,7 +182,7 @@ TEST(HLSLAfxCodegen, TextureInStructure) {
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLPSAfxCodegen codegen;
-  ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
+  ASSERT_EQ(codegen.GenCode(shader), expect);
 }
 
 TEST(HLSLAfxCodegen, LineEffect) {
@@ -219,7 +219,7 @@ TEST(HLSLAfxCodegen, LineEffect) {
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLPSAfxCodegen codegen;
-  ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
+  ASSERT_EQ(codegen.GenCode(shader), expect);
 }
 
 TEST(HLSLAfxCodegen, Shadowmap) {
@@ -258,6 +258,6 @@ TEST(HLSLAfxCodegen, Shadowmap) {
   ASSERT_TRUE(shader.entry != NULL);
 
   HLSLPSAfxCodegen codegen;
-  ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
+  ASSERT_EQ(codegen.GenCode(shader), expect);
 }
 

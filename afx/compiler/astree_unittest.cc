@@ -6,7 +6,7 @@
 using azer::afx::ASTNode;
 using azer::afx::ASTNodeVec;
 
-TEST(ASTree, Expression1) {
+TEST(ASTree, Expression) {
   const std::string str =
       "void psmain() {\n"
       "  int a = 0;\n"
@@ -20,7 +20,7 @@ TEST(ASTree, Expression1) {
   azer::afx::ParseContext context(AFXL(""), "", str, &factory, opt);
   azer::afx::Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
-  DumpASTree(&context, std::cout);
+  // DumpASTree(&context, std::cout);
 }
 
 TEST(ASTree, StructureDecl) {

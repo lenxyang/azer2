@@ -313,8 +313,8 @@ TEST(AfxParser, Texture) {
       "uniform Texture3D samp3d;\n"
       ;
   ParseContext::Options opt;
-  opt.dump_parser = true;
-  opt.dump_tokenizer = true;
+  // opt.dump_parser = true;
+  // opt.dump_tokenizer = true;
   ASTNodeFactory factory;
   ParseContext context(AFXL(""), "", str, &factory, opt);
   Parser parser;
@@ -349,6 +349,7 @@ TEST(AfxParser, FunctionDefiniation) {
   ParseContext context(AFXL(""), "", str, &factory, opt);
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
+  DumpASTree(&context, std::cout);
 }
 
 TEST(AfxParser, FuncCall) {

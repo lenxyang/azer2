@@ -304,6 +304,27 @@ class PSDeclarationNodeHLSLCodeGen : public DeclarationNodeHLSLCodeGen {
   DISALLOW_COPY_AND_ASSIGN(PSDeclarationNodeHLSLCodeGen);
 };
 
+// for geometry stage
+class GSFuncProtoNodeHLSLCodeGen : public FuncProtoNodeHLSLCodeGen {
+ public:
+  GSFuncProtoNodeHLSLCodeGen(ASTNode* node) : FuncProtoNodeHLSLCodeGen(node) {}
+
+  virtual bool GenCodeBegin(std::string* code) override;
+ private:
+  DISALLOW_COPY_AND_ASSIGN(GSFuncProtoNodeHLSLCodeGen);
+};
+
+class GSFuncCallNodeHLSLCodeGen : public FuncCallNodeHLSLCodeGen {
+ public:
+  GSFuncCallNodeHLSLCodeGen(ASTNode* node) : FuncCallNodeHLSLCodeGen(node) {}
+  
+  virtual bool GenCodeBegin(std::string* code) override;
+  virtual void GenCodeEnd(std::string* code) override {}
+ private:
+  DISALLOW_COPY_AND_ASSIGN(GSFuncCallNodeHLSLCodeGen);
+};
+
+// factory
 class HLSLCodeGeneratorFactory : public CodeGeneratorFactory {
  public:
   virtual ~HLSLCodeGeneratorFactory();
@@ -319,6 +340,21 @@ class HLSLPSCodeGeneratorFactory : public HLSLCodeGeneratorFactory {
       ASTCodeGenerator* gen = new PSDeclarationNodeHLSLCodeGen(node);
       allocated_.push_back(gen);
       return gen;
+    } else {
+      return HLSLCodeGeneratorFactory::CreateCodeGen(node);
+    }
+  }
+};
+
+class HLSLGSCodeGeneratorFactory : public HLSLCodeGeneratorFactory {
+ public:
+  virtual ASTCodeGenerator* CreateCodeGen(ASTNode* node) override {
+    if (node->IsFuncProtoNode()) {
+      allocated_.push_back(new GSFuncProtoNodeHLSLCodeGen(node));
+      return allocated_.back();
+    } else if (node->IsFuncCallNode()) {
+      allocated_.push_back(new GSFuncCallNodeHLSLCodeGen(node));
+      return allocated_.back();
     } else {
       return HLSLCodeGeneratorFactory::CreateCodeGen(node);
     }

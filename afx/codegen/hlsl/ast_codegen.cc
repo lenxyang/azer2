@@ -12,6 +12,8 @@
 #include "azer/afx/compiler/astutil.h"
 #include "azer/afx/compiler/context.h"
 #include "azer/afx/compiler/expression_validator.h"
+#include "azer/afx/linker/attribute_name.h"
+#include "azer/afx/linker/technique_validator.h"
 
 namespace azer {
 namespace afx {
@@ -28,6 +30,8 @@ namespace {
 bool NeedBraceForOp(ASTNode* node);
 std::string MapBuiltInFunc(const std::string& name);
 std::string DumpParamList(FuncCallNode* func, int start);
+
+std::string HLSLGSStreamType(const std::string& str);
 
 /**
  * ´øÓÐ sampler ¼ì²é
@@ -339,6 +343,26 @@ std::string FuncCallNodeHLSLCodeGen::GenCodeForSample() {
   return ss.str();
 }
 
+bool GSFuncCallNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
+  TRACE();
+  std::stringstream ss;
+  DCHECK(node()->GetContext());
+  FuncCallNode* func = node()->ToFuncCallNode();
+  if (func->IsBuiltIn()) {
+    if (func->funcname() == "emit_vertex") {
+      SymbolNode* symbol = GetGSEmitVariableUpstream(node());
+      ss << "gs_ostream.Append(" << symbol->symbolname() << ")";
+      *code = ss.str();
+      return false;
+    } else if (func->funcname() == "end_primitive") {
+      ss << "gs_ostream.RestartStrip()";
+      *code = ss.str();
+      return false;
+    }
+  } 
+  return FuncCallNodeHLSLCodeGen::GenCodeBegin(code);
+}
+
 bool FuncCallTypeInitNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
   TRACE();
 
@@ -392,6 +416,34 @@ void FuncProtoNodeHLSLCodeGen::GenCodeEnd(std::string* code) {
     AttributesNode* attrnode = func->attributes();
     code->append(std::move(AttributeSupfix("", attrnode)));
     code->append(" ");
+  }
+}
+
+// class FuncProtoNodeHLSLCodeGen
+bool GSFuncProtoNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
+  if (!node()->parent()->IsFuncDefNode()) {
+    return FuncProtoNodeHLSLCodeGen::GenCodeBegin(code);
+  }
+
+  AttributesNode* attr = node()->parent()->attributes();
+  FuncProtoNode* func = node()->ToFuncProtoNode();
+  if (attr && attr->GetAttrValue(AttrNames::kGeometryShaderEntry) == "true") {
+    std::stringstream ss;
+    for (auto iter = func->GetParams().begin();
+         iter != func->GetParams().end(); ++iter) {
+      DCHECK((*iter)->IsParamNode());
+      ParamNode* param = (*iter)->ToParamNode();
+      ss << HLSLDumpFullType(param->GetTypedNode()) << " " << param->paramname();
+      ss << ", ";
+      CHECK(!param->GetType()->IsTexture());
+    }
+
+    std::string primitive_type = attr->GetAttrValue(AttrNames::kGSPrimitiveType);
+    ss << "inout " << HLSLGSStreamType(primitive_type) <<"<" << "> gs_ostream)";
+    *code = ss.str();
+    return false;
+  } else {
+    return FuncProtoNodeHLSLCodeGen::GenCodeBegin(code);
   }
 }
 
@@ -502,6 +554,7 @@ bool StatementNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
   TRACE();
   return true;
 }
+
 void StatementNodeHLSLCodeGen::GenCodeEnd(std::string* code) {
   TRACE();
   ASTNode* first = node()->first_child();
@@ -789,6 +842,18 @@ std::string DumpParamList(FuncCallNode* func, int start) {
   return ss.str();
 }
 
+std::string HLSLGSStreamType(const std::string& str) {
+  if (str == "point") {
+    return "PointStream";
+  } else if (str == "line") {
+    return "LineStream";
+  } else if (str == "triangle") {
+    return "TriangleStream";
+  } else {
+    NOTREACHED();
+    return "";
+  }
+}
 }  // naemsapce
 }  // namespace afx
 }  // namespace azer
