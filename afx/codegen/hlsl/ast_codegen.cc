@@ -156,17 +156,33 @@ bool DeclarationNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
   DCHECK_EQ(node()->type(), ASTNode::kDeclarationNode);
   DeclarationNode* decl = node()->ToDeclarationNode();
 
-  if (!decl->GetType()->IsTexture()) {
-    std::stringstream ss;
-    ss << HLSLDumpFullType(decl->GetTypedNode()) << " ";
-    *code = ss.str();
-    return true;
+  std::stringstream ss;
+  ss << HLSLDumpFullType(decl->GetTypedNode()) << " ";
+  *code = ss.str();
+  return true;
+}
+
+void DeclarationNodeHLSLCodeGen::GenCodeEnd(std::string* code) {
+  if (node()->parent()->IsScopedNode() && node()->parent()->parent() == NULL) {
+    code->append(";");
+  }
+  TRACE();
+}
+
+
+// ps declaration
+bool PSDeclarationNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
+  DCHECK_EQ(node()->type(), ASTNode::kDeclarationNode);
+  DeclarationNode* decl = node()->ToDeclarationNode();
+  if (decl->GetType()->IsTexture()) {
+    GenCodeForTexture(code);
+    return false;
   } else {
-    return GenCodeForTexture(code);
+    return DeclarationNodeHLSLCodeGen::GenCodeBegin(code);
   }
 }
 
-bool DeclarationNodeHLSLCodeGen::GenCodeForTexture(std::string* code) {
+bool PSDeclarationNodeHLSLCodeGen::GenCodeForTexture(std::string* code) {
   std::stringstream ss;
   ASTNode* cur = node()->first_child();
   DeclarationNode* decl = node()->ToDeclarationNode();
@@ -190,13 +206,6 @@ bool DeclarationNodeHLSLCodeGen::GenCodeForTexture(std::string* code) {
 
   *code = ss.str();
   return false;
-}
-
-void DeclarationNodeHLSLCodeGen::GenCodeEnd(std::string* code) {
-  if (node()->parent()->IsScopedNode() && node()->parent()->parent() == NULL) {
-    code->append(";");
-  }
-  TRACE();
 }
 
 // class FieldNodeHLSLCodeGen

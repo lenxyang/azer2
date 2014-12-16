@@ -31,6 +31,15 @@ bool IsConstBufferMember(ASTNode* node) {
   }
 }
 }  // namespace
+
+HLSLAfxCodegen::HLSLAfxCodegen() 
+    : stage_(kStageNotSpec) {
+}
+
+HLSLAfxCodegen::~HLSLAfxCodegen() {
+  delete factory_;
+}
+
 std::string HLSLAfxCodegen::GenDeps(const Technique::StageInfo& shader,
                                 bool comments) {
   std::stringstream ss;
@@ -112,7 +121,7 @@ std::string HLSLAfxCodegen::GenCode(RenderPipelineStage stage,
 }
 
 std::string HLSLAfxCodegen::GenEntry(ASTNode* node, bool comments) {
-  SnippetCodeGenerator generator(&factory_);
+  SnippetCodeGenerator generator(factory_);
   DCHECK(node);
   generator.GenCode(node);
   return std::move(generator.GetCode());
@@ -145,7 +154,7 @@ std::string HLSLAfxCodegen::GenUniform(const std::vector<ASTNode*> &uniforms,
       continue;
     }
     DCHECK (!decl->GetType()->IsTexture());
-    SnippetCodeGenerator generator(&factory_);
+    SnippetCodeGenerator generator(factory_);
     generator.GenCode(decl);
     ss << std::move(generator.GetCode());
   }
@@ -160,7 +169,7 @@ std::string HLSLAfxCodegen::GenDepend(ASTNode* node, bool comments) {
        << "// which defined in file:\n"
        << "//   " << node->GetContext()->path().value() << "\n";
   }
-  SnippetCodeGenerator generator(&factory_);
+  SnippetCodeGenerator generator(factory_);
   generator.GenCode(node);
   ss << std::move(generator.GetCode());
   if (node->IsStructDeclNode()) {
@@ -185,11 +194,18 @@ std::string HLSLAfxCodegen::GenUniDepend(ASTNode* node, bool comments) {
        << "// which defined in file:\n"
        << "//   " << node->GetContext()->path().value() << "\n";
   }
-  SnippetCodeGenerator generator(&factory_);
+  SnippetCodeGenerator generator(factory_);
   generator.GenCode(node);
   ss << std::move(generator.GetCode());
   return ss.str();
 }
 
+HLSLVSAfxCodegen::HLSLVSAfxCodegen() {
+  factory_ = new HLSLCodeGeneratorFactory;
+}
+
+HLSLPSAfxCodegen::HLSLPSAfxCodegen() {
+  factory_ = new HLSLPSCodeGeneratorFactory;
+}
 }  // namespace afx
 }  // namespace azer

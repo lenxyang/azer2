@@ -7,13 +7,8 @@
 
 namespace azer {
 namespace afx {
-class HLSLCodeGeneratorFactory : public CodeGeneratorFactory {
- public:
-  virtual ~HLSLCodeGeneratorFactory();
-  virtual ASTCodeGenerator* CreateCodeGen(ASTNode* node) override;
- private:
-  std::vector<ASTCodeGenerator*> allocated_;
-};
+
+class HLSLCodeGeneratorFactory;
 
 class AttributesNodeHLSLCodeGen : public ASTCodeGenerator {
  public:
@@ -296,6 +291,38 @@ class WhileLoopNodeHLSLCodeGen : public ASTCodeGenerator {
   virtual void GenCodeEnd(std::string* code) override {};
  private:
   DISALLOW_COPY_AND_ASSIGN(WhileLoopNodeHLSLCodeGen);
+};
+
+// spceifiay for stage
+class PSDeclarationNodeHLSLCodeGen : public DeclarationNodeHLSLCodeGen {
+ public:
+  PSDeclarationNodeHLSLCodeGen(ASTNode* node) : DeclarationNodeHLSLCodeGen(node) {}
+  
+  virtual bool GenCodeBegin(std::string* code) override;
+ private:
+  bool GenCodeForTexture(std::string* code);
+  DISALLOW_COPY_AND_ASSIGN(PSDeclarationNodeHLSLCodeGen);
+};
+
+class HLSLCodeGeneratorFactory : public CodeGeneratorFactory {
+ public:
+  virtual ~HLSLCodeGeneratorFactory();
+  virtual ASTCodeGenerator* CreateCodeGen(ASTNode* node) override;
+ protected:
+  std::vector<ASTCodeGenerator*> allocated_;
+};
+
+class HLSLPSCodeGeneratorFactory : public HLSLCodeGeneratorFactory {
+ public:
+  virtual ASTCodeGenerator* CreateCodeGen(ASTNode* node) override {
+    if (node->IsDeclarationNode()) {
+      ASTCodeGenerator* gen = new PSDeclarationNodeHLSLCodeGen(node);
+      allocated_.push_back(gen);
+      return gen;
+    } else {
+      return HLSLCodeGeneratorFactory::CreateCodeGen(node);
+    }
+  }
 };
 }  // namespace afx
 }  // namespace azer

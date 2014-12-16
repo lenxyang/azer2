@@ -19,9 +19,9 @@ class TechniqueLinker;
 class TechniqueValidator {
  public:
   TechniqueValidator(TechniqueLinker* linker);
-  bool Valid(const Technique& technique);
+  bool Valid(Technique* technique);
  private:
-  bool ValidGeometryShader(const Technique::StageInfo& shader);
+  bool ValidGeometryShader(Technique::StageInfo* shader);
 
   TechniqueLinker* linker_;
   DISALLOW_COPY_AND_ASSIGN(TechniqueValidator);
@@ -30,5 +30,7 @@ class TechniqueValidator {
 inline TechniqueValidator::TechniqueValidator(TechniqueLinker* linker)
     : linker_(linker) {
 }
+
+SymbolNode* GetGSEmitVariable(const Technique& tech);
 }  // namespace afx
 }  // namespace azer

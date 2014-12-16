@@ -6,7 +6,8 @@
 
 using azer::afx::AfxFacade;
 using azer::afx::AfxLinker;
-using azer::afx::HLSLAfxCodegen;
+using azer::afx::HLSLPSAfxCodegen;
+using azer::afx::HLSLVSAfxCodegen;
 using azer::afx::ASTreeDumper;
 using azer::afx::FileLoader;
 using azer::afx::ParseContext;
@@ -50,7 +51,7 @@ TEST(HLSLAfxCodegen, EffectVertex) {
   const Technique::StageInfo& shader = technique->shader[azer::kVertexStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  HLSLAfxCodegen codegen;
+  HLSLVSAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kVertexStage, shader), expect);
   // LOG(ERROR) << codegen.GenCode(shader);
 }
@@ -83,7 +84,7 @@ TEST(HLSLAfxCodegen, EffectPixel) {
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  HLSLAfxCodegen codegen;
+  HLSLPSAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 
@@ -130,7 +131,7 @@ TEST(HLSLAfxCodegen, EffectPixelWithSampler) {
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  HLSLAfxCodegen codegen;
+  HLSLPSAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 
@@ -180,7 +181,7 @@ TEST(HLSLAfxCodegen, TextureInStructure) {
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  HLSLAfxCodegen codegen;
+  HLSLPSAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 
@@ -217,7 +218,7 @@ TEST(HLSLAfxCodegen, LineEffect) {
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  HLSLAfxCodegen codegen;
+  HLSLPSAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 
@@ -256,7 +257,7 @@ TEST(HLSLAfxCodegen, Shadowmap) {
   const Technique::StageInfo& shader = technique->shader[azer::kPixelStage];
   ASSERT_TRUE(shader.entry != NULL);
 
-  HLSLAfxCodegen codegen;
+  HLSLPSAfxCodegen codegen;
   ASSERT_EQ(codegen.GenCode(azer::kPixelStage, shader), expect);
 }
 

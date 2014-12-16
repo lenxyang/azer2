@@ -5,9 +5,18 @@
 
 namespace azer {
 namespace afx {
-AfxCodegen* AfxCodegen::Create(const std::string& target_lan) {
+AfxCodegen* AfxCodegen::Create(const std::string& target_lan,
+                               RenderPipelineStage stage) {
   if (target_lan == "hlsl") {
-    return new HLSLAfxCodegen();
+    switch (stage) {
+      case kVertexStage:
+        return new HLSLVSAfxCodegen();
+      case kPixelStage:
+        return new HLSLPSAfxCodegen();
+      default:
+        NOTREACHED() << "unsupport";
+        return NULL;
+    }
   } else {
     CHECK(false) << "unsupport target language \"" << target_lan << "\"";
     return NULL;

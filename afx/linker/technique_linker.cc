@@ -52,7 +52,7 @@ bool TechniqueLinker::GenTechnique(AttributesNode* node, ParseContext* context) 
   technique.name = name;
   CalcFuncDeps(&technique);
   TechniqueValidator validator(this);
-  if (validator.Valid(technique)) {
+  if (validator.Valid(&technique)) {
     techniques_.insert(std::make_pair(name, technique));
     return true;
   } else {

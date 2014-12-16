@@ -64,6 +64,9 @@ const std::string g_builtin_str =
     "float pow(float v1, float v2) {}\n"
     "vec3 lerp(vec3 v1, vec3 v2, float s) {}\n"
     "vec4 lerp(vec4 v1, vec4 v2, float s) {}\n"
+    // gs only
+    "void emit_vertex() {}\n"
+    "void end_primitive() {}\n"
     ;
 }  // namespace
 

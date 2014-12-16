@@ -22,7 +22,8 @@ class AfxCodegen {
                               const Technique::StageInfo& shader,
                               bool comments = false) = 0;
 
-  static AfxCodegen* Create(const std::string& target_lan);
+  static AfxCodegen* Create(const std::string& target_lan,
+                            RenderPipelineStage stage);
 };
 
 }  // namespace afx

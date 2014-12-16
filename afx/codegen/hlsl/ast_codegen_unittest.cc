@@ -11,7 +11,7 @@ using azer::afx::ParseContext;
 using azer::afx::Parser;
 using azer::afx::CodeGenerator;
 using azer::afx::SnippetCodeGenerator;
-using azer::afx::HLSLCodeGeneratorFactory;
+using azer::afx::HLSLPSCodeGeneratorFactory;
 
 TEST(HLSLCodeGenerator, Expression) {
   const std::string expect =
@@ -40,7 +40,7 @@ TEST(HLSLCodeGenerator, Expression) {
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -74,7 +74,7 @@ TEST(HLSLCodeGenerator, VariableDecl) {
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -102,7 +102,7 @@ TEST(HLSLCodeGenerator, ArrayMember) {
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -127,7 +127,7 @@ TEST(HLSLCodeGenerator, StructureDecl) {
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect_str);
@@ -156,7 +156,7 @@ TEST(HLSLCodeGenerator, FuncCall) {
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -185,7 +185,7 @@ TEST(HLSLCodeGenerator, IfElse) {
   azer::afx::Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -213,7 +213,7 @@ TEST(HLSLCodeGenerator, While) {
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -240,7 +240,7 @@ TEST(HLSLCodeGenerator, DoWhile) {
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -276,7 +276,7 @@ TEST(HLSLCodeGenerator, ForStatement) {
   Parser parser;
   ASSERT_TRUE(parser.Parse(&context));
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -303,7 +303,7 @@ TEST(HLSLCodeGenerator, Texture) {
   EXPECT_TRUE(parser.Parse(&context));
   DUMP_AFXCOMPILE_ERROR(context);
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -334,7 +334,7 @@ TEST(HLSLCodeGenerator, TextureAsParam) {
   EXPECT_TRUE(parser.Parse(&context));
   DUMP_AFXCOMPILE_ERROR(context);
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
@@ -373,7 +373,7 @@ TEST(HLSLCodeGenerator, Material) {
   DUMP_AFXCOMPILE_ERROR(context);
   // DumpASTree(&context, std::cout);
 
-  HLSLCodeGeneratorFactory gen_factory;
+  HLSLPSCodeGeneratorFactory gen_factory;
   SnippetCodeGenerator generator(&gen_factory);
   generator.GenCode(context.root());
   ASSERT_EQ(generator.GetCode(), expect);
