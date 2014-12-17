@@ -769,9 +769,10 @@ parameter_declarator
   const SourceLoc& loc = $2.loc;
   DCHECK($1->IsTypedNode());
   DCHECK($3->IsTypedNode());
-  TypedNode* typednode = $3->ToTypedNode();
-  typednode->SetType($1->ToTypedNode()->GetType());
-  ParamNode* param = CreateParamNode(*$2.identifier, typednode, loc, parseContext);
+  TypedNode* typednode = $1->ToTypedNode();
+  TypedNode* array_typednode = $3->ToTypedNode();
+  array_typednode->SetType(typednode->GetType());
+  ParamNode* param = CreateParamNode(*$2.identifier, array_typednode, loc, parseContext);
   $$ = param;
   delete $2.identifier;
 }

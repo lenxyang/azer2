@@ -112,6 +112,9 @@ class Type {
   Type();
   Type(BasicType type);
   Type(BasicType type, StorageQualifier q);
+  Type(const Type& type);
+
+  Type& operator = (const Type& type);
 
   bool IsStructure() const { return type_ == kStructure;}
   bool IsAnomyousStruct() const { return struct_name_.empty();}
@@ -143,7 +146,6 @@ class Type {
    */
   std::string struct_name_;
   std::vector<int> dim_;
-  DISALLOW_COPY_AND_ASSIGN(Type);
 };
 
 inline void Type::SetType(BasicType t) {

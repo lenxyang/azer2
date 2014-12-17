@@ -177,7 +177,13 @@ void ConstNode::SetString(const std::string& str) {
 // class ExpressionNode
 ExpressionNode::ExpressionNode(const std::string& source,
                                const SourceLoc& loc, ASTNodeType type)
-    : ASTNode(source, loc, type) {
+    : ASTNode(source, loc, type)
+    , typed_(NULL) {
+}
+
+void ExpressionNode::SetTypedNode(TypedNode* node) {
+  DCHECK(typed_ == NULL);
+  typed_ = node;
 }
 
 void ExpressionNode::SetResultType(TypePtr ptr) {
@@ -665,7 +671,7 @@ TypedNode::TypedNode(const std::string& source, const SourceLoc& loc)
 
 void TypedNode::SetType(TypePtr type) {
   DCHECK(type_.get() == NULL);
-  type_.reset(new Type(type->type(), type->storage_qualifier()));;
+  type_.reset(new Type(*type.get()));
 }
 
 void TypedNode::SetBasicType(BasicType type) {

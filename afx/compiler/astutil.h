@@ -46,5 +46,16 @@ bool IsNodeTypeTexture(ASTNode* node);
 
 bool HasTextureField(ASTNode* field);
 bool HasOnlyTextureField(ASTNode* node);
+
+ScopedNode* GetScopedNode(ASTNode* node);
+
+StructDeclNode* GetStructDecl(const std::string& name, ParseContext* context);
+
+/**
+ * 如果 typed 是一个 struct, ApplyTypedNodeDecl 帮助寻找 struct 的声明节点
+ * 并将信息保存在 TypedNode 当中
+ */
+bool ApplyTypedNodeDecl(ASTNode* node, TypedNode* typed);
+bool ApplyRefSymbolNodeSymbol(RefSymbolNode* node);
 }  // namespace afx
 }  // namespace azer

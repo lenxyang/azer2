@@ -114,17 +114,7 @@ bool ContextValidator::LookupField(ASTNode* node, FieldNode* field) {
 }
 
 bool ContextValidator::LookupTypeDecl(ASTNode* node, TypedNode* typed) {
-  TypePtr& type = typed->GetType();
-  if (!type->IsStructure()) return true;
-  if (type->IsAnomyousStruct()) return true;
-
-  const std::string& type_name = type->struct_name();
-  ASTNode* tmp = context_->LookupType(type_name);
-  if (tmp != NULL) {
-    DCHECK(tmp->IsStructDeclNode());
-    StructDeclNode* decl = tmp->ToStructDeclNode();
-    typed->SetStructDecl(decl);
-
+  if (ApplyTypedNodeDecl(node, typed)) {
     return true;
   } else {
     std::stringstream ss;
@@ -135,22 +125,14 @@ bool ContextValidator::LookupTypeDecl(ASTNode* node, TypedNode* typed) {
 }
 
 bool ContextValidator::LookupSymbolDecl(RefSymbolNode* node) {
-  DCHECK_EQ(node->type(), ASTNode::kRefSymbolNode);
-  ScopedNode* scoped = GetScopedNode(node);
-  ASTNode* decl_node = scoped->LookupSymbol(node->symbolname());
-  if (decl_node == NULL) {
+  if (ApplyRefSymbolNodeSymbol(node)) {
+    return true;
+  } else {
     std::stringstream ss;
     ss << "symbol \"" << node->symbolname() << "\" not declared.";
     ReportError(node, ss.str());
     return false;
   }
-
-  if (node->GetDeclNode() == NULL) {
-    node->SetDeclNode((SymbolNode*)decl_node);
-  } else {
-    CHECK_EQ(decl_node, node->GetDeclNode());
-  }
-  return true;
 }
 
 bool ContextValidator::LookupFunctionDecl(FuncCallNode* node) {
@@ -185,22 +167,6 @@ bool ContextValidator::AddSymbolToScoped(SymbolNode* node) {
     scoped->RegisteSymbol(node);
     return true;
   }
-}
-
-/**
- * get the scoped node
- * for lookup symbol or registe symbol
- */
-ScopedNode* ContextValidator::GetScopedNode(ASTNode* node) {
-  ASTNode* cur = node;
-  while (cur->type() != ASTNode::kScopedNode) {
-    cur = cur->parent();
-    CHECK(cur != NULL);
-  }
-
-  DCHECK(cur != NULL);
-  DCHECK_EQ(cur->type(), ASTNode::kScopedNode);
-  return (ScopedNode*)cur;
 }
 
 bool ContextValidator::ValidUniformDeclarationNode(DeclarationNode* decl) {

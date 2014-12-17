@@ -17,6 +17,8 @@ bool IsIntegerScalar(const Type* type) {
 }
 bool IsReal(const TypePtr& type);
 BasicType GetSwizzleType(const std::string& fieldname);
+TypePtr GetStructFieldType(const std::string& fieldname, 
+                           const std::string& structname, ParseContext* ctx);
 }  // namespace
 
 bool ExpressionValidator::Valid(ASTNode* node) {
@@ -296,8 +298,8 @@ void ExpressionValidator::CalcBinaryOperType(BinaryOpNode* node) {
       if (ptr->IsArray()) {
         DCHECK_GT(ptr->GetDimVec().size(), 0);
         TypePtr newtype(new Type(ptr->type()));
-        for (int i = 0; i < ptr->GetDimVec().size() - 1; ++i) {
-          newtype->PushDim(ptr->GetDim(i));
+        if (ptr->IsStructure()) {
+          newtype->SetStructName(ptr->struct_name());
         }
         v = Value(newtype);
       } else if (ptr->IsVector()) { 
@@ -315,6 +317,7 @@ void ExpressionValidator::CalcBinaryOperType(BinaryOpNode* node) {
       DCHECK(oper2->IsFieldNode());
       FieldNode* field = oper2->ToFieldNode();
       if (oper1->IsExpressionNode()) {
+        ExpressionNode* expnode = node->ToExpressionNode();
         TypePtr ptr = oper1->ToExpressionNode()->GetResultType();
         DCHECK(ptr.get() != NULL);
         if (ptr->IsVector()) {
@@ -322,6 +325,18 @@ void ExpressionValidator::CalcBinaryOperType(BinaryOpNode* node) {
             v = Value(GetSwizzleType(field->fieldname()));
           } else {
             v = Value();
+          }
+        } else if (ptr->IsStructure()) {
+          TypePtr ftype = GetStructFieldType(field->fieldname(), 
+                                             ptr->struct_name(), 
+                                             node->GetContext());
+          if (ftype.get() == NULL) {
+            std::stringstream ss;
+            ss << "struct \"" << ptr->struct_name() << "\""
+              << " has no field named \"" << field->fieldname() << "\"";
+            ReportError(ss.str(), node); 
+          } else {
+            v = Value(ftype);
           }
         } else {
           v = Value();
@@ -337,8 +352,8 @@ void ExpressionValidator::CalcBinaryOperType(BinaryOpNode* node) {
           FieldNode* decl_field = decl->GetField(field->fieldname());
           if (decl_field == NULL) {
             std::stringstream ss;
-            ss << "struct \"" << symtype->GetStructDecl()->struct_name() << "\""
-              << " has no field named \"" << field->fieldname() << "\"";
+            ss << "struct \"" << decl->struct_name() << "\""
+               << " has no field named \"" << field->fieldname() << "\"";
             ReportError(ss.str(), node); 
           } else {
             v = Value(decl_field->GetType());
@@ -545,6 +560,21 @@ BasicType GetSwizzleType(const std::string& fieldname) {
     case 4: return kVector4;
     default:
       NOTREACHED(); return kFloat;
+  }
+}
+
+TypePtr GetStructFieldType(const std::string& fieldname, 
+                           const std::string& structname, ParseContext* ctx) {
+  StructDeclNode* decl = GetStructDecl(structname, ctx);
+  if (decl == NULL) {
+    return TypePtr();
+  }
+
+  FieldNode* decl_field = decl->GetField(fieldname);
+  if (decl_field) {
+    return decl_field->GetType();
+  } else {
+    return TypePtr();
   }
 }
 }

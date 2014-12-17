@@ -47,7 +47,6 @@ class ContextValidator {
    * uniform 类型的变量声明时，只能有一个变量，不能是多个
    */
   bool ValidUniformDeclarationNode(DeclarationNode* decl);
-  ScopedNode* GetScopedNode(ASTNode* node);
   ParseContext* context_;
   bool failed_;
   DISALLOW_COPY_AND_ASSIGN(ContextValidator);

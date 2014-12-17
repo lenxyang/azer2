@@ -107,6 +107,20 @@ Type::Type(BasicType type, StorageQualifier q)
     : type_(type), storage_qualifier_(q) {
 }
 
+Type::Type(const Type& type) {
+  *this = type;
+}
+
+Type& Type::operator = (const Type& type) {
+  this->struct_name_ = type.struct_name_;
+  this->storage_qualifier_ = type.storage_qualifier_;
+  this->type_ = type.type_;
+  for (auto iter = type.dim_.begin(); iter != type.dim_.end(); ++iter) {
+    dim_.push_back(*iter);
+  }
+  return *this;
+}
+
 uint32 BasicTypeSize(BasicType type) {
   switch (type) {
     case kChar: return 1;

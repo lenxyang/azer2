@@ -224,15 +224,18 @@ class ExpressionNode : public ASTNode {
   virtual bool IsExpressionNode() override { return true;}
   virtual ExpressionNode* ToExpressionNode() { return this;}
 
+  void SetTypedNode(TypedNode* typed);
   void SetResultType(TypePtr ptr);
   TypePtr& GetResultType();
   const TypePtr& GetResultType() const;
 
+  TypedNode* GetTypedNode() { return typed_;}
   void SetValue(const Value& value);
   ValuePtr& value() { return value_;}
   const ValuePtr& value() const { return value_;}
  protected:
   ValuePtr value_;
+  TypedNode* typed_;
   DISALLOW_COPY_AND_ASSIGN(ExpressionNode);
 };
 
@@ -253,7 +256,6 @@ class BinaryOpNode : public ExpressionNode {
   ASTNode* GetOper2() { return oper2_;}
   Operator GetOperator() const { return op_;}
  private:
-
   Operator op_;
   ASTNode *oper1_, *oper2_;
   DISALLOW_COPY_AND_ASSIGN(BinaryOpNode);
@@ -731,7 +733,8 @@ class ActParamNode : public SymbolNode {
 /**
  * 当符号声明是具有的类型有此函数记录
  * 此外, 如果是 struct 类型，此函数还将记录结构体声明的节点
- * 如果是数组表达式此函数则记录数组表达式的节点
+ * 如果是数组表达式此函数则记录数组表达式的节点, 在 expression_validator 
+ * 过程中，数组的具体值将被计算并保存在 Type 成员当中
  */
 class TypedNode : public ASTNode {
  public:

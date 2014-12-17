@@ -6,6 +6,14 @@
 namespace azer {
 namespace afx {
 
+TypedNode* CreateTypedNode(ASTNode* node, TypePtr type) {
+  ParseContext* ctx = node->GetContext();
+  TypedNode* typed = ctx->Create(ASTNode::kTypedNode, node->loc())->ToTypedNode();
+  typed->SetType(type);
+  CHECK(ApplyTypedNodeDecl(node, typed));
+  return typed;
+}
+
 ValuePtr GetNodeValue(ASTNode* node) {
   if (node->IsConstNode()) {
     return ValuePtr(node->ToConstNode()->value());
@@ -38,17 +46,22 @@ ValuePtr GetNodeValue(ASTNode* node) {
 
 TypedNode* GetTypedNode(ASTNode* node) {
   if (node->IsConstNode()) {
-    TypedNode* typed = node->GetContext()->Create(ASTNode::kTypedNode,
-                                                  node->loc())->ToTypedNode();
-    typed->SetType(node->ToConstNode()->GetResultType());
-    return typed;
+    ConstNode* cnode = node->ToConstNode();
+    if (!cnode->GetTypedNode()) {
+      TypedNode* typed = CreateTypedNode(node, node->ToConstNode()->GetResultType());
+      cnode->SetTypedNode(typed);
+    }
+    return cnode->GetTypedNode();
   } else if (node->IsFuncCallNode()) {
     FuncCallNode* func = node->ToFuncCallNode();
-    FuncDefNode* funcdef = func->GetFuncDefNode();
-    DCHECK(funcdef != NULL);
-    FuncProtoNode* proto = funcdef->GetProtoNode();
-    DCHECK(proto != NULL);
-    return proto->rettype();
+    if (!func->GetTypedNode()) {
+      FuncDefNode* funcdef = func->GetFuncDefNode();
+      DCHECK(funcdef != NULL);
+      FuncProtoNode* proto = funcdef->GetProtoNode();
+      DCHECK(proto != NULL);
+      func->SetTypedNode(proto->rettype());
+    }
+    return func->GetTypedNode();
   } else if (node->IsRefSymbolNode()) {
     SymbolNode* symbol = node->ToRefSymbolNode()->GetDeclNode();
     DCHECK(symbol != NULL);
@@ -62,18 +75,11 @@ TypedNode* GetTypedNode(ASTNode* node) {
     }
   } else if (node->IsBinaryOpNode()) {
     BinaryOpNode* binary = node->ToBinaryOpNode();
-    if (binary->GetOperator() == kOpMember
-        || binary->GetOperator() == kOpIndex) {
-      TypedNode* typed = node->GetContext()->Create(ASTNode::kTypedNode,
-                                                    node->loc())->ToTypedNode();
-      typed->SetType(binary->GetResultType());
-      return typed;
-    } else {
-      TypedNode* typed = node->GetContext()->Create(ASTNode::kTypedNode,
-                                                    node->loc())->ToTypedNode();
-      typed->SetType(binary->GetResultType());
-      return typed;
+    if (!binary->GetTypedNode()) {
+      TypedNode* typed = CreateTypedNode(node, binary->GetResultType());
+      binary->SetTypedNode(typed);
     }
+    return binary->GetTypedNode();
   } else {
     NOTREACHED();
     return NULL;
@@ -93,17 +99,14 @@ TypePtr GetNodeType(ASTNode* node) {
     DCHECK(typeinit->GetType().get() != NULL);
     return typeinit->GetType();
   } else if (node->IsFuncCallNode()) {
-    FuncCallNode* call = node->ToFuncCallNode();
-    DCHECK(call->GetFuncDefNode() && call->GetFuncDefNode()->IsFuncDefNode());
-    DCHECK(call->GetFuncDefNode()->GetProtoNode());
-    FuncProtoNode* proto = call->GetFuncDefNode()->GetProtoNode();
-    return proto->rettype()->GetType();
+    TypedNode* typed = GetTypedNode(node);
+    return typed->GetType();
   } else if (node->IsUnaryOpNode()) {
     DCHECK(node->ToUnaryOpNode()->GetResultType().get() != NULL);
     return node->ToUnaryOpNode()->GetResultType();
   } else if (node->IsBinaryOpNode()) {
-    DCHECK(node->ToBinaryOpNode()->GetResultType().get() != NULL);
-    return node->ToBinaryOpNode()->GetResultType();
+    TypedNode* typed = GetTypedNode(node);
+    return typed->GetType();
   } else if (node->IsFieldNode()) {
     return node->ToFieldNode()->GetType();
   } else if (node->IsParamNode()) {
@@ -325,6 +328,64 @@ bool IsTextureArray(ASTNode* node) {
     }
   } else {
     NOTREACHED();
+    return false;
+  }
+}
+
+/**
+ * get the scoped node
+ * for lookup symbol or registe symbol
+ */
+ScopedNode* GetScopedNode(ASTNode* node) {
+  ASTNode* cur = node;
+  while (cur->type() != ASTNode::kScopedNode) {
+    cur = cur->parent();
+    CHECK(cur != NULL);
+  }
+
+  DCHECK(cur != NULL);
+  DCHECK_EQ(cur->type(), ASTNode::kScopedNode);
+  return (ScopedNode*)cur;
+}
+
+StructDeclNode* GetStructDecl(const std::string& struct_name, ParseContext* ctx) {
+  ASTNode* tmp = ctx->LookupType(struct_name);
+  if (tmp != NULL) {
+    DCHECK(tmp->IsStructDeclNode());
+    StructDeclNode* decl = tmp->ToStructDeclNode();
+    return decl;
+  } else {
+    return NULL;
+  }
+}
+bool ApplyRefSymbolNodeSymbol(RefSymbolNode* node) {
+  DCHECK_EQ(node->type(), ASTNode::kRefSymbolNode);
+  ScopedNode* scoped = GetScopedNode(node);
+  ASTNode* decl_node = scoped->LookupSymbol(node->symbolname());
+  if (decl_node == NULL) {
+    return false;
+  }
+
+  if (node->GetDeclNode() == NULL) {
+    node->SetDeclNode((SymbolNode*)decl_node);
+  } else {
+    CHECK_EQ(decl_node, node->GetDeclNode());
+  }
+  return true;
+}
+
+bool ApplyTypedNodeDecl(ASTNode* node, TypedNode* typed) {
+  ParseContext* ctx = node->GetContext();
+  TypePtr& type = typed->GetType();
+  if (!type->IsStructure()) return true;
+  if (type->IsAnomyousStruct()) return true;
+
+  const std::string& type_name = type->struct_name();
+  StructDeclNode* decl = GetStructDecl(type_name, ctx);
+  if (decl != NULL) {
+    typed->SetStructDecl(decl);
+    return true;
+  } else {
     return false;
   }
 }
