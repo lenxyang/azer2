@@ -287,6 +287,7 @@ TEST(AfxParser, AnomoymousStructSymbol) {
 TEST(AfxParser, FunctionDeclaration) {
   const std::string str =
       "struct Light {vec4 position;};\n"
+      "float sum(float a[5]);"
       "void clamp0();"
       "void clamp1(float a);"
       "void clamp2(float a, float b);"

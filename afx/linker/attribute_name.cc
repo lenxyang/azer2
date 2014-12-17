@@ -5,7 +5,8 @@ namespace afx {
 
 const std::string AttrNames::kGSMaxVertexCount = "max_vertex_count";
 const std::string AttrNames::kGSVertexType = "vertex_type";
-const std::string AttrNames::kGSPrimitiveType = "primitive_type";
+const std::string AttrNames::kGSInputPrimitiveType = "input_primitive_type";
+const std::string AttrNames::kGSOutputPrimitiveType = "output_primitive_type";
 const std::string AttrNames::kGSEmitVariable = "gs_emitted";
 
 const std::string AttrNames::kName = "name";

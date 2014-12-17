@@ -45,6 +45,10 @@ class AfxFacade {
   const std::string GetErrorText() const {
     return linker_.GetErrorText();
   }
+
+  const std::string GetTechErrorText() const {
+    return tlinker_.error_text();
+  }
  private:
   bool initializer_;
   FileLoader loader_;

@@ -33,6 +33,7 @@ class EmitVariableFinder : public TreeNode<ASTNode>::Traverser {
   std::vector<SymbolNode*> emit_;
   DISALLOW_COPY_AND_ASSIGN(EmitVariableFinder);
 };
+
 }  // namespace
 
 bool TechniqueValidator::Valid(Technique* tech) {
@@ -78,7 +79,8 @@ bool TechniqueValidator::ValidGeometryShader(Technique::StageInfo* shader) {
   std::string attrs[] = {
     AttrNames::kGSMaxVertexCount,
     AttrNames::kGSVertexType,
-    AttrNames::kGSPrimitiveType,
+    AttrNames::kGSInputPrimitiveType,
+    AttrNames::kGSOutputPrimitiveType,
   };
   for (uint32 i = 0; i < arraysize(attrs); ++i) {
     if (!attr->HasAttr(attrs[i])) {
@@ -87,6 +89,20 @@ bool TechniqueValidator::ValidGeometryShader(Technique::StageInfo* shader) {
       linker_->ReportError(ss.str());
       return false;
     }
+  }
+
+  // entry has only one parameter
+  ASTNode* entry_proto = shader->entry->first_child();
+  while (entry_proto && !entry_proto->IsFuncProtoNode()) {
+    entry_proto = entry_proto->next_sibling();
+  }
+  
+  if (!entry_proto) {
+    linker_->ReportError("geometry shader entry can take only one parameter.");
+    return false;
+  } else if (entry_proto->ToFuncProtoNode()->GetParams().size() != 1u) {
+    linker_->ReportError("geometry shader entry can take only one parameter.");
+    return false;
   }
 
   // check attributes valud

@@ -27,7 +27,7 @@ TEST(StageUnittest, GeometryStage) {
       "float2 texcoord:TEXCOORD;"
       "};"
       "[maxvertexcount(18)]\n"
-      "void gsmain(VSOutput v,inout LineStream<VSOutput> gs_ostream){"
+      "void gsmain(point VSOutput v,inout LineStream<VSOutput> gs_ostream){"
       "VSOutput nv;"
       "gs_ostream.Append(nv);"
       "gs_ostream.RestartStrip();}";

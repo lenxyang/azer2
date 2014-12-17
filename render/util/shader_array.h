@@ -47,6 +47,8 @@ bool AZER_EXPORT LoadVertexShader(const base::FilePath& path, ShaderArray* shade
 bool AZER_EXPORT LoadVertexShader(const std::string& path, ShaderArray* shaders);
 bool AZER_EXPORT LoadPixelShader(const base::FilePath& path, ShaderArray* shaders);
 bool AZER_EXPORT LoadPixelShader(const std::string& path, ShaderArray* shaders);
+bool AZER_EXPORT LoadGeometryShader(const base::FilePath& path, ShaderArray* shaders);
+bool AZER_EXPORT LoadGeometryShader(const std::string& path, ShaderArray* shaders);
 bool AZER_EXPORT LoadForStage(RenderPipelineStage stage, const base::FilePath& path,
                               ShaderArray* shaders);
 }  // namespace azer

@@ -36,6 +36,10 @@ bool AfxWrapper::Parse(const FilePath& path, std::string* err,
     if (!link_err.empty()) {
       ss << path.value() << " link error: " << link_err << std::endl;
     }
+    const std::string& tech_err = facade_->GetTechErrorText();
+    if (!tech_err.empty()) {
+      ss << path.value() << " tech error: " << tech_err << std::endl;
+    }
     *err = ss.str();
     return false;
   }

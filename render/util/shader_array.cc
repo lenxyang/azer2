@@ -19,6 +19,13 @@ bool LoadPixelShader(const base::FilePath& path, ShaderArray* shaders) {
   return LoadForStage(kPixelStage, path, shaders);
 }
 
+bool LoadGeometryShader(const base::FilePath& path, ShaderArray* shaders) {
+  return LoadForStage(kGeometryStage, path, shaders);
+}
+bool LoadGeometryShader(const std::string& path, ShaderArray* shaders) {
+  return LoadGeometryShader(::base::FilePath(base::UTF8ToWide(path)), shaders);
+}
+
 bool LoadForStage(RenderPipelineStage stage, const base::FilePath& path,
                   ShaderArray* shaders) {
   DCHECK(shaders != NULL);

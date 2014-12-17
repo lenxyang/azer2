@@ -33,6 +33,7 @@ std::string DumpParamList(FuncCallNode* func, int start);
 std::string DumpParamProtoList(FuncProtoNode* func);
 
 std::string HLSLGSStreamType(const std::string& str);
+std::string HLSLGSPrimitiveType(const std::string& str);
 
 /**
  * ´øÓÐ sampler ¼ì²é
@@ -419,12 +420,24 @@ bool GSFuncProtoNodeHLSLCodeGen::GenCodeBegin(std::string* code) {
   if (attr && attr->GetAttrValue(AttrNames::kGeometryShaderEntry) == "true") {
     std::stringstream ss;
 
-    ss << HLSLDumpFullType(func->rettype()) << " "
-       << PackagePrefix(node()->GetContext()) << func->funcname()
-       << "(" << DumpParamProtoList(func) << ",";
-    std::string primitive_type = attr->GetAttrValue(AttrNames::kGSPrimitiveType);
+    std::string input_primitive_type =
+        attr->GetAttrValue(AttrNames::kGSInputPrimitiveType);
+    std::string output_primitive_type =
+        attr->GetAttrValue(AttrNames::kGSOutputPrimitiveType);
     std::string vertex_type = attr->GetAttrValue(AttrNames::kGSVertexType);
-    ss << "inout " << HLSLGSStreamType(primitive_type) 
+    CHECK_EQ(func->GetParams().size(), 1u);
+
+    ss << HLSLDumpFullType(func->rettype()) << " "
+       << PackagePrefix(node()->GetContext()) << func->funcname();
+    
+    
+    ParamNode* param = func->GetParams()[0];
+    TypedNode* param1_typed = param->GetTypedNode();
+    ss << "(" << HLSLGSPrimitiveType(input_primitive_type) << " "
+       << HLSLDumpFullType(param1_typed) << " " << param->paramname()
+       << DumpArraySpecifier(param1_typed->GetType()) << ", ";
+    
+    ss << "inout " << HLSLGSStreamType(output_primitive_type) 
        << "<" << vertex_type << "> gs_ostream)";
     *code = ss.str();
     return false;
@@ -852,6 +865,17 @@ std::string HLSLGSStreamType(const std::string& str) {
     return "LineStream";
   } else if (str == "triangle") {
     return "TriangleStream";
+  } else {
+    NOTREACHED();
+    return "";
+  }
+}
+
+std::string HLSLGSPrimitiveType(const std::string& str) {
+  if (str == "point"
+      || str == "line"
+      || str == "triangle") {
+    return str;
   } else {
     NOTREACHED();
     return "";

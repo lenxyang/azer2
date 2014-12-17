@@ -28,7 +28,9 @@ VSOutput vsmain(VSInput input) {
   return o;
 }
 
-[max_vertex_count="18" vertex_type="VSOutput" primitive_type="line"]
+[max_vertex_count="18" vertex_type="VSOutput"
+ input_primitive_type="point"
+ output_primitive_type="line"]
 void gsmain(VSOutput v) {
   gsemit VSOutput nv;
   emit_vertex();

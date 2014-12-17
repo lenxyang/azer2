@@ -12,7 +12,8 @@ class AttrNames {
    */
   static const std::string kGSMaxVertexCount;
   static const std::string kGSVertexType;
-  static const std::string kGSPrimitiveType;
+  static const std::string kGSInputPrimitiveType;
+  static const std::string kGSOutputPrimitiveType;
   static const std::string kGSEmitVariable;
 
   static const std::string kName;

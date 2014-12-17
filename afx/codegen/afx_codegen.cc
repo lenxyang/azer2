@@ -13,6 +13,8 @@ AfxCodegen* AfxCodegen::Create(const std::string& target_lan,
         return new HLSLVSAfxCodegen();
       case kPixelStage:
         return new HLSLPSAfxCodegen();
+	  case kGeometryStage:
+		return new HLSLGSAfxCodegen();
       default:
         NOTREACHED() << "unsupport";
         return NULL;

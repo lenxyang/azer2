@@ -25,6 +25,9 @@ bool AfxFacade::Parse(const std::string& content, const ::base::FilePath& path) 
   }
 
   ParseContext* context = linker_.root()->GetContext();
+  if (!context->success()) {
+	return false;
+  }
   if (!tlinker_.Parse(context)) {
     return false;
   }

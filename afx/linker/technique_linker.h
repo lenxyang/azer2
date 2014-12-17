@@ -23,6 +23,8 @@ class TechniqueLinker {
   typedef std::map<std::string, Technique> TechniqueDict;
   bool GetTechnique(const std::string& name, Technique** technique);
   const TechniqueDict& GetTechniques() const { return techniques_;}
+
+  const std::string& error_text() const { return error_text_;}
  private:
   void CalcFuncDeps(Technique* technique);
   void ReportError(const std::string& errtext);
