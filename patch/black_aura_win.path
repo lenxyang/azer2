@@ -1,0 +1,505 @@
+From 2a00a163f6a0d93f64061e5a22c9dbcc4bf63b11 Mon Sep 17 00:00:00 2001
+From: lenxyang <lenxyang@gmail.com>
+Date: Thu, 18 Dec 2014 11:43:34 +0800
+Subject: [PATCH 1/1] Issue 429408 in chromium: Aura demo shows black window
+
+---
+ ui/aura/demo/demo_main.cc                        | 34 +----------
+ ui/compositor/test/DEPS                          |  1 +
+ ui/compositor/test/in_process_context_factory.cc | 73 +++++++++++++++---------
+ ui/compositor/test/in_process_context_factory.h  | 19 ++----
+ ui/views/examples/examples_main.cc               | 24 +-------
+ 5 files changed, 57 insertions(+), 94 deletions(-)
+
+diff --git a/ui/aura/demo/demo_main.cc b/ui/aura/demo/demo_main.cc
+index 53b87f6..a419cb6 100644
+--- a/ui/aura/demo/demo_main.cc
++++ b/ui/aura/demo/demo_main.cc
+@@ -1,7 +1,6 @@
+ // Copyright (c) 2012 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+-
+ #include "base/at_exit.h"
+ #include "base/command_line.h"
+ #include "base/i18n/icu_util.h"
+@@ -22,27 +21,20 @@
+ #include "ui/gfx/canvas.h"
+ #include "ui/gfx/rect.h"
+ #include "ui/gl/gl_surface.h"
+-
+ #if defined(USE_X11)
+ #include "ui/gfx/x/x11_connection.h"
+ #endif
+-
+ #if defined(OS_WIN)
+ #include "ui/gfx/win/dpi.h"
+ #endif
+-
+ namespace {
+-
+ // Trivial WindowDelegate implementation that draws a colored background.
+ class DemoWindowDelegate : public aura::WindowDelegate {
+  public:
+   explicit DemoWindowDelegate(SkColor color) : color_(color) {}
+-
+   // Overridden from WindowDelegate:
+   gfx::Size GetMinimumSize() const override { return gfx::Size(); }
+-
+   gfx::Size GetMaximumSize() const override { return gfx::Size(); }
+-
+   void OnBoundsChanged(const gfx::Rect& old_bounds,
+                        const gfx::Rect& new_bounds) override {}
+   gfx::NativeCursor GetCursor(const gfx::Point& point) override {
+@@ -67,23 +59,18 @@ class DemoWindowDelegate : public aura::WindowDelegate {
+   void OnWindowTargetVisibilityChanged(bool visible) override {}
+   bool HasHitTestMask() const override { return false; }
+   void GetHitTestMask(gfx::Path* mask) const override {}
+-
+  private:
+   SkColor color_;
+-
+   DISALLOW_COPY_AND_ASSIGN(DemoWindowDelegate);
+ };
+-
+ class DemoWindowTreeClient : public aura::client::WindowTreeClient {
+  public:
+   explicit DemoWindowTreeClient(aura::Window* window) : window_(window) {
+     aura::client::SetWindowTreeClient(window_, this);
+   }
+-
+   ~DemoWindowTreeClient() override {
+     aura::client::SetWindowTreeClient(window_, NULL);
+   }
+-
+   // Overridden from aura::client::WindowTreeClient:
+   aura::Window* GetDefaultParent(aura::Window* context,
+                                  aura::Window* window,
+@@ -94,35 +81,27 @@ class DemoWindowTreeClient : public aura::client::WindowTreeClient {
+     }
+     return window_;
+   }
+-
+  private:
+   aura::Window* window_;
+-
+   scoped_ptr<aura::client::DefaultCaptureClient> capture_client_;
+-
+   DISALLOW_COPY_AND_ASSIGN(DemoWindowTreeClient);
+ };
+-
+ int DemoMain() {
+ #if defined(USE_X11)
+   // This demo uses InProcessContextFactory which uses X on a separate Gpu
+   // thread.
+   gfx::InitializeThreadedX11();
+ #endif
+-
+   gfx::GLSurface::InitializeOneOff();
+-
+ #if defined(OS_WIN)
+   gfx::InitDeviceScaleFactor(1.0f);
+ #endif
+-
+   // The ContextFactory must exist before any Compositors are created.
+   scoped_ptr<ui::InProcessContextFactory> context_factory(
+       new ui::InProcessContextFactory());
+-
++  context_factory->set_use_test_surface(false);
+   // Create the message-loop here before creating the root window.
+   base::MessageLoopForUI message_loop;
+-
+   aura::Env::CreateInstance(true);
+   aura::Env::GetInstance()->set_context_factory(context_factory.get());
+   scoped_ptr<aura::TestScreen> test_screen(
+@@ -134,7 +113,6 @@ int DemoMain() {
+       new DemoWindowTreeClient(host->window()));
+   aura::test::TestFocusClient focus_client;
+   aura::client::SetFocusClient(host->window(), &focus_client);
+-
+   // Create a hierarchy of test windows.
+   DemoWindowDelegate window_delegate1(SK_ColorBLUE);
+   aura::Window window1(&window_delegate1);
+@@ -143,7 +121,6 @@ int DemoMain() {
+   window1.SetBounds(gfx::Rect(100, 100, 400, 400));
+   window1.Show();
+   aura::client::ParentWindowWithContext(&window1, host->window(), gfx::Rect());
+-
+   DemoWindowDelegate window_delegate2(SK_ColorRED);
+   aura::Window window2(&window_delegate2);
+   window2.set_id(2);
+@@ -151,7 +128,6 @@ int DemoMain() {
+   window2.SetBounds(gfx::Rect(200, 200, 350, 350));
+   window2.Show();
+   aura::client::ParentWindowWithContext(&window2, host->window(), gfx::Rect());
+-
+   DemoWindowDelegate window_delegate3(SK_ColorGREEN);
+   aura::Window window3(&window_delegate3);
+   window3.set_id(3);
+@@ -159,22 +135,16 @@ int DemoMain() {
+   window3.SetBounds(gfx::Rect(10, 10, 50, 50));
+   window3.Show();
+   window2.AddChild(&window3);
+-
+   host->Show();
+   base::MessageLoopForUI::current()->Run();
+-
+   return 0;
+ }
+-
+ }  // namespace
+-
+ int main(int argc, char** argv) {
+   CommandLine::Init(argc, argv);
+-
+   // The exit manager is in charge of calling the dtors of singleton objects.
+   base::AtExitManager exit_manager;
+-
+   base::i18n::InitializeICU();
+-
+   return DemoMain();
+ }
++
+diff --git a/ui/compositor/test/DEPS b/ui/compositor/test/DEPS
+index cc6a491..2f3c840 100644
+--- a/ui/compositor/test/DEPS
++++ b/ui/compositor/test/DEPS
+@@ -1,3 +1,4 @@
+ include_rules = [
+   "+webkit/common/gpu",
++  "+gpu/command_buffer/client"
+ ]
+diff --git a/ui/compositor/test/in_process_context_factory.cc b/ui/compositor/test/in_process_context_factory.cc
+index 31f8b57..24f8564 100644
+--- a/ui/compositor/test/in_process_context_factory.cc
++++ b/ui/compositor/test/in_process_context_factory.cc
+@@ -1,14 +1,18 @@
+ // Copyright 2014 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+-
+ #include "ui/compositor/test/in_process_context_factory.h"
+-
++#include "base/bind.h"
+ #include "base/command_line.h"
+ #include "base/threading/thread.h"
++#include "cc/output/compositor_frame.h"
++#include "cc/output/context_provider.h"
++#include "cc/output/output_surface_client.h"
+ #include "cc/surfaces/surface_id_allocator.h"
+ #include "cc/test/pixel_test_output_surface.h"
+ #include "cc/test/test_shared_bitmap_manager.h"
++#include "gpu/command_buffer/client/context_support.h"
++#include "gpu/command_buffer/client/gles2_interface.h"
+ #include "ui/compositor/compositor_switches.h"
+ #include "ui/compositor/reflector.h"
+ #include "ui/gl/gl_implementation.h"
+@@ -16,15 +20,44 @@
+ #include "webkit/common/gpu/context_provider_in_process.h"
+ #include "webkit/common/gpu/grcontext_for_webgraphicscontext3d.h"
+ #include "webkit/common/gpu/webgraphicscontext3d_in_process_command_buffer_impl.h"
+-
+ namespace ui {
+-
++namespace {
++// An OutputSurface implementation that directly draws and swaps to an actual
++// GL surface.
++class DirectOutputSurface : public cc::OutputSurface {
++ public:
++  explicit DirectOutputSurface(
++      const scoped_refptr<cc::ContextProvider>& context_provider)
++      : cc::OutputSurface(context_provider), weak_ptr_factory_(this) {}
++  ~DirectOutputSurface() override {}
++  // cc::OutputSurface implementation
++  void SwapBuffers(cc::CompositorFrame* frame) override {
++    DCHECK(context_provider_.get());
++    DCHECK(frame->gl_frame_data);
++    if (frame->gl_frame_data->sub_buffer_rect ==
++        gfx::Rect(frame->gl_frame_data->size)) {
++      context_provider_->ContextSupport()->Swap();
++    } else {
++      context_provider_->ContextSupport()->PartialSwapBuffers(
++          frame->gl_frame_data->sub_buffer_rect);
++    }
++    uint32_t sync_point =
++        context_provider_->ContextGL()->InsertSyncPointCHROMIUM();
++    context_provider_->ContextSupport()->SignalSyncPoint(
++        sync_point, base::Bind(&OutputSurface::OnSwapBuffersComplete,
++                               weak_ptr_factory_.GetWeakPtr()));
++    client_->DidSwapBuffers();
++  }
++ private:
++  base::WeakPtrFactory<DirectOutputSurface> weak_ptr_factory_;
++  DISALLOW_COPY_AND_ASSIGN(DirectOutputSurface);
++};
++}  // namespace
+ InProcessContextFactory::InProcessContextFactory()
+-    : next_surface_id_namespace_(1u) {
++    : next_surface_id_namespace_(1u), use_test_surface_(true) {
+   DCHECK_NE(gfx::GetGLImplementation(), gfx::kGLImplementationNone)
+       << "If running tests, ensure that main() is calling "
+       << "gfx::GLSurface::InitializeOneOffForTests()";
+-
+ #if defined(OS_CHROMEOS)
+   bool use_thread = !CommandLine::ForCurrentProcess()->HasSwitch(
+       switches::kUIDisableThreadedCompositing);
+@@ -36,9 +69,7 @@ InProcessContextFactory::InProcessContextFactory()
+     compositor_thread_->Start();
+   }
+ }
+-
+ InProcessContextFactory::~InProcessContextFactory() {}
+-
+ void InProcessContextFactory::CreateOutputSurface(
+     base::WeakPtr<Compositor> compositor,
+     bool software_fallback) {
+@@ -49,37 +80,35 @@ void InProcessContextFactory::CreateOutputSurface(
+   attrs.antialias = false;
+   attrs.shareResources = true;
+   bool lose_context_when_out_of_memory = true;
+-
+   using webkit::gpu::WebGraphicsContext3DInProcessCommandBufferImpl;
+   scoped_ptr<WebGraphicsContext3DInProcessCommandBufferImpl> context3d(
+       WebGraphicsContext3DInProcessCommandBufferImpl::CreateViewContext(
+           attrs, lose_context_when_out_of_memory, compositor->widget()));
+   CHECK(context3d);
+-
+   using webkit::gpu::ContextProviderInProcess;
+   scoped_refptr<ContextProviderInProcess> context_provider =
+       ContextProviderInProcess::Create(context3d.Pass(), "UICompositor");
+-
+-  bool flipped_output_surface = false;
+-  compositor->SetOutputSurface(make_scoped_ptr(new cc::PixelTestOutputSurface(
+-      context_provider, flipped_output_surface)));
++  if (use_test_surface_) {
++    bool flipped_output_surface = false;
++    compositor->SetOutputSurface(make_scoped_ptr(new cc::PixelTestOutputSurface(
++        context_provider, flipped_output_surface)));
++  } else {
++    compositor->SetOutputSurface(
++        make_scoped_ptr(new DirectOutputSurface(context_provider)));
++  }
+ }
+-
+ scoped_refptr<Reflector> InProcessContextFactory::CreateReflector(
+     Compositor* mirroed_compositor,
+     Layer* mirroring_layer) {
+   return new Reflector();
+ }
+-
+ void InProcessContextFactory::RemoveReflector(
+     scoped_refptr<Reflector> reflector) {}
+-
+ scoped_refptr<cc::ContextProvider>
+ InProcessContextFactory::SharedMainThreadContextProvider() {
+   if (shared_main_thread_contexts_.get() &&
+       !shared_main_thread_contexts_->DestroyedOnMainThread())
+     return shared_main_thread_contexts_;
+-
+   bool lose_context_when_out_of_memory = false;
+   shared_main_thread_contexts_ =
+       webkit::gpu::ContextProviderInProcess::CreateOffscreen(
+@@ -87,33 +116,25 @@ InProcessContextFactory::SharedMainThreadContextProvider() {
+   if (shared_main_thread_contexts_.get() &&
+       !shared_main_thread_contexts_->BindToCurrentThread())
+     shared_main_thread_contexts_ = NULL;
+-
+   return shared_main_thread_contexts_;
+ }
+-
+ void InProcessContextFactory::RemoveCompositor(Compositor* compositor) {}
+-
+ bool InProcessContextFactory::DoesCreateTestContexts() { return false; }
+-
+ cc::SharedBitmapManager* InProcessContextFactory::GetSharedBitmapManager() {
+   return &shared_bitmap_manager_;
+ }
+-
+ gpu::GpuMemoryBufferManager*
+ InProcessContextFactory::GetGpuMemoryBufferManager() {
+   return &gpu_memory_buffer_manager_;
+ }
+-
+ base::MessageLoopProxy* InProcessContextFactory::GetCompositorMessageLoop() {
+   if (!compositor_thread_)
+     return NULL;
+   return compositor_thread_->message_loop_proxy().get();
+ }
+-
+ scoped_ptr<cc::SurfaceIdAllocator>
+ InProcessContextFactory::CreateSurfaceIdAllocator() {
+   return make_scoped_ptr(
+       new cc::SurfaceIdAllocator(next_surface_id_namespace_++));
+ }
+-
+ }  // namespace ui
+diff --git a/ui/compositor/test/in_process_context_factory.h b/ui/compositor/test/in_process_context_factory.h
+index 2f74ea6..7d19e32 100644
+--- a/ui/compositor/test/in_process_context_factory.h
++++ b/ui/compositor/test/in_process_context_factory.h
+@@ -1,39 +1,35 @@
+ // Copyright 2014 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+-
+ #ifndef UI_COMPOSITOR_TEST_IN_PROCESS_CONTEXT_FACTORY_H_
+ #define UI_COMPOSITOR_TEST_IN_PROCESS_CONTEXT_FACTORY_H_
+-
+ #include "cc/test/test_gpu_memory_buffer_manager.h"
+ #include "cc/test/test_shared_bitmap_manager.h"
+ #include "ui/compositor/compositor.h"
+-
+ namespace base {
+ class Thread;
+ }
+-
+ namespace webkit {
+ namespace gpu {
+ class ContextProviderInProcess;
+ }
+ }
+-
+ namespace ui {
+-
+ class InProcessContextFactory : public ContextFactory {
+  public:
+   InProcessContextFactory();
+   ~InProcessContextFactory() override;
+-
++  // If true (the default) an OutputSurface is created that does not display
++  // anything. Set to false if you want to see results on the screen.
++  void set_use_test_surface(bool use_test_surface) {
++    use_test_surface_ = use_test_surface;
++  }
+   // ContextFactory implementation
+   void CreateOutputSurface(base::WeakPtr<Compositor> compositor,
+                            bool software_fallback) override;
+-
+   scoped_refptr<Reflector> CreateReflector(Compositor* mirrored_compositor,
+                                            Layer* mirroring_layer) override;
+   void RemoveReflector(scoped_refptr<Reflector> reflector) override;
+-
+   scoped_refptr<cc::ContextProvider> SharedMainThreadContextProvider() override;
+   void RemoveCompositor(Compositor* compositor) override;
+   bool DoesCreateTestContexts() override;
+@@ -41,7 +37,6 @@ class InProcessContextFactory : public ContextFactory {
+   gpu::GpuMemoryBufferManager* GetGpuMemoryBufferManager() override;
+   base::MessageLoopProxy* GetCompositorMessageLoop() override;
+   scoped_ptr<cc::SurfaceIdAllocator> CreateSurfaceIdAllocator() override;
+-
+  private:
+   scoped_ptr<base::Thread> compositor_thread_;
+   scoped_refptr<webkit::gpu::ContextProviderInProcess>
+@@ -49,10 +44,8 @@ class InProcessContextFactory : public ContextFactory {
+   cc::TestSharedBitmapManager shared_bitmap_manager_;
+   cc::TestGpuMemoryBufferManager gpu_memory_buffer_manager_;
+   uint32_t next_surface_id_namespace_;
+-
++  bool use_test_surface_;
+   DISALLOW_COPY_AND_ASSIGN(InProcessContextFactory);
+ };
+-
+ }  // namespace ui
+-
+ #endif  // UI_COMPOSITOR_TEST_IN_PROCESS_CONTEXT_FACTORY_H_
+diff --git a/ui/views/examples/examples_main.cc b/ui/views/examples/examples_main.cc
+index a751a0d..23c9c56 100644
+--- a/ui/views/examples/examples_main.cc
++++ b/ui/views/examples/examples_main.cc
+@@ -1,7 +1,6 @@
+ // Copyright 2012 The Chromium Authors. All rights reserved.
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+-
+ #include "base/at_exit.h"
+ #include "base/command_line.h"
+ #include "base/files/file_path.h"
+@@ -18,61 +17,46 @@
+ #include "ui/views/examples/example_base.h"
+ #include "ui/views/examples/examples_window.h"
+ #include "ui/views/test/desktop_test_views_delegate.h"
+-
+ #if defined(USE_AURA)
+ #include "ui/aura/env.h"
+ #include "ui/wm/core/wm_state.h"
+ #endif
+-
+ #if !defined(OS_CHROMEOS) && defined(USE_AURA)
+ #include "ui/views/widget/desktop_aura/desktop_screen.h"
+ #endif
+-
+ #if defined(OS_WIN)
+ #include "ui/base/win/scoped_ole_initializer.h"
+ #endif
+-
+ #if defined(USE_X11)
+ #include "ui/gfx/x/x11_connection.h"
+ #endif
+-
+ int main(int argc, char** argv) {
+ #if defined(OS_WIN)
+   ui::ScopedOleInitializer ole_initializer_;
+ #endif
+-
+   CommandLine::Init(argc, argv);
+-
+   base::AtExitManager at_exit;
+-
+ #if defined(USE_X11)
+   // This demo uses InProcessContextFactory which uses X on a separate Gpu
+   // thread.
+   gfx::InitializeThreadedX11();
+ #endif
+-
+   gfx::GLSurface::InitializeOneOff();
+-
+   // The ContextFactory must exist before any Compositors are created.
+   scoped_ptr<ui::InProcessContextFactory> context_factory(
+       new ui::InProcessContextFactory());
+-
++  context_factory->set_use_test_surface(false);
+   base::MessageLoopForUI message_loop;
+-
+   base::i18n::InitializeICU();
+-
+   ui::RegisterPathProvider();
+-
+   base::FilePath ui_test_pak_path;
+   DCHECK(PathService::Get(ui::UI_TEST_PAK, &ui_test_pak_path));
+   ui::ResourceBundle::InitSharedInstanceWithPakPath(ui_test_pak_path);
+-
+ #if defined(USE_AURA)
+   aura::Env::CreateInstance(true);
+   aura::Env::GetInstance()->set_context_factory(context_factory.get());
+ #endif
+   ui::InitializeInputMethodForTesting();
+-
+   {
+     views::DesktopTestViewsDelegate views_delegate;
+ #if defined(USE_AURA)
+@@ -83,22 +67,16 @@ int main(int argc, char** argv) {
+     gfx::Screen::SetScreenInstance(gfx::SCREEN_TYPE_NATIVE,
+                                    desktop_screen.get());
+ #endif
+-
+     views::examples::ShowExamplesWindow(
+         views::examples::QUIT_ON_CLOSE,
+         NULL,
+         scoped_ptr<ScopedVector<views::examples::ExampleBase> >());
+-
+     base::RunLoop().Run();
+-
+     ui::ResourceBundle::CleanupSharedInstance();
+   }
+-
+   ui::ShutdownInputMethod();
+-
+ #if defined(USE_AURA)
+   aura::Env::DeleteInstance();
+ #endif
+-
+   return 0;
+ }
+-- 
+2.1.1
+
