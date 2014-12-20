@@ -1,0 +1,8 @@
+angle-extend-for-azer.patch
+
+build-ui-views-examples-with-gn.path 使用 gn 编译所有 //ui/views/examples:views_examples_exe 项目
+ffmpeg-build.patch 使用 gn 编译 ffmpeg
+webrtc.patch 使用 gn 编译 //third_party/webrtc
+
+black_aura_win.path 修复导致 //ui/aura:demo, //ui/views/examples:views_examples_exe 程序只有一个黑框的问题
+init-d3d11-for-gfx-Surface.patch 使 ui 默认的 render angle 是 d3d11
