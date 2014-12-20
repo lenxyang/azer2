@@ -1,29 +1,20 @@
-From fa402a223ff1660665c7b429ad706093019eb9b1 Mon Sep 17 00:00:00 2001
+From 27d68acf17b11716e26e57459e5442d1a3973eb0 Mon Sep 17 00:00:00 2001
 From: lenxyang <lenxyang@gmail.com>
 Date: Mon, 1 Dec 2014 14:11:57 +0800
 Subject: [PATCH 1/1] compile
 
 ---
- BUILD.gn                                           | 13 ++++--
+ BUILD.gn                                           | 12 ++++-
  src/libGLESv2/azer_ext.cpp                         | 52 ++++++++++++++++++++++
  src/libGLESv2/libGLESv2.def                        |  2 +
  .../renderer/d3d/d3d11/TextureStorage11.cpp        |  2 +-
- 4 files changed, 65 insertions(+), 4 deletions(-)
+ 4 files changed, 65 insertions(+), 3 deletions(-)
  create mode 100644 src/libGLESv2/azer_ext.cpp
 
 diff --git a/BUILD.gn b/BUILD.gn
-index 5d1bad5..3b06b19 100644
+index 5d1bad5..14f2693 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
-@@ -144,7 +144,7 @@ action("commit_id") {
- }
- 
- if (is_win) {
--  angle_enable_d3d9 = true
-+  angle_enable_d3d9 = false
-   angle_enable_d3d11 = true
- 
-   shared_library("libGLESv2") {
 @@ -153,6 +153,7 @@ if (is_win) {
        "src/libGLESv2/libGLESv2.cpp",
        "src/libGLESv2/libGLESv2.def",
@@ -32,7 +23,15 @@ index 5d1bad5..3b06b19 100644
      ]
  
      defines = [
-@@ -196,7 +197,8 @@ if (is_win) {
+@@ -161,6 +162,7 @@ if (is_win) {
+       "GL_APICALL=",
+       "GL_GLEXT_PROTOTYPES=",
+       "EGLAPI=",
++      "ANGLE_DEFAULT_D3D11",
+     ]
+     libs = []
+ 
+@@ -196,7 +198,8 @@ if (is_win) {
      ]
  
      include_dirs = [ "src/libGLESv2" ]
@@ -42,7 +41,7 @@ index 5d1bad5..3b06b19 100644
      deps = [
        ":commit_id",
        ":includes",
-@@ -207,6 +209,7 @@ if (is_win) {
+@@ -207,6 +210,7 @@ if (is_win) {
  
    shared_library("libEGL") {
      sources = rebase_path(egl_gypi.angle_libegl_sources, ".", "src")
@@ -50,7 +49,7 @@ index 5d1bad5..3b06b19 100644
  
      defines = [
        "GL_APICALL=",
-@@ -223,12 +226,16 @@ if (is_win) {
+@@ -223,12 +227,16 @@ if (is_win) {
      if (is_debug) {
        defines += [
          "ANGLE_ENABLE_PERF",
