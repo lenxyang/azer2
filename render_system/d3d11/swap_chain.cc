@@ -83,33 +83,6 @@ bool D3D11SwapChain::Present() {
 }
 
 bool D3D11SwapChain::reset(int width, int height) {
-  WindowHost* winhost = render_system_->GetWindowHost();
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  HRESULT hr;
-
-  //Describe our SwapChain
-  DXGI_MODE_DESC bufferDesc;
-  ZeroMemory(&bufferDesc, sizeof(DXGI_MODE_DESC));
-  bufferDesc.Width = width;
-  bufferDesc.Height = height;
-  bufferDesc.RefreshRate.Numerator = 60;
-  bufferDesc.RefreshRate.Denominator = 1;
-  bufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-  bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-  bufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-  DXGI_SWAP_CHAIN_DESC swapChainDesc; 
-  ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-  swapChainDesc.BufferDesc = bufferDesc;
-  swapChainDesc.SampleDesc.Count = 1;
-  swapChainDesc.SampleDesc.Quality = 0;
-  swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-  swapChainDesc.BufferCount = 1;
-  swapChainDesc.OutputWindow = (HWND)winhost->Handle();
-  swapChainDesc.Windowed = !winhost->GetMetrics().fullscreen;
-  swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-  IDXGIFactory* factory = render_system_->GetDxgiFactory();
-  hr = factory->CreateSwapChain(d3d_device, &swapChainDesc, &swap_chain_);
   HRESULT_HANDLE(hr, ERROR, "Failed to create D3D11 and Swapchain ");
   renderer_.reset(CreateDefault(width, height));
   if (renderer_.get() == NULL) {

@@ -30,16 +30,10 @@ const StringType& D3D11RenderSystem::name_ = AZER_LITERAL("Direct3D11RenderSyste
 const StringType& D3D11RenderSystem::short_name_ = AZER_LITERAL("d3d11");
 
 D3D11RenderSystem::D3D11RenderSystem(WindowHost* window)
-    : RenderSystem(window)
-    , d3d_device_(NULL)
-    , d3d_context_(NULL)
-    , dxgi_factory_(NULL) {
+    : RenderSystem(window) {
 }
 
 D3D11RenderSystem::~D3D11RenderSystem() {
-  SAFE_RELEASE(dxgi_factory_);
-  SAFE_RELEASE(d3d_context_);
-  SAFE_RELEASE(d3d_device_);
 }
 
 bool D3D11RenderSystem::Init() {
@@ -266,47 +260,7 @@ EGL* D3D11RenderSystem::CreateEGL() {
 }
 
 bool D3D11RenderSystem::InitD3DDevice() {
-  HRESULT hr;
-  // Create our SwapChain
-  D3D_FEATURE_LEVEL featureLevels[] = {
-    D3D_FEATURE_LEVEL_11_0,
-    D3D_FEATURE_LEVEL_10_1,
-    D3D_FEATURE_LEVEL_10_0,
-  };
-
-  hr = D3D11CreateDevice(NULL,
-                         D3D_DRIVER_TYPE_HARDWARE,
-                         NULL,
-                         NULL,
-                         featureLevels, arraysize(featureLevels),
-                         D3D11_SDK_VERSION,
-                         &d3d_device_,
-                         &feature_level_,
-                         &d3d_context_);
-  if (FAILED(hr)) {
-    return false;
-  }
-
-  IDXGIDevice *dxgiDevice = NULL; 
-  hr = d3d_device_->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to get Interface: IDXGIDevice";
-    return false;
-  }
-
-  hr = dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgi_adapter_);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to get Interface: IDXGIAdapter";
-    return false;
-  }
-
-  hr = dxgi_adapter_->GetParent(__uuidof(IDXGIFactory), (void**)&dxgi_factory_);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to get Interface: IDXGIFactory";
-    return false;
-  }
-
-  d3d_context_->AddRef();
+  
   return true;
 }
 }  // namespace azer

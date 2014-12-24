@@ -21,7 +21,7 @@ class D3D11DepthBuffer;
 
 class D3D11RenderSystem : public RenderSystem {
  public:
-  D3D11RenderSystem(WindowHost* host);
+  D3D11RenderSystem(D3D11Initializer* initializer);
   ~D3D11RenderSystem();
 
   bool Init();
@@ -69,12 +69,6 @@ class D3D11RenderSystem : public RenderSystem {
   void GetDriverCapability();
   bool InitD3DDevice();
   bool InitDefaultRenderer();
-
-  ID3D11Device* d3d_device_;
-  ID3D11DeviceContext* d3d_context_;
-  IDXGIFactory* dxgi_factory_;
-  IDXGIAdapter* dxgi_adapter_;
-  D3D_FEATURE_LEVEL feature_level_;
   static const StringType& name_;
   static const StringType& short_name_;
   DISALLOW_COPY_AND_ASSIGN(D3D11RenderSystem);

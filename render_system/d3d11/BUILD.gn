@@ -3,6 +3,8 @@ shared_library("d3d11_render_system") {
   sources = [
     "blending.cc",
     "blending.h",
+    "d3denv.cc",
+    "d3denv.h",
     "depth_buffer.cc",
     "depth_buffer.h",
     "enum_transform.h",
