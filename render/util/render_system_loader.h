@@ -11,7 +11,7 @@ namespace azer {
 class WindowHost;
 class RenderSystem;
 
-class AutoRenderSystemInit {
+class AZER_EXPORT AutoRenderSystemInit {
  public:
   AutoRenderSystemInit(const base::FilePath& path, SurfacePtr surface);
   ~AutoRenderSystemInit();
