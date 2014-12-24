@@ -11,6 +11,7 @@
 #include "azer/render/render_system.h"
 #include "azer/render/gpu_program.h"
 #include "azer/render_system/d3d11/swap_chain.h"
+#include "azer/render_system/d3d11/d3denv.h"
 
 namespace azer {
 
@@ -21,7 +22,7 @@ class D3D11DepthBuffer;
 
 class D3D11RenderSystem : public RenderSystem {
  public:
-  D3D11RenderSystem(D3D11Initializer* initializer);
+  D3D11RenderSystem(D3D11EnvironmentPtr envptr);
   ~D3D11RenderSystem();
 
   bool Init();
@@ -57,39 +58,23 @@ class D3D11RenderSystem : public RenderSystem {
 
   virtual EGL* CreateEGL() override;
 
+  D3D11EnvironmentPtr& GetD3DEnv() { return envptr_;}
   /**
    * direct3d relevent
    */
-  ID3D11Device* GetDevice();
-  ID3D11DeviceContext* GetContext();
-  IDXGIFactory* GetDxgiFactory();
+  ID3D11Device* GetDevice() { return envptr_->GetDevice();}
+  ID3D11DeviceContext* GetContext() { return envptr_->GetContext();}
+  const D3D_FEATURE_LEVEL& feature_level() const { return envptr_->feature_level();}
   void ResetRenderTarget();
-  D3D_FEATURE_LEVEL feature_level() const;
  protected:
   void GetDriverCapability();
   bool InitD3DDevice();
   bool InitDefaultRenderer();
+
+  D3D11EnvironmentPtr envptr_;
   static const StringType& name_;
   static const StringType& short_name_;
   DISALLOW_COPY_AND_ASSIGN(D3D11RenderSystem);
 };
 
-inline ID3D11DeviceContext* D3D11RenderSystem::GetContext() {
-  DCHECK(NULL != d3d_context_);
-  return d3d_context_;
-}
-inline ID3D11Device* D3D11RenderSystem::GetDevice() {
-  DCHECK(NULL != d3d_device_);
-  return d3d_device_;
-}
-
-inline IDXGIFactory* D3D11RenderSystem::GetDxgiFactory() {
-  DCHECK(NULL != dxgi_factory_);
-  return dxgi_factory_;
-}
-
-inline D3D_FEATURE_LEVEL D3D11RenderSystem::feature_level() const {
-  DCHECK(NULL != feature_level_);
-  return feature_level_;
-}
 }  // namespace azer

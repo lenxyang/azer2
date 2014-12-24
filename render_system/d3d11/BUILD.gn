@@ -1,5 +1,6 @@
 
-shared_library("d3d11_render_system") {
+shared_library("d3d11") {
+  output_name = "d3d11_render_system"
   sources = [
     "blending.cc",
     "blending.h",

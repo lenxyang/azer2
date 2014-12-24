@@ -10,20 +10,20 @@
 
 namespace azer {
 D3D11SwapChain::D3D11SwapChain(D3D11RenderSystem* rs)
-    : swap_chain_(NULL)
-    , render_system_(rs) {
+    : render_system_(rs)
+    , envptr_(rs->GetD3DEnv()) {
 }
 
 D3D11SwapChain::~D3D11SwapChain() {
-  SAFE_RELEASE(swap_chain_);
 }
 
-bool D3D11SwapChain::Init(int width, int height)  {
-  DCHECK(NULL == swap_chain_);
-  return reset(width, height);
+bool D3D11SwapChain::Init(Surface* surface)  {
+  return reset(surface);
 }
 
-Renderer* D3D11SwapChain::CreateDefault(int width, int height) {
+Renderer* D3D11SwapChain::CreateDefaultRenderTarget(Surface* surface) {
+  int32 width = surface->GetBounds().width();
+  int32 height = surface->GetBounds().height();
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
   azer::Texture::Options o;
   o.width = width;
@@ -34,7 +34,7 @@ Renderer* D3D11SwapChain::CreateDefault(int width, int height) {
   
   std::unique_ptr<D3D11RenderTarget> target(
           new D3D11RenderTarget(o, true, renderer.get()));
-  if (!target->InitDefault(o, this, render_system_)) {
+  if (!target->InitDefault(o, render_system_)) {
     return false;
   }
 
@@ -58,14 +58,16 @@ Renderer* D3D11SwapChain::CreateDefault(int width, int height) {
   return renderer.release();
 }
 
-bool D3D11SwapChain::resize(int width, int height) {
+bool D3D11SwapChain::resize(Surface* surface) {
   CHECK(false);
   return true;
 }
 
 bool D3D11SwapChain::Present() {
-  DCHECK(NULL != swap_chain_);
-  HRESULT hr = swap_chain_->Present(0, 0);
+  D3D11EnvironmentPtr& ptr = render_system_->GetD3DEnv();
+  IDXGISwapChain* swap_chain = ptr->GetSwapChain();
+  DCHECK(NULL != swap_chain);
+  HRESULT hr = swap_chain->Present(0, 0);
   if (FAILED(hr)) {
     if (hr == DXGI_ERROR_DEVICE_RESET) {
       LOG(ERROR) << "Present error: DXGI_ERROR_DEVICE_RESET";
@@ -82,9 +84,11 @@ bool D3D11SwapChain::Present() {
   return true;
 }
 
-bool D3D11SwapChain::reset(int width, int height) {
-  HRESULT_HANDLE(hr, ERROR, "Failed to create D3D11 and Swapchain ");
-  renderer_.reset(CreateDefault(width, height));
+bool D3D11SwapChain::reset(Surface* surface) {
+  D3D11EnvironmentPtr& ptr = render_system_->GetD3DEnv();
+  ptr->ResetSwapChain();
+
+  renderer_.reset(CreateDefaultRenderTarget(surface));
   if (renderer_.get() == NULL) {
     return false;
   }

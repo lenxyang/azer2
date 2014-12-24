@@ -9,6 +9,8 @@
 
 #include "base/logging.h"
 #include "azer/render/swap_chain.h"
+#include "azer/render/surface.h"
+#include "azer/render_system/d3d11/d3denv.h"
 
 namespace azer {
 class D3D11RenderSystem;
@@ -19,21 +21,22 @@ class D3D11SwapChain : public SwapChain {
   D3D11SwapChain(D3D11RenderSystem* rs);
   virtual ~D3D11SwapChain();
 
-  bool Init(int width, int height);
-  virtual bool reset(int width, int height) override;
-  virtual bool resize(int width, int height) override;
+  bool Init(Surface* surface);
+  virtual bool reset(Surface* surface) override;
+  virtual bool resize(Surface* surface) override;
   virtual bool Present() override;
-  
-  IDXGISwapChain* GetD3D11SwapChain();
+
+  IDXGISwapChain* GetSwapChain();
  private:
-  Renderer* CreateDefault(int width, int height);
-  IDXGISwapChain* swap_chain_;
+  Renderer* CreateDefaultRenderTarget(Surface* surface);
   D3D11RenderSystem* render_system_;
+  D3D11EnvironmentPtr envptr_;
+  
   DISALLOW_COPY_AND_ASSIGN(D3D11SwapChain);
 };
 
-inline IDXGISwapChain* D3D11SwapChain::GetD3D11SwapChain() {
-  DCHECK(NULL != swap_chain_);
-  return swap_chain_;
+inline IDXGISwapChain* D3D11SwapChain::GetSwapChain() {
+  DCHECK(NULL != envptr_.get());
+  return envptr_->GetSwapChain();
 }
 }  // namespace azer

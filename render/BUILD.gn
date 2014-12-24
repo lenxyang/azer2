@@ -46,6 +46,12 @@ shared_library("render") {
     "util/shader_array.h",
   ]
 
+  if (is_win) {
+    sources += [
+      "surface_win.cc",
+    ]
+  }
+
   deps = [
     "//azer/math",
     "//azer/base",
@@ -86,6 +92,6 @@ test("render_unittest") {
     ":render",
   ]
 
-  if (is_win) {deps += ["//azer/render_system/d3d11:d3d11_render_system"]}
+  if (is_win) {deps += ["//azer/render_system/d3d11"]}
   configs += ["//azer/build/config:utf8src"]
 }

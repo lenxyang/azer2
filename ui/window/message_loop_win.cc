@@ -30,6 +30,7 @@ void MainRenderLoop(WindowHost* mainwnd) {
     mainwnd->delegate_->OnUpdateScene(0, 0);
   }
 
+  RenderSystem* rs = RenderSystem::Current();
   while (msg.message != WM_QUIT) {
     if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
       TranslateMessage(&msg);
@@ -45,8 +46,8 @@ void MainRenderLoop(WindowHost* mainwnd) {
         mainwnd->delegate_->OnUpdateScene(total, (float)delta.InSecondsF());
       }
 
-      DCHECK(mainwnd->render_system_ != NULL);
-      mainwnd->render_system_->Present();
+      DCHECK(rs != NULL);
+      rs->Present();
     }
   }
 

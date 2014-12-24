@@ -11,15 +11,15 @@
 
 namespace azer {
 
-class WindowHost;
+class Surface;
 
 class AZER_EXPORT SwapChain {
  public:
   SwapChain() {}
   virtual ~SwapChain() {}
 
-  virtual bool resize(int width, int height) = 0;
-  virtual bool reset(int width, int height) = 0;
+  virtual bool resize(Surface* surface) = 0;
+  virtual bool reset(Surface* surface) = 0;
   virtual bool Present() = 0;
 
   RendererPtr& GetRenderer() { return renderer_;}

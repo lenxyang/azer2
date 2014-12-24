@@ -9,13 +9,13 @@
 #include "azer/base/string.h"
 #include "azer/render/render_capability.h"
 #include "azer/render/renderer.h"
+#include "azer/render/surface.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/swap_chain.h"
 #include "ui/gfx/geometry/rect.h"
 
 namespace azer {
 class Overlay;
-class WindowHost;
 class Technique;
 class VertexBuffer;
 class RenderTarget;
@@ -31,15 +31,13 @@ typedef std::shared_ptr<IndicesData> IndicesDataPtr;
 
 class AZER_EXPORT RenderSystem {
  public:
-  RenderSystem(WindowHost* host) : win_host_(host) { }
+  RenderSystem(Surface* surface) : surface_(surface) { }
 
   virtual ~RenderSystem() {}
   virtual const StringType& name() const = 0;
   virtual const StringType& short_name() const = 0;
 
-  static RenderSystem* InitRenderSystem(const ::base::FilePath& path,
-                                        WindowHost* win);
-  static void Release();
+  static void SetRenderSystem(RenderSystem* rs);
   static RenderSystem* Current();
 
   virtual Renderer* CreateRenderer(const Texture::Options& opt) = 0;
@@ -83,7 +81,8 @@ class AZER_EXPORT RenderSystem {
     return capability_;
   }
 
-  WindowHost* GetWindowHost() const { return win_host_;}
+  Surface* GetSurface() { return surface_;}
+  const Surface* GetSurface() const { return surface_;}
   static const int32 kMaxRenderTarget = 256;
 
   Renderer* GetDefaultRenderer() {
@@ -95,7 +94,8 @@ class AZER_EXPORT RenderSystem {
  protected:
   RenderSystemCapability capability_;
   SwapChainPtr swap_chain_;
-  WindowHost* win_host_;
+  Surface* surface_;
+  static RenderSystem* render_system_;
   friend class AutoRenderSystemInit;
   DISALLOW_COPY_AND_ASSIGN(RenderSystem);
 };

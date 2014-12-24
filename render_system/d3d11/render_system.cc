@@ -29,22 +29,17 @@ namespace azer {
 const StringType& D3D11RenderSystem::name_ = AZER_LITERAL("Direct3D11RenderSystem");
 const StringType& D3D11RenderSystem::short_name_ = AZER_LITERAL("d3d11");
 
-D3D11RenderSystem::D3D11RenderSystem(WindowHost* window)
-    : RenderSystem(window) {
+D3D11RenderSystem::D3D11RenderSystem(D3D11EnvironmentPtr envptr)
+    : envptr_(envptr)
+    , RenderSystem(envptr->GetSurface()) {
 }
 
 D3D11RenderSystem::~D3D11RenderSystem() {
 }
 
 bool D3D11RenderSystem::Init() {
-  if (!InitD3DDevice()) {
-    return false;
-  }
-
-  WindowHost* winhost = GetWindowHost();
-  gfx::Rect rect = std::move(winhost->GetClientBounds());
   std::unique_ptr<D3D11SwapChain> ptr(new D3D11SwapChain(this));
-  if (!ptr->Init(rect.width(), rect.height())) {
+  if (!ptr->Init(envptr_->GetSurface())) {
     return false;
   }
 
@@ -58,8 +53,7 @@ bool D3D11RenderSystem::Present() {
   if (!swap_chain_->Present()) {
     LOG(ERROR) << " failed to Present.";
 
-    gfx::Rect rect = std::move(win_host_->GetClientBounds());
-    return swap_chain_->reset(rect.width(), rect.height());
+    return swap_chain_->reset(envptr_->GetSurface());
   }
 
   return true;
@@ -67,8 +61,7 @@ bool D3D11RenderSystem::Present() {
 
 bool D3D11RenderSystem::reset() {
   DCHECK(swap_chain_ != NULL);
-  gfx::Rect rect = std::move(win_host_->GetClientBounds());
-  return swap_chain_->reset(rect.width(), rect.height());
+  return swap_chain_->reset(envptr_->GetSurface());
 }
 
 void D3D11RenderSystem::GetDriverCapability() {

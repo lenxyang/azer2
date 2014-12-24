@@ -26,5 +26,5 @@ test("util_unittest") {
     "//base/test:run_all_unittests",
     ":util",
   ]
-  if (is_win) {deps += ["//azer/render_system/d3d11:d3d11_render_system"]}
+  if (is_win) {deps += ["//azer/render_system/d3d11"]}
 }

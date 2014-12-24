@@ -19,7 +19,7 @@ typedef std::shared_ptr<D3D11Environment> D3D11EnvironmentPtr;
 class D3D11Environment {
  public:
   virtual ~D3D11Environment();
-  static D3D11EnvironmentPtr Create(const std::string& name, SurfacePtr surface);
+  static D3D11EnvironmentPtr Create(const std::string& name, Surface* surface);
 
   /**
    * direct3d relevent
@@ -30,11 +30,12 @@ class D3D11Environment {
   IDXGISwapChain* GetSwapChain() { return swap_chain_;}
   const D3D_FEATURE_LEVEL&  feature_level() const { return feature_level_;}
 
-  virtual bool ResetSwapChain() = 0;
+  ID3D11Texture2D* GetSwapTexture();
 
-  SurfacePtr& GetSurface() { return surface_;}
+  virtual bool ResetSwapChain() = 0;
+  Surface* GetSurface() { return surface_;}
  protected:
-  D3D11Environment(SurfacePtr ptr);
+  D3D11Environment(Surface* ptr);
   
   virtual bool Initialize() = 0;
 
@@ -44,7 +45,7 @@ class D3D11Environment {
   IDXGIAdapter* dxgi_adapter_;
   IDXGISwapChain* swap_chain_;
   D3D_FEATURE_LEVEL feature_level_;
-  SurfacePtr surface_;
+  Surface* surface_;
   DISALLOW_COPY_AND_ASSIGN(D3D11Environment);
 };
 

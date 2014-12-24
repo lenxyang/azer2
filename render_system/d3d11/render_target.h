@@ -28,8 +28,7 @@ class D3D11RenderTarget : public RenderTarget {
   virtual void Clear(const azer::Vector4& color);
 
   bool Init(D3D11RenderSystem* rs);
-  bool InitDefault(const Texture::Options& opt, D3D11SwapChain*,
-                   D3D11RenderSystem* rs);
+  bool InitDefault(const Texture::Options& opt, D3D11RenderSystem* rs);
   
   ID3D11RenderTargetView* GetD3D11RenderTargetView() { return target_;}
  private:

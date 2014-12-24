@@ -3,11 +3,10 @@
 #include <windows.h>
 
 #include "azer/render/surface.h"
-#include "azer/render_system/d3d11/surface.h"
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-D3D11Environment::D3D11Environment(SurfacePtr surface) 
+D3D11Environment::D3D11Environment(Surface* surface) 
     : d3d_device_(NULL)
     , d3d_context_(NULL)
     , dxgi_factory_(NULL)
@@ -25,9 +24,19 @@ D3D11Environment::~D3D11Environment() {
   SAFE_RELEASE(swap_chain_);
 }
 
+ID3D11Texture2D* D3D11Environment::GetSwapTexture() {
+  HRESULT hr = 0;
+  ID3D11Texture2D* texture_buffer = NULL;
+  hr = swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&texture_buffer);
+  if (FAILED(hr)) {
+    return NULL;
+  }
+  return texture_buffer;
+}
+
 class InternalD3D11Environment : public D3D11Environment {
  public:
-  InternalD3D11Environment(SurfacePtr surface)
+  InternalD3D11Environment(Surface* surface)
       : D3D11Environment(surface) {
   }
 
@@ -63,7 +72,7 @@ bool InternalD3D11Environment::ResetSwapChain() {
   swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
   swapChainDesc.BufferCount = 1;
   swapChainDesc.OutputWindow = (HWND)surface_->GetWindow();
-  swapChainDesc.Windowed = surface_->fullscreen();
+  swapChainDesc.Windowed = !surface_->fullscreen();
   swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
   IDXGIFactory* factory = dxgi_factory_;
   hr = factory->CreateSwapChain(d3d_device_, &swapChainDesc, &swap_chain_);
@@ -118,19 +127,21 @@ bool InternalD3D11Environment::InitD3D11Device() {
   }
 
   d3d_context_->AddRef();
+  return true;
 }
 
-bool InternalD3D11Environment::Initialize(gfx::AcceleratedWidget window) {
+bool InternalD3D11Environment::Initialize() {
   if (!InitD3D11Device()) {
     return false;
   }
-  
+
+  ResetSwapChain();
   return true;
 }
 
 
 D3D11EnvironmentPtr D3D11Environment::Create(const std::string& name, 
-                                             SurfacePtr surface) {
+                                             Surface* surface) {
   if (name == "internal") {
     std::unique_ptr<D3D11Environment> ptr(new InternalD3D11Environment(surface));
     if (ptr->Initialize()) {

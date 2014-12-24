@@ -1,11 +1,11 @@
 #include "azer/render_system/d3d11/plugin.h"
 #include "azer/render_system/d3d11/d3denv.h"
 #include "azer/render_system/d3d11/render_system.h"
+#include "azer/ui/window/window_host.h"
 
 extern "C" {
-azer::RenderSystem* CreateRenderSystem(azer::WindowHost* win) {
-  D3D11EnvironmentPtr envptr(D3D11Environment::Create(
-      "internal", (gfx::AcceleratedWidget window)win->Handle()));
+azer::RenderSystem* CreateRenderSystem(azer::Surface* sur) {
+  azer::D3D11EnvironmentPtr envptr = azer::D3D11Environment::Create("internal", sur);
   if (envptr.get() == NULL) {
     LOG(ERROR) << "Failed to inititialize D3D11Environment";
     return NULL;

@@ -12,6 +12,7 @@
 #include "gl/GrGLInterface.h"          // skia
 
 #include "azer/ui/window/window_host.h"
+#include "azer/render/surface.h"
 #include "azer/render_system/d3d11/angle/module.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/render_system.h"
@@ -33,8 +34,8 @@ bool AngleEGL::Init() {
   EGLConfig config;
   EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE, EGL_NONE };
 
-  WindowHost* host = render_system_->GetWindowHost();
-  EGLNativeWindowType hWnd = (EGLNativeWindowType)host->Handle();
+  SurfacePtr& azer_surface = render_system_->GetSurface();
+  EGLNativeWindowType hWnd = (EGLNativeWindowType)azer_surface->GetWindow();
   display = eglGetDisplay(GetDC(hWnd));
   if (display == EGL_NO_DISPLAY) {
     return false;
