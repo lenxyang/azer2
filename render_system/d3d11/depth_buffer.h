@@ -10,9 +10,13 @@
 namespace azer {
 class D3D11RenderSystem;
 class D3D11Renderer;
+class Surface;
 
 class D3D11DepthBuffer : public DepthBuffer {
  public:
+  static D3D11DepthBuffer* Create(Surface* surface, D3D11Renderer* renderer);
+  static D3D11DepthBuffer* Create(const Texture::Options& opt, 
+                                  D3D11Renderer* renderer);
    // create by rendersystem
   D3D11DepthBuffer(const Texture::Options& opt, D3D11Renderer* renderer)
       : DepthBuffer(opt)
@@ -24,7 +28,6 @@ class D3D11DepthBuffer : public DepthBuffer {
   virtual ~D3D11DepthBuffer() {
     SAFE_RELEASE(target_);
   }
-
   
   virtual void Enable(bool enable);
   virtual bool IsEnabled();
@@ -56,6 +59,5 @@ class D3D11DepthBuffer : public DepthBuffer {
   friend class D3D11RenderSystem;
   DISALLOW_COPY_AND_ASSIGN(D3D11DepthBuffer);
 };
-
 
 }  // namespace azer

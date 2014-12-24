@@ -34,7 +34,7 @@ bool AngleEGL::Init() {
   EGLConfig config;
   EGLint contextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE, EGL_NONE };
 
-  SurfacePtr& azer_surface = render_system_->GetSurface();
+  Surface* azer_surface = render_system_->GetSurface();
   EGLNativeWindowType hWnd = (EGLNativeWindowType)azer_surface->GetWindow();
   display = eglGetDisplay(GetDC(hWnd));
   if (display == EGL_NO_DISPLAY) {

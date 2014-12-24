@@ -28,7 +28,7 @@ class D3D11SwapChain : public SwapChain {
 
   IDXGISwapChain* GetSwapChain();
  private:
-  Renderer* CreateDefaultRenderTarget(Surface* surface);
+  Renderer* CreateSurfaceRenderer(Surface* surface);
   D3D11RenderSystem* render_system_;
   D3D11EnvironmentPtr envptr_;
   

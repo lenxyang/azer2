@@ -87,8 +87,6 @@ class D3D11Renderer : public Renderer {
   void ResetRenderTarget();
 
   bool Init(const Texture::Options& opt);
-  bool InitDefault(const Texture::Options& o, D3D11RenderTarget* target,
-                   D3D11DepthBuffer* depth);
  protected:
   void InitRenderState();
   void InitForRenderTarget();
@@ -102,5 +100,21 @@ class D3D11Renderer : public Renderer {
   static const std::string& name_;
   friend class RenderSystem;
   DISALLOW_COPY_AND_ASSIGN(D3D11Renderer);
+};
+
+class D3D11SurfaceRenderer : public D3D11Renderer {
+ public:
+  D3D11SurfaceRenderer(Surface* surface,
+                       ID3D11DeviceContext* context,
+                       D3D11RenderSystem* rs)
+      : D3D11Renderer(context, rs)
+      , surface_(surface) {
+    DCHECK(NULL != surface);
+  }
+
+  bool InitForSurface(RenderTargetPtr target, DepthBufferPtr depth);
+ private:
+  Surface* surface_;
+  DISALLOW_COPY_AND_ASSIGN(D3D11SurfaceRenderer);
 };
 }  // namespace azer

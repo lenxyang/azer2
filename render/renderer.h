@@ -103,12 +103,12 @@ class AZER_EXPORT Renderer {
 
   DepthBuffer* GetDepthBuffer() { return depth_.get();}
   RenderTarget* GetRenderTarget() { return targets_[0].get();}
-  typedef std::vector<std::unique_ptr<RenderTarget> > RenderTargetVec;
+  typedef std::vector<RenderTargetPtr> RenderTargetVec;
   RenderTargetVec* GetAllRenderTargets() { return &targets_;}
   RenderSystem* GetRenderSystem() { return render_system_;}
  protected:
   RenderSystem* render_system_;
-  std::unique_ptr<DepthBuffer> depth_;
+  DepthBufferPtr depth_;
   RenderTargetVec targets_;
   const int kNumOfRenderTarget;
   DISALLOW_COPY_AND_ASSIGN(Renderer);

@@ -1,6 +1,7 @@
 
 #include "azer/render_system/d3d11/depth_buffer.h"
 
+#include "azer/render/surface.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
@@ -8,6 +9,29 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
+
+D3D11DepthBuffer* D3D11DepthBuffer::Create(const Texture::Options& o, 
+                                           D3D11Renderer* renderer) {
+  Texture::Options opt;
+  opt = o;
+  opt.format = kDepth24Stencil8;
+  opt.target = Texture::kDepthStencil;
+  std::unique_ptr<D3D11DepthBuffer> ptr(new D3D11DepthBuffer(opt, renderer));
+  if (!ptr->Init((D3D11RenderSystem*)renderer->GetRenderSystem())) {
+    return NULL;
+  }
+
+  return ptr.release();
+}
+
+D3D11DepthBuffer* D3D11DepthBuffer::Create(Surface* surface,
+                                           D3D11Renderer* renderer) {
+  Texture::Options o;
+  o.width = surface->GetBounds().width();
+  o.height = surface->GetBounds().height();
+  return Create(o, renderer);
+}
+
 bool D3D11DepthBuffer::InitDepthAndStencilState(D3D11RenderSystem* rs) {
   HRESULT hr;
   ID3D11DepthStencilState* state;

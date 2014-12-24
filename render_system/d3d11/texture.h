@@ -63,6 +63,7 @@ class D3D11Texture2D : public D3D11Texture {
   virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
   virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
   friend class D3D11RenderTarget;
+  friend class D3D11SurfaceRenderTarget;
   friend class D3D11DepthBuffer;
   DISALLOW_COPY_AND_ASSIGN(D3D11Texture2D);
 };

@@ -4,6 +4,7 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 
+#include "azer/render/surface.h"
 #include "azer/render/render_system.h"
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
@@ -313,42 +314,22 @@ void D3D11Renderer::SetShaderResource(RenderPipelineStage stage,
   }
 }
 
-bool D3D11Renderer::InitDefault(const Texture::Options& o,
-                                D3D11RenderTarget* target, D3D11DepthBuffer* depth) {
-  targets_[0].reset(target);
-  depth_.reset(depth);
-  Reset();
-  SetViewport(azer::Renderer::Viewport(0, 0, o.width, o.height));
-  return true;
-}
-
 bool D3D11Renderer::Init(const Texture::Options& o) {
   DCHECK(o.width != 0 && o.height != 0);
   DCHECK(targets_[0].get() == NULL);
   DCHECK(depth_.get() == NULL);
 
-  Texture::Options target_opt;
-  target_opt = o;
-  target_opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
-  D3D11RenderTarget* target = new D3D11RenderTarget(target_opt, false, this);
-  targets_[0].reset(target);
-  if (!target->Init(d3d11_render_system_)) {
-    return false;
-  }
-
-  Texture::Options depth_opt;
-  depth_opt.width = o.width;
-  depth_opt.height = o.height;
-  depth_opt.format = kDepth24Stencil8;
-  depth_opt.target = Texture::kDepthStencil;
-  D3D11DepthBuffer* depth = new D3D11DepthBuffer(depth_opt, this);
-  depth_.reset(depth);
-  if (!depth->Init(d3d11_render_system_)) {
+  RenderTargetPtr target(D3D11RenderTarget::Create(o, this));
+  DepthBufferPtr depth(D3D11DepthBuffer::Create(o, this));
+  if (target.get() == NULL || depth.get()) {
     return false;
   }
 
   Reset();
   SetViewport(azer::Renderer::Viewport(0, 0, o.width, o.height));
+
+  targets_[0] = target;
+  depth_ = depth;
   return true;
 }
 
@@ -378,5 +359,21 @@ void D3D11Renderer::InitRenderState() {
   HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");
   D3DObjPtr auto_ptr(obj);
   d3d_context_->RSSetState(obj);
+}
+
+bool D3D11SurfaceRenderer::InitForSurface(RenderTargetPtr target,
+                                          DepthBufferPtr depth) {
+  if (target.get() == NULL || depth.get() == NULL) {
+    return false;
+  }
+
+  int32 width = surface_->GetBounds().width();
+  int32 height = surface_->GetBounds().height();
+  targets_.resize(1);
+  targets_[0] = target;
+  depth_ = depth;
+  Reset();
+  SetViewport(azer::Renderer::Viewport(0, 0, width, height));
+  return true;
 }
 }  // namespace azer

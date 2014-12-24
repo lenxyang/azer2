@@ -21,40 +21,18 @@ bool D3D11SwapChain::Init(Surface* surface)  {
   return reset(surface);
 }
 
-Renderer* D3D11SwapChain::CreateDefaultRenderTarget(Surface* surface) {
-  int32 width = surface->GetBounds().width();
-  int32 height = surface->GetBounds().height();
+Renderer* D3D11SwapChain::CreateSurfaceRenderer(Surface* surface) {
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  azer::Texture::Options o;
-  o.width = width;
-  o.height = height;
-  o.target = Texture::kRenderTarget;
-  std::unique_ptr<D3D11Renderer> renderer(
-      new D3D11Renderer(d3d_context, render_system_));
+  std::unique_ptr<D3D11SurfaceRenderer> renderer(
+      new D3D11SurfaceRenderer(surface, d3d_context, render_system_));
   
-  std::unique_ptr<D3D11RenderTarget> target(
-          new D3D11RenderTarget(o, true, renderer.get()));
-  if (!target->InitDefault(o, render_system_)) {
+  RenderTargetPtr target(D3D11SurfaceRenderTarget::Create(
+      surface, renderer.get()));
+  DepthBufferPtr depth(D3D11DepthBuffer::Create(surface, renderer.get()));
+  if (!renderer->InitForSurface(target, depth)) {
     return false;
   }
 
-  Texture::Options depth_opt;
-  depth_opt.width = o.width;
-  depth_opt.height = o.height;
-  depth_opt.format = kDepth24Stencil8;
-  depth_opt.target = Texture::kDepthStencil;
-  std::unique_ptr<D3D11DepthBuffer> depth(new D3D11DepthBuffer(depth_opt,
-                                                               renderer.get()));
-  if (!depth->Init(render_system_)) {
-    return false;
-  }
-
-  if (!renderer->InitDefault(o, target.get(), depth.get())) {
-    return false;
-  }
-
-  target.release();
-  depth.release();
   return renderer.release();
 }
 
@@ -88,7 +66,7 @@ bool D3D11SwapChain::reset(Surface* surface) {
   D3D11EnvironmentPtr& ptr = render_system_->GetD3DEnv();
   ptr->ResetSwapChain();
 
-  renderer_.reset(CreateDefaultRenderTarget(surface));
+  renderer_.reset(CreateSurfaceRenderer(surface));
   if (renderer_.get() == NULL) {
     return false;
   }
