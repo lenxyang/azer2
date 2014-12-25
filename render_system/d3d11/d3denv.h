@@ -16,6 +16,13 @@ namespace azer {
 class D3D11Environment;
 typedef std::shared_ptr<D3D11Environment> D3D11EnvironmentPtr;
 
+/**
+ * D3D11Enviroment 的作用是封装 D3D11 的初始化过程
+ * 在内部实现中, D3D11Environment 分成两个部分 External 和 Internal
+ * Internal 是默认的方法，即在内部完成 D3D11 的初始化
+ * External 则为外部方法，D3D11 通过外部程序完成初始化，如果希望 azer 与 ANGLE 结合
+ * 那么应该使用 ANGLE 的 d3d11 初始化的对象。
+ */
 class D3D11Environment {
  public:
   virtual ~D3D11Environment();

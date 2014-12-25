@@ -47,6 +47,18 @@ class InternalD3D11Environment : public D3D11Environment {
   DISALLOW_COPY_AND_ASSIGN(InternalD3D11Environment);
 };
 
+class ExternalD3D11Environment : public D3D11Environment {
+ public:
+  ExternalD3D11Environment(Surface* surface)
+      : D3D11Environment(surface) {
+  }
+
+  virtual bool ResetSwapChain() override {}
+  virtual bool Initialize() override;
+ private:
+  DISALLOW_COPY_AND_ASSIGN(ExternalD3D11Environment);
+};
+
 bool InternalD3D11Environment::ResetSwapChain() {
   HRESULT hr = 0;
   int32 width = surface_->GetBounds().width();
