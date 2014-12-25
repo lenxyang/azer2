@@ -8,7 +8,8 @@
 #include "azer/render_system/d3d11/render_system.h"
 
 namespace azer {
-bool D3D11IndicesBuffer::Init(const IndicesData* data) {
+namespace d3d11 {
+bool D3DIndicesBuffer::Init(const IndicesData* data) {
   DCHECK(NULL == buffer_);
   DCHECK(data != NULL);
   DCHECK(indices_num_ == -1 && type_ == IndicesData::kUndefined);
@@ -36,7 +37,7 @@ bool D3D11IndicesBuffer::Init(const IndicesData* data) {
   return true;
 }
 
-HardwareBufferDataPtr D3D11IndicesBuffer::map(MapType flags) {
+HardwareBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
   DCHECK(options_.usage & GraphicBuffer::kDynamic
          || options_.usage & GraphicBuffer::kStaging);
   DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
@@ -62,7 +63,7 @@ HardwareBufferDataPtr D3D11IndicesBuffer::map(MapType flags) {
   return data;
 }
 
-void D3D11IndicesBuffer::unmap() {
+void D3DIndicesBuffer::unmap() {
   DCHECK(locked_) << "Indices Buffer has not been locked";
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
@@ -71,4 +72,5 @@ void D3D11IndicesBuffer::unmap() {
   d3d_context->Unmap(buffer_, 0);
   locked_ = false;
 }
+}  // namespace d3d11
 }  // namespace azer

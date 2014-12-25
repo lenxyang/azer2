@@ -18,8 +18,9 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
+namespace d3d11 {
 
-#define GET_D3D11_RENDER_STATE()                        \
+#define GET_D3D_RENDER_STATE()                        \
   DCHECK(d3d_context_ != NULL);                         \
   ID3D11RasterizerState* obj = NULL;                    \
   d3d_context_->RSGetState(&obj);                       \
@@ -28,7 +29,7 @@ namespace azer {
   ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));     \
   obj->GetDesc(&desc);
 
-#define SET_D3D11_RENDER_STATE()  {                                     \
+#define SET_D3D_RENDER_STATE()  {                                     \
   ID3D11RasterizerState* newobj = NULL;                                 \
   HRESULT hr = GetDevice()->CreateRasterizerState(&desc, &newobj);      \
   HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");     \
@@ -36,34 +37,34 @@ namespace azer {
   d3d_context_->RSSetState(newobj);                                     \
 }
 
-const std::string& D3D11Renderer::name_ = "Direct3D11Renderer";
+const std::string& D3DRenderer::name_ = "Direct3D11Renderer";
 
-const std::string& D3D11Renderer::name() const {
+const std::string& D3DRenderer::name() const {
   return name_;
 }
 
-D3D11Renderer::D3D11Renderer(ID3D11DeviceContext* context, D3D11RenderSystem* rs)
+D3DRenderer::D3DRenderer(ID3D11DeviceContext* context, D3DRenderSystem* rs)
     : Renderer(1, rs)
     , d3d11_render_system_(rs)
     , d3d_context_(context) {
 }
 
-D3D11Renderer::~D3D11Renderer() {
+D3DRenderer::~D3DRenderer() {
   SAFE_RELEASE(d3d_context_);
 }
 
-void D3D11Renderer::Use() {
+void D3DRenderer::Use() {
   DCHECK(!targets_.empty() && targets_[0].get() != NULL);
   DCHECK(depth_.get() != NULL);
   ID3D11RenderTargetView* target_view[1] = {0};
   target_view[0] =
-      ((D3D11RenderTarget*)targets_[0].get())->GetD3D11RenderTargetView();
+      ((D3DRenderTarget*)targets_[0].get())->GetD3DRenderTargetView();
   ID3D11DepthStencilView* depth_view =
-      ((D3D11DepthBuffer*)depth_.get())->GetD3D11DepthStencilView();
+      ((D3DDepthBuffer*)depth_.get())->GetD3DDepthStencilView();
   d3d_context_->OMSetRenderTargets(1, target_view, depth_view);
 }
 
-void D3D11Renderer::Reset() {
+void D3DRenderer::Reset() {
   DCHECK(d3d_context_ != NULL);
   d3d_context_->ClearState();
   InitRenderState();
@@ -72,100 +73,100 @@ void D3D11Renderer::Reset() {
   EnableDepthTest(false);
 }
 
-bool D3D11Renderer::IsDepthTestEnable() {
+bool D3DRenderer::IsDepthTestEnable() {
   return depth_ && depth_->IsEnabled();
 }
 
-void D3D11Renderer::EnableDepthTest(bool enable) {
+void D3DRenderer::EnableDepthTest(bool enable) {
   CHECK(depth_);
   depth_->Enable(enable);
 }
 
-FrontFace D3D11Renderer::GetFrontFace(void) {
-  GET_D3D11_RENDER_STATE();
+FrontFace D3DRenderer::GetFrontFace(void) {
+  GET_D3D_RENDER_STATE();
   if (desc.FrontCounterClockwise) return kCounterClockwise;
   else return kClockwise;
 }
 
-void D3D11Renderer::SetFrontFace(FrontFace mode) {
-  GET_D3D11_RENDER_STATE();
+void D3DRenderer::SetFrontFace(FrontFace mode) {
+  GET_D3D_RENDER_STATE();
   desc.FrontCounterClockwise = (mode == kCounterClockwise);
-  SET_D3D11_RENDER_STATE();
+  SET_D3D_RENDER_STATE();
 }
 
-FillMode D3D11Renderer::GetFillMode(void) {
-  GET_D3D11_RENDER_STATE();
+FillMode D3DRenderer::GetFillMode(void) {
+  GET_D3D_RENDER_STATE();
   return TranslateD3DFillMode(desc.FillMode);
 }
 
-void D3D11Renderer::SetFillMode(FillMode mode) {
-  GET_D3D11_RENDER_STATE();
+void D3DRenderer::SetFillMode(FillMode mode) {
+  GET_D3D_RENDER_STATE();
   desc.FillMode = TranslateFillMode(mode);
-  SET_D3D11_RENDER_STATE();
+  SET_D3D_RENDER_STATE();
 }
 
-CullingMode D3D11Renderer::GetCullingMode(void) {
-  GET_D3D11_RENDER_STATE();
+CullingMode D3DRenderer::GetCullingMode(void) {
+  GET_D3D_RENDER_STATE();
   return TranslateD3DCullingMode(desc.CullMode);
 }
 
-void D3D11Renderer::SetCullingMode(CullingMode mode) {
-  GET_D3D11_RENDER_STATE();
+void D3DRenderer::SetCullingMode(CullingMode mode) {
+  GET_D3D_RENDER_STATE();
   desc.CullMode = TranslateCullingMode(mode);
-  SET_D3D11_RENDER_STATE();
+  SET_D3D_RENDER_STATE();
 }
 
-void D3D11Renderer::EnableMultisampleAntiAliasing(bool enable) {
-  GET_D3D11_RENDER_STATE();
+void D3DRenderer::EnableMultisampleAntiAliasing(bool enable) {
+  GET_D3D_RENDER_STATE();
   desc.MultisampleEnable = (enable ? TRUE : FALSE);
-  SET_D3D11_RENDER_STATE();
+  SET_D3D_RENDER_STATE();
 }
 
-bool D3D11Renderer::IsMultisampleAntiAliasingEnabled() {
-  GET_D3D11_RENDER_STATE();
+bool D3DRenderer::IsMultisampleAntiAliasingEnabled() {
+  GET_D3D_RENDER_STATE();
   return desc.MultisampleEnable == TRUE;
 } 
 
-void D3D11Renderer::EnableLineAntialiasing(bool enable) {
-  GET_D3D11_RENDER_STATE();
+void D3DRenderer::EnableLineAntialiasing(bool enable) {
+  GET_D3D_RENDER_STATE();
   desc.AntialiasedLineEnable = (enable ? TRUE : FALSE);
-  SET_D3D11_RENDER_STATE();
+  SET_D3D_RENDER_STATE();
 }
 
-bool D3D11Renderer::IsLineAntialiasingEnabled() {
-  GET_D3D11_RENDER_STATE();
+bool D3DRenderer::IsLineAntialiasingEnabled() {
+  GET_D3D_RENDER_STATE();
   return desc.AntialiasedLineEnable == TRUE;
 }
 
-void D3D11Renderer::ResetBlending() {
+void D3DRenderer::ResetBlending() {
   d3d_context_->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
 
-void D3D11Renderer::UseBlending(Blending* vblending, float* factor, uint32 mask) {
+void D3DRenderer::UseBlending(Blending* vblending, float* factor, uint32 mask) {
   DCHECK(NULL != d3d_context_);
-  D3D11Blending* blending = (D3D11Blending*)vblending;
+  D3DBlending* blending = (D3DBlending*)vblending;
   DCHECK(NULL != blending->blending_state_);
   d3d_context_->OMSetBlendState(blending->blending_state_, factor, mask);
 }
 
-void D3D11Renderer::Clear(const azer::Vector4& color) {
+void D3DRenderer::Clear(const azer::Vector4& color) {
   DCHECK(d3d_context_ != NULL);
   DCHECK(targets_[0].get() != NULL);
   ID3D11RenderTargetView* target_view =
-      ((D3D11RenderTarget*)targets_[0].get())->GetD3D11RenderTargetView();
+      ((D3DRenderTarget*)targets_[0].get())->GetD3DRenderTargetView();
   DCHECK(target_view != NULL);
   d3d_context_->ClearRenderTargetView(
       target_view,
       D3DXCOLOR(color.x, color.y, color.z, color.w));
 }
 
-void D3D11Renderer::ClearDepthAndStencil(DepthBuffer::ClearFlag flag,
+void D3DRenderer::ClearDepthAndStencil(DepthBuffer::ClearFlag flag,
                                          float depth_val, int stencil_val) {
   DCHECK(NULL != depth_.get());
-  ((D3D11DepthBuffer*)depth_.get())->Clear(this, flag, depth_val, stencil_val);
+  ((D3DDepthBuffer*)depth_.get())->Clear(this, flag, depth_val, stencil_val);
 }
 
-void D3D11Renderer::ResetShader(RenderPipelineStage stage) {
+void D3DRenderer::ResetShader(RenderPipelineStage stage) {
   switch (stage) {
     case kVertexStage:
       d3d_context_->VSSetShader(NULL, 0, 0);
@@ -181,12 +182,12 @@ void D3D11Renderer::ResetShader(RenderPipelineStage stage) {
   }
 }
 
-void D3D11Renderer::Draw(VertexBuffer* vvb, PrimitiveTopology primitive,
+void D3DRenderer::Draw(VertexBuffer* vvb, PrimitiveTopology primitive,
                          int vertices_num, int32 start_vertex) {
   const int num_of_vertices =
       (vertices_num != -1) ? vertices_num : vvb->vertex_num();
   CHECK(num_of_vertices > 0);
-  D3D11VertexBuffer* vb = (D3D11VertexBuffer*)vvb;
+  D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
   DCHECK(vb->Initialized()) << "VertexBuffer not initialized.";
   UINT stride = vvb->element_size();
   UINT offset = 0;
@@ -196,16 +197,16 @@ void D3D11Renderer::Draw(VertexBuffer* vvb, PrimitiveTopology primitive,
   d3d_context_->Draw(num_of_vertices, start_vertex);
 }
 
-void D3D11Renderer::DrawIndex(VertexBuffer* vvb, IndicesBuffer* vib,
+void D3DRenderer::DrawIndex(VertexBuffer* vvb, IndicesBuffer* vib,
                               PrimitiveTopology primitive, int indices_num,
                               int32 first_indices, int32 index_base) {
   const int num_of_indices =
       (indices_num != -1) ? indices_num : vib->indices_num();
   UINT stride = vvb->element_size();
   UINT offset = 0;
-  D3D11VertexBuffer* vb = (D3D11VertexBuffer*)vvb;
+  D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
   DCHECK(NULL != vb && vb->Initialized()) << "VertexBuffer not initialized.";
-  D3D11IndicesBuffer* ib = (D3D11IndicesBuffer*)vib;
+  D3DIndicesBuffer* ib = (D3DIndicesBuffer*)vib;
   DCHECK(NULL != ib && ib->Initialized()) << "IndicesBuffer not initialized.";
   d3d_context_->IASetVertexBuffers(0, 1, &vb->buffer_, &stride, &offset);
   d3d_context_->IASetIndexBuffer(ib->buffer_,
@@ -215,11 +216,11 @@ void D3D11Renderer::DrawIndex(VertexBuffer* vvb, IndicesBuffer* vib,
   d3d_context_->DrawIndexed(num_of_indices, first_indices, index_base);
 }
 
-void D3D11Renderer::DrawInstanced(int32 instance_num, VertexBuffer* vvb,
+void D3DRenderer::DrawInstanced(int32 instance_num, VertexBuffer* vvb,
                                   PrimitiveTopology primitive,
                                   int32 vertices_num, int32 first_vertex,
                                   int32 instance_start_index) {
-  D3D11VertexBuffer* vb = (D3D11VertexBuffer*)vvb;
+  D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
   DCHECK(NULL != vb && vb->Initialized()) << "VertexBuffer not initialized.";
   const int num_of_vertices =
       (vertices_num != -1) ? vertices_num : vb->vertex_num();
@@ -231,7 +232,7 @@ void D3D11Renderer::DrawInstanced(int32 instance_num, VertexBuffer* vvb,
                               first_vertex, instance_start_index);
 }
 
-void D3D11Renderer::DrawIndexInstanced(int32 instance_num, VertexBuffer* vvb,
+void D3DRenderer::DrawIndexInstanced(int32 instance_num, VertexBuffer* vvb,
                                        IndicesBuffer* vib,
                                        PrimitiveTopology primitive,
                                        int32 indices_num, int32 first_indices,
@@ -241,9 +242,9 @@ void D3D11Renderer::DrawIndexInstanced(int32 instance_num, VertexBuffer* vvb,
       (indices_num != -1) ? indices_num : vib->indices_num();
   UINT stride = vvb->element_size();
   UINT offset = 0;
-  D3D11VertexBuffer* vb = (D3D11VertexBuffer*)vvb;
+  D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
   DCHECK(NULL != vb && vb->Initialized()) << "VertexBuffer not initialized.";
-  D3D11IndicesBuffer* ib = (D3D11IndicesBuffer*)vib;
+  D3DIndicesBuffer* ib = (D3DIndicesBuffer*)vib;
   DCHECK(NULL != ib && ib->Initialized()) << "IndicesBuffer not initialized.";
   d3d_context_->IASetVertexBuffers(0, 1, &vb->buffer_, &stride, &offset);
   d3d_context_->IASetIndexBuffer(ib->buffer_,
@@ -255,9 +256,9 @@ void D3D11Renderer::DrawIndexInstanced(int32 instance_num, VertexBuffer* vvb,
                                      instance_start_index);
 }
 
-void D3D11Renderer::UseConstantsTable(RenderPipelineStage stage,
+void D3DRenderer::UseConstantsTable(RenderPipelineStage stage,
                                           GpuConstantsTable* table) {
-  D3D11GpuConstantsTable* constants = (D3D11GpuConstantsTable*)table;
+  D3DGpuConstantsTable* constants = (D3DGpuConstantsTable*)table;
   if (stage == kVertexStage) {
     d3d_context_->VSSetConstantBuffers(0, 1, &(constants->buffer_));
   } else if (stage == kGeometryStage) {
@@ -269,7 +270,7 @@ void D3D11Renderer::UseConstantsTable(RenderPipelineStage stage,
   }
 }
 
-inline void D3D11Renderer::ResetTexture(RenderPipelineStage stage, int index) {
+inline void D3DRenderer::ResetTexture(RenderPipelineStage stage, int index) {
   DCHECK(NULL != d3d_context_);
   switch (stage) {
     case kPixelStage:
@@ -280,9 +281,9 @@ inline void D3D11Renderer::ResetTexture(RenderPipelineStage stage, int index) {
   }
 }
 
-void D3D11Renderer::UseTexture(RenderPipelineStage stage, int index,
+void D3DRenderer::UseTexture(RenderPipelineStage stage, int index,
                                Texture* texture) {
-  D3D11Texture2D* tex = (D3D11Texture2D*)texture;
+  D3DTexture2D* tex = (D3DTexture2D*)texture;
   if (tex) {
     tex->UseForStage(stage, index, this);
   } else {
@@ -290,7 +291,7 @@ void D3D11Renderer::UseTexture(RenderPipelineStage stage, int index,
   }
 }
 
-void D3D11Renderer::SetViewport(const Viewport& vp) {
+void D3DRenderer::SetViewport(const Viewport& vp) {
   D3D11_VIEWPORT viewport;
   ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
   viewport.TopLeftX= vp.left;
@@ -303,9 +304,9 @@ void D3D11Renderer::SetViewport(const Viewport& vp) {
   viewport_ = vp;
 }
 
-void D3D11Renderer::SetShaderResource(RenderPipelineStage stage,
-                                      uint32 first, uint32 num,
-                                      ID3D11ShaderResourceView** view) {
+void D3DRenderer::SetShaderResource(RenderPipelineStage stage,
+                                    uint32 first, uint32 num,
+                                    ID3D11ShaderResourceView** view) {
   DCHECK(d3d_context_ != NULL);
   switch (stage) {
     case kVertexStage: d3d_context_->VSSetShaderResources(first, num, view);
@@ -314,13 +315,13 @@ void D3D11Renderer::SetShaderResource(RenderPipelineStage stage,
   }
 }
 
-bool D3D11Renderer::Init(const Texture::Options& o) {
+bool D3DRenderer::Init(const Texture::Options& o) {
   DCHECK(o.width != 0 && o.height != 0);
   DCHECK(targets_[0].get() == NULL);
   DCHECK(depth_.get() == NULL);
 
-  RenderTargetPtr target(D3D11RenderTarget::Create(o, this));
-  DepthBufferPtr depth(D3D11DepthBuffer::Create(o, this));
+  RenderTargetPtr target(D3DRenderTarget::Create(o, this));
+  DepthBufferPtr depth(D3DDepthBuffer::Create(o, this));
   if (target.get() == NULL || depth.get()) {
     return false;
   }
@@ -340,7 +341,7 @@ bool D3D11Renderer::Init(const Texture::Options& o) {
  * 1. Stackoverflow: RSGetState in out parameter returns null pointer? [http://stackoverflow.com/questions/16874481/rsgetstate-in-out-parameter-returns-null-pointer]
  *
  */
-void D3D11Renderer::InitRenderState() {
+void D3DRenderer::InitRenderState() {
   ID3D11RasterizerState* obj = NULL;
   DCHECK(d3d_context_ != NULL); 
   D3D11_RASTERIZER_DESC desc;
@@ -361,8 +362,8 @@ void D3D11Renderer::InitRenderState() {
   d3d_context_->RSSetState(obj);
 }
 
-bool D3D11SurfaceRenderer::InitForSurface(RenderTargetPtr target,
-                                          DepthBufferPtr depth) {
+bool D3DSurfaceRenderer::InitForSurface(RenderTargetPtr target,
+                                        DepthBufferPtr depth) {
   if (target.get() == NULL || depth.get() == NULL) {
     return false;
   }
@@ -376,4 +377,5 @@ bool D3D11SurfaceRenderer::InitForSurface(RenderTargetPtr target,
   SetViewport(azer::Renderer::Viewport(0, 0, width, height));
   return true;
 }
+}  // namespace d3d11
 }  // namespace azer

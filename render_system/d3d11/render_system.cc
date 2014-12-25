@@ -25,20 +25,21 @@
 #include "azer/render_system/d3d11/angle/egl.h"
 
 namespace azer {
+namespace d3d11 {
 
-const StringType& D3D11RenderSystem::name_ = AZER_LITERAL("Direct3D11RenderSystem");
-const StringType& D3D11RenderSystem::short_name_ = AZER_LITERAL("d3d11");
+const StringType& D3DRenderSystem::name_ = AZER_LITERAL("Direct3D11RenderSystem");
+const StringType& D3DRenderSystem::short_name_ = AZER_LITERAL("d3d11");
 
-D3D11RenderSystem::D3D11RenderSystem(D3D11EnvironmentPtr envptr)
+D3DRenderSystem::D3DRenderSystem(D3DEnvironmentPtr envptr)
     : envptr_(envptr)
     , RenderSystem(envptr->GetSurface()) {
 }
 
-D3D11RenderSystem::~D3D11RenderSystem() {
+D3DRenderSystem::~D3DRenderSystem() {
 }
 
-bool D3D11RenderSystem::Init() {
-  std::unique_ptr<D3D11SwapChain> ptr(new D3D11SwapChain(this));
+bool D3DRenderSystem::Init() {
+  std::unique_ptr<D3DSwapChain> ptr(new D3DSwapChain(this));
   if (!ptr->Init(envptr_->GetSurface())) {
     return false;
   }
@@ -48,7 +49,7 @@ bool D3D11RenderSystem::Init() {
   return true;
 }
 
-bool D3D11RenderSystem::Present() {
+bool D3DRenderSystem::Present() {
   DCHECK(swap_chain_ != NULL) << "swap_chain cannto be NULL";
   if (!swap_chain_->Present()) {
     LOG(ERROR) << " failed to Present.";
@@ -59,27 +60,27 @@ bool D3D11RenderSystem::Present() {
   return true;
 }
 
-bool D3D11RenderSystem::reset() {
+bool D3DRenderSystem::reset() {
   DCHECK(swap_chain_ != NULL);
   return swap_chain_->reset(envptr_->GetSurface());
 }
 
-void D3D11RenderSystem::GetDriverCapability() {
+void D3DRenderSystem::GetDriverCapability() {
   capability_.hw_transform_light_ = true;
 }
 
-const StringType& D3D11RenderSystem::name() const {
+const StringType& D3DRenderSystem::name() const {
   return name_;
 }
 
-const StringType& D3D11RenderSystem::short_name() const {
+const StringType& D3DRenderSystem::short_name() const {
   return short_name_;
 }
 
-VertexBuffer* D3D11RenderSystem::CreateVertexBuffer(
+VertexBuffer* D3DRenderSystem::CreateVertexBuffer(
     const VertexBuffer::Options& opt, VertexData* dataptr) {
-  std::unique_ptr<D3D11VertexBuffer> vertex_buffer(
-      new D3D11VertexBuffer(opt, this));
+  std::unique_ptr<D3DVertexBuffer> vertex_buffer(
+      new D3DVertexBuffer(opt, this));
   if (vertex_buffer->Init(dataptr)) {
     return vertex_buffer.release();
   } else {
@@ -88,10 +89,10 @@ VertexBuffer* D3D11RenderSystem::CreateVertexBuffer(
 }
 
 
-IndicesBuffer* D3D11RenderSystem::CreateIndicesBuffer(
+IndicesBuffer* D3DRenderSystem::CreateIndicesBuffer(
     const IndicesBuffer::Options& opt, IndicesData* dataptr) {
-  std::unique_ptr<D3D11IndicesBuffer> indices_buffer(
-      new D3D11IndicesBuffer(opt, this));
+  std::unique_ptr<D3DIndicesBuffer> indices_buffer(
+      new D3DIndicesBuffer(opt, this));
   if (indices_buffer->Init(dataptr)) {
     return indices_buffer.release();
   } else {
@@ -99,15 +100,15 @@ IndicesBuffer* D3D11RenderSystem::CreateIndicesBuffer(
   }
 }
 
-GpuProgram* D3D11RenderSystem::CreateGpuProgram(RenderPipelineStage stage,
-                                                const std::string& program) {
+GpuProgram* D3DRenderSystem::CreateGpuProgram(RenderPipelineStage stage,
+                                              const std::string& program) {
   std::unique_ptr<GpuProgram> gpu_program;
   switch (stage) {
     case kPixelStage:
-      gpu_program.reset(new D3D11PixelGpuProgram(program));
+      gpu_program.reset(new D3DPixelGpuProgram(program));
       break;
     case kGeometryStage:
-      gpu_program.reset(new D3D11GeometryGpuProgram(program));
+      gpu_program.reset(new D3DGeometryGpuProgram(program));
       break;
     case kVertexStage:
       CHECK(false) << "Vertex GpuProgram has its own ";
@@ -122,10 +123,10 @@ GpuProgram* D3D11RenderSystem::CreateGpuProgram(RenderPipelineStage stage,
   }
 }
 
-VertexGpuProgram* D3D11RenderSystem::CreateVertexGpuProgram(
+VertexGpuProgram* D3DRenderSystem::CreateVertexGpuProgram(
     VertexDescPtr desc, const std::string& program) {
   std::unique_ptr<VertexGpuProgram> gpu_program(
-      new D3D11VertexGpuProgram(desc, program));
+      new D3DVertexGpuProgram(desc, program));
   if (gpu_program->Init(this)) {
     return gpu_program.release();
   } else {
@@ -133,14 +134,14 @@ VertexGpuProgram* D3D11RenderSystem::CreateVertexGpuProgram(
   }
 }
 
-Technique* D3D11RenderSystem::CreateTechnique() {
-  return new D3D11Technique(this);
+Technique* D3DRenderSystem::CreateTechnique() {
+  return new D3DTechnique(this);
 }
 
-GpuConstantsTable* D3D11RenderSystem::CreateGpuConstantsTable(
+GpuConstantsTable* D3DRenderSystem::CreateGpuConstantsTable(
     int32 num, const GpuConstantsTable::Desc* desc) {
-  std::unique_ptr<D3D11GpuConstantsTable> tableptr(
-      new D3D11GpuConstantsTable(num, desc));
+  std::unique_ptr<D3DGpuConstantsTable> tableptr(
+      new D3DGpuConstantsTable(num, desc));
   if (tableptr->Init(this)) {
     return tableptr.release();
   } else {
@@ -148,19 +149,19 @@ GpuConstantsTable* D3D11RenderSystem::CreateGpuConstantsTable(
   }
 }
 
-Texture* D3D11RenderSystem::CreateTexture(const Texture::Options& opt,
-                                          const Image* img) {
+Texture* D3DRenderSystem::CreateTexture(const Texture::Options& opt,
+                                        const Image* img) {
   const ImageDataPtr& image = img->data(0);
   Texture::Options texopt = opt;
   texopt.width = image->width();
   texopt.height = image->height();
   texopt.format = image->format();
   texopt.type = (Texture::Type)img->type();
-  std::unique_ptr<D3D11Texture> tex;
+  std::unique_ptr<D3DTexture> tex;
   if (texopt.type == Texture::k2D) {
-    tex.reset(new D3D11Texture2D(texopt, this));
+    tex.reset(new D3DTexture2D(texopt, this));
   } else if (texopt.type == Texture::kCubemap) {
-    tex.reset(new D3D11TextureCubeMap(texopt, this));
+    tex.reset(new D3DTextureCubeMap(texopt, this));
   } else {
     NOTREACHED();
     return NULL;
@@ -172,38 +173,38 @@ Texture* D3D11RenderSystem::CreateTexture(const Texture::Options& opt,
   }
 }
 
-Texture* D3D11RenderSystem::CreateTexture(const Texture::Options& opt) {
+Texture* D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   if (opt.type == Texture::k2D) {
-    return new D3D11Texture2D(opt, this);
+    return new D3DTexture2D(opt, this);
   } else {
     return NULL;
   }
 }
 
 /*
-RenderTarget* D3D11RenderSystem::CreateRenderTarget(const Texture::Options& opt) {
-  std::unique_ptr<D3D11RenderTarget> target(new D3D11RenderTarget(opt, false, this));
+  RenderTarget* D3DRenderSystem::CreateRenderTarget(const Texture::Options& opt) {
+  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, this));
   if (target->Init(this)) {
-    return target.release();
+  return target.release();
   } else {
-    return NULL;
+  return NULL;
   }
-}
+  }
 
-DepthBuffer* D3D11RenderSystem::CreateDepthBuffer(const Texture::Options& opt) {
+  DepthBuffer* D3DRenderSystem::CreateDepthBuffer(const Texture::Options& opt) {
   DCHECK(opt.format == kDepth24Stencil8);
   DCHECK(opt.target & Texture::kDepthStencil);
-  std::unique_ptr<D3D11DepthBuffer> depthbuffer(new D3D11DepthBuffer(opt, this));
+  std::unique_ptr<D3DDepthBuffer> depthbuffer(new D3DDepthBuffer(opt, this));
   if (depthbuffer->Init()) {
-    return depthbuffer.release();
+  return depthbuffer.release();
   } else {
-    return false;
+  return false;
   }
-}
+  }
 */
 
-Overlay* D3D11RenderSystem::CreateOverlay(const gfx::RectF& rect) {
-  std::unique_ptr<D3D11Overlay> surface_ptr(new D3D11Overlay(rect, this));
+Overlay* D3DRenderSystem::CreateOverlay(const gfx::RectF& rect) {
+  std::unique_ptr<D3DOverlay> surface_ptr(new D3DOverlay(rect, this));
   if (surface_ptr->Init(this)) {
     return surface_ptr.release();
   } else {
@@ -211,8 +212,8 @@ Overlay* D3D11RenderSystem::CreateOverlay(const gfx::RectF& rect) {
   }
 }
 
-Blending* D3D11RenderSystem::CreateBlending(const Blending::Desc& desc) {
-  std::unique_ptr<D3D11Blending> blending(new D3D11Blending(desc, this));
+Blending* D3DRenderSystem::CreateBlending(const Blending::Desc& desc) {
+  std::unique_ptr<D3DBlending> blending(new D3DBlending(desc, this));
   if (blending->Init()) {
     return blending.release();
   } else {
@@ -220,10 +221,10 @@ Blending* D3D11RenderSystem::CreateBlending(const Blending::Desc& desc) {
   }
 }
 
-Renderer* D3D11RenderSystem::CreateRenderer(const Texture::Options& opt) {
+Renderer* D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
   DCHECK(GetDefaultRenderer() != NULL);
-  std::unique_ptr<D3D11Renderer> renderer(new D3D11Renderer(
-      ((D3D11Renderer*)GetDefaultRenderer())->GetContext(), this));
+  std::unique_ptr<D3DRenderer> renderer(new D3DRenderer(
+      ((D3DRenderer*)GetDefaultRenderer())->GetContext(), this));
   if (renderer->Init(opt)) {
     return renderer.release();
   } else {
@@ -231,7 +232,7 @@ Renderer* D3D11RenderSystem::CreateRenderer(const Texture::Options& opt) {
   }
 }
 
-Renderer* D3D11RenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
+Renderer* D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
   DCHECK(GetDevice() != NULL);
   ID3D11DeviceContext* context = NULL;
   HRESULT hr = GetDevice()->CreateDeferredContext(0, &context);
@@ -240,7 +241,7 @@ Renderer* D3D11RenderSystem::CreateDeferredRenderer(const Texture::Options& opt)
     return NULL;
   }
 
-  std::unique_ptr<D3D11Renderer> renderer(new D3D11Renderer(context, this));
+  std::unique_ptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(opt)) {
     return renderer.release();
   } else {
@@ -248,13 +249,14 @@ Renderer* D3D11RenderSystem::CreateDeferredRenderer(const Texture::Options& opt)
   }
 }
 
-EGL* D3D11RenderSystem::CreateEGL() {
+EGL* D3DRenderSystem::CreateEGL() {
   return new AngleEGL(this);
 }
 
-bool D3D11RenderSystem::InitD3DDevice() {
+bool D3DRenderSystem::InitD3DDevice() {
   
   return true;
 }
+}  // namespace d3d11
 }  // namespace azer
 

@@ -9,26 +9,27 @@
 #include "azer/ui/window/window_host.h"
 
 namespace azer {
-D3D11SwapChain::D3D11SwapChain(D3D11RenderSystem* rs)
+namespace d3d11 {
+D3DSwapChain::D3DSwapChain(D3DRenderSystem* rs)
     : render_system_(rs)
     , envptr_(rs->GetD3DEnv()) {
 }
 
-D3D11SwapChain::~D3D11SwapChain() {
+D3DSwapChain::~D3DSwapChain() {
 }
 
-bool D3D11SwapChain::Init(Surface* surface)  {
+bool D3DSwapChain::Init(Surface* surface)  {
   return reset(surface);
 }
 
-Renderer* D3D11SwapChain::CreateSurfaceRenderer(Surface* surface) {
+Renderer* D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  std::unique_ptr<D3D11SurfaceRenderer> renderer(
-      new D3D11SurfaceRenderer(surface, d3d_context, render_system_));
+  std::unique_ptr<D3DSurfaceRenderer> renderer(
+      new D3DSurfaceRenderer(surface, d3d_context, render_system_));
   
-  RenderTargetPtr target(D3D11SurfaceRenderTarget::Create(
+  RenderTargetPtr target(D3DSurfaceRenderTarget::Create(
       surface, renderer.get()));
-  DepthBufferPtr depth(D3D11DepthBuffer::Create(surface, renderer.get()));
+  DepthBufferPtr depth(D3DDepthBuffer::Create(surface, renderer.get()));
   if (!renderer->InitForSurface(target, depth)) {
     return false;
   }
@@ -36,13 +37,13 @@ Renderer* D3D11SwapChain::CreateSurfaceRenderer(Surface* surface) {
   return renderer.release();
 }
 
-bool D3D11SwapChain::resize(Surface* surface) {
+bool D3DSwapChain::resize(Surface* surface) {
   CHECK(false);
   return true;
 }
 
-bool D3D11SwapChain::Present() {
-  D3D11EnvironmentPtr& ptr = render_system_->GetD3DEnv();
+bool D3DSwapChain::Present() {
+  D3DEnvironmentPtr& ptr = render_system_->GetD3DEnv();
   IDXGISwapChain* swap_chain = ptr->GetSwapChain();
   DCHECK(NULL != swap_chain);
   HRESULT hr = swap_chain->Present(0, 0);
@@ -62,8 +63,8 @@ bool D3D11SwapChain::Present() {
   return true;
 }
 
-bool D3D11SwapChain::reset(Surface* surface) {
-  D3D11EnvironmentPtr& ptr = render_system_->GetD3DEnv();
+bool D3DSwapChain::reset(Surface* surface) {
+  D3DEnvironmentPtr& ptr = render_system_->GetD3DEnv();
   ptr->ResetSwapChain();
 
   renderer_.reset(CreateSurfaceRenderer(surface));
@@ -74,4 +75,6 @@ bool D3D11SwapChain::reset(Surface* surface) {
   return true;
 }
 
+}  // namespace d3d11
 }  // namespace azer
+

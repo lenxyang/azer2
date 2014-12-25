@@ -14,6 +14,7 @@
 #include "azer/base/string.h"
 
 namespace azer {
+namespace d3d11 {
 class AZER_D3D11RS_EXPORT ANGLEModule {
  public:
   static ANGLEModule* GetInstance();
@@ -28,4 +29,5 @@ class AZER_D3D11RS_EXPORT ANGLEModule {
   friend struct ::base::DefaultLazyInstanceTraits<ANGLEModule>;
   DISALLOW_COPY_AND_ASSIGN(ANGLEModule);
 };
+}  // namespace d3d11
 }  // namespace azer

@@ -22,6 +22,7 @@ typedef void (*FUNCGLGETTEXSHARED3DTEX)(GLenum target, GLuint fbhandle, void** v
 }
 
 namespace azer {
+namespace d3d11 {
 FUNCGLGETTEXSHARED3DTEX glGetTexShareD3DTexProc;
 
 bool AngleEGL::Init() {
@@ -134,9 +135,10 @@ void AngleEGL::Destroy() {
 
 Texture* AngleEGL::GetShareTextureFromTex(uint32 texid) {
   DCHECK(glGetTexShareD3DTexProc != NULL);
-  D3D11RenderSystem* rs = render_system_;
+  D3DRenderSystem* rs = render_system_;
   HANDLE handle = 0;
   (*glGetTexShareD3DTexProc)(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
-  return D3D11Texture2DExtern::Create(handle, rs);
+  return D3DTexture2DExtern::Create(handle, rs);
 }
-}  // namespace
+}  // namespace d3d11
+}  // namespace azer

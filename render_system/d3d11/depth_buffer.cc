@@ -9,30 +9,31 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
+namespace d3d11 {
 
-D3D11DepthBuffer* D3D11DepthBuffer::Create(const Texture::Options& o, 
-                                           D3D11Renderer* renderer) {
+D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o, 
+                                       D3DRenderer* renderer) {
   Texture::Options opt;
   opt = o;
   opt.format = kDepth24Stencil8;
   opt.target = Texture::kDepthStencil;
-  std::unique_ptr<D3D11DepthBuffer> ptr(new D3D11DepthBuffer(opt, renderer));
-  if (!ptr->Init((D3D11RenderSystem*)renderer->GetRenderSystem())) {
+  std::unique_ptr<D3DDepthBuffer> ptr(new D3DDepthBuffer(opt, renderer));
+  if (!ptr->Init((D3DRenderSystem*)renderer->GetRenderSystem())) {
     return NULL;
   }
 
   return ptr.release();
 }
 
-D3D11DepthBuffer* D3D11DepthBuffer::Create(Surface* surface,
-                                           D3D11Renderer* renderer) {
+D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface,
+                                       D3DRenderer* renderer) {
   Texture::Options o;
   o.width = surface->GetBounds().width();
   o.height = surface->GetBounds().height();
   return Create(o, renderer);
 }
 
-bool D3D11DepthBuffer::InitDepthAndStencilState(D3D11RenderSystem* rs) {
+bool D3DDepthBuffer::InitDepthAndStencilState(D3DRenderSystem* rs) {
   HRESULT hr;
   ID3D11DepthStencilState* state;
   ID3D11Device* d3d_device = rs->GetDevice();
@@ -58,23 +59,23 @@ bool D3D11DepthBuffer::InitDepthAndStencilState(D3D11RenderSystem* rs) {
   return true;
 }
 
-void D3D11DepthBuffer::PushState() {
+void D3DDepthBuffer::PushState() {
   state_stack_.push(desc_);
 }
 
-void D3D11DepthBuffer::PopState() {
+void D3DDepthBuffer::PopState() {
   DCHECK(!state_stack_.empty());
   desc_ = state_stack_.top();
   state_stack_.pop();
   UpdateState();
 }
 
-void D3D11DepthBuffer::Enable(bool enable) {
+void D3DDepthBuffer::Enable(bool enable) {
   desc_.DepthEnable = enable;
   UpdateState();
 }
 
-void D3D11DepthBuffer::UpdateState() {
+void D3DDepthBuffer::UpdateState() {
   ID3D11DeviceContext* d3d_context = renderer_->GetContext();
 
   ID3D11DepthStencilState* state = NULL;
@@ -86,26 +87,26 @@ void D3D11DepthBuffer::UpdateState() {
   SAFE_RELEASE(state);
 }
 
-bool D3D11DepthBuffer::IsEnabled() {
+bool D3DDepthBuffer::IsEnabled() {
   return desc_.DepthEnable == TRUE;
 }
 
-void D3D11DepthBuffer::SetDepthCompareFunc(CompareFunc::Type func) {
+void D3DDepthBuffer::SetDepthCompareFunc(CompareFunc::Type func) {
   desc_.DepthFunc = TranslateCompareFunc(func);
   UpdateState();
 }
 
-bool D3D11DepthBuffer::Init(D3D11RenderSystem* rs) {
+bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
   ID3D11Device* d3d_device = rs->GetDevice();
   HRESULT hr;
   DCHECK(texture_.get() == NULL);
-  D3D11Texture2D* tex = new D3D11Texture2D(options_, rs);
+  D3DTexture2D* tex = new D3DTexture2D(options_, rs);
   texture_.reset(tex);
   if (!tex->Init(NULL, 1)) {
     return false;
   }
 
-  ID3D11Resource* resource = ((D3D11Texture2D*)texture_.get())->resource_;
+  ID3D11Resource* resource = ((D3DTexture2D*)texture_.get())->resource_;
   DCHECK_EQ(TranslateBindTarget(options_.target), D3D11_BIND_DEPTH_STENCIL);
 
   hr = d3d_device->CreateDepthStencilView(resource, NULL, &target_);
@@ -114,8 +115,8 @@ bool D3D11DepthBuffer::Init(D3D11RenderSystem* rs) {
   return InitDepthAndStencilState(rs);
 }
 
-void D3D11DepthBuffer::Clear(D3D11Renderer* renderer, ClearFlag flag,
-                             float depth_val, int stencil_val) {
+void D3DDepthBuffer::Clear(D3DRenderer* renderer, ClearFlag flag,
+                           float depth_val, int stencil_val) {
   DCHECK(target_ != NULL);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
   d3d_context->ClearDepthStencilView(target_,
@@ -124,4 +125,5 @@ void D3D11DepthBuffer::Clear(D3D11Renderer* renderer, ClearFlag flag,
                                      stencil_val);   // stencil value
   stencil_ref_value_ = stencil_val;
 }
+}  // namespace d3d11
 }  // namespace azer

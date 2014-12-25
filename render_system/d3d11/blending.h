@@ -7,27 +7,29 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-class D3D11RenderSystem;
-class D3D11Renderer;
+namespace d3d11 {
+class D3DRenderSystem;
+class D3DRenderer;
 
-class D3D11Blending : public Blending {
+class D3DBlending : public Blending {
  public:
-  D3D11Blending(const Desc& desc, D3D11RenderSystem* rs)
+  D3DBlending(const Desc& desc, D3DRenderSystem* rs)
         : Blending(desc)
         , blending_state_(NULL)
         , render_system_(rs) {
   }
 
-  virtual ~D3D11Blending() {
+  virtual ~D3DBlending() {
     SAFE_RELEASE(blending_state_);
   }
 
   bool Init();
  protected:
   ID3D11BlendState* blending_state_;
-  D3D11RenderSystem* render_system_;
+  D3DRenderSystem* render_system_;
 
-  friend class D3D11Renderer;
-  DISALLOW_COPY_AND_ASSIGN(D3D11Blending);
+  friend class D3DRenderer;
+  DISALLOW_COPY_AND_ASSIGN(D3DBlending);
 };
+}  // namespace d3d11
 }  // namespace azer

@@ -6,7 +6,8 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-D3D11Environment::D3D11Environment(Surface* surface) 
+namespace d3d11 {
+D3DEnvironment::D3DEnvironment(Surface* surface) 
     : d3d_device_(NULL)
     , d3d_context_(NULL)
     , dxgi_factory_(NULL)
@@ -16,7 +17,7 @@ D3D11Environment::D3D11Environment(Surface* surface)
   memset(&feature_level_, 0, sizeof(feature_level_));
 }
 
-D3D11Environment::~D3D11Environment() {
+D3DEnvironment::~D3DEnvironment() {
   SAFE_RELEASE(d3d_device_);
   SAFE_RELEASE(d3d_context_);
   SAFE_RELEASE(dxgi_factory_);
@@ -24,7 +25,7 @@ D3D11Environment::~D3D11Environment() {
   SAFE_RELEASE(swap_chain_);
 }
 
-ID3D11Texture2D* D3D11Environment::GetSwapTexture() {
+ID3D11Texture2D* D3DEnvironment::GetSwapTexture() {
   HRESULT hr = 0;
   ID3D11Texture2D* texture_buffer = NULL;
   hr = swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&texture_buffer);
@@ -34,32 +35,32 @@ ID3D11Texture2D* D3D11Environment::GetSwapTexture() {
   return texture_buffer;
 }
 
-class InternalD3D11Environment : public D3D11Environment {
+class InternalD3DEnvironment : public D3DEnvironment {
  public:
-  InternalD3D11Environment(Surface* surface)
-      : D3D11Environment(surface) {
+  InternalD3DEnvironment(Surface* surface)
+      : D3DEnvironment(surface) {
   }
 
   virtual bool ResetSwapChain() override;
   virtual bool Initialize() override;
  private:
-  bool InitD3D11Device();
-  DISALLOW_COPY_AND_ASSIGN(InternalD3D11Environment);
+  bool InitD3DDevice();
+  DISALLOW_COPY_AND_ASSIGN(InternalD3DEnvironment);
 };
 
-class ExternalD3D11Environment : public D3D11Environment {
+class ExternalD3DEnvironment : public D3DEnvironment {
  public:
-  ExternalD3D11Environment(Surface* surface)
-      : D3D11Environment(surface) {
+  ExternalD3DEnvironment(Surface* surface)
+      : D3DEnvironment(surface) {
   }
 
   virtual bool ResetSwapChain() override {}
   virtual bool Initialize() override;
  private:
-  DISALLOW_COPY_AND_ASSIGN(ExternalD3D11Environment);
+  DISALLOW_COPY_AND_ASSIGN(ExternalD3DEnvironment);
 };
 
-bool InternalD3D11Environment::ResetSwapChain() {
+bool InternalD3DEnvironment::ResetSwapChain() {
   HRESULT hr = 0;
   int32 width = surface_->GetBounds().width();
   int32 height = surface_->GetBounds().height();
@@ -93,7 +94,7 @@ bool InternalD3D11Environment::ResetSwapChain() {
   return true;
 }
 
-bool InternalD3D11Environment::InitD3D11Device() {
+bool InternalD3DEnvironment::InitD3DDevice() {
   DCHECK(NULL == d3d_device_);
   DCHECK(NULL == d3d_context_);
   DCHECK(NULL == dxgi_adapter_);
@@ -142,8 +143,8 @@ bool InternalD3D11Environment::InitD3D11Device() {
   return true;
 }
 
-bool InternalD3D11Environment::Initialize() {
-  if (!InitD3D11Device()) {
+bool InternalD3DEnvironment::Initialize() {
+  if (!InitD3DDevice()) {
     return false;
   }
 
@@ -152,21 +153,22 @@ bool InternalD3D11Environment::Initialize() {
 }
 
 
-D3D11EnvironmentPtr D3D11Environment::Create(const std::string& name, 
+D3DEnvironmentPtr D3DEnvironment::Create(const std::string& name, 
                                              Surface* surface) {
   if (name == "internal") {
-    std::unique_ptr<D3D11Environment> ptr(new InternalD3D11Environment(surface));
+    std::unique_ptr<D3DEnvironment> ptr(new InternalD3DEnvironment(surface));
     if (ptr->Initialize()) {
-      return D3D11EnvironmentPtr(ptr.release());
+      return D3DEnvironmentPtr(ptr.release());
     }
   } else if (name == "external") {
-    return D3D11EnvironmentPtr();
+    return D3DEnvironmentPtr();
   } else {
     NOTREACHED();
   }
 
-  return D3D11EnvironmentPtr();
+  return D3DEnvironmentPtr();
 }
+}  // namespace d3d11
 }  // namespace azer
 
 

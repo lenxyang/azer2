@@ -4,8 +4,9 @@
 #include "azer/render_system/d3d11/render_system.h"
 
 namespace azer {
+namespace d3d11 {
 
-const char* D3D11OverlayEffect::kVertexShaderProg = ""
+const char* D3DOverlayEffect::kVertexShaderProg = ""
     "struct VS_OUTPUT {                                  \n"
     "  float4 Pos : SV_POSITION;                         \n"
     "  float2 texcoord : TEXCOORD;                       \n"
@@ -20,7 +21,7 @@ const char* D3D11OverlayEffect::kVertexShaderProg = ""
     "}";
 
 
-const char* D3D11OverlayEffect::kPixelShaderProg = ""
+const char* D3DOverlayEffect::kPixelShaderProg = ""
     "struct VS_OUTPUT {                                      \n"
     "  float4 Pos : SV_POSITION;                             \n"
     "  float2 Tex : TEXTURE;                                 \n"
@@ -33,7 +34,7 @@ const char* D3D11OverlayEffect::kPixelShaderProg = ""
     "  return diffuse;                                                  \n"
     "}";
 
-bool D3D11OverlayEffect::Init(Overlay* surface, D3D11RenderSystem* rs) {
+bool D3DOverlayEffect::Init(Overlay* surface, D3DRenderSystem* rs) {
   GpuProgramPtr vs(rs->CreateVertexGpuProgram(surface->GetVertexDesc(),
                                               kVertexShaderProg));
   DCHECK(vs.get() != NULL) << "Overlay default VertexStage Program compiled failed";
@@ -48,10 +49,10 @@ bool D3D11OverlayEffect::Init(Overlay* surface, D3D11RenderSystem* rs) {
   return true;
 }
 
-OverlayEffect* D3D11Overlay::CreateDefaultEffect() {
+OverlayEffect* D3DOverlay::CreateDefaultEffect() {
   DCHECK(render_system_ != NULL);
-  std::unique_ptr<D3D11OverlayEffect> effect_ptr(
-      new D3D11OverlayEffect(render_system_));
+  std::unique_ptr<D3DOverlayEffect> effect_ptr(
+      new D3DOverlayEffect(render_system_));
   if (effect_ptr->Init(this, render_system_)) {
     return effect_ptr.release();
   } else {
@@ -59,21 +60,21 @@ OverlayEffect* D3D11Overlay::CreateDefaultEffect() {
   }
 }
 
-bool D3D11Overlay::Init(azer::RenderSystem* rs) {
+bool D3DOverlay::Init(azer::RenderSystem* rs) {
   if (!InitVertex(rs)) {
     return false;
   }
   return true;
 }
 
-const VertexDesc::Desc D3D11Overlay::kVertexDesc[] = {
+const VertexDesc::Desc D3DOverlay::kVertexDesc[] = {
   {"POSITION", 0, kVec4},
   {"TEXCOORD", 0, kVec2},
 };
 
-const int D3D11Overlay::kVertexDescNum = arraysize(D3D11Overlay::kVertexDesc);
+const int D3DOverlay::kVertexDescNum = arraysize(D3DOverlay::kVertexDesc);
 
-bool D3D11Overlay::InitVertex(RenderSystem* rs) {
+bool D3DOverlay::InitVertex(RenderSystem* rs) {
   // create vertex buffer
   vertex_desc_ptr_.reset(new VertexDesc(kVertexDesc, kVertexDescNum));
   VertexData data(vertex_desc_ptr_, kVertexNum);
@@ -104,4 +105,5 @@ bool D3D11Overlay::InitVertex(RenderSystem* rs) {
 
   return true;
 }
+}  // namespace d3d11
 }  // namespace azer

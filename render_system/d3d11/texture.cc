@@ -18,7 +18,9 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-bool D3D11Texture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
+namespace d3d11 {
+
+bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   HRESULT hr;
   DCHECK(NULL == resource_);
   ID3D11Device* d3d_device = render_system_->GetDevice();
@@ -48,7 +50,7 @@ bool D3D11Texture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   }
 }
 
-void D3D11Texture::SetPSSampler(int index, D3D11Renderer* renderer) {
+void D3DTexture::SetPSSampler(int index, D3DRenderer* renderer) {
   DCHECK(NULL != view_);
   DCHECK_GE(index, 0);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
@@ -58,7 +60,7 @@ void D3D11Texture::SetPSSampler(int index, D3D11Renderer* renderer) {
   }
 }
 
-void D3D11Texture::SetVSSampler(int index, D3D11Renderer* renderer) {
+void D3DTexture::SetVSSampler(int index, D3DRenderer* renderer) {
   DCHECK(NULL != view_);
   DCHECK_GE(index, 0);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
@@ -68,16 +70,16 @@ void D3D11Texture::SetVSSampler(int index, D3D11Renderer* renderer) {
   }
 }
 
-void D3D11Texture::GenerateMips(int level) {
+void D3DTexture::GenerateMips(int level) {
   DCHECK(view_ != NULL);
   ID3D11Device* d3d_device = render_system_->GetDevice();
-  D3D11Renderer* renderer = (D3D11Renderer*)(render_system_->GetDefaultRenderer());
+  D3DRenderer* renderer = (D3DRenderer*)(render_system_->GetDefaultRenderer());
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
   // D3DX11FilterTexture(d3d_context, (ID3D11Resource*)view_, 0, level);
   d3d_context->GenerateMips(view_);
 }
 
-bool D3D11Texture::InitResourceView() {
+bool D3DTexture::InitResourceView() {
   ID3D11Device* d3d_device = render_system_->GetDevice();
   InitResourceDesc(&res_view_desc_);
   HRESULT hr = d3d_device->CreateShaderResourceView(resource_, &res_view_desc_,
@@ -86,7 +88,7 @@ bool D3D11Texture::InitResourceView() {
   return SetSamplerState(options_.sampler);
 }
 
-bool D3D11Texture::SetSamplerState(const SamplerState& sampler_state) {
+bool D3DTexture::SetSamplerState(const SamplerState& sampler_state) {
   ID3D11Device* d3d_device = render_system_->GetDevice();
   if (sampler_state_) {
     SAFE_RELEASE(sampler_state_);
@@ -114,8 +116,8 @@ bool D3D11Texture::SetSamplerState(const SamplerState& sampler_state) {
   return true;
 }
 
-void D3D11Texture::UseForStage(RenderPipelineStage stage, int index,
-                               D3D11Renderer* renderer) {
+void D3DTexture::UseForStage(RenderPipelineStage stage, int index,
+                             D3DRenderer* renderer) {
   DCHECK(NULL != render_system_);
   if (stage == kVertexStage) {
     SetVSSampler(index, renderer);
@@ -127,11 +129,11 @@ void D3D11Texture::UseForStage(RenderPipelineStage stage, int index,
 }
 
 // reference: MSDN "How to: Use dynamic resources"
-Texture::MapData D3D11Texture::map(MapType maptype) {
+Texture::MapData D3DTexture::map(MapType maptype) {
   DCHECK(NULL != resource_);
   MapData mapdata;
   ZeroMemory(&mapdata, sizeof(mapdata));
-  D3D11Renderer* renderer = (D3D11Renderer*)(render_system_->GetDefaultRenderer());
+  D3DRenderer* renderer = (D3DRenderer*)(render_system_->GetDefaultRenderer());
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
 
   D3D11_MAPPED_SUBRESOURCE mapped;
@@ -153,22 +155,22 @@ Texture::MapData D3D11Texture::map(MapType maptype) {
   return mapdata;
 }
 
-void D3D11Texture::unmap() {
+void D3DTexture::unmap() {
 #ifdef DEBUG
   DCHECK(mapped_);
   mapped_ = false;
 #endif
   DCHECK(NULL != resource_);
-  D3D11Renderer* renderer = (D3D11Renderer*)(render_system_->GetDefaultRenderer());
+  D3DRenderer* renderer = (D3DRenderer*)(render_system_->GetDefaultRenderer());
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
   d3d_context->Unmap(resource_, 0);
 }
 
-// class D3D11Texture2D
-void D3D11Texture2D::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
+// class D3DTexture2D
+void D3DTexture2D::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
 }
 
-bool D3D11Texture2D::InitFromImage(const Image* image) {
+bool D3DTexture2D::InitFromImage(const Image* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   const ImageDataPtr& data = image->data(0);
   uint32 expect_size = SizeofDataFormat(options_.format)
@@ -187,7 +189,7 @@ bool D3D11Texture2D::InitFromImage(const Image* image) {
   return Init(&subres, 1);
 }
 
-void D3D11Texture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
+void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   DCHECK(resource_ != NULL);
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURE2D);
@@ -197,12 +199,12 @@ void D3D11Texture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   desc->Texture2D.MostDetailedMip = 0;
 }
 
-void D3D11TextureCubeMap::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
+void D3DTextureCubeMap::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
   desc->MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 } 
 
 // class D3D11TextureCubeMap
-bool D3D11TextureCubeMap::InitFromImage(const Image* image) {
+bool D3DTextureCubeMap::InitFromImage(const Image* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   const ImageDataPtr& data = image->data(0);
   uint32 expect_size = SizeofDataFormat(options_.format)
@@ -225,7 +227,7 @@ bool D3D11TextureCubeMap::InitFromImage(const Image* image) {
   return Init(subres, 6);
 }
 
-void D3D11TextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
+void D3DTextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   DCHECK(resource_ != NULL);
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURECUBE);
@@ -236,25 +238,25 @@ void D3D11TextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc
 }
 
 // reference: MSDN, Surface Sharing Between Windows Graphics APIs
-D3D11Texture2DShared::D3D11Texture2DShared(const Texture::Options& opt,
-                                           D3D11RenderSystem* rs)
-    : D3D11Texture2D(opt, rs)
+D3DTexture2DShared::D3DTexture2DShared(const Texture::Options& opt,
+                                       D3DRenderSystem* rs)
+    : D3DTexture2D(opt, rs)
     , shared_handle_(NULL) {
   DCHECK(opt.target & azer::Texture::kRenderTarget);
   DCHECK_EQ(opt.usage, GraphicBuffer::kDefault);
 }
 
-D3D11Texture2DShared::~D3D11Texture2DShared() {
+D3DTexture2DShared::~D3DTexture2DShared() {
   if (shared_handle_ != NULL) {
     // CloseHandle(shared_handle_);
   }
 }
 
-void D3D11Texture2DShared::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
+void D3DTexture2DShared::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
   desc->MiscFlags      = D3D11_RESOURCE_MISC_SHARED;
 }
 
-bool D3D11Texture2DShared::InitSharedResource() {
+bool D3DTexture2DShared::InitSharedResource() {
   CHECK(NULL == shared_handle_);
   HRESULT hr;
   IDXGIResource* dxgi_res = NULL;
@@ -284,16 +286,16 @@ bool D3D11Texture2DShared::InitSharedResource() {
   return true;
 }
 
-bool D3D11Texture2DShared::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
-  if (!D3D11Texture::Init(data, num)) {
+bool D3DTexture2DShared::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
+  if (!D3DTexture::Init(data, num)) {
     return false;
   }
 
   return InitSharedResource();
 }
 
-D3D11Texture2DExtern* D3D11Texture2DExtern::Create(HANDLE handle,
-                                                   D3D11RenderSystem* rs) {
+D3DTexture2DExtern* D3DTexture2DExtern::Create(HANDLE handle,
+                                               D3DRenderSystem* rs) {
   ID3D11Texture2D* shared_tex = NULL;
   ID3D11Device* d3d_device = rs->GetDevice();
   HRESULT hr = d3d_device->OpenSharedResource(handle, __uuidof(ID3D11Texture2D),
@@ -309,7 +311,7 @@ D3D11Texture2DExtern* D3D11Texture2DExtern::Create(HANDLE handle,
   opt.width = desc.Width;
   opt.height = desc.Height;
   opt.format = TranslateD3DFormat(desc.Format);
-  std::unique_ptr<D3D11Texture2DExtern> ptr(new D3D11Texture2DExtern(opt, rs));
+  std::unique_ptr<D3DTexture2DExtern> ptr(new D3DTexture2DExtern(opt, rs));
   ptr->Attach(shared_tex);
   if (ptr->GetResource()) {
     return ptr.release();
@@ -318,13 +320,14 @@ D3D11Texture2DExtern* D3D11Texture2DExtern::Create(HANDLE handle,
   }
 }
 
-void D3D11Texture2DExtern::Attach(ID3D11Texture2D* tex) {
-  D3D11Texture::Attach(tex);
+void D3DTexture2DExtern::Attach(ID3D11Texture2D* tex) {
+  D3DTexture::Attach(tex);
   tex->GetDesc(&tex_desc_);
   InitResourceView();
 }
 
-void D3D11Texture2DExtern::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
+void D3DTexture2DExtern::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
   desc->MiscFlags      = D3D11_RESOURCE_MISC_SHARED;
 }
+}  // namespace d3d11
 }  // namespace azer

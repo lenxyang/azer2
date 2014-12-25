@@ -5,16 +5,17 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-void D3D11Technique::Use(Renderer* renderer) {
-  D3D11VertexGpuProgram* vs = (D3D11VertexGpuProgram*)pline_[kVertexStage].get();
-  D3D11PixelGpuProgram* ps = (D3D11PixelGpuProgram*)pline_[kPixelStage].get();
-  D3D11GeometryGpuProgram* gs = (D3D11GeometryGpuProgram*)pline_[kGeometryStage].get();
+namespace d3d11 {
+void D3DTechnique::Use(Renderer* renderer) {
+  D3DVertexGpuProgram* vs = (D3DVertexGpuProgram*)pline_[kVertexStage].get();
+  D3DPixelGpuProgram* ps = (D3DPixelGpuProgram*)pline_[kPixelStage].get();
+  D3DGeometryGpuProgram* gs = (D3DGeometryGpuProgram*)pline_[kGeometryStage].get();
   DCHECK(vs != NULL);
   DCHECK(ps != NULL);
   DCHECK_EQ(vs->stage(), kVertexStage);
   DCHECK_EQ(ps->stage(), kPixelStage);
 
-  ID3D11DeviceContext* d3d_context = ((D3D11Renderer*)renderer)->GetContext();
+  ID3D11DeviceContext* d3d_context = ((D3DRenderer*)renderer)->GetContext();
 
   DCHECK(vs->input_layout_ != NULL);
   d3d_context->IASetInputLayout(vs->input_layout_);
@@ -31,4 +32,5 @@ void D3D11Technique::Use(Renderer* renderer) {
   }
   // TODO(yanglei)
 }
+}  // namespace d3d11
 }  // namespace azer

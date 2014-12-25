@@ -30,6 +30,7 @@
 
 
 namespace azer {
+
 ID3DBlob* CompileVertexShader(const std::string& shader, std::string* error_msg);
 ID3DBlob* CompilePixelShader(const std::string& shader, std::string* error_msg);
 ID3DBlob* CompileGeometryShader(const std::string& shader, std::string* error_msg);
@@ -66,5 +67,4 @@ class ScopedRefCOM {
   IUnknown* ptr_;
   DISALLOW_COPY_AND_ASSIGN(ScopedRefCOM);
 };
-
 }  // namespace azer

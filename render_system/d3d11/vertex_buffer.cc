@@ -10,8 +10,9 @@
 #include "azer/render_system/d3d11/hr_msg.h"
 
 namespace azer {
+namespace d3d11 {
 
-bool D3D11VertexBuffer::Init(const VertexData* dataptr) {
+bool D3DVertexBuffer::Init(const VertexData* dataptr) {
   DCHECK(element_size_ == -1 && buffer_size_ == -1 && vertex_num_ == -1);
   ID3D11Device* d3d_device = render_system_->GetDevice();
 
@@ -41,7 +42,7 @@ bool D3D11VertexBuffer::Init(const VertexData* dataptr) {
   return true;
 }
 
-HardwareBufferDataPtr D3D11VertexBuffer::map(MapType flags) {
+HardwareBufferDataPtr D3DVertexBuffer::map(MapType flags) {
   DCHECK(options_.usage & GraphicBuffer::kDynamic
          || options_.usage & GraphicBuffer::kStaging);
   DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
@@ -68,7 +69,7 @@ HardwareBufferDataPtr D3D11VertexBuffer::map(MapType flags) {
   return data;
 }
 
-void D3D11VertexBuffer::unmap() {
+void D3DVertexBuffer::unmap() {
   DCHECK(locked_) << "Vertex Buffer(" << options_.name << ") has not been locked";
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
@@ -77,4 +78,5 @@ void D3D11VertexBuffer::unmap() {
   d3d_context->Unmap(buffer_, 0);
   locked_ = false;
 }
+}  // namespace d3d11
 }  // namespace azer

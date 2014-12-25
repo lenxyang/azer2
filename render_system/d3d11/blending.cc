@@ -7,8 +7,9 @@
 #include "azer/render_system/d3d11/renderer.h"
 
 namespace azer {
+namespace d3d11 {
 
-bool D3D11Blending::Init() {
+bool D3DBlending::Init() {
   D3D11_BLEND_DESC blend_desc;
   ZeroMemory(&blend_desc, sizeof(blend_desc));
 
@@ -35,4 +36,5 @@ bool D3D11Blending::Init() {
   
   return true;
 }
+}  // namespace d3d11
 }  // namespace azer

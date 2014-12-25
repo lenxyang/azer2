@@ -7,11 +7,12 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-class D3D11RenderSystem;
+namespace d3d11 {
+class D3DRenderSystem;
 
-class D3D11IndicesBuffer : public IndicesBuffer {
+class D3DIndicesBuffer : public IndicesBuffer {
  public:
-  virtual ~D3D11IndicesBuffer() {
+  virtual ~D3DIndicesBuffer() {
     SAFE_RELEASE(buffer_);
   }
 
@@ -20,7 +21,7 @@ class D3D11IndicesBuffer : public IndicesBuffer {
 
   bool Initialized() { return NULL != buffer_;}
  private:
-  D3D11IndicesBuffer(const IndicesBuffer::Options& opt, D3D11RenderSystem* rs)
+  D3DIndicesBuffer(const IndicesBuffer::Options& opt, D3DRenderSystem* rs)
       : IndicesBuffer(opt)
       , locked_(false)
       , buffer_(NULL)
@@ -30,10 +31,11 @@ class D3D11IndicesBuffer : public IndicesBuffer {
   bool Init(const IndicesData* data);
   bool locked_;
   ID3D11Buffer* buffer_;
-  D3D11RenderSystem* render_system_;
+  D3DRenderSystem* render_system_;
 
-  friend class D3D11RenderSystem;
-  friend class D3D11Renderer;
-  DISALLOW_COPY_AND_ASSIGN(D3D11IndicesBuffer);
+  friend class D3DRenderSystem;
+  friend class D3DRenderer;
+  DISALLOW_COPY_AND_ASSIGN(D3DIndicesBuffer);
 };
+}  // namespace d3d11
 }  // namespace azer

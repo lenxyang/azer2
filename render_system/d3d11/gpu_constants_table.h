@@ -8,28 +8,30 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-class D3D11Renderer;
-class D3D11RenderSystem;
+namespace d3d11 {
+class D3DRenderer;
+class D3DRenderSystem;
 
-class D3D11GpuConstantsTable : public GpuConstantsTable {
+class D3DGpuConstantsTable : public GpuConstantsTable {
  public:
-  virtual ~D3D11GpuConstantsTable() {
+  virtual ~D3DGpuConstantsTable() {
     SAFE_RELEASE(buffer_);
   }
 
   virtual void flush(Renderer*) override;
  private:
-  D3D11GpuConstantsTable(int32 num, const Desc* desc)
+  D3DGpuConstantsTable(int32 num, const Desc* desc)
       : GpuConstantsTable(num, desc)
       , buffer_(NULL) {
   }
   
  private:
   ID3D11Buffer* buffer_;
-  bool Init(D3D11RenderSystem* rs);
+  bool Init(D3DRenderSystem* rs);
 
-  friend class D3D11RenderSystem;
-  friend class D3D11Renderer;
-  DISALLOW_COPY_AND_ASSIGN(D3D11GpuConstantsTable);
+  friend class D3DRenderSystem;
+  friend class D3DRenderer;
+  DISALLOW_COPY_AND_ASSIGN(D3DGpuConstantsTable);
 };
+}  // namespace d3d11
 }  // namespace azer

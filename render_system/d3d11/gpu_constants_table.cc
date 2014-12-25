@@ -5,7 +5,8 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-bool D3D11GpuConstantsTable::Init(D3D11RenderSystem* rs) {
+namespace d3d11 {
+bool D3DGpuConstantsTable::Init(D3DRenderSystem* rs) {
   D3D11_BUFFER_DESC cbbd;
   ID3D11Device* d3d_device = rs->GetDevice();
 
@@ -22,10 +23,11 @@ bool D3D11GpuConstantsTable::Init(D3D11RenderSystem* rs) {
   return true;
 }
 
-void D3D11GpuConstantsTable::flush(Renderer* renderer) {
+void D3DGpuConstantsTable::flush(Renderer* renderer) {
   DCHECK(buffer_ != NULL);
-  ID3D11DeviceContext* d3d_context = ((D3D11Renderer*)renderer)->GetContext();
+  ID3D11DeviceContext* d3d_context = ((D3DRenderer*)renderer)->GetContext();
   d3d_context->UpdateSubresource(buffer_, 0, NULL, data_.get(), 0, 0);
 }
 
+}  // namespace d3d11
 }  // namespace azer

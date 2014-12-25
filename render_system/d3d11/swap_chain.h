@@ -13,13 +13,14 @@
 #include "azer/render_system/d3d11/d3denv.h"
 
 namespace azer {
-class D3D11RenderSystem;
-class D3D11Renderer;
+namespace d3d11 {
+class D3DRenderSystem;
+class D3DRenderer;
 
-class D3D11SwapChain : public SwapChain {
+class D3DSwapChain : public SwapChain {
  public:
-  D3D11SwapChain(D3D11RenderSystem* rs);
-  virtual ~D3D11SwapChain();
+  D3DSwapChain(D3DRenderSystem* rs);
+  virtual ~D3DSwapChain();
 
   bool Init(Surface* surface);
   virtual bool reset(Surface* surface) override;
@@ -29,14 +30,15 @@ class D3D11SwapChain : public SwapChain {
   IDXGISwapChain* GetSwapChain();
  private:
   Renderer* CreateSurfaceRenderer(Surface* surface);
-  D3D11RenderSystem* render_system_;
-  D3D11EnvironmentPtr envptr_;
+  D3DRenderSystem* render_system_;
+  D3DEnvironmentPtr envptr_;
   
-  DISALLOW_COPY_AND_ASSIGN(D3D11SwapChain);
+  DISALLOW_COPY_AND_ASSIGN(D3DSwapChain);
 };
 
-inline IDXGISwapChain* D3D11SwapChain::GetSwapChain() {
+inline IDXGISwapChain* D3DSwapChain::GetSwapChain() {
   DCHECK(NULL != envptr_.get());
   return envptr_->GetSwapChain();
 }
+}  // namespace d3d11
 }  // namespace azer

@@ -5,12 +5,13 @@
 #include "azer/render/gpu_program.h"
 
 namespace azer {
+namespace d3d11 {
 
-class D3D11RenderSystem;
+class D3DRenderSystem;
 
-class D3D11Technique : public Technique {
+class D3DTechnique : public Technique {
  public:
-  D3D11Technique(D3D11RenderSystem* rs)
+  D3DTechnique(D3DRenderSystem* rs)
       : render_system_(rs) {
   }
 
@@ -20,7 +21,8 @@ class D3D11Technique : public Technique {
 
   virtual void Use(Renderer*);
  private:
-  D3D11RenderSystem* render_system_;
-  DISALLOW_COPY_AND_ASSIGN(D3D11Technique);
+  D3DRenderSystem* render_system_;
+  DISALLOW_COPY_AND_ASSIGN(D3DTechnique);
 };
+}  // namespace d3d11
 }  // namespace azer

@@ -13,17 +13,18 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
+namespace d3d11 {
 
-class D3D11RenderSystem;
-class D3D11VertexGpuProgram : public VertexGpuProgram {
+class D3DRenderSystem;
+class D3DVertexGpuProgram : public VertexGpuProgram {
  public:
-  D3D11VertexGpuProgram(VertexDescPtr desc, const std::string& program)
+  D3DVertexGpuProgram(VertexDescPtr desc, const std::string& program)
       : VertexGpuProgram(desc, program)
       , shader_(NULL)
       , input_layout_(NULL) {
   }
 
-  virtual ~D3D11VertexGpuProgram() {
+  virtual ~D3DVertexGpuProgram() {
     SAFE_RELEASE(shader_);
     SAFE_RELEASE(input_layout_);
   }
@@ -33,38 +34,38 @@ class D3D11VertexGpuProgram : public VertexGpuProgram {
   ID3D11VertexShader* shader_;
   ID3D11InputLayout *input_layout_;
 
-  friend class D3D11Renderer;
-  friend class D3D11Technique;
-  DISALLOW_COPY_AND_ASSIGN(D3D11VertexGpuProgram);
+  friend class D3DRenderer;
+  friend class D3DTechnique;
+  DISALLOW_COPY_AND_ASSIGN(D3DVertexGpuProgram);
 };
 
-class D3D11PixelGpuProgram : public GpuProgram {
+class D3DPixelGpuProgram : public GpuProgram {
  public:
-  D3D11PixelGpuProgram(const std::string& program)
+  D3DPixelGpuProgram(const std::string& program)
       : GpuProgram(kPixelStage, program)
       , shader_(NULL) {
   }
 
-  virtual ~D3D11PixelGpuProgram() {
+  virtual ~D3DPixelGpuProgram() {
     SAFE_RELEASE(shader_);
   }
 
   virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11PixelShader* shader_;
-  friend class D3D11Renderer;
-  friend class D3D11Technique;
-  DISALLOW_COPY_AND_ASSIGN(D3D11PixelGpuProgram);
+  friend class D3DRenderer;
+  friend class D3DTechnique;
+  DISALLOW_COPY_AND_ASSIGN(D3DPixelGpuProgram);
 };
 
-class D3D11GeometryGpuProgram : public GpuProgram {
+class D3DGeometryGpuProgram : public GpuProgram {
  public:
-  D3D11GeometryGpuProgram(const std::string& program)
+  D3DGeometryGpuProgram(const std::string& program)
       : GpuProgram(kGeometryStage, program)
       , shader_(NULL) {
   }
 
-  virtual ~D3D11GeometryGpuProgram() {
+  virtual ~D3DGeometryGpuProgram() {
     SAFE_RELEASE(shader_);
   }
 
@@ -72,8 +73,9 @@ class D3D11GeometryGpuProgram : public GpuProgram {
  private:
   ID3D11GeometryShader* shader_;
 
-  friend class D3D11Renderer;
-  friend class D3D11Technique;
-  DISALLOW_COPY_AND_ASSIGN(D3D11GeometryGpuProgram);
+  friend class D3DRenderer;
+  friend class D3DTechnique;
+  DISALLOW_COPY_AND_ASSIGN(D3DGeometryGpuProgram);
 };
+}  // namespace d3d11
 }  // namespace azer

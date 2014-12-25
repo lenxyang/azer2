@@ -7,51 +7,53 @@
 #include "azer/render_system/d3d11/swap_chain.h"
 
 namespace azer {
-class D3D11RenderSystem;
-class D3D11Renderer;
-class D3D11SurfaceRenderTarget;
+namespace d3d11 {
+class D3DRenderSystem;
+class D3DRenderer;
+class D3DSurfaceRenderTarget;
 
-class D3D11RenderTarget : public RenderTarget {
+class D3DRenderTarget : public RenderTarget {
  public:
   // create by RenderSystem
-  static D3D11RenderTarget* Create(const Texture::Options& opt,
-                                   D3D11Renderer* renderer);
-  D3D11RenderTarget(const Texture::Options& opt,
-                    bool surface_target, 
-                    D3D11Renderer* renderer)
+  static D3DRenderTarget* Create(const Texture::Options& opt,
+                                 D3DRenderer* renderer);
+  D3DRenderTarget(const Texture::Options& opt,
+                  bool surface_target, 
+                  D3DRenderer* renderer)
       : RenderTarget(opt, surface_target)
       , target_(NULL)
       , renderer_(renderer) {
   }
   
-  virtual ~D3D11RenderTarget() {
+  virtual ~D3DRenderTarget() {
     SAFE_RELEASE(target_);
   }
   
   virtual void Clear(const azer::Vector4& color);
 
-  bool Init(D3D11RenderSystem* rs);
-  ID3D11RenderTargetView* GetD3D11RenderTargetView() { return target_;}
+  bool Init(D3DRenderSystem* rs);
+  ID3D11RenderTargetView* GetD3DRenderTargetView() { return target_;}
  protected:
   ID3D11RenderTargetView* target_;
-  D3D11Renderer* renderer_;
-  DISALLOW_COPY_AND_ASSIGN(D3D11RenderTarget);
+  D3DRenderer* renderer_;
+  DISALLOW_COPY_AND_ASSIGN(D3DRenderTarget);
 };
 
-class D3D11SurfaceRenderTarget : public D3D11RenderTarget {
+class D3DSurfaceRenderTarget : public D3DRenderTarget {
  public:
-  static D3D11SurfaceRenderTarget* Create(Surface* surface, D3D11Renderer* r);
+  static D3DSurfaceRenderTarget* Create(Surface* surface, D3DRenderer* r);
 
-  D3D11SurfaceRenderTarget(const Texture::Options& opt, Surface* surface,
-                           D3D11Renderer* renderer)
-      : D3D11RenderTarget(opt, true, renderer)
+  D3DSurfaceRenderTarget(const Texture::Options& opt, Surface* surface,
+                         D3DRenderer* renderer)
+      : D3DRenderTarget(opt, true, renderer)
       , surface_(surface) {
   }
 
   bool Init();
  protected:
   Surface* surface_;
-  DISALLOW_COPY_AND_ASSIGN(D3D11SurfaceRenderTarget);
+  DISALLOW_COPY_AND_ASSIGN(D3DSurfaceRenderTarget);
 };
 
+}  // namespace d3d11
 }  // namespace azer

@@ -6,9 +6,10 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
-class D3D11VertexBuffer : public VertexBuffer {
+namespace d3d11 {
+class D3DVertexBuffer : public VertexBuffer {
  public:
-  virtual ~D3D11VertexBuffer() {
+  virtual ~D3DVertexBuffer() {
     SAFE_RELEASE(buffer_);
   }
   
@@ -22,7 +23,7 @@ class D3D11VertexBuffer : public VertexBuffer {
 
   bool Initialized() const { return NULL != buffer_;}
  private:
-  D3D11VertexBuffer(const Options &opt, D3D11RenderSystem* rs)
+  D3DVertexBuffer(const Options &opt, D3DRenderSystem* rs)
       : VertexBuffer(opt)
       , locked_(false)
       , buffer_(NULL)
@@ -31,10 +32,11 @@ class D3D11VertexBuffer : public VertexBuffer {
 
   bool locked_;
   ID3D11Buffer* buffer_;
-  D3D11RenderSystem* render_system_;
-  friend class D3D11RenderSystem;
-  friend class D3D11Renderer;
-  DISALLOW_COPY_AND_ASSIGN(D3D11VertexBuffer);
+  D3DRenderSystem* render_system_;
+  friend class D3DRenderSystem;
+  friend class D3DRenderer;
+  DISALLOW_COPY_AND_ASSIGN(D3DVertexBuffer);
 };
 
+}  // namespace d3d11
 }  // namespace azer

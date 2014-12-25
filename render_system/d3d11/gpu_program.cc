@@ -6,9 +6,10 @@
 #include "azer/base/string.h"
 
 namespace azer {
+namespace d3d11 {
 
-bool D3D11VertexGpuProgram::Init(RenderSystem* vrs) {
-  D3D11RenderSystem* rs = (D3D11RenderSystem*)vrs;
+bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
+  D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
   std::string msg;
   ID3D11Device* d3d_device = rs->GetDevice();
 
@@ -49,8 +50,8 @@ bool D3D11VertexGpuProgram::Init(RenderSystem* vrs) {
   return true;
 }
 
-bool D3D11PixelGpuProgram::Init(RenderSystem* vrs) {
-  D3D11RenderSystem* rs = (D3D11RenderSystem*)vrs;
+bool D3DPixelGpuProgram::Init(RenderSystem* vrs) {
+  D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
   std::string msg;
   ID3D11Device* d3d_device = rs->GetDevice();
   D3DBlobPtr blob(CompilePixelShader(program_, &msg));
@@ -68,8 +69,8 @@ bool D3D11PixelGpuProgram::Init(RenderSystem* vrs) {
   return true;
 }
 
-bool D3D11GeometryGpuProgram::Init(RenderSystem* vrs) {
-  D3D11RenderSystem* rs = (D3D11RenderSystem*)vrs;
+bool D3DGeometryGpuProgram::Init(RenderSystem* vrs) {
+  D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
   DCHECK(NULL == shader_);
   std::string msg;
   ID3D11Device* d3d_device = rs->GetDevice();
@@ -87,4 +88,5 @@ bool D3D11GeometryGpuProgram::Init(RenderSystem* vrs) {
   DCHECK(NULL != shader_);
   return true;
 }
+}  // namespace d3d11
 }  // namespace azer

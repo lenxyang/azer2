@@ -12,21 +12,24 @@
 #include "ui/gfx/native_widget_types.h"
 
 namespace azer {
+namespace d3d11 {
 
-class D3D11Environment;
-typedef std::shared_ptr<D3D11Environment> D3D11EnvironmentPtr;
+class D3DSwapChain;
+class D3DEnvironment;
+typedef std::shared_ptr<D3DEnvironment> D3DEnvironmentPtr;
 
 /**
- * D3D11Enviroment 的作用是封装 D3D11 的初始化过程
- * 在内部实现中, D3D11Environment 分成两个部分 External 和 Internal
+ * D3DEnviroment 的作用是封装 D3D11 的初始化过程
+ * 在内部实现中, D3DEnvironment 分成两个部分 External 和 Internal
  * Internal 是默认的方法，即在内部完成 D3D11 的初始化
  * External 则为外部方法，D3D11 通过外部程序完成初始化，如果希望 azer 与 ANGLE 结合
  * 那么应该使用 ANGLE 的 d3d11 初始化的对象。
+ *
  */
-class D3D11Environment {
+class D3DEnvironment {
  public:
-  virtual ~D3D11Environment();
-  static D3D11EnvironmentPtr Create(const std::string& name, Surface* surface);
+  virtual ~D3DEnvironment();
+  static D3DEnvironmentPtr Create(const std::string& name, Surface* surface);
 
   /**
    * direct3d relevent
@@ -42,7 +45,7 @@ class D3D11Environment {
   virtual bool ResetSwapChain() = 0;
   Surface* GetSurface() { return surface_;}
  protected:
-  D3D11Environment(Surface* ptr);
+  D3DEnvironment(Surface* ptr);
   
   virtual bool Initialize() = 0;
 
@@ -53,7 +56,8 @@ class D3D11Environment {
   IDXGISwapChain* swap_chain_;
   D3D_FEATURE_LEVEL feature_level_;
   Surface* surface_;
-  DISALLOW_COPY_AND_ASSIGN(D3D11Environment);
+  DISALLOW_COPY_AND_ASSIGN(D3DEnvironment);
 };
 
+}  // namespace d3d11
 }  // namespace azer

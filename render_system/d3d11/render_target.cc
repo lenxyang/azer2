@@ -9,8 +9,9 @@
 #include "azer/render_system/d3d11/util.h"
 
 namespace azer {
+namespace d3d11 {
 
-void D3D11RenderTarget::Clear(const azer::Vector4& color) {
+void D3DRenderTarget::Clear(const azer::Vector4& color) {
   DCHECK(NULL != target_);
   DCHECK(NULL != renderer_);
   ID3D11DeviceContext* d3d_context = renderer_->GetContext();
@@ -18,20 +19,20 @@ void D3D11RenderTarget::Clear(const azer::Vector4& color) {
       target_, D3DXCOLOR(color.x, color.y, color.z, color.w));
 }
 
-bool D3D11RenderTarget::Init(D3D11RenderSystem* rs) {
+bool D3DRenderTarget::Init(D3DRenderSystem* rs) {
   DCHECK(!default_render_target_);
   DCHECK(target_ == NULL);
 
   ID3D11Device* d3d_device = rs->GetDevice();
   HRESULT hr;
   DCHECK(texture_.get() == NULL);
-  D3D11Texture2D* tex = new D3D11Texture2D(options_, rs);
+  D3DTexture2D* tex = new D3DTexture2D(options_, rs);
   texture_.reset(tex);
   if (!tex->Init(NULL, 1)) {
     return false;
   }
 
-  ID3D11Resource* resource = ((D3D11Texture2D*)texture_.get())->resource_;
+  ID3D11Resource* resource = ((D3DTexture2D*)texture_.get())->resource_;
   DCHECK(TranslateBindTarget(options_.target) & D3D11_BIND_RENDER_TARGET);
 
   hr = d3d_device->CreateRenderTargetView(resource, NULL, &target_);
@@ -39,12 +40,12 @@ bool D3D11RenderTarget::Init(D3D11RenderSystem* rs) {
   return true;
 }
 
-bool D3D11SurfaceRenderTarget::Init() {
-  D3D11RenderSystem* rs = (D3D11RenderSystem*)renderer_->GetRenderSystem();
+bool D3DSurfaceRenderTarget::Init() {
+  D3DRenderSystem* rs = (D3DRenderSystem*)renderer_->GetRenderSystem();
   DCHECK(target_ == NULL);
   DCHECK(default_render_target_);
   ID3D11Device* d3d_device = renderer_->GetDevice();
-  std::unique_ptr<D3D11Texture2D> ptr(new D3D11Texture2D(options(), rs));
+  std::unique_ptr<D3DTexture2D> ptr(new D3DTexture2D(options(), rs));
   HRESULT hr;
   
   ID3D11Texture2D* buffer = rs->GetD3DEnv()->GetSwapTexture();
@@ -55,13 +56,13 @@ bool D3D11SurfaceRenderTarget::Init() {
   return true;
 }
 
-D3D11RenderTarget* D3D11RenderTarget::Create(const Texture::Options& o,
-                                             D3D11Renderer* r) {
-  D3D11RenderSystem* rs = (D3D11RenderSystem*)r->GetRenderSystem();
+D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
+                                         D3DRenderer* r) {
+  D3DRenderSystem* rs = (D3DRenderSystem*)r->GetRenderSystem();
   Texture::Options opt;
   opt = o;
   opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
-  std::unique_ptr<D3D11RenderTarget> target(new D3D11RenderTarget(opt, false, r));
+  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, r));
   if (!target->Init(rs)) {
     return NULL;
   }
@@ -69,8 +70,8 @@ D3D11RenderTarget* D3D11RenderTarget::Create(const Texture::Options& o,
   return target.release();
 }
 
-D3D11SurfaceRenderTarget* D3D11SurfaceRenderTarget::Create(Surface* surface,
-                                                           D3D11Renderer* r) {
+D3DSurfaceRenderTarget* D3DSurfaceRenderTarget::Create(Surface* surface,
+                                                       D3DRenderer* r) {
   int32 width = surface->GetBounds().width();
   int32 height = surface->GetBounds().height();
   Texture::Options opt;
@@ -78,12 +79,13 @@ D3D11SurfaceRenderTarget* D3D11SurfaceRenderTarget::Create(Surface* surface,
   opt.height = height;
   opt.target = Texture::kRenderTarget;
 
-  std::unique_ptr<D3D11SurfaceRenderTarget> target(
-      new D3D11SurfaceRenderTarget(opt, surface, r));
+  std::unique_ptr<D3DSurfaceRenderTarget> target(
+      new D3DSurfaceRenderTarget(opt, surface, r));
   if (!target->Init()) {
     return NULL;
   }
   
   return target.release();
 }
+}  // namespace d3d11
 }  // namespace azer

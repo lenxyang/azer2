@@ -14,6 +14,7 @@
 
 
 namespace azer {
+namespace d3d11 {
 
 inline D3D11_USAGE TranslateUsage(GraphicBuffer::Usage usage) {
   switch(usage) {
@@ -306,4 +307,5 @@ inline D3D11_FILTER TranslateSamplerState(const Texture::SamplerState& state) {
     return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
   }
 }
+}  // namespace d3d11
 }  // namespace azer

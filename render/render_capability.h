@@ -4,6 +4,11 @@
 #include "azer/base/export.h"
 
 namespace azer {
+
+namespace d3d11 {
+class D3DRenderSystem;
+}
+
 class AZER_EXPORT RenderSystemCapability {
  public:
   bool HarewareTransformAndLightingSupported() const {
@@ -14,7 +19,6 @@ class AZER_EXPORT RenderSystemCapability {
   bool hw_transform_light_;
 
   int32 max_simultaneous_textures_;
-  friend class D3D9RenderSystem;
-  friend class D3D11RenderSystem;
+  friend class d3d11::D3DRenderSystem;
 };
 }  // namespace azer

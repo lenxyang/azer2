@@ -17,13 +17,16 @@ namespace azer {
 
 class WindowHost;
 class VertexBuffer;
-class D3D11RenderTarget;
-class D3D11DepthBuffer;
 
-class D3D11RenderSystem : public RenderSystem {
+
+namespace d3d11 {
+class D3DRenderTarget;
+class D3DDepthBuffer;
+
+class D3DRenderSystem : public RenderSystem {
  public:
-  D3D11RenderSystem(D3D11EnvironmentPtr envptr);
-  ~D3D11RenderSystem();
+  D3DRenderSystem(D3DEnvironmentPtr envptr);
+  ~D3DRenderSystem();
 
   bool Init();
   virtual const StringType& name() const override;
@@ -58,7 +61,7 @@ class D3D11RenderSystem : public RenderSystem {
 
   virtual EGL* CreateEGL() override;
 
-  D3D11EnvironmentPtr& GetD3DEnv() { return envptr_;}
+  D3DEnvironmentPtr& GetD3DEnv() { return envptr_;}
   /**
    * direct3d relevent
    */
@@ -71,10 +74,10 @@ class D3D11RenderSystem : public RenderSystem {
   bool InitD3DDevice();
   bool InitDefaultRenderer();
 
-  D3D11EnvironmentPtr envptr_;
+  D3DEnvironmentPtr envptr_;
   static const StringType& name_;
   static const StringType& short_name_;
-  DISALLOW_COPY_AND_ASSIGN(D3D11RenderSystem);
+  DISALLOW_COPY_AND_ASSIGN(D3DRenderSystem);
 };
-
+}  // namespace d3d11
 }  // namespace azer

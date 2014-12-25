@@ -17,13 +17,15 @@ namespace azer {
 
 class WindowHost;
 class VertexBuffer;
-class D3D11RenderTarget;
-class D3D11DepthBuffer;
 
-class D3D11Renderer : public Renderer {
+namespace d3d11 {
+class D3DRenderTarget;
+class D3DDepthBuffer;
+
+class D3DRenderer : public Renderer {
  public:
-  D3D11Renderer(ID3D11DeviceContext* context, D3D11RenderSystem* rs);
-  ~D3D11Renderer();
+  D3DRenderer(ID3D11DeviceContext* context, D3DRenderSystem* rs);
+  ~D3DRenderer();
 
   virtual void Reset() override;
   virtual void Use() override;
@@ -94,20 +96,20 @@ class D3D11Renderer : public Renderer {
   void SetShaderResource(RenderPipelineStage stage, uint32 first, uint32 num,
                          ID3D11ShaderResourceView** view);
 
-  D3D11RenderSystem* d3d11_render_system_;
+  D3DRenderSystem* d3d11_render_system_;
   Viewport viewport_;
   ID3D11DeviceContext* d3d_context_;
   static const std::string& name_;
   friend class RenderSystem;
-  DISALLOW_COPY_AND_ASSIGN(D3D11Renderer);
+  DISALLOW_COPY_AND_ASSIGN(D3DRenderer);
 };
 
-class D3D11SurfaceRenderer : public D3D11Renderer {
+class D3DSurfaceRenderer : public D3DRenderer {
  public:
-  D3D11SurfaceRenderer(Surface* surface,
+  D3DSurfaceRenderer(Surface* surface,
                        ID3D11DeviceContext* context,
-                       D3D11RenderSystem* rs)
-      : D3D11Renderer(context, rs)
+                       D3DRenderSystem* rs)
+      : D3DRenderer(context, rs)
       , surface_(surface) {
     DCHECK(NULL != surface);
   }
@@ -115,6 +117,7 @@ class D3D11SurfaceRenderer : public D3D11Renderer {
   bool InitForSurface(RenderTargetPtr target, DepthBufferPtr depth);
  private:
   Surface* surface_;
-  DISALLOW_COPY_AND_ASSIGN(D3D11SurfaceRenderer);
+  DISALLOW_COPY_AND_ASSIGN(D3DSurfaceRenderer);
 };
+}  // namespace d3d11
 }  // namespace azer

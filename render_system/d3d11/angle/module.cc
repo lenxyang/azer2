@@ -13,6 +13,7 @@
 #include "base/lazy_instance.h"
 
 namespace azer {
+namespace d3d11 {
 namespace {
 base::LazyInstance<ANGLEModule>::Leaky gmodule;
 }
@@ -39,4 +40,5 @@ void* ANGLEModule::GetProcAddress(const std::string& name) {
   return eglGetProcAddress(name.c_str());
 }
 
+}  // namespace d3d11
 }  // namespace azer
