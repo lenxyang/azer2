@@ -70,9 +70,9 @@ bool Context::Init() {
     return false;
   }
 
-  WindowHost* host = render_system_->GetWindowHost();
-  int width = host->GetMetrics().width;
-  int height = host->GetMetrics().height;
+  Surface* surface = render_system_->GetSurface();
+  int width = surface->GetBounds().width();
+  int height = surface->GetBounds().height();
   ccanvas_ = sk_context_->CreateCanvas(width, height);
   if (!ccanvas_.get()) {
     LOG(ERROR) << "Failed to init canvas.";
