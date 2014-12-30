@@ -52,13 +52,17 @@ bool AutoRenderSystemInit::Init(SurfacePtr surface) {
 }
 
 bool LoadRenderSystem(WindowHost* host) {
+  return LoadRenderSystem((gfx::AcceleratedWidget)host->Handle());
+}
+
+bool LoadRenderSystem(gfx::AcceleratedWidget window) {
   DCHECK(RenderSystem::Current() == NULL);
   DCHECK(NULL != CommandLine::ForCurrentProcess());
   ::base::FilePath path = CommandLine::ForCurrentProcess()->GetProgram();
   ::base::FilePath dllpath = path.DirName();
   dllpath = dllpath.Append(::base::UTF8ToWide("d3d11_render_system.dll"));
 
-  SurfacePtr surface(new Surface((gfx::AcceleratedWidget)host->Handle()));
+  SurfacePtr surface(new Surface(window));
   s_render_system_env = new AutoRenderSystemInit(dllpath, surface);
   return s_render_system_env->GetRenderSystem() != NULL;
 }
