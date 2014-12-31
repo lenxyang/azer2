@@ -6,7 +6,6 @@
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/util.h"
 #include "azer/render_system/d3d11/texture.h"
-#include "azer/ui/window/window_host.h"
 
 namespace azer {
 namespace d3d11 {

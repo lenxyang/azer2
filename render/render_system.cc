@@ -4,7 +4,6 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/math/math.h"
-#include "azer/ui/window/window_host.h"
 #include "azer/render/surface.h"
 #include "azer/render/util/dynlib.h"
 #include "azer/render/context2d.h"

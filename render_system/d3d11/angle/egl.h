@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
-#include "azer/render/egl.h"
+#include "azer/render/skia/egl.h"
 #include "azer/render/texture.h"
 
 struct GrGLInterface;

@@ -7,7 +7,6 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/base/image.h"
-#include "azer/ui/window/window_host.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render_system/d3d11/util.h"
 #include "azer/render_system/d3d11/blending.h"

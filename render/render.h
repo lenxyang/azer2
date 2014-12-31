@@ -11,7 +11,6 @@
 #include "azer/render/overlay.h"
 #include "azer/render/technique.h"
 #include "azer/render/vertex_data.h"
-#include "azer/ui/window/window_host.h"
 
 #include "azer/render/scoped_render_target.h"
 #include "azer/render/util/coordinate_grid.h"
