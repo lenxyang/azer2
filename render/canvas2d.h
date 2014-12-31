@@ -12,14 +12,10 @@ namespace azer {
 class Context2D;
 class Device2D;
 
-
 class AZER_EXPORT Canvas2D {
  public:
-  Canvas2D(int width, int height, Context2D* context);
   ~Canvas2D();
-
   TexturePtr& GetTexture();
-  bool Init();
 
   int width() const { return width_;}
   int height() const { return height_;}
@@ -29,6 +25,10 @@ class AZER_EXPORT Canvas2D {
   bool Save(const ::base::FilePath& path);
   SkCanvas* GetSkCanvas();
  private:
+  // create by canvas
+  Canvas2D(int width, int height, Context2D* context);
+  bool Init();
+
   TexturePtr texture_;
   int32 width_;
   int32 height_;

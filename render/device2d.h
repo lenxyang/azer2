@@ -1,7 +1,6 @@
 #pragma once
 
 #include "azer/render/context2d.h"
-#include "azer/render/egl.h"
 
 struct GrGLInterface;
 class GrRenderTarget;

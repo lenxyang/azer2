@@ -4,7 +4,6 @@
 
 #include "base/basictypes.h"
 #include "base/files/file_path.h"
-#include "azer/render/egl.h"
 #include "azer/render/render_system.h"
 #include "azer/render/canvas2d.h"
 
@@ -18,6 +17,7 @@ namespace azer {
 class RenderSystem;
 class Context2D;
 class Device2D;
+class EGL;
 
 namespace skia {
 class ASkGLContext;

@@ -3,7 +3,7 @@
 #include "gl/SkGLContext.h"
 #include "base/basictypes.h"
 #include "azer/render/render_system.h"
-#include "azer/render/egl.h"
+#include "azer/render/skia/egl.h"
 #include "base/logging.h"
 
 struct GrGLInterface;

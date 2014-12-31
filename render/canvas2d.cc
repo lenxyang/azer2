@@ -13,6 +13,7 @@
 
 #include "azer/render/device2d.h"
 #include "azer/render/context2d.h"
+#include "azer/render/skia/egl.h"
 #include "base/strings/string_util.h"
 #include "azer/render/texture.h"
 

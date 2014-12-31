@@ -11,6 +11,7 @@
 #include "SkImageEncoder.h"
 #include "azer/render/skia/grcontext.h"
 #include "azer/render/skia/GrGLUtil.h"
+#include "azer/render/skia/egl.h"
 
 namespace azer {
 
