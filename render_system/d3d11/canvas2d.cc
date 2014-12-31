@@ -9,8 +9,7 @@
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render/render_system.h"
-#include "azer/render/canvas2d.h"
-#include "azer/render/context2d.h"
+
 
 extern "C" {
 typedef void (*FUNCGLGETTEXSHARED3DTEX)(GLenum target, GLuint fbhandle, void** val);

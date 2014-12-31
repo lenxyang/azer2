@@ -3,7 +3,8 @@
 #include <memory>
 
 #include "base/basictypes.h"
-#include "azer/render/render_system.h"
+#include "azer/base/export.h"
+#include "azer/render/texture.h"
 
 class SkCanvas;
 

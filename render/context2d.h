@@ -3,37 +3,31 @@
 #include <memory>
 
 #include "base/basictypes.h"
-#include "base/files/file_path.h"
-#include "azer/render/render_system.h"
-#include "azer/render/canvas2d.h"
+#include "azer/base/export.h"
 
-#include "third_party/skia/include/gpu/gl/GrGLInterface.h"
-
-struct GrGLInterface;
 class GrContext;
-
+struct GrGLInterface;
 
 namespace azer {
 
 class RenderSystem;
-class Context2D;
 class Device2D;
 
 class AZER_EXPORT Context2D {
  public:
-  Context2D(const GrGLInterface* interface);
+  Context2D(GrGLInterface* interface);
   virtual ~Context2D();
   
   void flush();
   void finish();
 
   GrContext* GetGrContext() { return gr_context_;}
-  const GrGLInterface* GetGrGLInterface() { return interface_;}
+  GrGLInterface* GetGrGLInterface() { return interface_;}
  protected:
-  bool Init(RenderSystem* rs);
+  virtual bool Init(RenderSystem* rs);
 
   GrContext* gr_context_;
-  const GrGLInterface* interface_;
+  GrGLInterface* interface_;
   friend class Device2D;
   friend class RenderSystem;
   DISALLOW_COPY_AND_ASSIGN(Context2D);

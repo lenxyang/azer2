@@ -4,15 +4,10 @@
 #include "SkGpuDevice.h"
 #include "GrContext.h"
 #include "GrTexture.h"
-#include "GrRenderTarget.h"
-#include "SkImageInfo.h"
-#include "SkImageEncoder.h"
-#include "gl/GrGLInterface.h"
-#include "gl/GrGLFunctions.h"
-#include "gl/GrGLDefines.h"
-#include "gl/GrGLUtil.h"
 
 #include "azer/render/texture.h"
+#include "azer/render/context2d.h"
+#include "azer/render/canvas2d.h"
 
 namespace azer {
 

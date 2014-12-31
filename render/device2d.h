@@ -1,15 +1,16 @@
 #pragma once
 
-#include "azer/render/context2d.h"
+#include <memory>
+#include "base/basictypes.h"
 
-struct GrGLInterface;
-class GrRenderTarget;
-class GrContext;
 class GrTexture;
 class SkGpuDevice;
 class SkCanvas;
 
 namespace azer {
+
+class Context2D;
+class Canvas2D;
 
 class Device2D {
  public:

@@ -1,20 +1,14 @@
 #include "azer/render/context2d.h"
 
-#include "third_party/skia/src/gpu/gl/GrGLUtil.h"
-#include "third_party/skia/include/gpu/gl/GrGLFunctions.h"
 #include "third_party/skia/include/gpu/gl/GrGLInterface.h"
-#include "third_party/skia/include/gpu/GrTexture.h"
 #include "third_party/skia/include/gpu/GrContext.h"
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "third_party/skia/include/core/SkImageInfo.h"
-#include "third_party/skia/include/core/SkImageEncoder.h"
 
-#include "third_party/skia/src/gpu/SkGpuDevice.h"
+#include "base/logging.h"
 
 namespace azer {
 
 // class Context2D
-Context2D::Context2D(const GrGLInterface* interface)
+Context2D::Context2D(GrGLInterface* interface)
     : gr_context_(NULL)
     , interface_(interface) {
 }
