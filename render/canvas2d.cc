@@ -10,7 +10,12 @@
 #include "azer/render/device2d.h"
 #include "azer/render/context2d.h"
 #include "base/strings/string_util.h"
+#include "base/files/file_util.h"
 #include "azer/render/texture.h"
+
+#include "ui/gfx/geometry/size.h"
+#include "ui/gfx/image/image.h"
+#include "ui/gfx/codec/png_codec.h"
 
 namespace azer {
 
@@ -61,6 +66,23 @@ SkImageEncoder::Type ImageType(const FilePath::StringType& ext) {
     return SkImageEncoder::kBMP_Type;
   }
 }
+
+std::vector<uint8> EncodeBitmap(const SkBitmap& bitmap, 
+                                    SkImageEncoder::Type type) {
+  std::vector<uint8> data;
+  if (type == SkImageEncoder::kPNG_Type) {
+    CHECK(gfx::PNGCodec::Encode((const uint8*)bitmap.getPixels(),
+                                gfx::PNGCodec::FORMAT_BGRA,
+                                gfx::Size(bitmap.width(), bitmap.height()),
+                                bitmap.width() * 4,
+                                true,
+                                std::vector<gfx::PNGCodec::Comment>(),
+                                &data));
+    return data;
+  } else {
+    return data;
+  }
+}
 }
 
 bool Canvas2D::Save(const FilePath& path) {
@@ -74,8 +96,13 @@ bool Canvas2D::Save(const FilePath& path) {
   bitmap.setInfo(info);
   bitmap.allocPixels();
   device_->GetCanvas()->readPixels(&bitmap, 0, 0);
-  // return SkImageEncoder::EncodeFile(pathstr.c_str(), bitmap, type, 100);
-  return false;
+  std::vector<uint8> compressed = std::move(EncodeBitmap(bitmap, type));
+
+  FILE* f = base::OpenFile(path, "wb");
+  CHECK_EQ(fwrite(&*compressed.begin(), 1, compressed.size(), f),
+           compressed.size());
+  base::CloseFile(f);
+  return true;
 }
 
 void Canvas2D::flush() {

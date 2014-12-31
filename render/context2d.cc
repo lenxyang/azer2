@@ -5,12 +5,32 @@
 
 #include "base/logging.h"
 
+#define GL_GLEXT_PROTOTYPES
 #include "GLES2/gl2.h"
+#include "GLES2/gl2ext.h"
 
 namespace azer {
 
 void StubGLGenerateMipmap(GLenum target) {
   glGenerateMipmap(target);
+}
+
+void StubGLCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, 
+                                   GLint yoffset, GLsizei width, GLsizei height,
+                                   GLenum format, GLsizei imageSize, 
+                                   const GLvoid* data) {
+  glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height,
+                            format, imageSize, data);
+}
+
+GLvoid* StubGLMapBufferRangeEXT(GLenum target, GLintptr offset, 
+                             GLsizeiptr length, GLbitfield access) {
+  return glMapBufferRangeEXT(target, offset, length, access);
+}
+
+void StubGLFlushMappedBufferRangeEXT(GLenum target, GLintptr offset, 
+                                     GLsizeiptr length) {
+  glFlushMappedBufferRangeEXT(target, offset, length);
 }
 
 // class Context2D
@@ -30,6 +50,9 @@ bool Context2D::Init(RenderSystem* rs) {
   DCHECK(NULL != interface_);
 
   interface_->fFunctions.fGenerateMipmap = StubGLGenerateMipmap;
+  interface_->fFunctions.fCompressedTexSubImage2D = StubGLCompressedTexSubImage2D;
+  interface_->fFunctions.fMapBufferRange = StubGLMapBufferRangeEXT;
+  interface_->fFunctions.fFlushMappedBufferRange = StubGLFlushMappedBufferRangeEXT;
   GrBackendContext p3dctx = reinterpret_cast<GrBackendContext>(interface_);
   gr_context_ = GrContext::Create(kOpenGL_GrBackend, p3dctx);
   if (!gr_context_) {
