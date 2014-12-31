@@ -24,10 +24,11 @@ class AZER_EXPORT Canvas2D {
 
   bool Save(const ::base::FilePath& path);
   SkCanvas* GetSkCanvas();
- private:
+ protected:
   // create by canvas
   Canvas2D(int width, int height, Context2D* context);
-  bool Init();
+  virtual bool Init();
+  virtual TexturePtr InitTexture() = 0;
 
   TexturePtr texture_;
   int32 width_;

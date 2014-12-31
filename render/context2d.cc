@@ -56,6 +56,6 @@ void Context2D::flush() {
 void Context2D::wait() {
   DCHECK(gr_context_ != NULL);
   gr_context_->resetContext();
-  GR_GL_CALL(interface_, Finish());
+  interface_->fFunctions.fFinish();
 }
 }  // namespace azer

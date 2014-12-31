@@ -31,15 +31,16 @@ RenderSystem* RenderSystem::Current() {
 RenderSystem::RenderSystem(Surface* surface)
     : surface_(surface) {
   gfx::GLSurface::InitializeOneOff();
+  InitContext2D();
 }
 
-Context2D* RenderSystem::GetContext2D() {
+enderSystem::~RenderSystem() {
+}
+
+void RenderSystem::InitContext2D() {
   GrGLInterface* interface = gfx::CreateInProcessSkiaGLBinding();
-  std::unique_ptr<Context2D> ctx(new Context2D(interface));
-  if (ctx->Init(this)) {
-    return ctx.release();
-  } else {
-    return NULL;
-  }
+  CHECK(NULL != interface);
+  context2d_.reset(new Context2D(interface));
+  CHECK(context2d_.Init());
 }
 }  // namespace azer

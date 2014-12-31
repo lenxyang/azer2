@@ -4,6 +4,8 @@ shared_library("d3d11") {
   sources = [
     "blending.cc",
     "blending.h",
+    "canvas2d.cc",
+    "canvas2d.h",
     "d3denv.cc",
     "d3denv.h",
     "depth_buffer.cc",
@@ -41,7 +43,8 @@ shared_library("d3d11") {
   deps = [
     "//base:base",
     "//azer/render:render",
-    "//ui/gfx:gfx",
+    "//ui/gfx",
+    "//ui/gl",
   ]
   defines = ["BUILD_D3D11_AZER_RENDER_SYSTEM"]
   configs += [

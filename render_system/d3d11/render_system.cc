@@ -10,6 +10,7 @@
 #include "azer/render/render_system_enum.h"
 #include "azer/render_system/d3d11/util.h"
 #include "azer/render_system/d3d11/blending.h"
+#include "azer/render_system/d3d11/canvas2d.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
@@ -249,6 +250,15 @@ Renderer* D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
 
 bool D3DRenderSystem::InitD3DDevice() {
   return true;
+}
+
+Canvas2D* D3DRenderSystem::CreateCanvas2D() {
+  std::unique_ptr<D3DCanvas2D> ptr(new D3DCanvas2D(GetContext2D()));
+  if (ptr->Init()) {
+    return ptr.release();
+  } else {
+    return NULL;
+  }
 }
 }  // namespace d3d11
 }  // namespace azer

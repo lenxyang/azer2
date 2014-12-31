@@ -31,7 +31,7 @@ class AZER_EXPORT RenderSystem {
  public:
   RenderSystem(Surface* surface);
 
-  virtual ~RenderSystem() {}
+  virtual ~RenderSystem();
   virtual const StringType& name() const = 0;
   virtual const StringType& short_name() const = 0;
 
@@ -71,8 +71,8 @@ class AZER_EXPORT RenderSystem {
   virtual bool Present() = 0;
   virtual bool reset() = 0;
 
-  virtual Context2D* GetContext2D();
-
+  Context2D* GetContext2D() { return context2d_.get();}
+  virtual Canvas2D* CreateCanvas2D() = 0;
   const RenderSystemCapability& capability() const {
     return capability_;
   }
@@ -88,6 +88,9 @@ class AZER_EXPORT RenderSystem {
 
   SwapChainPtr& GetSwapChain() { return swap_chain_;}
  protected:
+  void InitContext2D();
+
+  std::unique_ptr<Context2D> context2d_;
   RenderSystemCapability capability_;
   SwapChainPtr swap_chain_;
   Surface* surface_;
