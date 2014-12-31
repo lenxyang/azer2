@@ -59,8 +59,6 @@ class D3DRenderSystem : public RenderSystem {
   virtual bool Present() override;
   virtual bool reset() override;
 
-  virtual EGL* CreateEGL() override;
-
   D3DEnvironmentPtr& GetD3DEnv() { return envptr_;}
   /**
    * direct3d relevent

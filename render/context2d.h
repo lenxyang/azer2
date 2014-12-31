@@ -27,8 +27,6 @@ class AZER_EXPORT Context2D {
 
   Canvas2DPtr CreateCanvas(int width, int height);
 
-  EGL* GetEGL();
-
   GrContext* GetGrContext() { return gr_context_;}
   const GrGLInterface* GetGrGLInterface() { return interface_;}
  private:

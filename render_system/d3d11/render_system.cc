@@ -21,7 +21,6 @@
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/vertex_buffer.h"
-#include "azer/render_system/d3d11/angle/egl.h"
 
 namespace azer {
 namespace d3d11 {
@@ -248,12 +247,7 @@ Renderer* D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
   }
 }
 
-EGL* D3DRenderSystem::CreateEGL() {
-  return new AngleEGL(this);
-}
-
 bool D3DRenderSystem::InitD3DDevice() {
-  
   return true;
 }
 }  // namespace d3d11

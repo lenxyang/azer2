@@ -42,7 +42,6 @@ shared_library("d3d11") {
     "//base:base",
     "//azer/render:render",
     "//ui/gfx:gfx",
-    "angle",
   ]
   defines = ["BUILD_D3D11_AZER_RENDER_SYSTEM"]
   configs += [
