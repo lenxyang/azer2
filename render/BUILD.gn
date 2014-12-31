@@ -9,7 +9,6 @@ source_set("render2d") {
     "device2d.h",
   ]
   deps = [
-   "skia",
    "//skia",
   ]
 
