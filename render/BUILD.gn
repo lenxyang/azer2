@@ -10,6 +10,11 @@ source_set("render2d") {
   ]
   deps = [
    "//skia",
+   "//third_party/angle:libGLESv2",
+  ]
+
+  include_dirs = [
+    "//third_party/angle/include",
   ]
 
   configs += ["//azer/build/config:utf8src"]

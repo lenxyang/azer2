@@ -5,7 +5,13 @@
 
 #include "base/logging.h"
 
+#include "GLES2/gl2.h"
+
 namespace azer {
+
+void StubGLGenerateMipmap(GLenum target) {
+  glGenerateMipmap(target);
+}
 
 // class Context2D
 Context2D::Context2D(GrGLInterface* interface)
@@ -23,6 +29,7 @@ bool Context2D::Init(RenderSystem* rs) {
   // code reference: skia/include/gpu/GrContextFactory.h
   DCHECK(NULL != interface_);
 
+  interface_->fFunctions.fGenerateMipmap = StubGLGenerateMipmap;
   GrBackendContext p3dctx = reinterpret_cast<GrBackendContext>(interface_);
   gr_context_ = GrContext::Create(kOpenGL_GrBackend, p3dctx);
   if (!gr_context_) {
