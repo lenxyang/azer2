@@ -6,6 +6,7 @@
 #include "azer/base/export.h"
 
 class GrContext;
+class GrTexture;
 struct GrGLInterface;
 
 namespace azer {
@@ -23,6 +24,7 @@ class AZER_EXPORT Context2D {
 
   GrContext* GetGrContext() { return gr_context_;}
   GrGLInterface* GetGrGLInterface() { return interface_;}
+  GrTexture* CreateTexture(int width, int height);
  protected:
   virtual bool Init(RenderSystem* rs);
 

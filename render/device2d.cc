@@ -13,7 +13,7 @@ namespace azer {
 
 bool Device2D::Init(Context2D* ctx, Canvas2D* canvas) {
   GrContext* context = ctx->gr_context_;
-  grtex_ = CreateTex(ctx, canvas);
+  grtex_ = ctx->CreateTexture(canvas->width(), canvas->height());
   // tex_.reset(ctx->GetAzerEGLInterface()->CreateTexture(gltex_->fbid()));
   SkSurfaceProps props(SkSurfaceProps::kDisallowAntiAlias_Flag,
                        kRGB_H_SkPixelGeometry);
@@ -31,16 +31,4 @@ bool Device2D::Init(Context2D* ctx, Canvas2D* canvas) {
 
   return true;
 }
-
-GrTexture* Device2D::CreateTex(Context2D* ctx, Canvas2D* canvas) {
-  GrContext* context = ctx->gr_context_;
-  GrTextureDesc desc;
-  desc.fConfig = kRGBA_8888_GrPixelConfig;
-  desc.fFlags = kRenderTarget_GrTextureFlagBit;
-  desc.fWidth = canvas->height();
-  desc.fHeight = canvas->height();
-  desc.fSampleCnt = 0;
-  return context->createUncachedTexture(desc, NULL, 0);
-}
-
 }  // namespace azer

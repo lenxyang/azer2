@@ -43,4 +43,14 @@ void Context2D::finish() {
   gr_context_->resetContext();
   interface_->fFunctions.fFinish();
 }
+
+GrTexture* Context2D::CreateTexture(int width, int height) {
+  GrTextureDesc desc;
+  desc.fConfig = kRGBA_8888_GrPixelConfig;
+  desc.fFlags = kRenderTarget_GrTextureFlagBit;
+  desc.fWidth = width;
+  desc.fHeight = height;
+  desc.fSampleCnt = 0;
+  return gr_context_->createUncachedTexture(desc, NULL, 0);
+}
 }  // namespace azer
