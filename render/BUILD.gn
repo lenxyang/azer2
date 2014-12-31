@@ -68,6 +68,7 @@ shared_library("render") {
     "//azer/math",
     "//azer/base",
     "//azer/resources",
+    "//ui/gl",
     "//ui/gfx",
     "//ui/gfx/geometry",
     "//base",

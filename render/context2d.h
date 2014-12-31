@@ -17,18 +17,11 @@ namespace azer {
 class RenderSystem;
 class Context2D;
 class Device2D;
-class EGL;
-
-namespace skia {
-class ASkGLContext;
-}  // namespace skia
 
 class AZER_EXPORT Context2D {
  public:
-  Context2D();
-  ~Context2D();
-
-  bool Init(RenderSystem* rs);
+  virtual ~Context2D();
+  
   void flush();
   void wait();
 
@@ -39,17 +32,16 @@ class AZER_EXPORT Context2D {
   GrContext* GetGrContext() { return gr_context_;}
   const GrGLInterface* GetGrGLInterface() { return interface_;}
  private:
-  std::unique_ptr<EGL> egl_;
+  Context2D(const GrGLInterface* interface);
+  bool Init(RenderSystem* rs);
+
   GrContext* gr_context_;
   const GrGLInterface* interface_;
-  skia::ASkGLContext* helper_;
   friend class Device2D;
+  friend class RenderSystem;
   DISALLOW_COPY_AND_ASSIGN(Context2D);
 };
 
-inline EGL* Context2D::GetEGL() {
-  DCHECK(egl_.get() != NULL);
-  return egl_.get();
-}
+typedef std::shared_ptr<Context2D> Context2DPtr;
 
 }  // namespace azer

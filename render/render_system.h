@@ -29,7 +29,7 @@ typedef std::shared_ptr<IndicesData> IndicesDataPtr;
 
 class AZER_EXPORT RenderSystem {
  public:
-  RenderSystem(Surface* surface) : surface_(surface) { }
+  RenderSystem(Surface* surface);
 
   virtual ~RenderSystem() {}
   virtual const StringType& name() const = 0;
@@ -71,8 +71,6 @@ class AZER_EXPORT RenderSystem {
   virtual bool Present() = 0;
   virtual bool reset() = 0;
 
-  // 
-  virtual EGL* CreateEGL() = 0;
   virtual Context2D* GetContext2D();
 
   const RenderSystemCapability& capability() const {

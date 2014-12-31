@@ -1,6 +1,5 @@
 #include "azer/render/canvas2d.h"
 
-
 #include "gl/GrGLFunctions.h"
 #include "gl/GrGLDefines.h"
 #include "gl/GrGLUtil.h"

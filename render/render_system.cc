@@ -8,6 +8,9 @@
 #include "azer/render/util/dynlib.h"
 #include "azer/render/context2d.h"
 
+#include "ui/gl/gl_surface.h"
+#include "ui/gl/gl_bindings_skia_in_process.h"
+
 namespace azer {
 
 RenderSystem* RenderSystem::render_system_ = NULL;
@@ -25,12 +28,16 @@ RenderSystem* RenderSystem::Current() {
   return render_system_;
 }
 
+RenderSystem::RenderSystem(Surface* surface)
+    : surface_(surface) {
+  gfx::GLSurface::InitializeOneOff();
+}
 
 Context2D* RenderSystem::GetContext2D() {
-  static EGL* egl = CreateEGL();
-  std::unique_ptr<Context2D> ctx(new Context2D());
+  GrGLInterface* interface = gfx::CreateInProcessSkiaGLBinding();
+  std::unique_ptr<Context2D> ctx(new Context2D(interface));
   if (ctx->Init(this)) {
-    return ctx.release();;
+    return ctx.release();
   } else {
     return NULL;
   }

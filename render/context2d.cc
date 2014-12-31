@@ -1,5 +1,6 @@
 #include "azer/render/context2d.h"
 
+#include "third_party/skia/src/gpu/gl/GrGLUtil.h"
 #include "gl/GrGLFunctions.h"
 #include "gl/GrGLDefines.h"
 #include "gl/GrGLInterface.h"
@@ -9,51 +10,25 @@
 #include "GrContext.h"
 #include "SkImageInfo.h"
 #include "SkImageEncoder.h"
-#include "azer/render/skia/grcontext.h"
-#include "azer/render/skia/GrGLUtil.h"
-#include "azer/render/skia/egl.h"
 
 namespace azer {
 
 // class Context2D
-Context2D::Context2D()
+Context2D::Context2D(const GrGLInterface* interface)
     : gr_context_(NULL)
-    , interface_(NULL)
-    , helper_(NULL) {
+    , interface_(interface) {
 }
 
 Context2D::~Context2D() {
   if (gr_context_) {
     delete gr_context_;
   }
-
-  if (helper_) {
-    delete helper_;
-  }
 }
 
 bool Context2D::Init(RenderSystem* rs) {
   // code reference: skia/include/gpu/GrContextFactory.h
-  egl_.reset(rs->CreateEGL());
-  if (!egl_.get()) {
-    return false;
-  }
-  if (!egl_->Init()) {
-    return false;
-  }
+  DCHECK(NULL != interface_);
 
-  helper_ = new skia::ASkGLContext(egl_.get());
-  if (!helper_->Init()) {
-    return false;
-  }
-
-  SkGLContext* glctx = helper_;
-  interface_ = helper_->GetGrGlInterface();
-  if (!interface_) {
-    return false;
-  }
-
-  glctx->makeCurrent();
   GrBackendContext p3dctx = reinterpret_cast<GrBackendContext>(interface_);
   gr_context_ = GrContext::Create(kOpenGL_GrBackend, p3dctx);
   if (!gr_context_) {
