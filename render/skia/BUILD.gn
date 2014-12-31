@@ -3,14 +3,8 @@
 
 source_set("skia") {
   sources = [
-    "canvas.cc",
-    "canvas.h",
-    "context.cc",
-    "context.h",
     "grcontext.cc",
     "grcontext.h",
-    "device.cc",
-    "device.h",
   ]
 
   if (component_mode == "shared_library") {
@@ -26,5 +20,5 @@ source_set("skia") {
   deps = ["//skia"]
   configs += ["//azer/build/config:utf8src"]
   configs += ["//azer/base:build_render_config"]
-  visibility = ["//azer/render"]
+  visibility = ["//azer/render:render2d"]
 }

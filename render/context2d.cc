@@ -1,4 +1,4 @@
-#include "azer/render/skia/context.h"
+#include "azer/render/context2d.h"
 
 #include "gl/GrGLFunctions.h"
 #include "gl/GrGLDefines.h"
@@ -13,16 +13,15 @@
 #include "azer/render/skia/GrGLUtil.h"
 
 namespace azer {
-namespace skia {
 
-// class Context
-Context::Context()
+// class Context2D
+Context2D::Context2D()
     : gr_context_(NULL)
     , interface_(NULL)
     , helper_(NULL) {
 }
 
-Context::~Context() {
+Context2D::~Context2D() {
   if (gr_context_) {
     delete gr_context_;
   }
@@ -32,7 +31,7 @@ Context::~Context() {
   }
 }
 
-bool Context::Init(RenderSystem* rs) {
+bool Context2D::Init(RenderSystem* rs) {
   // code reference: skia/include/gpu/GrContextFactory.h
   egl_.reset(rs->CreateEGL());
   if (!egl_.get()) {
@@ -42,7 +41,7 @@ bool Context::Init(RenderSystem* rs) {
     return false;
   }
 
-  helper_ = new ASkGLContext(egl_.get());
+  helper_ = new skia::ASkGLContext(egl_.get());
   if (!helper_->Init()) {
     return false;
   }
@@ -63,25 +62,24 @@ bool Context::Init(RenderSystem* rs) {
   return true;
 }
 
-CanvasPtr Context::CreateCanvas(int width, int height) {
-  std::unique_ptr<Canvas> ptr(new Canvas(width, height, this));
+Canvas2DPtr Context2D::CreateCanvas(int width, int height) {
+  std::unique_ptr<Canvas2D> ptr(new Canvas2D(width, height, this));
   if (ptr->Init()) {
-    return CanvasPtr(ptr.release());
+    return Canvas2DPtr(ptr.release());
   } else {
-    return CanvasPtr();
+    return Canvas2DPtr();
   }
 }
 
-void Context::flush() {
+void Context2D::flush() {
   DCHECK(gr_context_ != NULL);
   gr_context_->resetContext();
   gr_context_->flush();
 }
 
-void Context::wait() {
+void Context2D::wait() {
   DCHECK(gr_context_ != NULL);
   gr_context_->resetContext();
   GR_GL_CALL(interface_, Finish());
 }
-}  // namespace skia
 }  // namespace azer

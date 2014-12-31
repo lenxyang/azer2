@@ -1,4 +1,4 @@
-#include "azer/render/skia/device.h"
+#include "azer/render/device2d.h"
 
 #include "SkCanvas.h"
 #include "SkGpuDevice.h"
@@ -16,9 +16,8 @@
 #include "azer/render/texture.h"
 
 namespace azer {
-namespace skia {
 
-bool AzerSkDevice::Init(Context* ctx, Canvas* canvas) {
+bool Device2D::Init(Context2D* ctx, Canvas2D* canvas) {
   GrContext* context = ctx->gr_context_;
   grtex_ = CreateTex(ctx, canvas);
   // tex_.reset(ctx->GetAzerEGLInterface()->CreateTexture(gltex_->fbid()));
@@ -39,7 +38,7 @@ bool AzerSkDevice::Init(Context* ctx, Canvas* canvas) {
   return true;
 }
 
-GrTexture* AzerSkDevice::CreateTex(Context* ctx, Canvas* canvas) {
+GrTexture* Device2D::CreateTex(Context2D* ctx, Canvas2D* canvas) {
   GrContext* context = ctx->gr_context_;
   GrTextureDesc desc;
   desc.fConfig = kRGBA_8888_GrPixelConfig;
@@ -50,5 +49,4 @@ GrTexture* AzerSkDevice::CreateTex(Context* ctx, Canvas* canvas) {
   return context->createUncachedTexture(desc, NULL, 0);
 }
 
-}  // namespace skia
 }  // namespace azer

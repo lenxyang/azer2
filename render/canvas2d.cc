@@ -1,4 +1,4 @@
-#include "azer/render/skia/canvas.h"
+#include "azer/render/canvas2d.h"
 
 
 #include "gl/GrGLFunctions.h"
@@ -11,39 +11,38 @@
 #include "SkImageInfo.h"
 #include "SkImageEncoder.h"
 
-#include "azer/render/skia/device.h"
-#include "azer/render/skia/context.h"
+#include "azer/render/device2d.h"
+#include "azer/render/context2d.h"
 #include "base/strings/string_util.h"
 #include "azer/render/texture.h"
 
 namespace azer {
-namespace skia {
 
 using ::base::FilePath;
 
-// class Canvas
-Canvas::Canvas(int width, int height, Context* ctx)
+// class Canvas2D
+Canvas2D::Canvas2D(int width, int height, Context2D* ctx)
     : width_(width)
     , height_(height)
     , device_(NULL)
     , context_(ctx) {
 }
 
-Canvas::~Canvas() {
+Canvas2D::~Canvas2D() {
   if (device_) { delete device_;}
 }
 
-bool Canvas::Init() {
-  device_ = new AzerSkDevice();
+bool Canvas2D::Init() {
+  device_ = new Device2D();
   return device_->Init(context_, this);
 }
 
-SkCanvas* Canvas::GetSkCanvas() {
+SkCanvas* Canvas2D::GetSkCanvas() {
   DCHECK(device_ != NULL);
   return device_->GetCanvas();
 }
 
-TexturePtr& Canvas::GetTexture() {
+TexturePtr& Canvas2D::GetTexture() {
   if (!texture_.get()) {
     GrTexture* tex = device_->GetGrTex();
     texture_.reset(context_->GetEGL()->
@@ -69,7 +68,7 @@ SkImageEncoder::Type ImageType(const FilePath::StringType& ext) {
 }
 }
 
-bool Canvas::Save(const FilePath& path) {
+bool Canvas2D::Save(const FilePath& path) {
   DCHECK(device_ != NULL);
   const FilePath::StringType ext = ::base::StringToLowerASCII(path.Extension());
   SkImageEncoder::Type type = ImageType(ext);
@@ -84,7 +83,7 @@ bool Canvas::Save(const FilePath& path) {
   return false;
 }
 
-void Canvas::flush() {
+void Canvas2D::flush() {
 }
-}  // namespace skia
+
 }  // namespace azer

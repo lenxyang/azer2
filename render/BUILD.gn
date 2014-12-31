@@ -1,4 +1,23 @@
 
+source_set("render2d") {
+  sources = [
+    "canvas2d.cc",
+    "canvas2d.h",
+    "context2d.cc",
+    "context2d.h",
+    "device2d.cc",
+    "device2d.h",
+  ]
+  deps = [
+   "skia",
+   "//skia",
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+  visibility = ["//azer/render"]
+}
+
 shared_library("render") {
   sources = [
     "../animation/bone.cc",
@@ -60,7 +79,7 @@ shared_library("render") {
     "//ui/gfx",
     "//ui/gfx/geometry",
     "//base",
-    "skia",
+    ":render2d",
   ]
 
   configs += ["//azer/build/config:utf8src"]

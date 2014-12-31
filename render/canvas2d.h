@@ -8,15 +8,15 @@
 class SkCanvas;
 
 namespace azer {
-namespace skia {
 
-class AzerSkDevice;
-class Context;
+class Context2D;
+class Device2D;
 
-class AZER_EXPORT Canvas {
+
+class AZER_EXPORT Canvas2D {
  public:
-  Canvas(int width, int height, Context* context);
-  ~Canvas();
+  Canvas2D(int width, int height, Context2D* context);
+  ~Canvas2D();
 
   TexturePtr& GetTexture();
   bool Init();
@@ -32,13 +32,13 @@ class AZER_EXPORT Canvas {
   TexturePtr texture_;
   int32 width_;
   int32 height_;
-  AzerSkDevice* device_;
-  Context* context_;
-  friend class Context;
-  DISALLOW_COPY_AND_ASSIGN(Canvas);
+  Device2D* device_;
+  Context2D* context_;
+  friend class Context2D;
+  DISALLOW_COPY_AND_ASSIGN(Canvas2D);
 };
 
-typedef std::shared_ptr<Canvas> CanvasPtr;
+typedef std::shared_ptr<Canvas2D> Canvas2DPtr;
 
-}  // namespace skia
+
 }  // namespace azer
