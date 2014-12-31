@@ -22,10 +22,8 @@ class RenderTarget;
 class DepthRenderTarget;
 class Image;
 class EGL;
+class Context2D;
 
-namespace skia {
-class Context;
-}
 
 typedef std::shared_ptr<IndicesData> IndicesDataPtr;
 
@@ -75,7 +73,7 @@ class AZER_EXPORT RenderSystem {
 
   // 
   virtual EGL* CreateEGL() = 0;
-  virtual skia::Context* GetSkiaContext();
+  virtual Context2D* GetContext2D();
 
   const RenderSystemCapability& capability() const {
     return capability_;

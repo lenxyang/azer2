@@ -7,7 +7,7 @@
 #include "azer/ui/window/window_host.h"
 #include "azer/render/surface.h"
 #include "azer/render/util/dynlib.h"
-#include "azer/render/skia/context.h"
+#include "azer/render/context2d.h"
 
 namespace azer {
 
@@ -27,9 +27,9 @@ RenderSystem* RenderSystem::Current() {
 }
 
 
-skia::Context* RenderSystem::GetSkiaContext() {
+Context2D* RenderSystem::GetContext2D() {
   static EGL* egl = CreateEGL();
-  std::unique_ptr<skia::Context> ctx(new skia::Context());
+  std::unique_ptr<Context2D> ctx(new Context2D());
   if (ctx->Init(this)) {
     return ctx.release();;
   } else {

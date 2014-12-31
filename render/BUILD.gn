@@ -20,12 +20,6 @@ source_set("render2d") {
 
 shared_library("render") {
   sources = [
-    "../animation/bone.cc",
-    "../animation/skeleton.cc",
-    "../scene/node.cc",
-    "../scene/node.h",
-    "../scene/scene.cc",
-    "../scene/scene.h",
     "axis_aligned_box.cc",
     "axis_aligned_box.h",
     "blending.h",
