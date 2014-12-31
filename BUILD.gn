@@ -1,11 +1,12 @@
 
 group("azer") {
   deps = [
-    "//azer/math:math",
-    "//azer/render:render",
+    "//azer/math",
+    "//azer/render",
     "//azer/afx:afxlib",
     "//azer/afx:afxc",
-    "//azer/render_system/d3d11:d3d11_render_system",
+    "//azer/render_system/d3d11",
+    "//samples",
   ]
 }
 

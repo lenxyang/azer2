@@ -68,7 +68,6 @@ shared_library("render") {
   deps = [
     "//azer/math",
     "//azer/base",
-    "//azer/ui/window",
     "//azer/resources",
     "//ui/gfx",
     "//ui/gfx/geometry",

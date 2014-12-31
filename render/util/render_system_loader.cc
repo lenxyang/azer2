@@ -51,10 +51,6 @@ bool AutoRenderSystemInit::Init(SurfacePtr surface) {
   }
 }
 
-bool LoadRenderSystem(WindowHost* host) {
-  return LoadRenderSystem((gfx::AcceleratedWidget)host->Handle());
-}
-
 bool LoadRenderSystem(gfx::AcceleratedWidget window) {
   DCHECK(RenderSystem::Current() == NULL);
   DCHECK(NULL != CommandLine::ForCurrentProcess());

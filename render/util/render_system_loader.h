@@ -25,6 +25,5 @@ class AZER_EXPORT AutoRenderSystemInit {
   DISALLOW_COPY_AND_ASSIGN(AutoRenderSystemInit);
 };
 
-bool AZER_EXPORT LoadRenderSystem(WindowHost* host);
 bool AZER_EXPORT LoadRenderSystem(gfx::AcceleratedWidget window);
 }  // namespace azer
