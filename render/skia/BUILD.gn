@@ -1,3 +1,0 @@
-#include("//build/config/features.gni)
-#include("//build/config/ui/gni)
-

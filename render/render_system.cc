@@ -34,13 +34,13 @@ RenderSystem::RenderSystem(Surface* surface)
   InitContext2D();
 }
 
-enderSystem::~RenderSystem() {
+RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::InitContext2D() {
   GrGLInterface* interface = gfx::CreateInProcessSkiaGLBinding();
   CHECK(NULL != interface);
   context2d_.reset(new Context2D(interface));
-  CHECK(context2d_.Init());
+  CHECK(context2d_->Init(this));
 }
 }  // namespace azer

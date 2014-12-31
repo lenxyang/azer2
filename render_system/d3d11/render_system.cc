@@ -252,8 +252,8 @@ bool D3DRenderSystem::InitD3DDevice() {
   return true;
 }
 
-Canvas2D* D3DRenderSystem::CreateCanvas2D() {
-  std::unique_ptr<D3DCanvas2D> ptr(new D3DCanvas2D(GetContext2D()));
+Canvas2D* D3DRenderSystem::CreateCanvas2D(int32 width, int32 height) {
+  std::unique_ptr<D3DCanvas2D> ptr(new D3DCanvas2D(width, height, GetContext2D()));
   if (ptr->Init()) {
     return ptr.release();
   } else {

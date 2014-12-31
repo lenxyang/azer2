@@ -1,15 +1,15 @@
 #include "azer/render/context2d.h"
 
 #include "third_party/skia/src/gpu/gl/GrGLUtil.h"
-#include "gl/GrGLFunctions.h"
-#include "gl/GrGLDefines.h"
-#include "gl/GrGLInterface.h"
-#include "SkCanvas.h"
-#include "SkGpuDevice.h"
-#include "GrTexture.h"
-#include "GrContext.h"
-#include "SkImageInfo.h"
-#include "SkImageEncoder.h"
+#include "third_party/skia/include/gpu/gl/GrGLFunctions.h"
+#include "third_party/skia/include/gpu/gl/GrGLInterface.h"
+#include "third_party/skia/include/gpu/GrTexture.h"
+#include "third_party/skia/include/gpu/GrContext.h"
+#include "third_party/skia/include/core/SkCanvas.h"
+#include "third_party/skia/include/core/SkImageInfo.h"
+#include "third_party/skia/include/core/SkImageEncoder.h"
+
+#include "third_party/skia/src/gpu/SkGpuDevice.h"
 
 namespace azer {
 
@@ -38,22 +38,13 @@ bool Context2D::Init(RenderSystem* rs) {
   return true;
 }
 
-Canvas2DPtr Context2D::CreateCanvas(int width, int height) {
-  std::unique_ptr<Canvas2D> ptr(new Canvas2D(width, height, this));
-  if (ptr->Init()) {
-    return Canvas2DPtr(ptr.release());
-  } else {
-    return Canvas2DPtr();
-  }
-}
-
 void Context2D::flush() {
   DCHECK(gr_context_ != NULL);
   gr_context_->resetContext();
   gr_context_->flush();
 }
 
-void Context2D::wait() {
+void Context2D::finish() {
   DCHECK(gr_context_ != NULL);
   gr_context_->resetContext();
   interface_->fFunctions.fFinish();

@@ -15,8 +15,10 @@
 
 namespace azer {
 
+
 class WindowHost;
 class VertexBuffer;
+class Canvas2D;
 
 
 namespace d3d11 {
@@ -59,7 +61,7 @@ class D3DRenderSystem : public RenderSystem {
   virtual bool Present() override;
   virtual bool reset() override;
 
-  virtual Canvas2D* CreateCanvas2D() override;
+  virtual Canvas2D* CreateCanvas2D(int32 width, int32 height) override;
 
   D3DEnvironmentPtr& GetD3DEnv() { return envptr_;}
   /**

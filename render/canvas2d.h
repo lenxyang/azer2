@@ -28,7 +28,7 @@ class AZER_EXPORT Canvas2D {
   // create by canvas
   Canvas2D(int width, int height, Context2D* context);
   virtual bool Init();
-  virtual TexturePtr InitTexture() = 0;
+  virtual TexturePtr InitTexture(int32 texid) = 0;
 
   TexturePtr texture_;
   int32 width_;

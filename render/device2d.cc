@@ -12,7 +12,6 @@
 #include "gl/GrGLDefines.h"
 #include "gl/GrGLUtil.h"
 
-#include "azer/render/skia/egl.h"
 #include "azer/render/texture.h"
 
 namespace azer {

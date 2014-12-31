@@ -12,7 +12,6 @@
 
 #include "azer/render/device2d.h"
 #include "azer/render/context2d.h"
-#include "azer/render/skia/egl.h"
 #include "base/strings/string_util.h"
 #include "azer/render/texture.h"
 
@@ -45,6 +44,7 @@ SkCanvas* Canvas2D::GetSkCanvas() {
 TexturePtr& Canvas2D::GetTexture() {
   if (!texture_.get()) {
     GrTexture* tex = device_->GetGrTex();
+    InitTexture(tex->getTextureHandle());
   }
   return texture_;
 }

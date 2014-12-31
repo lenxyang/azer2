@@ -7,10 +7,11 @@
 #include "azer/render/render_system.h"
 #include "azer/render/canvas2d.h"
 
+#include "third_party/skia/include/gpu/gl/GrGLInterface.h"
+
 struct GrGLInterface;
 class GrContext;
-class SkGpuDevice;
-class SkCanvas;
+
 
 namespace azer {
 
@@ -20,17 +21,15 @@ class Device2D;
 
 class AZER_EXPORT Context2D {
  public:
+  Context2D(const GrGLInterface* interface);
   virtual ~Context2D();
   
   void flush();
-  void wait();
-
-  Canvas2DPtr CreateCanvas(int width, int height);
+  void finish();
 
   GrContext* GetGrContext() { return gr_context_;}
   const GrGLInterface* GetGrGLInterface() { return interface_;}
- private:
-  Context2D(const GrGLInterface* interface);
+ protected:
   bool Init(RenderSystem* rs);
 
   GrContext* gr_context_;

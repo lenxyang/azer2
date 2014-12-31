@@ -23,6 +23,7 @@ class DepthRenderTarget;
 class Image;
 class EGL;
 class Context2D;
+class Canvas2D;
 
 
 typedef std::shared_ptr<IndicesData> IndicesDataPtr;
@@ -72,7 +73,7 @@ class AZER_EXPORT RenderSystem {
   virtual bool reset() = 0;
 
   Context2D* GetContext2D() { return context2d_.get();}
-  virtual Canvas2D* CreateCanvas2D() = 0;
+  virtual Canvas2D* CreateCanvas2D(int32 width, int32 height) = 0;
   const RenderSystemCapability& capability() const {
     return capability_;
   }

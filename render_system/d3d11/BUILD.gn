@@ -1,11 +1,35 @@
 
+source_set("canvas") {
+  sources = [
+    "canvas2d.cc",
+    "canvas2d.h",
+  ]
+
+ deps = [
+    "//third_party/angle:libGLESv2",
+    "//third_party/angle:libEGL",
+    "//azer/render",
+  ]
+
+  configs += [
+    "//azer/build/config:d3d11",
+    "//azer/build/config:utf8src",
+  ]
+  include_dirs = [
+    "//third_party/angle/include",
+  ]
+  defines = [
+    "BUILD_D3D11_AZER_RENDER_SYSTEM",
+    "ANGLE_GLNAME=L\"libGLESv2\"",
+    "ANGLE_EGLNAME=L\"libEGL\"",
+  ]
+}
+
 shared_library("d3d11") {
   output_name = "d3d11_render_system"
   sources = [
     "blending.cc",
     "blending.h",
-    "canvas2d.cc",
-    "canvas2d.h",
     "d3denv.cc",
     "d3denv.h",
     "depth_buffer.cc",
@@ -45,6 +69,8 @@ shared_library("d3d11") {
     "//azer/render:render",
     "//ui/gfx",
     "//ui/gl",
+    "//skia",
+    ":canvas",
   ]
   defines = ["BUILD_D3D11_AZER_RENDER_SYSTEM"]
   configs += [
