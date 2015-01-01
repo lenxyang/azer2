@@ -46,7 +46,7 @@ SkCanvas* Canvas2D::GetSkCanvas() {
 TexturePtr& Canvas2D::GetTexture() {
   if (!texture_.get()) {
     GrTexture* tex = device_->GetGrTex();
-    InitTexture(tex->getTextureHandle());
+    texture_ = InitTexture(tex->getTextureHandle());
   }
   return texture_;
 }
