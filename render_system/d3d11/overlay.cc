@@ -49,19 +49,24 @@ bool D3DOverlayEffect::Init(Overlay* surface, D3DRenderSystem* rs) {
   return true;
 }
 
-OverlayEffect* D3DOverlay::CreateDefaultEffect() {
+bool D3DOverlay::InitEffect() {
   DCHECK(render_system_ != NULL);
   std::unique_ptr<D3DOverlayEffect> effect_ptr(
       new D3DOverlayEffect(render_system_));
   if (effect_ptr->Init(this, render_system_)) {
-    return effect_ptr.release();
+    effect_ptr_.reset(effect_ptr.release());
+    return true;
   } else {
-    return NULL;
+    return false;
   }
 }
 
 bool D3DOverlay::Init(azer::RenderSystem* rs) {
   if (!InitVertex(rs)) {
+    return false;
+  }
+
+  if (!InitEffect()) {
     return false;
   }
   return true;

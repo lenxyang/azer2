@@ -36,11 +36,7 @@ class AZER_EXPORT Overlay {
   virtual ~Overlay() {}
   virtual void Render(Renderer* rs);
 
-  virtual OverlayEffect* CreateDefaultEffect() = 0;
-
-  EffectPtr& GetEffect() { return effect_ptr_;}
-  void SetEffect(EffectPtr& ptr) { effect_ptr_ = ptr;}
-
+  void SetTexture(TexturePtr tex);
   /**
    * Overlay 的顶点格式
    * struct Vertex {

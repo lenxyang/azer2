@@ -30,12 +30,12 @@ class D3DOverlay : public Overlay {
       : Overlay(rect)
       , render_system_(rs) {}
   virtual ~D3DOverlay() {}
-  virtual OverlayEffect* CreateDefaultEffect();
 
   static const int kVertexDescNum;
   static const azer::VertexDesc::Desc kVertexDesc[];
  protected:
   bool Init(azer::RenderSystem* rs);
+  bool InitEffect();
   bool InitVertex(RenderSystem* rs);
   D3DRenderSystem* render_system_;
   friend class D3DRenderSystem;
