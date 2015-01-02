@@ -6,12 +6,7 @@
 #include "GLES2/gl2.h"
 #include "GLES2/gl2ext.h"
 
-#include "SkCanvas.h"
-#include "SkGpuDevice.h"
-#include "GrTexture.h"
-#include "GrContext.h"
-
-#include "azer/render_system/d3d11/device2d.h"
+#include "azer/render_system/d3d11/context2d.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render/render_system.h"
@@ -43,20 +38,46 @@ bool GetProc() {
 }
 }  // namespace
 
-bool Canvas2D::Init() {
-  std::unique_ptr<D3DDevice> device(new D3DDevice2D());
-  if (!device->Init(context_, this)) {
+D3DCanvas2D::~D3DCanvas2D() {
+  if (skcanvas_) {
+    delete skcanvas_;
+  }
+}
+
+bool D3DCanvas2D::Init() {
+  if (!InitCanvas()) {
     return false;
   }
 
-  device_.reset(device.release());
-  GrTexture* tex = device_->GetGrTex();
-  return InitTexture(tex->getTextureHandle());
+  return InitTexture(grtex_->getTextureHandle());
+}
+
+bool D3DCanvas2D::InitCanvas() {
+  D3DContext2D* ctx = (D3DContext2D*)context_;
+  GrContext* context =  ctx->GetGrContext();
+  DCHECK(NULL != context);
+  grtex_.reset(ctx->CreateTexture(width_, height_));
+  SkSurfaceProps props(SkSurfaceProps::kDisallowAntiAlias_Flag,
+                       kRGB_H_SkPixelGeometry);
+  gr_device_.reset(SkGpuDevice::Create(grtex_.get(), props, 0));
+  if (gr_device_.get() == NULL) {
+    LOG(ERROR) << "Failed to create SkGpuDevice";
+    return false;
+  }
+
+  DCHECK(NULL == skcanvas_);
+  skcanvas_ = new SkCanvas(gr_device_.get());
+  if (skcanvas_ == NULL) {
+    LOG(ERROR) << "Failed to create SkCanvas";
+    return false;
+  }
+
+  return true;
 }
 
 bool D3DCanvas2D::InitTexture(int32 texid) {
   if (!GetProc()) {
-    return TexturePtr();
+    return false;
   }
 
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();

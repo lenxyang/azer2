@@ -32,6 +32,7 @@ const StringType& D3DRenderSystem::short_name_ = AZER_LITERAL("d3d11");
 D3DRenderSystem::D3DRenderSystem(D3DEnvironmentPtr envptr)
     : envptr_(envptr)
     , RenderSystem(envptr->GetSurface()) {
+  InitContext2D();
 }
 
 D3DRenderSystem::~D3DRenderSystem() {
@@ -252,14 +253,6 @@ bool D3DRenderSystem::InitD3DDevice() {
   return true;
 }
 
-Canvas2D* D3DRenderSystem::CreateCanvas2D(int32 width, int32 height) {
-  std::unique_ptr<D3DCanvas2D> ptr(new D3DCanvas2D(width, height, GetContext2D()));
-  if (ptr->Init()) {
-    return ptr.release();
-  } else {
-    return NULL;
-  }
-}
 }  // namespace d3d11
 }  // namespace azer
 

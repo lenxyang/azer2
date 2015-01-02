@@ -73,7 +73,6 @@ class AZER_EXPORT RenderSystem {
   virtual bool reset() = 0;
 
   Context2D* GetContext2D() { return context2d_.get();}
-  virtual Canvas2D* CreateCanvas2D(int32 width, int32 height) = 0;
   const RenderSystemCapability& capability() const {
     return capability_;
   }
@@ -89,8 +88,7 @@ class AZER_EXPORT RenderSystem {
 
   SwapChainPtr& GetSwapChain() { return swap_chain_;}
  protected:
-  void InitContext2D();
-
+  // context2d, init by sub render-system
   std::unique_ptr<Context2D> context2d_;
   RenderSystemCapability capability_;
   SwapChainPtr swap_chain_;

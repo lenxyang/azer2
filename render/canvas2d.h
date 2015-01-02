@@ -5,6 +5,7 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
+#include "base/logging.h"
 
 class SkCanvas;
 
@@ -16,23 +17,35 @@ class Device2D;
 class AZER_EXPORT Canvas2D {
  public:
   ~Canvas2D();
-  TexturePtr& GetTexture();
 
-  int width() const { return width_;}
-  int height() const { return height_;}
+  int32 width() const { return width_;}
+  int32 height() const { return height_;}
+
+  SkCanvas* GetSkCanvas() {
+    DCHECK(NULL != skcanvas_);
+    return skcanvas_;
+  }
+
+  TexturePtr& GetTexture() {
+    DCHECK(NULL != texture_.get());
+    return texture_;
+  }
+
+  Context2D* GetContext2D() {
+    DCHECK(NULL != context_);
+    return context_;
+  }
 
   bool Save(const ::base::FilePath& path);
-  SkCanvas* GetSkCanvas();
-
-  Context2D* GetContext2D() { return context_;}
  protected:
   // create by canvas
-  Canvas2D(int width, int height, Context2D* context);
+  Canvas2D(int32 width, int32 height, Context2D* context);
   virtual bool Init() = 0;
   
   TexturePtr texture_;
-  int32 width_;
-  int32 height_;
+  const int32 width_;
+  const int32 height_;
+  SkCanvas* skcanvas_;
   Context2D* context_;
   friend class Context2D;
   DISALLOW_COPY_AND_ASSIGN(Canvas2D);

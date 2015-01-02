@@ -8,11 +8,11 @@
 namespace azer {
 
 class RenderSystem;
-class Device2D;
+class Canvas2D;
 
 class AZER_EXPORT Context2D {
  public:
-  Context2D(GrGLInterface* interface);
+  Context2D();
   virtual ~Context2D();
   
   virtual void flush() = 0;

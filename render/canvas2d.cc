@@ -1,7 +1,11 @@
 #include "azer/render/canvas2d.h"
 
 
-#include "SkImageInfo.h"
+// skia headers
+#include "third_party/skia/include/core/SkBitmap.h"
+#include "third_party/skia/include/core/SkCanvas.h"
+#include "third_party/skia/include/core/SkImageInfo.h"
+#include "third_party/skia/include/core/SkImageEncoder.h"
 
 #include "base/strings/string_util.h"
 #include "base/files/file_util.h"
@@ -21,20 +25,13 @@ using ::base::FilePath;
 Canvas2D::Canvas2D(int width, int height, Context2D* ctx)
     : width_(width)
     , height_(height)
+    , skcanvas_(NULL)
     , context_(ctx) {
 }
 
 Canvas2D::~Canvas2D() {
 }
 
-SkCanvas* Canvas2D::GetSkCanvas() {
-  DCHECK(device_ != NULL);
-  return device_->GetCanvas();
-}
-
-TexturePtr& Canvas2D::GetTexture() {
-  return texture_;
-}
 
 namespace {
 SkImageEncoder::Type ImageType(const FilePath::StringType& ext) {
@@ -71,7 +68,6 @@ std::vector<uint8> EncodeBitmap(const SkBitmap& bitmap,
 }
 
 bool Canvas2D::Save(const FilePath& path) {
-  DCHECK(device_ != NULL);
   const FilePath::StringType ext = ::base::StringToLowerASCII(path.Extension());
   SkImageEncoder::Type type = ImageType(ext);
   std::string pathstr = ::base::WideToUTF8(path.value());
@@ -80,7 +76,7 @@ bool Canvas2D::Save(const FilePath& path) {
                                        kOpaque_SkAlphaType);
   bitmap.setInfo(info);
   bitmap.allocPixels();
-  device_->GetCanvas()->readPixels(&bitmap, 0, 0);
+  GetSkCanvas()->readPixels(&bitmap, 0, 0);
   std::vector<uint8> compressed = std::move(EncodeBitmap(bitmap, type));
 
   FILE* f = base::OpenFile(path, "wb");
