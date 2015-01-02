@@ -21,20 +21,18 @@ class AZER_EXPORT Canvas2D {
   int width() const { return width_;}
   int height() const { return height_;}
 
-  void flush();
-
   bool Save(const ::base::FilePath& path);
   SkCanvas* GetSkCanvas();
+
+  Context2D* GetContext2D() { return context_;}
  protected:
   // create by canvas
   Canvas2D(int width, int height, Context2D* context);
-  virtual bool Init();
-  virtual TexturePtr InitTexture(int32 texid) = 0;
-
+  virtual bool Init() = 0;
+  
   TexturePtr texture_;
   int32 width_;
   int32 height_;
-  Device2D* device_;
   Context2D* context_;
   friend class Context2D;
   DISALLOW_COPY_AND_ASSIGN(Canvas2D);

@@ -5,10 +5,6 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 
-class GrContext;
-class GrTexture;
-struct GrGLInterface;
-
 namespace azer {
 
 class RenderSystem;
@@ -19,19 +15,10 @@ class AZER_EXPORT Context2D {
   Context2D(GrGLInterface* interface);
   virtual ~Context2D();
   
-  void flush();
-  void finish();
-
-  GrContext* GetGrContext() { return gr_context_;}
-  GrGLInterface* GetGrGLInterface() { return interface_;}
-  GrTexture* CreateTexture(int width, int height);
+  virtual void flush() = 0;
+  virtual void finish() = 0;
+  virtual Canvas2D* CreateCanvas(int32 width, int32 height) = 0;
  protected:
-  virtual bool Init(RenderSystem* rs);
-
-  GrContext* gr_context_;
-  GrGLInterface* interface_;
-  friend class Device2D;
-  friend class RenderSystem;
   DISALLOW_COPY_AND_ASSIGN(Context2D);
 };
 

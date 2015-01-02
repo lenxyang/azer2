@@ -1,21 +1,17 @@
 #include "azer/render/canvas2d.h"
 
-#include "SkCanvas.h"
-#include "SkGpuDevice.h"
-#include "GrTexture.h"
-#include "GrContext.h"
-#include "SkImageInfo.h"
-#include "SkImageEncoder.h"
 
-#include "azer/render/device2d.h"
-#include "azer/render/context2d.h"
+#include "SkImageInfo.h"
+
 #include "base/strings/string_util.h"
 #include "base/files/file_util.h"
-#include "azer/render/texture.h"
 
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/image/image.h"
 #include "ui/gfx/codec/png_codec.h"
+
+#include "azer/render/texture.h"
+#include "azer/render/context2d.h"
 
 namespace azer {
 
@@ -25,17 +21,10 @@ using ::base::FilePath;
 Canvas2D::Canvas2D(int width, int height, Context2D* ctx)
     : width_(width)
     , height_(height)
-    , device_(NULL)
     , context_(ctx) {
 }
 
 Canvas2D::~Canvas2D() {
-  if (device_) { delete device_;}
-}
-
-bool Canvas2D::Init() {
-  device_ = new Device2D();
-  return device_->Init(context_, this);
 }
 
 SkCanvas* Canvas2D::GetSkCanvas() {
@@ -44,10 +33,6 @@ SkCanvas* Canvas2D::GetSkCanvas() {
 }
 
 TexturePtr& Canvas2D::GetTexture() {
-  if (!texture_.get()) {
-    GrTexture* tex = device_->GetGrTex();
-    texture_ = InitTexture(tex->getTextureHandle());
-  }
   return texture_;
 }
 
@@ -103,9 +88,6 @@ bool Canvas2D::Save(const FilePath& path) {
            compressed.size());
   base::CloseFile(f);
   return true;
-}
-
-void Canvas2D::flush() {
 }
 
 }  // namespace azer

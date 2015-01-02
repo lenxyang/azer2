@@ -14,10 +14,10 @@ namespace azer {
 class Context2D;
 class Canvas2D;
 
-class AZER_EXPORT Device2D {
+class AZER_EXPORT D3DDevice2D {
  public:
-  Device2D(){}
-  ~Device2D() {}
+  D3DDevice2D(){}
+  ~D3DDevice2D() {}
 
   bool Init(Context2D* ctx, Canvas2D* canvas);
 
@@ -28,7 +28,7 @@ class AZER_EXPORT Device2D {
   std::unique_ptr<SkGpuDevice> gr_device_;
   std::unique_ptr<SkCanvas> sk_canvas_;
   GrTexture* grtex_;
-  DISALLOW_COPY_AND_ASSIGN(Device2D);
+  DISALLOW_COPY_AND_ASSIGN(D3DDevice2D);
 };
 
 }  // namespace azer

@@ -1,4 +1,4 @@
-#include "azer/render/device2d.h"
+#include "azer/render_system/d3d11/device2d.h"
 
 #include "SkCanvas.h"
 #include "SkGpuDevice.h"
@@ -11,10 +11,9 @@
 
 namespace azer {
 
-bool Device2D::Init(Context2D* ctx, Canvas2D* canvas) {
+bool D3DDevice2D::Init(Context2D* ctx, Canvas2D* canvas) {
   GrContext* context = ctx->gr_context_;
   grtex_ = ctx->CreateTexture(canvas->width(), canvas->height());
-  // tex_.reset(ctx->GetAzerEGLInterface()->CreateTexture(gltex_->fbid()));
   SkSurfaceProps props(SkSurfaceProps::kDisallowAntiAlias_Flag,
                        kRGB_H_SkPixelGeometry);
   gr_device_.reset(SkGpuDevice::Create(grtex_, props, 0));

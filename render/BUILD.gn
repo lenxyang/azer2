@@ -5,16 +5,9 @@ source_set("render2d") {
     "canvas2d.h",
     "context2d.cc",
     "context2d.h",
-    "device2d.cc",
-    "device2d.h",
   ]
   deps = [
    "//skia",
-   "//third_party/angle:libGLESv2",
-  ]
-
-  include_dirs = [
-    "//third_party/angle/include",
   ]
 
   configs += ["//azer/build/config:utf8src"]

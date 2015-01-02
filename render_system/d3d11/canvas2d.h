@@ -9,6 +9,9 @@ namespace azer {
 class Context2D;
 
 namespace d3d11 {
+
+class D3DDevice2D;
+
 class D3DCanvas2D : public Canvas2D {
  public:
   D3DCanvas2D(int width, int height, Context2D* context)
@@ -20,6 +23,7 @@ class D3DCanvas2D : public Canvas2D {
     return Canvas2D::Init();
   }
  private:
+  D3DDevice2D* device_;
   DISALLOW_COPY_AND_ASSIGN(D3DCanvas2D);
 };
 }  // namespace d3d11

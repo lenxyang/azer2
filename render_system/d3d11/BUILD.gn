@@ -5,6 +5,8 @@ source_set("canvas") {
     "canvas2d.h",
     "context2d.cc",
     "context2d.h",
+    "device2d.cc",
+    "device2d.h",
   ]
 
  deps = [
