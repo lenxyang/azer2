@@ -5,6 +5,7 @@
 #include "azer/render/effect.h"
 #include "azer/render/texture.h"
 #include "azer/render/vertex_buffer.h"
+#include "azer/render/blending.h"
 #include "ui/gfx/rect_f.h"
 #include "ui/gfx/rect.h"
 
@@ -32,9 +33,8 @@ class AZER_EXPORT Overlay {
    * overlay 的坐标与 3D 坐标系一致
    * 可以将它认为是 view volumn 的切面
    */
-  explicit Overlay(const gfx::RectF& rect) : rect_(rect) {}
-  virtual ~Overlay() {}
-  virtual void Render(Renderer* rs);
+  virtual ~Overlay();
+  void Render(Renderer* rs);
 
   void SetTexture(TexturePtr tex);
   /**
@@ -45,7 +45,12 @@ class AZER_EXPORT Overlay {
    * };
    */
   VertexDescPtr GetVertexDesc() { return vertex_desc_ptr_;}
+
+  void EnableBlending(bool enabled) { blending_enabled_ = enabled;}
+  bool IsBlendingEnable() const { return blending_enabled_;}
  protected:
+  explicit Overlay(const gfx::RectF& rect);
+
   struct Vertex {
     azer::Vector4 position;
     azer::Vector2 texcoord;
@@ -54,6 +59,13 @@ class AZER_EXPORT Overlay {
         , texcoord(in_texcoord){}
     Vertex() {}
   };
+
+  virtual bool Init(RenderSystem* rs);
+
+  void SetBlending(Renderer* renderer);
+  void ResetBlending(Renderer* renderer);
+  bool blending_enabled_;
+  BlendingPtr blending_;
 
   gfx::RectF rect_;
   VertexBufferPtr vb_ptr_;

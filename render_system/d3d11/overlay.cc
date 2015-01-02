@@ -69,7 +69,8 @@ bool D3DOverlay::Init(azer::RenderSystem* rs) {
   if (!InitEffect()) {
     return false;
   }
-  return true;
+
+  return Overlay::Init(rs);
 }
 
 const VertexDesc::Desc D3DOverlay::kVertexDesc[] = {
