@@ -7,6 +7,8 @@ namespace wm {
 class WMState;
 }
 
+namespace azer {
+
 class TestViewsDelegate : public views::ViewsDelegate {
  public:
   TestViewsDelegate();
@@ -39,3 +41,5 @@ class TestViewsDelegate : public views::ViewsDelegate {
   DISALLOW_COPY_AND_ASSIGN(TestViewsDelegate);
 };
 
+
+}  // namespace azer

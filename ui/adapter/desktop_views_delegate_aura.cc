@@ -5,6 +5,8 @@
 
 using namespace views;
 
+namespace azer {
+
 DesktopTestViewsDelegate::DesktopTestViewsDelegate() {}
 
 DesktopTestViewsDelegate::~DesktopTestViewsDelegate() {}
@@ -26,3 +28,4 @@ void DesktopTestViewsDelegate::OnBeforeWidgetInit(
   }
 }
 
+}  // namespace azer

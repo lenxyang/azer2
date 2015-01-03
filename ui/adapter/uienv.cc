@@ -1,20 +1,28 @@
 #include "azer/ui/adapter/uienv.h"
 
+#include "base/at_exit.h"
 #include "base/command_line.h"
 #include "base/i18n/icu_util.h"
+#include "base/message_loop/message_loop.h"
 #include "base/path_service.h"
 #include "base/run_loop.h"
-#include "ui/aura/window.h"
 #include "ui/aura/env.h"
+#include "ui/aura/window.h"
 #include "ui/base/ime/input_method_initializer.h"
 #include "ui/base/resource/resource_bundle.h"
 #include "ui/base/ui_base_paths.h"
+#include "ui/gfx/screen.h"
+#include "ui/wm/core/wm_state.h"
+#include "ui/views/widget/desktop_aura/desktop_screen.h"
 
+#include "azer/ui/adapter/azer_init.h"
 #include "azer/ui/adapter/context_factory.h"
+#include "azer/ui/adapter/desktop_views_delegate.h"
 
 namespace azer {
 
-UIEnvironment::UIEnvironment() {
+UIEnvironment::UIEnvironment(const Options& options)
+    : options_(options) {
 }
 
 UIEnvironment::~UIEnvironment() {
@@ -50,11 +58,21 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
   return true;
 }
 
-ScopedUIEnvironment::ScopedUIEnvironment(int argc, char* argv[]) {
-  scoped_obj_.reset(new UIEnvironment());
-  CHECK(scoped_obj_->Init(argc, argv));
-}
-ScopedUIEnvironment::~ScopedUIEnvironment() {
+bool UIEnvironment::MainLoop(views::WidgetDelegate* view_delegate) {
+  using views::Widget;
+  Widget* widget = new Widget;
+  Widget::InitParams params;
+  params.delegate = view_delegate;
+  params.context = NULL;
+  params.bounds = gfx::Rect(0, 0, options_.width, options_.height);
+  widget->Init(params);
+  widget->Show();
+
+  if (!InitializeAzer(widget)) {
+    return false;
+  }
+
+  return true;
 }
 
 }  // namespace azer

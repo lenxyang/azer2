@@ -1,6 +1,8 @@
 
 source_set("adapter") {
   sources = [
+    "azer_init.cc",
+    "azer_init.h",
     "context_factory.cc",
     "context_factory.h",
     "output_device.cc",

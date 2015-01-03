@@ -6,6 +6,8 @@
 
 using namespace views;
 
+namespace azer {
+
 TestViewsDelegate::TestViewsDelegate()
     : use_desktop_native_widgets_(false),
       use_transparent_windows_(false) {
@@ -31,3 +33,5 @@ void TestViewsDelegate::OnBeforeWidgetInit(
     params->native_widget = new DesktopNativeWidgetAura(delegate);
 }
 
+
+}  // namespace azer

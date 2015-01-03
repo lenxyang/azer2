@@ -3,6 +3,8 @@
 
 #include "azer/ui/adapter/views_delegate.h"
 
+namespace azer {
+
 // Most aura test code is written assuming a single RootWindow view, however,
 // at higher levels like content_browsertests and
 // views_examples_with_content_exe, we must use the Desktop variants.
@@ -19,5 +21,4 @@ class DesktopTestViewsDelegate : public TestViewsDelegate {
   DISALLOW_COPY_AND_ASSIGN(DesktopTestViewsDelegate);
 };
 
-
-
+}  // namespace azer
