@@ -71,7 +71,9 @@ bool UIEnvironment::MainLoop(const Params& params) {
     return false;
   }
 
-  return true;
+  CHECK(NULL != params.render_delegate);
+  scoped_refptr<RenderLoop> renderloop(new RenderLoop(params.render_delegate));
+  return renderloop->Run();
 }
 
 }  // namespace azer

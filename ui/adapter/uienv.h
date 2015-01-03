@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "azer/base/export.h"
+#include "azer/base/render_loop.h"
 #include "ui/base/win/scoped_ole_initializer.h"
 
 namespace wm {
@@ -41,12 +42,14 @@ public:
     int32 height;
     bool fullscreen;
     views::WidgetDelegate* view_delegate;
+    RenderLoop::Delegate* render_delegate;
 
     Params()
         : width(800)
         , height(600)
         , fullscreen(false) 
-        , view_delegate(NULL) {
+        , view_delegate(NULL)
+        , render_delegate(NULL) {
     }
   };
   bool MainLoop(const Params& params);

@@ -49,6 +49,8 @@ source_set("base") {
     "image.h",
     "file_util.cc",
     "file_util.h",
+    "render_loop.cc",
+    "render_loop.h",
   ]
   deps = [
     "//base",
