@@ -21,8 +21,7 @@
 
 namespace azer {
 
-UIEnvironment::UIEnvironment(const Options& options)
-    : options_(options) {
+UIEnvironment::UIEnvironment() {
 }
 
 UIEnvironment::~UIEnvironment() {
@@ -31,7 +30,7 @@ UIEnvironment::~UIEnvironment() {
   aura::Env::DeleteInstance();
 
   wm_state_.reset(NULL);
-  views_delegate_.reset(NULL);
+  desktop_views_delegate_.reset(NULL);
 }
 
 bool UIEnvironment::Init(int argc, char* argv[]) {
@@ -47,7 +46,7 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
   ui::ResourceBundle::InitSharedInstanceWithPakPath(ui_test_pak_path);
   ui::InitializeInputMethodForTesting();
 
-  views_delegate_.reset(new DesktopTestViewsDelegate);
+  desktop_views_delegate_.reset(new DesktopTestViewsDelegate);
   aura::Env::CreateInstance(true);
   aura::Env::GetInstance()->set_context_factory(context_factory_.get());
   
@@ -58,14 +57,14 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
   return true;
 }
 
-bool UIEnvironment::MainLoop(views::WidgetDelegate* view_delegate) {
+bool UIEnvironment::MainLoop(const Params& params) {
   using views::Widget;
   Widget* widget = new Widget;
-  Widget::InitParams params;
-  params.delegate = view_delegate;
-  params.context = NULL;
-  params.bounds = gfx::Rect(0, 0, options_.width, options_.height);
-  widget->Init(params);
+  Widget::InitParams wparams;
+  wparams.delegate = params.view_delegate;
+  wparams.context = NULL;
+  wparams.bounds = gfx::Rect(0, 0, params.width, params.height);
+  widget->Init(wparams);
   widget->Show();
 
   if (!InitializeAzer(widget)) {

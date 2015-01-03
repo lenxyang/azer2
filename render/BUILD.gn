@@ -71,6 +71,7 @@ shared_library("render") {
     "//ui/gfx/geometry",
     "//base",
     ":render2d",
+    "../ui/adapter",
   ]
 
   configs += ["//azer/build/config:utf8src"]

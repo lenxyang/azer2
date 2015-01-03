@@ -29,26 +29,27 @@ class DesktopTestViewsDelegate;
 class UIContextFactory;
 
 class AZER_EXPORT UIEnvironment {
- public:
-  struct Options {
-    int32 width;
-    int32 height;
-    bool fullscreen;
-
-    Options()
-        : width(800)
-        , height(600)
-        , fullscreen(false) {
-    }
-  };
-
-  UIEnvironment(const Options& options);
+public:
+  UIEnvironment();
   ~UIEnvironment();
 
   bool Init(int argc, char* argv[]);
 
   // create main window and run loop
-  bool MainLoop(views::WidgetDelegate* delegate);
+  struct Params {
+    int32 width;
+    int32 height;
+    bool fullscreen;
+    views::WidgetDelegate* view_delegate;
+
+    Params()
+        : width(800)
+        , height(600)
+        , fullscreen(false) 
+        , view_delegate(NULL) {
+    }
+  };
+  bool MainLoop(const Params& params);
  private:
   ui::ScopedOleInitializer ole_initializer_;
   std::unique_ptr< ::base::AtExitManager> exit_manager_;
@@ -57,8 +58,7 @@ class AZER_EXPORT UIEnvironment {
   std::unique_ptr<gfx::Screen> desktop_screen_;
   std::unique_ptr<wm::WMState> wm_state_;
   std::unique_ptr<UIContextFactory> context_factory_;
-  std::unique_ptr<DesktopTestViewsDelegate> views_delegate_;
-  const Options options_;
+  std::unique_ptr<DesktopTestViewsDelegate> desktop_views_delegate_;
   DISALLOW_COPY_AND_ASSIGN(UIEnvironment);
 };
 
