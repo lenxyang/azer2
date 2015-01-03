@@ -1,4 +1,4 @@
-#include "azer/uisbox/view/base/context_factory.h"
+#include "azer/ui/adapter/context_factory.h"
 
 #include "base/bind.h"
 #include "base/command_line.h"
@@ -11,8 +11,9 @@
 #include "ui/compositor/compositor_switches.h"
 #include "ui/compositor/reflector.h"
 
-#include "azer/uisbox/view/base/output_device.h"
+#include "azer/ui/adapter/output_device.h"
 
+namespace azer {
 
 // An OutputSurface implementation that directly draws and swaps to an actual
 // GL surface.
@@ -25,13 +26,6 @@ class DirectOutputSurface : public cc::OutputSurface {
   // cc::OutputSurface implementation
   void SwapBuffers(cc::CompositorFrame* frame) override {
     client_->DidSwapBuffers();
-
-    static bool stored = false;
-    if (!stored) {
-      OutputDevice* device = (OutputDevice*)software_device_.get();
-      device->save(::base::FilePath(FILE_PATH_LITERAL("uisbox_view_simple.png")));
-      stored = true;
-    }
   }
 
  private:
@@ -39,55 +33,57 @@ class DirectOutputSurface : public cc::OutputSurface {
   DISALLOW_COPY_AND_ASSIGN(DirectOutputSurface);
 };
 
-MyContextFactory::MyContextFactory()
+UIContextFactory::UIContextFactory()
     : next_surface_id_namespace_(1u) {
 }
 
-MyContextFactory::~MyContextFactory() {
+UIContextFactory::~UIContextFactory() {
 }
 
-void MyContextFactory::CreateOutputSurface(
+void UIContextFactory::CreateOutputSurface(
     base::WeakPtr<ui::Compositor> compositor,
     bool software_fallback) {
-  scoped_ptr<cc::SoftwareOutputDevice> device(new OutputDevice);
+  scoped_ptr<cc::SoftwareOutputDevice> device(new Azer2DDevice);
   compositor->SetOutputSurface(
       make_scoped_ptr(new DirectOutputSurface(device.Pass())));
 
   // surface_context_provider_ = context_provider;
 }
-scoped_refptr<ui::Reflector> MyContextFactory::CreateReflector(
+scoped_refptr<ui::Reflector> UIContextFactory::CreateReflector(
     ui::Compositor* mirroed_compositor,
     ui::Layer* mirroring_layer) {
   return new ui::Reflector();
 }
-void MyContextFactory::RemoveReflector(
+void UIContextFactory::RemoveReflector(
     scoped_refptr<ui::Reflector> reflector) {
 }
 
 scoped_refptr<cc::ContextProvider>
-MyContextFactory::SharedMainThreadContextProvider() {
+UIContextFactory::SharedMainThreadContextProvider() {
   return scoped_refptr<cc::ContextProvider>();
 }
 
-void MyContextFactory::RemoveCompositor(ui::Compositor* compositor) {
+void UIContextFactory::RemoveCompositor(ui::Compositor* compositor) {
 }
 
-bool MyContextFactory::DoesCreateTestContexts() {
+bool UIContextFactory::DoesCreateTestContexts() {
   return false;
 }
 
-cc::SharedBitmapManager* MyContextFactory::GetSharedBitmapManager() {
+cc::SharedBitmapManager* UIContextFactory::GetSharedBitmapManager() {
   return NULL;
 }
 
-gpu::GpuMemoryBufferManager* MyContextFactory::GetGpuMemoryBufferManager() {
+gpu::GpuMemoryBufferManager* UIContextFactory::GetGpuMemoryBufferManager() {
   return NULL;
 }
-base::MessageLoopProxy* MyContextFactory::GetCompositorMessageLoop() {
+base::MessageLoopProxy* UIContextFactory::GetCompositorMessageLoop() {
   return NULL;
 }
 scoped_ptr<cc::SurfaceIdAllocator>
-MyContextFactory::CreateSurfaceIdAllocator() {
+UIContextFactory::CreateSurfaceIdAllocator() {
   return make_scoped_ptr(
       new cc::SurfaceIdAllocator(next_surface_id_namespace_++));
 }
+
+}  // namespace azer

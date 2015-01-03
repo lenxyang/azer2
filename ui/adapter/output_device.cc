@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "azer/cc/output/azer_2d_device.h"
+#include "azer/ui/adapter/output_device.h"
 
 #include "base/logging.h"
 #include "cc/output/software_frame_data.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "ui/gfx/vsync_provider.h"
 
-namespace cc {
+namespace azer {
 
 Azer2DDevice::Azer2DDevice() : scale_factor_(1.f) {
 }
@@ -17,7 +17,7 @@ Azer2DDevice::Azer2DDevice() : scale_factor_(1.f) {
 Azer2DDevice::~Azer2DDevice() {}
 
 void Azer2DDevice::Resize(const gfx::Size& viewport_pixel_size,
-                                  float scale_factor) {
+                          float scale_factor) {
   scale_factor_ = scale_factor;
 
   if (viewport_pixel_size_ == viewport_pixel_size)
@@ -36,7 +36,7 @@ SkCanvas* Azer2DDevice::BeginPaint(const gfx::Rect& damage_rect) {
   return canvas_.get();
 }
 
-void Azer2DDevice::EndPaint(SoftwareFrameData* frame_data) {
+void Azer2DDevice::EndPaint(cc::SoftwareFrameData* frame_data) {
   DCHECK(frame_data);
   frame_data->id = 0;
   frame_data->size = viewport_pixel_size_;
@@ -50,7 +50,7 @@ void Azer2DDevice::CopyToPixels(const gfx::Rect& rect, void* pixels) {
 }
 
 void Azer2DDevice::Scroll(const gfx::Vector2d& delta,
-                                  const gfx::Rect& clip_rect) {
+                          const gfx::Rect& clip_rect) {
   NOTIMPLEMENTED();
 }
 
@@ -62,4 +62,4 @@ gfx::VSyncProvider* Azer2DDevice::GetVSyncProvider() {
   return vsync_provider_.get();
 }
 
-}  // namespace cc
+}  // namespace azer

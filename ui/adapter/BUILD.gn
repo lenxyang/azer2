@@ -1,0 +1,33 @@
+
+source_set("adapter") {
+  sources = [
+    "context_factory.cc",
+    "context_factory.h",
+    "output_device.cc",
+    "output_device.h",
+    "uienv.cc",
+    "uienv.h",
+    "desktop_views_delegate_aura.cc",
+    "desktop_views_delegate.h",
+    "views_delegate_aura.cc",
+    "views_delegate.h",
+  ]
+
+  deps = [
+    "//base",
+    "//base:i18n",
+    "//cc",
+    "//cc/surfaces",
+    "//ui/aura",
+    "//ui/base",
+    "//ui/compositor",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//ui/views",
+    "//ui/wm",
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+}

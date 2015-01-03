@@ -2,12 +2,11 @@
 
 #include "base/basictypes.h"
 #include "base/memory/scoped_ptr.h"
-#include "cc/base/cc_export.h"
+#include "cc/output/software_output_device.h"
 #include "skia/ext/refptr.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/geometry/vector2d.h"
-
 #include "azer/base/export.h"
 
 class SkBitmap;
@@ -18,12 +17,14 @@ class VSyncProvider;
 }
 
 namespace cc {
-
 class SoftwareFrameData;
+}  // namespace cc
+
+namespace azer {
 
 // This is a "tear-off" class providing software drawing support to
 // OutputSurface, such as to a platform-provided window framebuffer.
-class AZER_EXPORT Azer2DDevice {
+class AZER_EXPORT Azer2DDevice : public cc::SoftwareOutputDevice {
  public:
   Azer2DDevice();
   virtual ~Azer2DDevice();
@@ -42,7 +43,7 @@ class AZER_EXPORT Azer2DDevice {
   // Called on FinishDrawingFrame. The compositor will no longer mutate the the
   // SkCanvas instance returned by |BeginPaint| and should discard any reference
   // that it holds to it.
-  virtual void EndPaint(SoftwareFrameData* frame_data);
+  virtual void EndPaint(cc::SoftwareFrameData* frame_data);
 
   // Copies pixels inside |rect| from the current software framebuffer to
   // |pixels|. Fails if there is no current softwareframebuffer.
@@ -79,5 +80,5 @@ class AZER_EXPORT Azer2DDevice {
   DISALLOW_COPY_AND_ASSIGN(Azer2DDevice);
 };
 
-}  // namespace cc
+}  // namespace azer
 

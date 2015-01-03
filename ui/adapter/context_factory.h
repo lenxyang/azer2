@@ -1,15 +1,18 @@
 #pragma once
 
 #include "ui/compositor/compositor.h"
+#include "azer/base/export.h"
 
 namespace base {
 class Thread;
 }
 
-class MyContextFactory : public ui::ContextFactory {
+namespace azer {
+
+class AZER_EXPORT UIContextFactory : public ui::ContextFactory {
  public:
-  MyContextFactory();
-  ~MyContextFactory() override;
+  UIContextFactory();
+  ~UIContextFactory() override;
   // ContextFactory implementation
   void CreateOutputSurface(base::WeakPtr<ui::Compositor> compositor,
                            bool software_fallback) override;
@@ -26,5 +29,7 @@ class MyContextFactory : public ui::ContextFactory {
 
  private:
   uint32_t next_surface_id_namespace_;
-  DISALLOW_COPY_AND_ASSIGN(MyContextFactory);
+  DISALLOW_COPY_AND_ASSIGN(UIContextFactory);
 };
+
+}  // namespace azer
