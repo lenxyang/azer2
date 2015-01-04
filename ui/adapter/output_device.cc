@@ -31,7 +31,6 @@ void Azer2DDevice::Resize(const gfx::Size& viewport_pixel_size,
   DCHECK(NULL != context2d_);
   canvas2d_ = Canvas2DPtr(context2d_->CreateCanvas(viewport_pixel_size.width(),
                                                    viewport_pixel_size.height()));
-
   viewport_pixel_size_ = viewport_pixel_size;
 }
 
