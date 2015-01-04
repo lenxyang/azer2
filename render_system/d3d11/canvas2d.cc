@@ -49,7 +49,22 @@ bool D3DCanvas2D::Init() {
     return false;
   }
 
-  return InitTexture(grtex_->getTextureHandle());
+  return true;
+}
+
+bool D3DCanvas2D::InitTexture() {
+  if (!GetProc()) {
+    return false;
+  }
+  
+  DCHECK(NULL != gr_device_.get());
+  DCHECK(NULL != grtex_.get());
+  int32 texid = grtex_->getTextureHandle();
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  HANDLE handle = 0;
+  (*fnglGetTexShareD3DTexProc)(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
+  texture_ = TexturePtr(D3DTexture2DExtern::Create(handle, rs));
+  return true;
 }
 
 bool D3DCanvas2D::InitCanvas() {
@@ -73,22 +88,6 @@ bool D3DCanvas2D::InitCanvas() {
   }
 
   return true;
-}
-
-bool D3DCanvas2D::InitTexture(int32 texid) {
-  if (!GetProc()) {
-    return false;
-  }
-
-  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
-  HANDLE handle = 0;
-  (*fnglGetTexShareD3DTexProc)(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
-  texture_ =  TexturePtr(D3DTexture2DExtern::Create(handle, rs));
-  if (texture_.get()) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 }  // namespace d3d11

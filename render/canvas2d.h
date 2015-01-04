@@ -17,7 +17,7 @@ class Device2D;
 
 class AZER_EXPORT Canvas2D {
  public:
-  ~Canvas2D();
+  virtual ~Canvas2D();
 
   int32 width() const { return width_;}
   int32 height() const { return height_;}
@@ -27,25 +27,22 @@ class AZER_EXPORT Canvas2D {
     return skcanvas_;
   }
 
-  TexturePtr& GetTexture() {
-    DCHECK(NULL != texture_.get());
-    return texture_;
-  }
-
   Context2D* GetContext2D() {
     DCHECK(NULL != context_);
     return context_;
   }
 
+  TexturePtr& GetTexture() { return texture_;}
   bool Save(const ::base::FilePath& path);
  protected:
   // create by canvas
   Canvas2D(int32 width, int32 height, Context2D* context);
   virtual bool Init() = 0;
+  // virtual TexturePtr CreateSharedTexture() = 0;
   
-  TexturePtr texture_;
   const int32 width_;
   const int32 height_;
+  TexturePtr texture_;
   SkCanvas* skcanvas_;
   Context2D* context_;
   friend class Context2D;

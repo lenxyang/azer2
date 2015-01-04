@@ -22,6 +22,10 @@ Azer2DDevice::Azer2DDevice(Context2D* context2d)
 Azer2DDevice::~Azer2DDevice() {
 }
 
+void Azer2DDevice::SetResizeCallback(::base::Callback<void(void)> closure) {
+  resize_closure_ = closure;
+}
+
 void Azer2DDevice::Resize(const gfx::Size& viewport_pixel_size,
                           float scale_factor) {
   scale_factor_ = scale_factor;
@@ -33,6 +37,7 @@ void Azer2DDevice::Resize(const gfx::Size& viewport_pixel_size,
   canvas2d_ = Canvas2DPtr(context2d_->CreateCanvas(viewport_pixel_size.width(),
                                                    viewport_pixel_size.height()));
   viewport_pixel_size_ = viewport_pixel_size;
+  resize_closure_.Run();
 }
 
 SkCanvas* Azer2DDevice::BeginPaint(const gfx::Rect& damage_rect) {

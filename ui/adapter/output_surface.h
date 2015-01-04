@@ -2,6 +2,7 @@
 
 #include "base/basictypes.h"
 #include "base/memory/scoped_ptr.h"
+#include "base/memory/ref_counted.h"
 #include "cc/output/output_surface_client.h"
 #include "cc/output/output_surface.h"
 
@@ -21,14 +22,20 @@ class AZER_EXPORT Azer2DOutputSurface : public cc::OutputSurface {
                       RenderSystem* rs);
   ~Azer2DOutputSurface() override;
 
-  Azer2DDevice* GetOutputDevice();
+  TexturePtr& GetTexture() { return texture_;}
  protected:
   // cc::OutputSurface implementation
   void SwapBuffers(cc::CompositorFrame* frame) override;
  private:
+  Azer2DDevice* GetOutputDevice();
+
+  friend class OutputDeviceProxy;
+  scoped_refptr<OutputDeviceProxy> proxy_;
+
   base::WeakPtrFactory<Azer2DOutputSurface> weak_ptr_factory_;
   RenderSystem* render_system_;
   Renderer* renderer_;
+  TexturePtr texture_;
   DISALLOW_COPY_AND_ASSIGN(Azer2DOutputSurface);
 };
 

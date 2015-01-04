@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
+#include "base/callback.h"
 #include "base/memory/scoped_ptr.h"
 #include "cc/output/software_output_device.h"
 #include "ui/gfx/geometry/rect.h"
@@ -73,6 +74,8 @@ class AZER_EXPORT Azer2DDevice : public cc::SoftwareOutputDevice {
   virtual gfx::VSyncProvider* GetVSyncProvider();
 
   azer::Canvas2DPtr GetCanvas() { return canvas2d_;}
+
+  void SetResizeCallback(::base::Callback<void(void)> closure);
  protected:
   gfx::Size viewport_pixel_size_;
   float scale_factor_;
@@ -80,6 +83,7 @@ class AZER_EXPORT Azer2DDevice : public cc::SoftwareOutputDevice {
   scoped_ptr<gfx::VSyncProvider> vsync_provider_;
   azer::Canvas2DPtr canvas2d_;
   Context2D* context2d_;
+  ::base::Callback<void(void)> resize_closure_;
  private:
   DISALLOW_COPY_AND_ASSIGN(Azer2DDevice);
 };

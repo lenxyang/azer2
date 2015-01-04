@@ -25,14 +25,12 @@ class D3DCanvas2D : public Canvas2D {
       : Canvas2D(width, height, context) {
   }
 
-  virtual ~D3DCanvas2D();
-
-  virtual bool Init() override;
+  ~D3DCanvas2D() override;
+  bool Init() override;
 
  private:
   bool InitCanvas();
-  bool InitTexture(int32 texid);
-
+  bool InitTexture();
   std::unique_ptr<SkGpuDevice> gr_device_;
   std::unique_ptr<GrTexture> grtex_;
   D3DDevice2D* device_;
