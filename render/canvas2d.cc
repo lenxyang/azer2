@@ -32,6 +32,9 @@ Canvas2D::Canvas2D(int width, int height, Context2D* ctx)
 Canvas2D::~Canvas2D() {
 }
 
+bool Canvas2D::Save(const FilePath& path) {
+  return SaveSkCanvas(GetSkCanvas(), path);
+}
 
 namespace {
 SkImageEncoder::Type ImageType(const FilePath::StringType& ext) {
@@ -67,23 +70,31 @@ std::vector<uint8> EncodeBitmap(const SkBitmap& bitmap,
 }
 }
 
-bool Canvas2D::Save(const FilePath& path) {
+bool SaveSkBitmap(const SkBitmap& bitmap, const ::base::FilePath& path) {
   const FilePath::StringType ext = ::base::StringToLowerASCII(path.Extension());
   SkImageEncoder::Type type = ImageType(ext);
-  std::string pathstr = ::base::WideToUTF8(path.value());
-  SkBitmap bitmap;
-  SkImageInfo info = SkImageInfo::Make(width(), height(), kRGBA_8888_SkColorType,
-                                       kOpaque_SkAlphaType);
-  bitmap.setInfo(info);
-  bitmap.allocPixels();
-  GetSkCanvas()->readPixels(&bitmap, 0, 0);
   std::vector<uint8> compressed = std::move(EncodeBitmap(bitmap, type));
-
   FILE* f = base::OpenFile(path, "wb");
+  if (f == NULL) {
+    return false;
+  }
+
   CHECK_EQ(fwrite(&*compressed.begin(), 1, compressed.size(), f),
            compressed.size());
   base::CloseFile(f);
   return true;
+}
+
+bool SaveSkCanvas(SkCanvas* canvas, const ::base::FilePath& path) {
+  SkBitmap bitmap;
+  SkImageInfo info = SkImageInfo::Make(canvas->imageInfo().width(),
+                                       canvas->imageInfo().height(),
+                                       kRGBA_8888_SkColorType,
+                                       kOpaque_SkAlphaType);
+  bitmap.setInfo(info);
+  bitmap.allocPixels();
+  canvas->readPixels(&bitmap, 0, 0);
+  return SaveSkBitmap(bitmap, path);
 }
 
 }  // namespace azer

@@ -8,6 +8,7 @@
 #include "base/logging.h"
 
 class SkCanvas;
+class SkBitmap;
 
 namespace azer {
 
@@ -53,10 +54,6 @@ class AZER_EXPORT Canvas2D {
 
 typedef std::shared_ptr<Canvas2D> Canvas2DPtr;
 
-
-class Canvas2DSwapChain {
- public:
- private:
-  DISALLOW_COPY_AND_ASSIGN(Canvas2DSwapChain);
-};
+bool AZER_EXPORT SaveSkCanvas(SkCanvas* canvas, const ::base::FilePath& path);
+bool AZER_EXPORT SaveSkBitmap(const SkBitmap& bitmap, const ::base::FilePath& path);
 }  // namespace azer

@@ -114,13 +114,13 @@ bool D3DContext2D::Init(RenderSystem* rs) {
 
 void D3DContext2D::flush() {
   DCHECK(gr_context_ != NULL);
-  gr_context_->resetContext();
+  // gr_context_->resetContext();
   gr_context_->flush();
 }
 
 void D3DContext2D::finish() {
   DCHECK(gr_context_ != NULL);
-  gr_context_->resetContext();
+  // gr_context_->resetContext();
   interface_->fFunctions.fFinish();
 }
 
