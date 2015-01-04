@@ -25,14 +25,12 @@ class OutputDeviceProxy:  public ::base::RefCounted<OutputDeviceProxy> {
 
 
   void OnDeviceResize() {
-    /*
     Canvas2DPtr ptr = device_->GetCanvas();
     TexturePtr tex = ptr->GetTexture();
     RenderSystem* rs = RenderSystem::Current();
     Texture::Options opt = tex->option();
     opt.target = azer::Texture::kShaderResource;
     surface_->texture_.reset(rs->CreateTexture(opt));
-    */
   }
 
  private:
@@ -55,6 +53,13 @@ Azer2DOutputSurface::~Azer2DOutputSurface() {
 }
 
 void Azer2DOutputSurface::TextureCopy() {
+  Azer2DDevice* device = GetOutputDevice();
+  Canvas2DPtr ptr = device->GetCanvas();
+  TexturePtr tex = ptr->GetTexture();
+  SkCanvas* canvas = ptr->GetSkCanvas();
+  canvas->flush();
+  render_system_->GetContext2D()->finish();
+  tex->CopyTo(texture_.get());
 }
 
 void Azer2DOutputSurface::PixelsCopy() {
@@ -65,6 +70,8 @@ void Azer2DOutputSurface::PixelsCopy() {
   opt.target = azer::Texture::kShaderResource;
 
   SkCanvas* canvas = ptr->GetSkCanvas();
+  canvas->flush();
+  render_system_->GetContext2D()->finish();
   int32 size = canvas->imageInfo().width() * canvas->imageInfo().height() * 4;
   ImageDataPtr imagedata(new ImageData(canvas->imageInfo().width(),
                                        canvas->imageInfo().height()));
@@ -78,8 +85,8 @@ void Azer2DOutputSurface::PixelsCopy() {
 
 // cc::OutputSurface implementation
 void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
-  render_system_->GetContext2D()->finish();
-  PixelsCopy();
+  // PixelsCopy();
+  TextureCopy();
   client_->DidSwapBuffers();
 }
 
