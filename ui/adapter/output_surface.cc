@@ -8,6 +8,7 @@
 #include "azer/ui/adapter/output_device.h"
 
 #include "SkCanvas.h"
+#include "SkString.h"
 
 namespace azer {
 
@@ -52,11 +53,33 @@ Azer2DOutputSurface::Azer2DOutputSurface(scoped_ptr<cc::SoftwareOutputDevice> de
 Azer2DOutputSurface::~Azer2DOutputSurface() {
 }
 
+void DrawCanvas(SkCanvas* canvas) {
+  SkString text("Hello, Skia World");
+  SkPaint paint;
+  paint.setARGB(255, 0, 0, 0);
+  paint.setAntiAlias(true);
+  paint.setTextSize(SkIntToScalar(30));
+  SkScalar x = 80, y = 60;
+  canvas->drawText(text.c_str(), text.size(), x, y, paint);
+  paint.setStyle(SkPaint::kStroke_Style);
+  paint.setStrokeWidth(10);
+
+  SkRect rect;
+  paint.setARGB(255, 0, 0, 0);
+  rect.set(50, 100, 200, 200);
+  canvas->drawRoundRect(rect, 20, 20, paint);
+
+  canvas->drawLine(10, 300, 300, 300, paint);
+  canvas->drawCircle(100, 400, 50, paint);
+  canvas->flush();
+}
+
 void Azer2DOutputSurface::TextureCopy() {
   Azer2DDevice* device = GetOutputDevice();
   Canvas2DPtr ptr = device->GetCanvas();
   TexturePtr tex = ptr->GetTexture();
   SkCanvas* canvas = ptr->GetSkCanvas();
+  DrawCanvas(canvas);
   canvas->flush();
   render_system_->GetContext2D()->finish();
   tex->CopyTo(texture_.get());
@@ -70,6 +93,7 @@ void Azer2DOutputSurface::PixelsCopy() {
   opt.target = azer::Texture::kShaderResource;
 
   SkCanvas* canvas = ptr->GetSkCanvas();
+  DrawCanvas(canvas);
   canvas->flush();
   render_system_->GetContext2D()->finish();
   int32 size = canvas->imageInfo().width() * canvas->imageInfo().height() * 4;
@@ -85,8 +109,8 @@ void Azer2DOutputSurface::PixelsCopy() {
 
 // cc::OutputSurface implementation
 void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
-  // PixelsCopy();
-  TextureCopy();
+  PixelsCopy();
+  // TextureCopy();
   client_->DidSwapBuffers();
 }
 
