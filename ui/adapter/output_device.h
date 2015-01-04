@@ -3,11 +3,13 @@
 #include "base/basictypes.h"
 #include "base/memory/scoped_ptr.h"
 #include "cc/output/software_output_device.h"
-#include "skia/ext/refptr.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/geometry/vector2d.h"
+
 #include "azer/base/export.h"
+#include "azer/render/context2d.h"
+#include "azer/render/canvas2d.h"
 
 class SkBitmap;
 class SkCanvas;
@@ -26,7 +28,7 @@ namespace azer {
 // OutputSurface, such as to a platform-provided window framebuffer.
 class AZER_EXPORT Azer2DDevice : public cc::SoftwareOutputDevice {
  public:
-  Azer2DDevice();
+  Azer2DDevice(Context2D* context);
   virtual ~Azer2DDevice();
 
   // Discards any pre-existing backing buffers and allocates memory for a
@@ -69,13 +71,14 @@ class AZER_EXPORT Azer2DDevice : public cc::SoftwareOutputDevice {
   // hardware vsync. Return NULL if a provider doesn't exist.
   virtual gfx::VSyncProvider* GetVSyncProvider();
 
+  azer::Canvas2DPtr GetCanvas() { return canvas2d_;}
  protected:
   gfx::Size viewport_pixel_size_;
   float scale_factor_;
   gfx::Rect damage_rect_;
-  skia::RefPtr<SkCanvas> canvas_;
   scoped_ptr<gfx::VSyncProvider> vsync_provider_;
-
+  azer::Canvas2DPtr canvas2d_;
+  Context2D* context2d_;
  private:
   DISALLOW_COPY_AND_ASSIGN(Azer2DDevice);
 };

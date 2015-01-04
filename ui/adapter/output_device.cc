@@ -9,9 +9,14 @@
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "ui/gfx/vsync_provider.h"
 
+#include "azer/render/context2d.h"
+#include "azer/render/canvas2d.h"
+
 namespace azer {
 
-Azer2DDevice::Azer2DDevice() : scale_factor_(1.f) {
+Azer2DDevice::Azer2DDevice(Context2D* context2d)
+    : scale_factor_(1.f)
+    , context2d_(context2d) {
 }
 
 Azer2DDevice::~Azer2DDevice() {}
@@ -23,17 +28,17 @@ void Azer2DDevice::Resize(const gfx::Size& viewport_pixel_size,
   if (viewport_pixel_size_ == viewport_pixel_size)
     return;
 
-  SkImageInfo info = SkImageInfo::MakeN32(viewport_pixel_size.width(),
-                                          viewport_pixel_size.height(),
-                                          kOpaque_SkAlphaType);
+  DCHECK(NULL != context2d_);
+  canvas2d_ = Canvas2DPtr(context2d_->CreateCanvas(viewport_pixel_size.width(),
+                                                   viewport_pixel_size.height()));
+
   viewport_pixel_size_ = viewport_pixel_size;
-  canvas_ = skia::AdoptRef(SkCanvas::NewRaster(info));
 }
 
 SkCanvas* Azer2DDevice::BeginPaint(const gfx::Rect& damage_rect) {
-  DCHECK(canvas_);
+  DCHECK(canvas2d_);
   damage_rect_ = damage_rect;
-  return canvas_.get();
+  return canvas2d_->GetSkCanvas();
 }
 
 void Azer2DDevice::EndPaint(cc::SoftwareFrameData* frame_data) {
@@ -45,8 +50,9 @@ void Azer2DDevice::EndPaint(cc::SoftwareFrameData* frame_data) {
 
 void Azer2DDevice::CopyToPixels(const gfx::Rect& rect, void* pixels) {
   DCHECK(canvas_);
+  SkCanvas* canvas = canvas2d_->GetSkCanvas();
   SkImageInfo info = SkImageInfo::MakeN32Premul(rect.width(), rect.height());
-  canvas_->readPixels(info, pixels, info.minRowBytes(), rect.x(), rect.y());
+  canvas->readPixels(info, pixels, info.minRowBytes(), rect.x(), rect.y());
 }
 
 void Azer2DDevice::Scroll(const gfx::Vector2d& delta,

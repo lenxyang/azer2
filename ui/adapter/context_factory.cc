@@ -12,6 +12,7 @@
 #include "ui/compositor/reflector.h"
 
 #include "azer/ui/adapter/output_device.h"
+#include "azer/render/render.h"
 
 namespace azer {
 
@@ -19,17 +20,35 @@ namespace azer {
 // GL surface.
 class DirectOutputSurface : public cc::OutputSurface {
  public:
-  explicit DirectOutputSurface(scoped_ptr<cc::SoftwareOutputDevice> device)
-      : cc::OutputSurface(device.Pass()),
-        weak_ptr_factory_(this) {}
-  ~DirectOutputSurface() override {}
+  explicit DirectOutputSurface(scoped_ptr<cc::SoftwareOutputDevice> device,
+                               RenderSystem* rs)
+      : cc::OutputSurface(device.Pass())
+      , weak_ptr_factory_(this)
+      , render_system_(rs)
+      , renderer_(rs->GetDefaultRenderer()) {
+    overlay_.reset(rs->CreateOverlay(gfx::RectF(-1.0f, -1.0f, 1.0f, 1.0f)));
+    overlay_->EnableBlending(true);
+  }
+  
+  ~DirectOutputSurface() override {
+  }
+
   // cc::OutputSurface implementation
   void SwapBuffers(cc::CompositorFrame* frame) override {
     client_->DidSwapBuffers();
+
+    render_system_->GetContext2D()->finish();
+    Azer2DDevice* device = (Azer2DDevice*)(this->software_device());
+    Canvas2DPtr canvas = device->GetCanvas();
+    overlay_->SetTexture(canvas->GetTexture());
+    overlay_->Render(renderer_);
   }
 
  private:
   base::WeakPtrFactory<DirectOutputSurface> weak_ptr_factory_;
+  RenderSystem* render_system_;
+  Renderer* renderer_;
+  std::unique_ptr<azer::Overlay> overlay_;
   DISALLOW_COPY_AND_ASSIGN(DirectOutputSurface);
 };
 
@@ -43,9 +62,12 @@ UIContextFactory::~UIContextFactory() {
 void UIContextFactory::CreateOutputSurface(
     base::WeakPtr<ui::Compositor> compositor,
     bool software_fallback) {
-  scoped_ptr<cc::SoftwareOutputDevice> device(new Azer2DDevice);
-  compositor->SetOutputSurface(
-      make_scoped_ptr(new DirectOutputSurface(device.Pass())));
+  RenderSystem* rs = RenderSystem::Current();
+  DCHECK(NULL != rs);
+  scoped_ptr<cc::SoftwareOutputDevice> device(new Azer2DDevice(rs->GetContext2D()));
+  scoped_ptr<DirectOutputSurface> surface(
+      new DirectOutputSurface(device.Pass(), rs));
+  compositor->SetOutputSurface(surface.Pass());
 
   // surface_context_provider_ = context_provider;
 }

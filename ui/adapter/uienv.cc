@@ -37,7 +37,6 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
   exit_manager_.reset(new base::AtExitManager);
   CommandLine::Init(argc, argv);
   base::i18n::InitializeICU();
-  context_factory_.reset(new UIContextFactory);
   message_loop_.reset(new ::base::MessageLoopForUI);
 
   ui::RegisterPathProvider();
@@ -46,6 +45,7 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
   ui::ResourceBundle::InitSharedInstanceWithPakPath(ui_test_pak_path);
   ui::InitializeInputMethodForTesting();
 
+  context_factory_.reset(new UIContextFactory);
   desktop_views_delegate_.reset(new DesktopTestViewsDelegate);
   aura::Env::CreateInstance(true);
   aura::Env::GetInstance()->set_context_factory(context_factory_.get());
@@ -65,19 +65,19 @@ bool UIEnvironment::MainLoop(const Params& params) {
   wparams.context = NULL;
   wparams.bounds = gfx::Rect(0, 0, params.width, params.height);
   widget->Init(wparams);
-  widget->Show();
 
   if (!InitializeAzer(widget)) {
     return false;
   }
 
+  widget->Show();
   CHECK(NULL != params.render_delegate);
   render_loop_ = new RenderLoop(params.render_delegate);
   return render_loop_->Run();
 }
 
 RenderLoop* UIEnvironment::GetRenderLoop() {
-  DCHECK(NULL != render_loop_.get());
+  DCHECK(NULL != render_loop_);
   return render_loop_.get();
 }
 }  // namespace azer
