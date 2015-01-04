@@ -32,6 +32,9 @@ class AZER_EXPORT Azer2DOutputSurface : public cc::OutputSurface {
   friend class OutputDeviceProxy;
   scoped_refptr<OutputDeviceProxy> proxy_;
 
+  void PixelsCopy();
+  void TextureCopy();
+
   base::WeakPtrFactory<Azer2DOutputSurface> weak_ptr_factory_;
   RenderSystem* render_system_;
   Renderer* renderer_;

@@ -54,9 +54,10 @@ Azer2DOutputSurface::Azer2DOutputSurface(scoped_ptr<cc::SoftwareOutputDevice> de
 Azer2DOutputSurface::~Azer2DOutputSurface() {
 }
 
-// Cc::OutputSurface implementation
-void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
-  render_system_->GetContext2D()->finish();
+void Azer2DOutputSurface::TextureCopy() {
+}
+
+void Azer2DOutputSurface::PixelsCopy() {
   Azer2DDevice* device = GetOutputDevice();
   Canvas2DPtr ptr = device->GetCanvas();
   TexturePtr tex = ptr->GetTexture();
@@ -73,6 +74,12 @@ void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
                      0, 0);
   Image image(imagedata, Image::k2D);
   texture_.reset(render_system_->CreateTexture(opt, &image));
+}
+
+// cc::OutputSurface implementation
+void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
+  render_system_->GetContext2D()->finish();
+  
   client_->DidSwapBuffers();
 }
 
