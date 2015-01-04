@@ -14,7 +14,8 @@
 namespace azer {
 
 UIContextFactory::UIContextFactory()
-    : next_surface_id_namespace_(1u) {
+    : next_surface_id_namespace_(1u) 
+    , output_surface_(NULL) {
 }
 
 UIContextFactory::~UIContextFactory() {
@@ -23,15 +24,14 @@ UIContextFactory::~UIContextFactory() {
 void UIContextFactory::CreateOutputSurface(
     base::WeakPtr<ui::Compositor> compositor,
     bool software_fallback) {
+  CHECK(NULL == output_surface_);
   RenderSystem* rs = RenderSystem::Current();
   DCHECK(NULL != rs);
   scoped_ptr<cc::SoftwareOutputDevice> device(new Azer2DDevice(rs->GetContext2D()));
   scoped_ptr<Azer2DOutputSurface> surface(
       new Azer2DOutputSurface(device.Pass(), rs));
+  output_surface_ = surface.get();
   compositor->SetOutputSurface(surface.Pass());
-}
-
-TexturePtr UIContextFactory::GetUIOverlayTex() {
 }
 
 scoped_refptr<ui::Reflector> UIContextFactory::CreateReflector(

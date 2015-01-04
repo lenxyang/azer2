@@ -8,6 +8,7 @@
 #include "ui/gfx/geometry/vector2d.h"
 
 #include "azer/base/export.h"
+#include "azer/base/back_swap.h"
 #include "azer/render/context2d.h"
 #include "azer/render/canvas2d.h"
 

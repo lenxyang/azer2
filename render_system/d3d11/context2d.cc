@@ -121,7 +121,7 @@ void D3DContext2D::flush() {
 void D3DContext2D::finish() {
   DCHECK(gr_context_ != NULL);
   gr_context_->resetContext();
-// interface_->fFunctions.fFinish();
+  interface_->fFunctions.fFinish();
 }
 
 GrTexture* D3DContext2D::CreateTexture(int width, int height) {

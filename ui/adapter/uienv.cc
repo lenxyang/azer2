@@ -76,6 +76,18 @@ bool UIEnvironment::MainLoop(const Params& params) {
   return render_loop_->Run();
 }
 
+TexturePtr UIEnvironment::GetUITexture() {
+  DCHECK(NULL != context_factory_.get());
+  Azer2DOutputSurface* surface = context_factory_->GetSurface();
+  Azer2DDevice* device = surface->GetOutputDevice();
+  return device->GetCanvas()->GetTexture();
+}
+
+Azer2DOutputSurface* UIEnvironment::GetUISurface() {
+  DCHECK(NULL != context_factory_.get());
+  return context_factory_->GetSurface();
+}
+
 RenderLoop* UIEnvironment::GetRenderLoop() {
   DCHECK(NULL != render_loop_);
   return render_loop_.get();

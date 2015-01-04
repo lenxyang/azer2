@@ -19,7 +19,8 @@ Azer2DDevice::Azer2DDevice(Context2D* context2d)
     , context2d_(context2d) {
 }
 
-Azer2DDevice::~Azer2DDevice() {}
+Azer2DDevice::~Azer2DDevice() {
+}
 
 void Azer2DDevice::Resize(const gfx::Size& viewport_pixel_size,
                           float scale_factor) {

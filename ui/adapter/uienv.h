@@ -4,6 +4,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/base/render_loop.h"
+#include "azer/ui/adapter/output_surface.h"
 #include "ui/base/win/scoped_ole_initializer.h"
 
 namespace wm {
@@ -37,6 +38,11 @@ public:
   ~UIEnvironment();
 
   RenderLoop* GetRenderLoop();
+  
+  // attention: shold not store the texture, it may be changed
+  // so call the function to get Texture when using it;
+  TexturePtr GetUITexture();
+  Azer2DOutputSurface* GetUISurface();
 
   bool Init(int argc, char* argv[]);
 

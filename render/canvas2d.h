@@ -54,4 +54,9 @@ class AZER_EXPORT Canvas2D {
 typedef std::shared_ptr<Canvas2D> Canvas2DPtr;
 
 
+class Canvas2DSwapChain {
+ public:
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Canvas2DSwapChain);
+};
 }  // namespace azer

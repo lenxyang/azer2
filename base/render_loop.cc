@@ -38,7 +38,6 @@ bool RenderLoop::Init() {
   }
 
   delegate_->OnUpdate(time_[cur], ::base::TimeDelta());
-  PostTask();
   return true;
 }
 
@@ -72,9 +71,13 @@ bool RenderLoop::Run() {
   }
 
   DCHECK(cur == message_loop_);
-  while (!stop_.load()) {
+  while (true) {
     base::RunLoop().RunUntilIdle();
-    PostTask();
+    if (stop_.load()) {
+      break;
+    }
+
+    RenderTask();
     render_system_->Present();
   }
   return true;
