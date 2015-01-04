@@ -8,6 +8,7 @@
 #include "azer/ui/adapter/output_device.h"
 
 #include "SkCanvas.h"
+#include "SkImageInfo.h"
 #include "SkString.h"
 
 namespace azer {
@@ -78,9 +79,9 @@ void Azer2DOutputSurface::TextureCopy() {
   Azer2DDevice* device = GetOutputDevice();
   Canvas2DPtr ptr = device->GetCanvas();
   TexturePtr tex = ptr->GetTexture();
-  SkCanvas* canvas = ptr->GetSkCanvas();
-  DrawCanvas(canvas);
-  canvas->flush();
+  SkCanvas* skcanvas = ptr->GetSkCanvas();
+  DrawCanvas(skcanvas);
+  skcanvas->flush();
   render_system_->GetContext2D()->finish();
   tex->CopyTo(texture_.get());
 }
@@ -92,19 +93,22 @@ void Azer2DOutputSurface::PixelsCopy() {
   Texture::Options opt = tex->option();
   opt.target = azer::Texture::kShaderResource;
 
-  SkCanvas* canvas = ptr->GetSkCanvas();
-  DrawCanvas(canvas);
-  canvas->flush();
+  SkCanvas* skcanvas = ptr->GetSkCanvas();
+  DrawCanvas(skcanvas);
+  skcanvas->flush();
   render_system_->GetContext2D()->finish();
-  int32 size = canvas->imageInfo().width() * canvas->imageInfo().height() * 4;
-  ImageDataPtr imagedata(new ImageData(canvas->imageInfo().width(),
-                                       canvas->imageInfo().height()));
-  canvas->readPixels(canvas->imageInfo(),
-                     imagedata->data(),
-                     canvas->imageInfo().width() * 4,
-                     0, 0);
+  const SkImageInfo &imageinfo = skcanvas->imageInfo();
+  int32 size = imageinfo.width() * imageinfo.height() * 4;
+  ImageDataPtr imagedata(new ImageData(imageinfo.width(),
+                                       imageinfo.height()));
+  skcanvas->readPixels(imageinfo,
+                       imagedata->data(),
+                       imageinfo.width() * 4,
+                       0, 0);
   Image image(imagedata, Image::k2D);
   texture_.reset(render_system_->CreateTexture(opt, &image));
+  // texture_.reset(render_system_->CreateTexture(opt));
+  // texture_ = ptr->GetTexture();
 }
 
 // cc::OutputSurface implementation

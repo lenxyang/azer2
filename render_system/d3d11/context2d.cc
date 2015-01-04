@@ -9,10 +9,12 @@
 
 #include "base/logging.h"
 #include "base/lazy_instance.h"
+#include "base/command_line.h"
 #include "ui/gl/gl_surface.h"
 #include "ui/gl/gl_context.h"
 #include "ui/gl/gl_share_group.h"
 #include "ui/gl/gl_bindings_skia_in_process.h"
+#include "ui/gl/gl_switches.h"
 
 #include "azer/render_system/d3d11/canvas2d.h"
 
@@ -41,6 +43,20 @@ void StubGLFlushMappedBufferRangeEXT(GLenum target, GLintptr offset,
 }
 
 namespace {
+class GLSurfaceANGLE : public gfx::GLSurface {
+ public:
+  static bool Initialize() {
+    CommandLine* cmd = CommandLine::ForCurrentProcess();
+    bool fallback_to_osmesa = false;
+    bool gpu_service_logging = cmd->HasSwitch(switches::kEnableGPUServiceLogging);
+    bool disable_gl_drawing = cmd->HasSwitch(switches::kDisableGLDrawingForTests);
+    return InitializeOneOffImplementation(
+        gfx::kGLImplementationEGLGLES2,
+        fallback_to_osmesa,
+        gpu_service_logging,
+        disable_gl_drawing);
+  }
+};
 class CGLEnvironment {
  public:
   CGLEnvironment()
@@ -52,7 +68,8 @@ class CGLEnvironment {
     if (initialized_failed_) { return false;}
     if (initialized_) { return true;}
 
-    gfx::GLSurface::InitializeOneOff();
+    // gfx::GLSurface::InitializeOneOff();
+    CHECK(GLSurfaceANGLE::Initialize());
     surface_ = gfx::GLSurface::CreateOffscreenGLSurface(gfx::Size(1,1));
     if (!surface_.get()) {
       initialized_failed_= true;

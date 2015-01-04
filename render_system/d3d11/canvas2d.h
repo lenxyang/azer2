@@ -17,8 +17,6 @@ class Context2D;
 
 namespace d3d11 {
 
-class D3DDevice2D;
-
 class D3DCanvas2D : public Canvas2D {
  public:
   D3DCanvas2D(int width, int height, Context2D* context)
@@ -31,9 +29,11 @@ class D3DCanvas2D : public Canvas2D {
  private:
   bool InitCanvas();
   bool InitTexture();
-  std::unique_ptr<SkGpuDevice> gr_device_;
+  // order of GrTexture and SkGpuDevice is important
+  // SkGpuDevice is dependent on GrTexture, so put it later
+  // or will coredump
   std::unique_ptr<GrTexture> grtex_;
-  D3DDevice2D* device_;
+  std::unique_ptr<SkGpuDevice> gr_device_;
   DISALLOW_COPY_AND_ASSIGN(D3DCanvas2D);
 };
 }  // namespace d3d11
