@@ -35,6 +35,8 @@ class D3DTexture: public Texture {
 
   ID3D11ShaderResourceView* GetResourceView() { return view_;}
   ID3D11Resource* GetResource() { return resource_;}
+
+  virtual bool CopyTo(Texture* texture) override;
  protected:
   virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) = 0;
   virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) = 0;

@@ -40,6 +40,10 @@ bool Texture::Save(const ::base::FilePath& path) {
 
   uint8* pixels = (uint8*)bitmap.getPixels();
   MapData mapdata = map(kReadOnly);
+  if (mapdata.pdata == NULL) {
+    return false;
+  }
+
   uint32 row_pitch = mapdata.row_pitch;
   for (int32 i = 0; i < options_.height; ++i) {
     memcpy(pixels, mapdata.pdata + i * row_pitch, row_pitch);

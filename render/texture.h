@@ -131,6 +131,8 @@ public:
   virtual MapData map(MapType maptype) = 0;
   virtual void unmap() = 0;
   virtual bool InitFromImage(const Image* image) = 0;
+
+  virtual bool CopyTo(Texture* texture) = 0;
   
   // save the texture into file
   // for debug

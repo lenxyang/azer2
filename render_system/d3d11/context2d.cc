@@ -72,7 +72,10 @@ class CGLEnvironment {
     initialized_ = true;
     return true;
   }
-
+  void finish() {
+    DCHECK(NULL != interface_);
+    interface_->fFunctions.fFinish();
+  }
   GrGLInterface* GetGrGLInterface() { return interface_;}
  private:
   bool initialized_failed_;
@@ -121,7 +124,7 @@ void D3DContext2D::flush() {
 void D3DContext2D::finish() {
   DCHECK(gr_context_ != NULL);
   // gr_context_->resetContext();
-  interface_->fFunctions.fFinish();
+  gl_context_.Pointer()->finish();
 }
 
 GrTexture* D3DContext2D::CreateTexture(int width, int height) {

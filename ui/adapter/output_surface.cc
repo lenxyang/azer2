@@ -16,7 +16,6 @@ Azer2DOutputSurface::~Azer2DOutputSurface() {
 
 // cc::OutputSurface implementation
 void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
-  client_->DidSwapBuffers();
   render_system_->GetContext2D()->finish();
   static bool save = false;
   if (!save) {
@@ -24,6 +23,8 @@ void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
     Canvas2DPtr ptr = device->GetCanvas();
     ptr->Save(::base::FilePath(FILE_PATH_LITERAL("ui_adapter.png")));
   }
+
+  client_->DidSwapBuffers();
 }
 
 Azer2DDevice* Azer2DOutputSurface::GetOutputDevice() {

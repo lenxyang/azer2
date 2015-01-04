@@ -166,6 +166,25 @@ void D3DTexture::unmap() {
   d3d_context->Unmap(resource_, 0);
 }
 
+bool D3DTexture::CopyTo(Texture* texture) {
+  D3DTexture* tex = (D3DTexture*)texture;
+  if (tex->option().type != option().type) {
+    DLOG(INFO) << "cannot Copy Texture to diffuse type texture.";
+    return false;
+  }
+
+  if (tex->option().width != option().width
+      || tex->option().height != option().height) {
+    DLOG(INFO) << "cannot Copy Texture to the one with diffuse dimension.";
+    return false;
+  }
+
+  D3DRenderer* renderer = (D3DRenderer*)(render_system_->GetDefaultRenderer());
+  ID3D11DeviceContext* d3d_context = renderer->GetContext();
+  d3d_context->CopyResource(tex->resource_, resource_);
+  return true;
+}
+
 // class D3DTexture2D
 void D3DTexture2D::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
 }
