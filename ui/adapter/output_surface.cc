@@ -3,8 +3,11 @@
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/logging.h"
+#include "azer/base/image.h"
 #include "azer/render/render_system.h"
 #include "azer/ui/adapter/output_device.h"
+
+#include "SkCanvas.h"
 
 namespace azer {
 
@@ -22,13 +25,16 @@ class OutputDeviceProxy:  public ::base::RefCounted<OutputDeviceProxy> {
 
 
   void OnDeviceResize() {
+    /*
     Canvas2DPtr ptr = device_->GetCanvas();
     TexturePtr tex = ptr->GetTexture();
     RenderSystem* rs = RenderSystem::Current();
     Texture::Options opt = tex->option();
     opt.target = azer::Texture::kShaderResource;
     surface_->texture_.reset(rs->CreateTexture(opt));
+    */
   }
+
  private:
   Azer2DDevice* device_;
   Azer2DOutputSurface* surface_;
@@ -53,14 +59,20 @@ void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
   render_system_->GetContext2D()->finish();
   Azer2DDevice* device = GetOutputDevice();
   Canvas2DPtr ptr = device->GetCanvas();
-  TexturePtr tex = ptr->CreateSharedTexture();
+  TexturePtr tex = ptr->GetTexture();
+  Texture::Options opt = tex->option();
+  opt.target = azer::Texture::kShaderResource;
 
-  static bool save = false;
-  if (!save) {
-	tex->Save(::base::FilePath(FILE_PATH_LITERAL("ui_adapter.png")));
-  }
-
-  tex->CopyTo(texture_.get());
+  SkCanvas* canvas = ptr->GetSkCanvas();
+  int32 size = canvas->imageInfo().width() * canvas->imageInfo().height() * 4;
+  ImageDataPtr imagedata(new ImageData(canvas->imageInfo().width(),
+                                       canvas->imageInfo().height()));
+  canvas->readPixels(canvas->imageInfo(),
+                     imagedata->data(),
+                     canvas->imageInfo().width() * 4,
+                     0, 0);
+  Image image(imagedata, Image::k2D);
+  texture_.reset(render_system_->CreateTexture(opt, &image));
   client_->DidSwapBuffers();
 }
 

@@ -49,7 +49,7 @@ bool D3DCanvas2D::Init() {
     return false;
   }
 
-  return true;
+  return InitTexture();
 }
 
 bool D3DCanvas2D::InitTexture() {
