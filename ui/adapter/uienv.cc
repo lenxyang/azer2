@@ -62,8 +62,8 @@ bool UIEnvironment::MainLoop(const Params& params) {
   Widget* widget = new Widget;
   Widget::InitParams wparams;
   wparams.delegate = params.view_delegate;
-  wparams.context = NULL;
-  wparams.bounds = gfx::Rect(0, 0, params.width, params.height);
+  wparams.context  = NULL;
+  wparams.bounds   = gfx::Rect(0, 0, params.width, params.height);
   widget->Init(wparams);
 
   if (!InitializeAzer(widget)) {

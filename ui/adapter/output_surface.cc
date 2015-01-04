@@ -79,7 +79,7 @@ void Azer2DOutputSurface::PixelsCopy() {
 // cc::OutputSurface implementation
 void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
   render_system_->GetContext2D()->finish();
-  
+  PixelsCopy();
   client_->DidSwapBuffers();
 }
 
