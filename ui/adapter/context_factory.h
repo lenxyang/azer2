@@ -3,6 +3,7 @@
 #include "ui/compositor/compositor.h"
 #include "azer/base/export.h"
 #include "azer/ui/adapter/output_device.h"
+#include "azer/ui/adapter/output_surface.h"
 
 namespace base {
 class Thread;
@@ -30,8 +31,11 @@ class AZER_EXPORT UIContextFactory : public ui::ContextFactory {
   gpu::GpuMemoryBufferManager* GetGpuMemoryBufferManager() override;
   base::MessageLoopProxy* GetCompositorMessageLoop() override;
   scoped_ptr<cc::SurfaceIdAllocator> CreateSurfaceIdAllocator() override;
+  
+  Azer2DOutputSurface* GetSurface() { return output_surface_;}
  private:
   uint32_t next_surface_id_namespace_;
+  Azer2DOutputSurface* output_surface_;
   DISALLOW_COPY_AND_ASSIGN(UIContextFactory);
 };
 

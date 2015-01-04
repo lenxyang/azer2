@@ -5,52 +5,13 @@
 #include "base/threading/thread.h"
 #include "cc/output/compositor_frame.h"
 #include "cc/output/context_provider.h"
-#include "cc/output/output_surface_client.h"
-#include "cc/output/output_surface.h"
+
 #include "cc/surfaces/surface_id_allocator.h"
 #include "ui/compositor/compositor_switches.h"
 #include "ui/compositor/reflector.h"
-
-#include "azer/ui/adapter/output_device.h"
 #include "azer/render/render.h"
 
 namespace azer {
-
-// An OutputSurface implementation that directly draws and swaps to an actual
-// GL surface.
-class DirectOutputSurface : public cc::OutputSurface {
- public:
-  explicit DirectOutputSurface(scoped_ptr<cc::SoftwareOutputDevice> device,
-                               RenderSystem* rs)
-      : cc::OutputSurface(device.Pass())
-      , weak_ptr_factory_(this)
-      , render_system_(rs)
-      , renderer_(rs->GetDefaultRenderer()) {
-    overlay_.reset(rs->CreateOverlay(gfx::RectF(-1.0f, -1.0f, 1.0f, 1.0f)));
-    overlay_->EnableBlending(true);
-  }
-  
-  ~DirectOutputSurface() override {
-  }
-
-  // cc::OutputSurface implementation
-  void SwapBuffers(cc::CompositorFrame* frame) override {
-    client_->DidSwapBuffers();
-
-    render_system_->GetContext2D()->finish();
-    Azer2DDevice* device = (Azer2DDevice*)(this->software_device());
-    Canvas2DPtr canvas = device->GetCanvas();
-    overlay_->SetTexture(canvas->GetTexture());
-    overlay_->Render(renderer_);
-  }
-
- private:
-  base::WeakPtrFactory<DirectOutputSurface> weak_ptr_factory_;
-  RenderSystem* render_system_;
-  Renderer* renderer_;
-  std::unique_ptr<azer::Overlay> overlay_;
-  DISALLOW_COPY_AND_ASSIGN(DirectOutputSurface);
-};
 
 UIContextFactory::UIContextFactory()
     : next_surface_id_namespace_(1u) {
@@ -65,12 +26,14 @@ void UIContextFactory::CreateOutputSurface(
   RenderSystem* rs = RenderSystem::Current();
   DCHECK(NULL != rs);
   scoped_ptr<cc::SoftwareOutputDevice> device(new Azer2DDevice(rs->GetContext2D()));
-  scoped_ptr<DirectOutputSurface> surface(
-      new DirectOutputSurface(device.Pass(), rs));
+  scoped_ptr<Azer2DOutputSurface> surface(
+      new Azer2DOutputSurface(device.Pass(), rs));
   compositor->SetOutputSurface(surface.Pass());
-
-  // surface_context_provider_ = context_provider;
 }
+
+TexturePtr UIContextFactory::GetUIOverlayTex() {
+}
+
 scoped_refptr<ui::Reflector> UIContextFactory::CreateReflector(
     ui::Compositor* mirroed_compositor,
     ui::Layer* mirroring_layer) {

@@ -7,6 +7,8 @@ source_set("adapter") {
     "context_factory.h",
     "output_device.cc",
     "output_device.h",
+    "output_surface.cc",
+    "output_surface.h",
     "uienv.cc",
     "uienv.h",
     "desktop_views_delegate_aura.cc",
