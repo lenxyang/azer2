@@ -20,6 +20,32 @@
 namespace azer {
 namespace d3d11 {
 
+bool ValidTextureFlags(const Texture::Options& opt) {
+  // cpu access require for Usage
+  // reference D3D11_CPU_ACCESS_FLAG enumeration
+  if (opt.cpu_access & kCPURead) {
+    if (!(opt.usage & GraphicBuffer::kStaging)) {
+      return false;
+    }
+
+    if (opt.target & Texture::kRenderTarget) {
+      return false;
+    }
+
+    if (opt.target & Texture::kShaderResource) {
+      return false;
+    }
+  }
+  if (opt.cpu_access & kCPUWrite) {
+    if (!(opt.usage & GraphicBuffer::kStaging
+          && opt.usage & GraphicBuffer::kDynamic)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   HRESULT hr;
   DCHECK(NULL == resource_);

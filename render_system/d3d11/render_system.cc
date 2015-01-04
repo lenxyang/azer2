@@ -176,7 +176,7 @@ Texture* D3DRenderSystem::CreateTexture(const Texture::Options& opt,
 Texture* D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   if (opt.type == Texture::k2D) {
     std::unique_ptr<D3DTexture2D> ptr(new D3DTexture2D(opt, this));
-    if (ptr->Init()) {
+    if (ptr->Init(NULL, 1)) {
       return ptr.release();
     } else {
       return NULL;
