@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/base/render_loop.h"
 #include "ui/base/win/scoped_ole_initializer.h"
@@ -27,12 +28,15 @@ class WidgetDelegate;
 namespace azer {
 
 class DesktopTestViewsDelegate;
+class RenderLoop;
 class UIContextFactory;
 
 class AZER_EXPORT UIEnvironment {
 public:
   UIEnvironment();
   ~UIEnvironment();
+
+  RenderLoop* GetRenderLoop();
 
   bool Init(int argc, char* argv[]);
 
@@ -62,7 +66,7 @@ public:
   std::unique_ptr<wm::WMState> wm_state_;
   std::unique_ptr<UIContextFactory> context_factory_;
   std::unique_ptr<DesktopTestViewsDelegate> desktop_views_delegate_;
+  scoped_refptr<RenderLoop> render_loop_;
   DISALLOW_COPY_AND_ASSIGN(UIEnvironment);
 };
-
 }  // namespace azer
