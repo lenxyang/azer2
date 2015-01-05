@@ -1,20 +1,29 @@
-From 27d68acf17b11716e26e57459e5442d1a3973eb0 Mon Sep 17 00:00:00 2001
+From fc3907332c63eb34d819899c10abaff2e7c39c38 Mon Sep 17 00:00:00 2001
 From: lenxyang <lenxyang@gmail.com>
 Date: Mon, 1 Dec 2014 14:11:57 +0800
 Subject: [PATCH 1/1] compile
 
 ---
- BUILD.gn                                           | 12 ++++-
- src/libGLESv2/azer_ext.cpp                         | 52 ++++++++++++++++++++++
- src/libGLESv2/libGLESv2.def                        |  2 +
+ BUILD.gn                                           | 13 +++-
+ src/libGLESv2/azer_ext.cpp                         | 76 ++++++++++++++++++++++
+ src/libGLESv2/libGLESv2.def                        |  8 +++
  .../renderer/d3d/d3d11/TextureStorage11.cpp        |  2 +-
- 4 files changed, 65 insertions(+), 3 deletions(-)
+ 4 files changed, 95 insertions(+), 4 deletions(-)
  create mode 100644 src/libGLESv2/azer_ext.cpp
 
 diff --git a/BUILD.gn b/BUILD.gn
-index 5d1bad5..14f2693 100644
+index 5d1bad5..3b06b19 100644
 --- a/BUILD.gn
 +++ b/BUILD.gn
+@@ -144,7 +144,7 @@ action("commit_id") {
+ }
+ 
+ if (is_win) {
+-  angle_enable_d3d9 = true
++  angle_enable_d3d9 = false
+   angle_enable_d3d11 = true
+ 
+   shared_library("libGLESv2") {
 @@ -153,6 +153,7 @@ if (is_win) {
        "src/libGLESv2/libGLESv2.cpp",
        "src/libGLESv2/libGLESv2.def",
@@ -23,15 +32,7 @@ index 5d1bad5..14f2693 100644
      ]
  
      defines = [
-@@ -161,6 +162,7 @@ if (is_win) {
-       "GL_APICALL=",
-       "GL_GLEXT_PROTOTYPES=",
-       "EGLAPI=",
-+      "ANGLE_DEFAULT_D3D11",
-     ]
-     libs = []
- 
-@@ -196,7 +198,8 @@ if (is_win) {
+@@ -196,7 +197,8 @@ if (is_win) {
      ]
  
      include_dirs = [ "src/libGLESv2" ]
@@ -41,7 +42,7 @@ index 5d1bad5..14f2693 100644
      deps = [
        ":commit_id",
        ":includes",
-@@ -207,6 +210,7 @@ if (is_win) {
+@@ -207,6 +209,7 @@ if (is_win) {
  
    shared_library("libEGL") {
      sources = rebase_path(egl_gypi.angle_libegl_sources, ".", "src")
@@ -49,7 +50,7 @@ index 5d1bad5..14f2693 100644
  
      defines = [
        "GL_APICALL=",
-@@ -223,12 +227,16 @@ if (is_win) {
+@@ -223,12 +226,16 @@ if (is_win) {
      if (is_debug) {
        defines += [
          "ANGLE_ENABLE_PERF",
@@ -69,10 +70,13 @@ index 5d1bad5..14f2693 100644
        ":commit_id",
 diff --git a/src/libGLESv2/azer_ext.cpp b/src/libGLESv2/azer_ext.cpp
 new file mode 100644
-index 0000000..32f7168
+index 0000000..fbb3261
 --- /dev/null
 +++ b/src/libGLESv2/azer_ext.cpp
-@@ -0,0 +1,52 @@
+@@ -0,0 +1,76 @@
++#include <windows.h>
++#include <d3d11.h>
++
 +#include "libGLESv2/main.h"
 +#include "libGLESv2/Context.h"
 +#include "libGLESv2/Framebuffer.h"
@@ -82,6 +86,8 @@ index 0000000..32f7168
 +#include "libGLESv2/renderer/d3d/d3d11/Renderer11.h"
 +#include "libGLESv2/renderer/d3d/d3d11/RenderTarget11.h"
 +#include "libGLESv2/renderer/d3d/d3d11/TextureStorage11.h"
++
++#include "azer/render_system/d3d11/angle_def.h"
 +
 +HANDLE createSharedHandle(ID3D11Resource* resource) {
 +  HANDLE shared_handle;
@@ -100,6 +106,9 @@ index 0000000..32f7168
 +
 +  return shared_handle;
 +}
++
++typedef void (*FnOnSwapRect)(ID3D11Texture2D* front, ID3D11Texture2D** toshow);
++FnOnSwapRect fn_OnD3D11SwapRect = NULL;
 +
 +extern "C" {
 +void glGetTexShareD3DTex(GLenum target, GLuint fbhandle, void** val) {
@@ -124,17 +133,39 @@ index 0000000..32f7168
 +  }
 +  *val = createSharedHandle(resource);
 +}
++
++void* GetD3D11DeviceANGLE() {
++  return NULL;
++}
++
++void* GetD3D11DeviceContextANGLE() {
++  return NULL;
++}
++
++void SetSwapChainHookANGLE(FUNCSwapRectHook* hook) {
++}
++
++void SetSwapChainResetHookANGLE(FUNCOnSwapChainReset* proc);
++}
++
++void SetSwapChainResizeHookANGLE(FUNCOnSwapChainResize* proc);
 +}
 diff --git a/src/libGLESv2/libGLESv2.def b/src/libGLESv2/libGLESv2.def
-index 88dceb3..a12cde3 100644
+index 88dceb3..2486196 100644
 --- a/src/libGLESv2/libGLESv2.def
 +++ b/src/libGLESv2/libGLESv2.def
-@@ -297,3 +297,5 @@ EXPORTS
+@@ -297,3 +297,11 @@ EXPORTS
  
      ; Setting up TRACE macro callbacks
      SetTraceFunctionPointers        @284
 +
 +    glGetTexShareD3DTex             @300
++    GetD3D11DeviceANGLE             @310
++    GetD3D11DeviceContextANGLE      @311
++    SetSwapChainHookANGLE           @312
++    SetSwapChainResetHookANGLE      @313
++    SetSwapChainResizeHookANGLE     @314
++    
 diff --git a/src/libGLESv2/renderer/d3d/d3d11/TextureStorage11.cpp b/src/libGLESv2/renderer/d3d/d3d11/TextureStorage11.cpp
 index 6998231..9907079 100644
 --- a/src/libGLESv2/renderer/d3d/d3d11/TextureStorage11.cpp
