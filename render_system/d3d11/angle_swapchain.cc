@@ -10,7 +10,8 @@
 namespace azer {
 namespace d3d11 {
 
-AngleSwapChain::AngleSwapChain(D3DRenderSystem* rs) {
+AngleSwapChain::AngleSwapChain(D3DRenderSystem* rs)
+    : render_system_(rs) {
 }
 
 AngleSwapChain::~AngleSwapChain() {
@@ -22,8 +23,6 @@ bool AngleSwapChain::Init(Surface* surface) {
 
 bool AngleSwapChain::reset(Surface* surface) {
   D3DEnvironmentPtr& ptr = render_system_->GetD3DEnv();
-  ptr->ResetSwapChain();
-
   renderer_.reset(CreateSurfaceRenderer(surface));
   if (renderer_.get() == NULL) {
     return false;

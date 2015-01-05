@@ -24,7 +24,6 @@ class AngleSwapChain : public SwapChain {
  private:
   Renderer* CreateSurfaceRenderer(Surface* surface);
   D3DRenderSystem* render_system_;
-  D3DEnvironment* envptr_;
 
   RendererPtr combined_renderer_;
 

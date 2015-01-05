@@ -213,7 +213,7 @@ bool AngleEnv::GetProcAddress(const char* name, void** proc) {
 }
 
 bool AngleEnv::swap() {
-  return AngleEnv::Pointer()->swap();
+  return glenv_->swap();
 }
 
 bool GetANGLEProcAddress(const char* name, void** procaddr) {
