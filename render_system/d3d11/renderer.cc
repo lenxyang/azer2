@@ -322,15 +322,14 @@ bool D3DRenderer::Init(const Texture::Options& o) {
 
   RenderTargetPtr target(D3DRenderTarget::Create(o, this));
   DepthBufferPtr depth(D3DDepthBuffer::Create(o, this));
-  if (target.get() == NULL || depth.get()) {
+  if (target.get() == NULL || depth.get() == NULL) {
     return false;
   }
 
-  Reset();
-  SetViewport(azer::Renderer::Viewport(0, 0, o.width, o.height));
-
   targets_[0] = target;
   depth_ = depth;
+  Reset();
+  SetViewport(azer::Renderer::Viewport(0, 0, o.width, o.height));
   return true;
 }
 
