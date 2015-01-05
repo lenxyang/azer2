@@ -33,6 +33,9 @@ class AZER_EXPORT Canvas2D {
   }
 
   TexturePtr& GetTexture() { return texture_;}
+  virtual uint32 GetTexID() = 0;
+
+  // save the content into file
   bool Save(const ::base::FilePath& path);
  protected:
   // create by canvas

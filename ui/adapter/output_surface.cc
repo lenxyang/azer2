@@ -41,8 +41,9 @@ class OutputDeviceProxy:  public ::base::RefCounted<OutputDeviceProxy> {
   DISALLOW_COPY_AND_ASSIGN(OutputDeviceProxy);
 };
 
-Azer2DOutputSurface::Azer2DOutputSurface(scoped_ptr<cc::SoftwareOutputDevice> device,
-                                         RenderSystem* rs)
+Azer2DOutputSurface::Azer2DOutputSurface(
+    scoped_ptr<cc::SoftwareOutputDevice> device,
+    RenderSystem* rs)
     : cc::OutputSurface(device.Pass())
     , weak_ptr_factory_(this)
     , render_system_(rs)

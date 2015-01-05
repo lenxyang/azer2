@@ -25,7 +25,7 @@ class D3DCanvas2D : public Canvas2D {
 
   ~D3DCanvas2D() override;
   bool Init() override;
-
+  uint32 GetTexID() override;
  private:
   bool InitCanvas();
   bool InitTexture();

@@ -90,5 +90,9 @@ bool D3DCanvas2D::InitCanvas() {
   return true;
 }
 
+uint32 D3DCanvas2D::GetTexID() {
+  DCHECK(NULL != grtex_.get());
+  return grtex_->getTextureHandle();
+}
 }  // namespace d3d11
 }  // namespace azer

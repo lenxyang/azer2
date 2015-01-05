@@ -140,7 +140,7 @@ void D3DContext2D::flush() {
 
 void D3DContext2D::finish() {
   DCHECK(gr_context_ != NULL);
-  gr_context_->resetContext();
+  flush();
   gl_context_.Pointer()->finish();
 }
 
