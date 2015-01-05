@@ -1,4 +1,4 @@
-#include "azer/render_system/d3d11/d3d_angle_env.h"
+#include "azer/render_system/d3d11/angle_d3denv.h"
 
 #include "EGL/egl.h"
 
@@ -39,7 +39,12 @@ bool AngleD3DEnvironment::Initialize() {
 }
 
 SwapChain* AngleD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs) {
-  return NULL;
+  std::unique_ptr<AngleSwapChain> ptr(new AngleSwapChain(rs));
+  if (!ptr->Init(GetSurface())) {
+    return NULL;
+  }
+
+  return ptr.release();
 }
 }  // namespace d3d11
 }  // namespace azer

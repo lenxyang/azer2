@@ -29,6 +29,11 @@ bool AngleSwapChain::reset(Surface* surface) {
     return false;
   }
 
+  combined_renderer_.reset(CreateSurfaceRenderer(surface));
+  if (combined_renderer_.get() == NULL) {
+    return false;
+  }
+
   return true;
 }
 
@@ -47,6 +52,10 @@ Renderer* AngleSwapChain::CreateSurfaceRenderer(Surface* surface) {
   opt.target = (azer::Texture::BindTarget)
       (azer::Texture::kRenderTarget | azer::Texture::kShaderResource);
   return render_system_->CreateRenderer(opt);
+}
+
+void Combined(ID3D11ShaderResourceView* angle, AngleSwapChain* swapchain,
+              ID3D11ShaderResourceView** resource) {
 }
 }  // namespace d3d11
 }  // namespace azer
