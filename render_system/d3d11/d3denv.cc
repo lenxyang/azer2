@@ -27,6 +27,30 @@ D3DEnvironment::~D3DEnvironment() {
   SAFE_RELEASE(swap_chain_);
 }
 
+bool D3DEnvironment::InitDXGI() {
+  HRESULT hr = S_OK;
+  IDXGIDevice *dxgiDevice = NULL; 
+  hr = d3d_device_->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
+  if (FAILED(hr)) {
+    LOG(ERROR) << "Failed to get Interface: IDXGIDevice";
+    return false;
+  }
+
+  hr = dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgi_adapter_);
+  if (FAILED(hr)) {
+    LOG(ERROR) << "Failed to get Interface: IDXGIAdapter";
+    return false;
+  }
+
+  hr = dxgi_adapter_->GetParent(__uuidof(IDXGIFactory), (void**)&dxgi_factory_);
+  if (FAILED(hr)) {
+    LOG(ERROR) << "Failed to get Interface: IDXGIFactory";
+    return false;
+  }
+
+  return true;
+}
+
 ID3D11Texture2D* D3DEnvironment::GetSwapTexture() {
   HRESULT hr = 0;
   ID3D11Texture2D* texture_buffer = NULL;

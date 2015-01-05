@@ -146,5 +146,15 @@ base::LazyInstance<AngleEnv>::Leaky angleenv_ = LAZY_INSTANCE_INITIALIZER;
 AngleEnv* AngleEnv::Pointer() {
   return angleenv_.Pointer();
 }
+
+bool AngleEnv::GetProcAddress(const char* name, void** proc) {
+  HMODULE module = GetModuleHandle(ANGLE_GLNAME);
+  *proc = ::GetProcAddress(module, name);
+  return *proc != NULL;
+}
+
+bool GetAngleProcAddress(const char* name, void** procaddr) {
+  return AngleEnv::Pointer()->GetProcAddress(name, procaddr);
+}
 }  // namespace d3d11
 }  // namespace azer

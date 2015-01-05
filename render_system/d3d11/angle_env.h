@@ -20,16 +20,21 @@ class AngleEnv {
 
   void finish();
   void flush();
+
+  bool GetProcAddress(const char* name, void** procaddr);
  private:
   AngleEnv();
   bool InitForView(Surface* surface);
   bool InitForOffscreen();
 
+  friend class AngleD3DEnvironment;
   friend class InternalD3DEnvironment;
   friend struct ::base::DefaultLazyInstanceTraits<AngleEnv>;
   std::unique_ptr<CGLEnvironment> glenv_;
   DISALLOW_COPY_AND_ASSIGN(AngleEnv);
 };
+
+bool GetANGLEProcAddress(const char* name, void** procaddr);
 
 }  // namespace d3d11
 }  // namespace azer

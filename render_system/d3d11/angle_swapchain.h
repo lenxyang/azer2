@@ -1,40 +1,30 @@
 #pragma once
 
-#include <d3d11.h>
-#include <d3dx11.h>
-#include <d3dx10.h>
-#include <xnamath.h>
-
-#include <string>
-
-#include "base/logging.h"
-#include "azer/render/swap_chain.h"
 #include "azer/render/surface.h"
-#include "azer/render_system/d3d11/d3denv.h"
+#include "azer/render/swap_chain.h"
 
 namespace azer {
 namespace d3d11 {
-class D3DRenderSystem;
-class D3DRenderer;
 
-class D3DSwapChain : public SwapChain {
+class D3DRenderSystem;
+class D3DEnvironment;
+
+class AngleSwapChain : public SwapChain {
  public:
-  virtual ~D3DSwapChain();
+  AngleSwapChain(D3DRenderSystem* rs);
+  virtual ~AngleSwapChain();
 
   bool Init(Surface* surface);
   virtual bool reset(Surface* surface) override;
   virtual bool resize(Surface* surface) override;
   virtual bool Present() override;
  private:
-  D3DSwapChain(D3DRenderSystem* rs);
-  friend class D3DEnvironment;;
-
-
   Renderer* CreateSurfaceRenderer(Surface* surface);
   D3DRenderSystem* render_system_;
   D3DEnvironment* envptr_;
-  DISALLOW_COPY_AND_ASSIGN(D3DSwapChain);
-};
 
+  friend class D3DEnvironment;;
+  DISALLOW_COPY_AND_ASSIGN(AngleSwapChain);
+};
 }  // namespace d3d11
 }  // namespace azer

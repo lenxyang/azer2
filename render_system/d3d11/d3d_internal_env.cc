@@ -74,26 +74,10 @@ bool InternalD3DEnvironment::InitD3DDevice() {
     return false;
   }
 
-  IDXGIDevice *dxgiDevice = NULL; 
-  hr = d3d_device_->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to get Interface: IDXGIDevice";
+  if (!InitDXGI()) {
     return false;
   }
 
-  hr = dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgi_adapter_);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to get Interface: IDXGIAdapter";
-    return false;
-  }
-
-  hr = dxgi_adapter_->GetParent(__uuidof(IDXGIFactory), (void**)&dxgi_factory_);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to get Interface: IDXGIFactory";
-    return false;
-  }
-
-  d3d_context_->AddRef();
   return AngleEnv::Pointer()->InitForOffscreen();
 }
 
@@ -106,7 +90,7 @@ bool InternalD3DEnvironment::Initialize() {
   return true;
 }
 
-D3DSwapChain* InternalD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs) {
+SwapChain* InternalD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs) {
   std::unique_ptr<D3DSwapChain> ptr(new D3DSwapChain(rs));
   if (!ptr->Init(GetSurface())) {
     return NULL;

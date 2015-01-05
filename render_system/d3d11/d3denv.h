@@ -9,6 +9,7 @@
 
 #include "base/basictypes.h"
 #include "azer/render/surface.h"
+#include "azer/render/swap_chain.h"
 #include "ui/gfx/native_widget_types.h"
 
 namespace azer {
@@ -33,7 +34,7 @@ class D3DEnvironment {
   virtual ~D3DEnvironment();
 
   virtual bool Initialize() = 0;
-  virtual D3DSwapChain* CreateSwapChain(D3DRenderSystem* rs) = 0;
+  virtual SwapChain* CreateSwapChain(D3DRenderSystem* rs) = 0;
   /**
    * direct3d relevent
    */
@@ -49,6 +50,9 @@ class D3DEnvironment {
   Surface* GetSurface() { return surface_;}
  protected:
   D3DEnvironment(Surface* ptr);
+
+  // after get D3D11Device, get dxgi interface pointer
+  bool InitDXGI();
 
   ID3D11Device* d3d_device_;
   ID3D11DeviceContext* d3d_context_;

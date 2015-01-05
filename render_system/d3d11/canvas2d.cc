@@ -9,6 +9,7 @@
 #include "azer/render_system/d3d11/context2d.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/render_system.h"
+#include "azer/render_system/d3d11/angle.h"
 #include "azer/render/render_system.h"
 
 
@@ -27,10 +28,7 @@ bool GetProc() {
     return true;
   }
 
-  HMODULE module = GetModuleHandle(ANGLE_GLNAME);
-  fnglGetTexShareD3DTexProc = (FUNCGLGETTEXSHARED3DTEX)
-      ::GetProcAddress(module, "glGetTexShareD3DTex");
-  if (fnglGetTexShareD3DTexProc) {
+  if (GetANGLEProcAddress(glGetTexShareD3DTex, &fnglGetTexShareD3DTexProc)) {
     return true;
   } else {
     return false;

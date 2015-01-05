@@ -1,12 +1,16 @@
 
 source_set("canvas") {
   sources = [
-    "angle.cc",
-    "angle.h",
+    "angle_env.cc",
+    "angle_env.h",
+    "angle_swapchain.cc",
+    "angle_swapchain.h",
     "canvas2d.cc",
     "canvas2d.h",
     "context2d.cc",
     "context2d.h",
+    "d3d_angle_env.cc",
+    "d3d_angle_env.h",
     "render_system_2d.cc",
   ]
 
