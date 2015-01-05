@@ -162,7 +162,7 @@ bool AngleEnv::GetProcAddress(const char* name, void** proc) {
   return *proc != NULL;
 }
 
-bool GetAngleProcAddress(const char* name, void** procaddr) {
+bool GetANGLEProcAddress(const char* name, void** procaddr) {
   return AngleEnv::Pointer()->GetProcAddress(name, procaddr);
 }
 }  // namespace d3d11

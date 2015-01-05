@@ -6,7 +6,7 @@
 extern "C" {
 
 // get texture's shared handle
-typedef void (*FUNCGLGETTEXSHARED3DTEX)(GLenum target, GLuint fbhandle, void** val);
+typedef void (*FUNCGetTexShareD3DTex)(GLenum target, GLuint fbhandle, void** val);
 
 
 // get ANGLE's Direct3D11Device Pointer
