@@ -24,4 +24,8 @@ azer::RenderSystem* CreateRenderSystem(azer::Surface* sur) {
     return NULL;
   }
 }
+
+void ReleaseRenderSystem(azer::RenderSystem* rs) {
+  delete rs;
+}
 }  // extern "C"

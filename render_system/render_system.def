@@ -1,3 +1,4 @@
 LIBRARY  d3d11_render_system.dll
 EXPORTS
 	CreateRenderSystem
+        ReleaseRenderSystem
