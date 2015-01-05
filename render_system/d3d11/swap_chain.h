@@ -26,19 +26,14 @@ class D3DSwapChain : public SwapChain {
   virtual bool reset(Surface* surface) override;
   virtual bool resize(Surface* surface) override;
   virtual bool Present() override;
-
-  IDXGISwapChain* GetSwapChain();
  private:
   Renderer* CreateSurfaceRenderer(Surface* surface);
   D3DRenderSystem* render_system_;
-  D3DEnvironmentPtr envptr_;
-  
+  D3DEnvironment* envptr_;
+
+  friend class D3DEnvironment;;
   DISALLOW_COPY_AND_ASSIGN(D3DSwapChain);
 };
 
-inline IDXGISwapChain* D3DSwapChain::GetSwapChain() {
-  DCHECK(NULL != envptr_.get());
-  return envptr_->GetSwapChain();
-}
 }  // namespace d3d11
 }  // namespace azer

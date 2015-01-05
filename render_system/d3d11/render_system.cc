@@ -39,12 +39,7 @@ D3DRenderSystem::~D3DRenderSystem() {
 }
 
 bool D3DRenderSystem::Init() {
-  std::unique_ptr<D3DSwapChain> ptr(new D3DSwapChain(this));
-  if (!ptr->Init(envptr_->GetSurface())) {
-    return false;
-  }
-
-  swap_chain_.reset(ptr.release());
+  swap_chain_.reset(envptr_->CreateSwapChain(this));
   GetDefaultRenderer()->Use();
   return true;
 }

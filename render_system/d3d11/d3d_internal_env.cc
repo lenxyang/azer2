@@ -5,6 +5,7 @@
 #include "azer/render/surface.h"
 #include "azer/render_system/d3d11/util.h"
 #include "azer/render_system/d3d11/angle.h"
+#include "azer/render_system/d3d11/swap_chain.h"
 
 namespace azer {
 namespace d3d11 {
@@ -105,6 +106,14 @@ bool InternalD3DEnvironment::Initialize() {
   return true;
 }
 
+D3DSwapChain* InternalD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs) {
+  std::unique_ptr<D3DSwapChain> ptr(new D3DSwapChain(rs));
+  if (!ptr->Init(GetSurface())) {
+    return NULL;
+  }
+
+  return ptr.release();
+}
 
 }  // namespace d3d11
 }  // namespace azer

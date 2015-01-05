@@ -15,7 +15,9 @@ namespace azer {
 namespace d3d11 {
 
 class D3DSwapChain;
+class D3DRenderSystem;
 class D3DEnvironment;
+
 typedef std::shared_ptr<D3DEnvironment> D3DEnvironmentPtr;
 
 /**
@@ -31,6 +33,7 @@ class D3DEnvironment {
   virtual ~D3DEnvironment();
 
   virtual bool Initialize() = 0;
+  virtual D3DSwapChain* CreateSwapChain(D3DRenderSystem* rs) = 0;
   /**
    * direct3d relevent
    */
