@@ -121,7 +121,7 @@ D3DContext2D::~D3DContext2D() {
 
 bool D3DContext2D::Init(RenderSystem* rs) {
   // code reference: skia/include/gpu/GrContextFactory.h
-  
+
   GrBackendContext p3dctx =
     reinterpret_cast<GrBackendContext>(gl_context_.Pointer()->GetGrGLInterface());
   gr_context_ = GrContext::Create(kOpenGL_GrBackend, p3dctx);
@@ -141,7 +141,7 @@ void D3DContext2D::flush() {
 void D3DContext2D::finish() {
   DCHECK(gr_context_ != NULL);
   flush();
-  gl_context_.Pointer()->finish();
+  glFinish();
 }
 
 GrTexture* D3DContext2D::CreateTexture(int width, int height) {
@@ -162,5 +162,25 @@ Canvas2D* D3DContext2D::CreateCanvas(int32 width, int32 height) {
     return NULL;
   }
 }
+
+int32 D3DContext2D::GetRenderTargetColorTexID(D3DCanvas2D* canvas) {
+  GrRenderTarget* target = canvas->GetSkGpuDevice()->accessRenderTarget();
+  uint32 fboid = target->getRenderTargetHandle();
+
+  GLint texid = 0;
+  glBindFramebuffer(GL_FRAMEBUFFER, fboid);
+  glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER,
+                                        GL_COLOR_ATTACHMENT0,
+                                        GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME,
+                                        &texid);
+  gr_context_->resetContext();
+  GLenum glerr = glGetError();
+  if (glerr == GL_NO_ERROR) {
+    return static_cast<int32>(texid);
+  } else {
+    return -1;
+  }
+}
+
 }  // namespace d3d11
 }  // namespace azer

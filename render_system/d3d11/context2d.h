@@ -13,6 +13,8 @@ class RenderSystem;
 
 namespace d3d11 {
 
+class D3DCanvas2D;
+
 class D3DContext2D : public Context2D {
  public:
   D3DContext2D();
@@ -26,6 +28,8 @@ class D3DContext2D : public Context2D {
   virtual void flush() override;
   virtual void finish() override;
   virtual Canvas2D* CreateCanvas(int32 width, int32 height) override;
+
+  int32 GetRenderTargetColorTexID(D3DCanvas2D* canvas);
  private:
   GrContext* gr_context_;
   DISALLOW_COPY_AND_ASSIGN(D3DContext2D);

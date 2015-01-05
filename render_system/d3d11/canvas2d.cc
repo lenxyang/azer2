@@ -38,6 +38,10 @@ bool GetProc() {
 }
 }  // namespace
 
+D3DCanvas2D::D3DCanvas2D(int width, int height, Context2D* context)
+    : Canvas2D(width, height, context) {
+}
+
 D3DCanvas2D::~D3DCanvas2D() {
   if (skcanvas_) {
     delete skcanvas_;
@@ -56,11 +60,15 @@ bool D3DCanvas2D::InitTexture() {
   if (!GetProc()) {
     return false;
   }
-  
+
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+
   DCHECK(NULL != gr_device_.get());
   DCHECK(NULL != grtex_.get());
-  int32 texid = grtex_->getTextureHandle();
-  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  D3DContext2D* context = (D3DContext2D*)GetContext2D();
+  int32 texid = context->GetRenderTargetColorTexID(this);
+  // int32 texid = grtex_->getTextureHandle();
+  
   HANDLE handle = 0;
   (*fnglGetTexShareD3DTexProc)(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
   texture_ = TexturePtr(D3DTexture2DExtern::Create(handle, rs));
@@ -86,6 +94,9 @@ bool D3DCanvas2D::InitCanvas() {
     LOG(ERROR) << "Failed to create SkCanvas";
     return false;
   }
+
+  skcanvas_->clear((SkColor)0x01010101);
+  skcanvas_->clear((SkColor)0);
 
   return true;
 }

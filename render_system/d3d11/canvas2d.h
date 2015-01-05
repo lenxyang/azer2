@@ -19,13 +19,16 @@ namespace d3d11 {
 
 class D3DCanvas2D : public Canvas2D {
  public:
-  D3DCanvas2D(int width, int height, Context2D* context)
-      : Canvas2D(width, height, context) {
-  }
+  D3DCanvas2D(int width, int height, Context2D* context);
 
   ~D3DCanvas2D() override;
   bool Init() override;
   uint32 GetTexID() override;
+
+  SkGpuDevice* GetSkGpuDevice() {
+    DCHECK(NULL != gr_device_.get());
+    return gr_device_.get();
+  }
  private:
   bool InitCanvas();
   bool InitTexture();
