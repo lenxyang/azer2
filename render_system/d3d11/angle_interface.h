@@ -8,6 +8,7 @@ extern FUNCGetD3D11Device         pfnGetDevice;
 extern FUNCGetD3D11DeviceContext  pfnGetDeviceContext;
 extern FUNCSetSwapRectHook        pfnSetSwapRectHook;
 extern FUNCSetSwapChainResetHook  pfnSetSwapChainResetHook;
+extern FUNCSetSwapChainResizeHook pfnSetSwapChainResizeHook;
 extern FUNCGetTexShareD3DTex      pfnGetTexShareD3DTex;
 
 namespace azer {

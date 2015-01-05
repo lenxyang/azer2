@@ -1,5 +1,7 @@
 #include "azer/render_system/d3d11/angle_swapchain.h"
 
+#include "EGL/egl.h"
+
 namespace azer {
 namespace d3d11 {
 

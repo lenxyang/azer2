@@ -16,7 +16,6 @@ class AngleD3DEnvironment : public D3DEnvironment {
 
   SwapChain* CreateSwapChain(D3DRenderSystem* rs) override;
  private:
-  bool InitFuncProc();
   DISALLOW_COPY_AND_ASSIGN(AngleD3DEnvironment);
 };
 

@@ -23,23 +23,9 @@ bool AngleD3DEnvironment::ResetSwapChain() {
   return false;
 }
 
-bool AngleD3DEnvironment::InitFuncProc() {
-  static bool initialized = false;
-  if (!initialized) {
-    initialized = true;
-    return true;
-  } else {
-    return true;
-  }
-}
-
 bool AngleD3DEnvironment::Initialize() {
   if (!AngleEnv::Pointer()->InitForView(surface_)) {
     LOG(ERROR) << "Failed to initialize ANGLE.";
-  }
-
-  if (!InitFuncProc()) {
-    return false;
   }
 
   d3d_device_ = (ID3D11Device*)(*pfnGetDevice)();
