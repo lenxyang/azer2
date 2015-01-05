@@ -10,8 +10,8 @@ using azer::d3d11::InternalD3DEnvironment;
 
 extern "C" {
 azer::RenderSystem* CreateRenderSystem(azer::Surface* sur) {
-  D3DEnvironmentPtr envptr(new InternalD3DEnvironment(surface));
-  if (envptr.get() == NULL) {
+  D3DEnvironmentPtr envptr(new InternalD3DEnvironment(sur));
+  if (!envptr->Initialize()) {
     LOG(ERROR) << "Failed to inititialize D3D11Environment";
     return NULL;
   }

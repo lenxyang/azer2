@@ -2,11 +2,16 @@
 
 #include <windows.h>
 
-#include "azer/render/surface.h"p
+#include "azer/render/surface.h"
 #include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/angle.h"
 
 namespace azer {
 namespace d3d11 {
+
+InternalD3DEnvironment::InternalD3DEnvironment(Surface* surface)
+    : D3DEnvironment(surface) {
+}
 
 bool InternalD3DEnvironment::ResetSwapChain() {
   HRESULT hr = 0;
@@ -88,7 +93,7 @@ bool InternalD3DEnvironment::InitD3DDevice() {
   }
 
   d3d_context_->AddRef();
-  return true;
+  return AngleEnv::Pointer()->InitForOffscreen();
 }
 
 bool InternalD3DEnvironment::Initialize() {

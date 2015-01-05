@@ -1,6 +1,8 @@
 
 source_set("canvas") {
   sources = [
+    "angle.cc",
+    "angle.h",
     "canvas2d.cc",
     "canvas2d.h",
     "context2d.cc",

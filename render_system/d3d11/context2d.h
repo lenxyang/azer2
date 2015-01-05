@@ -3,9 +3,9 @@
 #include "base/basictypes.h"
 #include "azer/render/context2d.h"
 
-struct GrGLInterface;
 class GrContext;
 class GrTexture;
+class AngleEnv;
 
 namespace azer {
 
@@ -13,6 +13,7 @@ class RenderSystem;
 
 namespace d3d11 {
 
+class AngleEnv;
 class D3DCanvas2D;
 
 class D3DContext2D : public Context2D {

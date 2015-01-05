@@ -30,6 +30,7 @@ class D3DEnvironment {
  public:
   virtual ~D3DEnvironment();
 
+  virtual bool Initialize() = 0;
   /**
    * direct3d relevent
    */
@@ -45,8 +46,6 @@ class D3DEnvironment {
   Surface* GetSurface() { return surface_;}
  protected:
   D3DEnvironment(Surface* ptr);
-  
-  virtual bool Initialize() = 0;
 
   ID3D11Device* d3d_device_;
   ID3D11DeviceContext* d3d_context_;
