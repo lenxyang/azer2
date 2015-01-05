@@ -1,33 +1,15 @@
 #include "azer/render_system/d3d11/d3d_angle_env.h"
-#include "azer/render_system/d3d11/angle_swapchain.h"
 
 #include "EGL/egl.h"
 
 #include <windows.h>
 #include <d3d11.h>
 
-extern "C" {
-typedef void* (*FUNCGetD3D11Device)();
-typedef void* (*FUNCGetD3D11DeviceContext)();
+#include "azer/render_system/d3d11/angle_env.h"
+#include "azer/render_system/d3d11/angle_swapchain.h"
+#include "azer/render_system/d3d11/angle_interface.h"
+#include "azer/render/surface.h"
 
-typedef void (*FUNCSwapRectHook)(ID3D11Texture2D* angle_target,
-                                 ID3D11Texture2D* todraw);
-typedef void (*FUNCSetSwapRectHook)(FUNCSwapRectHook* hook);
-
-typedef void (*FUNCOnSwapChainReset)();
-typedef void (*FUNCSetSwapChainResetHook)(FUNCOnSwapChainReset* func);
-}
-
-namespace {
-const char* funcname_GetDevice = "GetD3D11DeviceANGLE";
-const char* funcname_GetContext = "GetD3D11DeviceContextANGLE";
-const char* funcname_SetSwapChainHook = "SetSwapChainHookANGLE";
-const char* funcname_SetSwapChainResetHook = "SetSwapChainResetHookANGLE";
-FUNCGetD3D11Device*        pfnGetDevice = NULL;
-FUNCGetD3D11DeviceContext* pfnGetDeviceContext = NULL;
-FUNCSetSwapRectHook*       pfnSetSwapRectHook = NULL;
-FUNCSetSwapChainResetHook* pfnSetSwapChainResetHook = NULL;
-}
 
 namespace azer {
 namespace d3d11 {
@@ -38,21 +20,21 @@ AngleD3DEnvironment::AngleD3DEnvironment(Surface* surface)
 
 bool AngleD3DEnvironment::ResetSwapChain() {
   CHECK(false);
+  return false;
 }
 
-void AngleD3DEnvironment::InitFuncProc() {
+bool AngleD3DEnvironment::InitFuncProc() {
   static bool initialized = false;
   if (!initialized) {
     initialized = true;
-
-    
+    return true;
   } else {
     return true;
   }
 }
 
 bool AngleD3DEnvironment::Initialize() {
-  if (!AngleEnv::Pointer()->InitForView(surface)) {
+  if (!AngleEnv::Pointer()->InitForView(surface_)) {
     LOG(ERROR) << "Failed to initialize ANGLE.";
   }
 
@@ -60,8 +42,8 @@ bool AngleD3DEnvironment::Initialize() {
     return false;
   }
 
-  d3d_device_ = (*pfnGetDevice)();
-  d3d_context_ = (*pfnGetDeviceContext)();
+  d3d_device_ = (ID3D11Device*)(*pfnGetDevice)();
+  d3d_context_ = (ID3D11DeviceContext*)(*pfnGetDeviceContext)();
 
   if (!InitDXGI()) {
     return false;
@@ -71,6 +53,7 @@ bool AngleD3DEnvironment::Initialize() {
 }
 
 SwapChain* AngleD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs) {
+  return NULL;
 }
 }  // namespace d3d11
 }  // namespace azer

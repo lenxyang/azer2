@@ -1,7 +1,8 @@
-#include "azer/render_system/d3d11/angle.h"
+#include "azer/render_system/d3d11/angle_env.h"
 
 #include "third_party/skia/include/gpu/gl/GrGLInterface.h"
 #include "third_party/skia/include/gpu/GrContext.h"
+#include "azer/render_system/d3d11/angle_interface.h"
 
 #define GL_GLEXT_PROTOTYPES
 #include "GLES2/gl2.h"
@@ -135,11 +136,19 @@ GrContext* AngleEnv::CreateGrContext() {
 }
 
 bool AngleEnv::InitForView(Surface* surface) {
-  return glenv_->InitForView(surface);
+  if (!glenv_->InitForView(surface)) {
+    return false;
+  }
+
+  return InitANGLEInterface();
 }
 
 bool AngleEnv::InitForOffscreen() {
-  return glenv_->InitForOffscreen();
+  if (!glenv_->InitForOffscreen()) {
+    return false;
+  }
+
+  return InitANGLEInterface();
 }
 
 base::LazyInstance<AngleEnv>::Leaky angleenv_ = LAZY_INSTANCE_INITIALIZER;

@@ -9,32 +9,13 @@
 #include "azer/render_system/d3d11/context2d.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/render_system.h"
-#include "azer/render_system/d3d11/angle.h"
+#include "azer/render_system/d3d11/angle_env.h"
+#include "azer/render_system/d3d11/angle_interface.h"
 #include "azer/render/render_system.h"
 
 
-extern "C" {
-typedef void (*FUNCGLGETTEXSHARED3DTEX)(GLenum target, GLuint fbhandle, void** val);
-}
-
 namespace azer {
 namespace d3d11 {
-
-namespace {
-FUNCGLGETTEXSHARED3DTEX fnglGetTexShareD3DTexProc = NULL;
-
-bool GetProc() {
-  if (fnglGetTexShareD3DTexProc) {
-    return true;
-  }
-
-  if (GetANGLEProcAddress(glGetTexShareD3DTex, &fnglGetTexShareD3DTexProc)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-}  // namespace
 
 D3DCanvas2D::D3DCanvas2D(int width, int height, Context2D* context)
     : Canvas2D(width, height, context) {
@@ -55,10 +36,6 @@ bool D3DCanvas2D::Init() {
 }
 
 bool D3DCanvas2D::InitTexture() {
-  if (!GetProc()) {
-    return false;
-  }
-
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
 
   DCHECK(NULL != gr_device_.get());
@@ -68,7 +45,7 @@ bool D3DCanvas2D::InitTexture() {
   // int32 texid = grtex_->getTextureHandle();
   
   HANDLE handle = 0;
-  (*fnglGetTexShareD3DTexProc)(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
+  (*pfnGetTexShareD3DTex)(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
   texture_ = TexturePtr(D3DTexture2DExtern::Create(handle, rs));
   return true;
 }

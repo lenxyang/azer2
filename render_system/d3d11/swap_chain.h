@@ -27,12 +27,10 @@ class D3DSwapChain : public SwapChain {
   virtual bool Present() override;
  private:
   D3DSwapChain(D3DRenderSystem* rs);
-  friend class D3DEnvironment;;
-
+  friend class InternalD3DEnvironment;;
 
   Renderer* CreateSurfaceRenderer(Surface* surface);
   D3DRenderSystem* render_system_;
-  D3DEnvironment* envptr_;
   DISALLOW_COPY_AND_ASSIGN(D3DSwapChain);
 };
 

@@ -10,8 +10,7 @@
 namespace azer {
 namespace d3d11 {
 D3DSwapChain::D3DSwapChain(D3DRenderSystem* rs)
-    : render_system_(rs)
-    , envptr_(rs->GetD3DEnv()) {
+    : render_system_(rs) {
 }
 
 D3DSwapChain::~D3DSwapChain() {

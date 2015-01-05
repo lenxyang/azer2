@@ -1,8 +1,11 @@
 
 source_set("canvas") {
   sources = [
+    "angle_def.h",
     "angle_env.cc",
     "angle_env.h",
+    "angle_interface.cc",
+    "angle_interface.h",
     "angle_swapchain.cc",
     "angle_swapchain.h",
     "canvas2d.cc",
