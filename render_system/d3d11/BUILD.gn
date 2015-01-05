@@ -36,6 +36,8 @@ shared_library("d3d11") {
     "blending.h",
     "d3denv.cc",
     "d3denv.h",
+    "d3d_internal_env.cc",
+    "d3d_internal_env.h",
     "depth_buffer.cc",
     "depth_buffer.h",
     "enum_transform.h",

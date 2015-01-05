@@ -76,7 +76,7 @@ bool D3DCanvas2D::InitTexture() {
 }
 
 bool D3DCanvas2D::InitCanvas() {
-  D3DContext2D* ctx = (D3DContext2D*)context_;
+  D3DContext2D* ctx = (D3DContext2D*)GetContext2D();
   GrContext* context =  ctx->GetGrContext();
   DCHECK(NULL != context);
   grtex_.reset(ctx->CreateTexture(width_, height_));
@@ -102,8 +102,9 @@ bool D3DCanvas2D::InitCanvas() {
 }
 
 uint32 D3DCanvas2D::GetTexID() {
-  DCHECK(NULL != grtex_.get());
-  return grtex_->getTextureHandle();
+  D3DContext2D* context = (D3DContext2D*)GetContext2D();
+  DCHECK(NULL != context);
+  return context->GetRenderTargetColorTexID(this);
 }
 }  // namespace d3d11
 }  // namespace azer

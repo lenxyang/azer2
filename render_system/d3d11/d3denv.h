@@ -29,7 +29,6 @@ typedef std::shared_ptr<D3DEnvironment> D3DEnvironmentPtr;
 class D3DEnvironment {
  public:
   virtual ~D3DEnvironment();
-  static D3DEnvironmentPtr Create(const std::string& name, Surface* surface);
 
   /**
    * direct3d relevent
