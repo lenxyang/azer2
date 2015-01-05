@@ -24,7 +24,7 @@ namespace azer {
 namespace d3d11 {
 
 bool InitANGLEInterface() {
-  const char* name[] = {
+  const char* fnames[] = {
     fname_GetDevice,
     fname_GetContext,
     fname_SetSwapChainHook,
@@ -40,10 +40,10 @@ bool InitANGLEInterface() {
     (void**)&pfnSetSwapChainResetHook,
     (void**)&pfnSetSwapChainResizeHook,
     (void**)&pfnGetTexShareD3DTex,
-  }
+  };
 
-  for (int i = 0; arraysize(names); ++i) {
-    if (!GetANGLEProcAddress(names[i], pfn[i])) {
+  for (uint32 i = 0; i < arraysize(fnames); ++i) {
+    if (!GetANGLEProcAddress(fnames[i], pfn[i])) {
       LOG(ERROR) << "Failed to get address: " << fname_GetTexShareD3DTex;
       return false;
     }

@@ -17,8 +17,8 @@ typedef void* (*FUNCGetD3D11DeviceContext)();
 
 
 // set a function, which will be called on swap
-typedef void (*FUNCSwapRectHook)(ID3D11Texture2D* angle_target,
-                                 ID3D11Texture2D* todraw);
+typedef void (*FUNCSwapRectHook)(ID3D11ShaderResourceView* angle_target,
+                                 ID3D11ShaderResourceView** todraw);
 typedef void (*FUNCSetSwapRectHook)(FUNCSwapRectHook* hook);
 
 // set a function, which will be called on swapchain reset
