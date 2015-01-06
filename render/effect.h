@@ -42,34 +42,4 @@ class AZER_EXPORT Effect : public Resource {
 };
 
 typedef std::shared_ptr<Effect> EffectPtr;
-
-typedef int32 int2[2];
-typedef int32 int3[3];
-typedef int32 int4[4];
-
-typedef uint32 uint;
-typedef uint32 uint2[2];
-typedef uint32 uint3[3];
-typedef uint32 uint4[4];
-
-typedef bool bool2[2];
-typedef bool bool3[3];
-typedef bool bool4[4];
-
-inline void Effect::UseTechnique(Renderer* renderer) {
-  DCHECK(technique_.get() != NULL);
-  technique_->Use(renderer);
-}
-
-inline void Effect::UseConstantsTable(Renderer* renderer) {
-  DCHECK(render_system_ != NULL);
-  for (int i = (int)kVertexStage; i <= (int)kPixelStage; ++i) {
-    GpuConstantsTable* table = gpu_table_[i].get();
-    RenderPipelineStage stage = (RenderPipelineStage)i;
-    if (table != NULL) {
-      table->flush(renderer);
-      renderer->UseConstantsTable(stage, table);
-    }
-  }
-}
-}  // namespace
+}  // namespace azer

@@ -28,4 +28,21 @@ void Effect::flush(Renderer* renderer) {
     }
   }
 }
+
+void Effect::UseTechnique(Renderer* renderer) {
+  DCHECK(technique_.get() != NULL);
+  technique_->Use(renderer);
+}
+
+void Effect::UseConstantsTable(Renderer* renderer) {
+  DCHECK(render_system_ != NULL);
+  for (int i = (int)kVertexStage; i <= (int)kPixelStage; ++i) {
+    GpuConstantsTable* table = gpu_table_[i].get();
+    RenderPipelineStage stage = (RenderPipelineStage)i;
+    if (table != NULL) {
+      table->flush(renderer);
+      renderer->UseConstantsTable(stage, table);
+    }
+  }
+}
 }  // namespace azer
