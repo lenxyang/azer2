@@ -604,28 +604,28 @@ std::string CppCodeGen::GenStageTextureMember(RenderPipelineStage stage,
 namespace {
 const char* StageName(RenderPipelineStage stage) {
   switch (stage) {
-    case kInputAssemblerStage: return "azer::kInputAssemblerStage";
-    case kVertexStage: return "azer::kVertexStage";
-    case kHullStage: return "azer::kHullStage";
-    case kTessellatorStage: return "azer::kTessellatorStage";
-    case kDomainStage: return "azer::kDomainStage";
-    case kGeometryStage: return "azer::kGeometryStage";
-    case kRasterizerStage: return "azer::kRasterizerStage";
-    case kPixelStage: return "azer::kPixelStage";
-    case kOutputMergerStage: return "azer::kOutputMergerStage";
+    case kInputAssemblerStage:    return "azer::kInputAssemblerStage";
+    case kVertexStage:            return "azer::kVertexStage";
+    case kHullStage:              return "azer::kHullStage";
+    case kTessellatorStage:       return "azer::kTessellatorStage";
+    case kDomainStage:            return "azer::kDomainStage";
+    case kGeometryStage:          return "azer::kGeometryStage";
+    case kRasterizerStage:        return "azer::kRasterizerStage";
+    case kPixelStage:             return "azer::kPixelStage";
+    case kOutputMergerStage:      return "azer::kOutputMergerStage";
     case kRenderPipelineStageNum: return "azer::kRenderPipelineStageNum";
-    default: NOTREACHED(); return "";
+    default: NOTREACHED();        return "";
   }
 }
 
 const char* StagePrefix(RenderPipelineStage stage) {
   switch (stage) {
-    case azer::kVertexStage: return "vs";
-    case azer::kHullStage: return "hs";
+    case azer::kVertexStage:      return "vs";
+    case azer::kHullStage:        return "hs";
     case azer::kTessellatorStage: return "ts";
-    case azer::kDomainStage: return "ds";
-    case azer::kGeometryStage: return "gs";
-    case azer::kPixelStage: return "ps";
+    case azer::kDomainStage:      return "ds";
+    case azer::kGeometryStage:    return "gs";
+    case azer::kPixelStage:       return "ps";
     default: NOTREACHED() << "No such RenderPipelineStage: " << stage; return "";
   }
 }
@@ -633,11 +633,11 @@ const char* StagePrefix(RenderPipelineStage stage) {
 // used by generate vertex desc
 std::string UniformTypeIndex(const TypePtr& type) {
   switch(type->type()) {
-    case kBoolean: return "kBool";
-    case kShort: return "azer::kShort";
-    case kInt32: return "kInt";
-    case kUint32: return "kUint";
-    case kFloat: return "kFloat";
+    case kBoolean: return "azer::kBool";
+    case kShort:   return "azer::kShort";
+    case kInt32:   return "azer::kInt";
+    case kUint32:  return "azer::kUint";
+    case kFloat:   return "azer::kFloat";
     case kIntVec2: return "azer::kIntVec2";
     case kIntVec3: return "azer::kIntVec3";
     case kIntVec4: return "azer::kIntVec4";
@@ -665,23 +665,23 @@ std::string UniformTypeIndex(const TypePtr& type) {
 std::string UniformTypeName(ASTNode* node) {
   TypePtr type = GetNodeType(node);
   switch(type->type()) {
-    case kShort: return "short";
-    case kInt32: return "int32";
-    case kUint32: return "uint32";
-    case kBoolean: return "bool";
-    case kFloat: return "float";
-    case kIntVec2: return "azer::IntVec2";
-    case kIntVec3: return "azer::IntVec3";
-    case kIntVec4: return "azer::IntVec4";
-    case kVector2: return "azer::Vector2";
-    case kVector3: return "azer::Vector3";
-    case kVector4: return "azer::Vector4";
-    case kMatrix2: return "azer::Matrix2";
-    case kMatrix3: return "azer::Matrix3";
-    case kMatrix4: return "azer::Matrix4";
-    case kTexture1D: return "azer::Texture";
-    case kTexture2D: return "azer::Texture";
-    case kTexture3D: return "azer::Texture";
+    case kShort:       return "short";
+    case kInt32:       return "int32";
+    case kUint32:      return "uint32";
+    case kBoolean:     return "bool";
+    case kFloat:       return "float";
+    case kIntVec2:     return "azer::IntVec2";
+    case kIntVec3:     return "azer::IntVec3";
+    case kIntVec4:     return "azer::IntVec4";
+    case kVector2:     return "azer::Vector2";
+    case kVector3:     return "azer::Vector3";
+    case kVector4:     return "azer::Vector4";
+    case kMatrix2:     return "azer::Matrix2";
+    case kMatrix3:     return "azer::Matrix3";
+    case kMatrix4:     return "azer::Matrix4";
+    case kTexture1D:   return "azer::Texture";
+    case kTexture2D:   return "azer::Texture";
+    case kTexture3D:   return "azer::Texture";
     case kTextureCube: return "azer::Texture";
     case kStructure:
       return GetStructTypeName(node);
@@ -759,10 +759,10 @@ const char* GpuConstantTypeFromUniform(const TypePtr& typeptr) {
     }
   } else {
     switch (typeptr->type()) {
-      case kInt32: return "azer::GpuConstantsType::kInt";
-      case kUint32: return "azer::GpuConstantsType::kUint";
+      case kInt32:   return "azer::GpuConstantsType::kInt";
+      case kUint32:  return "azer::GpuConstantsType::kUint";
       case kBoolean: return "azer::GpuConstantsType::kBool";
-      case kFloat: return "azer::GpuConstantsType::kFloat";
+      case kFloat:   return "azer::GpuConstantsType::kFloat";
       case kVector2: return "azer::GpuConstantsType::kVector2";
       case kVector3: return "azer::GpuConstantsType::kVector3";
       case kVector4: return "azer::GpuConstantsType::kVector4";
