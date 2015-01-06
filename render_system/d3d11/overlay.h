@@ -17,6 +17,7 @@ class D3DOverlayEffect : Effect {
 #pragma pack(push, 4)
   struct vs_cbuffer {
     Matrix4 transform;
+    Vector4 vertex[4];
     Vector2 tex[4];
   };
 #pragma pack(pop)
@@ -24,6 +25,7 @@ class D3DOverlayEffect : Effect {
   void SetTexture(TexturePtr texture) { texture_ = texture;}
   void SetTransform(const Matrix4& matrx);
   void SetTexcoord(const Vector2 texcoord[4]);
+  void SetVertex(const Vector4 vertex[4]);  
 
   void Use(Renderer* renderer) override;
 
@@ -42,9 +44,8 @@ class D3DOverlayEffect : Effect {
 
 class D3DOverlay : public Overlay {
  public:
-  D3DOverlay(const gfx::RectF& rect, D3DRenderSystem* rs)
-      : Overlay(rect)
-      , render_system_(rs) {}
+  D3DOverlay(D3DRenderSystem* rs)
+      : render_system_(rs) {}
   virtual ~D3DOverlay() {}
 
   void Render(Renderer* renderer) override;
@@ -54,16 +55,8 @@ class D3DOverlay : public Overlay {
  protected:
   struct Vertex {
     azer::Vector4 position;
-    azer::Vector2 texcoord;
     int32 index;
-    Vertex(const azer::Vector4& in_position, const azer::Vector2& in_texcoord)
-        : position(in_position)
-        , texcoord(in_texcoord) 
-        , index(0) {
-    }
-
-    Vertex() {
-    }
+    Vertex() : index(0) {}
   };
 
   bool Init(azer::RenderSystem* rs);

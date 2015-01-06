@@ -55,7 +55,7 @@ class D3DRenderSystem : public RenderSystem {
                                                    const std::string& str) override;
   virtual GpuProgram* CreateGpuProgram(RenderPipelineStage stage,
                                        const std::string& program) override;
-  virtual Overlay* CreateOverlay(const gfx::RectF& rect) override;
+  virtual Overlay* CreateOverlay() override;
   virtual Technique* CreateTechnique() override;
 
   virtual bool Present() override;

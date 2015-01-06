@@ -22,10 +22,8 @@ class AZER_EXPORT Overlay {
   virtual void Render(Renderer* rs) = 0;
 
   void SetTexture(TexturePtr tex) { tex_ = tex;}
-  void SetTexCoord(const gfx::PointF& lt, const gfx::PointF& br) {
-    texcoord1_ = lt;
-    texcoord2_ = br;
-  }
+  void SetBounds(const gfx::RectF& rect);
+  void SetTexCoord(const gfx::PointF& lt, const gfx::PointF& br);
   void SetTransform(const Matrix4& matrix) { transform_ = matrix;}
   /**
    * Overlay 的顶点格式
@@ -34,21 +32,21 @@ class AZER_EXPORT Overlay {
    *   vec3 texcoord;
    * };
    */
-  VertexDescPtr GetVertexDesc() { return vertex_desc_ptr_;}
+  VertexDescPtr& GetVertexDesc() { return vertex_desc_ptr_;}
 
   void UseBlending(BlendingPtr ptr) {blending_ = ptr;}
   void UseDefaultBlending();
  protected:
-  explicit Overlay(const gfx::RectF& rect);
+  explicit Overlay();
   virtual bool Init(RenderSystem* rs);
 
   void SetBlending(Renderer* renderer);
   void ResetBlending(Renderer* renderer);
   BlendingPtr blending_;
 
+  Vector2 texcoord_[4];
+  Vector4 vertex_[4];
   Matrix4 transform_;
-  gfx::PointF texcoord1_, texcoord2_;
-  gfx::RectF rect_;
   TexturePtr tex_;
   VertexBufferPtr vb_ptr_;
   VertexDescPtr vertex_desc_ptr_;

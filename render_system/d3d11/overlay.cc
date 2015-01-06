@@ -15,12 +15,14 @@ const char* D3DOverlayEffect::kVertexShaderProg = ""
     "};                                                  \n"
     "cbuffer c_buffer {                                  \n"
     "  float4x4 transform;                               \n"
+    "  float4   vertex;                                  \n"
     "  vec2 tex[4];                                      \n"
     "};                                                  \n"
     "VS_OUTPUT vs_main(float4 inpos : POSITION,          \n"
     "                  int index : INDEX) {              \n"
     "  VS_OUTPUT output;                                 \n"
-    "  output.Pos = mul(transform, inpos);               \n"
+    "  float4 position = vertex[index];                  \n"
+    "  output.Pos = mul(transform, position);            \n"
     "  inpos.z = 0.0f;                                   \n"
     "  output.texcoord = tex[index];                     \n"
     "  return output;                                    \n"
@@ -54,10 +56,16 @@ void D3DOverlayEffect::SetTransform(const Matrix4& matrix) {
   tb->SetValue(0, &matrix, sizeof(azer::Matrix4));
 }
 
+void D3DOverlayEffect::SetVertex(const Vector4 vertex[4]) {
+  azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+  DCHECK(tb != NULL);
+  tb->SetValue(1, &vertex, sizeof(Vector4) * 4);
+}
+
 void D3DOverlayEffect::SetTexcoord(const Vector2 texcoord[4]) {
   azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
   DCHECK(tb != NULL);
-  tb->SetValue(1, &texcoord, sizeof(Vector2) * 4);
+  tb->SetValue(2, &texcoord, sizeof(Vector2) * 4);
 }
 
 bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
@@ -113,7 +121,6 @@ bool D3DOverlay::Init(azer::RenderSystem* rs) {
 
 const VertexDesc::Desc D3DOverlay::kVertexDesc[] = {
   {"POSITION", 0, kVec4},
-  {"TEXCOORD", 0, kVec2},
   {"INDEX",    0, kInt},
 };
 
@@ -124,30 +131,24 @@ bool D3DOverlay::InitVertex(RenderSystem* rs) {
   vertex_desc_ptr_.reset(new VertexDesc(kVertexDesc, kVertexDescNum));
   VertexData data(vertex_desc_ptr_, kVertexNum);
   Vertex* ptr = (Vertex*)data.pointer();
-  ptr->position = azer::Vector4(rect_.x(), rect_.bottom(), 0.0f, 1.0f);
-  ptr->texcoord = azer::Vector2(0.0f, 1.0f);
+  ptr->position = azer::Vector4(-1.0f, -1.0f, 0.0f, 1.0f);  // left-bottom
+  ptr->index = 3;
+  ptr++;
+  ptr->position = azer::Vector4(-1.0f, 1.0f, 0.0f, 1.0f);  // left-top
   ptr->index = 0;
   ptr++;
-  ptr->position = azer::Vector4(rect_.x(), rect_.y(), 0.0f, 1.0f);
-  ptr->texcoord = azer::Vector2(0.0f, 0.0f);
-  ptr->index = 1;
-  ptr++;
-  ptr->position = azer::Vector4(rect_.right(), rect_.bottom(), 0.0f, 1.0f);
-  ptr->texcoord = azer::Vector2(1.0f, 1.0f);
+  ptr->position = azer::Vector4(1.0f, -1.0f, 0.0f, 1.0f);  // right-bottom
   ptr->index = 2;
   ptr++;
 
-  ptr->position = azer::Vector4(rect_.right(), rect_.bottom(), 0.0f, 1.0f);
-  ptr->texcoord = azer::Vector2(1.0f, 1.0f);
-  ptr->index = 3;
+  ptr->position = azer::Vector4(1.0f, -1.0f, 0.0f, 1.0f);  // right-bottom
+  ptr->index = 2;
   ptr++;
-  ptr->position = azer::Vector4(rect_.x(), rect_.y(), 0.0f, 1.0f);
-  ptr->texcoord = azer::Vector2(0.0f, 0.0f);
-  ptr->index = 4;
+  ptr->position = azer::Vector4(-1.0f, 1.0f, 0.0f, 1.0f);  // left-top
+  ptr->index = 0;
   ptr++;
-  ptr->position = azer::Vector4(rect_.right(), rect_.y(), 0.0f, 1.0f);
-  ptr->texcoord = azer::Vector2(1.0f, 0.0f);
-  ptr->index = 5;
+  ptr->position = azer::Vector4(1.0f, 1.0f, 0.0f, 1.0f);  // right-top
+  ptr->index = 1;
 
   vb_ptr_.reset(rs->CreateVertexBuffer(VertexBuffer::Options(), &data));
   if (!vb_ptr_.get()) {
@@ -159,7 +160,13 @@ bool D3DOverlay::InitVertex(RenderSystem* rs) {
 
 void D3DOverlay::Render(Renderer* renderer) {
   SetBlending(renderer);
+  azer::Vector2 texcoord[4];
+  
   DCHECK (effect_.get() != NULL);
+  effect_->SetTransform(transform_);
+  effect_->SetVertex(vertex_);
+  effect_->SetTexcoord(texcoord_);
+  effect_->SetTexture(tex_);
   effect_->Use(renderer);
   renderer->Draw(vb_ptr_.get(), azer::kTriangleList, 6);
   ResetBlending(renderer);

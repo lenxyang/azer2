@@ -215,8 +215,8 @@ Texture* D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   }
 */
 
-Overlay* D3DRenderSystem::CreateOverlay(const gfx::RectF& rect) {
-  std::unique_ptr<D3DOverlay> surface_ptr(new D3DOverlay(rect, this));
+Overlay* D3DRenderSystem::CreateOverlay() {
+  std::unique_ptr<D3DOverlay> surface_ptr(new D3DOverlay(this));
   if (surface_ptr->Init(this)) {
     return surface_ptr.release();
   } else {

@@ -67,7 +67,7 @@ class AZER_EXPORT RenderSystem {
                                                    const std::string& program) = 0;
   virtual GpuProgram* CreateGpuProgram(RenderPipelineStage stage,
                                        const std::string& program) = 0;
-  virtual Overlay* CreateOverlay(const gfx::RectF& rect) = 0;
+  virtual Overlay* CreateOverlay() = 0;
 
   virtual bool Present() = 0;
   virtual bool reset() = 0;
