@@ -8,7 +8,7 @@ GpuConstantsTable::GpuConstantsTable(int32 num, const Desc* desc) {
   const Desc* curr = desc;
   for (int32 i = 0; i < num; ++i, ++curr) {
     const int32 size = GpuTableItemDescSize(*curr);
-    const int32 total_size = size * desc->num;
+    const int32 total_size = size * curr->num;
     offset = curr->offset;
     DCHECK(offset != -1);
     constants_.push_back(Variable(*curr, size, total_size, offset));

@@ -37,7 +37,7 @@ bool ReusableObject::Init(RenderSystem* rs) {
 
 bool ReusableObject::InsertBlending(const std::string& name, BlendingPtr& ptr) {
   auto iter = blending_dict_.find(name);
-  if (iter == blending_dict_.end()) {
+  if (iter == blending_dict_.end() || iter->second.get() == NULL) {
     blending_dict_[name] = ptr;
     return true;
   } else {
@@ -48,7 +48,7 @@ bool ReusableObject::InsertBlending(const std::string& name, BlendingPtr& ptr) {
 bool ReusableObject::InsertVertexDesc(const std::string& name, 
                                        VertexDescPtr& ptr) {
   auto iter = vertex_desc_dict_.find(name);
-  if (iter == vertex_desc_dict_.end()) {
+  if (iter == vertex_desc_dict_.end() || iter->second.get() == NULL) {
     vertex_desc_dict_[name] = ptr;
     return true;
   } else {
@@ -58,7 +58,7 @@ bool ReusableObject::InsertVertexDesc(const std::string& name,
 
 bool ReusableObject::InsertGpuProgram(const std::string& name, GpuProgramPtr& ptr) {
   auto iter = program_dict_.find(name);
-  if (iter == program_dict_.end()) {
+  if (iter == program_dict_.end() || iter->second.get() == NULL) {
     program_dict_[name] = ptr;
     return true;
   } else {

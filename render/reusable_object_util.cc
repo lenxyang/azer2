@@ -13,7 +13,7 @@ GpuProgramPtr GetVertexProgramMayCreate(const std::string& name,
   GpuProgramPtr vs(objs->GetGpuProgram(name));
   if (!vs.get()) {
     vs.reset(rs->CreateVertexGpuProgram(vdesc, program.c_str()));
-    if (vs.get() != NULL) {
+    if (vs.get() == NULL) {
       LOG(ERROR) << "Overlay VertexStage Program compiled failed";  
       return GpuProgramPtr();
     }

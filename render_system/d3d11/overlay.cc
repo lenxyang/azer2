@@ -15,8 +15,8 @@ const char* D3DOverlayEffect::kVertexShaderProg = ""
     "};                                                  \n"
     "cbuffer c_buffer {                                  \n"
     "  float4x4 transform;                               \n"
-    "  float4   vertex;                                  \n"
-    "  vec2 tex[4];                                      \n"
+    "  float4   vertex[4];                               \n"
+    "  float2   tex[4];                                  \n"
     "};                                                  \n"
     "VS_OUTPUT vs_main(float4 inpos : POSITION,          \n"
     "                  int index : INDEX) {              \n"
@@ -71,9 +71,11 @@ void D3DOverlayEffect::SetTexcoord(const Vector2 texcoord[4]) {
 bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
   // generate GpuTable init for stage azer::kVertexStage
   azer::GpuConstantsTable::Desc vs_table_desc[] = {
-    azer::GpuConstantsTable::Desc("pvw", azer::GpuConstantsType::kMatrix4,
+    azer::GpuConstantsTable::Desc("transform", azer::GpuConstantsType::kMatrix4,
                                   offsetof(vs_cbuffer, transform), 1),
-    azer::GpuConstantsTable::Desc("pvw", azer::GpuConstantsType::kVector2,
+    azer::GpuConstantsTable::Desc("vertex", azer::GpuConstantsType::kVector4,
+                                  offsetof(vs_cbuffer, vertex), 4),
+    azer::GpuConstantsTable::Desc("tex", azer::GpuConstantsType::kVector2,
                                   offsetof(vs_cbuffer, tex), 4),
   };
   gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
