@@ -376,5 +376,13 @@ bool D3DSurfaceRenderer::InitForSurface(RenderTargetPtr target,
   SetViewport(azer::Renderer::Viewport(0, 0, width, height));
   return true;
 }
+
+void D3DRenderer::SaveState() {
+  CHECK(false);
+}
+
+void D3DRenderer::RestoreState() {
+  CHECK(false);
+}
 }  // namespace d3d11
 }  // namespace azer

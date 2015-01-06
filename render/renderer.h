@@ -46,9 +46,12 @@ class AZER_EXPORT Renderer {
   virtual void EnableLineAntialiasing(bool enable) = 0;
   virtual bool IsLineAntialiasingEnabled() = 0;
 
+  // save and restore the current state of renderer
+  virtual void SaveState() = 0;
+  virtual void RestoreState() = 0;
+
   virtual void UseBlending(Blending* blending, float* factor,
                            uint32 mask = 0xffffffff) = 0;
-  
   virtual void ResetBlending() = 0;
 
   virtual void UseTexture(RenderPipelineStage stage, int index, Texture* texture) = 0;

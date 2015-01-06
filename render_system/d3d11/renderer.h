@@ -27,54 +27,57 @@ class D3DRenderer : public Renderer {
   D3DRenderer(ID3D11DeviceContext* context, D3DRenderSystem* rs);
   ~D3DRenderer();
 
-  virtual void Reset() override;
-  virtual void Use() override;
-  virtual const std::string& name() const override;
+  void Reset() override;
+  void Use() override;
+  const std::string& name() const override;
 
-  virtual bool IsDepthTestEnable() override;
-  virtual void EnableDepthTest(bool enable) override;
+  bool IsDepthTestEnable() override;
+  void EnableDepthTest(bool enable) override;
 
-  virtual FillMode GetFillMode(void) override;
-  virtual void SetFillMode(FillMode mode) override;
-  virtual CullingMode GetCullingMode(void) override;
-  virtual void SetCullingMode(CullingMode mode) override;
-  virtual FrontFace GetFrontFace() override;
-  virtual void SetFrontFace(FrontFace mode) override;
-  virtual void EnableMultisampleAntiAliasing(bool enable) override;
-  virtual bool IsMultisampleAntiAliasingEnabled() override;
-  virtual void EnableLineAntialiasing(bool enable) override;
-  virtual bool IsLineAntialiasingEnabled() override;
+  FillMode GetFillMode(void) override;
+  void SetFillMode(FillMode mode) override;
+  CullingMode GetCullingMode(void) override;
+  void SetCullingMode(CullingMode mode) override;
+  FrontFace GetFrontFace() override;
+  void SetFrontFace(FrontFace mode) override;
+  void EnableMultisampleAntiAliasing(bool enable) override;
+  bool IsMultisampleAntiAliasingEnabled() override;
+  void EnableLineAntialiasing(bool enable) override;
+  bool IsLineAntialiasingEnabled() override;
 
-  virtual void UseBlending(Blending* blending, float* factor, uint32 mask) override;
-  virtual void ResetBlending() override;
+  void SaveState() override;
+  void RestoreState() override;
 
-  virtual void UseConstantsTable(RenderPipelineStage stage,
-                                 GpuConstantsTable* table) override;
+  void UseBlending(Blending* blending, float* factor, uint32 mask) override;
+  void ResetBlending() override;
+
+  void UseConstantsTable(RenderPipelineStage stage, 
+                         GpuConstantsTable* table) override;
 
   // texutre functions
-  virtual void UseTexture(RenderPipelineStage stage, int index, Texture* texture) override;
-  virtual void ResetShader(RenderPipelineStage stage) override;
+  void UseTexture(RenderPipelineStage stage, int index, Texture* texture) override;
+  void ResetShader(RenderPipelineStage stage) override;
 
-  virtual void Clear(const azer::Vector4& color) override;
-  virtual void ClearDepthAndStencil(DepthBuffer::ClearFlag,
-                                    float depth_val, int stencil_val) override;
+  void Clear(const azer::Vector4& color) override;
+  void ClearDepthAndStencil(DepthBuffer::ClearFlag, float depth_val, 
+                            int stencil_val) override;
   
-  virtual void Draw(VertexBuffer* vb, PrimitiveTopology primitive,
+  void Draw(VertexBuffer* vb, PrimitiveTopology primitive,
                       int32 num_of_vertices, int32 first_vertex) override;
-  virtual void DrawIndex(VertexBuffer* vb, IndicesBuffer* ib,
+  void DrawIndex(VertexBuffer* vb, IndicesBuffer* ib,
                          PrimitiveTopology primitive, int32 num_of_indices,
                          int32 first_indices, int32 index_base) override;
-  virtual void DrawInstanced(int32 instance_num, VertexBuffer* vb,
+  void DrawInstanced(int32 instance_num, VertexBuffer* vb,
                              PrimitiveTopology primitive,
                              int32 num_of_vertices, int32 first_vertex,
                              int32 instance_start_index) override;
-  virtual void DrawIndexInstanced(int32 instance_num, VertexBuffer* vb,
+  void DrawIndexInstanced(int32 instance_num, VertexBuffer* vb,
                                   IndicesBuffer* ib, PrimitiveTopology primitive,
                                   int32 num_of_indices, int32 first_indices,
                                   int32 index_base,
                                   int32 instance_start_index) override;
 
-  virtual void SetViewport(const Viewport& viewport) override;
+  void SetViewport(const Viewport& viewport) override;
   
   ID3D11DeviceContext* GetContext() {
     CHECK(NULL != d3d_context_);
