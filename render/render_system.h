@@ -12,6 +12,7 @@
 #include "azer/render/surface.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/swap_chain.h"
+#include "azer/render/reusable_object.h"
 #include "ui/gfx/geometry/rect.h"
 
 namespace azer {
@@ -24,7 +25,6 @@ class Image;
 class EGL;
 class Context2D;
 class Canvas2D;
-
 
 typedef std::shared_ptr<IndicesData> IndicesDataPtr;
 
@@ -72,6 +72,8 @@ class AZER_EXPORT RenderSystem {
   virtual bool Present() = 0;
   virtual bool reset() = 0;
 
+  ReusableObject* GetReusableObject() { return reusable_object_.get();}
+
   Context2D* GetContext2D() { return context2d_.get();}
   const RenderSystemCapability& capability() const {
     return capability_;
@@ -93,6 +95,7 @@ class AZER_EXPORT RenderSystem {
   RenderSystemCapability capability_;
   SwapChainPtr swap_chain_;
   Surface* surface_;
+  ReusableObjectPtr reusable_object_;
   static RenderSystem* render_system_;
   friend class AutoRenderSystemInit;
   DISALLOW_COPY_AND_ASSIGN(RenderSystem);

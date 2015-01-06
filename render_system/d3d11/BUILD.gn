@@ -68,6 +68,8 @@ shared_library("d3d11") {
     "render_target.h",
     "renderer.cc",
     "renderer.h",
+    "reusable_object.cc",
+    "reusable_object.h",
     "swap_chain.cc",
     "swap_chain.h",
     "technique.cc",

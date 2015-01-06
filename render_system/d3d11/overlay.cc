@@ -2,6 +2,8 @@
 
 #include "azer/render/render.h"
 #include "azer/render_system/d3d11/render_system.h"
+#include "azer/render/reusable_object.h"
+#include "azer/render/reusable_object_util.h"
 
 namespace azer {
 namespace d3d11 {
@@ -34,29 +36,39 @@ const char* D3DOverlayEffect::kPixelShaderProg = ""
     "  return diffuse;                                                  \n"
     "}";
 
-bool D3DOverlayEffect::Init(Overlay* surface, D3DRenderSystem* rs) {
-  GpuProgramPtr vs(rs->CreateVertexGpuProgram(surface->GetVertexDesc(),
-                                              kVertexShaderProg));
-  DCHECK(vs.get() != NULL) << "Overlay default VertexStage Program compiled failed";
-  GpuProgramPtr ps(rs->CreateGpuProgram(kPixelStage, kPixelShaderProg));
-  if (ps.get() == NULL || vs.get() == NULL) {
+
+void D3DOverlayEffect::Use(Renderer* renderer) {
+  DCHECK(texture_.get() != NULL);
+  renderer->UseTexture(azer::kPixelStage, 0, texture_.get());
+  UseConstantsTable(renderer);
+  UseTechnique(renderer);
+}
+
+bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
+  technique_.reset(rs->CreateTechnique());
+  VertexDescPtr& desc = overlay->GetVertexDesc();
+  ReusableObject* object = rs->GetReusableObject();
+  
+  const char* overlay_vs = "azer_overlay_vs";
+  const char* overlay_ps = "azer_overlay_ps";
+  GpuProgramPtr vs(GetVertexProgramMayCreate(overlay_vs, kVertexShaderProg, desc));
+  GpuProgramPtr ps(GetPixelProgramMayCreate(overlay_ps, kPixelShaderProg));
+  if (vs.get() && ps.get()) {
+    technique_->AddGpuProgram(vs);
+    technique_->AddGpuProgram(ps);
+    return true;
+  } else {
     return false;
   }
-  technique_.reset(rs->CreateTechnique());
-  technique_->AddGpuProgram(vs);
-  technique_->AddGpuProgram(ps);
-
-  return true;
 }
 
 bool D3DOverlay::InitEffect() {
   DCHECK(render_system_ != NULL);
-  std::unique_ptr<D3DOverlayEffect> effect_ptr(
-      new D3DOverlayEffect(render_system_));
-  if (effect_ptr->Init(this, render_system_)) {
-    effect_ptr_.reset(effect_ptr.release());
+  effect_.reset(new D3DOverlayEffect(render_system_));
+  if (effect_->Init(this, render_system_)) {
     return true;
   } else {
+    effect_.reset(NULL);
     return false;
   }
 }
@@ -76,6 +88,7 @@ bool D3DOverlay::Init(azer::RenderSystem* rs) {
 const VertexDesc::Desc D3DOverlay::kVertexDesc[] = {
   {"POSITION", 0, kVec4},
   {"TEXCOORD", 0, kVec2},
+  {"INDEX",    0, kInt},
 };
 
 const int D3DOverlay::kVertexDescNum = arraysize(D3DOverlay::kVertexDesc);
@@ -87,22 +100,28 @@ bool D3DOverlay::InitVertex(RenderSystem* rs) {
   Vertex* ptr = (Vertex*)data.pointer();
   ptr->position = azer::Vector4(rect_.x(), rect_.bottom(), 0.0f, 1.0f);
   ptr->texcoord = azer::Vector2(0.0f, 1.0f);
+  ptr->index = 0;
   ptr++;
   ptr->position = azer::Vector4(rect_.x(), rect_.y(), 0.0f, 1.0f);
   ptr->texcoord = azer::Vector2(0.0f, 0.0f);
+  ptr->index = 1;
   ptr++;
   ptr->position = azer::Vector4(rect_.right(), rect_.bottom(), 0.0f, 1.0f);
   ptr->texcoord = azer::Vector2(1.0f, 1.0f);
+  ptr->index = 2;
   ptr++;
 
   ptr->position = azer::Vector4(rect_.right(), rect_.bottom(), 0.0f, 1.0f);
   ptr->texcoord = azer::Vector2(1.0f, 1.0f);
+  ptr->index = 3;
   ptr++;
   ptr->position = azer::Vector4(rect_.x(), rect_.y(), 0.0f, 1.0f);
   ptr->texcoord = azer::Vector2(0.0f, 0.0f);
+  ptr->index = 4;
   ptr++;
   ptr->position = azer::Vector4(rect_.right(), rect_.y(), 0.0f, 1.0f);
   ptr->texcoord = azer::Vector2(1.0f, 0.0f);
+  ptr->index = 5;
 
   vb_ptr_.reset(rs->CreateVertexBuffer(VertexBuffer::Options(), &data));
   if (!vb_ptr_.get()) {
@@ -110,6 +129,14 @@ bool D3DOverlay::InitVertex(RenderSystem* rs) {
   }
 
   return true;
+}
+
+void D3DOverlay::Render(Renderer* renderer) {
+  SetBlending(renderer);
+  DCHECK (effect_.get() != NULL);
+  effect_->Use(renderer);
+  renderer->Draw(vb_ptr_.get(), azer::kTriangleList, 6);
+  ResetBlending(renderer);
 }
 }  // namespace d3d11
 }  // namespace azer
