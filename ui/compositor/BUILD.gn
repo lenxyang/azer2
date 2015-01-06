@@ -1,0 +1,19 @@
+
+source_set("compositor") {
+  sources = [
+    "canvas_layer.cc",
+    "canvas_layer.h",
+    "compositor.cc",
+    "compositor.h",
+    "layer.cc",
+    "layer.h",
+    "layer_tree_host.cc",
+    "layer_tree_host.h",
+    "renderer_layer.cc",
+    "renderer_layer.h",
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+  visibility = ["//azer/render"]
+}

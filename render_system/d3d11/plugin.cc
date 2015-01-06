@@ -12,19 +12,18 @@ using azer::d3d11::AngleD3DEnvironment;
 
 extern "C" {
 azer::RenderSystem* CreateRenderSystem(azer::Surface* sur) {
-  /*
   D3DEnvironmentPtr envptr(new InternalD3DEnvironment(sur));
   if (!envptr->Initialize()) {
     LOG(ERROR) << "Failed to inititialize D3D11Environment";
     return NULL;
   }
-  */
-
+  /*
   D3DEnvironmentPtr envptr(new AngleD3DEnvironment(sur));
   if (!envptr->Initialize()) {
     LOG(ERROR) << "Failed to inititialize D3D11Environment";
     return NULL;
   }
+  */
 
   std::unique_ptr<D3DRenderSystem> rs(new D3DRenderSystem(envptr));
   if (rs->Init()) {
