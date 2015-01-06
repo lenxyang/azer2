@@ -13,12 +13,16 @@ const char* D3DOverlayEffect::kVertexShaderProg = ""
     "  float4 Pos : SV_POSITION;                         \n"
     "  float2 texcoord : TEXCOORD;                       \n"
     "};                                                  \n"
+    "cbuffer c_buffer {                                  \n"
+    "  float4x4 transform;                               \n"
+    "  vec2 tex[4];                                      \n"
+    "};                                                  \n"
     "VS_OUTPUT vs_main(float4 inpos : POSITION,          \n"
-    "                  float2 tex : TEXCOORD) {          \n"
+    "                  int index : INDEX) {              \n"
     "  VS_OUTPUT output;                                 \n"
-    "  output.Pos = inpos;                               \n"
+    "  output.Pos = mul(transform, inpos);               \n"
     "  inpos.z = 0.0f;                                   \n"
-    "  output.texcoord = tex;                            \n"
+    "  output.texcoord = tex[index];                     \n"
     "  return output;                                    \n"
     "}";
 
@@ -44,7 +48,29 @@ void D3DOverlayEffect::Use(Renderer* renderer) {
   UseTechnique(renderer);
 }
 
+void D3DOverlayEffect::SetTransform(const Matrix4& matrix) {
+  azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+  DCHECK(tb != NULL);
+  tb->SetValue(0, &matrix, sizeof(azer::Matrix4));
+}
+
+void D3DOverlayEffect::SetTexcoord(const Vector2 texcoord[4]) {
+  azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+  DCHECK(tb != NULL);
+  tb->SetValue(1, &texcoord, sizeof(Vector2) * 4);
+}
+
 bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
+  // generate GpuTable init for stage azer::kVertexStage
+  azer::GpuConstantsTable::Desc vs_table_desc[] = {
+    azer::GpuConstantsTable::Desc("pvw", azer::GpuConstantsType::kMatrix4,
+                                  offsetof(vs_cbuffer, transform), 1),
+    azer::GpuConstantsTable::Desc("pvw", azer::GpuConstantsType::kVector2,
+                                  offsetof(vs_cbuffer, tex), 4),
+  };
+  gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
+      arraysize(vs_table_desc), vs_table_desc));
+
   technique_.reset(rs->CreateTechnique());
   VertexDescPtr& desc = overlay->GetVertexDesc();
   ReusableObject* object = rs->GetReusableObject();

@@ -14,7 +14,17 @@ class D3DOverlayEffect : Effect {
       : Effect((RenderSystem*)rs) {
   }
 
+#pragma pack(push, 4)
+  struct vs_cbuffer {
+    Matrix4 transform;
+    Vector2 tex[4];
+  };
+#pragma pack(pop)
+  
   void SetTexture(TexturePtr texture) { texture_ = texture;}
+  void SetTransform(const Matrix4& matrx);
+  void SetTexcoord(const Vector2 texcoord[4]);
+
   void Use(Renderer* renderer) override;
 
   void UseTexture(Renderer* renderer) override {}
@@ -23,6 +33,8 @@ class D3DOverlayEffect : Effect {
   static const char* kVertexShaderProg;
   static const char* kPixelShaderProg;
 
+  Vector2 texcoord_[4];
+  Matrix4 transform_;
   TexturePtr texture_;
   friend class D3DOverlay;
   DISALLOW_COPY_AND_ASSIGN(D3DOverlayEffect);
