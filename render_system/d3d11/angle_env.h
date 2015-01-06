@@ -20,6 +20,7 @@ class AngleEnv {
 
   void finish();
   void flush();
+  bool swap();
 
   bool GetProcAddress(const char* name, void** procaddr);
  private:

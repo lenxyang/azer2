@@ -40,6 +40,10 @@ D3DRenderSystem::~D3DRenderSystem() {
 
 bool D3DRenderSystem::Init() {
   swap_chain_.reset(envptr_->CreateSwapChain(this));
+  if (swap_chain_.get() == NULL) {
+    return false;
+  }
+
   GetDefaultRenderer()->Use();
   return true;
 }
@@ -222,9 +226,10 @@ Blending* D3DRenderSystem::CreateBlending(const Blending::Desc& desc) {
 }
 
 Renderer* D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
-  DCHECK(GetDefaultRenderer() != NULL);
-  std::unique_ptr<D3DRenderer> renderer(new D3DRenderer(
-      ((D3DRenderer*)GetDefaultRenderer())->GetContext(), this));
+  DCHECK(envptr_.get() != NULL);
+  DCHECK(envptr_->GetContext() != NULL);
+  ID3D11DeviceContext* context = envptr_->GetContext();
+  std::unique_ptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(opt)) {
     return renderer.release();
   } else {

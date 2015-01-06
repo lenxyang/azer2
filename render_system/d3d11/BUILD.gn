@@ -12,8 +12,8 @@ source_set("canvas") {
     "canvas2d.h",
     "context2d.cc",
     "context2d.h",
-    "d3d_angle_env.cc",
-    "d3d_angle_env.h",
+    "angle_d3denv.cc",
+    "angle_d3denv.h",
     "render_system_2d.cc",
   ]
 
@@ -41,12 +41,12 @@ source_set("canvas") {
 shared_library("d3d11") {
   output_name = "d3d11_render_system"
   sources = [
+    "azer_d3denv.cc",
+    "azer_d3denv.h",
     "blending.cc",
     "blending.h",
     "d3denv.cc",
     "d3denv.h",
-    "d3d_internal_env.cc",
-    "d3d_internal_env.h",
     "depth_buffer.cc",
     "depth_buffer.h",
     "enum_transform.h",

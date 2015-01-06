@@ -106,9 +106,8 @@ class D3DRenderer : public Renderer {
 
 class D3DSurfaceRenderer : public D3DRenderer {
  public:
-  D3DSurfaceRenderer(Surface* surface,
-                       ID3D11DeviceContext* context,
-                       D3DRenderSystem* rs)
+  D3DSurfaceRenderer(Surface* surface, ID3D11DeviceContext* context,
+                     D3DRenderSystem* rs)
       : D3DRenderer(context, rs)
       , surface_(surface) {
     DCHECK(NULL != surface);
