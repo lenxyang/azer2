@@ -12,8 +12,9 @@ void OverlayEffect::Use(Renderer* renderer) {
 
 Overlay::Overlay(const gfx::RectF& rect) 
     : blending_enabled_(true)
-    , rect_(rect) {
-    
+    , rect_(rect)
+    , texcoord1_(0.0f, 0.0f)
+    , texcoord2_(1.0f, 1.0f) {
 }
 
 Overlay::~Overlay() {

@@ -12,21 +12,6 @@
 namespace azer {
 class Renderer;
 
-class AZER_EXPORT OverlayEffect : public Effect {
- public:
-  OverlayEffect(RenderSystem* rs) : Effect(rs) {}
-
-  TexturePtr GetTexture() { return texture_ptr_;}
-  void SetTexture(TexturePtr texture_ptr) { texture_ptr_ = texture_ptr;}
-
-  virtual void Use(Renderer* rs);
- protected:
-  TexturePtr texture_ptr_;
-  DISALLOW_COPY_AND_ASSIGN(OverlayEffect);
-};
-
-typedef std::shared_ptr<OverlayEffect> OverlayEffectPtr;
-
 class AZER_EXPORT Overlay {
  public:
   /**
@@ -37,6 +22,11 @@ class AZER_EXPORT Overlay {
   void Render(Renderer* rs);
 
   void SetTexture(TexturePtr tex);
+  void SetTexCoord(const gfx::PointF& lt, const gfx::PointF& br) {
+    texcoord1_ = lt;
+    texcoord2_ = br;
+  }
+  void SetTransform(const Matrix4& matrix) { transform_ = matrix;}
   /**
    * Overlay 的顶点格式
    * struct Vertex {
@@ -67,6 +57,8 @@ class AZER_EXPORT Overlay {
   bool blending_enabled_;
   BlendingPtr blending_;
 
+  Matrix4 transform_;
+  gfx::PointF texcoord1_, texcoord2_;
   gfx::RectF rect_;
   VertexBufferPtr vb_ptr_;
   VertexDescPtr vertex_desc_ptr_;
