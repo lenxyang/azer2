@@ -3,15 +3,16 @@
 
 namespace azer {
 Overlay::Overlay() {
-  vertex_[0] = azer::Vector4(-1.0f,  1.0f, 0.0f, 0.0f);
-  vertex_[1] = azer::Vector4( 1.0f,  1.0f, 0.0f, 0.0f);
-  vertex_[2] = azer::Vector4( 1.0f, -1.0f, 0.0f, 0.0f);
-  vertex_[3] = azer::Vector4(-1.0f, -1.0f, 0.0f, 0.0f);
+  vertex_[0] = azer::Vector4(-1.0f,  1.0f, 0.0f, 1.0f);
+  vertex_[1] = azer::Vector4( 1.0f,  1.0f, 0.0f, 1.0f);
+  vertex_[2] = azer::Vector4( 1.0f, -1.0f, 0.0f, 1.0f);
+  vertex_[3] = azer::Vector4(-1.0f, -1.0f, 0.0f, 1.0f);
 
   texcoord_[0] = azer::Vector2(0.0f, 0.0f);
   texcoord_[1] = azer::Vector2(1.0f, 0.0f);
   texcoord_[2] = azer::Vector2(1.0f, 1.0f);
   texcoord_[3] = azer::Vector2(0.0f, 1.0f);
+  transform_ = Matrix4::kIdentity;
 }
 
 Overlay::~Overlay() {
