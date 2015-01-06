@@ -19,13 +19,13 @@ typedef void* (*FUNCGetD3D11DeviceContext)();
 // set a function, which will be called on swap
 typedef void (*FUNCSwapRectHook)(ID3D11ShaderResourceView* angle_target,
                                  ID3D11ShaderResourceView** todraw);
-typedef void (*FUNCSetSwapRectHook)(FUNCSwapRectHook* hook);
+typedef void (*FUNCSetSwapRectHook)(FUNCSwapRectHook hook);
 
 // set a function, which will be called on swapchain reset
 typedef void (*FUNCOnSwapChainReset)();
-typedef void (*FUNCSetSwapChainResetHook)(FUNCOnSwapChainReset* func);
+typedef void (*FUNCSetSwapChainResetHook)(FUNCOnSwapChainReset func);
 
 // set a function, which will be called on swapchain size  
 typedef void (*FUNCOnSwapChainResize)();
-typedef void (*FUNCSetSwapChainResizeHook)(FUNCOnSwapChainResize* func);
+typedef void (*FUNCSetSwapChainResizeHook)(FUNCOnSwapChainResize func);
 }

@@ -6,9 +6,30 @@
 #include "azer/render_system/d3d11/angle_interface.h"
 #include "azer/render_system/d3d11/d3denv.h"
 #include "azer/render_system/d3d11/render_system.h"
+#include "azer/render_system/d3d11/texture.h"
+
+extern "C" {
+void SwapRectHookANGLE(ID3D11ShaderResourceView* angle, 
+                       ID3D11ShaderResourceView** resource);
+}
 
 namespace azer {
 namespace d3d11 {
+
+class TextureCombined {
+ public:
+ private:
+  OverlayPtr overlay_;
+  DISALLOW_COPY_AND_ASSIGN(TextureCombined);
+};
+
+void Combined(ID3D11ShaderResourceView* angle, AngleSwapChain* swapchain,
+              ID3D11ShaderResourceView** resource) {
+  RenderTarget* target = swapchain->GetRenderer()->GetRenderTarget();
+  TexturePtr& tex = target->GetTexture();
+  D3DTexture* d3dtex = (D3DTexture*)tex.get();
+  *resource = d3dtex->GetResourceView();
+}
 
 AngleSwapChain::AngleSwapChain(D3DRenderSystem* rs)
     : render_system_(rs) {
@@ -18,6 +39,8 @@ AngleSwapChain::~AngleSwapChain() {
 }
 
 bool AngleSwapChain::Init(Surface* surface) {
+  DCHECK(NULL != pfnSetSwapRectHook);
+  (*pfnSetSwapRectHook)(SwapRectHookANGLE);
   return reset(surface);
 }
 
@@ -52,9 +75,15 @@ Renderer* AngleSwapChain::CreateSurfaceRenderer(Surface* surface) {
       (azer::Texture::kRenderTarget | azer::Texture::kShaderResource);
   return render_system_->CreateRenderer(opt);
 }
-
-void Combined(ID3D11ShaderResourceView* angle, AngleSwapChain* swapchain,
-              ID3D11ShaderResourceView** resource) {
-}
 }  // namespace d3d11
 }  // namespace azer
+
+using azer::d3d11::AngleSwapChain;
+extern "C" {
+void SwapRectHookANGLE(ID3D11ShaderResourceView* angle, 
+                       ID3D11ShaderResourceView** resource) {
+  azer::RenderSystem* rs = azer::RenderSystem::Current();
+  AngleSwapChain* swapchain = (AngleSwapChain*)(rs->GetSwapChain().get());
+  Combined(angle, swapchain, resource);
+}
+}
