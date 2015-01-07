@@ -23,12 +23,8 @@ class AZER_EXPORT SwapChain {
   virtual bool Present() = 0;
 
   RendererPtr& GetRenderer() { return renderer_;}
-  DepthBufferPtr& GetDepthBuffer() { return depth_buffer_;}
-  RenderTargetPtr& GetRenderTarget() { return render_target_;}
  protected:
   RendererPtr renderer_;
-  DepthBufferPtr depth_buffer_;
-  RenderTargetPtr render_target_;
   DISALLOW_COPY_AND_ASSIGN(SwapChain);
 };
 
