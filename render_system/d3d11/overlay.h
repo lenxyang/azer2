@@ -13,14 +13,6 @@ class D3DOverlayEffect : Effect {
   D3DOverlayEffect(D3DRenderSystem* rs)
       : Effect((RenderSystem*)rs) {
   }
-
-#pragma pack(push, 4)
-  struct vs_cbuffer {
-    Matrix4 transform;
-    Vector4 vertex[4];
-    Vector2 texcoord[4];
-  };
-#pragma pack(pop)
   
   void SetTexture(TexturePtr texture) { texture_ = texture;}
   void SetTransform(const Matrix4& matrx);

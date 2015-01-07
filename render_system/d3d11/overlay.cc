@@ -8,6 +8,16 @@
 
 namespace azer {
 namespace d3d11 {
+namespace {
+#pragma pack(push, 4)
+  struct vs_cbuffer {
+    Matrix4 transform;
+    Vector4 vertex[4];
+    Vector2 texcoord[4];
+    Vector2 padding[4];
+  };
+#pragma pack(pop)
+}  // namespace
 
 const char* D3DOverlayEffect::kVertexShaderProg = ""
     "struct VS_OUTPUT {                                  \n"

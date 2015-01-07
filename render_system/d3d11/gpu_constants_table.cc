@@ -12,7 +12,7 @@ bool D3DGpuConstantsTable::Init(D3DRenderSystem* rs) {
   ID3D11Device* d3d_device = rs->GetDevice();
 
   ZeroMemory(&cbbd, sizeof(D3D11_BUFFER_DESC));
-  cbbd.Usage = D3D11_USAGE_DEFAULT;
+  cbbd.Usage = D3D11_USAGE_DYNAMIC;
   cbbd.ByteWidth = size();
   cbbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
   cbbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
