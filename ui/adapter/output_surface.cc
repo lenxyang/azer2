@@ -25,15 +25,7 @@ class OutputDeviceProxy:  public ::base::RefCounted<OutputDeviceProxy> {
     device->SetResizeCallback(callback);
   }
 
-
   void OnDeviceResize() {
-    Canvas2DPtr ptr = device_->GetCanvas();
-    TexturePtr tex = ptr->GetTexture();
-    RenderSystem* rs = RenderSystem::Current();
-    Texture::Options opt = tex->option();
-    opt.target = azer::Texture::kShaderResource;
-    surface_->texture_.reset(rs->CreateTexture(opt));
-	LOG(ERROR) << "id: " << ptr->GetTexID();
   }
 
  private:
@@ -56,31 +48,9 @@ Azer2DOutputSurface::Azer2DOutputSurface(
 Azer2DOutputSurface::~Azer2DOutputSurface() {
 }
 
-void DrawCanvas(SkCanvas* canvas) {
-  SkString text("Hello, Skia World");
-  SkPaint paint;
-  paint.setARGB(255, 0, 0, 0);
-  paint.setAntiAlias(true);
-  paint.setTextSize(SkIntToScalar(30));
-  SkScalar x = 80, y = 60;
-  canvas->drawText(text.c_str(), text.size(), x, y, paint);
-  paint.setStyle(SkPaint::kStroke_Style);
-  paint.setStrokeWidth(10);
-
-  SkRect rect;
-  paint.setARGB(255, 0, 0, 0);
-  rect.set(50, 100, 200, 200);
-  canvas->drawRoundRect(rect, 20, 20, paint);
-
-  canvas->drawLine(10, 300, 300, 300, paint);
-  canvas->drawCircle(100, 400, 50, paint);
-  canvas->flush();
-}
-
 void Azer2DOutputSurface::TextureCopy() {
   Azer2DDevice* device = GetOutputDevice();
   Canvas2DPtr ptr = device->GetCanvas();
-  TexturePtr tex = ptr->GetTexture();
   texture_ = ptr->GetTexture();
 }
 
