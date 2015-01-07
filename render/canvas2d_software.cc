@@ -9,7 +9,7 @@
 
 namespace azer {
 SoftwareCanvas2D::SoftwareCanvas2D(int width, int height, Context2D* context) 
-    : Canvas2d(width, height, context) {
+    : Canvas2D(width, height, context) {
 }
 
 SoftwareCanvas2D::~SoftwareCanvas2D() {
@@ -20,7 +20,7 @@ SoftwareCanvas2D::~SoftwareCanvas2D() {
 
 bool SoftwareCanvas2D::Init() {
   skbitmap_.reset(new SkBitmap());
-  skbitmap_.allocN32Pixels(width(), height(), true);
+  skbitmap_->allocN32Pixels(width(), height(), true);
   skcanvas_ = new SkCanvas(*skbitmap_.get());
   return InitTexture();
 }

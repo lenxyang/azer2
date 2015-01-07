@@ -7,6 +7,8 @@ source_set("render2d") {
     "canvas2d_software.h",
     "context2d.cc",
     "context2d.h",
+    "context2d_software.cc",
+    "context2d_software.h",
   ]
   deps = [
    "//skia",
