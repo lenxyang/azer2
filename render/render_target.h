@@ -26,7 +26,7 @@ class AZER_EXPORT RenderTarget {
  protected:
   const bool default_render_target_;
   TexturePtr texture_;
-  const Texture::Options& options_;
+  const Texture::Options options_;
   DISALLOW_COPY_AND_ASSIGN(RenderTarget);
 };
 

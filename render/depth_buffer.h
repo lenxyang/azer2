@@ -34,7 +34,7 @@ protected:
   }
 
   TexturePtr texture_;
-  const Texture::Options& options_;
+  const Texture::Options options_;
   DISALLOW_COPY_AND_ASSIGN(DepthBuffer);
 };
 
