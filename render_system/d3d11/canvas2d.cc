@@ -36,7 +36,7 @@ bool D3DCanvas2D::Init() {
 }
 
 SkCanvas* D3DCanvas2D::BeginPaint() {
-  return skcanvas_.get();
+  return skcanvas_;
 }
 
 void D3DCanvas2D::EndPaint() {

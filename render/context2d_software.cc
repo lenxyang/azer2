@@ -17,7 +17,12 @@ void SoftwareContext2D::finish() {
 }
 
 Canvas2D* SoftwareContext2D::CreateCanvas(int32 width, int32 height) {
-  return new SoftwareCanvas2D(width, height, this);
+  std::unique_ptr<SoftwareCanvas2D> ptr(new SoftwareCanvas2D(width, height, this));
+  if (ptr->Init()) {
+    return ptr.release();
+  } else {
+    return NULL;
+  }
 }
 
 }  // namespace azer

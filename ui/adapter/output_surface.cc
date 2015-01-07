@@ -81,44 +81,12 @@ void Azer2DOutputSurface::TextureCopy() {
   Azer2DDevice* device = GetOutputDevice();
   Canvas2DPtr ptr = device->GetCanvas();
   TexturePtr tex = ptr->GetTexture();
-  SkCanvas* skcanvas = ptr->GetSkCanvas();
-  DrawCanvas(skcanvas);
-  skcanvas->flush();
-  render_system_->GetContext2D()->finish();
-  LOG(ERROR) << "id: " << ptr->GetTexID();
   texture_ = ptr->GetTexture();
 }
 
-void Azer2DOutputSurface::PixelsCopy() {
-  Azer2DDevice* device = GetOutputDevice();
-  Canvas2DPtr ptr = device->GetCanvas();
-  render_system_->GetContext2D()->finish();
-  TexturePtr tex = ptr->GetTexture();
-  Texture::Options opt = tex->option();
-  opt.target = azer::Texture::kShaderResource;
-
-  SkCanvas* skcanvas = ptr->GetSkCanvas();
-  DrawCanvas(skcanvas);
-  skcanvas->flush();
-  render_system_->GetContext2D()->finish();
-  const SkImageInfo &imageinfo = skcanvas->imageInfo();
-  int32 size = imageinfo.width() * imageinfo.height() * 4;
-  ImageDataPtr imagedata(new ImageData(imageinfo.width(),
-                                       imageinfo.height()));
-  skcanvas->readPixels(imageinfo,
-                       imagedata->data(),
-                       imageinfo.width() * 4,
-                       0, 0);
-  Image image(imagedata, Image::k2D);
-  LOG(ERROR) << "id: " << ptr->GetTexID();
-  texture_.reset(render_system_->CreateTexture(opt, &image));
-  // texture_.reset(render_system_->CreateTexture(opt));
-  // texture_ = ptr->GetTexture();
-}
 
 // cc::OutputSurface implementation
 void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
-  // PixelsCopy();
   TextureCopy();
   client_->DidSwapBuffers();
 }

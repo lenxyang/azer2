@@ -16,9 +16,9 @@ class AZER_EXPORT SoftwareContext2D : public Context2D {
   SoftwareContext2D();
   virtual ~SoftwareContext2D();
   
-  virtual void flush() = 0;
-  virtual void finish() = 0;
-  virtual Canvas2D* CreateCanvas(int32 width, int32 height) = 0;
+  void flush() override;
+  void finish() override;
+  Canvas2D* CreateCanvas(int32 width, int32 height) override;
  protected:
   DISALLOW_COPY_AND_ASSIGN(SoftwareContext2D);
 };

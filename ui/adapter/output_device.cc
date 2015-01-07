@@ -43,7 +43,7 @@ void Azer2DDevice::Resize(const gfx::Size& viewport_pixel_size,
 SkCanvas* Azer2DDevice::BeginPaint(const gfx::Rect& damage_rect) {
   DCHECK(canvas2d_);
   damage_rect_ = damage_rect;
-  return canvas2d_->GetSkCanvas();
+  return canvas2d_->BeginPaint();
 }
 
 void Azer2DDevice::EndPaint(cc::SoftwareFrameData* frame_data) {
@@ -51,7 +51,7 @@ void Azer2DDevice::EndPaint(cc::SoftwareFrameData* frame_data) {
   frame_data->id = 0;
   frame_data->size = viewport_pixel_size_;
   frame_data->damage_rect = damage_rect_;
-  canvas2d_->GetSkCanvas()->flush();
+  canvas2d_->EndPaint();
 }
 
 void Azer2DDevice::CopyToPixels(const gfx::Rect& rect, void* pixels) {
