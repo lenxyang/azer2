@@ -26,6 +26,7 @@ class OutputDeviceProxy:  public ::base::RefCounted<OutputDeviceProxy> {
   }
 
   void OnDeviceResize() {
+    surface_->texture_ = device_->GetCanvas()->GetTexture();
   }
 
  private:
