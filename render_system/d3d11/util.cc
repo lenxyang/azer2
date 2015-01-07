@@ -7,7 +7,7 @@
 #include <xnamath.h>
 
 namespace azer {
-#if defined(DEBUG)
+#if defined(_DEBUG)
 const DWORD kCompileFlags =
     D3DCOMPILE_DEBUG
     | D3DCOMPILE_ENABLE_STRICTNESS

@@ -37,7 +37,6 @@ const char* D3DOverlayEffect::kPixelShaderProg = ""
     "SamplerState ObjSamplerState;                           \n"
     "float4 ps_main(VS_OUTPUT input) : SV_TARGET {           \n"
     "  float4 diffuse =  ObjTexture.Sample(ObjSamplerState, input.texcoord); \n"
-    "  clip(diffuse.a - 0.01);                                          \n"
     "  return diffuse;                                                  \n"
     "}";
 
