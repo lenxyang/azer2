@@ -29,6 +29,9 @@ class D3DCanvas2D : public Canvas2D {
     DCHECK(NULL != gr_device_.get());
     return gr_device_.get();
   }
+
+  virtual SkCanvas* BeginPaint() override;
+  virtual void EndPaint() override;
  private:
   bool InitCanvas();
   bool InitTexture();

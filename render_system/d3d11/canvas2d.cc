@@ -35,6 +35,14 @@ bool D3DCanvas2D::Init() {
   return InitTexture();
 }
 
+SkCanvas* D3DCanvas2D::BeginPaint() {
+  return skcanvas_.get();
+}
+
+void D3DCanvas2D::EndPaint() {
+  skcanvas_->flush();
+}
+
 bool D3DCanvas2D::InitTexture() {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
 

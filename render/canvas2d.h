@@ -22,6 +22,10 @@ class AZER_EXPORT Canvas2D {
   int32 width() const { return width_;}
   int32 height() const { return height_;}
 
+  // is use SkCanvas to Paint, should call the following functions
+  virtual SkCanvas* BeginPaint() = 0;
+  virtual void EndPaint() = 0;
+
   SkCanvas* GetSkCanvas() {
     DCHECK(NULL != skcanvas_);
     return skcanvas_;

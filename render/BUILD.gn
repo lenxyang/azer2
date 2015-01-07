@@ -3,6 +3,8 @@ source_set("render2d") {
   sources = [
     "canvas2d.cc",
     "canvas2d.h",
+    "canvas2d_software.cc",
+    "canvas2d_software.h",
     "context2d.cc",
     "context2d.h",
   ]
