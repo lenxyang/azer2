@@ -30,6 +30,14 @@ uint32 SoftwareCanvas2D::GetTexID() {
 }
 
 bool SoftwareCanvas2D::UpdateTexture() {
+  DCHECK(NULL != texture_.get());
+  Texture::MapData mapdata = texture_->map(kWriteDiscard);
+  if (mapdata.pdata) {
+    skbitmap_->readPixels(skbitmap_->info(),
+                          mapdata.pdata, 
+                          mapdata.row_pitch, 0, 0);
+  }
+  texture_->unmap();
   return true;
 }
 
