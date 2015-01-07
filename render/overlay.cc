@@ -8,10 +8,10 @@ Overlay::Overlay() {
   vertex_[2] = azer::Vector4( 1.0f, -1.0f, 0.0f, 1.0f);
   vertex_[3] = azer::Vector4(-1.0f, -1.0f, 0.0f, 1.0f);
 
-  texcoord_[0] = azer::Vector2(0.0f, 0.0f);
-  texcoord_[1] = azer::Vector2(1.0f, 0.0f);
-  texcoord_[2] = azer::Vector2(1.0f, 1.0f);
-  texcoord_[3] = azer::Vector2(0.0f, 1.0f);
+  texcoord_[0] = azer::Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+  texcoord_[1] = azer::Vector4(1.0f, 0.0f, 0.0f, 0.0f);
+  texcoord_[2] = azer::Vector4(1.0f, 1.0f, 0.0f, 0.0f);
+  texcoord_[3] = azer::Vector4(0.0f, 1.0f, 0.0f, 0.0f);
   transform_ = Matrix4::kIdentity;
 }
 
@@ -49,10 +49,10 @@ void Overlay::ResetBlending(Renderer* renderer) {
 }
 
 void Overlay::SetTexCoord(const gfx::PointF& lt, const gfx::PointF& br) {
-  texcoord_[0] = azer::Vector2(lt.x(), lt.y());
-  texcoord_[1] = azer::Vector2(br.x(), lt.y());
-  texcoord_[2] = azer::Vector2(br.x(), br.y());
-  texcoord_[3] = azer::Vector2(lt.x(), br.y());
+  texcoord_[0] = azer::Vector4(lt.x(), lt.y(), 0.0f, 0.0f);
+  texcoord_[1] = azer::Vector4(br.x(), lt.y(), 0.0f, 0.0f);
+  texcoord_[2] = azer::Vector4(br.x(), br.y(), 0.0f, 0.0f);
+  texcoord_[3] = azer::Vector4(lt.x(), br.y(), 0.0f, 0.0f);
 }
 
 void Overlay::SetBounds(const gfx::RectF& rect) {

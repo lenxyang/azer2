@@ -44,7 +44,7 @@ class AZER_EXPORT Overlay {
   void ResetBlending(Renderer* renderer);
   BlendingPtr blending_;
 
-  Vector2 texcoord_[4];
+  Vector4 texcoord_[4];
   Vector4 vertex_[4];
   Matrix4 transform_;
   TexturePtr tex_;
