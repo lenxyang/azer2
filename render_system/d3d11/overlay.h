@@ -18,7 +18,7 @@ class D3DOverlayEffect : Effect {
   struct vs_cbuffer {
     Matrix4 transform;
     Vector4 vertex[4];
-    Vector2 tex[4];
+    Vector2 texcoord[4];
   };
 #pragma pack(pop)
   
@@ -53,12 +53,6 @@ class D3DOverlay : public Overlay {
   static const int kVertexDescNum;
   static const azer::VertexDesc::Desc kVertexDesc[];
  protected:
-  struct Vertex {
-    azer::Vector4 position;
-    int32 index;
-    Vertex() : index(0) {}
-  };
-
   bool Init(azer::RenderSystem* rs);
   bool InitEffect();
   bool InitVertex(RenderSystem* rs);

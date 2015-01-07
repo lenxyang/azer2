@@ -88,7 +88,8 @@ bool InternalD3DEnvironment::Initialize() {
 
   ResetSwapChain();
 
-  return AngleEnv::Pointer()->InitForOffscreen();
+  // return AngleEnv::Pointer()->InitForOffscreen();
+  return true;
 }
 
 SwapChain* InternalD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs) {

@@ -4,40 +4,39 @@
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render/reusable_object.h"
 #include "azer/render/reusable_object_util.h"
+#include "azer/render/render_state_autorestore.h"
 
 namespace azer {
 namespace d3d11 {
 
 const char* D3DOverlayEffect::kVertexShaderProg = ""
     "struct VS_OUTPUT {                                  \n"
-    "  float4 Pos : SV_POSITION;                         \n"
-    "  float2 texcoord : TEXCOORD;                       \n"
+    "  float4 pos      : SV_POSITION;                    \n"
+    "  float2 texcoord : TEXCOORD0;                      \n"
     "};                                                  \n"
     "cbuffer c_buffer {                                  \n"
     "  float4x4 transform;                               \n"
     "  float4   vertex[4];                               \n"
-    "  float2   tex[4];                                  \n"
+    "  float2   texcoord[4];                             \n"
     "};                                                  \n"
-    "VS_OUTPUT vs_main(float4 inpos : POSITION,          \n"
-    "                  int index : INDEX) {              \n"
+    "VS_OUTPUT vs_main(int index : INDEX) {              \n"
     "  VS_OUTPUT output;                                 \n"
     "  float4 position = vertex[index];                  \n"
-    "  output.Pos = mul(transform, position);            \n"
-    "  inpos.z = 0.0f;                                   \n"
-    "  output.texcoord = tex[index];                     \n"
+    "  output.pos = mul(transform, position);            \n"
+    "  output.texcoord = texcoord[index];                \n"
     "  return output;                                    \n"
     "}";
 
 
 const char* D3DOverlayEffect::kPixelShaderProg = ""
     "struct VS_OUTPUT {                                      \n"
-    "  float4 Pos : SV_POSITION;                             \n"
-    "  float2 Tex : TEXTURE;                                 \n"
+    "  float4 pos      : SV_POSITION;                        \n"
+    "  float2 texcoord : TEXTURE0;                           \n"
     "};                                                      \n"
     "Texture2D ObjTexture;                                   \n"
     "SamplerState ObjSamplerState;                           \n"
     "float4 ps_main(VS_OUTPUT input) : SV_TARGET {           \n"
-    "  float4 diffuse =  ObjTexture.Sample(ObjSamplerState, input.Tex); \n"
+    "  float4 diffuse =  ObjTexture.Sample(ObjSamplerState, input.texcoord); \n"
     "  clip(diffuse.a - 0.01);                                          \n"
     "  return diffuse;                                                  \n"
     "}";
@@ -59,13 +58,13 @@ void D3DOverlayEffect::SetTransform(const Matrix4& matrix) {
 void D3DOverlayEffect::SetVertex(const Vector4 vertex[4]) {
   azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
   DCHECK(tb != NULL);
-  tb->SetValue(1, &vertex, sizeof(Vector4) * 4);
+  tb->SetValue(1, vertex, sizeof(Vector4) * 4);
 }
 
 void D3DOverlayEffect::SetTexcoord(const Vector2 texcoord[4]) {
   azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
   DCHECK(tb != NULL);
-  tb->SetValue(2, &texcoord, sizeof(Vector2) * 4);
+  tb->SetValue(2, texcoord, sizeof(Vector2) * 4);
 }
 
 bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
@@ -76,7 +75,7 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
     azer::GpuConstantsTable::Desc("vertex", azer::GpuConstantsType::kVector4,
                                   offsetof(vs_cbuffer, vertex), 4),
     azer::GpuConstantsTable::Desc("tex", azer::GpuConstantsType::kVector2,
-                                  offsetof(vs_cbuffer, tex), 4),
+                                  offsetof(vs_cbuffer, texcoord), 4),
   };
   gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
       arraysize(vs_table_desc), vs_table_desc));
@@ -122,7 +121,6 @@ bool D3DOverlay::Init(azer::RenderSystem* rs) {
 }
 
 const VertexDesc::Desc D3DOverlay::kVertexDesc[] = {
-  {"POSITION", 0, kVec4},
   {"INDEX",    0, kInt},
 };
 
@@ -130,28 +128,11 @@ const int D3DOverlay::kVertexDescNum = arraysize(D3DOverlay::kVertexDesc);
 
 bool D3DOverlay::InitVertex(RenderSystem* rs) {
   // create vertex buffer
+  const int32 indices[] = {2, 1, 0, 2, 0, 3}; 
   vertex_desc_ptr_.reset(new VertexDesc(kVertexDesc, kVertexDescNum));
   VertexData data(vertex_desc_ptr_, kVertexNum);
-  Vertex* ptr = (Vertex*)data.pointer();
-  ptr->position = azer::Vector4(-1.0f, -1.0f, 0.0f, 1.0f);  // left-bottom
-  ptr->index = 3;
-  ptr++;
-  ptr->position = azer::Vector4(-1.0f, 1.0f, 0.0f, 1.0f);  // left-top
-  ptr->index = 0;
-  ptr++;
-  ptr->position = azer::Vector4(1.0f, -1.0f, 0.0f, 1.0f);  // right-bottom
-  ptr->index = 2;
-  ptr++;
-
-  ptr->position = azer::Vector4(1.0f, -1.0f, 0.0f, 1.0f);  // right-bottom
-  ptr->index = 2;
-  ptr++;
-  ptr->position = azer::Vector4(-1.0f, 1.0f, 0.0f, 1.0f);  // left-top
-  ptr->index = 0;
-  ptr++;
-  ptr->position = azer::Vector4(1.0f, 1.0f, 0.0f, 1.0f);  // right-top
-  ptr->index = 1;
-
+  int32* ptr = (int32*)data.pointer();
+  memcpy(ptr, indices, sizeof(indices));
   vb_ptr_.reset(rs->CreateVertexBuffer(VertexBuffer::Options(), &data));
   if (!vb_ptr_.get()) {
     return false;
@@ -165,6 +146,7 @@ void D3DOverlay::Render(Renderer* renderer) {
   azer::Vector2 texcoord[4];
   
   DCHECK (effect_.get() != NULL);
+  AutoCullingMode(kCullNone, renderer);
   effect_->SetTransform(transform_);
   effect_->SetVertex(vertex_);
   effect_->SetTexcoord(texcoord_);

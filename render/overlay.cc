@@ -56,10 +56,10 @@ void Overlay::SetTexCoord(const gfx::PointF& lt, const gfx::PointF& br) {
 }
 
 void Overlay::SetBounds(const gfx::RectF& rect) {
-  vertex_[0] = azer::Vector4(rect.x(), rect.y() + rect.height(), 0.0f, 0.0f);
+  vertex_[0] = azer::Vector4(rect.x(), rect.y() + rect.height(), 0.0f, 1.0f);
   vertex_[1] = azer::Vector4(rect.x() + rect.width(), rect.y() + rect.height(),
-                             0.0f, 0.0f);
-  vertex_[2] = azer::Vector4(rect.x() + rect.width(), rect.y(), 0.0f, 0.0f);
-  vertex_[3] = azer::Vector4(rect.x(), rect.y(), 0.0f, 0.0f);
+                             0.0f, 1.0f);
+  vertex_[2] = azer::Vector4(rect.x() + rect.width(), rect.y(), 0.0f, 1.0f);
+  vertex_[3] = azer::Vector4(rect.x(), rect.y(), 0.0f, 1.0f);
 }
 }  // namespace azer
