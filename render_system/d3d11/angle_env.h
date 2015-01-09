@@ -23,10 +23,12 @@ class AngleEnv {
   bool swap();
 
   bool GetProcAddress(const char* name, void** procaddr);
- private:
-  AngleEnv();
+
+  // initialize
   bool InitForView(Surface* surface);
   bool InitForOffscreen();
+ private:
+  AngleEnv();
 
   friend class AngleD3DEnvironment;
   friend class InternalD3DEnvironment;

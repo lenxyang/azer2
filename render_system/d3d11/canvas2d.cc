@@ -41,6 +41,7 @@ SkCanvas* D3DCanvas2D::BeginPaint() {
 
 void D3DCanvas2D::EndPaint() {
   skcanvas_->flush();
+  GetContext2D()->finish();
 }
 
 bool D3DCanvas2D::InitTexture() {

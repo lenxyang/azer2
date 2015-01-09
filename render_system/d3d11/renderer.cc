@@ -67,6 +67,7 @@ void D3DRenderer::Use() {
 
   // reset all state to current
   GetRenderSystem()->SetCurrentRenderer(this);
+  SetViewport(viewport_);
 }
 
 void D3DRenderer::Reset() {

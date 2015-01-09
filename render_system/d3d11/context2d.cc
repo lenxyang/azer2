@@ -8,7 +8,6 @@
 namespace azer {
 namespace d3d11 {
 
-
 // class Context2D
 D3DContext2D::D3DContext2D()
     : gr_context_(NULL) {
