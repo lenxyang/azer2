@@ -7,8 +7,8 @@
 namespace azer {
 namespace d3d11 {
 
-Context2D* D3DRenderSystem::InitContext2D() {
-  return new SoftwareContext2D;
+void D3DRenderSystem::InitContext2D() {
+  context2d_.reset(new SoftwareContext2D);
   /*
   std::unique_ptr<D3DContext2D> ptr(new D3DContext2D);
   if (ptr->Init(this)) {

@@ -86,12 +86,11 @@ class AZER_EXPORT RenderSystem {
 
   SwapChainPtr& GetSwapchain() { return swap_chain_;}
  protected:
-  virtual Context2D* InitContext2D() = 0;
-  virtual RenderSystemCapability ResetCapability() = 0;
   void SetSwapchain(SwapChainPtr& swapchain);
 
   // context2d, init by sub render-system
   RenderSystemCapability capability_;
+  std::unique_ptr<Context2D> context2d_;
 
   Surface* surface_;
   ReusableObjectPtr reusable_object_;
@@ -99,7 +98,6 @@ class AZER_EXPORT RenderSystem {
 private:
   Renderer* current_renderer_;
   SwapChainPtr swap_chain_;
-  std::unique_ptr<Context2D> context2d_;
   static RenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(RenderSystem);
 };

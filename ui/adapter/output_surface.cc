@@ -41,7 +41,7 @@ Azer2DOutputSurface::Azer2DOutputSurface(
     : cc::OutputSurface(device.Pass())
     , weak_ptr_factory_(this)
     , render_system_(rs)
-    , renderer_(rs->GetDefaultRenderer()) {
+    , renderer_(rs->GetSwapchainRenderer()) {
   Azer2DDevice* azer_device = GetOutputDevice();
   proxy_ = new OutputDeviceProxy(azer_device, this);
 }
