@@ -27,7 +27,7 @@ azer::RenderSystem* CreateRenderSystem(azer::Surface* sur) {
 
   std::unique_ptr<D3DRenderSystem> rs(new D3DRenderSystem(envptr));
   if (rs->Init()) {
-    rs->GetDefaultRenderer()->SetViewport(azer::Renderer::Viewport());
+    rs->GetSwapchainRenderer()->SetViewport(azer::Renderer::Viewport());
     return rs.release();
   } else {
     return NULL;

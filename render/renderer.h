@@ -4,6 +4,8 @@
 #include <string>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
+
 #include "azer/base/export.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/blending.h"
@@ -103,6 +105,7 @@ class AZER_EXPORT Renderer {
     }
   };
   virtual void SetViewport(const Viewport& viewport) = 0;
+  virtual const Viewport& GetViewport() const  = 0;
 
   DepthBuffer* GetDepthBuffer() { return depth_.get();}
   RenderTarget* GetRenderTarget() { return targets_[0].get();}

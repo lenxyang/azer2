@@ -78,7 +78,8 @@ class D3DRenderer : public Renderer {
                                   int32 instance_start_index) override;
 
   void SetViewport(const Viewport& viewport) override;
-  
+  const Viewport& GetViewport() const override;
+
   ID3D11DeviceContext* GetContext() {
     CHECK(NULL != d3d_context_);
     return d3d_context_;

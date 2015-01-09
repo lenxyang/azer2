@@ -26,7 +26,7 @@ class GLSurfaceANGLE : public gfx::GLSurface {
  public:
   // to access protected memober of gfx::GLSurface
   // we just initialize of GLES2(angle)
-  static bool Initialize();
+  static bool InitializeBinding();
 };
 
 class CGLEnvironment {
@@ -73,7 +73,7 @@ void StubGLFlushMappedBufferRangeEXT(GLenum target, GLintptr offset,
   glFlushMappedBufferRangeEXT(target, offset, length);
 }
 
-bool GLSurfaceANGLE::Initialize() {
+bool GLSurfaceANGLE::InitializeBinding() {
   CommandLine* cmd = CommandLine::ForCurrentProcess();
   bool fallback_to_osmesa = false;
   bool gpu_service_logging = cmd->HasSwitch(switches::kEnableGPUServiceLogging);
@@ -103,7 +103,7 @@ bool CGLEnvironment::InitForView(Surface* surface) {
   if (initialized_) { return true;}
 
   // gfx::GLSurface::InitializeOneOff();
-  CHECK(GLSurfaceANGLE::Initialize());
+  CHECK(GLSurfaceANGLE::InitializeBinding());
   surface_ = gfx::GLSurface::CreateViewGLSurface(surface->GetWindow());
   if (!surface_.get()) {
     initialized_failed_= true;
@@ -127,7 +127,7 @@ bool CGLEnvironment::InitForOffscreen() {
   if (initialized_) { return true;}
 
   // gfx::GLSurface::InitializeOneOff();
-  CHECK(GLSurfaceANGLE::Initialize());
+  CHECK(GLSurfaceANGLE::InitializeBinding());
   surface_ = gfx::GLSurface::CreateOffscreenGLSurface(gfx::Size(1,1));
   if (!surface_.get()) {
     initialized_failed_= true;

@@ -56,7 +56,6 @@ D3DRenderer::~D3DRenderer() {
 void D3DRenderer::Use() {
   DCHECK(!targets_.empty() && targets_[0].get() != NULL);
   DCHECK(depth_.get() != NULL);
-  
 
   ID3D11RenderTargetView* target_view[1] = {0};
   D3DRenderTarget* target = ((D3DRenderTarget*)targets_[0].get());
@@ -65,12 +64,16 @@ void D3DRenderer::Use() {
   D3DDepthBuffer* depth = ((D3DDepthBuffer*)depth_.get());
   ID3D11DepthStencilView* depth_view = depth->GetD3DDepthStencilView();
   d3d_context_->OMSetRenderTargets(1, target_view, depth_view);
+
+  // reset all state to current
+  GetRenderSystem()->SetCurrentRenderer(this);
 }
 
 void D3DRenderer::Reset() {
   DCHECK(d3d_context_ != NULL);
   d3d_context_->ClearState();
   InitRenderState();
+  SetViewport(viewport_);
   SetFrontFace(azer::kCounterClockwise);
   SetCullingMode(azer::kCullBack);
   EnableDepthTest(false);
@@ -292,6 +295,10 @@ void D3DRenderer::UseTexture(RenderPipelineStage stage, int index,
   } else {
     ResetTexture(stage, index);
   }
+}
+
+const Renderer::Viewport& D3DRenderer::GetViewport() const {
+  return viewport_;
 }
 
 void D3DRenderer::SetViewport(const Viewport& vp) {

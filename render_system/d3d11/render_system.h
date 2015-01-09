@@ -61,6 +61,8 @@ class D3DRenderSystem : public RenderSystem {
   virtual bool Present() override;
   virtual bool reset() override;
 
+  RenderSystemCapability ResetCapability() override;
+
   D3DEnvironmentPtr& GetD3DEnv() { return envptr_;}
   /**
    * direct3d relevent
@@ -70,7 +72,7 @@ class D3DRenderSystem : public RenderSystem {
   const D3D_FEATURE_LEVEL& feature_level() const { return envptr_->feature_level();}
   void ResetRenderTarget();
  protected:
-  void InitContext2D();
+  Context2D* InitContext2D() override;
   void GetDriverCapability();
   bool InitD3DDevice();
   bool InitDefaultRenderer();

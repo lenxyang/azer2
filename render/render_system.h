@@ -16,15 +16,16 @@
 #include "ui/gfx/geometry/rect.h"
 
 namespace azer {
+
+class Canvas2D;
+class Context2D;
+class DepthRenderTarget;
+class GpuConstantsTpable;
+class Image;
 class Overlay;
+class RenderTarget;
 class Technique;
 class VertexBuffer;
-class RenderTarget;
-class DepthRenderTarget;
-class Image;
-class EGL;
-class Context2D;
-class Canvas2D;
 
 typedef std::shared_ptr<IndicesData> IndicesDataPtr;
 
@@ -44,9 +45,7 @@ class AZER_EXPORT RenderSystem {
   virtual Blending* CreateBlending(const Blending::Desc& desc) = 0;
   virtual Technique* CreateTechnique() = 0;
 
-  /**
-   * Create Vertex Buffer
-   */
+  // create gpu buffers
   virtual VertexBuffer* CreateVertexBuffer(const VertexBuffer::Options& opt,
                                            VertexData*) = 0;
   virtual IndicesBuffer* CreateIndicesBuffer(const IndicesBuffer::Options& opt,
@@ -57,9 +56,6 @@ class AZER_EXPORT RenderSystem {
   // textures functions
   virtual Texture* CreateTexture(const Texture::Options& opt) = 0;
   virtual Texture* CreateTexture(const Texture::Options& opt, const Image* image) = 0;
-  // virtual RenderTarget* CreateRenderTarget(const Texture::Options& opt) = 0;
-  // virtual DepthBuffer* CreateDepthBuffer(const Texture::Options& opt) = 0;  
-
   // create GpuProgram
   // Vertex Gpu Program need to help check "Vertex Layout"
   //
@@ -81,25 +77,36 @@ class AZER_EXPORT RenderSystem {
 
   Surface* GetSurface() { return surface_;}
   const Surface* GetSurface() const { return surface_;}
+
+  // renderers
+  Renderer* GetSwapchainRenderer();
+  Renderer* GetCurrentRenderer() { return current_renderer_;}
+  void SetCurrentRenderer(Renderer* ptr) { current_renderer_ = ptr;}
   static const int32 kMaxRenderTarget = 256;
 
-  Renderer* GetDefaultRenderer() {
-    DCHECK(swap_chain_.get() != NULL);
-    return swap_chain_->GetRenderer().get();
-  }
-
-  SwapChainPtr& GetSwapChain() { return swap_chain_;}
+  SwapChainPtr& GetSwapchain() { return swap_chain_;}
  protected:
+  virtual Context2D* InitContext2D() = 0;
+  virtual RenderSystemCapability ResetCapability() = 0;
+  void SetSwapchain(SwapChainPtr& swapchain);
+
   // context2d, init by sub render-system
-  std::unique_ptr<Context2D> context2d_;
   RenderSystemCapability capability_;
-  SwapChainPtr swap_chain_;
+
   Surface* surface_;
   ReusableObjectPtr reusable_object_;
-  static RenderSystem* render_system_;
   friend class AutoRenderSystemInit;
+private:
+  Renderer* current_renderer_;
+  SwapChainPtr swap_chain_;
+  std::unique_ptr<Context2D> context2d_;
+  static RenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(RenderSystem);
 };
 
+inline Renderer* RenderSystem::GetSwapchainRenderer() {
+  DCHECK(swap_chain_.get() != NULL);
+  return swap_chain_->GetRenderer().get();
+}
 }  // namespace azer
 

@@ -38,12 +38,6 @@ bool AutoRenderSystemInit::Init(SurfacePtr surface) {
       dynlib_.GetSymbol("CreateRenderSystem");
   if (func != NULL && (current_ = (*func)(surface.get()))) {
     LOG(ERROR) << "RenderSystem(" << current_->name() << ") Created";
-    if (current_) {
-      Renderer* renderer = current_->GetDefaultRenderer();
-      DCHECK(renderer->GetFrontFace() == azer::kCounterClockwise);
-      DCHECK(renderer->GetCullingMode() == azer::kCullBack);
-    }
-
     return true;
   } else {
     PLOG(ERROR) << "not a RenderSystem shared library.";

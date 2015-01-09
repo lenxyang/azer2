@@ -40,12 +40,13 @@ D3DRenderSystem::~D3DRenderSystem() {
 }
 
 bool D3DRenderSystem::Init() {
-  swap_chain_.reset(envptr_->CreateSwapChain(this));
-  if (swap_chain_.get() == NULL) {
+  SwapChainPtr swapchain(envptr_->CreateSwapChain(this));
+  if (swapchain.get() == NULL) {
     return false;
   }
 
-  GetDefaultRenderer()->Use();
+  SetSwapchain(swapchain);
+  GetSwapchainRenderer()->Use();
   std::unique_ptr<D3DReusableObject> ptr(new D3DReusableObject());
   if (ptr->Init(this)) {
     reusable_object_ = ptr.release();
@@ -57,19 +58,19 @@ bool D3DRenderSystem::Init() {
 }
 
 bool D3DRenderSystem::Present() {
-  DCHECK(swap_chain_ != NULL) << "swap_chain cannto be NULL";
-  if (!swap_chain_->Present()) {
+  DCHECK(GetSwapchain().get() != NULL) << "swap_chain cannto be NULL";
+  if (!GetSwapchain()->Present()) {
     LOG(ERROR) << " failed to Present.";
 
-    return swap_chain_->reset(envptr_->GetSurface());
+    return GetSwapchain()->reset(envptr_->GetSurface());
   }
 
   return true;
 }
 
 bool D3DRenderSystem::reset() {
-  DCHECK(swap_chain_ != NULL);
-  return swap_chain_->reset(envptr_->GetSurface());
+  DCHECK(GetSwapchain().get() != NULL);
+  return GetSwapchain()->reset(envptr_->GetSurface());
 }
 
 void D3DRenderSystem::GetDriverCapability() {
@@ -260,6 +261,10 @@ Renderer* D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
   } else {
     return NULL;
   }
+}
+
+RenderSystemCapability D3DRenderSystem::ResetCapability() {
+  return RenderSystemCapability();
 }
 
 bool D3DRenderSystem::InitD3DDevice() {
