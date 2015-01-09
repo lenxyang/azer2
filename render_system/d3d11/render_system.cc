@@ -263,14 +263,6 @@ Renderer* D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
   }
 }
 
-RenderSystemCapability D3DRenderSystem::ResetCapability() {
-  return RenderSystemCapability();
-}
-
-bool D3DRenderSystem::InitD3DDevice() {
-  return true;
-}
-
 }  // namespace d3d11
 }  // namespace azer
 

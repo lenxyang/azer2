@@ -72,8 +72,7 @@ class D3DRenderSystem : public RenderSystem {
  protected:
   void InitContext2D();
   void GetDriverCapability();
-  bool InitD3DDevice();
-  bool InitDefaultRenderer();
+  bool InitSwapchainRenderer();
 
   D3DEnvironmentPtr envptr_;
   static const StringType& name_;

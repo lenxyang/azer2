@@ -33,9 +33,6 @@ RenderSystem* RenderSystem::Current() {
 RenderSystem::RenderSystem(Surface* surface)
     : surface_(surface) 
     , current_renderer_(NULL) {
-  capability_ = std::move(ResetCapability());
-  context2d_.reset(InitContext2D());
-  CHECK(context2d_.get() != NULL) << "Failed to init context2D.";
 }
 
 RenderSystem::~RenderSystem() {
