@@ -196,8 +196,7 @@ std::string CppCodeGen::GenTechnique(const Technique& tech) {
        << "    technique_->AddGpuProgram(gpup_ptr);\n"
        << "  }\n";
   }
-  ss << "  technique_->Use(render_system_->GetDefaultRenderer());\n"
-     << "}\n\n";
+  ss << "}\n\n";
   return ss.str();
 }
 

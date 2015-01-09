@@ -39,5 +39,8 @@ RenderSystem::~RenderSystem() {
 }
 
 void RenderSystem::SetSwapchain(SwapChainPtr& swapchain) {
+  DCHECK(swapchain.get() != NULL);
+  DCHECK(swap_chain_.get() == NULL);
+  swap_chain_ = swapchain;
 }
 }  // namespace azer
