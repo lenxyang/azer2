@@ -20,6 +20,9 @@ class AZER_EXPORT WindowTreeHostWin
   explicit WindowTreeHostWin(const gfx::Rect& bounds);
   virtual ~WindowTreeHostWin();
 
+  // WindowTreeHost:
+  ui::EventSource* GetEventSource() override;
+  gfx::AcceleratedWidget GetAcceleratedWidget() override;
   void Show() override;
   void Hide() override;
   gfx::Rect GetBounds() override;
@@ -34,6 +37,8 @@ class AZER_EXPORT WindowTreeHostWin
   // ui::EventSource:
   ui::EventProcessor* GetEventProcessor() override;
   
+ protected:
+  gfx::AcceleratedWidget hwnd() const { return widget_; }
  private:
   // ui::PlatformWindowDelegate:
   void OnBoundsChanged(const gfx::Rect& new_bounds) override;

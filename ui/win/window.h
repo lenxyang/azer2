@@ -7,6 +7,7 @@ namespace azer {
 namespace win {
 
 class WindowTreeHost;
+class WindowDelegate;
 
 class AZER_EXPORT Window {
  public:
@@ -55,7 +56,19 @@ class AZER_EXPORT Window {
   // is platform dependent and defined in the implementation of the
   // |aura::client::ScreenPositionClient| interface.
   gfx::Rect GetBoundsInScreen() const;
+
+  void SetTransform(const gfx::Transform& transform);
+
+  // Changes the bounds of the window. If present, the window's parent's
+  // LayoutManager may adjust the bounds.
+  void SetBounds(const gfx::Rect& new_bounds);
  private:
+  Window* parent_;
+  WindowTreeHost* host_;
+  WindowDelegate* delegate_;
+  bool visible_;
+  void *user_data_;
+  gfx::Rect bounds_;
   DISALLOW_COPY_AND_ASSIGN(Window);
 };
 }  // namespace win

@@ -10,6 +10,8 @@
 #include "ui/gfx/screen.h"
 #include "ui/platform_window/win/win_window.h"
 
+#include "azer/ui/win/window.h"
+
 using std::max;
 using std::min;
 
@@ -37,7 +39,6 @@ WindowTreeHostWin::~WindowTreeHostWin() {
   DestroyDispatcher();
   window_.reset();
 }
-
 
 ui::EventSource* WindowTreeHostWin::GetEventSource() {
   return this;
