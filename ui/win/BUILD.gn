@@ -1,0 +1,16 @@
+
+source_set("win") {
+  sources = [
+    "window_tree_host.cc",
+    "window_tree_host.h",
+    "window_tree_host_win.cc",
+    "window_tree_host_win.h",
+    "window.cc",
+    "window.h"
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+  visibility = ["//azer/render"]
+}
+

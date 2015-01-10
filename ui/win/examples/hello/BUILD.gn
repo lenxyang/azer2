@@ -1,0 +1,12 @@
+
+executable("hello") {
+  sources = [
+    "main.cc",
+  ]
+  deps = [
+    "//azer/render",
+    "//base",
+    "//base:i18n",
+    "//ui/gfx",
+  ]
+}
