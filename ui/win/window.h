@@ -2,7 +2,7 @@
 
 #include "base/basictypes.h"
 #include "azer/base/export.h"
-
+#include "ui/aura/window_property.h"
 #include "ui/gfx/geometry/rect.h"
 
 namespace gfx {
@@ -70,6 +70,22 @@ class AZER_EXPORT Window {
   // Changes the bounds of the window. If present, the window's parent's
   // LayoutManager may adjust the bounds.
   void SetBounds(const gfx::Rect& new_bounds);
+
+  // Sets the |value| of the given window |property|. Setting to the default
+  // value (e.g., NULL) removes the property. The caller is responsible for the
+  // lifetime of any object set as a property on the Window.
+  template<typename T>
+      void SetProperty(const aura::WindowProperty<T>* property, T value);
+
+  // Returns the value of the given window |property|.  Returns the
+  // property-specific default value if the property was not previously set.
+  template<typename T>
+      T GetProperty(const aura::WindowProperty<T>* property) const;
+
+  // Sets the |property| to its default value. Useful for avoiding a cast when
+  // setting to NULL.
+  template<typename T>
+      void ClearProperty(const aura::WindowProperty<T>* property);
  private:
   Window* parent_;
   WindowTreeHost* host_;

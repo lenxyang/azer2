@@ -1,20 +1,20 @@
-#include "azer/ui/win/window_event_observer.h"
+#include "azer/ui/win/window_observer.h"
 #include "azer/ui/win/window.h"
 
 namespace azer {
 namespace win {
 
-WindowEventDispatcher::WindowEventDispatcher()
+WindowObserver::WindowObserver()
     : observing_(0) {
 }
 
-WindowEventDispatcher::~WindowEventDispatcher() {
+WindowObserver::~WindowObserver() {
 }
 
-void WindowEventDispatcher::OnObservingWindow(Window* window) {
+void WindowObserver::OnObservingWindow(Window* window) {
 }
 
-void WindowEventDispatcher::OnUnobservingWindow(Window* window) {
+void WindowObserver::OnUnobservingWindow(Window* window) {
 }
 }  // namespace win
 }  // namespace azer

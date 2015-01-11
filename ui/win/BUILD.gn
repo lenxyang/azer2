@@ -8,7 +8,9 @@ source_set("win") {
     "window_tree_host_win.cc",
     "window_tree_host_win.h",
     "window.cc",
-    "window.h"
+    "window.h",
+    "client/event_client.cc",
+    "client/event_client.h",
   ]
 
   deps = [

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
-
+#include "ui/gfx/geometry/rect.h"
 #include "azer/base/export.h"
 
 namespace azer {
@@ -29,7 +29,7 @@ private:
   void OnObservingWindow(Window* window); 
   void OnUnobservingWindow(Window* window); 
   int observing_;
-  DISALLOW_COPY_AND_ASSIGN(WindowEventDispatcher);
+  DISALLOW_COPY_AND_ASSIGN(WindowObserver);
 };
 }  // namespace win
 }  // namespace azer
