@@ -1,5 +1,6 @@
 #pragma once
 
+#include "base/compiler_specific.h"
 #include "base/basictypes.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/point.h"
@@ -15,7 +16,7 @@ namespace win {
 class AZER_EXPORT WindowTreeHostWin 
     : public WindowTreeHost
     , public ui::EventSource
-    , public ui::PlatformWindowDelegate {
+    , public NON_EXPORTED_BASE(ui::PlatformWindowDelegate) {
  public:
   explicit WindowTreeHostWin(const gfx::Rect& bounds);
   virtual ~WindowTreeHostWin();

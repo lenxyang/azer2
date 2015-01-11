@@ -1,12 +1,12 @@
 #include "azer/ui/win/window.h"
 
 namespace azer {
-namespace ui {
+namespace win {
 
 Window::Window() {
 }
 
 Window::~Window() {
 }
-}  // namespace ui
+}  // namespace win
 }  // namespace azer

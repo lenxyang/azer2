@@ -3,6 +3,14 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 
+#include "ui/gfx/geometry/rect.h"
+
+namespace gfx {
+class Display;
+class Transform;
+class Vector2d;
+}  // namespace gfx
+
 namespace azer {
 namespace win {
 

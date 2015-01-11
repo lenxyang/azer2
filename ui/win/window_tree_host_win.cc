@@ -56,7 +56,7 @@ void WindowTreeHostWin::Hide() {
   window_->Hide();
 }
 
-gfx::Rect WindowTreeHostWin::GetBounds() const {
+gfx::Rect WindowTreeHostWin::GetBounds() {
   return window_->GetBounds();
 }
 
@@ -99,13 +99,19 @@ void WindowTreeHostWin::OnCursorVisibilityChangedNative(bool show) {
 }
 
 ui::EventProcessor* WindowTreeHostWin::GetEventProcessor() {
-  return dispatcher();
+  return NULL;
 }
 
 void WindowTreeHostWin::DispatchEvent(ui::Event* event) {
   ui::EventDispatchDetails details = SendEventToProcessor(event);
   if (details.dispatcher_destroyed)
     event->SetHandled();
+}
+
+void WindowTreeHostWin::OnBoundsChanged(const gfx::Rect& new_bounds) {
+}
+
+void WindowTreeHostWin::OnDamageRect(const gfx::Rect& damaged_region) {
 }
 
 void WindowTreeHostWin::OnCloseRequest() {

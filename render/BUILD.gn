@@ -81,6 +81,7 @@ shared_library("render") {
     ":render2d",
     "../ui/adapter",
     "../ui/compositor",
+    "../ui/win",
   ]
 
   configs += ["//azer/build/config:utf8src"]
