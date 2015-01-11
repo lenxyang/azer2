@@ -1,6 +1,8 @@
 
 source_set("win") {
   sources = [
+    "window_observer.cc",
+    "window_observer.h",
     "window_tree_host.cc",
     "window_tree_host.h",
     "window_tree_host_win.cc",
