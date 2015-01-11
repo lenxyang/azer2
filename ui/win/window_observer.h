@@ -9,9 +9,9 @@ namespace win {
 
 class Window;
 
-class AZER_EXPORT WindowEventDispatcher {
-public:
-  WindowEventDispatcher();
+class AZER_EXPORT WindowObserver {
+ public:
+  WindowObserver();
   virtual void OnWindowAdded(Window* new_win) {}
   virtual void OnWindowBoundsChanged(Window* window,
                                      const gfx::Rect& old_bounds,
@@ -22,7 +22,7 @@ public:
 
   virtual void OnWindowTitleChanged(Window* window) {}
 protected:
-  virtual ~WindowEventDispatcher();
+  virtual ~WindowObserver();
 private:
   friend class Window;
 

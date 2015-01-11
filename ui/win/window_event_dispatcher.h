@@ -2,13 +2,41 @@
 
 #include "base/basictypes.h"
 
+#include "base/memory/ref_counted.h"
+#include "base/memory/scoped_ptr.h"
+#include "base/message_loop/message_loop.h"
+#include "base/scoped_observer.h"
+#include "ui/events/event_constants.h"
+#include "ui/events/event_processor.h"
+#include "ui/events/event_targeter.h"
+#include "ui/gfx/native_widget_types.h"
+#include "ui/gfx/point.h"
+#include "azer/ui/win/window_observer.h"
 #include "azer/base/export.h"
 
 namespace azer {
 namespace win {
-class WindowEventDispatcher {
+
+class WindowTreeHost;
+
+class AZER_EXPORT WindowEventDispatcher : public ui::EventProcessor,
+                                          public WindowObserver {
  public:
+  explicit WindowEventDispatcher(WindowTreeHost* host);
+  void RepostEvent(const ui::LocatedEvent& event);
+
+  // Overridden from ui::EventProcessor:
+  ui::EventTarget* GetRootTarget() override;
+  void OnEventProcessingStarted(ui::Event* event) override;
+
+  // Overridden from ui::EventDispatcherDelegate.
+  bool CanDispatchToTarget(ui::EventTarget* target) override;
+  ui::EventDispatchDetails PreDispatchEvent(ui::EventTarget* target,
+                                            ui::Event* event) override;
+  ui::EventDispatchDetails PostDispatchEvent(ui::EventTarget* target,
+                                             const ui::Event& event) override;
  private:
+  WindowTreeHost* host_;
   DISALLOW_COPY_AND_ASSIGN(WindowEventDispatcher);
 };
 
