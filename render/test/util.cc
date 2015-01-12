@@ -2,14 +2,15 @@
 
 #include "azer/util/util.h"
 #include "azer/render/render.h"
+#include "azer/sandbox/base/sampleapp.h"
 
 namespace azer {
 namespace testing {
 
-class TestWinDelegate : public azer::WindowHost::Delegate {
+class TestWinDelegate : public SampleApp::Delegate {
  public:
   TestWinDelegate() {}
-  virtual void OnCreate() {}
+  virtual bool OnInit() {return true;}
   virtual void OnUpdateScene(double time, float delta_time) {}
   virtual void OnRenderScene(double time, float delta_time) {}
   virtual void OnQuit() {}
@@ -19,9 +20,8 @@ class TestWinDelegate : public azer::WindowHost::Delegate {
 
 RenderSystem* CreateD3D11RenderSystemForTest() {
   TestWinDelegate delegate;
-  azer::WindowHost win(azer::WindowHost::Options(), &delegate);
-  win.Init();
-  CHECK(azer::LoadRenderSystem(&win));
+  SampleApp app(&delegate);
+  app.Init();
   return RenderSystem::Current();
 }
 }  // namespace testing

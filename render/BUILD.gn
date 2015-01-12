@@ -98,7 +98,7 @@ test("unittests") {
     "test/camera_unittest.cc",
     "test/frustrum_unittest.cc",
     "test/gpu_constants_table_unittest.cc",
-    "test/light_unittest.cc",
+#    "test/light_unittest.cc",
     "test/vertex_data_unittest.cc",
     "test/util.cc",
     "test/util.h",

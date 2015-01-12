@@ -1,4 +1,3 @@
-#include "azer/render/light.h"
 #include "azer/math/math.h"
 #include "base/basictypes.h"
 #include "base/logging.h"
