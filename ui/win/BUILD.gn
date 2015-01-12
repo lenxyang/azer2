@@ -11,6 +11,8 @@ source_set("win") {
     "window.h",
     "client/event_client.cc",
     "client/event_client.h",
+    "client/screen_position_client.cc",
+    "client/screen_position_client.h",
   ]
 
   deps = [

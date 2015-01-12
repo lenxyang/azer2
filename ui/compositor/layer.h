@@ -72,7 +72,22 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   // 
   void SortChildren();
   LayerList* GetChildren() { return &children_;}
+
+  // Converts a point from the coordinates of |source| to the coordinates of
+  // |target|. Necessarily, |source| and |target| must inhabit the same Layer
+  // tree.
+  static void ConvertPointToLayer(const Layer* source,
+                                  const Layer* target,
+                                  gfx::Point* point);
+  // Converts a transform to be relative to the given |ancestor|. Returns
+  // whether success (that is, whether the given ancestor was really an
+  // ancestor of this layer).
+  bool GetTargetTransformRelativeTo(const Layer* ancestor,
+                                    gfx::Transform* transform) const;
  private:
+  bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
+  bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
+
   BlendingPtr blending_;
   gfx::Size bounds_;
   gfx::Point position_;

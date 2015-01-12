@@ -86,6 +86,16 @@ class AZER_EXPORT Window {
   // setting to NULL.
   template<typename T>
       void ClearProperty(const aura::WindowProperty<T>* property);
+
+  // Converts |point| from |source|'s coordinates to |target|'s. If |source| is
+  // NULL, the function returns without modifying |point|. |target| cannot be
+  // NULL.
+  static void ConvertPointToTarget(const Window* source,
+                                   const Window* target,
+                                   gfx::Point* point);
+  static void ConvertRectToTarget(const Window* source,
+                                  const Window* target,
+                                  gfx::Rect* rect);
  private:
   Window* parent_;
   WindowTreeHost* host_;
