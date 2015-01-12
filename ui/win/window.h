@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "ui/aura/window_property.h"
@@ -16,6 +17,11 @@ namespace win {
 
 class WindowTreeHost;
 class WindowDelegate;
+class WindowObserver;
+
+// Defined in window_property.h (which we do not include)
+template<typename T>
+struct WindowProperty;
 
 class AZER_EXPORT Window {
  public:
@@ -29,6 +35,9 @@ class AZER_EXPORT Window {
 
   Window* parent() { return parent_; }
   const Window* parent() const { return parent_; }
+
+  ui::Layer* layer() { return layer_;}
+  const ui::Layer* layer() const { return layer_;}
 
   // Returns the root Window that contains this Window. The root Window is
   // defined as the Window that has a dispatcher. These functions return NULL if
@@ -75,17 +84,20 @@ class AZER_EXPORT Window {
   // value (e.g., NULL) removes the property. The caller is responsible for the
   // lifetime of any object set as a property on the Window.
   template<typename T>
-      void SetProperty(const aura::WindowProperty<T>* property, T value);
+      void SetProperty(const WindowProperty<T>* property, T value);
 
   // Returns the value of the given window |property|.  Returns the
   // property-specific default value if the property was not previously set.
   template<typename T>
-      T GetProperty(const aura::WindowProperty<T>* property) const;
+      T GetProperty(const WindowProperty<T>* property) const;
 
   // Sets the |property| to its default value. Useful for avoiding a cast when
   // setting to NULL.
   template<typename T>
-      void ClearProperty(const aura::WindowProperty<T>* property);
+      void ClearProperty(const WindowProperty<T>* property);
+
+  // Type of a function to delete a property that this window owns.
+  typedef void (*PropertyDeallocator)(int64 value);
 
   // Converts |point| from |source|'s coordinates to |target|'s. If |source| is
   // NULL, the function returns without modifying |point|. |target| cannot be
@@ -96,13 +108,54 @@ class AZER_EXPORT Window {
   static void ConvertRectToTarget(const Window* source,
                                   const Window* target,
                                   gfx::Rect* rect);
+
+  // Returns the first ancestor (starting at |this|) with a layer. |offset| is
+  // set to the offset from |this| to the first ancestor with a layer. |offset|
+  // may be NULL.
+  Window* GetAncestorWithLayer(gfx::Vector2d* offset) {
+    return const_cast<Window*>(
+        const_cast<const Window*>(this)->GetAncestorWithLayer(offset));
+  }
+  const Window* GetAncestorWithLayer(gfx::Vector2d* offset) const;
+
+  // Add/remove observer.
+  void AddObserver(WindowObserver* observer);
+  void RemoveObserver(WindowObserver* observer);
+  bool HasObserver(WindowObserver* observer);
+
+  void set_ignore_events(bool ignore_events) { ignore_events_ = ignore_events; }
+  bool ignore_events() const { return ignore_events_; }
  private:
+  // Called by the public {Set,Get,Clear}Property functions.
+  int64 SetPropertyInternal(const void* key,
+                            const char* name,
+                            PropertyDeallocator deallocator,
+                            int64 value,
+                            int64 default_value);
+  int64 GetPropertyInternal(const void* key, int64 default_value) const;
+
   Window* parent_;
   WindowTreeHost* host_;
   WindowDelegate* delegate_;
+
+  ui::Layer* layer_;
   bool visible_;
+  bool ignore_events_;
   void *user_data_;
   gfx::Rect bounds_;
+
+  ObserverList<WindowObserver, true> observers_;
+
+  // Value struct to keep the name and deallocator for this property.
+  // Key cannot be used for this purpose because it can be char* or
+  // WindowProperty<>.
+  struct Value {
+    const char* name;
+    int64 value;
+    PropertyDeallocator deallocator;
+  };
+
+  std::map<const void*, Value> prop_map_;
   DISALLOW_COPY_AND_ASSIGN(Window);
 };
 }  // namespace win

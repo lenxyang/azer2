@@ -1,6 +1,6 @@
 #include "azer/ui/win/client/event_client.h"
 
-#include "ui/aura/window_property.h"
+#include "azer/ui/win/window_property.h"
 #include "azer/ui/win/window.h"
 
 DECLARE_WINDOW_PROPERTY_TYPE(azer::win::EventClient*)

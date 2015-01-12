@@ -1,11 +1,11 @@
 #include "azer/ui/win/client/screen_position_client.h"
 
-#include "ui/aura/window_property.h"
+#include "azer/ui/win/window_property.h"
+
+DECLARE_WINDOW_PROPERTY_TYPE(azer::win::ScreenPositionClient*)
 
 namespace azer {
 namespace win {
-
-DECLARE_WINDOW_PROPERTY_TYPE(azer::win::ScreenPositionClient*)
 
 DEFINE_LOCAL_WINDOW_PROPERTY_KEY(ScreenPositionClient*,
                                  kScreenPositionClientKey,
