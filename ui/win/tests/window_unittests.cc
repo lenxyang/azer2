@@ -1,8 +1,8 @@
 
+#include "base/memory/scoped_ptr.h"
 #include "azer/ui/win/window_tree_host.h"
 #include "azer/ui/win/window.h"
 #include "azer/ui/win/tests/test_base.h"
-#include "base/memory/scoped_ptr.h"
 
 using azer::win::WindowTreeHost;
 

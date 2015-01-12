@@ -111,6 +111,7 @@ test("unittests") {
     "//azer/third_party/glm:glm",
     "//base/test:run_all_unittests",
     "//testing/gtest",
+    "//azer/sandbox/base",
     ":render",
   ]
 
