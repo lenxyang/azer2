@@ -4,11 +4,24 @@
 #include "base/logging.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/geometry/point3_f.h"
+#include "ui/gfx/geometry/size.h"
+#include "ui/gfx/geometry/size_f.h"
 #include "ui/gfx/point_conversions.h"
 #include "ui/gfx/size_conversions.h"
+#include "ui/gfx/transform.h"
 
 namespace azer {
 namespace ui {
+
+namespace {
+const Layer* GetRoot(const Layer* layer) {
+  while (layer->parent())
+    layer = layer->parent();
+  return layer;
+}
+}
+
+
 Layer::Layer(Layer* parent)
     : visible_(true)
     , order_(0)
@@ -134,11 +147,7 @@ bool Layer::GetTargetTransformRelativeTo(const Layer* ancestor,
   for (; p && p != ancestor; p = p->parent()) {
     gfx::Transform translation;
     translation.Translate(static_cast<float>(p->bounds().x()),
-                          static_cast<float>(p->bounds().y()));
-    // Use target transform so that result will be correct once animation is
-    // finished.
-    if (!p->GetTargetTransform().IsIdentity())
-      transform->ConcatTransform(p->GetTargetTransform());
+                            static_cast<float>(p->bounds().y()));
     transform->ConcatTransform(translation);
   }
   return p == ancestor;

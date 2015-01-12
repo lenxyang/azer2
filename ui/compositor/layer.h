@@ -7,9 +7,14 @@
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/geometry/point.h"
 #include "ui/gfx/geometry/rect.h"
+#include "ui/gfx/transform.h"
 #include "azer/base/export.h"
 #include "azer/render/blending.h"
 #include "azer/render/texture.h"
+
+namespace gfx {
+class Transform;
+}
 
 namespace azer {
 
@@ -31,6 +36,7 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   virtual ~Layer();
 
   Layer* parent() { return parent_;}
+  const Layer* parent() const { return parent_;}
   
   LayerTreeHost* GetTreeHost() { return host_;}
 
@@ -55,7 +61,7 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   void SetBlending(BlendingPtr& ptr) { blending_ = ptr;}
 
   void SetBounds(const gfx::Size& bounds);
-  const gfx::Size& bounds() const { return bounds_;}
+  const gfx::Rect& bounds() const { return bounds_;}
 
   void SetPosition(const gfx::Point& pt) { position_ = pt;}
   const gfx::Point& position() const { return position_;}
@@ -89,7 +95,7 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
   BlendingPtr blending_;
-  gfx::Size bounds_;
+  gfx::Rect bounds_;
   gfx::Point position_;
   bool visible_;
   int32 order_;
