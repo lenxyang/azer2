@@ -89,7 +89,7 @@ shared_library("render") {
   forward_dependent_configs_from = deps
 }
 
-test("unittest") {
+test("unittests") {
   output_name="azer_render_unittests"
   sources = [
     "../base/tree_node_unittest.cc",
@@ -106,7 +106,7 @@ test("unittest") {
 
   defines = ["AZER_UNITTEST"]
   deps = [
-    "//azer/ui/win/win_unittests",
+    "//azer/ui/win:unittests",
     "//azer/math:math",
     "//azer/third_party/glm:glm",
     "//base/test:run_all_unittests",

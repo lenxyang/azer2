@@ -33,7 +33,7 @@ void Compositor::OnResize(const gfx::Size& size) {
 gfx::Rect Compositor::CalcRect(Layer* layer, const gfx::Rect& rect) {
   gfx::Point pt(rect.origin().x() + layer->position().x(),
                 rect.origin().y() + layer->position().y());
-  gfx::Rect rc(pt, layer->bounds());
+  gfx::Rect rc(pt, layer->bounds().size());
 
   return std::move(gfx::IntersectRects(rect, rc));
 }

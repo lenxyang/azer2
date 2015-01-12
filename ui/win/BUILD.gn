@@ -31,7 +31,7 @@ source_set("win") {
 }
 
 
-source_set("win_unittest") {
+source_set("unittests") {
   sources = [
     "tests/test_base.cc",
     "tests/test_base.h",
