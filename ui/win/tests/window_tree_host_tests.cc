@@ -1,4 +1,5 @@
 #include "base/memory/scoped_ptr.h"
+#include "base/run_loop.h"
 #include "azer/ui/win/window_tree_host.h"
 #include "azer/ui/win/window.h"
 #include "azer/ui/win/tests/test_base.h"
@@ -25,5 +26,6 @@ class WindowTreeHostTest : public azer::win::WinTestBase {
 };
 
 TEST_F(WindowTreeHostTest, Base) {
-  host_.Show();
+  host_->Show();
+  message_loop_.Run();
 }

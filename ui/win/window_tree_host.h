@@ -6,6 +6,10 @@
 #include "ui/gfx/geometry/rect.h"
 #include "azer/base/export.h"
 
+namespace ui {
+class ViewProp;
+}
+
 namespace azer {
 namespace win {
 
@@ -17,6 +21,13 @@ class AZER_EXPORT WindowTreeHost {
   static WindowTreeHost* Create(const gfx::Rect& bounds);
   static WindowTreeHost* GetForAcceleratedWidget(gfx::AcceleratedWidget widget);
 
+  void InitHost();
+
+  void AddObserver(WindowTreeHostObserver* observer);
+  void RemoveObserver(WindowTreeHostObserver* observer);
+
+  Window* window() { return window_;}
+  const Window* window() const { return window_;}
   
   // Cursor.
   // Sets the currently-displayed cursor. If the cursor was previously hidden
@@ -78,6 +89,12 @@ class AZER_EXPORT WindowTreeHost {
 
   // kCalled when the cursor visibility has changed.
   virtual void OnCursorVisibilityChangedNative(bool show) = 0;
+
+  Window* window_;
+
+  bserverList<WindowTreeHostObserver> observers_;
+
+  scoped_ptr<ui::ViewProp> prop_;
   DISALLOW_COPY_AND_ASSIGN(WindowTreeHost);
 };
 }  // namespace win

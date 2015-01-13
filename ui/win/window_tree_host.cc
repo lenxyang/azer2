@@ -1,5 +1,9 @@
 #include "azer/ui/win/window_tree_host.h"
 
+#include "ui/base/view_prop.h"
+
+#include "azer/ui/win/window_tree_host_observer.h"
+
 namespace azer {
 namespace win {
 
@@ -23,5 +27,14 @@ void WindowTreeHost::OnHostActivated() {
 
 void WindowTreeHost::OnHostLostWindowCapture() {
 }
+
+void WindowTreeHost::AddObserver(WindowTreeHostObserver* observer) {
+  observers_.AddObserver(observer);
+}
+
+void WindowTreeHost::RemoveObserver(WindowTreeHostObserver* observer) {
+  observers_.RemoveObserver(observer);
+}
+
 }  // namespace win
 }  // namespace azer
