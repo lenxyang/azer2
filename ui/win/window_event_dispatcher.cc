@@ -10,9 +10,6 @@ WindowEventDispatcher::WindowEventDispatcher(WindowTreeHost* host)
     : host_(host) {
 }
 
-WindowEventDispatcher::~WindowEventDispatcher() {
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 // WindowEventDispatcher, ui::EventProcessor implementation:
 ui::EventTarget* WindowEventDispatcher::GetRootTarget() {

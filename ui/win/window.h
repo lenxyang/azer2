@@ -1,7 +1,10 @@
 #pragma once
 
 #include <map>
+#include <string>
+
 #include "base/basictypes.h"
+#include "base/strings/string16.h"
 #include "azer/base/export.h"
 #include "ui/aura/window_property.h"
 #include "ui/gfx/geometry/rect.h"
@@ -31,6 +34,14 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
 
   WindowDelegate* delegate() { return delegate_; }
   const WindowDelegate* delegate() const { return delegate_; }
+
+  int id() const { return id_;}
+  void set_id(int id) { id_ = id;}
+  const std::string& name() const { return name_;}
+  void SetName(const std::string&  name);
+
+  const ::base::string16& Title() const { return title_;}
+  void SetTitle(const ::base::string16& title);
 
   const gfx::Rect& bounds() const { return bounds_; }
 
@@ -164,6 +175,10 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   bool ignore_events_;
   void *user_data_;
   gfx::Rect bounds_;
+
+  int id_;
+  std::string name_;
+  base::string16 title_;
 
   scoped_ptr<ui::EventTargeter> targeter_;
 

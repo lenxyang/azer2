@@ -41,6 +41,18 @@ const WindowTreeHost* Window::GetHost() const {
   return root_window ? root_window->host_ : NULL;
 }
 
+void Window::SetName(const std::string& name) {
+  name_ = name;
+}
+
+void Window::SetTitle(const base::string16& title) {
+  title_ = title;
+  FOR_EACH_OBSERVER(WindowObserver,
+                    observers_,
+                    OnWindowTitleChanged(this));
+}
+
+
 
 gfx::Rect Window::GetBoundsInRootWindow() const {
   // TODO(beng): There may be a better way to handle this, and the existing code

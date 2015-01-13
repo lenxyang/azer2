@@ -11,8 +11,9 @@
 #include "ui/events/event_targeter.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/point.h"
-#include "azer/ui/win/window_observer.h"
+
 #include "azer/base/export.h"
+#include "azer/ui/win/window_observer.h"
 
 namespace azer {
 namespace win {
@@ -23,7 +24,7 @@ class AZER_EXPORT WindowEventDispatcher : public ::ui::EventProcessor,
                                           public WindowObserver {
  public:
   explicit WindowEventDispatcher(WindowTreeHost* host);
-  ~WindowEventDispatcher() override;
+// ~WindowEventDispatcher();
 
   // override ui::EventProcessor,
   ::ui::EventTarget* GetRootTarget() override;
