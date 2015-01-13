@@ -2,6 +2,7 @@
 
 #include "ui/events/event_target_iterator.h"
 
+#include "azer/ui/win/context.h"
 #include "azer/ui/win/window_observer.h"
 #include "azer/ui/win/client/screen_position_client.h"
 #include "azer/ui/win/client/event_client.h"
@@ -170,12 +171,26 @@ Window::SetEventTargeter(scoped_ptr< ::ui::EventTargeter> targeter) {
 }
 
 bool Window::CanAcceptEvent(const ::ui::Event& event) {
+  client::EventClient* client = client::GetEventClient(GetRootWindow());
+  if (client && !client->CanProcessEventsWithinSubtree(this))
+    return false;
+
+  if (!IsVisible()) {
+    return false;
+  }
+
+  if (!parent_) {
+    return true;
+  }
+
   return true;
 }
 
 ::ui::EventTarget* Window::GetParentTarget() {
   if (IsRootWindow()) {
-    return GetEventClient(this)->GetToplevelEventTarget();
+    return GetEventClient(this) ?
+        GetEventClient(this)->GetToplevelEventTarget() :
+        WinContext::GetInstance();
   }
   return parent_;
 }

@@ -6,6 +6,7 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 #include "azer/ui/win/window_tree_host.h"
+#include "azer/ui/win/context.h"
 
 namespace azer {
 namespace win {
