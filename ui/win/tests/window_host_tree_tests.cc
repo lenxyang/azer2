@@ -1,4 +1,3 @@
-
 #include "base/memory/scoped_ptr.h"
 #include "azer/ui/win/window_tree_host.h"
 #include "azer/ui/win/window.h"
@@ -6,9 +5,9 @@
 
 using azer::win::WindowTreeHost;
 
-class WindowTest : public azer::win::WinTestBase {
+class WindowTreeHostTest : public azer::win::WinTestBase {
  public:
-  WindowTest() : max_separation_(0) {
+  WindowTreeHostTest() : max_separation_(0) {
   }
 
   void SetUp() override {
@@ -22,11 +21,9 @@ class WindowTest : public azer::win::WinTestBase {
  private:
   float max_separation_;
 
-  DISALLOW_COPY_AND_ASSIGN(WindowTest);
+  DISALLOW_COPY_AND_ASSIGN(WindowTreeHostTest);
 };
 
-TEST_F(WindowTest, Base) {
-  scoped_ptr<WindowTreeHost> host(
-      WindowTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
-  host->Show();
+TEST_F(WindowTreeHostTest, Base) {
+  host_.Show();
 }

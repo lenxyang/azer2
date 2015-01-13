@@ -10,6 +10,7 @@ WinTestBase::~WinTestBase() {
 }
 
 void WinTestBase::SetUp() {
+  host_.reset(WindowTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
 }
 
 void WinTestBase::TearDown() {
