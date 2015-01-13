@@ -10,7 +10,7 @@ namespace azer {
 
 class RenderSystem;
 
-namespace ui {
+namespace compositor {
 
 class Layer;
 class LayerTreeHost;
@@ -44,5 +44,5 @@ class Compositor : public LayerTreeHostClient {
   RendererPtr renderer_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

@@ -20,7 +20,7 @@ namespace azer {
 
 class Renderer;
 
-namespace ui {
+namespace compositor {
 
 class Layer;
 class LayerTreeHost;
@@ -109,5 +109,5 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   DISALLOW_COPY_AND_ASSIGN(Layer);
 };
 
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

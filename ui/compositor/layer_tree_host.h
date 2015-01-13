@@ -9,7 +9,7 @@ namespace azer {
 
 class RenderSystem;
 
-namespace ui {
+namespace compositor {
 class Layer;
 
 class AZER_EXPORT LayerTreeHostClient {
@@ -38,5 +38,5 @@ class AZER_EXPORT LayerTreeHost {
   RenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(LayerTreeHost);
 };
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

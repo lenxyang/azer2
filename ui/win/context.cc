@@ -12,7 +12,7 @@ namespace win {
 base::LazyInstance<base::ThreadLocalPointer<WinContext> >::Leaky lazy_tls_ptr =
     LAZY_INSTANCE_INITIALIZER;
 
-WinContext* WinContext::Create() {
+void WinContext::CreateInstance(bool create_event_source) {
   if (!lazy_tls_ptr.Pointer()->Get())
     (new WinContext())->Init(create_event_source);
 }

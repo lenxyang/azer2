@@ -4,11 +4,11 @@
 #include "azer/base/export.h"
 
 namespace azer {
-namespace ui {
+namespace compositor {
 class LayerOwner {
  public:
  private:
   DISALLOW_COPY_AND_ASSIGN(LayerOwner);
 };
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

@@ -4,7 +4,7 @@
 #include "base/logging.h"
 
 namespace azer {
-namespace ui {
+namespace compositor {
 
 RendererLayer::RendererLayer(Layer* parent)
     : Layer(parent) {
@@ -20,5 +20,5 @@ RendererLayer::~RendererLayer() {
 void RendererLayer::Render(Renderer* renderer, const gfx::RectF& rect) {
 }
 
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

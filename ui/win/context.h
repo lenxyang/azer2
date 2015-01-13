@@ -25,7 +25,7 @@ class AZER_EXPORT WinContext : public ::ui::EventTarget {
   // TODO(sky): nuke |create_event_source|. Only necessary while mojo's
   // nativeviewportservice lives in the same process as the viewmanager.
   static void CreateInstance(bool create_event_source);
-  static Env* GetInstance();
+  static WinContext* GetInstance();
   static void DeleteInstance();
  private:
   WinContext();

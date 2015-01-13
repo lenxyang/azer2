@@ -171,7 +171,7 @@ Window::SetEventTargeter(scoped_ptr< ::ui::EventTargeter> targeter) {
 }
 
 bool Window::CanAcceptEvent(const ::ui::Event& event) {
-  client::EventClient* client = client::GetEventClient(GetRootWindow());
+  EventClient* client = GetEventClient(GetRootWindow());
   if (client && !client->CanProcessEventsWithinSubtree(this))
     return false;
 

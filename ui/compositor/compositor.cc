@@ -4,7 +4,7 @@
 #include "azer/render/render.h"
 
 namespace azer {
-namespace ui {
+namespace compositor {
 
 Compositor::Compositor(LayerTreeHost* host)
     : host_(host) {
@@ -50,5 +50,5 @@ void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {
     }
   }
 }
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

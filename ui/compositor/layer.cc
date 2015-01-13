@@ -11,7 +11,7 @@
 #include "ui/gfx/transform.h"
 
 namespace azer {
-namespace ui {
+namespace compositor {
 
 namespace {
 const Layer* GetRoot(const Layer* layer) {
@@ -173,5 +173,5 @@ bool Layer::ConvertPointFromAncestor(const Layer* ancestor,
   return result;
 }
 
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

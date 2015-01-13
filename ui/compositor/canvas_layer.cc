@@ -2,7 +2,7 @@
 
 
 namespace azer {
-namespace ui {
+namespace compositor {
 
 CanvasLayer::CanvasLayer(Layer* parent)
     : Layer(parent) {
@@ -18,5 +18,5 @@ CanvasLayer::~CanvasLayer() {
 void CanvasLayer::Render(Renderer* renderer, const gfx::RectF& rect) {
 }
 
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

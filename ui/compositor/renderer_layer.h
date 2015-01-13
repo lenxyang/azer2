@@ -6,7 +6,7 @@
 #include "azer/ui/compositor/layer.h"
 
 namespace azer {
-namespace ui {
+namespace compositor {
 class AZER_EXPORT RendererLayer : public Layer {
  public:
   explicit RendererLayer(Layer* parent);
@@ -19,5 +19,5 @@ class AZER_EXPORT RendererLayer : public Layer {
   RendererPtr renderer_;
   DISALLOW_COPY_AND_ASSIGN(RendererLayer);
 };
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer

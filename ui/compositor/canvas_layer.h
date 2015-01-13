@@ -6,7 +6,7 @@
 #include "azer/render/canvas2d.h"
 
 namespace azer {
-namespace ui {
+namespace compositor {
 
 class AZER_EXPORT CanvasLayer : public Layer {
  public:
@@ -21,5 +21,5 @@ class AZER_EXPORT CanvasLayer : public Layer {
   DISALLOW_COPY_AND_ASSIGN(CanvasLayer);
 };
 
-}  // namespace ui
+}  // namespace compositor
 }  // namespace azer
