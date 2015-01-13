@@ -30,9 +30,13 @@ void WinContext::DeleteInstance() {
 }
 
 WinContext::WinContext() {
+  DCHECK(lazy_tls_ptr.Pointer()->Get() == NULL);
+  lazy_tls_ptr.Pointer()->Set(this);
 }
 
 WinContext::~WinContext() {
+  DCHECK_EQ(this, lazy_tls_ptr.Pointer()->Get());
+  lazy_tls_ptr.Pointer()->Set(NULL);
 }
 
 void WinContext::Init(bool create_event_source) {
@@ -40,7 +44,7 @@ void WinContext::Init(bool create_event_source) {
   // The ozone platform can provide its own event source. So initialize the
   // platform before creating the default event source.
   ui::OzonePlatform::InitializeForUI();
-  #endif
+#endif
   if (create_event_source && !ui::PlatformEventSource::GetInstance())
     event_source_ = ui::PlatformEventSource::CreateDefault();
 }

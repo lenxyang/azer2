@@ -53,6 +53,18 @@ void Window::SetTitle(const base::string16& title) {
                     OnWindowTitleChanged(this));
 }
 
+void Window::Hide() {
+  SetVisible(false);
+}
+
+void Window::SetVisible(bool visible) {
+  visible_ = visible;
+}
+
+bool Window::IsVisible() const {
+  return visible_;
+}
+
 gfx::Rect Window::GetBoundsInRootWindow() const {
   // TODO(beng): There may be a better way to handle this, and the existing code
   //             is likely wrong anyway in a multi-display world, but this will

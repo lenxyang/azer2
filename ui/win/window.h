@@ -165,6 +165,8 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
                             int64 default_value);
   int64 GetPropertyInternal(const void* key, int64 default_value) const;
 
+  void SetVisible(bool visible);
+
   Window* parent_;
   Windows children_;
   WindowTreeHost* host_;
