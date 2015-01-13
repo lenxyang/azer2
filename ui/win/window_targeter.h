@@ -6,10 +6,17 @@
 
 namespace azer {
 namespace win {
+
+class Window;
+
 class WindowTargeter : public ::ui::EventTargeter {
  public:
   WindowTargeter();
   ~WindowTargeter() override;
+
+  ::ui::EventTarget* FindTargetForEvent(::ui::EventTarget* root,
+                                        ::ui::Event* event) override;
+  Window* FindTargetForKeyEvent(Window* window, const ::ui::KeyEvent& key) override;
  private:
   DISALLOW_COPY_AND_ASSIGN(WindowTargeter);
 };
