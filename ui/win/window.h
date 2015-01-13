@@ -29,7 +29,7 @@ struct WindowProperty;
 class AZER_EXPORT Window : public ::ui::EventTarget {
  public:
   typedef std::vector<Window*> Windows;
-  Window();
+  Window(Window* parent);
   virtual ~Window();
 
   WindowDelegate* delegate() { return delegate_; }

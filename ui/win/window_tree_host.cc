@@ -13,7 +13,8 @@ namespace win {
 const char kWindowTreeHostForAcceleratedWidget[] =
     "__AZER_WINDOW_TREE_HOST_ACCELERATED_WIDGET__";
 
-WindowTreeHost::WindowTreeHost() {
+WindowTreeHost::WindowTreeHost() 
+    : window_(new Window(NULL)) {
 }
 
 WindowTreeHost::~WindowTreeHost() {

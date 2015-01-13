@@ -9,8 +9,8 @@
 namespace azer {
 namespace win {
 
-Window::Window()
-    : parent_(NULL)
+Window::Window(Window* parent)
+    : parent_(parent)
     , host_(NULL)
     , delegate_(NULL)
     , layer_(NULL)
@@ -51,8 +51,6 @@ void Window::SetTitle(const base::string16& title) {
                     observers_,
                     OnWindowTitleChanged(this));
 }
-
-
 
 gfx::Rect Window::GetBoundsInRootWindow() const {
   // TODO(beng): There may be a better way to handle this, and the existing code
