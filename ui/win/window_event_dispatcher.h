@@ -19,23 +19,27 @@ namespace win {
 
 class WindowTreeHost;
 
-class AZER_EXPORT WindowEventDispatcher : public ui::EventProcessor,
+class AZER_EXPORT WindowEventDispatcher : public ::ui::EventProcessor,
                                           public WindowObserver {
  public:
   explicit WindowEventDispatcher(WindowTreeHost* host);
-  void RepostEvent(const ui::LocatedEvent& event);
 
-  // Overridden from ui::EventProcessor:
-  ui::EventTarget* GetRootTarget() override;
-  void OnEventProcessingStarted(ui::Event* event) override;
+  // override ui::EventProcessor,
+  ::ui::EventTarget* GetRootTarget() override;
+  void OnEventProcessingStarted(::ui::Event* event) override;
 
   // Overridden from ui::EventDispatcherDelegate.
+  // ui::EventProcessor derive from ui::EventDispatcherDelegate
+  /*
   bool CanDispatchToTarget(ui::EventTarget* target) override;
   ui::EventDispatchDetails PreDispatchEvent(ui::EventTarget* target,
                                             ui::Event* event) override;
   ui::EventDispatchDetails PostDispatchEvent(ui::EventTarget* target,
                                              const ui::Event& event) override;
+  */
  private:
+  Window* window();
+  const Window* window() const;
   WindowTreeHost* host_;
   DISALLOW_COPY_AND_ASSIGN(WindowEventDispatcher);
 };

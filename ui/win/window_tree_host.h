@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
+#include "base/observer_list.h"
 #include "ui/events/event_source.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/geometry/rect.h"
@@ -13,7 +14,11 @@ class ViewProp;
 namespace azer {
 namespace win {
 
+
 class Compositor;
+class Window;
+class WindowTreeHostObserver;
+class WindowEventDispatcher;
 
 class AZER_EXPORT WindowTreeHost {
  public:
@@ -28,6 +33,12 @@ class AZER_EXPORT WindowTreeHost {
 
   Window* window() { return window_;}
   const Window* window() const { return window_;}
+
+  WindowEventDispatcher* dispatcher() {
+    return const_cast<WindowEventDispatcher*>(
+        const_cast<const WindowTreeHost*>(this)->dispatcher());
+  }
+  const WindowEventDispatcher* dispatcher() const { return dispatcher_.get(); }
   
   // Cursor.
   // Sets the currently-displayed cursor. If the cursor was previously hidden
@@ -91,8 +102,10 @@ class AZER_EXPORT WindowTreeHost {
   virtual void OnCursorVisibilityChangedNative(bool show) = 0;
 
   Window* window_;
+  
+  ObserverList<WindowTreeHostObserver> observers_;
 
-  bserverList<WindowTreeHostObserver> observers_;
+  scoped_ptr<WindowEventDispatcher> dispatcher_;
 
   scoped_ptr<ui::ViewProp> prop_;
   DISALLOW_COPY_AND_ASSIGN(WindowTreeHost);

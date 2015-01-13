@@ -9,6 +9,9 @@ class Point;
 
 namespace azer {
 namespace ui {
+
+class WindowTreeHost;
+
 class AZER_EXPORT WindowTreeHostObserver {
  public:
   WindowTreeHostObserver() {}

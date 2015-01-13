@@ -11,6 +11,7 @@
 #include "ui/platform_window/win/win_window.h"
 
 #include "azer/ui/win/window.h"
+#include "azer/ui/win/window_event_dispatcher.h"
 
 using std::max;
 using std::min;
@@ -98,12 +99,12 @@ void WindowTreeHostWin::OnCursorVisibilityChangedNative(bool show) {
   NOTIMPLEMENTED();
 }
 
-ui::EventProcessor* WindowTreeHostWin::GetEventProcessor() {
-  return NULL;
+::ui::EventProcessor* WindowTreeHostWin::GetEventProcessor() {
+  return dispatcher();
 }
 
 void WindowTreeHostWin::DispatchEvent(ui::Event* event) {
-  ui::EventDispatchDetails details = SendEventToProcessor(event);
+  ::ui::EventDispatchDetails details = SendEventToProcessor(event);
   if (details.dispatcher_destroyed)
     event->SetHandled();
 }

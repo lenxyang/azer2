@@ -2,7 +2,9 @@
 
 #include "ui/base/view_prop.h"
 
+#include "azer/ui/win/window.h"
 #include "azer/ui/win/window_tree_host_observer.h"
+#include "azer/ui/win/window_event_dispatcher.h"
 
 namespace azer {
 namespace win {

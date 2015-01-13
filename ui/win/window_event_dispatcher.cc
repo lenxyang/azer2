@@ -9,7 +9,22 @@ WindowEventDispatcher::WindowEventDispatcher(WindowTreeHost* host)
 WindowEventDispatcher::WindowEventDispatcher() {
 }
 
-void WindowEventDispatcher::OnEventProcessingStarted(ui::Event* event) {
+////////////////////////////////////////////////////////////////////////////////
+// WindowEventDispatcher, ui::EventProcessor implementation:
+ui::EventTarget* WindowEventDispatcher::GetRootTarget() {
+  return window();
 }
+
+void OnEventProcessingStarted(ui::Event* event) {
+}
+
+Window* WindowEventDispatcher::window() {
+  return host_->window();
+}
+
+const Window* WindowEventDispatcher::window() const {
+  return host_->window();
+}
+
 }  // namespace win
 }  // namespace azer
