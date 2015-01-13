@@ -22,6 +22,7 @@ void WindowTreeHost::DestroyDispatcher() {
 }
 
 void WindowTreeHost::CreateCompositor(gfx::AcceleratedWidget accelerated_widget) {
+  dispatcher_.reset(new WindowEventDispatcher(this));
 }
 
 void WindowTreeHost::OnHostActivated() {

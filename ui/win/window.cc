@@ -1,7 +1,10 @@
 #include "azer/ui/win/window.h"
 
+#include "ui/events/event_target_iterator.h"
+
 #include "azer/ui/win/window_observer.h"
 #include "azer/ui/win/client/screen_position_client.h"
+#include "azer/ui/win/client/event_client.h"
 
 namespace azer {
 namespace win {
@@ -93,9 +96,9 @@ void Window::ConvertPointToTarget(const Window* source,
       target = target->GetAncestorWithLayer(&offset_to_layer);
       *point -= offset_to_layer;
     }
-    ui::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
+    ::ui::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
   } else {
-    ui::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
+    ::ui::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
   }
 }
 
@@ -147,6 +150,58 @@ const Window* Window::GetAncestorWithLayer(gfx::Vector2d* offset) const {
   if (offset)
     *offset = gfx::Vector2d();
   return NULL;
+}
+
+scoped_ptr< ::ui::EventTargeter>
+Window::SetEventTargeter(scoped_ptr< ::ui::EventTargeter> targeter) {
+  scoped_ptr< ::ui::EventTargeter> old_targeter = targeter_.Pass();
+  targeter_ = targeter.Pass();
+  return old_targeter.Pass();
+}
+
+bool Window::CanAcceptEvent(const ::ui::Event& event) {
+  return true;
+}
+
+::ui::EventTarget* Window::GetParentTarget() {
+  if (IsRootWindow()) {
+    return GetEventClient(this)->GetToplevelEventTarget();
+  }
+  return parent_;
+}
+
+scoped_ptr< ::ui::EventTargetIterator> Window::GetChildIterator() const {
+  return scoped_ptr< ::ui::EventTargetIterator>(
+      new ::ui::EventTargetIteratorImpl<Window>(children()));
+}
+
+::ui::EventTargeter* Window::GetEventTargeter() {
+  return targeter_.get();
+}
+
+void Window::ConvertEventToTarget(::ui::EventTarget* target,
+                                  ::ui::LocatedEvent* event) {
+  event->ConvertLocationToTarget(this,
+                                 static_cast<Window*>(target));
+}
+
+void Window::AddChild(Window* child) {
+  child->parent_ = this;
+  children_.push_back(child);
+}
+
+void Window::RemoveChild(Window* child) {
+  Windows::iterator i = std::find(children_.begin(), children_.end(), child);
+  DCHECK(i != children_.end());
+  children_.erase(i);
+}
+
+bool Window::Contains(const Window* other) const {
+  for (const Window* parent = other; parent; parent = parent->parent_) {
+    if (parent == this)
+      return true;
+  }
+  return false;
 }
 
 }  // namespace win

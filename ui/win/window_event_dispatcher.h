@@ -23,6 +23,7 @@ class AZER_EXPORT WindowEventDispatcher : public ::ui::EventProcessor,
                                           public WindowObserver {
  public:
   explicit WindowEventDispatcher(WindowTreeHost* host);
+  ~WindowEventDispatcher() override;
 
   // override ui::EventProcessor,
   ::ui::EventTarget* GetRootTarget() override;
@@ -30,8 +31,8 @@ class AZER_EXPORT WindowEventDispatcher : public ::ui::EventProcessor,
 
   // Overridden from ui::EventDispatcherDelegate.
   // ui::EventProcessor derive from ui::EventDispatcherDelegate
+  bool CanDispatchToTarget(::ui::EventTarget* target) override;
   /*
-  bool CanDispatchToTarget(ui::EventTarget* target) override;
   ui::EventDispatchDetails PreDispatchEvent(ui::EventTarget* target,
                                             ui::Event* event) override;
   ui::EventDispatchDetails PostDispatchEvent(ui::EventTarget* target,

@@ -23,8 +23,9 @@ class WindowObserver;
 template<typename T>
 struct WindowProperty;
 
-class AZER_EXPORT Window {
+class AZER_EXPORT Window : public ::ui::EventTarget {
  public:
+  typedef std::vector<Window*> Windows;
   Window();
   virtual ~Window();
 
@@ -80,6 +81,11 @@ class AZER_EXPORT Window {
   // LayoutManager may adjust the bounds.
   void SetBounds(const gfx::Rect& new_bounds);
 
+  // Sets a new event-targeter for the window, and returns the previous
+  // event-targeter.
+  scoped_ptr<::ui::EventTargeter> SetEventTargeter(
+      scoped_ptr<::ui::EventTargeter> targeter);
+
   // Sets the |value| of the given window |property|. Setting to the default
   // value (e.g., NULL) removes the property. The caller is responsible for the
   // lifetime of any object set as a property on the Window.
@@ -125,6 +131,20 @@ class AZER_EXPORT Window {
 
   void set_ignore_events(bool ignore_events) { ignore_events_ = ignore_events; }
   bool ignore_events() const { return ignore_events_; }
+
+  // Overridden from ::ui::EventTarget:
+  bool CanAcceptEvent(const ::ui::Event& event) override;
+  EventTarget* GetParentTarget() override;
+  scoped_ptr<ui::EventTargetIterator> GetChildIterator() const override;
+  ::ui::EventTargeter* GetEventTargeter() override;
+  void ConvertEventToTarget(::ui::EventTarget* target,
+                            ::ui::LocatedEvent* event) override;
+
+  // subwindow
+  void AddChild(Window* child);
+  void RemoveChild(Window* child);
+  const Windows& children() const { return children_; }
+  bool Contains(const Window* other) const;
  private:
   // Called by the public {Set,Get,Clear}Property functions.
   int64 SetPropertyInternal(const void* key,
@@ -135,17 +155,19 @@ class AZER_EXPORT Window {
   int64 GetPropertyInternal(const void* key, int64 default_value) const;
 
   Window* parent_;
+  Windows children_;
   WindowTreeHost* host_;
   WindowDelegate* delegate_;
 
-  ui::Layer* layer_;
+  ::ui::Layer* layer_;
   bool visible_;
   bool ignore_events_;
   void *user_data_;
   gfx::Rect bounds_;
 
-  ObserverList<WindowObserver, true> observers_;
+  scoped_ptr<ui::EventTargeter> targeter_;
 
+  ObserverList<WindowObserver, true> observers_;
   // Value struct to keep the name and deallocator for this property.
   // Key cannot be used for this purpose because it can be char* or
   // WindowProperty<>.
