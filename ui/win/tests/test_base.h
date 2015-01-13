@@ -5,6 +5,8 @@
 #include "base/message_loop/message_loop.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
+#include "azer/ui/win/window_tree_host.h"
+
 namespace azer {
 namespace win {
 

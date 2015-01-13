@@ -35,11 +35,13 @@ source_set("unittests") {
   sources = [
     "tests/test_base.cc",
     "tests/test_base.h",
-    "tests/window_unittest.cc",
+    "tests/window_unittests.cc",
   ]
 
   deps = [
     "//testing/gtest",
+    "//skia",
+    "//azer/render",
   ]
   configs += ["//azer/build/config:utf8src"]
   visibility = ["//azer/render:unittests"]

@@ -4,7 +4,6 @@
 #include "ui/events/event_source.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/geometry/rect.h"
-
 #include "azer/base/export.h"
 
 namespace azer {

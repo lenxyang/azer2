@@ -60,7 +60,7 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
 
   void SetBlending(BlendingPtr& ptr) { blending_ = ptr;}
 
-  void SetBounds(const gfx::Size& bounds);
+  void SetBounds(const gfx::Rect& bounds);
   const gfx::Rect& bounds() const { return bounds_;}
 
   void SetPosition(const gfx::Point& pt) { position_ = pt;}
