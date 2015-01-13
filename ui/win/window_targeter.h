@@ -16,8 +16,8 @@ class WindowTargeter : public ::ui::EventTargeter {
 
   ::ui::EventTarget* FindTargetForEvent(::ui::EventTarget* root,
                                         ::ui::Event* event) override;
-  Window* FindTargetForKeyEvent(Window* window, const ::ui::KeyEvent& key) override;
  private:
+  Window* FindTargetForKeyEvent(Window* window, const ::ui::KeyEvent& key);
   DISALLOW_COPY_AND_ASSIGN(WindowTargeter);
 };
 }  // namespace win

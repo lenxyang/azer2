@@ -3,6 +3,8 @@
 #include "azer/ui/win/window.h"
 #include "azer/ui/win/window_delegate.h"
 #include "azer/ui/win/window_tree_host.h"
+#include "azer/ui/win/client/focus_client.h"
+#include "azer/ui/win/client/event_client.h"
 
 namespace azer {
 namespace win {
