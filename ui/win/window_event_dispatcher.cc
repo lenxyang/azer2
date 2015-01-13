@@ -7,7 +7,9 @@ namespace azer {
 namespace win {
 
 WindowEventDispatcher::WindowEventDispatcher(WindowTreeHost* host)
-    : host_(host) {
+    : host_(host) 
+    , event_dispatch_target_(NULL)
+    , old_dispatch_target_(NULL) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,8 +30,34 @@ const Window* WindowEventDispatcher::window() const {
 }
 
 bool WindowEventDispatcher::CanDispatchToTarget(ui::EventTarget* target) {
-  return true;
+  return event_dispatch_target_ == target;
 }
 
+::ui::EventDispatchDetails WindowEventDispatcher::PreDispatchEvent(
+    ::ui::EventTarget* target, ::ui::Event* event) {
+  Window* target_window = static_cast<Window*>(target);
+  CHECK(window()->Contains(target_window));
+
+  if (event->IsMouseEvent()) {
+    PreDispatchMouseEvent(target_window, static_cast<ui::MouseEvent*>(event));
+  } else {
+  }
+  old_dispatch_target_ = event_dispatch_target_;
+  event_dispatch_target_ = static_cast<Window*>(target);
+  return DispatchDetails();
+}
+::ui::EventDispatchDetails WindowEventDispatcher::PostDispatchEvent(
+    ::ui::EventTarget* target, const ::ui::Event& event) {
+  DispatchDetails details;
+  if (!target || target != event_dispatch_target_)
+    details.target_destroyed = true;
+  event_dispatch_target_ = old_dispatch_target_;
+  old_dispatch_target_ = NULL;
+#ifndef NDEBUG
+  DCHECK(!event_dispatch_target_ || window()->Contains(event_dispatch_target_));
+#endif
+
+  return details;
+}
 }  // namespace win
 }  // namespace azer
