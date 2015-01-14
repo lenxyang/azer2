@@ -109,5 +109,6 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   DISALLOW_COPY_AND_ASSIGN(Layer);
 };
 
+typedef scoped_refptr<Layer> LayerPtr;
 }  // namespace compositor
 }  // namespace azer

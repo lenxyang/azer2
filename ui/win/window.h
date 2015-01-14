@@ -5,10 +5,13 @@
 
 #include "base/basictypes.h"
 #include "base/strings/string16.h"
-#include "azer/base/export.h"
 #include "ui/aura/window_property.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/wm/public/window_types.h"
+
+#include "azer/base/export.h"
+#include "azer/ui/win/layer_type.h"
+#include "azer/ui/compositor/layer.h"
 
 namespace gfx {
 class Display;
@@ -31,7 +34,9 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
  public:
   typedef std::vector<Window*> Windows;
   Window(WindowDelegate* delegate);
-  virtual ~Window();
+  ~Window() override;
+
+  void Init(WindowLayerType layer_type);
 
   // A type is used to identify a class of Windows and customize behavior such
   // as event handling and parenting.  This field should only be consumed by the
@@ -214,8 +219,8 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   WindowTreeHost* host_;
   ui::wm::WindowType type_;
   WindowDelegate* delegate_;
-
-  ::ui::Layer* layer_;
+  
+  LayerPtr layer_;
   bool visible_;
   bool ignore_events_;
   void *user_data_;

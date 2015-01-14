@@ -56,4 +56,11 @@ bool LoadRenderSystem(gfx::AcceleratedWidget window) {
   s_render_system_env = new AutoRenderSystemInit(dllpath, surface);
   return s_render_system_env->GetRenderSystem() != NULL;
 }
+
+void UnloadRenderSystem() {
+  if (s_render_system_env) {
+    delete s_render_system_env;
+    s_render_system_env = NULL;
+  }
+}
 }  // namespace azer

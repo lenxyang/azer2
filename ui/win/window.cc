@@ -2,6 +2,7 @@
 
 #include "ui/events/event_target_iterator.h"
 
+#include "azer/ui/compositor/layer.h"
 #include "azer/ui/win/context.h"
 #include "azer/ui/win/window_observer.h"
 #include "azer/ui/win/window_delegate.h"
@@ -23,6 +24,10 @@ Window::Window(WindowDelegate* delegate)
 }
 
 Window::~Window() {
+}
+
+void Window::Init(WindowLayerType layer_type) {
+  SetLayer(new compositor::Layer());
 }
 
 Window* Window::GetRootWindow() {
@@ -148,9 +153,9 @@ void Window::ConvertPointToTarget(const Window* source,
       target = target->GetAncestorWithLayer(&offset_to_layer);
       *point -= offset_to_layer;
     }
-    ::ui::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
+    compositor::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
   } else {
-    ::ui::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
+    compositor::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
   }
 }
 

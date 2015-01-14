@@ -25,4 +25,5 @@ class AZER_EXPORT AutoRenderSystemInit {
 };
 
 bool AZER_EXPORT LoadRenderSystem(gfx::AcceleratedWidget window);
+void AZER_EXPORT UnloadRenderSystem();
 }  // namespace azer
