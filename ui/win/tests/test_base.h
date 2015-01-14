@@ -21,6 +21,7 @@ class WinTestBase : public testing::Test {
   void SetUp() override;
   void TearDown() override;
  protected:
+  Window* root_window();
   void RunAllPendingInMessageLoop();
   bool DispatchEventUsingWindowDispatcher(::ui::Event* event);
   ui::EventProcessor* event_processor() { return host_->event_processor(); }

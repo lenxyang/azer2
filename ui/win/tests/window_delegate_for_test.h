@@ -15,6 +15,8 @@ class WindowDelegateForTest : public WindowDelegate {
   virtual bool CanFocus() { return true;}
   virtual bool OnCaptureLost() {return true;}
   virtual void OnPaint(gfx::Canvas* canvas) {}
+  virtual bool ShouldDescendIntoChildForEventHandling(
+      Window* child, const gfx::Point& location) {}
 };
 
 class MouseEventCounterDelegate : public WindowDelegate {

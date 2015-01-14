@@ -9,6 +9,8 @@
 namespace azer {
 namespace win {
 
+Window* CreateTestWindowWithId(int id, Window* parent);
+Window* CreateTestWindowWithBounds(const gfx::Rect& bounds, Window* parent);
 Window* CreateTestWindow(SkColor color,
                          int id,
                          const gfx::Rect& bounds,

@@ -2,6 +2,7 @@
 
 #include "base/run_loop.h"
 #include "azer/ui/win/context.h"
+#include "azer/ui/win/window_tree_host.h"
 
 namespace azer {
 namespace win {
@@ -24,6 +25,10 @@ void WinTestBase::TearDown() {
 void WinTestBase::RunAllPendingInMessageLoop() {
   base::RunLoop run_loop;
   run_loop.RunUntilIdle();
+}
+
+Window* WinTestBase::root_window() {
+  return host_->window();
 }
 
 bool WinTestBase::DispatchEventUsingWindowDispatcher(::ui::Event* event) {

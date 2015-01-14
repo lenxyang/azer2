@@ -49,6 +49,38 @@ TEST_F(WindowTest, Contains) {
   EXPECT_FALSE(child2.Contains(&child1));
 }
 
+TEST_F(WindowTest, ContainsPointInRoot) {
+  scoped_ptr<Window> w(
+      CreateTestWindow(SK_ColorWHITE, 1, gfx::Rect(10, 10, 5, 5),
+                       root_window()));
+  EXPECT_FALSE(w->ContainsPointInRoot(gfx::Point(9, 9)));
+  EXPECT_TRUE(w->ContainsPointInRoot(gfx::Point(10, 10)));
+  EXPECT_TRUE(w->ContainsPointInRoot(gfx::Point(14, 14)));
+  EXPECT_FALSE(w->ContainsPointInRoot(gfx::Point(15, 15)));
+  EXPECT_FALSE(w->ContainsPointInRoot(gfx::Point(20, 20)));
+}
+
+TEST_F(WindowTest, ContainsPoint) {
+  scoped_ptr<Window> w(
+      CreateTestWindow(SK_ColorWHITE, 1, gfx::Rect(10, 10, 5, 5),
+                       root_window()));
+  EXPECT_TRUE(w->ContainsPoint(gfx::Point(0, 0)));
+  EXPECT_TRUE(w->ContainsPoint(gfx::Point(4, 4)));
+  EXPECT_FALSE(w->ContainsPoint(gfx::Point(5, 5)));
+  EXPECT_FALSE(w->ContainsPoint(gfx::Point(10, 10)));
+}
+
+TEST_F(WindowTest, ConvertPointToWindow) {
+  // Window::ConvertPointToWindow is mostly identical to
+  // Layer::ConvertPointToLayer, except NULL values for |source| are permitted,
+  // in which case the function just returns.
+  scoped_ptr<Window> w1(CreateTestWindowWithId(1, root_window()));
+  gfx::Point reference_point(100, 100);
+  gfx::Point test_point = reference_point;
+  Window::ConvertPointToTarget(NULL, w1.get(), &test_point);
+  EXPECT_EQ(reference_point, test_point);
+}
+
 TEST_F(WindowTest, MousePressedAndRelease) {
 }
 

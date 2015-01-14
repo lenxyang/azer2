@@ -115,6 +115,10 @@ gfx::Rect Window::GetBoundsInScreen() const {
   return bounds;
 }
 
+gfx::Rect Window::GetTargetBounds() const {
+  return bounds();
+}
+
 // static
 void Window::ConvertPointToTarget(const Window* source,
                                   const Window* target,
@@ -264,6 +268,71 @@ bool Window::Contains(const Window* other) const {
       return true;
   }
   return false;
+}
+
+bool Window::ContainsPointInRoot(const gfx::Point& point_in_root) const {
+  const Window* root_window = GetRootWindow();
+  if (!root_window)
+    return false;
+  gfx::Point local_point(point_in_root);
+  ConvertPointToTarget(root_window, this, &local_point);
+  return gfx::Rect(GetTargetBounds().size()).Contains(local_point);
+}
+
+bool Window::ContainsPoint(const gfx::Point& local_point) const {
+  return gfx::Rect(bounds().size()).Contains(local_point);
+}
+
+Window* Window::GetEventHandlerForPoint(const gfx::Point& local_point) {
+  return GetWindowForPoint(local_point, true, true);
+}
+
+Window* Window::GetTopWindowContainingPoint(const gfx::Point& local_point) {
+  return GetWindowForPoint(local_point, false, false);
+}
+
+Window* Window::GetToplevelWindow() {
+  Window* topmost_window_with_delegate = NULL;
+  for (Window* window = this; window != NULL; window = window->parent()) {
+    if (window->delegate())
+      topmost_window_with_delegate = window;
+  }
+  return topmost_window_with_delegate;
+}
+
+Window* Window::GetWindowForPoint(const gfx::Point& local_point,
+                                  bool return_tightest,
+                                  bool for_event_handling) {
+  if (!IsVisible())
+    return NULL;
+
+  for (Windows::const_reverse_iterator it = children_.rbegin(),
+           rend = children_.rend();
+       it != rend; ++it) {
+    Window* child = *it;
+
+    if (for_event_handling) {
+      if (child->ignore_events_)
+        continue;
+      // The client may not allow events to be processed by certain subtrees.
+      EventClient* client = GetEventClient(GetRootWindow());
+      if (client && !client->CanProcessEventsWithinSubtree(child))
+        continue;
+      if (delegate_ && !delegate_->ShouldDescendIntoChildForEventHandling(
+              child, local_point))
+        continue;
+    }
+
+    gfx::Point point_in_child_coords(local_point);
+    ConvertPointToTarget(this, child, &point_in_child_coords);
+    Window* match = child->GetWindowForPoint(point_in_child_coords,
+                                             return_tightest,
+                                             for_event_handling);
+    if (match)
+      return match;
+  }
+  
+  return delegate_ ? this : NULL;
 }
 
 }  // namespace win

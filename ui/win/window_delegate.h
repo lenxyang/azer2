@@ -26,6 +26,12 @@ public:
   virtual bool CanFocus() = 0;
   virtual bool OnCaptureLost() = 0;
   virtual void OnPaint(gfx::Canvas* canvas) = 0;
+
+  // Returns true if event handling should descend into |child|. |location| is
+  // in terms of the Window.
+  virtual bool ShouldDescendIntoChildForEventHandling(
+      Window* child,
+      const gfx::Point& location) = 0;
 private:
   DISALLOW_COPY_AND_ASSIGN(WindowDelegate);
 };

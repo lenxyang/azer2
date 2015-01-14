@@ -93,6 +93,10 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   // |aura::client::ScreenPositionClient| interface.
   gfx::Rect GetBoundsInScreen() const;
 
+  // Returns the target bounds of the window. If the window's layer is
+  // not animating, it simply returns the current bounds.
+  gfx::Rect GetTargetBounds() const;
+
   void SetTransform(const gfx::Transform& transform);
 
   // Changes the bounds of the window. If present, the window's parent's
@@ -132,6 +136,35 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   static void ConvertRectToTarget(const Window* source,
                                   const Window* target,
                                   gfx::Rect* rect);
+
+  // Returns true if the |point_in_root| in root window's coordinate falls
+  // within this window's bounds. Returns false if the window is detached
+  // from root window.
+  bool ContainsPointInRoot(const gfx::Point& point_in_root) const;
+
+  // Returns true if relative-to-this-Window's-origin |local_point| falls
+  // within this Window's bounds.
+  bool ContainsPoint(const gfx::Point& local_point) const;
+
+  // Returns the Window that most closely encloses |local_point| for the
+  // purposes of event targeting.
+  Window* GetEventHandlerForPoint(const gfx::Point& local_point);
+
+  // Returns the topmost Window with a delegate containing |local_point|.
+  Window* GetTopWindowContainingPoint(const gfx::Point& local_point);
+
+  // Returns this window's toplevel window (the highest-up-the-tree anscestor
+  // that has a delegate set).  The toplevel window may be |this|.
+  Window* GetToplevelWindow();
+
+  // Gets a Window (either this one or a subwindow) containing |local_point|.
+  // If |return_tightest| is true, returns the tightest-containing (i.e.
+  // furthest down the hierarchy) Window containing the point; otherwise,
+  // returns the loosest.  If |for_event_handling| is true, then hit-test masks
+  // are honored; otherwise, only bounds checks are performed.
+  Window* GetWindowForPoint(const gfx::Point& local_point,
+                            bool return_tightest,
+                            bool for_event_handling);
 
   // Returns the first ancestor (starting at |this|) with a layer. |offset| is
   // set to the offset from |this| to the first ancestor with a layer. |offset|
