@@ -1,5 +1,6 @@
 #include "azer/render/util/render_window.h"
 
+#include "base/message_loop/message_loop.h"
 #include "azer/base/render_loop.h"
 #include "azer/ui/win/window_tree_host.h"
 #include "azer/ui/win/context.h"
@@ -23,6 +24,8 @@ void RenderWindow::Loop(RenderLoop::Delegate* delegate) {
 
   CHECK(azer::LoadRenderSystem(
       (gfx::AcceleratedWidget)host->GetAcceleratedWidget()));
+  ::base::MessageLoopForUI message_loop;
+  host->Show();
   renderloop->Run();
 
   host.reset();

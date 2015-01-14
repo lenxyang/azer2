@@ -51,7 +51,10 @@ executable("demo") {
   output_name = "compositor_demo"
   sources = ["demo/main.cc"]
   deps = [
+       "//base",
        "//azer/render",
        "//skia",
+       "//ui/gfx",
+       "//ui/gfx/geometry",
   ]
 }
