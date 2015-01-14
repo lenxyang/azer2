@@ -43,6 +43,8 @@ source_set("unittests") {
   sources = [
     "tests/test_base.cc",
     "tests/test_base.h",
+    "tests/test_window.cc",
+    "tests/test_window.h",
     "tests/window_tree_host_tests.cc",
     "tests/window_tests.cc",
   ]

@@ -3,10 +3,13 @@
 #include "azer/ui/win/window_tree_host.h"
 #include "azer/ui/win/window.h"
 #include "azer/ui/win/tests/test_base.h"
+#include "azer/ui/win/tests/test_window.h"
+#include "azer/ui/win/tests/window_delegate_for_test.h"
 
-using azer::win::WindowTreeHost;
+namespace azer {
+namespace win {
 
-class WindowTest : public azer::win::WinTestBase {
+class WindowTest : public WinTestBase {
  public:
   WindowTest() : max_separation_(0) {
   }
@@ -30,4 +33,8 @@ TEST_F(WindowTest, Base) {
 }
 
 TEST_F(WindowTest, MousePressedAndRelease) {
+  Window
 }
+
+}  // namespace win
+}  // namespace azer
