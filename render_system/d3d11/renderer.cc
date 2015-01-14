@@ -305,12 +305,12 @@ const Renderer::Viewport& D3DRenderer::GetViewport() const {
 void D3DRenderer::SetViewport(const Viewport& vp) {
   D3D11_VIEWPORT viewport;
   ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
-  viewport.TopLeftX= vp.left;
-  viewport.TopLeftY= vp.top;
-  viewport.Width= vp.width;
-  viewport.Height= vp.height;
-  viewport.MinDepth= vp.min_depth;
-  viewport.MaxDepth= vp.max_depth;
+  viewport.TopLeftX = vp.bounds.x();
+  viewport.TopLeftY = vp.bounds.y();
+  viewport.Width = vp.bounds.width();
+  viewport.Height = vp.bounds.height();
+  viewport.MinDepth = vp.min_depth;
+  viewport.MaxDepth = vp.max_depth;
   d3d_context_->RSSetViewports(1, &viewport);
   viewport_ = vp;
 }
@@ -327,7 +327,7 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage,
 }
 
 bool D3DRenderer::Init(const Texture::Options& o) {
-  DCHECK(o.width != 0 && o.height != 0);
+  DCHECK(!o.size.IsEmpty());
   DCHECK(targets_[0].get() == NULL);
   DCHECK(depth_.get() == NULL);
 
@@ -340,7 +340,7 @@ bool D3DRenderer::Init(const Texture::Options& o) {
   targets_[0] = target;
   depth_ = depth;
   Reset();
-  SetViewport(azer::Renderer::Viewport(0, 0, o.width, o.height));
+  SetViewport(azer::Renderer::Viewport(0, 0, o.size.width(), o.size.height()));
   return true;
 }
 

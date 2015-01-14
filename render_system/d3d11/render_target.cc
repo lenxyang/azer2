@@ -72,11 +72,8 @@ D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
 
 D3DSurfaceRenderTarget* D3DSurfaceRenderTarget::Create(Surface* surface,
                                                        D3DRenderer* r) {
-  int32 width = surface->GetBounds().width();
-  int32 height = surface->GetBounds().height();
   Texture::Options opt;
-  opt.width = width;
-  opt.height = height;
+  opt.size = surface->GetBounds().size();
   opt.target = Texture::kRenderTarget;
 
   std::unique_ptr<D3DSurfaceRenderTarget> target(

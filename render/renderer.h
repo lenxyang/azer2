@@ -5,6 +5,7 @@
 
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
+#include "ui/gfx/geometry/rect.h"
 
 #include "azer/base/export.h"
 #include "azer/render/indices_buffer.h"
@@ -86,21 +87,23 @@ class AZER_EXPORT Renderer {
                                   int32 instance_start_index = 0) = 0;
   
   struct Viewport {
-    int32 left;
-    int32 top;
-    int32 width;
-    int32 height;
+    gfx::Rect bounds;
     int32 min_depth;
     int32 max_depth;
 
     Viewport(int32 l, int32 t, int32 w, int32 h, float mindepth = 0.0f,
              float maxdepth = 1.0f)
-        : left(l), top(t), width(w), height(h)
+        : bounds(l, t, w, h)
+        , min_depth(mindepth), max_depth(maxdepth) {
+    }
+
+    Viewport(const gfx::Rect& rect, float mindepth = 0.0f, float maxdepth = 1.0f)
+        : bounds(rect)
         , min_depth(mindepth), max_depth(maxdepth) {
     }
 
     Viewport()
-        : left(0), top(0), width(800), height(600)
+        : bounds(0, 0, 800, 600)
         , min_depth(0.0f), max_depth(1.0f) {
     }
   };

@@ -161,8 +161,7 @@ Texture* D3DRenderSystem::CreateTexture(const Texture::Options& opt,
                                         const Image* img) {
   const ImageDataPtr& image = img->data(0);
   Texture::Options texopt = opt;
-  texopt.width = image->width();
-  texopt.height = image->height();
+  texopt.size = gfx::Size(image->width(), image->height());
   texopt.format = image->format();
   texopt.type = (Texture::Type)img->type();
   std::unique_ptr<D3DTexture> tex;

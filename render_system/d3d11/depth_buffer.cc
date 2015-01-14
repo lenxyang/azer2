@@ -28,8 +28,7 @@ D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o,
 D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface,
                                        D3DRenderer* renderer) {
   Texture::Options o;
-  o.width = surface->GetBounds().width();
-  o.height = surface->GetBounds().height();
+  o.size = surface->GetBounds().size();
   return Create(o, renderer);
 }
 

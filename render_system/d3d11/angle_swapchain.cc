@@ -69,8 +69,7 @@ bool AngleSwapChain::Present() {
 
 Renderer* AngleSwapChain::CreateSurfaceRenderer(Surface* surface) {
   Texture::Options opt;
-  opt.width = surface->GetBounds().width();
-  opt.height = surface->GetBounds().height();
+  opt.size = surface->GetBounds().size();
   opt.target = (azer::Texture::BindTarget)
       (azer::Texture::kRenderTarget | azer::Texture::kShaderResource);
   return render_system_->CreateRenderer(opt);

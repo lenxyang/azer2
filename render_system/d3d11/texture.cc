@@ -51,8 +51,8 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   DCHECK(NULL == resource_);
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ZeroMemory(&tex_desc_, sizeof(D3D11_TEXTURE2D_DESC));
-  tex_desc_.Width     = options_.width;
-  tex_desc_.Height    = options_.height;
+  tex_desc_.Width     = options_.size.width();
+  tex_desc_.Height    = options_.size.height();
   tex_desc_.MipLevels = options_.sampler.mip_level;
   tex_desc_.ArraySize = num;
   tex_desc_.Format    = TranslateFormat(options_.format);
@@ -199,8 +199,7 @@ bool D3DTexture::CopyTo(Texture* texture) {
     return false;
   }
 
-  if (tex->option().width != option().width
-      || tex->option().height != option().height) {
+  if (tex->option().size != option().size) {
     DLOG(INFO) << "cannot Copy Texture to the one with diffuse dimension.";
     return false;
   }
@@ -219,7 +218,7 @@ bool D3DTexture2D::InitFromImage(const Image* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   const ImageDataPtr& data = image->data(0);
   uint32 expect_size = SizeofDataFormat(options_.format)
-      * options_.width * options_.height;
+      * options_.size.width() * options_.size.height();
   if (data->data_size() != static_cast<int32>(expect_size)) {
     LOG(ERROR) << "unexpected size: " << data->data_size()
                << " expected: " << expect_size;
@@ -229,7 +228,7 @@ bool D3DTexture2D::InitFromImage(const Image* image) {
   
   D3D11_SUBRESOURCE_DATA subres;
   subres.pSysMem = data->data();
-  subres.SysMemPitch = options_.width * SizeofDataFormat(options_.format);
+  subres.SysMemPitch = options_.size.width() * SizeofDataFormat(options_.format);
   subres.SysMemSlicePitch = 0;  // no meaning for 2D
   return Init(&subres, 1);
 }
@@ -253,7 +252,7 @@ bool D3DTextureCubeMap::InitFromImage(const Image* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   const ImageDataPtr& data = image->data(0);
   uint32 expect_size = SizeofDataFormat(options_.format)
-      * options_.width * options_.height;
+      * options_.size.width() * options_.size.height();
   if (data->data_size() != static_cast<int32>(expect_size)) {
     LOG(ERROR) << "unexpected size: " << data->data_size()
                << " expected: " << expect_size;
@@ -266,7 +265,8 @@ bool D3DTextureCubeMap::InitFromImage(const Image* image) {
     const ImageDataPtr& data = image->data(i);
 
     subres[i].pSysMem = data->data();
-    subres[i].SysMemPitch = options_.width * SizeofDataFormat(options_.format);
+    subres[i].SysMemPitch = options_.size.width()
+        * SizeofDataFormat(options_.format);
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
   return Init(subres, 6);
@@ -353,8 +353,7 @@ D3DTexture2DExtern* D3DTexture2DExtern::Create(HANDLE handle,
   D3D11_TEXTURE2D_DESC desc;
   shared_tex->GetDesc(&desc);
   Texture::Options opt;
-  opt.width = desc.Width;
-  opt.height = desc.Height;
+  opt.size = gfx::Size(desc.Width, desc.Height);
   opt.format = TranslateD3DFormat(desc.Format);
   std::unique_ptr<D3DTexture2DExtern> ptr(new D3DTexture2DExtern(opt, rs));
   ptr->Attach(shared_tex);

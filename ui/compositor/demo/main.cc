@@ -19,7 +19,7 @@ class RenderFrame : public azer::RenderLoop::Delegate {
     layer_host_.reset(new azer::compositor::LayerTreeHost(gfx::Size(800, 600)));
     compositor_ = new azer::compositor::Compositor;
     compositor_->SetTreeHost(layer_host_.get());
-    
+    return true;
   }
   void OnUpdate(const ::base::Time& Time,
                 const ::base::TimeDelta& delta) override {
