@@ -39,6 +39,8 @@ shared_library("render") {
     "overlay.h",
     "render_system.h",
     "render_system.cc",
+    "render_system_observer.cc",
+    "render_system_observer.h",
     "render_target.h",
     "render_system_enum.cc",
     "render_system_enum.h",
@@ -60,6 +62,8 @@ shared_library("render") {
     "util/dynlib.h",
     "util/render_system_loader.cc",
     "util/render_system_loader.h",
+    "util/render_window.cc",
+    "util/render_window.h",
     "util/shader_array.cc",
     "util/shader_array.h",
   ]
