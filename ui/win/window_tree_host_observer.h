@@ -22,7 +22,7 @@ class AZER_EXPORT WindowTreeHostObserver {
 
   virtual void OnHostCloseRequested(const WindowTreeHost* host) {}
  protected:
-  virtual ~WindowTr1eeHostObserver() {}
+  virtual ~WindowTreeHostObserver() {}
 };
 }  // namespace win
 }  // namespace azer

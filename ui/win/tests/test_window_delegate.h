@@ -16,15 +16,15 @@ class TestWindowDelegate : public WindowDelegate {
   virtual bool OnCaptureLost() {return true;}
   virtual void OnPaint(gfx::Canvas* canvas) {}
   virtual bool ShouldDescendIntoChildForEventHandling(
-      Window* child, const gfx::Point& location) {}
+      Window* child, const gfx::Point& location) {return true;}
 };
 
 // A simple WindowDelegate implementation for these tests. It owns itself
 // (deletes itself when the Window it is attached to is destroyed).
 class ColorTestWindowDelegate : public TestWindowDelegate {
  public:
-  explicit ColorTestWindowDelegate(SkColor color);
-  ~ColorTestWindowDelegate() override;
+  explicit ColorTestWindowDelegate(SkColor color) {}
+  ~ColorTestWindowDelegate() override {}
 
   void OnPaint(gfx::Canvas* canvas) override {}
  private:

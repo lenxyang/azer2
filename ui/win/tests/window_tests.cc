@@ -4,7 +4,7 @@
 #include "azer/ui/win/window.h"
 #include "azer/ui/win/tests/test_base.h"
 #include "azer/ui/win/tests/test_window.h"
-#include "azer/ui/win/tests/window_delegate_for_test.h"
+#include "azer/ui/win/tests/test_window_delegate.h"
 
 namespace azer {
 namespace win {
