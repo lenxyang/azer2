@@ -4,7 +4,7 @@
 #include "azer/base/appinit.h"
 #include "azer/ui/win/context.h"
 #include "azer/ui/win/window_tree_host.h"
-#include "azer/ui/compositor.h"
+#include "azer/ui/compositor/compositor.h"
 #include "azer/render/render.h"
 #include "azer/render/util/render_window.h"
 
@@ -16,8 +16,10 @@ class RenderFrame : public azer::RenderLoop::Delegate {
   bool Initialize(azer::RenderLoop* renderer) override {
     azer::RenderSystem* rs = azer::RenderSystem::Current();
     overlay_.reset(rs->CreateOverlay());
+    layer_host_.reset(new azer::compositor::LayerTreeHost(gfx::Size(800, 600)));
     compositor_ = new azer::compositor::Compositor;
-    compositor_->GetTreeHost()->resize(gfx::Size(800, 600));
+    compositor_->SetTreeHost(layer_host_.get());
+    
   }
   void OnUpdate(const ::base::Time& Time,
                 const ::base::TimeDelta& delta) override {
@@ -31,6 +33,7 @@ class RenderFrame : public azer::RenderLoop::Delegate {
     renderer->ClearDepthAndStencil();
   }
  private:
+  scoped_ptr<azer::compositor::LayerTreeHost> layer_host_;
   azer::compositor::CompositorPtr compositor_;
   azer::OverlayPtr overlay_;
   DISALLOW_COPY_AND_ASSIGN(RenderFrame);

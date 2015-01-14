@@ -18,7 +18,7 @@ class Layer;
 class LayerTreeHost;
 
 class AZER_EXPORT Compositor : public LayerTreeHostClient,
-                               public RefCounted<Compositor>  {
+  public ::base::RefCounted<Compositor>  {
  public:
   Compositor();
   ~Compositor();
@@ -35,7 +35,7 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient,
   Layer* root_layer() { return host_->root();}
 
   void SetTreeHost(LayerTreeHost* host);
-  LayerTreeHost* GetTreeHost() { return host_.get();}
+  LayerTreeHost* GetTreeHost() { return host_;}
  protected:
   void OnResize(const gfx::Size& size) override;
   /**

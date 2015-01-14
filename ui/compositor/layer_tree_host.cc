@@ -8,8 +8,9 @@
 namespace azer {
 namespace compositor {
 
-LayerTreeHost::LayerTreeHost() {
-  root_ = new NoDrawLayer(this);
+LayerTreeHost::LayerTreeHost(const gfx::Size& size)
+    : size_(size)  {
+  root_.reset(new NoDrawLayer(this));
 }
 
 LayerTreeHost::~LayerTreeHost() {
@@ -17,12 +18,13 @@ LayerTreeHost::~LayerTreeHost() {
 
 void LayerTreeHost::SetClient(LayerTreeHostClient* client) {
   client_ = client;
-  client_->OnResize(root()->bounds()->size());
+  client_->OnResize(size_);
 }
 
 void LayerTreeHost::resize(const gfx::Size& size) {
-  if (root_->bounds().size() != size) {
-    root_->SetBounds(gfx::Rect(0, 0, size));
+  if (size_ != size) {
+    size_= size;
+    root_->SetBounds(gfx::Rect(0, 0, size.width(), size.height()));
     if (client_) {
       client_->OnResize(size);
     }

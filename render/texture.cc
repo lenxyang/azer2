@@ -20,8 +20,7 @@ Texture* Texture::Load(const Options& o, const ::base::FilePath& path,
   std::unique_ptr<Image> imgptr(Image::Load(path, (Image::Type)o.type));
   if (imgptr.get()) {
     Texture::Options opt = o;
-    opt.width = imgptr->width();
-    opt.height = imgptr->height();
+    opt.size = gfx::Size(imgptr->width(), imgptr->height());
     return rs->CreateTexture(opt, imgptr.get());
   } else {
     LOG(ERROR) << "failed to load texture: \"" << path.value() << "\"";
@@ -31,8 +30,8 @@ Texture* Texture::Load(const Options& o, const ::base::FilePath& path,
 
 bool Texture::Save(const ::base::FilePath& path) {
   SkBitmap bitmap;
-  SkImageInfo info = SkImageInfo::Make(options_.width,
-                                       options_.height,
+  SkImageInfo info = SkImageInfo::Make(options_.size.width(),
+                                       options_.size.height(),
                                        kRGBA_8888_SkColorType,
                                        kOpaque_SkAlphaType);
   bitmap.setInfo(info);
@@ -45,7 +44,7 @@ bool Texture::Save(const ::base::FilePath& path) {
   }
 
   uint32 row_pitch = mapdata.row_pitch;
-  for (int32 i = 0; i < options_.height; ++i) {
+  for (int32 i = 0; i < options_.size.height(); ++i) {
     memcpy(pixels, mapdata.pdata + i * row_pitch, row_pitch);
     pixels += row_pitch;
   }

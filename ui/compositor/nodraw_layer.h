@@ -8,9 +8,11 @@
 namespace azer {
 namespace compositor {
 
+class LayerDelegate;
+
 class AZER_EXPORT NoDrawLayer : public Layer {
  public:
-  explicit NoDrawLayer(LayerDelegate* delegate) : Texture(delegate) {}
+  explicit NoDrawLayer(LayerDelegate* delegate) : Layer(delegate) {}
   ~NoDrawLayer() override {}
 
   void Render(Renderer* renderer, const gfx::Rect& parent_rc) override {}
