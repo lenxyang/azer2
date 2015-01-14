@@ -50,5 +50,9 @@ void WindowTreeHost::RemoveObserver(WindowTreeHostObserver* observer) {
   observers_.RemoveObserver(observer);
 }
 
+::ui::EventProcessor* WindowTreeHost::event_processor() {
+  return dispatcher();
+}
+
 }  // namespace win
 }  // namespace azer

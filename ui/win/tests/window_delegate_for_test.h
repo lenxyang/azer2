@@ -1,8 +1,23 @@
 #pragma once
 
+#include "ui/gfx/geometry/size.h"
+#include "ui/gfx/geometry/rect.h"
 #include "azer/ui/win/window_delegate.h"
 
-class MouseEventCounterDelegate : public azer::ui::WindowDelegate {
+namespace azer {
+namespace win {
+
+class WindowDelegateForTest : public WindowDelegate {
+ public:
+  virtual gfx::Size GetMinimumSize() const { return gfx::Size(1, 1);}
+  virtual gfx::Size GteMaximumSize() const { return gfx::Size(10000, 10000);}
+
+  virtual bool CanFocus() { return true;}
+  virtual bool OnCaptureLost() {return true;}
+  virtual void OnPaint(gfx::Canvas* canvas) {}
+};
+
+class MouseEventCounterDelegate : public WindowDelegate {
  public:
   MouseEventCounterDelegate() {
     ResetCounters();
@@ -39,3 +54,6 @@ class MouseEventCounterDelegate : public azer::ui::WindowDelegate {
   int other_counter_;
   DISALLOW_COPY_AND_ASSIGN(MouseEventCounterDelegate);
 };
+
+}  // namespace wing
+}  // namespace azer

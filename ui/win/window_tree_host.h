@@ -3,6 +3,7 @@
 #include "base/basictypes.h"
 #include "base/observer_list.h"
 #include "ui/events/event_source.h"
+#include "ui/events/event_processor.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/geometry/rect.h"
 #include "azer/base/export.h"
@@ -33,6 +34,8 @@ class AZER_EXPORT WindowTreeHost {
 
   Window* window() { return window_;}
   const Window* window() const { return window_;}
+  
+  ::ui::EventProcessor* event_processor();
 
   WindowEventDispatcher* dispatcher() {
     return const_cast<WindowEventDispatcher*>(
