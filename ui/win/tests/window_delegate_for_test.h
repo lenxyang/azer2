@@ -19,6 +19,27 @@ class WindowDelegateForTest : public WindowDelegate {
       Window* child, const gfx::Point& location) {}
 };
 
+// A simple WindowDelegate implementation for these tests. It owns itself
+// (deletes itself when the Window it is attached to is destroyed).
+class ColorTestWindowDelegate : public TestWindowDelegate {
+ public:
+  explicit ColorTestWindowDelegate(SkColor color);
+  ~ColorTestWindowDelegate() override;
+
+  ui::KeyboardCode last_key_code() const { return last_key_code_; }
+
+  // Overridden from TestWindowDelegate:
+  void OnKeyEvent(ui::KeyEvent* event) override {}
+  void OnWindowDestroyed(Window* window) override {}
+  void OnPaint(gfx::Canvas* canvas) override {}
+
+ private:
+  SkColor color_;
+  ui::KeyboardCode last_key_code_;
+
+  DISALLOW_COPY_AND_ASSIGN(ColorTestWindowDelegate);
+};
+
 class MouseEventCounterDelegate : public WindowDelegate {
  public:
   MouseEventCounterDelegate() {

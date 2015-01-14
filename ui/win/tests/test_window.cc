@@ -18,6 +18,14 @@ Window* CreateTestWindowWithBounds(const gfx::Rect& bounds, Window* parent) {
   return CreateTestWindowWithDelegate(NULL, 0, bounds, parent);
 }
 
+Window* CreateTestWindow(SkColor color,
+                         int id,
+                         const gfx::Rect& bounds,
+                         Window* parent) {
+  return CreateTestWindowWithDelegate(new ColorTestWindowDelegate(color),
+                                      id, bounds, parent);
+}
+
 Window* CreateTestWindowWithDelegateAndType(WindowDelegate* delegate,
                                             ui::wm::WindowType type,
                                             int id,
