@@ -44,8 +44,27 @@ const WindowTreeHost* Window::GetHost() const {
   return root_window ? root_window->host_ : NULL;
 }
 
+void Window::SetType(ui::wm::WindowType type) {
+  type_ = type;
+}
+
 void Window::SetName(const std::string& name) {
   name_ = name;
+}
+
+void Window::SetBounds(const gfx::Rect& new_bounds) {
+  gfx::Rect final_bounds(new_bounds);
+  if (delegate_) {
+    const gfx::Size min_size = delegate_->GetMinimumSize();
+    final_bounds.set_width(std::max(min_size.width(), final_bounds.width()));
+    final_bounds.set_height(std::max(min_size.height(), final_bounds.height()));
+  }
+
+  SetBoundsInternal(final_bounds);
+}
+
+void Window::SetBoundsInternal(const gfx::Rect& new_bounds) {
+  bounds_ = new_bounds;
 }
 
 void Window::SetTitle(const base::string16& title) {
@@ -57,6 +76,10 @@ void Window::SetTitle(const base::string16& title) {
 
 void Window::Hide() {
   SetVisible(false);
+}
+
+void Window::Show() {
+  SetVisible(true);
 }
 
 void Window::SetVisible(bool visible) {

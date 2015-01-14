@@ -172,6 +172,8 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
                             int64 default_value);
   int64 GetPropertyInternal(const void* key, int64 default_value) const;
 
+  void SetBoundsInternal(const gfx::Rect& bounds);
+
   void SetVisible(bool visible);
 
   Window* parent_;

@@ -3,6 +3,7 @@
 #include "base/strings/string_number_conversions.h"
 #include "azer/ui/win/client/constants.h"
 #include "azer/ui/win/window.h"
+#include "azer/ui/win/window_property.h"
 #include "ui/gfx/rect.h"
 
 

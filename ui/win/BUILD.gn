@@ -55,6 +55,7 @@ source_set("unittests") {
     "//testing/gtest",
     "//skia",
     "//azer/render",
+    "//ui/events",
   ]
   configs += ["//azer/build/config:utf8src"]
   visibility = ["//azer/render:unittests"]
