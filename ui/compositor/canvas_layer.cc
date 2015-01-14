@@ -11,7 +11,7 @@ CanvasLayer::CanvasLayer(LayerDelegate* delegate)
 CanvasLayer::~CanvasLayer() {
 }
 
-void CanvasLayer::Render(Renderer* renderer, const gfx::RectF& rect) {
+void CanvasLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
 }
 
 }  // namespace compositor

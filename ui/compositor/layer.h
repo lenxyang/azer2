@@ -21,6 +21,7 @@ class Renderer;
 namespace compositor {
 
 class Layer;
+class LayerTreeHost;
 typedef std::vector<Layer*> LayerList;
 
 class CanvasLayer;
@@ -39,10 +40,12 @@ class AZER_EXPORT Layer {
 
   /**
    * 将 Layer 的内容渲染到 Renderer 当中
-   * rect 制定了渲染的目标大小，rect的size有可能小于Layer的size,
-   * 此时 layer 仅仅部分内容渲染到制定目标当中
+   * parent_rc 为父窗口当前的 rect
    **/
-  virtual void Render(Renderer* renderer, const gfx::RectF& rect) = 0;
+  virtual void Render(Renderer* renderer, const gfx::Rect& parent_rc) = 0;
+
+  const std::string& name() const { return name_;}
+  void SetName(const std::string& name) { name_ = name;}
 
   // add, remove child
   void Add(Layer* layer);
@@ -85,10 +88,13 @@ class AZER_EXPORT Layer {
   bool GetTargetTransformRelativeTo(const Layer* ancestor,
                                     gfx::Transform* transform) const;
  private:
+  void SetTreeHost(LayerTreeHost* host);
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
+  std::string name_;
   LayerDelegate* delegate_;
+  LayerTreeHost* host_;
   gfx::Rect bounds_;
   gfx::Point position_;
   bool visible_;

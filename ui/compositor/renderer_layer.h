@@ -13,7 +13,7 @@ class AZER_EXPORT RendererLayer : public TextureLayer {
 
   ~RendererLayer() override;
 
-  void Render(Renderer* renderer) override;
+  void Render(Renderer* renderer, const gfx::Rect& parent_rc) override;
  private:
   RendererPtr renderer_;
   DISALLOW_COPY_AND_ASSIGN(RendererLayer);

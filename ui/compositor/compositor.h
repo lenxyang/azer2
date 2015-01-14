@@ -22,6 +22,7 @@ class Compositor : public LayerTreeHostClient {
 
   // composite the layers into the render target
   void DoComposite();
+  void ScheduleDraw();
 
   RendererPtr& GetRenderer();
 

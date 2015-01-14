@@ -24,6 +24,8 @@ class AZER_EXPORT LayerTreeHost {
   void resize(const gfx::Size& size);
 
   void SetRootLayer(Layer* layer);
+  Layer* root() { return root_;}
+  const Layer* root() const { return root_;}
  private:
   LayerTreeHostClient* client_;
   Layer* root_;

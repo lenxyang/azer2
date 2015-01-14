@@ -14,7 +14,7 @@ class AZER_EXPORT CanvasLayer : public TextureLayer {
 
   ~CanvasLayer() override;
 
-  void Render(Renderer* renderer, const gfx::RectF& rect) override;
+  void Render(Renderer* renderer, const gfx::Rect& parent_rc) override;
  private:
   Canvas2DPtr canvas_;
   DISALLOW_COPY_AND_ASSIGN(CanvasLayer);

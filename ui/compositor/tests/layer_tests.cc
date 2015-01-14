@@ -1,9 +1,9 @@
 #include "azer/ui/compositor/tests/test_base.h"
 
 namespace azer {
-namespace base {
+namespace compositor {
 
-class LayerTest : public WinTestBase {
+class LayerTest : public CompositorTestBase {
  public:
   LayerTest() : max_separation_(0) {
   }
@@ -25,5 +25,5 @@ class LayerTest : public WinTestBase {
 TEST_F(LayerTest, Base) {
 }
 
-}  // namespace base
+}  // namespace compositor
 }  // namespace azer

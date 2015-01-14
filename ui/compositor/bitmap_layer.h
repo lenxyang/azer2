@@ -12,10 +12,10 @@ namespace compositor {
 
 class BitmapLayer : public Layer {
  public:
-  explicit BitmapLayer(Layer* parent);
+  explicit BitmapLayer(LayerDelegate* delegate);
   ~BitmapLayer() override;
 
-  void Render(Renderer* renderer) override;
+  void Render(Renderer* renderer, const gfx::Rect& parent_rc) override;
  private:
   DISALLOW_COPY_AND_ASSIGN(BitmapLayer);
 };

@@ -8,13 +8,15 @@
 #include "azer/ui/compositor/layer.h"
 
 namespace azer {
+
+class Renderer;
+
 namespace compositor {
 class TextureLayer : public Layer {
  public:
   explicit TextureLayer(LayerDelegate* delegate);
   ~TextureLayer() override;
 
-  void Render(Renderer* renderer) override;
   void SetBlending(BlendingPtr& ptr) { blending_ = ptr;}
   TexturePtr& GetContent() { return texture_;}
  private:

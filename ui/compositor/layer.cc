@@ -22,31 +22,38 @@ const Layer* GetRoot(const Layer* layer) {
 }
 
 
-Layer::Layer(Delegate* delegate)
+Layer::Layer(LayerDelegate* delegate)
     : delegate_(delegate)
+    , host_(NULL)
     , parent_(NULL)
     , visible_(true)
     , order_(0)
     , min_order_(0)
     , max_order_(0)
-    , sorted_(false)
-    , parent_(parent) {
+    , sorted_(false) {
 }
 
 
 Layer::~Layer() {
 }
 
+void Layer::SetTreeHost(LayerTreeHost* host) {
+  DCHECK(host_ == NULL);
+  host_ = host;
+}
+
 void Layer::Add(Layer* layer) {
+  DCHECK(host_ != NULL);
   DCHECK(!IsChild(layer));
-  layer_->parent = this;
+  layer->parent_ = this;
+  layer->SetTreeHost(GetTreeHost());
   children_.push_back(layer);
   OnChildrenOrderChanged();
 }
 
 bool Layer::IsChild(Layer* layer) {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    if ((*iter).get() == layer.get()) {
+    if ((*iter) == layer) {
       return true;
     }
   }
@@ -56,7 +63,7 @@ bool Layer::IsChild(Layer* layer) {
 
 bool Layer::Remove(Layer* layer) {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    if ((*iter).get() == layer.get()) {
+    if ((*iter) == layer) {
       children_.erase(iter);
       DCHECK(layer->parent() == this);
       layer->RemoveFromParent();
@@ -94,7 +101,7 @@ void Layer::SortChildren() {
   std::sort(children_.begin(), children_.end(), LayerSort());
   int index = 0;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    Layer* cur = (*iter).get();
+    Layer* cur = (*iter);
     cur->SetOrder(++index);
   }
 

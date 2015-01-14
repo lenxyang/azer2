@@ -2,14 +2,14 @@
 
 namespace azer {
 namespace compositor {
-BitmapLayer::BitmapLayer(Layer* parent)
-    : Layer(parent) {
+BitmapLayer::BitmapLayer(LayerDelegate* delegate)
+    : Layer(delegate) {
 }
 
 BitmapLayer::~BitmapLayer() {
 }
 
-void BitmapLayer::Render(Renderer* renderer) {
+void BitmapLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
 }
 }  // namespace compositor
 }  // namespace azer

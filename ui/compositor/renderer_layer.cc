@@ -13,7 +13,7 @@ RendererLayer::RendererLayer(LayerDelegate* delegate)
 RendererLayer::~RendererLayer() {
 }
 
-void RendererLayer::Render(Renderer* renderer, const gfx::RectF& rect) {
+void RendererLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
 }
 
 }  // namespace compositor

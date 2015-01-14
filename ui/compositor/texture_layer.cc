@@ -9,7 +9,5 @@ TextureLayer::TextureLayer(LayerDelegate* delegate)
 TextureLayer::~TextureLayer() {
 }
 
-void TextureLayer::Render(Renderer* renderer) {
-}
 }  // namespace compositor
 }  // namespace azer

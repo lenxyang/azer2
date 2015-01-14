@@ -106,6 +106,7 @@ test("unittests") {
 
   defines = ["AZER_UNITTEST"]
   deps = [
+    "//azer/ui/compositor:unittests",
     "//azer/ui/win:unittests",
     "//azer/math:math",
     "//azer/third_party/glm:glm",

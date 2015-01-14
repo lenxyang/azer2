@@ -6,8 +6,8 @@
 namespace azer {
 namespace compositor {
 
-Compositor::Compositor()
-    : root_layer_(NULL) {
+Compositor::Compositor() {
+  host_.reset(new LayerTreeHost);
 }
 
 Compositor::~Compositor() {
@@ -20,7 +20,7 @@ void Compositor::DoComposite() {
 }
 
 void Compositor::OnResize(const gfx::Size& size) {
-  RenderSystem* rs = host_->GetRenderSystem();
+  RenderSystem* rs = RenderSystem::Current();
   azer::Texture::Options rdopt;
   rdopt.width = size.width();
   rdopt.height = size.height();
@@ -41,7 +41,7 @@ void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {
   parent->SortChildren();
   LayerList* list = parent->GetChildren();
   for (auto iter = list->begin(); iter != list->end(); ++iter) {
-    Layer* layer = (*iter).get();
+    Layer* layer = (*iter);
     if (layer->visible()) {
       gfx::Rect rc = std::move(CalcRect(layer, prect));
       layer->Render(renderer_.get(), rc);
@@ -50,8 +50,5 @@ void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {
   }
 }
 
-void Compositor::SetRootLayer(Layer* root_layer) {
-  root_layer_ = root_layer;
-}
 }  // namespace compositor
 }  // namespace azer
