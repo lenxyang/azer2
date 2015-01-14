@@ -22,7 +22,7 @@ class WinTestBase : public testing::Test {
   void TearDown() override;
  protected:
   void RunAllPendingInMessageLoop();
-  void DispatchEventUsingWindowDispatcher(::ui::Event* event);
+  bool DispatchEventUsingWindowDispatcher(::ui::Event* event);
   ui::EventProcessor* event_processor() { return host_->event_processor(); }
 
   base::MessageLoopForUI message_loop_;

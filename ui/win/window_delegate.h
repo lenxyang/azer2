@@ -18,6 +18,8 @@ namespace azer {
 namespace win {
 class AZER_EXPORT WindowDelegate : public ::ui::EventHandler {
 public:
+  WindowDelegate() {}
+  virtual ~WindowDelegate() {}
   virtual gfx::Size GetMinimumSize() const = 0;
   virtual gfx::Size GteMaximumSize() const = 0;
 

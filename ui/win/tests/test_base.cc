@@ -26,7 +26,7 @@ void WinTestBase::RunAllPendingInMessageLoop() {
   run_loop.RunUntilIdle();
 }
 
-void WinTestBase::DispatchEventUsingWindowDispatcher(::ui::Event* event) {
+bool WinTestBase::DispatchEventUsingWindowDispatcher(::ui::Event* event) {
   ui::EventDispatchDetails details =
       event_processor()->OnEventFromSource(event);
   CHECK(!details.dispatcher_destroyed);

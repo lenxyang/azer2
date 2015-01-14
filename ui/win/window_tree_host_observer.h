@@ -8,7 +8,7 @@ class Point;
 }
 
 namespace azer {
-namespace ui {
+namespace win {
 
 class WindowTreeHost;
 
@@ -22,7 +22,7 @@ class AZER_EXPORT WindowTreeHostObserver {
 
   virtual void OnHostCloseRequested(const WindowTreeHost* host) {}
  protected:
-  virtual ~WindowTreeHostObserver() {}
+  virtual ~WindowTr1eeHostObserver() {}
 };
-}  // namespace ui
+}  // namespace win
 }  // namespace azer

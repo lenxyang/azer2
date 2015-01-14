@@ -4,6 +4,7 @@
 
 #include "azer/ui/win/context.h"
 #include "azer/ui/win/window_observer.h"
+#include "azer/ui/win/window_delegate.h"
 #include "azer/ui/win/client/screen_position_client.h"
 #include "azer/ui/win/client/event_client.h"
 

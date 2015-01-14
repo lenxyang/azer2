@@ -8,6 +8,7 @@
 #include "azer/base/export.h"
 #include "ui/aura/window_property.h"
 #include "ui/gfx/geometry/rect.h"
+#include "ui/wm/public/window_types.h"
 
 namespace gfx {
 class Display;
@@ -31,6 +32,12 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   typedef std::vector<Window*> Windows;
   Window(WindowDelegate* delegate);
   virtual ~Window();
+
+  // A type is used to identify a class of Windows and customize behavior such
+  // as event handling and parenting.  This field should only be consumed by the
+  // shell -- Aura itself shouldn't contain type-specific logic.
+  ui::wm::WindowType type() const { return type_; }
+  void SetType(ui::wm::WindowType type);
 
   WindowDelegate* delegate() { return delegate_; }
   const WindowDelegate* delegate() const { return delegate_; }
@@ -170,6 +177,7 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   Window* parent_;
   Windows children_;
   WindowTreeHost* host_;
+  ui::wm::WindowType type_;
   WindowDelegate* delegate_;
 
   ::ui::Layer* layer_;

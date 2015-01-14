@@ -1,7 +1,7 @@
 #include "azer/ui/win/tests/test_window.h"
 
 #include "base/strings/string_number_conversions.h"
-#include "azer/ui/win/constants.h"
+#include "azer/ui/win/client/constants.h"
 #include "azer/ui/win/window.h"
 #include "ui/gfx/rect.h"
 
