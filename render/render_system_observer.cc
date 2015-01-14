@@ -1,9 +1,15 @@
 #include "azer/render/render_system_observer.h"
 
 #include "base/lazy_instance.h"
-#include "base/observer_list.h"
+
 
 namespace azer {
+namespace subtle {
+
+RenderSystemObserverManager* RenderSystemObserverManager::GetInstance() {
+  return NULL;
+}
+
 RenderSystemObserverManager::RenderSystemObserverManager() {
 }
 
@@ -29,9 +35,11 @@ void RenderSystemObserverManager::CallDestroyed() {
 }
 
 void RenderSystemObserverManager::CallResizing(RenderSystem* rs) {
+  /*
   FOR_EACH_OBSERVER(RenderSystemObserver,
                     observers_,
-                    OnResizeing(rs));
+                    OnResizing(rs));
+  */
 }
 
 void RenderSystemObserverManager::CallResized(RenderSystem* rs) {
@@ -41,10 +49,13 @@ void RenderSystemObserverManager::CallResized(RenderSystem* rs) {
 }
 
 void RenderSystemObserverManager::CallPresent(RenderSystem* rs) {
+  /*
   FOR_EACH_OBSERVER(RenderSystemObserver,
                     observers_,
                     OnPresent(rs));
+  */
 }
+}  // namespace subtle
 
 void AddRenderSystemObservered(RenderSystemObserver* observer) {
 }

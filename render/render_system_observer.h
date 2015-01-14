@@ -1,8 +1,12 @@
 #pragma once
 
 #include "azer/base/export.h"
+#include "base/observer_list.h"
 
 namespace azer {
+
+class RenderSystem;
+
 class AZER_EXPORT RenderSystemObserver {
  public:
   virtual void OnCreated(RenderSystem* render_system) {}
@@ -26,9 +30,10 @@ void AZER_EXPORT RemoveRenderSystemObservered(RenderSystemObserver* observer);
 namespace subtle {
 class AZER_EXPORT RenderSystemObserverManager {
  public:
+  static RenderSystemObserverManager* GetInstance();
   void CallCreated(RenderSystem* rs);
   void CallDestroying(RenderSystem* render_system);
-  void CallDestroyed(RenderSystem* render_system);
+  void CallDestroyed();
   void CallResizing(RenderSystem* render_system);
   void CallResized(RenderSystem* render_system);
   void CallPresent(RenderSystem* render_system);
@@ -36,7 +41,7 @@ class AZER_EXPORT RenderSystemObserverManager {
   RenderSystemObserverManager();
   ~RenderSystemObserverManager();
 
-  ObserverList<RenderSystemObserverManager> observers_;
+  ObserverList<RenderSystemObserver, true> observers_;
   DISALLOW_COPY_AND_ASSIGN(RenderSystemObserverManager);
 };
 }  // namespace subtle

@@ -46,3 +46,12 @@ source_set("unittests") {
   configs += ["//azer/build/config:utf8src"]
   visibility = ["//azer/render:unittests"]
 }
+
+executable("demo") {
+  output_name = "compositor_demo"
+  sources = ["demo/main.cc"]
+  deps = [
+       "//azer/render",
+       "//skia",
+  ]
+}
