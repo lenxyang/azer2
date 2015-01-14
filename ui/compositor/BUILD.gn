@@ -26,3 +26,23 @@ source_set("compositor") {
   configs += ["//azer/base:build_render_config"]
   visibility = ["//azer/render"]
 }
+
+source_set("unittests") {
+  sources = [
+    "tests/test_base.cc",
+    "tests/test_base.h",
+    "tests/layer_tests.cc",
+  ]
+
+  deps = [
+    "//base/test:test_support",
+    "//testing/gtest",
+    "//skia",
+    "//azer/render",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+  ]
+  configs += ["//azer/build/config:utf8src"]
+  visibility = ["//azer/render:unittests"]
+}

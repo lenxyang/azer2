@@ -20,6 +20,12 @@ class Vector2d;
 }  // namespace gfx
 
 namespace azer {
+
+namespace compositor {
+class Layer;
+class LayerTreeHost;
+}
+
 namespace win {
 
 class WindowTreeHost;
@@ -60,8 +66,8 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   Window* parent() { return parent_; }
   const Window* parent() const { return parent_; }
 
-  ui::Layer* layer() { return layer_;}
-  const ui::Layer* layer() const { return layer_;}
+  compositor::Layer* layer() { return layer_;}
+  const compositor::Layer* layer() const { return layer_;}
 
   // Returns the root Window that contains this Window. The root Window is
   // defined as the Window that has a dispatcher. These functions return NULL if
@@ -220,7 +226,7 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   ui::wm::WindowType type_;
   WindowDelegate* delegate_;
   
-  LayerPtr layer_;
+  compositor::Layer* layer_;
   bool visible_;
   bool ignore_events_;
   void *user_data_;

@@ -7,16 +7,21 @@
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/geometry/rect.h"
 #include "azer/base/export.h"
+#include "azer/ui/compositor/compositor.h"
+#include "azer/ui/compositor/layer_tree_host.h"
 
 namespace ui {
 class ViewProp;
 }
 
 namespace azer {
+
+namespace compositor {
+class Layer;
+class LayerTreeHost;
+}
+
 namespace win {
-
-
-class Compositor;
 class Window;
 class WindowTreeHostObserver;
 class WindowEventDispatcher;

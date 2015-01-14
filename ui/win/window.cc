@@ -27,7 +27,6 @@ Window::~Window() {
 }
 
 void Window::Init(WindowLayerType layer_type) {
-  SetLayer(new compositor::Layer());
 }
 
 Window* Window::GetRootWindow() {
