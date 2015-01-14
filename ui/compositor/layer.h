@@ -104,6 +104,8 @@ class AZER_EXPORT Layer {
   bool sorted_;
   LayerList children_;
   Layer* parent_;
+
+  friend class LayerTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Layer);
 };
 }  // namespace compositor

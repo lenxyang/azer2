@@ -15,13 +15,15 @@ namespace compositor {
 class Layer;
 class LayerTreeHost;
 
-class Compositor : public LayerTreeHostClient {
+class AZER_EXPORT Compositor : public LayerTreeHostClient {
  public:
   Compositor();
   ~Compositor();
 
-  // composite the layers into the render target
+  // 将所有的Layer输出合并成到 TreeHostLayer 当中
   void DoComposite();
+  // ScheduleDraw 是异步调用，返回式绘制可能尚未完成
+  // （例如 GL 调用必须等到 glFinish 返回之后才能确保所有操作已经完成 ）
   void ScheduleDraw();
 
   RendererPtr& GetRenderer();

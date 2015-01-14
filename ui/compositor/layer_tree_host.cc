@@ -9,9 +9,13 @@ namespace compositor {
 LayerTreeHost::LayerTreeHost() {
 }
 
+LayerTreeHost::~LayerTreeHost() {
+}
+
 void LayerTreeHost::SetRootLayer(Layer* layer) {
   DCHECK(NULL == root_);
   root_ = layer;
+  layer->SetTreeHost(this);
 }
 
 }  // namespace compositor

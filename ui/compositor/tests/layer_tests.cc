@@ -9,11 +9,11 @@ class LayerTest : public CompositorTestBase {
   }
 
   void SetUp() override {
-    WinTestBase::SetUp();
+    CompositorTestBase::SetUp();
   }
 
   void TearDown() override {
-    WinTestBase::TearDown();
+    CompositorTestBase::TearDown();
   }
 
  private:
