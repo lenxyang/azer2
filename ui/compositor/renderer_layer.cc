@@ -6,8 +6,8 @@
 namespace azer {
 namespace compositor {
 
-RendererLayer::RendererLayer(Layer* parent)
-    : Layer(parent) {
+RendererLayer::RendererLayer(LayerDelegate* delegate)
+    : TextureLayer(delegate) {
 }
 
 RendererLayer::~RendererLayer() {

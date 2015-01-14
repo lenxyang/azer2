@@ -3,11 +3,11 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "azer/render/render.h"
-#include "azer/ui/compositor/layer.h"
+#include "azer/ui/compositor/texture_layer.h"
 
 namespace azer {
 namespace compositor {
-class AZER_EXPORT RendererLayer : public Layer {
+class AZER_EXPORT RendererLayer : public TextureLayer {
  public:
   explicit RendererLayer(LayerDelegate* delegate);
 
