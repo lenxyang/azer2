@@ -21,7 +21,6 @@ const Layer* GetRoot(const Layer* layer) {
 }
 }
 
-
 Layer::Layer(LayerDelegate* delegate)
     : delegate_(delegate)
     , host_(NULL)
@@ -32,7 +31,6 @@ Layer::Layer(LayerDelegate* delegate)
     , max_order_(0)
     , sorted_(false) {
 }
-
 
 Layer::~Layer() {
 }

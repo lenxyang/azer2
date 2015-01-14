@@ -2,6 +2,8 @@
 
 #include "base/basictypes.h"
 #include "ui/gfx/geometry/rect.h"
+#include "base/memory/ref_counted.h"
+
 #include "azer/base/export.h"
 #include "azer/render/renderer.h"
 #include "azer/ui/compositor/layer_tree_host.h"
@@ -15,7 +17,8 @@ namespace compositor {
 class Layer;
 class LayerTreeHost;
 
-class AZER_EXPORT Compositor : public LayerTreeHostClient {
+class AZER_EXPORT Compositor : public LayerTreeHostClient,
+                               public RefCounted<Compositor>  {
  public:
   Compositor();
   ~Compositor();
@@ -30,7 +33,8 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
 
   const Layer* root_layer() const { return host_->root();}
   Layer* root_layer() { return host_->root();}
-  LayerTreeHost* host() { return host_.get();}
+  LayerTreeHost* GetTreeHost() { return host_.get();}
+
  protected:
   void OnResize(const gfx::Size& size) override;
   /**
@@ -51,5 +55,7 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   RendererPtr renderer_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };
+
+typedef scoped_refptr<Compositor> CompositorPtr;
 }  // namespace compositor
 }  // namespace azer

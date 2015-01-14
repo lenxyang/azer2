@@ -20,6 +20,7 @@ void Compositor::DoComposite() {
 }
 
 void Compositor::OnResize(const gfx::Size& size) {
+  DCHECK(NULL != renderer_.get());
   RenderSystem* rs = RenderSystem::Current();
   azer::Texture::Options rdopt;
   rdopt.width = size.width();

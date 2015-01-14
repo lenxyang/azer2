@@ -4,6 +4,8 @@
 #include "azer/base/appinit.h"
 #include "azer/ui/win/context.h"
 #include "azer/ui/win/window_tree_host.h"
+#include "azer/ui/compositor.h"
+#include "azer/render/render.h"
 #include "azer/render/util/render_window.h"
 
 class RenderFrame : public azer::RenderLoop::Delegate {
@@ -12,7 +14,10 @@ class RenderFrame : public azer::RenderLoop::Delegate {
   ~RenderFrame() {}
 
   bool Initialize(azer::RenderLoop* renderer) override {
-    return true;
+    azer::RenderSystem* rs = azer::RenderSystem::Current();
+    overlay_.reset(rs->CreateOverlay());
+    compositor_ = new azer::compositor::Compositor;
+    compositor_->GetTreeHost()->resize(gfx::Size(800, 600));
   }
   void OnUpdate(const ::base::Time& Time,
                 const ::base::TimeDelta& delta) override {
@@ -26,6 +31,8 @@ class RenderFrame : public azer::RenderLoop::Delegate {
     renderer->ClearDepthAndStencil();
   }
  private:
+  azer::compositor::CompositorPtr compositor_;
+  azer::OverlayPtr overlay_;
   DISALLOW_COPY_AND_ASSIGN(RenderFrame);
 };
 
