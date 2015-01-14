@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "ui/gfx/geometry/size.h"
 #include "base/files/file_path.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"
@@ -79,8 +80,7 @@ public:
   };
 
   struct Options {
-    int width;
-    int height;
+    gfx::Size size;
     SamplerState sampler;
     DataFormat format;
     GraphicBuffer::Usage usage;
@@ -89,9 +89,7 @@ public:
     Type type;
 
     Options()
-        : width(0)
-        , height(0)
-        , format(kRGBAn8)
+        : format(kRGBAn8)
         , usage(GraphicBuffer::kDefault)
         , cpu_access(kCPUNoAccess)
         , target(Texture::kUnknown)

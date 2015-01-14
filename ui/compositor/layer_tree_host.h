@@ -16,18 +16,19 @@ class AZER_EXPORT LayerTreeHostClient {
   virtual void OnResize(const gfx::Size& size) = 0;
 };
 
-class AZER_EXPORT LayerTreeHost {
+class AZER_EXPORT LayerTreeHost : public LayerDelegate {
  public:
   LayerTreeHost();
   ~LayerTreeHost();
 
-  void SetClient(LayerTreeHostClient* client) { client_ = client;}
+  void SetClient(LayerTreeHostClient* client);
   void resize(const gfx::Size& size);
 
-  void SetRootLayer(Layer* layer);
   Layer* root() { return root_;}
   const Layer* root() const { return root_;}
  private:
+  void OnPaintLayer(gfx::Canvas* canvas) override {}
+
   LayerTreeHostClient* client_;
   Layer* root_;
   DISALLOW_COPY_AND_ASSIGN(LayerTreeHost);

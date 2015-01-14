@@ -33,8 +33,9 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient,
 
   const Layer* root_layer() const { return host_->root();}
   Layer* root_layer() { return host_->root();}
-  LayerTreeHost* GetTreeHost() { return host_.get();}
 
+  void SetTreeHost(LayerTreeHost* host);
+  LayerTreeHost* GetTreeHost() { return host_.get();}
  protected:
   void OnResize(const gfx::Size& size) override;
   /**
@@ -51,7 +52,7 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient,
    */
   void CompositeLayer(Layer* layer, const gfx::Rect& rect);
 
-  scoped_ptr<LayerTreeHost> host_;
+  LayerTreeHost* host_;
   RendererPtr renderer_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };

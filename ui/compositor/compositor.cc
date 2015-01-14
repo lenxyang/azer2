@@ -6,11 +6,17 @@
 namespace azer {
 namespace compositor {
 
-Compositor::Compositor() {
-  host_.reset(new LayerTreeHost);
+Compositor::Compositor()
+    : host_(NULL) {
+  
 }
 
 Compositor::~Compositor() {
+}
+
+void Compositor::SetTreeHost(LayerTreeHost* host) {
+  host_ = host;
+  host_->SetClient(this);
 }
 
 void Compositor::DoComposite() {
@@ -20,14 +26,15 @@ void Compositor::DoComposite() {
 }
 
 void Compositor::OnResize(const gfx::Size& size) {
-  DCHECK(NULL != renderer_.get());
-  RenderSystem* rs = RenderSystem::Current();
-  azer::Texture::Options rdopt;
-  rdopt.width = size.width();
-  rdopt.height = size.height();
-  rdopt.target = (azer::Texture::BindTarget)
-      (azer::Texture::kRenderTarget | azer::Texture::kShaderResource);
-  renderer_.reset(rs->CreateRenderer(rdopt));
+  if (!renderer_.get() && renderer_->options().size != size) {
+    RenderSystem* rs = RenderSystem::Current();
+    azer::Texture::Options rdopt;
+    rdopt.width = size.width();
+    rdopt.height = size.height();
+    rdopt.target = (azer::Texture::BindTarget)
+        (azer::Texture::kRenderTarget | azer::Texture::kShaderResource);
+    renderer_.reset(rs->CreateRenderer(rdopt));
+  }
 }
 
 gfx::Rect Compositor::CalcRect(Layer* layer, const gfx::Rect& rect) {
