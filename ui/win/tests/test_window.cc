@@ -17,12 +17,11 @@ Window* CreateTestWindowWithDelegateAndType(WindowDelegate* delegate,
   Window* window = new Window(delegate);
   window->set_id(id);
   window->SetType(type);
-  window->Init(aura::WINDOW_LAYER_TEXTURED);
   window->SetBounds(bounds);
   window->Show();
   if (parent)
     parent->AddChild(window);
-  window->SetProperty(aura::client::kCanMaximizeKey, true);
+  window->SetProperty(kCanMaximizeKey, true);
   return window;
 }
 

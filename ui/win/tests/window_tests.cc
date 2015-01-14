@@ -32,8 +32,24 @@ TEST_F(WindowTest, Base) {
   host_->Show();
 }
 
+TEST_F(WindowTest, Contains) {
+  Window parent(NULL);
+  Window child1(NULL);
+  Window child2(NULL);
+
+  parent.AddChild(&child1);
+  child1.AddChild(&child2);
+
+  EXPECT_TRUE(parent.Contains(&parent));
+  EXPECT_TRUE(parent.Contains(&child1));
+  EXPECT_TRUE(parent.Contains(&child2));
+
+  EXPECT_FALSE(parent.Contains(NULL));
+  EXPECT_FALSE(child1.Contains(&parent));
+  EXPECT_FALSE(child2.Contains(&child1));
+}
+
 TEST_F(WindowTest, MousePressedAndRelease) {
-  Window
 }
 
 }  // namespace win
