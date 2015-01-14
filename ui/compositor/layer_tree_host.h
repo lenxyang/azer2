@@ -13,6 +13,7 @@
 namespace azer {
 
 namespace compositor {
+class Compositor;
 class Layer;
 
 class AZER_EXPORT LayerTreeHostClient {
@@ -31,15 +32,16 @@ class AZER_EXPORT LayerTreeHost : public LayerDelegate {
   Layer* root() { return root_;}
   const Layer* root() const { return root_;}
 
-  OverlayPtr& overlay() { return overlay_;}
+  Compositor* compositor();
  private:
   void OnPaintLayer(gfx::Canvas* canvas) override {}
+  void SetCompositor(Compositor* compositor) { compositor_ = compositor;}
 
+  Compositor* compositor_;
   LayerTreeHostClient* client_;
   Layer* root_;
   gfx::Size size_;
-  // all texture merge, use it
-  OverlayPtr overlay_;
+  friend class Compositor;
   DISALLOW_COPY_AND_ASSIGN(LayerTreeHost);
 };
 }  // namespace compositor

@@ -21,7 +21,8 @@ void DeepDeleteLayers(Layer* layer) {
 }  // namespace
 
 LayerTreeHost::LayerTreeHost(const gfx::Size& size)
-    : size_(size)  {
+    : size_(size)
+    , compositor_(NULL) {
   root_ = new NoDrawLayer(this);
   root_->host_ = this;
 }
@@ -40,13 +41,17 @@ void LayerTreeHost::SetClient(LayerTreeHostClient* client) {
 void LayerTreeHost::resize(const gfx::Size& size) {
   RenderSystem* rs = RenderSystem::Current();
   if (size_ != size) {
-    overlay_.reset(rs->CreateOverlay());
     size_= size;
     root_->SetBounds(gfx::Rect(0, 0, size.width(), size.height()));
     if (client_) {
       client_->OnResize(size);
     }
   }
+}
+
+Compositor* LayerTreeHost::compositor() {
+  DCHECK(NULL != compositor_);
+  return compositor_;
 }
 
 }  // namespace compositor

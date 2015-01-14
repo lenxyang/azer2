@@ -10,6 +10,8 @@
 #include "ui/gfx/size_conversions.h"
 #include "ui/gfx/transform.h"
 
+#include "azer/ui/compositor/layer_tree_host.h"
+
 namespace azer {
 namespace compositor {
 
@@ -170,5 +172,49 @@ bool Layer::ConvertPointFromAncestor(const Layer* ancestor,
   return result;
 }
 
+void Layer::SetBoundsInternal(const gfx::Rect& new_bounds) { 
+  bounds_ = new_bounds;
+  OnBoundsChanged();
+}
+
+void Layer::OnParentBoundsChanged() {
+  OnBoundsChanged();
+}
+
+void Layer::OnBoundsChanged() {
+  CalcTargetBounds();
+  CalcOverlayBounds();
+  CalcTexBounds();
+
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    Layer* i = (*iter);
+    i->OnParentBoundsChanged();
+  }
+}
+
+void Layer::CalcTargetBounds() {
+  gfx::Rect parent_bounds = (parent_ ? parent_->target_bounds() : bounds());
+  target_bounds_ = gfx::IntersectRects(parent_bounds , bounds());
+}
+
+void Layer::CalcOverlayBounds() {
+  const gfx::Rect& root_bounds = host_->root()->bounds();
+  float x = (float)target_bounds_.x() / (float)root_bounds.width();
+  float y = (float)target_bounds_.y() / (float)root_bounds.height();
+  float width_percent = (float)target_bounds_.width() / (float)root_bounds.width();
+  float height_percent = (float)target_bounds_.height() / (float)root_bounds.height();
+  overlay_bounds_ = gfx::RectF(2.0f * x - 1.0f, 
+                               2.0f * y - 1.0f,
+                               width_percent * 2.0f,
+                               height_percent * 2.0f);
+}
+
+void Layer::CalcTexBounds() {
+  float tu = (float)(target_bounds_.x()  - bounds().x()) / (float)bounds().width();
+  float tv = (float)(target_bounds_.y()  - bounds().y()) / (float)bounds().height();
+  float width = (float)target_bounds_.width() / (float)bounds().width();
+  float height = (float)target_bounds_.height() / (float)bounds().height();
+  tex_bounds_ = gfx::RectF(tu, tv, width, height);
+}
 }  // namespace compositor
 }  // namespace azer

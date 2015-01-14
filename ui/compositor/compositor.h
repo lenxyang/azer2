@@ -33,6 +33,7 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient,
 
   TexturePtr& GetOutputTexture();
   RendererPtr& GetRenderer();
+  OverlayPtr& overlay() { return overlay_;}
 
   const Layer* root_layer() const { return host_->root();}
   Layer* root_layer() { return host_->root();}
@@ -56,6 +57,7 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient,
   void CompositeLayer(Layer* layer, const gfx::Rect& rect);
 
   LayerTreeHost* host_;
+  OverlayPtr overlay_;
   RendererPtr renderer_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };

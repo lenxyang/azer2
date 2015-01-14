@@ -62,6 +62,13 @@ class AZER_EXPORT Layer {
   virtual void SetBounds(const gfx::Rect& bounds) = 0;
   const gfx::Rect& bounds() const { return bounds_;}
 
+  /**
+   * 虽然设置了 bounds, 但不是所有的 bounds 都能够显示的，
+   * 如果超出了 parent->bounds, 就不能显示了， target_bounds
+   * 就是未超出的部分，或者有效部分
+   */
+  const gfx::Rect& target_bounds() const { return target_bounds_;}
+
   void SetPosition(const gfx::Point& pt) { position_ = pt;}
   const gfx::Point& position() const { return position_;}
 
@@ -94,15 +101,26 @@ class AZER_EXPORT Layer {
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
-  void SetBoundsInternal(const gfx::Rect& new_bounds) { bounds_ = new_bounds;}
-
-  virtual void OnParentsBoundsChanged() = 0;
+  /**
+   * 在更改窗口的 bounds 时，需要重新计算 overly_bounds 和 tex_bounds
+   * 才外父窗口变化时，子窗口也需要进行计算
+   *
+   */
+  void SetBoundsInternal(const gfx::Rect& new_bounds);
+  void OnParentBoundsChanged();
+  void OnBoundsChanged();
  protected:
+  void CalcTargetBounds();
+  void CalcOverlayBounds();
+  void CalcTexBounds();
   std::string name_;
   LayerDelegate* delegate_;
   LayerTreeHost* host_;
   gfx::Point position_;
   gfx::Rect bounds_;
+  gfx::Rect target_bounds_;
+  gfx::RectF overlay_bounds_;
+  gfx::RectF tex_bounds_;
   bool visible_;
   int32 order_;
   int32 min_order_;

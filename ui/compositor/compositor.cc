@@ -16,8 +16,13 @@ Compositor::~Compositor() {
 }
 
 void Compositor::SetTreeHost(LayerTreeHost* host) {
+  if (host_) {
+    host_->SetCompositor(NULL);
+  }
+
   host_ = host;
   host_->SetClient(this);
+  host_->SetCompositor(this);
 }
 
 void Compositor::DoComposite() {
@@ -35,6 +40,9 @@ void Compositor::OnResize(const gfx::Size& size) {
   rdopt.target = (azer::Texture::BindTarget)
       (azer::Texture::kRenderTarget | azer::Texture::kShaderResource);
   renderer_.reset(rs->CreateRenderer(rdopt));
+  if (!overlay_.get()) {
+    overlay_.reset(rs->CreateOverlay());
+  }
 }
 
 gfx::Rect Compositor::CalcRect(Layer* layer, const gfx::Rect& rect) {

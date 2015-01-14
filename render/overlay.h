@@ -24,6 +24,7 @@ class AZER_EXPORT Overlay {
   void SetTexture(TexturePtr tex) { tex_ = tex;}
   void SetBounds(const gfx::RectF& rect);
   void SetTexCoord(const gfx::PointF& lt, const gfx::PointF& br);
+  void SetTexCoord(const gfx::RectF& rc);
   void SetTransform(const Matrix4& matrix) { transform_ = matrix;}
   /**
    * Overlay 的顶点格式

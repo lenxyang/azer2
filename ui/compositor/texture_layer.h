@@ -29,12 +29,9 @@ class AZER_EXPORT TextureLayer : public Layer {
   TexturePtr& GetContent() { return texture_;}
  protected:
   void UpdateOverlayCoord();
- private:
+ protected:
   BlendingPtr blending_;
   TexturePtr texture_;
-  
-  gfx::RectF texrc_;
-  gfx::RectF overlay_rc_;
   DISALLOW_COPY_AND_ASSIGN(TextureLayer);
 };
 }  // namespace compositor

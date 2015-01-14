@@ -55,6 +55,11 @@ void Overlay::SetTexCoord(const gfx::PointF& lt, const gfx::PointF& br) {
   texcoord_[3] = azer::Vector4(lt.x(), br.y(), 0.0f, 0.0f);
 }
 
+void Overlay::SetTexCoord(const gfx::RectF& rc) {
+  SetTexCoord(gfx::PointF(rc.x(), rc.y()),
+              gfx::PointF(rc.x() + rc.width(), rc.y() + rc.height()));
+}
+
 void Overlay::SetBounds(const gfx::RectF& rect) {
   vertex_[0] = azer::Vector4(rect.x(), rect.y() + rect.height(), 0.0f, 1.0f);
   vertex_[1] = azer::Vector4(rect.x() + rect.width(), rect.y() + rect.height(),
