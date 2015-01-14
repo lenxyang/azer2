@@ -15,6 +15,9 @@ class AZER_EXPORT NoDrawLayer : public Layer {
   explicit NoDrawLayer(LayerDelegate* delegate) : Layer(delegate) {}
   ~NoDrawLayer() override {}
 
+  void SetBounds(const gfx::Rect& bounds) override {
+    SetBoundsInternal(bounds);
+  }
   void Render(Renderer* renderer, const gfx::Rect& parent_rc) override {}
  private:
   DISALLOW_COPY_AND_ASSIGN(NoDrawLayer);

@@ -14,5 +14,8 @@ CanvasLayer::~CanvasLayer() {
 void CanvasLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
 }
 
+void CanvasLayer::SetBounds(const gfx::Rect& bounds) {
+  SetBoundsInternal(bounds);
+}
 }  // namespace compositor
 }  // namespace azer

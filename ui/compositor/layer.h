@@ -58,7 +58,7 @@ class AZER_EXPORT Layer {
   int32 order() const { return order_;}
   void SetOrder(int32 o);
 
-  void SetBounds(const gfx::Rect& bounds);
+  virtual void SetBounds(const gfx::Rect& bounds) = 0;
   const gfx::Rect& bounds() const { return bounds_;}
 
   void SetPosition(const gfx::Point& pt) { position_ = pt;}
@@ -87,16 +87,18 @@ class AZER_EXPORT Layer {
   // ancestor of this layer).
   bool GetTargetTransformRelativeTo(const Layer* ancestor,
                                     gfx::Transform* transform) const;
- private:
+ protected:
   void SetTreeHost(LayerTreeHost* host);
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
+  void SetBoundsInternal(const gfx::Rect& new_bounds) { bounds_ = new_bounds;}
+ private:
   std::string name_;
   LayerDelegate* delegate_;
   LayerTreeHost* host_;
-  gfx::Rect bounds_;
   gfx::Point position_;
+  gfx::Rect bounds_;
   bool visible_;
   int32 order_;
   int32 min_order_;

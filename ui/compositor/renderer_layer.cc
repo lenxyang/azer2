@@ -16,5 +16,9 @@ RendererLayer::~RendererLayer() {
 void RendererLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
 }
 
+void RendererLayer::SetBounds(const gfx::Rect& bounds) {
+  SetBoundsInternal(bounds);
+}
+
 }  // namespace compositor
 }  // namespace azer
