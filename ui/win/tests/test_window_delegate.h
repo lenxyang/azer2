@@ -7,7 +7,7 @@
 namespace azer {
 namespace win {
 
-class WindowDelegateForTest : public WindowDelegate {
+class TestWindowDelegate : public WindowDelegate {
  public:
   virtual gfx::Size GetMinimumSize() const { return gfx::Size(1, 1);}
   virtual gfx::Size GteMaximumSize() const { return gfx::Size(10000, 10000);}
@@ -26,13 +26,7 @@ class ColorTestWindowDelegate : public TestWindowDelegate {
   explicit ColorTestWindowDelegate(SkColor color);
   ~ColorTestWindowDelegate() override;
 
-  ui::KeyboardCode last_key_code() const { return last_key_code_; }
-
-  // Overridden from TestWindowDelegate:
-  void OnKeyEvent(ui::KeyEvent* event) override {}
-  void OnWindowDestroyed(Window* window) override {}
   void OnPaint(gfx::Canvas* canvas) override {}
-
  private:
   SkColor color_;
   ui::KeyboardCode last_key_code_;
@@ -40,7 +34,7 @@ class ColorTestWindowDelegate : public TestWindowDelegate {
   DISALLOW_COPY_AND_ASSIGN(ColorTestWindowDelegate);
 };
 
-class MouseEventCounterDelegate : public WindowDelegate {
+class MouseEventCounterDelegate : public TestWindowDelegate {
  public:
   MouseEventCounterDelegate() {
     ResetCounters();
