@@ -17,13 +17,17 @@ class LayerTreeHost;
 
 class Compositor : public LayerTreeHostClient {
  public:
-  explicit Compositor(LayerTreeHost* host);
+  Compositor();
   ~Compositor();
 
   // composite the layers into the render target
   void DoComposite();
 
   RendererPtr& GetRenderer();
+
+  const Layer* root_layer() const { return host_->root();}
+  Layer* root_layer() { return host_->root();}
+  LayerTreeHost* host() { return host_.get();}
  protected:
   void OnResize(const gfx::Size& size) override;
   /**
@@ -40,7 +44,7 @@ class Compositor : public LayerTreeHostClient {
    */
   void CompositeLayer(Layer* layer, const gfx::Rect& rect);
 
-  LayerTreeHost* host_;
+  scoped_ptr<LayerTreeHost> host_;
   RendererPtr renderer_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };

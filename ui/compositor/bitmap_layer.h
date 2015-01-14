@@ -5,18 +5,19 @@
 #include "azer/render/render.h"
 #include "azer/ui/compositor/layer.h"
 
+class SkBitmap;
+
 namespace azer {
 namespace compositor {
-class AZER_EXPORT RendererLayer : public Layer {
- public:
-  explicit RendererLayer(LayerDelegate* delegate);
 
-  ~RendererLayer() override;
+class BitmapLayer : public Layer {
+ public:
+  explicit BitmapLayer(Layer* parent);
+  ~BitmapLayer() override;
 
   void Render(Renderer* renderer) override;
  private:
-  RendererPtr renderer_;
-  DISALLOW_COPY_AND_ASSIGN(RendererLayer);
+  DISALLOW_COPY_AND_ASSIGN(BitmapLayer);
 };
 }  // namespace compositor
 }  // namespace azer

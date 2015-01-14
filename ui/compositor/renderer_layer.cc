@@ -10,10 +10,6 @@ RendererLayer::RendererLayer(Layer* parent)
     : Layer(parent) {
 }
 
-RendererLayer::RendererLayer(LayerTreeHost* host)
-    : Layer(host){
-}
-
 RendererLayer::~RendererLayer() {
 }
 

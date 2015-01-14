@@ -4,12 +4,8 @@
 namespace azer {
 namespace compositor {
 
-CanvasLayer::CanvasLayer(Layer* parent)
-    : Layer(parent) {
-}
-
-CanvasLayer::CanvasLayer(LayerTreeHost* host)
-    : Layer(host){
+CanvasLayer::CanvasLayer(LayerDelegate* delegate)
+    : TextureLayer(delegate) {
 }
 
 CanvasLayer::~CanvasLayer() {

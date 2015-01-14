@@ -9,8 +9,6 @@
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/transform.h"
 #include "azer/base/export.h"
-#include "azer/render/blending.h"
-#include "azer/render/texture.h"
 
 namespace gfx {
 class Transform;
@@ -23,16 +21,15 @@ class Renderer;
 namespace compositor {
 
 class Layer;
-class LayerTreeHost;
-typedef std::vector<scoped_refptr<Layer> > LayerList;
+typedef std::vector<Layer*> LayerList;
 
 class CanvasLayer;
 class RendererLayer;
+class LayerDelegate;
 
-class AZER_EXPORT Layer : public base::RefCounted<Layer> {
+class AZER_EXPORT Layer {
  public:
-  explicit Layer(Layer* parent);
-  explicit Layer(LayerTreeHost* host);
+  explicit Layer(LayerDelegate* delegate);
   virtual ~Layer();
 
   Layer* parent() { return parent_;}
@@ -48,17 +45,15 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   virtual void Render(Renderer* renderer, const gfx::RectF& rect) = 0;
 
   // add, remove child
-  void Add(scoped_refptr<Layer>& layer);
-  bool Remove(scoped_refptr<Layer>& layer);
-  bool IsChild(scoped_refptr<Layer>& layer);
+  void Add(Layer* layer);
+  bool Remove(Layer* layer);
+  bool IsChild(Layer* layer);
 
   // move the layer to top or bottom
   void BringToTop(Layer* layer);
   void BringToBottom(Layer* layer);
   int32 order() const { return order_;}
   void SetOrder(int32 o);
-
-  void SetBlending(BlendingPtr& ptr) { blending_ = ptr;}
 
   void SetBounds(const gfx::Rect& bounds);
   const gfx::Rect& bounds() const { return bounds_;}
@@ -73,7 +68,6 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   void RemoveFromParent();
   void OnChildrenOrderChanged();
 
-  TexturePtr& GetContent() { return texture_;}
   // sort the children layer by order
   // 
   void SortChildren();
@@ -94,7 +88,7 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
-  BlendingPtr blending_;
+  LayerDelegate* delegate_;
   gfx::Rect bounds_;
   gfx::Point position_;
   bool visible_;
@@ -103,12 +97,8 @@ class AZER_EXPORT Layer : public base::RefCounted<Layer> {
   int32 max_order_;
   bool sorted_;
   LayerList children_;
-  LayerTreeHost* host_;
   Layer* parent_;
-  TexturePtr texture_;
   DISALLOW_COPY_AND_ASSIGN(Layer);
 };
-
-typedef scoped_refptr<Layer> LayerPtr;
 }  // namespace compositor
 }  // namespace azer

@@ -1,6 +1,8 @@
 
 source_set("compositor") {
   sources = [
+    "bitmap_layer.cc",
+    "bitmap_layer.h",
     "canvas_layer.cc",
     "canvas_layer.h",
     "compositor.cc",
@@ -9,6 +11,8 @@ source_set("compositor") {
     "layer.h",
     "layer_tree_host.cc",
     "layer_tree_host.h",
+    "texture_layer.cc",
+    "texture_layer.h",
     "renderer_layer.cc",
     "renderer_layer.h",
   ]

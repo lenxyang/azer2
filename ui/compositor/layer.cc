@@ -22,37 +22,29 @@ const Layer* GetRoot(const Layer* layer) {
 }
 
 
-Layer::Layer(Layer* parent)
-    : visible_(true)
+Layer::Layer(Delegate* delegate)
+    : delegate_(delegate)
+    , parent_(NULL)
+    , visible_(true)
     , order_(0)
     , min_order_(0)
     , max_order_(0)
     , sorted_(false)
-    , host_(parent->GetTreeHost())
     , parent_(parent) {
-  parent_->Add(scoped_refptr<Layer>(this));
 }
 
-Layer::Layer(LayerTreeHost* host)
-    : visible_(true)
-    , order_(0)
-    , min_order_(0)
-    , max_order_(0)
-    , sorted_(false)
-    , host_(host)
-    , parent_(NULL) {
-}
 
 Layer::~Layer() {
 }
 
-void Layer::Add(scoped_refptr<Layer>& layer) {
+void Layer::Add(Layer* layer) {
   DCHECK(!IsChild(layer));
+  layer_->parent = this;
   children_.push_back(layer);
   OnChildrenOrderChanged();
 }
 
-bool Layer::IsChild(scoped_refptr<Layer>& layer) {
+bool Layer::IsChild(Layer* layer) {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     if ((*iter).get() == layer.get()) {
       return true;
@@ -62,7 +54,7 @@ bool Layer::IsChild(scoped_refptr<Layer>& layer) {
   return false;
 }
 
-bool Layer::Remove(scoped_refptr<Layer>& layer) {
+bool Layer::Remove(Layer* layer) {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     if ((*iter).get() == layer.get()) {
       children_.erase(iter);
@@ -91,7 +83,7 @@ void Layer::OnChildrenOrderChanged() {
 namespace {
 class LayerSort {
  public:
-  bool operator() (const scoped_refptr<Layer>& l1, const scoped_refptr<Layer>& l2) {
+  bool operator() (const Layer* l1, const Layer* l2) {
     return l1->order() < l2->order();
   }
 };

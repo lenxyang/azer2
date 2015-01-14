@@ -6,18 +6,13 @@
 
 namespace azer {
 namespace compositor {
-LayerTreeHost::LayerTreeHost(RenderSystem* rs)
-    : render_system_(rs) {
+LayerTreeHost::LayerTreeHost() {
 }
 
-scoped_refptr<Layer> LayerTreeHost::CreateCanvasLayer(const gfx::Rect& rect) {
-  DCHECK(NULL != root());
-  return scoped_refptr<Layer>(new CanvasLayer(root()));
+void LayerTreeHost::SetRootLayer(Layer* layer) {
+  DCHECK(NULL == root_);
+  root_ = layer;
 }
 
-scoped_refptr<Layer> LayerTreeHost::CreateRendererLayer(const gfx::Rect& rect) {
-  DCHECK(NULL != root());
-  return scoped_refptr<Layer>(new RendererLayer(root()));
-}
 }  // namespace compositor
 }  // namespace azer

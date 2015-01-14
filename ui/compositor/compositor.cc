@@ -6,9 +6,8 @@
 namespace azer {
 namespace compositor {
 
-Compositor::Compositor(LayerTreeHost* host)
-    : host_(host) {
-  host_->SetClient(this);
+Compositor::Compositor()
+    : root_layer_(NULL) {
 }
 
 Compositor::~Compositor() {
@@ -49,6 +48,10 @@ void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {
       CompositeLayer(layer, rc);
     }
   }
+}
+
+void Compositor::SetRootLayer(Layer* root_layer) {
+  root_layer_ = root_layer;
 }
 }  // namespace compositor
 }  // namespace azer
