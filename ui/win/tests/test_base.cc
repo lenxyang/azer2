@@ -1,5 +1,6 @@
 #include "azer/ui/win/tests/test_base.h"
 
+#include "base/run_loop.h"
 #include "azer/ui/win/context.h"
 
 namespace azer {
@@ -18,6 +19,11 @@ void WinTestBase::SetUp() {
 
 void WinTestBase::TearDown() {
   WinContext::DeleteInstance();
+}
+
+void WinTestBase::RunAllPendingInMessageLoop() {
+  base::RunLoop run_loop;
+  run_loop.RunUntilIdle();
 }
 }  // namespace win
 }  // namespace azer

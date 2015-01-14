@@ -10,14 +10,15 @@
 namespace azer {
 namespace win {
 
-Window::Window(Window* parent)
-    : parent_(parent)
+Window::Window(WindowDelegate* delegate)
+    : parent_(NULL)
     , host_(NULL)
-    , delegate_(NULL)
+    , delegate_(delegate)
     , layer_(NULL)
     , visible_(true)
     , user_data_(NULL)
     , ignore_events_(false) {
+  set_target_handler(delegate_);
 }
 
 Window::~Window() {

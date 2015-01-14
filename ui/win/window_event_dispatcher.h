@@ -42,6 +42,7 @@ class AZER_EXPORT WindowEventDispatcher : public ::ui::EventProcessor,
   const Window* window() const;
   WindowTreeHost* host_;
 
+  void PreDispatchLocatedEvent(Window* target, ui::LocatedEvent* event);
   void PreDispatchMouseEvent(Window* target, ui::MouseEvent* event);
 
   Window* event_dispatch_target_;

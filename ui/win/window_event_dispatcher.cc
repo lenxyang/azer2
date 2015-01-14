@@ -6,6 +6,8 @@
 namespace azer {
 namespace win {
 
+typedef ui::EventDispatchDetails DispatchDetails;
+
 WindowEventDispatcher::WindowEventDispatcher(WindowTreeHost* host)
     : host_(host) 
     , event_dispatch_target_(NULL)
@@ -41,6 +43,7 @@ bool WindowEventDispatcher::CanDispatchToTarget(ui::EventTarget* target) {
   if (event->IsMouseEvent()) {
     PreDispatchMouseEvent(target_window, static_cast<ui::MouseEvent*>(event));
   } else {
+    LOG(ERROR) << "Unsupport event.";
   }
   old_dispatch_target_ = event_dispatch_target_;
   event_dispatch_target_ = static_cast<Window*>(target);
@@ -58,6 +61,15 @@ bool WindowEventDispatcher::CanDispatchToTarget(ui::EventTarget* target) {
 #endif
 
   return details;
+}
+
+void WindowEventDispatcher::PreDispatchLocatedEvent(Window* target,
+                                                    ui::LocatedEvent* event) {
+}
+
+void WindowEventDispatcher::PreDispatchMouseEvent(Window* target,
+                                                  ui::MouseEvent* event) {
+  PreDispatchLocatedEvent(target, event);
 }
 }  // namespace win
 }  // namespace azer

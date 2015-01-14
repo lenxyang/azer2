@@ -28,3 +28,6 @@ class WindowTest : public azer::win::WinTestBase {
 TEST_F(WindowTest, Base) {
   host_->Show();
 }
+
+TEST_F(WindowTest, MousePressedAndRelease) {
+}

@@ -21,6 +21,7 @@ class WinTestBase : public testing::Test {
   void SetUp() override;
   void TearDown() override;
  protected:
+  void RunAllPendingInMessageLoop();
   base::MessageLoopForUI message_loop_;
   scoped_ptr<WindowTreeHost> host_;
   DISALLOW_COPY_AND_ASSIGN(WinTestBase);
