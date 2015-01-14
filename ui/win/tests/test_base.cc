@@ -25,5 +25,12 @@ void WinTestBase::RunAllPendingInMessageLoop() {
   base::RunLoop run_loop;
   run_loop.RunUntilIdle();
 }
+
+void WinTestBase::DispatchEventUsingWindowDispatcher(::ui::Event* event) {
+  ui::EventDispatchDetails details =
+      event_processor()->OnEventFromSource(event);
+  CHECK(!details.dispatcher_destroyed);
+  return event->handled();
+}
 }  // namespace win
 }  // namespace azer
