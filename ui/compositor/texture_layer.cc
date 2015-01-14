@@ -22,6 +22,7 @@ void TextureLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
   if (texture_.get()) {
     OverlayPtr& overlay = host_->compositor()->overlay();
     DCHECK(overlay.get() != NULL);
+    overlay->SetTexture(texture_);
     overlay->SetTexCoord(tex_bounds_);
     overlay->SetBounds(overlay_bounds_);
     overlay->Render(renderer);

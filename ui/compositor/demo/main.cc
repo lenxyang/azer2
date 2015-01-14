@@ -47,8 +47,8 @@ class RenderFrame : public azer::RenderLoop::Delegate {
     layer2->SetBounds(gfx::Rect(0, 0, 300, 300));
     
     Layer* layer3 = new CanvasLayer(blue_layer_delegate_.get());
-    layer3->SetBounds(gfx::Rect(100, 100, 100, 100));
     layer2->Add(layer3);
+    layer3->SetBounds(gfx::Rect(100, 100, 100, 100));
 
     compositor_ = new azer::compositor::Compositor;
     compositor_->SetTreeHost(layer_host_.get());

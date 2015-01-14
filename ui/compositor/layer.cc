@@ -173,6 +173,7 @@ bool Layer::ConvertPointFromAncestor(const Layer* ancestor,
 }
 
 void Layer::SetBoundsInternal(const gfx::Rect& new_bounds) { 
+  DCHECK(host_ != NULL) << "before set bounds, please put the layer into layer_tree";
   bounds_ = new_bounds;
   OnBoundsChanged();
 }
