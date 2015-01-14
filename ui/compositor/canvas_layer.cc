@@ -26,9 +26,11 @@ void CanvasLayer::SetBounds(const gfx::Rect& bounds) {
 
 void CanvasLayer::Redraw() {
   if (delegate_) {
+    SkCanvas* skcanvas = canvas_->BeginPaint();
     scoped_ptr<gfx::Canvas> canvas(
-        gfx::Canvas::CreateCanvasWithoutScaling(canvas_->GetSkCanvas(), 1.0f));
+        gfx::Canvas::CreateCanvasWithoutScaling(skcanvas, 1.0f));
     delegate_->OnPaintLayer(canvas.get());
+    canvas_->EndPaint();
     texture_ = canvas_->GetTexture();
   }
 }

@@ -25,6 +25,7 @@ LayerTreeHost::LayerTreeHost(const gfx::Size& size)
     , compositor_(NULL) {
   root_ = new NoDrawLayer(this);
   root_->host_ = this;
+  root_->SetBounds(gfx::Rect(0, 0, size.width(), size.height()));
 }
 
 LayerTreeHost::~LayerTreeHost() {
