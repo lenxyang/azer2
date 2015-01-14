@@ -4,6 +4,7 @@
 #include "base/memory/ref_counted.h"
 #include "ui/gfx/geometry/rect.h"
 #include "azer/base/export.h"
+#include "azer/render/render_system_observer.h"
 
 namespace azer {
 
