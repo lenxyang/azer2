@@ -18,7 +18,9 @@ class AZER_EXPORT NoDrawLayer : public Layer {
   void SetBounds(const gfx::Rect& bounds) override {
     SetBoundsInternal(bounds);
   }
+
   void Render(Renderer* renderer, const gfx::Rect& parent_rc) override {}
+  void Redraw() override {}
  private:
   DISALLOW_COPY_AND_ASSIGN(NoDrawLayer);
 };

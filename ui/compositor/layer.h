@@ -43,6 +43,7 @@ class AZER_EXPORT Layer {
    * parent_rc 为父窗口当前的 rect
    **/
   virtual void Render(Renderer* renderer, const gfx::Rect& parent_rc) = 0;
+  virtual void Redraw() = 0;
 
   const std::string& name() const { return name_;}
   void SetName(const std::string& name) { name_ = name;}
@@ -74,7 +75,8 @@ class AZER_EXPORT Layer {
   // sort the children layer by order
   // 
   void SortChildren();
-  LayerList* GetChildren() { return &children_;}
+  LayerList& children() { return children_;}
+  const LayerList& children() const { return children_;}
 
   // Converts a point from the coordinates of |source| to the coordinates of
   // |target|. Necessarily, |source| and |target| must inhabit the same Layer
@@ -93,7 +95,9 @@ class AZER_EXPORT Layer {
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
   void SetBoundsInternal(const gfx::Rect& new_bounds) { bounds_ = new_bounds;}
- private:
+
+  virtual void OnParentsBoundsChanged() = 0;
+ protected:
   std::string name_;
   LayerDelegate* delegate_;
   LayerTreeHost* host_;

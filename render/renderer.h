@@ -110,8 +110,8 @@ class AZER_EXPORT Renderer {
   virtual void SetViewport(const Viewport& viewport) = 0;
   virtual const Viewport& GetViewport() const  = 0;
 
-  DepthBuffer* GetDepthBuffer() { return depth_.get();}
-  RenderTarget* GetRenderTarget() { return targets_[0].get();}
+  DepthBufferPtr& GetDepthBuffer() { return depth_;}
+  RenderTargetPtr& GetRenderTarget() { return targets_[0];}
   typedef std::vector<RenderTargetPtr> RenderTargetVec;
   RenderTargetVec* GetAllRenderTargets() { return &targets_;}
   RenderSystem* GetRenderSystem() { return render_system_;}

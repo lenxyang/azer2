@@ -2,6 +2,7 @@
 
 #include "azer/ui/compositor/layer.h"
 #include "azer/render/render.h"
+#include "azer/render/context2d.h"
 
 namespace azer {
 namespace compositor {
@@ -20,6 +21,8 @@ void Compositor::SetTreeHost(LayerTreeHost* host) {
 }
 
 void Compositor::DoComposite() {
+  RenderSystem* rs = RenderSystem::Current();
+  rs->GetContext2D()->finish();
   Layer* root = host_->root();
   gfx::Rect rect(root->bounds());
   CompositeLayer(root, rect);
@@ -42,10 +45,20 @@ gfx::Rect Compositor::CalcRect(Layer* layer, const gfx::Rect& rect) {
   return std::move(gfx::IntersectRects(rect, rc));
 }
 
+void Compositor::ScheduleDraw() {
+  auto list = root_layer()->children();
+  for (auto iter = list.begin(); iter != list.end(); ++iter) {
+    Layer* layer = (*iter);
+    if (layer->visible()) {
+      layer->Redraw();
+    }
+  }
+}
+
 void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {
   parent->SortChildren();
-  LayerList* list = parent->GetChildren();
-  for (auto iter = list->begin(); iter != list->end(); ++iter) {
+  auto list = parent->children();
+  for (auto iter = list.begin(); iter != list.end(); ++iter) {
     Layer* layer = (*iter);
     if (layer->visible()) {
       gfx::Rect rc = std::move(CalcRect(layer, prect));
@@ -55,5 +68,9 @@ void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {
   }
 }
 
+TexturePtr& Compositor::GetOutputTexture() {
+  RenderTargetPtr target = renderer_->GetRenderTarget();
+  return target->GetTexture();
+}
 }  // namespace compositor
 }  // namespace azer

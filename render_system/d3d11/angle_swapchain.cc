@@ -25,7 +25,7 @@ class TextureCombined {
 
 void Combined(ID3D11ShaderResourceView* angle, AngleSwapChain* swapchain,
               ID3D11ShaderResourceView** resource) {
-  RenderTarget* target = swapchain->GetRenderer()->GetRenderTarget();
+  RenderTargetPtr target = swapchain->GetRenderer()->GetRenderTarget();
   TexturePtr& tex = target->GetTexture();
   D3DTexture* d3dtex = (D3DTexture*)tex.get();
   *resource = d3dtex->GetResourceView();

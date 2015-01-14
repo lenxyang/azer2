@@ -23,12 +23,15 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient,
   Compositor();
   ~Compositor();
 
-  // 将所有的Layer输出合并成到 TreeHostLayer 当中
+  // merge all output into output texture
   void DoComposite();
-  // ScheduleDraw 是异步调用，返回式绘制可能尚未完成
-  // （例如 GL 调用必须等到 glFinish 返回之后才能确保所有操作已经完成 ）
+  /* ScheduleDraw 是异步调用，返回式绘制可能尚未完成
+  * （例如 GL 调用必须等到 glFinish 返回之后才能确保所有操作已经完成 ）
+  * (save the layer need to redraw, and just draw them)
+  */
   void ScheduleDraw();
 
+  TexturePtr& GetOutputTexture();
   RendererPtr& GetRenderer();
 
   const Layer* root_layer() const { return host_->root();}
