@@ -19,6 +19,11 @@ class RenderFrame : public azer::RenderLoop::Delegate {
   }
   void OnRender(const ::base::Time& Time,
                 const ::base::TimeDelta& delta) override {
+    azer::RenderSystem* rs = azer::RenderSystem::Current();
+    azer::Renderer* renderer = rs->GetSwapchainRenderer();
+    renderer->Use();
+    renderer->Clear(azer::Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+    renderer->ClearDepthAndStencil();
   }
  private:
   DISALLOW_COPY_AND_ASSIGN(RenderFrame);
