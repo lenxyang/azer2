@@ -10,6 +10,7 @@
 namespace azer {
 namespace widget {
 
+class Widget;
 class WidgetTreeHost;
 
 class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor {
@@ -29,6 +30,8 @@ class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor {
                                              const ui::Event& event) override;
 
   Widget* root();
+
+  WidgetTreeHost* host_;
   DISALLOW_COPY_AND_ASSIGN(WidgetEventDispatcher);
 };
 }  // namespace widget

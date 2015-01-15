@@ -6,7 +6,9 @@
 #include "base/message_loop/message_loop.h"
 #include "ui/compositor/dip_util.h"
 #include "ui/events/event.h"
+
 #include "azer/ui/widget/widget_tree_host.h"
+#include "azer/ui/widget/widget.h"
 
 typedef ui::EventDispatchDetails DispatchDetails;
 
