@@ -25,11 +25,17 @@ class AZER_EXPORT WidgetTreeHostWin
   WidgetTreeHostWin();
   virtual ~WidgetTreeHostWin();
 
+  gfx::AcceleratedWidget GetAcceleratedWidget() override;
+  void Show() override;
+  void Hide() override;
+  gfx::Rect GetBounds() override;
+  void SetBounds(const gfx::Rect& rect) override;
+  gfx::Point GetLocationOnNativeScreen() const override;
 
   // ui::EventSource:
   ui::EventProcessor* GetEventProcessor() override;  
  protected:
-  gfx::AcceleratedWidget hwnd() const { return widget_; }
+  gfx::AcceleratedWidget hwnd() const { return hwnd_; }
 
   // ui::PlatformWindowDelegate:
   void OnBoundsChanged(const gfx::Rect& new_bounds) override;
@@ -41,6 +47,9 @@ class AZER_EXPORT WidgetTreeHostWin
   void OnLostCapture() override;
   void OnAcceleratedWidgetAvailable(gfx::AcceleratedWidget widget) override;
   void OnActivationChanged(bool active) override;
+
+  gfx::AcceleratedWidget hwnd_;
+  scoped_ptr< ::ui::WinWindow> window_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTreeHostWin);
 };
 
