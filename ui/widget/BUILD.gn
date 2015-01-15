@@ -1,0 +1,49 @@
+
+
+source_set("widget") {
+  sources = [
+    "render_loop.cc",
+    "render_loop.h",
+    "widget_context.cc",
+    "widget_context.h",
+    "widget_tree_host.cc",
+    "widget_tree_host.h",
+    "widget_tree_host_win.cc",
+    "widget_tree_host_win.h",
+    "widget.cc",
+    "widget.h",
+  ]
+
+  deps = [
+    "//skia",
+    "//ui/events",
+    "//ui/events/platform",
+    "//ui/events:events_base",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//ui/platform_window",
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+  visibility = ["//azer/render"]
+}
+
+source_set("unittests") {
+  sources = [
+    "tests/test_base.cc",
+    "tests/test_base.h",
+  ]
+
+  deps = [
+    "//base/test:test_support",
+    "//testing/gtest",
+    "//skia",
+    "//azer/render",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+  ]
+  configs += ["//azer/build/config:utf8src"]
+  visibility = ["//azer/render:unittests"]
+}

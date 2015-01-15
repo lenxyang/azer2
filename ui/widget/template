@@ -1,0 +1,27 @@
+#pragma once
+
+#include "azer/base/export.h"
+
+
+namespace azer {
+namespace widget {
+
+class WidgetTreeHost {
+ public:
+  
+ protected:
+  WidgetTreeHost();
+  virtual ~WidgetTreeHost();
+  DISALLOW_COPY_AND_ASSIGN(WidgetTreeHost);
+};
+
+}  // namespace widget
+}  // namespace azer
+
+
+#include "azer/ui/widget/widget_tree_host.h"
+
+namespace azer {
+namespace widget {
+}  // namespace widget
+}  // namespace azer
