@@ -64,7 +64,7 @@ class RenderFrame : public azer::RenderLoop::Delegate {
     azer::RenderSystem* rs = azer::RenderSystem::Current();
     azer::Renderer* renderer = rs->GetSwapchainRenderer();
     renderer->Use();
-    renderer->Clear(azer::Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+    renderer->Clear(azer::Vector4(0.0f, 0.0f, 0.0f, 1.0f));
     renderer->ClearDepthAndStencil();
 
     compositor_->ScheduleDraw();
