@@ -2,8 +2,10 @@
 
 #include "base/logging.h"
 #include "base/message_loop/message_loop.h"
+#include "base/run_loop.h"
+#include "base/time/time.h"
 
-
+#include "azer/render/render_system.h"
 #include "azer/ui/widget/widget_tree_host.h"
 
 namespace azer {
@@ -14,8 +16,7 @@ RenderLoop::RenderLoop(Delegate* delegate)
     , render_system_(NULL)
     , message_loop_(NULL)
     , which_(0)
-    , frame_count_(0) 
-    , stop_(false) {
+    , frame_count_(0) {
 }
 
 RenderLoop::~RenderLoop() {

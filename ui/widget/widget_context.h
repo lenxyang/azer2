@@ -1,6 +1,8 @@
 #pragma once
 
 #include <atomic>
+
+#include "base/basictypes.h"
 #include "azer/base/export.h"
 
 namespace azer {
@@ -10,7 +12,7 @@ class AZER_EXPORT WidgetContext {
  public:
   static void Init();
   static WidgetContext* GetInstance();
-  static WidgetContext* Destroy();
+  static void Destroy();
 
   int64 allocate_widget_id();
  protected:

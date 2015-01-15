@@ -1,12 +1,12 @@
 #pragma once
 
-
 #include "base/compiler_specific.h"
 #include "base/basictypes.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/point.h"
 #include "ui/events/event_source.h"
 
+#include "ui/platform_window/win/win_window.h"
 #include "ui/platform_window/platform_window.h"
 #include "ui/platform_window/platform_window_delegate.h"
 
@@ -22,7 +22,7 @@ class AZER_EXPORT WidgetTreeHostWin
     , public ::ui::EventSource
     , public NON_EXPORTED_BASE(ui::PlatformWindowDelegate) {
  public:
-  WidgetTreeHostWin();
+  explicit WidgetTreeHostWin(const gfx::Rect& bounds);
   virtual ~WidgetTreeHostWin();
 
   gfx::AcceleratedWidget GetAcceleratedWidget() override;
@@ -32,8 +32,10 @@ class AZER_EXPORT WidgetTreeHostWin
   void SetBounds(const gfx::Rect& rect) override;
   gfx::Point GetLocationOnNativeScreen() const override;
 
+  ::ui::EventSource* GetEventSource() override;
+
   // ui::EventSource:
-  ui::EventProcessor* GetEventProcessor() override;  
+  ::ui::EventProcessor* GetEventProcessor() override;  
  protected:
   gfx::AcceleratedWidget hwnd() const { return hwnd_; }
 

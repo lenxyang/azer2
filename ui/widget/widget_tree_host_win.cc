@@ -31,7 +31,11 @@ WidgetTreeHostWin::~WidgetTreeHostWin() {
   window_.reset();
 }
 
-ui::EventProcessor* WidgetTreeHostWin::GetEventProcessor() {
+::ui::EventSource* WidgetTreeHostWin::GetEventSource() {
+  return this;
+}
+
+::ui::EventProcessor* WidgetTreeHostWin::GetEventProcessor() {
   return this;
 }
 

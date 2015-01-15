@@ -1,9 +1,10 @@
-#include "azer/ui/widget/widget_tree_host.h"
+#include "azer/ui/widget/widget.h"
 
 #include "base/logging.h"
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget_delegate.h"
 #include "azer/ui/widget/widget_context.h"
+#include "azer/ui/widget/widget_tree_host.h"
 
 namespace azer {
 namespace widget {

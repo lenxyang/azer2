@@ -20,6 +20,8 @@ class Layer;
 
 namespace widget {
 
+class WidgetDelegate;
+
 class Widget : public compositor::LayerDelegate {
  public:
   typedef std::vector<Widget*> Widgets;
@@ -43,7 +45,7 @@ class Widget : public compositor::LayerDelegate {
   Widget* parent() { return parent_;}
   const Widget* parent() const { return parent_;}
   void AddChild(Widget* widget);
-  void RemoveChild(widget* widget);
+  void RemoveChild(Widget* widget);
   bool Contains(const Widget* widget) const;
   const Widgets& children() const { return children_;}
  protected:

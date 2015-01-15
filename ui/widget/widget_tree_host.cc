@@ -11,7 +11,7 @@ WidgetTreeHost::WidgetTreeHost() {
 }
 
 WidgetTreeHost::~WidgetTreeHost() {
-  layer_tree_host_.reset();
+  layer_host_.reset();
   compositor_.reset();
 }
 

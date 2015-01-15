@@ -5,6 +5,7 @@
 #include "ui/events/event_source.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/point.h"
+#include "ui/gfx/native_widget_types.h"
 
 #include "azer/base/export.h"
 
@@ -25,16 +26,21 @@ class AZER_EXPORT WidgetTreeHost {
  public:
   static WidgetTreeHost* Create(const gfx::Rect& bounds);
 
+  static gfx::Size WidgetTreeHost::GetNativeScreenSize();
+
   virtual ~WidgetTreeHost();
 
   virtual gfx::AcceleratedWidget GetAcceleratedWidget() = 0;
   virtual void Show() = 0;
   virtual void Hide() = 0;
+  virtual gfx::Rect GetBounds() = 0;
+  virtual void SetBounds(const gfx::Rect& rect) = 0;
+  virtual gfx::Point GetLocationOnNativeScreen() const  = 0;
 
   virtual ui::EventSource* GetEventSource() = 0;
 
-  Widget* root() { return widget_;}
-  const Widget* root() const { return widget_;}
+  Widget* root() { return root_;}
+  const Widget* root() const { return root_;}
  protected:
   WidgetTreeHost();
 
@@ -42,7 +48,7 @@ class AZER_EXPORT WidgetTreeHost {
 
   Widget* root_;
   scoped_ptr<compositor::Compositor> compositor_;
-  scoped_ptr<compositor::LayerTreeHost> compositor_;
+  scoped_ptr<compositor::LayerTreeHost> layer_host_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTreeHost);
 };
 

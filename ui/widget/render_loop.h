@@ -40,6 +40,7 @@ class AZER_EXPORT RenderLoop {
 
  private:
   bool Init();
+  void RenderTask();
 
   Delegate* delegate_;
   RenderSystem* render_system_;

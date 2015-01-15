@@ -16,7 +16,7 @@ WidgetContext* WidgetContext::GetInstance() {
   return inst_;
 }
 
-WidgetContext* WidgetContext::Destroy() {
+void WidgetContext::Destroy() {
   DCHECK(inst_ != NULL);
   delete inst_;
 }
