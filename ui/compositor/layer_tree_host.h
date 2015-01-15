@@ -8,6 +8,7 @@
 #include "azer/render/render.h"
 #include "azer/render/render_system_observer.h"
 #include "azer/ui/compositor/layer_delegate.h"
+#include "azer/ui/compositor/layer_observer.h"
 
 
 namespace azer {
@@ -21,12 +22,13 @@ class AZER_EXPORT LayerTreeHostClient {
   virtual void OnResize(const gfx::Size& size) = 0;
 };
 
-class AZER_EXPORT LayerTreeHost : public LayerDelegate {
+class AZER_EXPORT LayerTreeHost : public LayerDelegate
+                                , public LayerObserver {
  public:
   LayerTreeHost(const gfx::Size& size);
   ~LayerTreeHost();
 
-  void SetClient(LayerTreeHostClient* client);
+  void SetCompositor(Compositor* compositor);
   void resize(const gfx::Size& size);
 
   Layer* root() { return root_;}
@@ -34,8 +36,16 @@ class AZER_EXPORT LayerTreeHost : public LayerDelegate {
 
   Compositor* compositor();
  private:
+  // LayerDelegate for roort
   void OnPaintLayer(gfx::Canvas* canvas) override {}
-  void SetCompositor(Compositor* compositor) { compositor_ = compositor;}
+
+  // LayerObserver for all layer in the tree
+  void OnLayerAttachedOnTree(Layer* layer) override;
+  void OnLayerResized(Layer* layer) override;
+  void OnLayerDestroying(Layer* layer) override;
+
+  
+  void SetLayerNeedRedrawHierarchy(Layer* layer);
 
   Compositor* compositor_;
   LayerTreeHostClient* client_;

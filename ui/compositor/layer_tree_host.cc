@@ -4,6 +4,7 @@
 #include "azer/ui/compositor/canvas_layer.h"
 #include "azer/ui/compositor/nodraw_layer.h"
 #include "azer/ui/compositor/renderer_layer.h"
+#include "azer/ui/compositor/compositor.h"
 #include "azer/render/render_system.h"
 
 namespace azer {
@@ -21,10 +22,13 @@ void DeepDeleteLayers(Layer* layer) {
 }  // namespace
 
 LayerTreeHost::LayerTreeHost(const gfx::Size& size)
-    : size_(size)
-    , compositor_(NULL) {
+    : compositor_(NULL)
+    , client_(NULL)
+    , root_(NULL)
+    , size_(size)  {
   root_ = new NoDrawLayer(this);
   root_->host_ = this;
+  root_->SetName("root");
   root_->SetBounds(gfx::Rect(0, 0, size.width(), size.height()));
 }
 
@@ -34,9 +38,15 @@ LayerTreeHost::~LayerTreeHost() {
   }
 }
 
-void LayerTreeHost::SetClient(LayerTreeHostClient* client) {
-  client_ = client;
-  client_->OnResize(size_);
+void LayerTreeHost::SetCompositor(Compositor* compositor) {
+  DCHECK(NULL != compositor);
+  DCHECK(NULL != root());
+  client_ = compositor;
+  compositor_ = compositor;
+  if (compositor) {
+    client_->OnResize(size_);
+    SetLayerNeedRedrawHierarchy(root());
+  }
 }
 
 void LayerTreeHost::resize(const gfx::Size& size) {
@@ -50,10 +60,39 @@ void LayerTreeHost::resize(const gfx::Size& size) {
   }
 }
 
+void LayerTreeHost::SetLayerNeedRedrawHierarchy(Layer* layer) {
+  if (compositor()) {
+    compositor()->AddNeedRedrawLayer(layer);
+  }
+
+  for (auto iter = layer->children().begin();
+       iter != layer->children().end();
+       ++iter) {
+    SetLayerNeedRedrawHierarchy(*iter);
+  }
+}
+
 Compositor* LayerTreeHost::compositor() {
   DCHECK(NULL != compositor_);
   return compositor_;
 }
 
+void LayerTreeHost::OnLayerAttachedOnTree(Layer* layer) {
+  if (compositor()) {
+    compositor()->AddNeedRedrawLayer(layer);
+  }
+}
+
+void LayerTreeHost::OnLayerResized(Layer* layer) {
+  if (compositor()) {
+    compositor()->AddNeedRedrawLayer(layer);
+  }
+}
+
+void LayerTreeHost::OnLayerDestroying(Layer* layer) {
+  if (compositor()) {
+    compositor()->TryRemoveNeedRedrawLayer(layer);
+  }
+}
 }  // namespace compositor
 }  // namespace azer

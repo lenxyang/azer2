@@ -13,16 +13,20 @@ Compositor::Compositor()
 }
 
 Compositor::~Compositor() {
+  if (host_) {
+    host_->SetCompositor(NULL);
+  }
 }
 
 void Compositor::SetTreeHost(LayerTreeHost* host) {
   if (host_) {
     host_->SetCompositor(NULL);
   }
-
+  
   host_ = host;
-  host_->SetClient(this);
-  host_->SetCompositor(this);
+  if (host_) {
+    host_->SetCompositor(this);
+  }
 }
 
 void Compositor::DoComposite() {
@@ -54,8 +58,9 @@ gfx::Rect Compositor::CalcRect(Layer* layer, const gfx::Rect& rect) {
 }
 
 void Compositor::ScheduleDraw() {
-  auto list = root_layer()->children();
-  for (auto iter = list.begin(); iter != list.end(); ++iter) {
+  for (auto iter = need_redraw_.begin();
+       iter != need_redraw_.end();
+       ++iter) {
     Layer* layer = (*iter);
     if (layer->visible()) {
       layer->Redraw();
@@ -68,17 +73,26 @@ void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {
   auto list = parent->children();
   for (auto iter = list.begin(); iter != list.end(); ++iter) {
     Layer* layer = (*iter);
-    if (layer->visible()) {
-      gfx::Rect rc = std::move(CalcRect(layer, prect));
-      layer->Render(renderer_.get(), rc);
-      CompositeLayer(layer, rc);
-    }
+    gfx::Rect rc = std::move(CalcRect(layer, prect));
+    layer->Render(renderer_.get(), rc);
+    CompositeLayer(layer, rc);
   }
 }
 
 TexturePtr& Compositor::GetOutputTexture() {
   RenderTargetPtr target = renderer_->GetRenderTarget();
   return target->GetTexture();
+}
+
+void Compositor::AddNeedRedrawLayer(Layer* layer) {
+  need_redraw_.insert(layer);
+}
+
+void Compositor::TryRemoveNeedRedrawLayer(Layer* layer) {
+  auto iter = need_redraw_.find(layer);
+  if (need_redraw_.end() != iter) {
+    need_redraw_.erase(iter);
+  }
 }
 }  // namespace compositor
 }  // namespace azer

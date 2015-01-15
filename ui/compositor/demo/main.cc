@@ -39,18 +39,21 @@ class RenderFrame : public azer::RenderLoop::Delegate {
     green_layer_delegate_.reset(new ColorLayerDelegate(SK_ColorGREEN));
     blue_layer_delegate_.reset(new ColorLayerDelegate(SK_ColorBLUE));
     Layer* layer1 = new CanvasLayer(red_layer_delegate_.get());
+    layer1->SetName("layer1");
     layer_host_->root()->Add(layer1); 
     layer1->SetBounds(gfx::Rect(100, 100, 300, 300));
 
     Layer* layer2 = new CanvasLayer(green_layer_delegate_.get());
+    layer2->SetName("layer2");
     layer1->Add(layer2); 
     layer2->SetBounds(gfx::Rect(0, 0, 300, 300));
     
     Layer* layer3 = new CanvasLayer(blue_layer_delegate_.get());
+    layer3->SetName("layer2");
     layer2->Add(layer3);
     layer3->SetBounds(gfx::Rect(100, 100, 100, 100));
 
-    compositor_ = new azer::compositor::Compositor;
+    compositor_ = new azer::compositor::Compositor();
     compositor_->SetTreeHost(layer_host_.get());
     return true;
   }

@@ -10,6 +10,7 @@
 #include "ui/gfx/size_conversions.h"
 #include "ui/gfx/transform.h"
 
+#include "azer/ui/compositor/compositor.h"
 #include "azer/ui/compositor/layer_tree_host.h"
 
 namespace azer {
@@ -35,6 +36,7 @@ Layer::Layer(LayerDelegate* delegate)
 }
 
 Layer::~Layer() {
+  FOR_EACH_OBSERVER(LayerObserver, observers_, OnLayerDestroying(this));
 }
 
 void Layer::SetTreeHost(LayerTreeHost* host) {
@@ -49,6 +51,9 @@ void Layer::Add(Layer* layer) {
   layer->SetTreeHost(GetTreeHost());
   children_.push_back(layer);
   OnChildrenOrderChanged();
+
+  layer->AddObserver(host_);
+  FOR_EACH_OBSERVER(LayerObserver, layer->observers_, OnLayerAttachedOnTree(layer));
 }
 
 bool Layer::IsChild(Layer* layer) {
@@ -191,6 +196,8 @@ void Layer::OnBoundsChanged() {
     Layer* i = (*iter);
     i->OnParentBoundsChanged();
   }
+
+  FOR_EACH_OBSERVER(LayerObserver, observers_, OnLayerResized(this));
 }
 
 void Layer::CalcTargetBounds() {
@@ -216,6 +223,14 @@ void Layer::CalcTexBounds() {
   float width = (float)target_bounds_.width() / (float)bounds().width();
   float height = (float)target_bounds_.height() / (float)bounds().height();
   tex_bounds_ = gfx::RectF(tu, tv, width, height);
+}
+
+void Layer::AddObserver(LayerObserver* observer) {
+  observers_.AddObserver(observer);
+}
+
+void Layer::RemoveObserver(LayerObserver* observer) {
+  observers_.RemoveObserver(observer);
 }
 }  // namespace compositor
 }  // namespace azer

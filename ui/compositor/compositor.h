@@ -1,5 +1,9 @@
 #pragma once
 
+#include <set>
+#include <string>
+#include <vector>
+
 #include "base/basictypes.h"
 #include "ui/gfx/geometry/rect.h"
 #include "base/memory/ref_counted.h"
@@ -17,11 +21,13 @@ namespace compositor {
 class Layer;
 class LayerTreeHost;
 
-class AZER_EXPORT Compositor : public LayerTreeHostClient,
-  public ::base::RefCounted<Compositor>  {
+class AZER_EXPORT Compositor : public LayerTreeHostClient
+                             , public ::base::RefCounted<Compositor>  {
  public:
   Compositor();
   ~Compositor();
+
+  void SetTreeHost(LayerTreeHost* host);
 
   // merge all output into output texture
   void DoComposite();
@@ -38,9 +44,11 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient,
   const Layer* root_layer() const { return host_->root();}
   Layer* root_layer() { return host_->root();}
 
-  void SetTreeHost(LayerTreeHost* host);
   LayerTreeHost* GetTreeHost() { return host_;}
  protected:
+  void AddNeedRedrawLayer(Layer* layer);
+  void TryRemoveNeedRedrawLayer(Layer* layer);
+
   void OnResize(const gfx::Size& size) override;
   /**
    * Layer 仅保留相对于父窗口的坐标和大小, 此函数负责计算
@@ -56,9 +64,12 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient,
    */
   void CompositeLayer(Layer* layer, const gfx::Rect& rect);
 
+  std::set<Layer*> need_redraw_;
   LayerTreeHost* host_;
   OverlayPtr overlay_;
   RendererPtr renderer_;
+
+  friend class LayerTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };
 

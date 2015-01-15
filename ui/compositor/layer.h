@@ -8,7 +8,9 @@
 #include "ui/gfx/geometry/point.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/transform.h"
+
 #include "azer/base/export.h"
+#include "azer/ui/compositor/layer_observer.h"
 
 namespace gfx {
 class Transform;
@@ -37,6 +39,9 @@ class AZER_EXPORT Layer {
   const Layer* parent() const { return parent_;}
   
   LayerTreeHost* GetTreeHost() { return host_;}
+
+  void AddObserver(LayerObserver* observer);
+  void RemoveObserver(LayerObserver* observer);
 
   /**
    * 将 Layer 的内容渲染到 Renderer 当中
@@ -129,6 +134,7 @@ class AZER_EXPORT Layer {
   LayerList children_;
   Layer* parent_;
 
+  LayerObserverList observers_;
   friend class LayerTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Layer);
 };
