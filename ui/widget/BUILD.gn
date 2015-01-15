@@ -6,6 +6,8 @@ source_set("widget") {
     "render_loop.h",
     "widget_context.cc",
     "widget_context.h",
+    "widget_event_dispatcher.cc",
+    "widget_event_dispatcher.h",
     "widget_tree_host.cc",
     "widget_tree_host.h",
     "widget_tree_host_win.cc",

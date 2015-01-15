@@ -132,5 +132,20 @@ void Widget::ConvertEventToTarget(ui::EventTarget* target,
                                  static_cast<Widget*>(target));
 }
 
+// static
+void Widget::ConvertRectToTarget(const Widget* source,
+                                 const Widget* target,
+                                 gfx::Rect* rect) {
+  DCHECK(rect);
+  gfx::Point origin = rect->origin();
+  ConvertPointToTarget(source, target, &origin);
+  rect->set_origin(origin);
+}
+
+// static
+void Widget::ConvertPointToTarget(const Widget* source,
+                                  const Widget* target,
+                                  gfx::Point* point) {
+}
 }  // namespace widget
 }  // namespace azer

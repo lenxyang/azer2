@@ -53,6 +53,16 @@ class Widget : public compositor::LayerDelegate
   void RemoveChild(Widget* widget);
   bool Contains(const Widget* widget) const;
   const Widgets& children() const { return children_;}
+
+  // Converts |point| from |source|'s coordinates to |target|'s. If |source| is
+  // NULL, the function returns without modifying |point|. |target| cannot be
+  // NULL.
+  static void ConvertPointToTarget(const Widget* source,
+                                   const Widget* target,
+                                   gfx::Point* point);
+  static void ConvertRectToTarget(const Widget* source,
+                                  const Widget* target,
+                                  gfx::Rect* rect);
  protected:
   // Overridden from ui::EventTarget:
   bool CanAcceptEvent(const ui::Event& event) override;
