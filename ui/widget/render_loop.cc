@@ -11,7 +11,7 @@
 namespace azer {
 namespace widget {
 
-RenderLoop::RenderLoop(Delegate* delegate)
+RenderLoop::RenderLoop(RenderLoopDelegate* delegate)
     : delegate_(delegate)
     , render_system_(NULL)
     , message_loop_(NULL)

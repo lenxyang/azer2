@@ -14,20 +14,21 @@ class RenderSystem;
 
 namespace widget {
 
+class RenderLoop;
 class WidgetTreeHost;
+
+class AZER_EXPORT RenderLoopDelegate {
+ public:
+  virtual bool Initialize(RenderLoop* renderer) = 0;
+  virtual void OnUpdate(const ::base::Time& Time,
+                        const ::base::TimeDelta& delta) = 0;
+  virtual void OnRender(const ::base::Time& Time,
+                        const ::base::TimeDelta& delta) = 0;
+};
 
 class AZER_EXPORT RenderLoop {
  public:
-  class Delegate {
-   public:
-    virtual bool Initialize(RenderLoop* renderer) = 0;
-    virtual void OnUpdate(const ::base::Time& Time,
-                          const ::base::TimeDelta& delta) = 0;
-    virtual void OnRender(const ::base::Time& Time,
-                          const ::base::TimeDelta& delta) = 0;
-  };
-
-  explicit RenderLoop(Delegate* delegate);
+  explicit RenderLoop(RenderLoopDelegate* delegate);
   virtual ~RenderLoop();
 
   RenderSystem* GetRenderSystem() { return render_system_;}
@@ -42,7 +43,7 @@ class AZER_EXPORT RenderLoop {
   bool Init();
   void RenderTask();
 
-  Delegate* delegate_;
+  RenderLoopDelegate* delegate_;
   RenderSystem* render_system_;
   ::base::MessageLoop* message_loop_;
   uint32 which_;

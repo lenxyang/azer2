@@ -47,3 +47,15 @@ source_set("unittests") {
   configs += ["//azer/build/config:utf8src"]
   visibility = ["//azer/render:unittests"]
 }
+
+executable("demo") {
+  output_name = "widget_demo"
+  sources = ["demo/main.cc"]
+  deps = [
+       "//base",
+       "//azer/render",
+       "//skia",
+       "//ui/gfx",
+       "//ui/gfx/geometry",
+  ]
+}

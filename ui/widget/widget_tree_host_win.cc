@@ -31,6 +31,10 @@ WidgetTreeHostWin::~WidgetTreeHostWin() {
   window_.reset();
 }
 
+gfx::AcceleratedWidget WidgetTreeHostWin::GetAcceleratedWidget() {
+  return hwnd();
+}
+
 ::ui::EventSource* WidgetTreeHostWin::GetEventSource() {
   return this;
 }
