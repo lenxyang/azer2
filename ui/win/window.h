@@ -231,7 +231,7 @@ class AZER_EXPORT Window : public ::ui::EventTarget
   WindowTreeHost* host_;
   ui::wm::WindowType type_;
   WindowDelegate* delegate_;
-  
+
   compositor::Layer* layer_;
   bool visible_;
   bool ignore_events_;

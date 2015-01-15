@@ -18,6 +18,8 @@ WindowTreeHost::WindowTreeHost()
 }
 
 WindowTreeHost::~WindowTreeHost() {
+  compositor_.reset();
+  layer_host_.reset();
 }
 
 void WindowTreeHost::DestroyCompositor() {
@@ -28,8 +30,8 @@ void WindowTreeHost::DestroyDispatcher() {
 
 void WindowTreeHost::CreateCompositor(gfx::AcceleratedWidget accelerated_widget) {
   compositor_.reset(new compositor::Compositor);
-  layer_tree_.reset(new LayerTreeHost(bounds()));
-  layer_tree_.SetCompositor(compositor_.get());
+  layer_host_.reset(new compositor::LayerTreeHost(GetBounds().size()));
+  layer_host_->SetCompositor(compositor_.get());
   window()->set_host(this);
   window()->SetName("RootWindow");
   window()->SetEventTargeter(scoped_ptr< ::ui::EventTargeter>(new WindowTargeter()));

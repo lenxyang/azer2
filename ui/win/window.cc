@@ -1,5 +1,6 @@
 #include "azer/ui/win/window.h"
 
+#include "base/memory/scoped_ptr.h"
 #include "ui/events/event_target_iterator.h"
 
 #include "azer/ui/compositor/api.h"
@@ -8,6 +9,7 @@
 #include "azer/ui/win/window_delegate.h"
 #include "azer/ui/win/client/screen_position_client.h"
 #include "azer/ui/win/client/event_client.h"
+#include "azer/ui/win/window_tree_host.h"
 
 namespace azer {
 namespace win {
@@ -27,22 +29,22 @@ Window::~Window() {
 }
 
 compositor::Layer* Window::CreateLayerByType(WindowLayerType type) {
-  Layer* layer = NULL;
-  switch (layer_type) {
+  compositor::Layer* layer = NULL;
+  switch (type) {
     case kWindowLayerRoot:
-      layer = GetTreeHost()->compositor()->GetTreeHost()->root();
+      layer = GetHost()->compositor()->GetTreeHost()->root();
       break;
     case kWindowLayerNone:
-      layer = new NoDrawLayer(this);
+      layer = new compositor::NoDrawLayer(this);
       break;
     case kWindowLayerCanvas2D:
-      layer = new CanvasLayer(this);
+      layer = new compositor::CanvasLayer(this);
       break;
     case kWindowLayerCanvas3D:
-      layer = new RendererLayer(this);
+      layer = new compositor::RendererLayer(this);
       break;
     case kWindowLayerBitmap:
-      layer = new BitmapLayer(this);
+      layer = new compositor::BitmapLayer(this);
       break;
     default: layer = NULL;
       break;
@@ -51,7 +53,7 @@ compositor::Layer* Window::CreateLayerByType(WindowLayerType type) {
 }
 
 void Window::Init(WindowLayerType layer_type) {
-  Layer* layer = CreateLayerByType(layer_type);
+  compositor::Layer* layer = CreateLayerByType(layer_type);
   DCHECK(NULL != layer);
   layer_ = layer;
   if (parent()) {
@@ -371,6 +373,9 @@ Window* Window::GetWindowForPoint(const gfx::Point& local_point,
 }
 
 void Window::OnPaintLayer(gfx::Canvas* canvas) {
+  if (delegate_) {
+    delegate_->OnPaint(canvas);
+  }
 }
 }  // namespace win
 }  // namespace azer

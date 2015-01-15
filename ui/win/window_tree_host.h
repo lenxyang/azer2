@@ -64,6 +64,9 @@ class AZER_EXPORT WindowTreeHost {
   virtual void SetCapture() = 0;
 
   static gfx::Size GetNativeScreenSize();
+
+  compositor::LayerTreeHost* GetLayerHost() { return layer_host_.get();}
+  compositor::Compositor* compositor() { return compositor_.get();}
  protected:
   WindowTreeHost();
 
