@@ -1,6 +1,14 @@
 #include "azer/ui/widget/widget.h"
 
 #include "base/logging.h"
+#include "ui/events/event_target_iterator.h"
+#include "ui/events/event_target.h"
+#include "ui/events/event_targeter.h"
+#include "ui/gfx/canvas.h"
+#include "ui/gfx/path.h"
+#include "ui/gfx/scoped_canvas.h"
+#include "ui/gfx/screen.h"
+
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget_delegate.h"
 #include "azer/ui/widget/widget_context.h"
@@ -97,5 +105,32 @@ void Widget::InitLayer() {
     parent()->layer_->Add(layer_.get());
   }
 }
+
+bool Widget::CanAcceptEvent(const ui::Event& event) {
+  return true;
+}
+
+ui::EventTarget* Widget::GetParentTarget() {
+  if (IsRootWidget()) {
+    return this;
+  }
+  return parent_;
+}
+
+scoped_ptr<ui::EventTargetIterator> Widget::GetChildIterator() const {
+  return scoped_ptr<ui::EventTargetIterator>(
+      new ui::EventTargetIteratorImpl<Widget>(children()));
+}
+
+ui::EventTargeter* Widget::GetEventTargeter() {
+  return targeter_.get();
+}
+
+void Widget::ConvertEventToTarget(ui::EventTarget* target,
+                                  ui::LocatedEvent* event) {
+  event->ConvertLocationToTarget(this,
+                                 static_cast<Widget*>(target));
+}
+
 }  // namespace widget
 }  // namespace azer

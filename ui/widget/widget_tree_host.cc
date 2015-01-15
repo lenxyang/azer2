@@ -1,8 +1,9 @@
 #include "azer/ui/widget/widget_tree_host.h"
 
+#include "azer/render/render_system.h"
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget.h"
-#include "azer/render/render_system.h"
+#include "azer/ui/widget/widget_event_dispatcher.h"
 
 namespace azer {
 namespace widget {
@@ -10,6 +11,7 @@ namespace widget {
 WidgetTreeHost::WidgetTreeHost()
     : closed_(false)
     , root_(NULL) {
+  dispatcher_.reset(new WidgetEventDispatcher(this));
 }
 
 WidgetTreeHost::~WidgetTreeHost() {

@@ -22,6 +22,7 @@ class Compositor;
 namespace widget {
 
 class Widget;
+class WidgetEventDispatcher;
 
 class AZER_EXPORT WidgetTreeHost {
  public:
@@ -40,6 +41,8 @@ class AZER_EXPORT WidgetTreeHost {
 
   virtual ui::EventSource* GetEventSource() = 0;
 
+  WidgetEventDispatcher* dispatcher();
+
   Widget* root() { return root_;}
   const Widget* root() const { return root_;}
 
@@ -54,6 +57,7 @@ class AZER_EXPORT WidgetTreeHost {
 
   Widget* root_;
   std::atomic<bool> closed_;
+  scoped_ptr<WidgetEventDispatcher> dispatcher_;
   scoped_ptr<compositor::Compositor> compositor_;
   scoped_ptr<compositor::LayerTreeHost> layer_host_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTreeHost);

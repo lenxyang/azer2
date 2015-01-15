@@ -4,10 +4,12 @@
 #include <vector>
 
 #include "base/memory/scoped_ptr.h"
+#include "ui/events/event_target.h"
 #include "ui/gfx/geometry/rect.h"
 
 #include "azer/base/export.h"
 #include "azer/ui/compositor/layer_delegate.h"
+
 
 namespace gfx {
 class Canvas;
@@ -24,7 +26,8 @@ namespace widget {
 class WidgetDelegate;
 class WidgetTreeHost;
 
-class Widget : public compositor::LayerDelegate {
+class Widget : public compositor::LayerDelegate 
+             , public ::ui::EventTarget {
  public:
   typedef std::vector<Widget*> Widgets;
   enum WidgetType {
@@ -51,10 +54,20 @@ class Widget : public compositor::LayerDelegate {
   bool Contains(const Widget* widget) const;
   const Widgets& children() const { return children_;}
  protected:
+  // Overridden from ui::EventTarget:
+  bool CanAcceptEvent(const ui::Event& event) override;
+  EventTarget* GetParentTarget() override;
+  scoped_ptr<ui::EventTargetIterator> GetChildIterator() const override;
+  ui::EventTargeter* GetEventTargeter() override;
+  void ConvertEventToTarget(ui::EventTarget* target,
+                            ui::LocatedEvent* event) override;
+
   // compositor::LayerDelegate
   void OnPaintLayer(gfx::Canvas* canvas) override;
   void InitLayer();
   compositor::Layer* CreateLayerByType();
+
+  bool IsRootWidget() { return parent_ == NULL;}
 
   int64 id_;
   WidgetTreeHost* host_;
@@ -64,6 +77,7 @@ class Widget : public compositor::LayerDelegate {
 
   WidgetType layer_type_;
   scoped_ptr<compositor::Layer> layer_;
+  scoped_ptr<ui::EventTargeter> targeter_;
   
   gfx::Rect bounds_;
   DISALLOW_COPY_AND_ASSIGN(Widget);
