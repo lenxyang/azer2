@@ -89,6 +89,15 @@ shared_library("render") {
     "../ui/widget",
   ]
 
+  public_deps = [
+    "//base",
+    "//ui/events",
+    "//ui/events/platform",
+    "//ui/events:events_base",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+  ]
+
   configs += ["//azer/build/config:utf8src"]
   configs += ["//azer/base:build_render_config"]
   forward_dependent_configs_from = deps

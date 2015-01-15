@@ -18,20 +18,17 @@ source_set("widget") {
 
   deps = [
     "//skia",
+    "//ui/events",
+    "//ui/events/platform",
+    "//ui/events:events_base",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
     "//ui/platform_window",
   ]
 
   configs += ["//azer/build/config:utf8src"]
   configs += ["//azer/base:build_render_config"]
   visibility = ["//azer/render"]
-
-  public_deps = [
-    "//ui/events",
-    "//ui/events/platform",
-    "//ui/events:events_base",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
-  ]
 }
 
 source_set("unittests") {
@@ -45,10 +42,8 @@ source_set("unittests") {
     "//testing/gtest",
     "//skia",
     "//azer/render",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
   ]
+
   configs += ["//azer/build/config:utf8src"]
   visibility = ["//azer/render:unittests"]
 }
