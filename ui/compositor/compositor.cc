@@ -32,6 +32,7 @@ void Compositor::SetTreeHost(LayerTreeHost* host) {
 void Compositor::DoComposite() {
   RenderSystem* rs = RenderSystem::Current();
   rs->GetContext2D()->finish();
+  renderer_->Clear(azer::Vector4(0.0f, 0.0f, 0.0f, 1.0f));
   Layer* root = host_->root();
   gfx::Rect rect(root->bounds());
   CompositeLayer(root, rect);
