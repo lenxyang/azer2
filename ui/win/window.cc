@@ -2,7 +2,7 @@
 
 #include "ui/events/event_target_iterator.h"
 
-#include "azer/ui/compositor/layer.h"
+#include "azer/ui/compositor/api.h"
 #include "azer/ui/win/context.h"
 #include "azer/ui/win/window_observer.h"
 #include "azer/ui/win/window_delegate.h"
@@ -26,7 +26,38 @@ Window::Window(WindowDelegate* delegate)
 Window::~Window() {
 }
 
+compositor::Layer* Window::CreateLayerByType(WindowLayerType type) {
+  Layer* layer = NULL;
+  switch (layer_type) {
+    case kWindowLayerRoot:
+      layer = GetTreeHost()->compositor()->GetTreeHost()->root();
+      break;
+    case kWindowLayerNone:
+      layer = new NoDrawLayer(this);
+      break;
+    case kWindowLayerCanvas2D:
+      layer = new CanvasLayer(this);
+      break;
+    case kWindowLayerCanvas3D:
+      layer = new RendererLayer(this);
+      break;
+    case kWindowLayerBitmap:
+      layer = new BitmapLayer(this);
+      break;
+    default: layer = NULL;
+      break;
+  }
+  return layer;
+}
+
 void Window::Init(WindowLayerType layer_type) {
+  Layer* layer = CreateLayerByType(layer_type);
+  DCHECK(NULL != layer);
+  layer_ = layer;
+  if (parent()) {
+    DCHECK(parent()->layer_);
+    parent()->layer_->Add(layer);
+  }
 }
 
 Window* Window::GetRootWindow() {
@@ -339,5 +370,7 @@ Window* Window::GetWindowForPoint(const gfx::Point& local_point,
   return delegate_ ? this : NULL;
 }
 
+void Window::OnPaintLayer(gfx::Canvas* canvas) {
+}
 }  // namespace win
 }  // namespace azer

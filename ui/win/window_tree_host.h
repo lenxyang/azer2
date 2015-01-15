@@ -81,6 +81,9 @@ class AZER_EXPORT WindowTreeHost {
   scoped_ptr<WindowEventDispatcher> dispatcher_;
 
   scoped_ptr<ui::ViewProp> prop_;
+
+  scoped_ptr<compositor::LayerTreeHost> layer_host_;
+  scoped_ptr<compositor::Compositor> compositor_;
   DISALLOW_COPY_AND_ASSIGN(WindowTreeHost);
 };
 }  // namespace win

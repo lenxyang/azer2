@@ -11,7 +11,7 @@
 
 #include "azer/base/export.h"
 #include "azer/ui/win/layer_type.h"
-#include "azer/ui/compositor/layer.h"
+#include "azer/ui/compositor/layer_delegate.h"
 
 namespace gfx {
 class Display;
@@ -36,7 +36,8 @@ class WindowObserver;
 template<typename T>
 struct WindowProperty;
 
-class AZER_EXPORT Window : public ::ui::EventTarget {
+class AZER_EXPORT Window : public ::ui::EventTarget
+                         , public compositor::LayerDelegate {
  public:
   typedef std::vector<Window*> Windows;
   Window(WindowDelegate* delegate);
@@ -208,6 +209,11 @@ class AZER_EXPORT Window : public ::ui::EventTarget {
   const Windows& children() const { return children_; }
   bool Contains(const Window* other) const;
  private:
+  compositor::Layer* CreateLayerByType(WindowLayerType type);
+
+  // compositor::LayerDelegate override
+  void OnPaintLayer(gfx::Canvas* canvas) override;
+
   // Called by the public {Set,Get,Clear}Property functions.
   int64 SetPropertyInternal(const void* key,
                             const char* name,
