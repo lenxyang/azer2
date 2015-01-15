@@ -72,6 +72,5 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };
 
-typedef scoped_refptr<Compositor> CompositorPtr;
 }  // namespace compositor
 }  // namespace azer

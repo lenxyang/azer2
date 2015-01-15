@@ -53,7 +53,7 @@ class RenderFrame : public azer::RenderLoop::Delegate {
     layer2->Add(layer3);
     layer3->SetBounds(gfx::Rect(100, 100, 100, 100));
 
-    compositor_ = new azer::compositor::Compositor();
+    compositor_.reset(new azer::compositor::Compositor());
     compositor_->SetTreeHost(layer_host_.get());
     return true;
   }
@@ -78,7 +78,7 @@ class RenderFrame : public azer::RenderLoop::Delegate {
   }
  private:
   scoped_ptr<azer::compositor::LayerTreeHost> layer_host_;
-  azer::compositor::CompositorPtr compositor_;
+  scoped_ptr<azer::compositor::Compositor> compositor_;
   azer::OverlayPtr overlay_;
   scoped_ptr<ColorLayerDelegate> red_layer_delegate_;
   scoped_ptr<ColorLayerDelegate> green_layer_delegate_;
