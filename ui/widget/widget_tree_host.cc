@@ -22,7 +22,7 @@ WidgetTreeHost::~WidgetTreeHost() {
 void WidgetTreeHost::InitCompositor() {
   CHECK(RenderSystem::Current() == NULL);
   CHECK(LoadRenderSystem(GetAcceleratedWidget()));
-  layer_host_.reset(new compositor::LayerTreeHost(GetBounds().size()));
+  layer_host_.reset(new compositor::LayerTreeHost());
   compositor_.reset(new compositor::Compositor);
   layer_host_->SetCompositor(compositor_.get());
   root_ = new Widget(Widget::kRoot);
