@@ -49,14 +49,14 @@ class AZER_EXPORT WidgetTreeHost {
   compositor::Compositor* compositor();
   bool Closed() { return closed_;}
  protected:
-  WidgetTreeHost();
-
+  WidgetTreeHost(const gfx::Rect& rect);
 
   void SetClosed(bool closed) { closed_ = closed;}
-  void InitCompositor();
+  void CreateCompositor(gfx::AcceleratedWidget widget);
 
   Widget* root_;
   std::atomic<bool> closed_;
+  gfx::Rect bounds_;
   scoped_ptr<WidgetEventDispatcher> dispatcher_;
   scoped_ptr<compositor::Compositor> compositor_;
   scoped_ptr<compositor::LayerTreeHost> layer_host_;

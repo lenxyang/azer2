@@ -25,7 +25,7 @@ class AZER_EXPORT LayerTreeHostClient {
 class AZER_EXPORT LayerTreeHost : public LayerDelegate
                                 , public LayerObserver {
  public:
-  LayerTreeHost();
+  explicit LayerTreeHost(const gfx::Size& size);
   ~LayerTreeHost();
 
   void SetCompositor(Compositor* compositor);

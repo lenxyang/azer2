@@ -23,7 +23,8 @@ WidgetTreeHost* WidgetTreeHost::Create(const gfx::Rect& bounds) {
 }
 
 WidgetTreeHostWin::WidgetTreeHostWin(const gfx::Rect& bounds)
-    : hwnd_(gfx::kNullAcceleratedWidget)
+    : WidgetTreeHost(bounds)
+    , hwnd_(gfx::kNullAcceleratedWidget)
     , window_(new ui::WinWindow(this, bounds)) {
 }
 
@@ -91,7 +92,7 @@ void WidgetTreeHostWin::OnLostCapture() {
 
 void WidgetTreeHostWin::OnAcceleratedWidgetAvailable(gfx::AcceleratedWidget widget) {
   hwnd_ = widget;
-  InitCompositor();
+  CreateCompositor(widget);
 }
 
 void WidgetTreeHostWin::OnActivationChanged(bool active) {

@@ -21,13 +21,14 @@ void DeepDeleteLayers(Layer* layer) {
 }
 }  // namespace
 
-LayerTreeHost::LayerTreeHost()
+LayerTreeHost::LayerTreeHost(const gfx::Size& size)
     : compositor_(NULL)
     , client_(NULL)
     , root_(NULL) {
   root_ = new NoDrawLayer(this);
   root_->host_ = this;
   root_->SetName("root");
+  root_->SetBounds(gfx::Rect(0, 0, size.width(), size.height()));
 }
 
 LayerTreeHost::~LayerTreeHost() {

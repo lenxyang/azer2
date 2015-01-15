@@ -8,9 +8,10 @@
 namespace azer {
 namespace widget {
 
-WidgetTreeHost::WidgetTreeHost()
+WidgetTreeHost::WidgetTreeHost(const gfx::Rect& bounds)
     : closed_(false)
-    , root_(NULL) {
+    , root_(NULL)
+    , bounds_(bounds) {
   dispatcher_.reset(new WidgetEventDispatcher(this));
 }
 
@@ -19,10 +20,10 @@ WidgetTreeHost::~WidgetTreeHost() {
   compositor_.reset();
 }
 
-void WidgetTreeHost::InitCompositor() {
+void WidgetTreeHost::CreateCompositor(gfx::AcceleratedWidget widget) {
   CHECK(RenderSystem::Current() == NULL);
-  CHECK(LoadRenderSystem(GetAcceleratedWidget()));
-  layer_host_.reset(new compositor::LayerTreeHost());
+  CHECK(LoadRenderSystem(widget));
+  layer_host_.reset(new compositor::LayerTreeHost(bounds_.size()));
   compositor_.reset(new compositor::Compositor);
   layer_host_->SetCompositor(compositor_.get());
   root_ = new Widget(Widget::kRoot);
