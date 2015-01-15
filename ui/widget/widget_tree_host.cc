@@ -4,6 +4,7 @@
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget.h"
 #include "azer/ui/widget/widget_event_dispatcher.h"
+#include "azer/ui/widget/widget_targeter.h"
 
 namespace azer {
 namespace widget {
@@ -29,7 +30,7 @@ void WidgetTreeHost::CreateCompositor(gfx::AcceleratedWidget widget) {
   compositor_->SetTreeHost(layer_host_.get());
   root_ = new Widget(this);
   root_->SetName("root");
-
+  root_->SetEventTargeter(scoped_ptr<ui::EventTargeter>(new WidgetTargeter));
   dispatcher_.reset(new WidgetEventDispatcher(this));
 }
 

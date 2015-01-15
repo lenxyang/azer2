@@ -51,6 +51,11 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   
   void SetDelegate(WidgetDelegate* delegate);
 
+  // Sets a new event-targeter for the window, and returns the previous
+  // event-targeter.
+  scoped_ptr<ui::EventTargeter> SetEventTargeter(
+      scoped_ptr<ui::EventTargeter> targeter);
+
   Widget* parent() { return parent_;}
   const Widget* parent() const { return parent_;}
   void AddChild(Widget* widget);

@@ -55,6 +55,13 @@ void Widget::SetBounds(const gfx::Rect& bounds) {
   layer_->SetBounds(bounds);
 }
 
+scoped_ptr<ui::EventTargeter>
+Widget::SetEventTargeter(scoped_ptr<ui::EventTargeter> targeter) {
+  scoped_ptr<ui::EventTargeter> old_targeter = targeter_.Pass();
+  targeter_ = targeter.Pass();
+  return old_targeter.Pass();
+}
+
 void Widget::AddChild(Widget* widget) {
   DCHECK(widget);
   DCHECK(!Contains(widget));

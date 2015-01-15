@@ -8,6 +8,8 @@ source_set("widget") {
     "widget_context.h",
     "widget_event_dispatcher.cc",
     "widget_event_dispatcher.h",
+    "widget_targeter.cc",
+    "widget_targeter.h",
     "widget_tree_host.cc",
     "widget_tree_host.h",
     "widget_tree_host_win.cc",
