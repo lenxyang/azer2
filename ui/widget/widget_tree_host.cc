@@ -2,6 +2,7 @@
 
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget.h"
+#include "azer/render/render_system.h"
 
 namespace azer {
 namespace widget {
@@ -9,7 +10,6 @@ namespace widget {
 WidgetTreeHost::WidgetTreeHost()
     : closed_(false)
     , root_(NULL) {
-  
 }
 
 WidgetTreeHost::~WidgetTreeHost() {
@@ -18,6 +18,8 @@ WidgetTreeHost::~WidgetTreeHost() {
 }
 
 void WidgetTreeHost::InitCompositor() {
+  CHECK(RenderSystem::Current() == NULL);
+  CHECK(LoadRenderSystem(GetAcceleratedWidget()));
   layer_host_.reset(new compositor::LayerTreeHost(GetBounds().size()));
   compositor_.reset(new compositor::Compositor);
   layer_host_->SetCompositor(compositor_.get());

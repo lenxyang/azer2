@@ -46,7 +46,7 @@ class AZER_EXPORT WindowTreeHostWin
   void OnWindowStateChanged(ui::PlatformWindowState new_state) override;
   void OnLostCapture() override {}
   void OnAcceleratedWidgetAvailable(gfx::AcceleratedWidget widget) override;
-  void OnActivationChanged(bool active) override;
+  void OnActivationChanged(bool active) override {}
 
   bool has_capture_;
   gfx::Rect bounds_;

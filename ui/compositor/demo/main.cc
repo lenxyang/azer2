@@ -1,18 +1,15 @@
+
 #include "base/message_loop/message_loop.h"
 #include "base/time/time.h"
-
-
-#include "third_party/skia/include/core/SkColor.h"
 #include "azer/base/appinit.h"
-#include "azer/ui/win/context.h"
-#include "azer/ui/win/window_tree_host.h"
 #include "azer/ui/compositor/api.h"
-#include "azer/render/render.h"
-#include "azer/render/util/render_window.h"
+#include "azer/ui/widget/api.h"
 
 using azer::compositor::Layer;
 using azer::compositor::CanvasLayer;
 using azer::compositor::LayerTreeHost;
+using azer::widget::WidgetTreeHost;
+using azer::widget::WidgetContext;
 
 class ColorLayerDelegate : public azer::compositor::LayerDelegate {
  public:
@@ -26,12 +23,12 @@ class ColorLayerDelegate : public azer::compositor::LayerDelegate {
   DISALLOW_COPY_AND_ASSIGN(ColorLayerDelegate);
 };
 
-class RenderFrame : public azer::RenderLoop::Delegate {
+class RenderFrame : public azer::widget::RenderLoopDelegate {
  public:
   RenderFrame() {}
   ~RenderFrame() {}
 
-  bool Initialize(azer::RenderLoop* renderer) override {
+  bool Initialize(azer::widget::RenderLoop* renderer) override {
     azer::RenderSystem* rs = azer::RenderSystem::Current();
     overlay_.reset(rs->CreateOverlay());
     layer_host_.reset(new LayerTreeHost(gfx::Size(800, 600)));
@@ -88,8 +85,15 @@ class RenderFrame : public azer::RenderLoop::Delegate {
 
 int main(int argc, char* argv[]) {
   ::azer::InitApp(&argc, &argv, "");
+  WidgetContext::Init();
+  ::base::MessageLoopForUI message_loop;
   RenderFrame delegate;
-  azer::util::RenderWindow window(gfx::Rect(100, 100, 800, 600));
-  window.Loop(&delegate);
+  scoped_ptr<WidgetTreeHost> host(
+    WidgetTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
+  azer::widget::RenderLoop renderloop(&delegate);
+  host->Show();
+  renderloop.Run(host.get());
+  host.reset();
+  WidgetContext::Destroy();
   return 0;
 }

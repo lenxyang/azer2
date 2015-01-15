@@ -86,11 +86,14 @@ class RenderFrame : public azer::widget::RenderLoopDelegate {
 int main(int argc, char* argv[]) {
   ::azer::InitApp(&argc, &argv, "");
   WidgetContext::Init();
+  ::base::MessageLoopForUI message_loop;
   RenderFrame delegate;
   scoped_ptr<WidgetTreeHost> host(
     WidgetTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
   azer::widget::RenderLoop renderloop(&delegate);
+  host->Show();
   renderloop.Run(host.get());
+  host.reset();
   WidgetContext::Destroy();
   return 0;
 }

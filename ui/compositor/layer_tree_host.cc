@@ -39,7 +39,6 @@ LayerTreeHost::~LayerTreeHost() {
 }
 
 void LayerTreeHost::SetCompositor(Compositor* compositor) {
-  DCHECK(NULL != compositor);
   DCHECK(NULL != root());
   client_ = compositor;
   compositor_ = compositor;
