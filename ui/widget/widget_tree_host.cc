@@ -28,10 +28,17 @@ void WidgetTreeHost::CreateCompositor(gfx::AcceleratedWidget widget) {
   layer_host_->SetCompositor(compositor_.get());
   compositor_->SetTreeHost(layer_host_.get());
   root_ = new Widget(this);
+  root_->SetName("root");
+
+  dispatcher_.reset(new WidgetEventDispatcher(this));
 }
 
 compositor::Compositor* WidgetTreeHost::compositor() {
   return compositor_.get();
+}
+
+WidgetEventDispatcher* WidgetTreeHost::dispatcher() {
+  return dispatcher_.get();
 }
 }  // namespace widget
 }  // namespace azer

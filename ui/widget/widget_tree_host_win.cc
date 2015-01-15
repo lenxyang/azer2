@@ -8,6 +8,7 @@
 #include "ui/platform_window/win/win_window.h"
 
 #include "azer/ui/widget/widget.h"
+#include "azer/ui/widget/widget_event_dispatcher.h"
 
 namespace azer {
 namespace widget {
@@ -41,7 +42,7 @@ gfx::AcceleratedWidget WidgetTreeHostWin::GetAcceleratedWidget() {
 }
 
 ::ui::EventProcessor* WidgetTreeHostWin::GetEventProcessor() {
-  return NULL;
+  return dispatcher();
 }
 
 void WidgetTreeHostWin::Show() {
