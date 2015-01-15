@@ -9,6 +9,7 @@ using azer::compositor::Layer;
 using azer::compositor::CanvasLayer;
 using azer::compositor::LayerTreeHost;
 using azer::widget::WidgetTreeHost;
+using azer::widget::WidgetContext;
 
 class ColorLayerDelegate : public azer::compositor::LayerDelegate {
  public:
@@ -84,10 +85,12 @@ class RenderFrame : public azer::widget::RenderLoopDelegate {
 
 int main(int argc, char* argv[]) {
   ::azer::InitApp(&argc, &argv, "");
+  WidgetContext::Init();
   RenderFrame delegate;
   scoped_ptr<WidgetTreeHost> host(
     WidgetTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
   azer::widget::RenderLoop renderloop(&delegate);
   renderloop.Run(host.get());
+  WidgetContext::Destroy();
   return 0;
 }

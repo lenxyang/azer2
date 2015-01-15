@@ -25,6 +25,7 @@ WidgetTreeHost* WidgetTreeHost::Create(const gfx::Rect& bounds) {
 WidgetTreeHostWin::WidgetTreeHostWin(const gfx::Rect& bounds)
     : hwnd_(gfx::kNullAcceleratedWidget)
     , window_(new ui::WinWindow(this, bounds)) {
+  InitCompositor();
 }
 
 WidgetTreeHostWin::~WidgetTreeHostWin() {

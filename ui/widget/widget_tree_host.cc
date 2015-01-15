@@ -7,8 +7,9 @@ namespace azer {
 namespace widget {
 
 WidgetTreeHost::WidgetTreeHost()
-    : closed_(false) {
-  root_ = new Widget(Widget::kRoot);
+    : closed_(false)
+    , root_(NULL) {
+  
 }
 
 WidgetTreeHost::~WidgetTreeHost() {
@@ -17,6 +18,10 @@ WidgetTreeHost::~WidgetTreeHost() {
 }
 
 void WidgetTreeHost::InitCompositor() {
+  layer_host_.reset(new compositor::LayerTreeHost(GetBounds().size()));
+  compositor_.reset(new compositor::Compositor);
+  layer_host_->SetCompositor(compositor_.get());
+  root_ = new Widget(Widget::kRoot);
 }
 
 compositor::Compositor* WidgetTreeHost::compositor() {
