@@ -18,7 +18,7 @@ class AZER_EXPORT WidgetDelegate : public ::ui::EventHandler {
   WidgetDelegate() {}
   virtual ~WidgetDelegate() {}
   virtual gfx::Size GetMinimumSize() const = 0;
-  virtual gfx::Size GteMaximumSize() const = 0;
+  virtual gfx::Size GetMaximumSize() const = 0;
 
   virtual bool CanFocus() = 0;
   virtual bool OnCaptureLost() = 0;

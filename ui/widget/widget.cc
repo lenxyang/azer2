@@ -39,6 +39,11 @@ const std::string& Widget::name() const {
   return layer_->name();
 }
 
+void Widget::SetBounds(const gfx::Rect& bounds) {
+  bounds_ = bounds;
+  layer_->SetBounds(bounds);
+}
+
 void Widget::AddChild(Widget* widget) {
   DCHECK(widget);
   DCHECK(!Contains(widget));

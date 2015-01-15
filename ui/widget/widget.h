@@ -44,6 +44,9 @@ class Widget : public compositor::LayerDelegate
   void SetName(const std::string& name);
   const std::string& name() const;
   WidgetType type() const { return layer_type_;}
+
+  void SetBounds(const gfx::Rect& bounds);
+  const gfx::Rect& bounds() const { return bounds_;}
   
   void SetDelegate(WidgetDelegate* delegate);
 
