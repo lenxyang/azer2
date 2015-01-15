@@ -17,25 +17,36 @@
 namespace azer {
 namespace widget {
 
-Widget::Widget(WidgetType type)
+Widget::Widget(WidgetType type, Widget* parent) 
     : id_(WidgetContext::GetInstance()->allocate_widget_id())
     , layer_type_(type)
-    , host_(NULL)
+    , host_(parent->host_)
+    , parent_(parent) 
+    , delegate_(NULL){
+  DCHECK(NULL != parent);
+  parent_->AddChild(this);
+  InitLayer();
+}
+
+Widget::Widget(WidgetTreeHost* host)
+    : id_(WidgetContext::GetInstance()->allocate_widget_id())
+    , layer_type_(kRoot)
+    , host_(host)
     , parent_(NULL) 
     , delegate_(NULL) {
-  InitLayer();
+  layer_ = host_->compositor()->GetTreeHost()->root();
 }
 
 Widget::~Widget() {
 }
 
 void Widget::SetName(const std::string& name) {
-  DCHECK(layer_.get());
+  DCHECK(layer_);
   layer_->SetName(name);
 }
 
 const std::string& Widget::name() const {
-  DCHECK(layer_.get());
+  DCHECK(layer_);
   return layer_->name();
 }
 
@@ -82,7 +93,7 @@ compositor::Layer* Widget::CreateLayerByType() {
   compositor::Layer* layer = NULL;
   switch (type()) {
     case kRoot:
-      layer = host_->compositor()->GetTreeHost()->root();
+      NOTREACHED();
       break;
     case kNoDraw:
       layer = new compositor::NoDrawLayer(this);
@@ -103,11 +114,11 @@ compositor::Layer* Widget::CreateLayerByType() {
 }
 
 void Widget::InitLayer() {
-  layer_.reset(CreateLayerByType());
-  DCHECK(NULL != layer_.get());
+  layer_ = CreateLayerByType();
+  DCHECK(NULL != layer_);
   if (parent()) {
     DCHECK(parent()->layer_);
-    parent()->layer_->Add(layer_.get());
+    parent()->layer_->Add(layer_);
   }
 }
 

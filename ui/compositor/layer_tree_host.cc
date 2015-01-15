@@ -24,7 +24,8 @@ void DeepDeleteLayers(Layer* layer) {
 LayerTreeHost::LayerTreeHost(const gfx::Size& size)
     : compositor_(NULL)
     , client_(NULL)
-    , root_(NULL) {
+    , root_(NULL)
+    , size_(size)  {
   root_ = new NoDrawLayer(this);
   root_->host_ = this;
   root_->SetName("root");

@@ -86,22 +86,19 @@ int main(int argc, char* argv[]) {
     WidgetTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
   host->Show();
   
-  Widget widget1(Widget::kCanvas);
-  host->root()->AddChild(&widget1);
+  Widget widget1(Widget::kCanvas, host->root());
   widget1.SetName("widget1");
   widget1.SetBounds(gfx::Rect(100, 100, 300, 300));
   ColorWidgetDelegate delegate1(SK_ColorRED, widget1.bounds());
   widget1.SetDelegate(&delegate1);
 
-  Widget widget2(Widget::kCanvas);
-  widget1.AddChild(&widget2);
+  Widget widget2(Widget::kCanvas, &widget1);
   widget2.SetName("widget2");
   widget2.SetBounds(gfx::Rect(0, 0, 300, 300));
   ColorWidgetDelegate delegate2(SK_ColorRED, widget2.bounds());
   widget2.SetDelegate(&delegate2);
   
-  Widget widget3(Widget::kCanvas);
-  widget2.AddChild(&widget3);
+  Widget widget3(Widget::kCanvas, &widget2);
   widget3.SetName("widget3");
   widget3.SetBounds(gfx::Rect(100, 100, 100, 100));
   ColorWidgetDelegate delegate3(SK_ColorRED, widget3.bounds());
@@ -109,6 +106,7 @@ int main(int argc, char* argv[]) {
  
   RenderFrame delegate(host.get());
   azer::widget::RenderLoop renderloop(&delegate);
+
   renderloop.Run(host.get());
   host.reset();
   WidgetContext::Destroy();

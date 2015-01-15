@@ -38,7 +38,8 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
     kBitmap,
   };
 
-  explicit Widget(WidgetType type);
+  Widget(WidgetType type, Widget* parent);
+  Widget(WidgetTreeHost* host);
   virtual ~Widget();
 
   void SetName(const std::string& name);
@@ -89,10 +90,12 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   WidgetDelegate* delegate_;
 
   WidgetType layer_type_;
-  scoped_ptr<compositor::Layer> layer_;
+  compositor::Layer* layer_;
   scoped_ptr<ui::EventTargeter> targeter_;
   
   gfx::Rect bounds_;
+
+  friend class WidgetTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Widget);
 };
 
