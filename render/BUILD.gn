@@ -62,8 +62,6 @@ shared_library("render") {
     "util/dynlib.h",
     "util/render_system_loader.cc",
     "util/render_system_loader.h",
-    "util/render_window.cc",
-    "util/render_window.h",
     "util/shader_array.cc",
     "util/shader_array.h",
   ]
@@ -85,7 +83,6 @@ shared_library("render") {
     ":render2d",
     "../ui/adapter",
     "../ui/compositor",
-    "../ui/win",
     "../ui/widget",
   ]
 
@@ -121,7 +118,6 @@ test("unittests") {
   defines = ["AZER_UNITTEST"]
   deps = [
     "//azer/ui/compositor:unittests",
-    "//azer/ui/win:unittests",
     "//azer/ui/widget:unittests",
     "//azer/math:math",
     "//azer/third_party/glm:glm",
