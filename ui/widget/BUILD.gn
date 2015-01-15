@@ -55,5 +55,10 @@ executable("demo") {
     "//base",
     "//azer/render",
     "//skia",
+    "//ui/events",
+    "//ui/events/platform",
+    "//ui/events:events_base",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
   ]
 }

@@ -26,8 +26,8 @@ namespace widget {
 class WidgetDelegate;
 class WidgetTreeHost;
 
-class Widget : public compositor::LayerDelegate 
-             , public ::ui::EventTarget {
+class AZER_EXPORT Widget : public compositor::LayerDelegate 
+                         , public ::ui::EventTarget {
  public:
   typedef std::vector<Widget*> Widgets;
   enum WidgetType {
