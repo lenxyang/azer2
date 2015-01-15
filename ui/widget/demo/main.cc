@@ -84,6 +84,7 @@ int main(int argc, char* argv[]) {
   
   scoped_ptr<WidgetTreeHost> host(
     WidgetTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
+  host->Show();
   
   Widget widget1(Widget::kCanvas);
   host->root()->AddChild(&widget1);
@@ -105,8 +106,7 @@ int main(int argc, char* argv[]) {
   widget3.SetBounds(gfx::Rect(100, 100, 100, 100));
   ColorWidgetDelegate delegate3(SK_ColorRED, widget3.bounds());
   widget3.SetDelegate(&delegate3);
-  
-  host->Show();
+ 
   RenderFrame delegate(host.get());
   azer::widget::RenderLoop renderloop(&delegate);
   renderloop.Run(host.get());
