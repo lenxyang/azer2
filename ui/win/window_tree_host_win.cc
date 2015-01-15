@@ -76,29 +76,6 @@ void WindowTreeHostWin::SetCapture() {
   }
 }
 
-void WindowTreeHostWin::ReleaseCapture() {
-  if (has_capture_)
-    window_->ReleaseCapture();
-}
-
-void WindowTreeHostWin::SetCursorNative(gfx::NativeCursor native_cursor) {
-  // Custom web cursors are handled directly.
-  if (native_cursor == ui::kCursorCustom)
-    return;
-
-  ui::CursorLoaderWin cursor_loader;
-  cursor_loader.SetPlatformCursor(&native_cursor);
-  ::SetCursor(native_cursor.platform());
-}
-
-void WindowTreeHostWin::MoveCursorToNative(const gfx::Point& location) {
-  // Deliberately not implemented.
-}
-
-void WindowTreeHostWin::OnCursorVisibilityChangedNative(bool show) {
-  NOTIMPLEMENTED();
-}
-
 ::ui::EventProcessor* WindowTreeHostWin::GetEventProcessor() {
   return dispatcher();
 }
@@ -127,22 +104,11 @@ void WindowTreeHostWin::OnWindowStateChanged(
     ui::PlatformWindowState new_state) {
 }
 
-void WindowTreeHostWin::OnLostCapture() {
-  if (has_capture_) {
-    has_capture_ = false;
-    OnHostLostWindowCapture();
-  }
-}
-
 void WindowTreeHostWin::OnAcceleratedWidgetAvailable(
     gfx::AcceleratedWidget widget) {
   widget_ = widget;
   CreateCompositor(widget);
 }
 
-void WindowTreeHostWin::OnActivationChanged(bool active) {
-  if (active)
-    OnHostActivated();
-}
 }  // namespace win
 }  // namespace azer

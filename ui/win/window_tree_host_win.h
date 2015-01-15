@@ -30,10 +30,6 @@ class AZER_EXPORT WindowTreeHostWin
   void SetBounds(const gfx::Rect& rect) override;
   gfx::Point GetLocationOnNativeScreen() const override;
   void SetCapture() override;
-  void ReleaseCapture() override;
-  void SetCursorNative(gfx::NativeCursor cursor) override;
-  void MoveCursorToNative(const gfx::Point& location) override;
-  void OnCursorVisibilityChangedNative(bool show) override;
 
   // ui::EventSource:
   ui::EventProcessor* GetEventProcessor() override;
@@ -48,7 +44,7 @@ class AZER_EXPORT WindowTreeHostWin
   void OnCloseRequest() override;
   void OnClosed() override;
   void OnWindowStateChanged(ui::PlatformWindowState new_state) override;
-  void OnLostCapture() override;
+  void OnLostCapture() override {}
   void OnAcceleratedWidgetAvailable(gfx::AcceleratedWidget widget) override;
   void OnActivationChanged(bool active) override;
 

@@ -21,8 +21,7 @@ namespace compositor {
 class Layer;
 class LayerTreeHost;
 
-class AZER_EXPORT Compositor : public LayerTreeHostClient
-                             , public ::base::RefCounted<Compositor>  {
+class AZER_EXPORT Compositor : public LayerTreeHostClient {
  public:
   Compositor();
   ~Compositor();
