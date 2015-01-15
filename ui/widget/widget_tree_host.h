@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <string>
 
 #include "ui/events/event_source.h"
@@ -41,12 +42,18 @@ class AZER_EXPORT WidgetTreeHost {
 
   Widget* root() { return root_;}
   const Widget* root() const { return root_;}
+
+  compositor::Compositor* compositor();
+  bool Closed() { return closed_;}
  protected:
   WidgetTreeHost();
 
+
+  void SetClosed(bool closed) { closed_ = closed;}
   void InitCompositor();
 
   Widget* root_;
+  std::atomic<bool> closed_;
   scoped_ptr<compositor::Compositor> compositor_;
   scoped_ptr<compositor::LayerTreeHost> layer_host_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTreeHost);

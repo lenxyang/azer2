@@ -6,7 +6,8 @@
 namespace azer {
 namespace widget {
 
-WidgetTreeHost::WidgetTreeHost() {
+WidgetTreeHost::WidgetTreeHost()
+    : closed_(false) {
   root_ = new Widget(Widget::kRoot);
 }
 
@@ -16,6 +17,10 @@ WidgetTreeHost::~WidgetTreeHost() {
 }
 
 void WidgetTreeHost::InitCompositor() {
+}
+
+compositor::Compositor* WidgetTreeHost::compositor() {
+  return compositor_.get();
 }
 }  // namespace widget
 }  // namespace azer

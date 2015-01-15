@@ -64,7 +64,7 @@ bool RenderLoop::Run(WidgetTreeHost* host) {
   }
 
   DCHECK(cur == message_loop_);
-  while (true) {
+  while (host->Closed()) {
     base::RunLoop().RunUntilIdle();
     RenderTask();
     render_system_->Present();

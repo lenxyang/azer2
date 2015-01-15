@@ -6,7 +6,6 @@
 #include "ui/gfx/geometry/point.h"
 #include "ui/events/event_source.h"
 
-#include "ui/platform_window/win/win_window.h"
 #include "ui/platform_window/platform_window.h"
 #include "ui/platform_window/platform_window_delegate.h"
 
@@ -51,7 +50,7 @@ class AZER_EXPORT WidgetTreeHostWin
   void OnActivationChanged(bool active) override;
 
   gfx::AcceleratedWidget hwnd_;
-  scoped_ptr< ::ui::WinWindow> window_;
+  scoped_ptr< ::ui::PlatformWindow> window_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTreeHostWin);
 };
 

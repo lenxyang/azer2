@@ -36,7 +36,7 @@ WidgetTreeHostWin::~WidgetTreeHostWin() {
 }
 
 ::ui::EventProcessor* WidgetTreeHostWin::GetEventProcessor() {
-  return this;
+  return NULL;
 }
 
 void WidgetTreeHostWin::Show() {
@@ -72,6 +72,7 @@ void WidgetTreeHostWin::DispatchEvent(ui::Event* event) {
 }
 
 void WidgetTreeHostWin::OnCloseRequest() {
+  SetClosed(true);
   base::MessageLoopForUI::current()->Quit();
 }
 

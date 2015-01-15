@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "base/memory/scoped_ptr.h"
 #include "ui/gfx/geometry/rect.h"
 
 #include "azer/base/export.h"
@@ -21,6 +22,7 @@ class Layer;
 namespace widget {
 
 class WidgetDelegate;
+class WidgetTreeHost;
 
 class Widget : public compositor::LayerDelegate {
  public:
@@ -52,7 +54,7 @@ class Widget : public compositor::LayerDelegate {
   // compositor::LayerDelegate
   void OnPaintLayer(gfx::Canvas* canvas) override;
   void InitLayer();
-  compositor::Layer* CreateLayerByType() const;
+  compositor::Layer* CreateLayerByType();
 
   int64 id_;
   WidgetTreeHost* host_;

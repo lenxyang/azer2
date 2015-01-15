@@ -11,14 +11,14 @@ namespace widget {
 
 Widget::Widget(WidgetType type)
     : id_(WidgetContext::GetInstance()->allocate_widget_id())
-    , type_(type)
+    , layer_type_(type)
     , host_(NULL)
     , parent_(NULL) 
     , delegate_(NULL) {
-  InitLayer(type);
+  InitLayer();
 }
 
-Widget::Widget() {
+Widget::~Widget() {
 }
 
 void Widget::SetName(const std::string& name) {
@@ -36,11 +36,11 @@ void Widget::AddChild(Widget* widget) {
   DCHECK(!Contains(widget));
   children_.push_back(widget);
   widget->parent_ = this;
-  widget->host = host_;
+  widget->host_ = host_;
 }
 
-void Widget::RemoveChild(widget* widget) {
-  auto iter = std::find(children_.begin(), children_.end(), child);
+void Widget::RemoveChild(Widget* widget) {
+  auto iter = std::find(children_.begin(), children_.end(), widget);
   DCHECK(iter != children_.end());
   children_.erase(iter);
 }
@@ -65,11 +65,11 @@ void Widget::OnPaintLayer(gfx::Canvas* canvas) {
   }
 }
 
-compositor::Layer* Widget::CreateLayerByType() const {
+compositor::Layer* Widget::CreateLayerByType() {
   compositor::Layer* layer = NULL;
   switch (type()) {
     case kRoot:
-      layer = GetHost()->compositor()->GetTreeHost()->root();
+      layer = host_->compositor()->GetTreeHost()->root();
       break;
     case kNoDraw:
       layer = new compositor::NoDrawLayer(this);
@@ -94,7 +94,7 @@ void Widget::InitLayer() {
   DCHECK(NULL != layer_.get());
   if (parent()) {
     DCHECK(parent()->layer_);
-    parent()->layer_->Add(layer);
+    parent()->layer_->Add(layer_.get());
   }
 }
 }  // namespace widget
