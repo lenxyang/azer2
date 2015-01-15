@@ -73,7 +73,6 @@ void LayerTreeHost::SetLayerNeedRedrawHierarchy(Layer* layer) {
 }
 
 Compositor* LayerTreeHost::compositor() {
-  DCHECK(NULL != compositor_);
   return compositor_;
 }
 

@@ -64,15 +64,13 @@ class RenderFrame : public azer::RenderLoop::Delegate {
 
   void OnRender(const ::base::Time& Time,
                 const ::base::TimeDelta& delta) override {
+    compositor_->ScheduleDraw();
+    compositor_->DoComposite();
     azer::RenderSystem* rs = azer::RenderSystem::Current();
     azer::Renderer* renderer = rs->GetSwapchainRenderer();
     renderer->Use();
     renderer->Clear(azer::Vector4(0.0f, 0.0f, 0.0f, 1.0f));
     renderer->ClearDepthAndStencil();
-
-    compositor_->ScheduleDraw();
-    compositor_->DoComposite();
-
     overlay_->SetTexture(compositor_->GetOutputTexture());
     overlay_->SetBounds(gfx::RectF(-1.0f, -1.0f, 2.0f, 2.0f));
     overlay_->SetTexCoord(gfx::PointF(0.0f, 0.0f), gfx::PointF(1.0f, 1.0f));
