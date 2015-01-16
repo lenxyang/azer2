@@ -48,6 +48,9 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
 
   void SetBounds(const gfx::Rect& bounds);
   const gfx::Rect& bounds() const { return bounds_;}
+
+  void set_ignore_events(bool ignore) { ignore_events_ = ignore;}
+  bool ignore_events() const { return ignore_events;}
   
   void SetDelegate(WidgetDelegate* delegate);
 
@@ -93,6 +96,7 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   Widget* parent_;
   Widgets children_;
   WidgetDelegate* delegate_;
+  bool ignore_events_;
 
   WidgetType layer_type_;
   compositor::Layer* layer_;

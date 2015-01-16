@@ -23,6 +23,7 @@ class AZER_EXPORT WidgetTargeter : public ui::EventTargeter {
   bool EventLocationInsideBounds(ui::EventTarget* target,
                                  const ui::LocatedEvent& event) const override;
  protected:
+  Widget* FindTargetInRoot(Widget* root_window, const ui::LocatedEvent& event);
   DISALLOW_COPY_AND_ASSIGN(WidgetTargeter);
 };
 

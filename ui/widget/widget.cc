@@ -22,7 +22,8 @@ Widget::Widget(WidgetType type, Widget* parent)
     , layer_type_(type)
     , host_(parent->host_)
     , parent_(parent) 
-    , delegate_(NULL){
+    , delegate_(NULL)
+    , ignore_events_(false) {
   DCHECK(NULL != parent);
   parent_->AddChild(this);
   InitLayer();
