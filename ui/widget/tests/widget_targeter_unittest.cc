@@ -63,8 +63,8 @@ TEST_F(WidgetTargeterTest, SubWindow) {
                         gfx::Point(410, 310),
                         ui::EF_NONE,
                         ui::EF_NONE);
-  DispatchEventUsingWidgetDispatcher(&press);
-  EXPECT_EQ(0, handler.num_mouse_events());
+  DispatchEventUsingWidgetDispatcher(&press1);
+  EXPECT_EQ(1, handler.num_mouse_events());
   EXPECT_EQ(1, delegate1.num_mouse_events());
   EXPECT_EQ(0, delegate2.num_mouse_events());
 
@@ -77,8 +77,8 @@ TEST_F(WidgetTargeterTest, SubWindow) {
                         gfx::Point(480, 380),
                         ui::EF_NONE,
                         ui::EF_NONE);
-  DispatchEventUsingWidgetDispatcher(&press);
-  EXPECT_EQ(0, handler.num_mouse_events());
+  DispatchEventUsingWidgetDispatcher(&press2);
+  EXPECT_EQ(1, handler.num_mouse_events());
   EXPECT_EQ(0, delegate1.num_mouse_events());
   EXPECT_EQ(1, delegate2.num_mouse_events());
 
@@ -90,7 +90,7 @@ TEST_F(WidgetTargeterTest, SubWindow) {
                         gfx::Point(10, 10),
                         ui::EF_NONE,
                         ui::EF_NONE);
-  DispatchEventUsingWidgetDispatcher(&press);
+  DispatchEventUsingWidgetDispatcher(&press3);
   EXPECT_EQ(1, handler.num_mouse_events());
   EXPECT_EQ(0, delegate1.num_mouse_events());
   EXPECT_EQ(0, delegate2.num_mouse_events());
