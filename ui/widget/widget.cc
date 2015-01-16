@@ -103,6 +103,7 @@ bool Widget::Contains(const Widget* widget) const {
 
 void Widget::SetDelegate(WidgetDelegate* delegate) {
   delegate_ = delegate;
+  set_target_handler(delegate_);
 }
 
 void Widget::OnPaintLayer(gfx::Canvas* canvas) {

@@ -27,14 +27,14 @@ D3DEnvironment::~D3DEnvironment() {
 
 bool D3DEnvironment::InitDXGI() {
   HRESULT hr = S_OK;
-  IDXGIDevice *dxgiDevice = NULL; 
-  hr = d3d_device_->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice);
+  IDXGIDevice *dxgi_device = NULL; 
+  hr = d3d_device_->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgi_device);
   if (FAILED(hr)) {
     LOG(ERROR) << "Failed to get Interface: IDXGIDevice";
     return false;
   }
 
-  hr = dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgi_adapter_);
+  hr = dxgi_device->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgi_adapter_);
   if (FAILED(hr)) {
     LOG(ERROR) << "Failed to get Interface: IDXGIAdapter";
     return false;
