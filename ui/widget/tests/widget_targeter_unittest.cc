@@ -5,10 +5,10 @@
 namespace azer {
 namespace widget {
 
-class WidgetTest : public WidgetTestBase {
+class WidgetTargeterTest : public WidgetTargeterTestBase {
  public:
-  WidgetTest() {}
-  ~WidgetTest() override {}
+  WidgetTargeterTest() {}
+  ~WidgetTargeterTest() override {}
 
   void SetUp() override {
     WidgetTestBase::SetUp();
@@ -17,10 +17,10 @@ class WidgetTest : public WidgetTestBase {
     WidgetTestBase::TearDown();
   }
  private:
-  DISALLOW_COPY_AND_ASSIGN(WidgetTest);
+  DISALLOW_COPY_AND_ASSIGN(WidgetTargeterTest);
 };
 
-TEST_F(WidgetTest, Basic) {
+TEST_F(WidgetTargeterTest, Basic) {
 }
 
 }  // namespace widget

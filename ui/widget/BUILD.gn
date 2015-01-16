@@ -37,6 +37,8 @@ source_set("unittests") {
   sources = [
     "tests/test_base.cc",
     "tests/test_base.h",
+    "tests/widget_targeter_unittest.cc",
+    "tests/widget_unittest.cc",
   ]
 
   deps = [
