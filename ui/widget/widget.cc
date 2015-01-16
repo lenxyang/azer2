@@ -150,7 +150,7 @@ bool Widget::CanAcceptEvent(const ui::Event& event) {
 
 ui::EventTarget* Widget::GetParentTarget() {
   if (IsRootWidget()) {
-    return this;
+    return WidgetContext::GetInstance();
   }
   return parent_;
 }
