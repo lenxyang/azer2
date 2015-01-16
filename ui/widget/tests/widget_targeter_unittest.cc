@@ -56,8 +56,8 @@ TEST_F(WidgetTargeterTest, SubWindow) {
   host_->Show();
 
   ui::MouseEvent press(ui::ET_MOUSE_PRESSED,
-                       gfx::Point(20, 20),
-                       gfx::Point(20, 20),
+                       gfx::Point(480, 380),
+                       gfx::Point(480, 380),
                        ui::EF_NONE,
                        ui::EF_NONE);
   DispatchEventUsingWidgetDispatcher(&press);

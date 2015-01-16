@@ -19,6 +19,9 @@ WidgetTreeHost::WidgetTreeHost(const gfx::Rect& bounds)
 WidgetTreeHost::~WidgetTreeHost() {
   layer_host_.reset();
   compositor_.reset();
+  if (RenderSystem::Current() != NULL) {
+    UnloadRenderSystem();
+  }
 }
 
 void WidgetTreeHost::CreateCompositor(gfx::AcceleratedWidget widget) {
