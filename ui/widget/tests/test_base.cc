@@ -5,6 +5,7 @@
 
 namespace azer {
 namespace widget {
+namespace testing {
 
 WidgetTestBase::WidgetTestBase() {
 }
@@ -28,5 +29,6 @@ Widget* WidgetTestBase::root() {
   return host_->root();
 }
 
-}  // namespace win
+}  // namespace testing
+}  // namespace widget
 }  // namespace azer

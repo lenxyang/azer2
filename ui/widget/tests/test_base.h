@@ -12,6 +12,8 @@ namespace widget {
 
 class WidgetTreeHost;
 
+namespace testing {
+
 class FakeRenderLoopDelegate : public RenderLoopDelegate {
  public:
   virtual bool Initialize(RenderLoop* renderer) { return true;}
@@ -21,7 +23,7 @@ class FakeRenderLoopDelegate : public RenderLoopDelegate {
                         const ::base::TimeDelta& delta) {}
 };
 
-class WidgetTestBase : public testing::Test
+class WidgetTestBase : public ::testing::Test
                      , public FakeRenderLoopDelegate {
  public:
   WidgetTestBase();
@@ -38,5 +40,6 @@ class WidgetTestBase : public testing::Test
   scoped_ptr<RenderLoop> render_loop_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTestBase);
 };
+}  // namespace testing
 }  // namespace widget
 }  // namespace azer

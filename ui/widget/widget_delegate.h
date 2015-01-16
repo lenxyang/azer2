@@ -3,15 +3,16 @@
 #include "base/compiler_specific.h"
 #include "ui/events/event_constants.h"
 #include "ui/events/event_handler.h"
+#include "ui/gfx/canvas.h"
+#include "ui/gfx/geometry/point.h"
+#include "ui/gfx/geometry/size.h"
 #include "ui/gfx/native_widget_types.h"
 #include "azer/base/export.h"
 
-namespace gfx {
-class Canvas;
-}
-
 namespace azer {
 namespace widget {
+
+class Widget;
 
 class AZER_EXPORT WidgetDelegate : public ::ui::EventHandler {
  public:

@@ -4,6 +4,7 @@
 
 namespace azer {
 namespace widget {
+namespace testing {
 
 class WidgetTest : public WidgetTestBase {
  public:
@@ -23,5 +24,6 @@ class WidgetTest : public WidgetTestBase {
 TEST_F(WidgetTest, Basic) {
 }
 
+}  // namespace testing
 }  // namespace widget
 }  // namespace azer

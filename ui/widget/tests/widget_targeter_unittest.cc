@@ -4,8 +4,9 @@
 
 namespace azer {
 namespace widget {
+namespace testing {
 
-class WidgetTargeterTest : public WidgetTargeterTestBase {
+class WidgetTargeterTest : public WidgetTestBase {
  public:
   WidgetTargeterTest() {}
   ~WidgetTargeterTest() override {}
@@ -22,6 +23,6 @@ class WidgetTargeterTest : public WidgetTargeterTestBase {
 
 TEST_F(WidgetTargeterTest, Basic) {
 }
-
+}  // namespace testing
 }  // namespace widget
 }  // namespace azer
