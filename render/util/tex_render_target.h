@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "ui/gfx/geometry/size.h"
+
 #include "azer/render/render_system.h"
 #include "azer/render/renderer.h"
 #include "azer/base/export.h"
@@ -14,8 +16,7 @@ class TexRenderTarget {
   }
 
   TexRenderTarget(int width, int height) {
-    options_.width = width;
-    options_.height = height;
+    options_.size = gfx::Size(width, height);
     options_.format = azer::kRGBAf;
     options_.target = (azer::Texture::BindTarget)
         (azer::Texture::kRenderTarget | azer::Texture::kShaderResource);
@@ -38,13 +39,17 @@ class TexRenderTarget {
 
 inline void TexRenderTarget::Init(azer::RenderSystem* rs) {
   renderer_.reset(rs->CreateRenderer(options_));
-  renderer_->SetViewport(Renderer::Viewport(0, 0, options_.width, options_.height));
+  renderer_->SetViewport(Renderer::Viewport(0, 0,
+                                            options_.size.width(),
+                                            options_.size.height()));
   renderer_->EnableDepthTest(true);
 }
 
 inline azer::Renderer* TexRenderTarget::Begin(const azer::Vector4& color) {
   renderer_->Use();
-  renderer_->SetViewport(Renderer::Viewport(0, 0, options_.width, options_.height));
+  renderer_->SetViewport(Renderer::Viewport(0, 0,
+                                            options_.size.width(),
+                                            options_.size.height()));
   renderer_->Clear(color);
   renderer_->ClearDepthAndStencil();
   

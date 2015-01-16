@@ -6,8 +6,6 @@ static_library("util") {
     "tile.cc",
     "tile.h",
     "util.h",
-    "render_window.cc",
-    "render_window.h",
   ]
   deps = [
     "//azer/render",

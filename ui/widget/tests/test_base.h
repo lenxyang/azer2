@@ -5,18 +5,24 @@
 #include "base/message_loop/message_loop.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-#include "azer/ui/widget/context.h"
-#include "azer/ui/widget/render_loop.h"
-#include "azer/ui/widget/widget_tree_host.h"
-
+#include "azer/ui/widget/api.h"
 
 namespace azer {
 namespace widget {
 
 class WidgetTreeHost;
 
+class FakeRenderLoopDelegate : public RenderLoopDelegate {
+ public:
+  virtual bool Initialize(RenderLoop* renderer) { return true;}
+  virtual void OnUpdate(const ::base::Time& Time,
+                        const ::base::TimeDelta& delta) {}
+  virtual void OnRender(const ::base::Time& Time,
+                        const ::base::TimeDelta& delta) {}
+};
+
 class WidgetTestBase : public testing::Test
-                     , public RenderLoopDelegate {
+                     , public FakeRenderLoopDelegate {
  public:
   WidgetTestBase();
   ~WidgetTestBase() override;
@@ -26,7 +32,6 @@ class WidgetTestBase : public testing::Test
  protected:
   Widget* root();
   WidgetTreeHost* host() { return host_.get();}
-  void RunAllPendingInMessageLoop();
 
   base::MessageLoopForUI message_loop_;
   scoped_ptr<WidgetTreeHost> host_;
