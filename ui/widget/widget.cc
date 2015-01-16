@@ -23,7 +23,8 @@ Widget::Widget(WidgetType type, Widget* parent)
     , host_(parent->host_)
     , parent_(parent) 
     , delegate_(NULL)
-    , ignore_events_(false) {
+    , ignore_events_(false)
+    , visible_(true) {
   DCHECK(NULL != parent);
   parent_->AddChild(this);
   InitLayer();
@@ -39,6 +40,11 @@ Widget::Widget(WidgetTreeHost* host)
 }
 
 Widget::~Widget() {
+}
+
+Widget* Widget::root() {
+  DCHECK(host_ != NULL);
+  return host_->root();
 }
 
 void Widget::SetName(const std::string& name) {

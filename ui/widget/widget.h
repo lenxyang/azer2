@@ -42,15 +42,20 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   Widget(WidgetTreeHost* host);
   virtual ~Widget();
 
+  Widget* root();
+
   void SetName(const std::string& name);
   const std::string& name() const;
   WidgetType type() const { return layer_type_;}
+
+  void SetVisible(bool visible) { visible_ = visible;}
+  bool IsVisible() const { return visible_;}
 
   void SetBounds(const gfx::Rect& bounds);
   const gfx::Rect& bounds() const { return bounds_;}
 
   void set_ignore_events(bool ignore) { ignore_events_ = ignore;}
-  bool ignore_events() const { return ignore_events;}
+  bool ignore_events() const { return ignore_events_;}
   
   void SetDelegate(WidgetDelegate* delegate);
 
@@ -75,15 +80,18 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   static void ConvertRectToTarget(const Widget* source,
                                   const Widget* target,
                                   gfx::Rect* rect);
- protected:
+
   // Overridden from ui::EventTarget:
+ protected:
   bool CanAcceptEvent(const ui::Event& event) override;
   EventTarget* GetParentTarget() override;
   scoped_ptr<ui::EventTargetIterator> GetChildIterator() const override;
   ui::EventTargeter* GetEventTargeter() override;
+ public:
+  // access by WidgetTargeter
   void ConvertEventToTarget(ui::EventTarget* target,
                             ui::LocatedEvent* event) override;
-
+ protected:
   // compositor::LayerDelegate
   void OnPaintLayer(gfx::Canvas* canvas) override;
   void InitLayer();
@@ -97,6 +105,7 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   Widgets children_;
   WidgetDelegate* delegate_;
   bool ignore_events_;
+  bool visible_;
 
   WidgetType layer_type_;
   compositor::Layer* layer_;

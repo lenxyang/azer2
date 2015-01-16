@@ -1,6 +1,10 @@
 #include "azer/ui/widget/widget_targeter.h"
 
+#include "base/logging.h"
 #include "ui/events/event_target.h"
+#include "ui/gfx/geometry/point.h"
+#include "ui/gfx/geometry/rect.h"
+#include "ui/gfx/geometry/size.h"
 
 #include "azer/ui/widget/widget.h"
 #include "azer/ui/widget/widget_delegate.h"
@@ -59,7 +63,7 @@ bool WidgetTargeter::EventLocationInsideBounds(
   if (widget->parent()) {
     Widget::ConvertPointToTarget(widget->parent(), widget, &point);
   }
-  return gfx::Rect(window->bounds().size()).Contains(point);
+  return gfx::Rect(widget->bounds().size()).Contains(point);
 }
 
 Widget* WidgetTargeter::FindTargetInRoot(Widget* root, 
