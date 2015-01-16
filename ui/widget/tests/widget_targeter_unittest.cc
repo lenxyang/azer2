@@ -53,16 +53,47 @@ TEST_F(WidgetTargeterTest, SubWindow) {
   WidgetEventCounter delegate2;
   scoped_ptr<Widget> widget2(CreateWidget(bounds2, widget1.get(), &delegate2));
   widget2->SetName("widget2");
+
+  ui::test::TestEventHandler handler;
+  host_->root()->AddPreTargetHandler(&handler);
   host_->Show();
 
-  ui::MouseEvent press(ui::ET_MOUSE_PRESSED,
-                       gfx::Point(480, 380),
-                       gfx::Point(480, 380),
-                       ui::EF_NONE,
-                       ui::EF_NONE);
+  ui::MouseEvent press1(ui::ET_MOUSE_PRESSED,
+                        gfx::Point(410, 310),
+                        gfx::Point(410, 310),
+                        ui::EF_NONE,
+                        ui::EF_NONE);
   DispatchEventUsingWidgetDispatcher(&press);
+  EXPECT_EQ(0, handler.num_mouse_events());
+  EXPECT_EQ(1, delegate1.num_mouse_events());
+  EXPECT_EQ(0, delegate2.num_mouse_events());
+
+
+  handler.Reset();
+  delegate1.Reset();
+  delegate2.Reset();
+  ui::MouseEvent press2(ui::ET_MOUSE_PRESSED,
+                        gfx::Point(480, 380),
+                        gfx::Point(480, 380),
+                        ui::EF_NONE,
+                        ui::EF_NONE);
+  DispatchEventUsingWidgetDispatcher(&press);
+  EXPECT_EQ(0, handler.num_mouse_events());
   EXPECT_EQ(0, delegate1.num_mouse_events());
   EXPECT_EQ(1, delegate2.num_mouse_events());
+
+  handler.Reset();
+  delegate1.Reset();
+  delegate2.Reset();
+  ui::MouseEvent press3(ui::ET_MOUSE_PRESSED,
+                        gfx::Point(10, 10),
+                        gfx::Point(10, 10),
+                        ui::EF_NONE,
+                        ui::EF_NONE);
+  DispatchEventUsingWidgetDispatcher(&press);
+  EXPECT_EQ(1, handler.num_mouse_events());
+  EXPECT_EQ(0, delegate1.num_mouse_events());
+  EXPECT_EQ(0, delegate2.num_mouse_events());
 }
 }  // namespace testing
 }  // namespace widget
