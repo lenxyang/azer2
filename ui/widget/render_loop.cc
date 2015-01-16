@@ -56,18 +56,31 @@ void RenderLoop::RenderTask() {
   delegate_->OnUpdate(time_[cur], delta);
 }
 
-bool RenderLoop::Run(WidgetTreeHost* host) {
+bool RenderLoop::RunFirstFrame(WidgetTreeHost* host) {
   ::base::MessageLoop* cur = ::base::MessageLoop::current();
   DCHECK(cur->type() == ::base::MessageLoop::TYPE_UI);
   if (!Init()) {
     return false;
   }
 
+  return RunNextFrame(host);
+}
+
+bool RenderLoop::RunNextFrame(WidgetTreeHost* host) {
+  ::base::MessageLoop* cur = ::base::MessageLoop::current();
   DCHECK(cur == message_loop_);
-  while (!host->Closed()) {
-    base::RunLoop().RunUntilIdle();
-    RenderTask();
-    render_system_->Present();
+  base::RunLoop().RunUntilIdle();
+  RenderTask();
+  render_system_->Present();
+  return !host->Closed();
+}
+
+bool RenderLoop::Run(WidgetTreeHost* host) {
+  if (!RunFirstFrame(host)) {
+    return false;
+  }
+
+  while(RunNextFrame(host)) {
   }
   return true;
 }

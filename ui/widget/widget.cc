@@ -105,7 +105,7 @@ void Widget::OnPaintLayer(gfx::Canvas* canvas) {
 
 compositor::Layer* Widget::CreateLayerByType() {
   compositor::Layer* layer = NULL;
-  switch (type()) {
+  switch (layer_type_) {
     case kRoot:
       NOTREACHED();
       break;

@@ -37,8 +37,8 @@ class AZER_EXPORT RenderLoop {
   // run renderloop
   // must has a MessageLoopForUI in current thread
   bool Run(WidgetTreeHost* host);
-  bool RunOneFrame();
-
+  bool RunFirstFrame(WidgetTreeHost* host);
+  bool RunNextFrame(WidgetTreeHost* host);
  private:
   bool Init();
   void RenderTask();
