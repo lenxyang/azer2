@@ -58,6 +58,14 @@ Widget* WidgetTestBase::CreateWidget(const gfx::Rect& bounds,
   return widget;
 }
 
+Widget* WidgetTestBase::CreateWidget(const gfx::Rect& bounds, Widget* parent, 
+                                     WidgetDelegate* delegate) {
+  Widget* widget = new Widget(Widget::kCanvas, parent);
+  widget->SetBounds(bounds);
+  widget->SetDelegate(delegate);
+  return widget;
+}
+
 bool WidgetTestBase::DispatchEventUsingWidgetDispatcher(ui::Event* event) {
   CHECK(host_.get());
   ui::EventProcessor* processor = host_->event_processor();
