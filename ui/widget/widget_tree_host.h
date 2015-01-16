@@ -42,6 +42,7 @@ class AZER_EXPORT WidgetTreeHost {
   virtual ui::EventSource* GetEventSource() = 0;
 
   WidgetEventDispatcher* dispatcher();
+  ::ui::EventProcessor* event_processor();
 
   Widget* root() { return root_;}
   const Widget* root() const { return root_;}

@@ -30,6 +30,17 @@ class TestWidgetDelegate : public WidgetDelegate {
   bool can_focus_;
   DISALLOW_COPY_AND_ASSIGN(TestWidgetDelegate);
 };
+
+class ColorWidgetDelegate : public TestWidgetDelegate {
+ public:
+  ColorWidgetDelegate(SkColor color) : color_(color) {}
+  ~ColorWidgetDelegate() override {}
+
+  void OnPaint(gfx::Canvas* canvas) override;
+ private:
+  SkColor color_;
+  DISALLOW_COPY_AND_ASSIGN(ColorWidgetDelegate);
+};
 }  // namespace testing
 }  // namespace widget
 }  // namespace azer

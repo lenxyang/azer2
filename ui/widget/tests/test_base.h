@@ -35,9 +35,16 @@ class WidgetTestBase : public ::testing::Test
   Widget* root();
   WidgetTreeHost* host() { return host_.get();}
 
+  bool RunFirstFrame();
+  bool RunNextFrame();
+  Widget* CreateWidget(const gfx::Rect& bounds, WidgetDelegate* delegate);
+
+  bool DispatchEventUsingWidgetDispatcher(ui::Event* event);
+
   base::MessageLoopForUI message_loop_;
   scoped_ptr<WidgetTreeHost> host_;
   scoped_ptr<RenderLoop> render_loop_;
+  bool first_frame_rendered_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTestBase);
 };
 }  // namespace testing

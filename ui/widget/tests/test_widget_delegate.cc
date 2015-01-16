@@ -4,6 +4,13 @@ namespace azer {
 namespace widget {
 namespace testing {
 
+TestWidgetDelegate::TestWidgetDelegate()
+    : can_focus_(true) {
+}
+
+TestWidgetDelegate::~TestWidgetDelegate() {
+}
+
 gfx::Size TestWidgetDelegate::GetMinimumSize() const {
   return minimum_size_;
 }
@@ -28,6 +35,10 @@ bool TestWidgetDelegate::ShouldDescendIntoChildForEventHandling(
   return true;
 }
 
+void ColorWidgetDelegate::OnPaint(gfx::Canvas* canvas) {
+  canvas->DrawColor(color_, SkXfermode::kSrc_Mode);
+}
+   
 }  // namespace testing
 }  // namespace widget
 }  // namespace azer

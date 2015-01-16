@@ -102,11 +102,11 @@ int main(int argc, char* argv[]) {
   widget3.SetBounds(gfx::Rect(100, 100, 100, 100));
   ColorWidgetDelegate delegate3(SK_ColorRED, widget3.bounds());
   widget3.SetDelegate(&delegate3);
- 
-  host->Show();
+  
   RenderFrame delegate(host.get());
   azer::widget::RenderLoop renderloop(&delegate);
 
+  host->Show();
   renderloop.Run(host.get());
   host.reset();
   WidgetContext::Destroy();

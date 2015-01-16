@@ -44,10 +44,11 @@ source_set("unittests") {
   ]
 
   deps = [
-    "//base/test:test_support",
-    "//testing/gtest",
-    "//skia",
     "//azer/render",
+    "//base/test:test_support",
+    "//skia",
+    "//testing/gtest",
+    "//ui/events:test_support",
   ]
 
   configs += ["//azer/build/config:utf8src"]

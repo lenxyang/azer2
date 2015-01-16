@@ -1,6 +1,7 @@
 #include "azer/ui/widget/api.h"
 
 #include "azer/ui/widget/tests/test_base.h"
+#include "azer/ui/widget/tests/test_widget_delegate.h"
 
 namespace azer {
 namespace widget {
@@ -22,6 +23,16 @@ class WidgetTest : public WidgetTestBase {
 };
 
 TEST_F(WidgetTest, Basic) {
+}
+
+TEST_F(WidgetTest, Destroy) {
+  gfx::Rect bounds(100, 100, 300, 300);
+  ColorWidgetDelegate delegate(SK_ColorRED);
+  scoped_ptr<Widget> widget(CreateWidget(bounds, &delegate));
+  widget->SetName("widget1");
+
+  host_->Show();
+  RunFirstFrame();
 }
 
 }  // namespace testing

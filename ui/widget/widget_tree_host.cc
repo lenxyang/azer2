@@ -41,5 +41,9 @@ compositor::Compositor* WidgetTreeHost::compositor() {
 WidgetEventDispatcher* WidgetTreeHost::dispatcher() {
   return dispatcher_.get();
 }
+
+::ui::EventProcessor* WidgetTreeHost::event_processor() {
+  return dispatcher();
+}
 }  // namespace widget
 }  // namespace azer
