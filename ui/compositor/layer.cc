@@ -37,6 +37,7 @@ Layer::Layer(LayerDelegate* delegate)
 
 Layer::~Layer() {
   FOR_EACH_OBSERVER(LayerObserver, observers_, OnLayerDestroying(this));
+  observers_.Clear();
 }
 
 void Layer::SetTreeHost(LayerTreeHost* host) {
