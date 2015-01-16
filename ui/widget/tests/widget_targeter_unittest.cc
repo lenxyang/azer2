@@ -25,7 +25,7 @@ class WidgetTargeterTest : public WidgetTestBase {
 };
 
 TEST_F(WidgetTargeterTest, Basic) {
-  gfx::Rect bounds(100, 100, 300, 300);
+  gfx::Rect bounds(0, 0, 100, 100);
   ColorWidgetDelegate delegate(SK_ColorRED);
   scoped_ptr<Widget> widget(CreateWidget(bounds, &delegate));
   widget->SetName("widget1");
@@ -39,7 +39,7 @@ TEST_F(WidgetTargeterTest, Basic) {
                        gfx::Point(20, 20),
                        ui::EF_NONE,
                        ui::EF_NONE);
-  DispatchEventUsingWindowDispatcher(&press);
+  DispatchEventUsingWidgetDispatcher(&press);
   EXPECT_EQ(1, handler.num_mouse_events());
 }
 }  // namespace testing
