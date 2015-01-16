@@ -57,6 +57,14 @@ const std::string& Widget::name() const {
   return layer_->name();
 }
 
+compositor::Layer* Widget::layer() {
+  return layer_;
+}
+
+const compositor::Layer* Widget::layer() const {
+  return layer_;
+}
+
 void Widget::SetBounds(const gfx::Rect& bounds) {
   bounds_ = bounds;
   layer_->SetBounds(bounds);
@@ -176,6 +184,13 @@ void Widget::ConvertRectToTarget(const Widget* source,
 void Widget::ConvertPointToTarget(const Widget* source,
                                   const Widget* target,
                                   gfx::Point* point) {
+  if (!source)
+    return;
+  
+  DCHECK(target != NULL);
+  DCHECK(target->layer() != NULL);
+  
+  compositor::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
 }
 }  // namespace widget
 }  // namespace azer

@@ -43,6 +43,8 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   virtual ~Widget();
 
   Widget* root();
+  compositor::Layer* layer();
+  const compositor::Layer* layer() const;
 
   void SetName(const std::string& name);
   const std::string& name() const;
