@@ -6,6 +6,7 @@
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/color_utils.h"
 #include "azer/ui/views/painter.h"
+#include "azer/ui/views/view.h"
 
 namespace azer {
 namespace views {

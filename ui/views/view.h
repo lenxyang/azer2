@@ -43,6 +43,10 @@ class Widget;
 }  // namespace widget
 
 namespace views {
+
+class Border;
+class Background;
+
 class AZER_EXPORT View : public widget::WidgetDelegate {
  public:
   typedef std::vector<View> Views;
@@ -56,6 +60,10 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   // Returns true if |view| is contained within this View's hierarchy, even as
   // an indirect descendant. Will return true if child is also this view.
   bool Contains(const View* view) const;
+  
+  virtual void Show();
+  virtual void Hide();
+  bool visible() const { return visible_;}
 
   // Size and disposition ------------------------------------------------------
   // Methods for obtaining and modifying the position and size of the view.
@@ -129,10 +137,10 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   gfx::Rect bounds_;
   bool visible_;
   bool enabled_;
+  bool focusable_;
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;
-
   scoped_ptr<widget::Widget> widget_;
   DISALLOW_COPY_AND_ASSIGN(View);
 };

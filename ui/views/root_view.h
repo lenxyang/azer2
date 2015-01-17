@@ -11,10 +11,13 @@ class WidgetTreeHost;
 namespace views {
 class AZER_EXPORT RootView : public View {
  public:
-  RootView();
+  explicit RootView(const gfx::Rect& bounds);
   ~RootView() override;
+
+  void Show() override;
+  void Hide() override;
  private:
-  scoped_ptr<WidgetTreeHost> host_;
+  scoped_ptr<widget::WidgetTreeHost> host_;
   DISALLOW_COPY_AND_ASSIGN(RootView);
 };
 }  // namespace views

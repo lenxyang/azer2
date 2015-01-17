@@ -16,6 +16,7 @@ namespace azer {
 namespace views {
 
 class Painter;
+class View;
 
 class AZER_EXPORT Background {
  public:

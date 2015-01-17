@@ -84,6 +84,7 @@ shared_library("render") {
     "../ui/adapter",
     "../ui/compositor",
     "../ui/widget",
+    "../ui/views",
   ]
 
   public_deps = [

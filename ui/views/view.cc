@@ -21,6 +21,11 @@
 #include "base/win/scoped_gdi_object.h"
 #endif
 
+#include "azer/ui/widget/widget.h"
+#include "azer/ui/views/background.h"
+#include "azer/ui/views/border.h"
+#include "azer/ui/views/painter.h"
+
 
 namespace azer {
 namespace views {
