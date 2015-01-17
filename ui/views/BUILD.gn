@@ -1,0 +1,24 @@
+
+
+source_set("views") {
+  sources = [
+    "root_view.cc",
+    "root_view.h",
+    "view.cc",
+    "view.h",
+  ]
+
+  deps = [
+    "//skia",
+    "//ui/events",
+    "//ui/events/platform",
+    "//ui/events:events_base",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//ui/platform_window",
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+  visibility = ["//azer/render"]
+}
