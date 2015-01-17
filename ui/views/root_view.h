@@ -11,9 +11,11 @@ class WidgetTreeHost;
 namespace views {
 class AZER_EXPORT RootView : public View {
  public:
+  RootView();
+  ~RootView() override;
  private:
   scoped_ptr<WidgetTreeHost> host_;
-  DISALLOW_COPY_AND_ASSIGN(View);
+  DISALLOW_COPY_AND_ASSIGN(RootView);
 };
 }  // namespace views
 }  // namespace azer

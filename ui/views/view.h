@@ -12,6 +12,10 @@ class Widget;
 namespace views {
 class AZER_EXPORT View : public widget::WidgetDelegate {
  public:
+  View();
+  ~View() override;
+
+  void OnPaint(gfx::Canvas* canvas) override;
  private:
   DISALLOW_COPY_AND_ASSIGN(View);
 };

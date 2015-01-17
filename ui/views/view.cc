@@ -3,5 +3,11 @@
 
 namespace azer {
 namespace views {
+
+View::View() {
+}
+
+View::~View() {
+}
 }  // namespace views
 }  // namespace azer
