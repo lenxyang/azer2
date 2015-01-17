@@ -25,7 +25,11 @@
 namespace azer {
 namespace views {
 
-View::View() {
+View::View() 
+    : parent_(NULL)
+    , visible_(true)
+    , enabled_(true)
+    , focusable_(true) {
 }
 
 View::~View() {
@@ -62,16 +66,16 @@ void View::SetY(int y) {
   SetBounds(x(), y, width(), height());
 }
 
-gfx::View::Rect GetContentsBounds() const {
+gfx::Rect View::GetContentsBounds() const {
 }
 
-gfx::View::Rect GetLocalBounds() const {
+gfx::Rect View::GetLocalBounds() const {
 }
 
-gfx::View::Rect GetLayerBoundsInPixel() const {
+gfx::Rect View::GetLayerBoundsInPixel() const {
 }
 
-gfx::View::Insets GetInsets() const {
+gfx::Insets View::GetInsets() const {
 }
 
 void View::SetEnabled(bool enabled) {

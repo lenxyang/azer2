@@ -2,6 +2,12 @@
 
 source_set("views") {
   sources = [
+    "background.cc",
+    "background.h",
+    "controls/label.cc",
+    "controls/label.h",
+    "painter.cc",
+    "painter.h",
     "root_view.cc",
     "root_view.h",
     "view.cc",

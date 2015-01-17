@@ -104,6 +104,16 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
 
   // Returns whether the view is enabled.
   bool enabled() const { return enabled_; }
+
+  // The background object is owned by this object and may be NULL.
+  void set_background(Background* b);
+  const Background* background() const { return background_.get(); }
+  Background* background() { return background_.get(); }
+
+  // The border object is owned by this object and may be NULL.
+  virtual void SetBorder(scoped_ptr<Border> b);
+  const Border* border() const { return border_.get(); }
+  Border* border() { return border_.get(); }
  protected:
   void OnPaint(gfx::Canvas* canvas) override;
 
@@ -113,7 +123,16 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   void OnScrollEvent(ui::ScrollEvent* event) override;
   void OnTouchEvent(ui::TouchEvent* event) final;
   void OnGestureEvent(ui::GestureEvent* event) override;
- private:
+
+  View* parent_;
+  Views children_;
+  gfx::Rect bounds_;
+  bool visible_;
+  bool enabled_;
+
+  scoped_ptr<Background> background_;
+  scoped_ptr<Border> border_;
+
   scoped_ptr<widget::Widget> widget_;
   DISALLOW_COPY_AND_ASSIGN(View);
 };
