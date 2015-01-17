@@ -1,3 +1,7 @@
+// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 #include "azer/ui/views/border.h"
 
 #include "base/logging.h"
@@ -114,8 +118,8 @@ class BorderPainter : public Border {
 
   DISALLOW_COPY_AND_ASSIGN(BorderPainter);
 };
-}  // namespace
 
+}  // namespace
 
 Border::Border() {
 }

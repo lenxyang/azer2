@@ -17,8 +17,24 @@ namespace views {
 class Painter;
 class View;
 
+////////////////////////////////////////////////////////////////////////////////
+//
+// Border class.
+//
+// The border class is used to display a border around a view.
+// To set a border on a view, just call SetBorder on the view, for example:
+// view->SetBorder(Border::CreateSolidBorder(1, SkColorSetRGB(25, 25, 112));
+// Once set on a view, the border is owned by the view.
+//
+// IMPORTANT NOTE: not all views support borders at this point. In order to
+// support the border, views should make sure to use bounds excluding the
+// border (by calling View::GetLocalBoundsExcludingBorder) when doing layout and
+// painting.
+//
+////////////////////////////////////////////////////////////////////////////////
+
 class AZER_EXPORT Border {
-public:
+ public:
   Border();
   virtual ~Border();
 
@@ -63,8 +79,11 @@ public:
   // insets may be larger or smaller, depending on how the view wanted its
   // content laid out relative to these images.
   virtual gfx::Size GetMinimumSize() const = 0;
-private:
+
+ private:
   DISALLOW_COPY_AND_ASSIGN(Border);
 };
+
 }  // namespace views
 }  // namespace azer
+
