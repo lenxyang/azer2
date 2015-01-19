@@ -36,7 +36,7 @@ source_set("views") {
 }
 
 executable("demo") {
-  output_name = "view_demo"
+  output_name = "views_demo"
   sources = ["demo/main.cc"]
   deps = [
     "//base",

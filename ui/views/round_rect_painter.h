@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ui/gfx/rect.h"
-#include "ui/views/painter.h"
-#include "ui/views/views_export.h"
+#include "azer/ui/views/painter.h"
+#include "azer/base/export.h"
 
 namespace gfx {
 class Canvas;

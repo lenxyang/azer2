@@ -17,7 +17,7 @@ class AZER_EXPORT RootView : public View {
   void Show() override;
   void Hide() override;
 
-  widget::WidgetTreeHost* GetWidgetTreeHost() { return host_.get();}
+  widget::WidgetTreeHost* GetWidgetTreeHost();
  private:
   scoped_ptr<widget::WidgetTreeHost> host_;
   DISALLOW_COPY_AND_ASSIGN(RootView);
