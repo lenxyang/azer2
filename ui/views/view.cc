@@ -21,6 +21,8 @@
 #include "base/win/scoped_gdi_object.h"
 #endif
 
+#include "azer/ui/compositor/layer.h"
+#include "azer/ui/compositor/compositor.h"
 #include "azer/ui/widget/widget.h"
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/border.h"
@@ -51,8 +53,7 @@ bool View::Contains(const View* view) const {
 void View::SetBounds(int x, int y, int width, int height) {
 }
 
-void View::SetBoundsRect(const gfx::Rect& bounds) {
-  
+void View::SetBoundsRect(const gfx::Rect& bounds) {  
 }
 
 void View::SetSize(const gfx::Size& size) {
@@ -72,15 +73,23 @@ void View::SetY(int y) {
 }
 
 gfx::Rect View::GetContentsBounds() const {
+  gfx::Rect contents_bounds(GetLocalBounds());
+  if (border_.get()) {
+    contents_bounds.Inset(border_->GetInsets());
+  }
+  return contents_bounds;
 }
 
 gfx::Rect View::GetLocalBounds() const {
+  return gfx::Rect(size());
 }
 
 gfx::Rect View::GetLayerBoundsInPixel() const {
+  return layer()->target_bounds();
 }
 
 gfx::Insets View::GetInsets() const {
+  return border_.get() ? border_->GetInsets() : gfx::Insets();
 }
 
 void View::SetEnabled(bool enabled) {
@@ -114,6 +123,26 @@ void View::SetFocusable(bool focusable) {
 
 bool View::IsFocusable() const {
   return focusable_;
+}
+
+const compositor::Layer* View::layer() const {
+  DCHECK(widget_.get());
+  return widget_->layer();
+}
+
+compositor::Layer* View::layer() {
+  DCHECK(widget_.get());
+  return widget_->layer();
+}
+
+void View::SetBorder(scoped_ptr<Border> b) {
+  border_ = b.Pass();
+}
+
+void View::Show() {
+}
+
+void View::Hide() {
 }
 }  // namespace views
 }  // namespace azer

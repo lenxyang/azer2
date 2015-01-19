@@ -38,6 +38,10 @@ class Transform;
 
 namespace azer {
 
+namespace compositor {
+class Layer;
+}
+
 namespace widget {
 class Widget;
 }  // namespace widget
@@ -128,6 +132,8 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   void SetFocusable(bool focusable);
   bool IsFocusable() const;
  protected:
+  compositor::Layer* layer();
+  const compositor::Layer* layer() const;
   void OnPaint(gfx::Canvas* canvas) override;
 
   // Overridden from ui::EventHandler:
