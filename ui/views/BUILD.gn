@@ -8,6 +8,8 @@ source_set("views") {
     "border.h",
     "controls/label.cc",
     "controls/label.h",
+    "cull_set.cc",
+    "cull_set.h",
     "painter.cc",
     "painter.h",
     "round_rect_painter.cc",

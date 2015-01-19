@@ -42,6 +42,8 @@ class AZER_EXPORT Label : public View {
   // should "Password!" display as "*********"); default is false.
   bool obscured() const { return obscured_; }
   void SetObscured(bool obscured);
+
+  void OnPaint(gfx::Canvas* canvas) override;
  private:
   base::string16 text_;
   gfx::FontList font_list_;

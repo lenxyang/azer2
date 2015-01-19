@@ -160,12 +160,43 @@ bool View::OnCaptureLost() {
   return true;
 }
 
-void View::OnPaint(gfx::Canvas* canvas) {
-}
+// void View::OnPaint(gfx::Canvas* canvas) {
+// }
 
 bool View::ShouldDescendIntoChildForEventHandling(widget::Widget* child,
                                                   const gfx::Point& location) {
   return true;
+}
+
+void View::PaintChildren(gfx::Canvas* canvas, const CullSet& cull_set) {
+  TRACE_EVENT1("views", "View::PaintChildren", "class", GetClassName());
+  for (int i = 0, count = child_count(); i < count; ++i)
+    if (!child_at(i)->layer())
+      child_at(i)->Paint(canvas, cull_set);
+}
+
+void View::OnPaint(gfx::Canvas* canvas) {
+  TRACE_EVENT1("views", "View::OnPaint", "class", GetClassName());
+  OnPaintBackground(canvas);
+  OnPaintBorder(canvas);
+}
+
+void View::OnPaintBackground(gfx::Canvas* canvas) {
+  if (background_.get()) {
+    TRACE_EVENT2("views", "View::OnPaintBackground",
+                 "width", canvas->sk_canvas()->getDevice()->width(),
+                 "height", canvas->sk_canvas()->getDevice()->height());
+    background_->Paint(canvas, this);
+  }
+}
+
+void View::OnPaintBorder(gfx::Canvas* canvas) {
+  if (border_.get()) {
+    TRACE_EVENT2("views", "View::OnPaintBorder",
+                 "width", canvas->sk_canvas()->getDevice()->width(),
+                 "height", canvas->sk_canvas()->getDevice()->height());
+    border_->Paint(*this, canvas);
+  }
 }
 }  // namespace views
 }  // namespace azer

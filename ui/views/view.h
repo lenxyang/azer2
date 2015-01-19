@@ -27,6 +27,7 @@
 
 #include "azer/base/export.h"
 #include "azer/ui/widget/widget_delegate.h"
+#include "azer/ui/views/cull_set.h"
 
 namespace gfx {
 class Canvas;
@@ -149,6 +150,19 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   void OnScrollEvent(ui::ScrollEvent* event) override;
   void OnTouchEvent(ui::TouchEvent* event) final;
   void OnGestureEvent(ui::GestureEvent* event) override;
+
+  // Painting ------------------------------------------------------------------
+  // Responsible for calling Paint() on child Views. Override to control the
+  // order child Views are painted.
+  virtual void PaintChildren(gfx::Canvas* canvas, const CullSet& cull_set);
+
+  // Override to paint a background before any content is drawn. Typically this
+  // is done if you are satisfied with a default OnPaint handler but wish to
+  // supply a different background.
+  virtual void OnPaintBackground(gfx::Canvas* canvas);
+
+  // Override to paint a border not specified by SetBorder().
+  virtual void OnPaintBorder(gfx::Canvas* canvas);
 
   View* parent_;
   Views children_;
