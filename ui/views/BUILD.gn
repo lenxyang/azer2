@@ -30,3 +30,18 @@ source_set("views") {
   configs += ["//azer/base:build_render_config"]
   visibility = ["//azer/render"]
 }
+
+executable("demo") {
+  output_name = "view_demo"
+  sources = ["demo/main.cc"]
+  deps = [
+    "//base",
+    "//azer/render",
+    "//skia",
+    "//ui/events",
+    "//ui/events/platform",
+    "//ui/events:events_base",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+  ]
+}
