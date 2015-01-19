@@ -95,9 +95,7 @@ gfx::Insets View::GetInsets() const {
 void View::SetEnabled(bool enabled) {
 }
 
-void View::OnPaint(gfx::Canvas* canvas) {
-}
-
+// Overridden from ui::EventHandler:
 void View::OnKeyEvent(ui::KeyEvent* event) {
 }
 
@@ -143,6 +141,31 @@ void View::Show() {
 }
 
 void View::Hide() {
+}
+
+// Overriden from widget::WidgetDelegate
+gfx::Size View::GetMinimumSize() const {
+  return GetLocalBounds().size();
+}
+
+gfx::Size View::GetMaximumSize() const {
+  return GetLocalBounds().size();
+}
+
+bool View::CanFocus() {
+  return IsFocusable();
+}
+
+bool View::OnCaptureLost() {
+  return true;
+}
+
+void View::OnPaint(gfx::Canvas* canvas) {
+}
+
+bool View::ShouldDescendIntoChildForEventHandling(widget::Widget* child,
+                                                  const gfx::Point& location) {
+  return true;
 }
 }  // namespace views
 }  // namespace azer

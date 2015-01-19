@@ -4,8 +4,12 @@
 #include "azer/render/render.h"
 #include "azer/ui/base/environment.h"
 #include "azer/ui/widget/api.h"
+#include "azer/ui/compositor/api.h"
 #include "azer/ui/views/view.h"
 #include "azer/ui/views/root_view.h"
+
+using azer::compositor::Compositor;
+using azer::widget::WidgetTreeHost;
 
 class RenderFrame : public azer::widget::RenderLoopDelegate {
  public:
@@ -49,9 +53,9 @@ int main(int argc, char* argv[]) {
 
   azer::widget::WidgetContext::Init();
   azer::views::RootView root(gfx::Rect(100, 100, 800, 600));
-  root->Show();
+  root.Show();
 
-  RenderFrame delegate(host->GetWidgetTreeHost());
+  RenderFrame delegate(root.GetWidgetTreeHost());
   azer::widget::RenderLoop renderloop(&delegate);
 
   azer::widget::WidgetContext::Destroy();

@@ -134,8 +134,15 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
  protected:
   compositor::Layer* layer();
   const compositor::Layer* layer() const;
-  void OnPaint(gfx::Canvas* canvas) override;
 
+  // Overriden from widget::WidgetDelegate
+  gfx::Size GetMinimumSize() const override;
+  gfx::Size GetMaximumSize() const override;
+  bool CanFocus() override;
+  bool OnCaptureLost() override;
+  void OnPaint(gfx::Canvas* canvas) override;
+  bool ShouldDescendIntoChildForEventHandling(widget::Widget* child,
+                                              const gfx::Point& location) override;
   // Overridden from ui::EventHandler:
   void OnKeyEvent(ui::KeyEvent* event) override;
   void OnMouseEvent(ui::MouseEvent* event) override;
