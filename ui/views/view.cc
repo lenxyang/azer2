@@ -104,5 +104,16 @@ void View::OnTouchEvent(ui::TouchEvent* event) {
 void View::OnGestureEvent(ui::GestureEvent* event) {
 }
 
+bool View::HasFocus() const {
+  return false;
+}
+
+void View::SetFocusable(bool focusable) {
+  focusable_ = focusable;
+}
+
+bool View::IsFocusable() const {
+  return focusable_;
+}
 }  // namespace views
 }  // namespace azer

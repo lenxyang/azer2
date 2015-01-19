@@ -122,6 +122,11 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   virtual void SetBorder(scoped_ptr<Border> b);
   const Border* border() const { return border_.get(); }
   Border* border() { return border_.get(); }
+
+  // focus
+  virtual bool HasFocus() const;
+  void SetFocusable(bool focusable);
+  bool IsFocusable() const;
  protected:
   void OnPaint(gfx::Canvas* canvas) override;
 
