@@ -32,6 +32,9 @@
 namespace azer {
 namespace views {
 
+// static
+const char View::kViewClassName[] = "View";
+
 View::View() 
     : parent_(NULL)
     , visible_(true)
@@ -93,6 +96,10 @@ gfx::Insets View::GetInsets() const {
 }
 
 void View::SetEnabled(bool enabled) {
+}
+
+const char* View::GetClassName() const {
+  return kViewClassName;
 }
 
 // Overridden from ui::EventHandler:

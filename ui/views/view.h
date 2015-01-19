@@ -57,14 +57,6 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   typedef std::vector<View> Views;
   View();
   ~View() override;
-
-  // Returns the parent view.
-  const View* parent() const { return parent_; }
-  View* parent() { return parent_; }
-
-  // Returns true if |view| is contained within this View's hierarchy, even as
-  // an indirect descendant. Will return true if child is also this view.
-  bool Contains(const View* view) const;
   
   virtual void Show();
   virtual void Hide();
@@ -132,6 +124,37 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   virtual bool HasFocus() const;
   void SetFocusable(bool focusable);
   bool IsFocusable() const;
+
+  // Called by the framework to paint a View. Performs translation and clipping
+  // for View coordinates and language direction as required, allows the View
+  // to paint itself via the various OnPaint*() event handlers and then paints
+  // the hierarchy beneath it.
+  virtual void Paint(gfx::Canvas* canvas, const CullSet& cull_set);
+
+  static const char kViewClassName[];
+  virtual const char* GetClassName() const;
+
+  // Tree operations -----------------------------------------------------------
+  int child_count() const { return static_cast<int>(children_.size()); }
+  bool has_children() const { return !children_.empty(); }
+
+  // Returns the child view at |index|.
+  const View* child_at(int index) const {
+    DCHECK_GE(index, 0);
+    DCHECK_LT(index, child_count());
+    return children_[index];
+  }
+  View* child_at(int index) {
+    return const_cast<View*>(const_cast<const View*>(this)->child_at(index));
+  }
+
+  // Returns the parent view.
+  const View* parent() const { return parent_; }
+  View* parent() { return parent_; }
+
+  // Returns true if |view| is contained within this View's hierarchy, even as
+  // an indirect descendant. Will return true if child is also this view.
+  bool Contains(const View* view) const;
  protected:
   compositor::Layer* layer();
   const compositor::Layer* layer() const;

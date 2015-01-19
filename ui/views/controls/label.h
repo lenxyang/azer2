@@ -42,14 +42,58 @@ class AZER_EXPORT Label : public View {
   // should "Password!" display as "*********"); default is false.
   bool obscured() const { return obscured_; }
   void SetObscured(bool obscured);
+ protected:
+  // Called by Paint to paint the text.
+  void PaintText(gfx::Canvas* canvas,
+                 const base::string16& text,
+                 const gfx::Rect& text_bounds,
+                 int flags);
 
+  virtual gfx::Size GetTextSize() const;
   void OnPaint(gfx::Canvas* canvas) override;
+
+  void Init(const base::string16& text, const gfx::FontList& font_list);
  private:
+
+  // Returns where the text is drawn, in the receivers coordinate system.
+  gfx::Rect GetTextBounds() const;
+
+  int ComputeDrawStringFlags() const;
+
+  gfx::Rect GetAvailableRect() const;
+
+  // Returns parameters to be used for the DrawString call.
+  void CalculateDrawStringParams(base::string16* paint_text,
+                                 gfx::Rect* text_bounds,
+                                 int* flags) const;
+
   base::string16 text_;
+  base::string16 layout_text_;
   gfx::FontList font_list_;
+
+  SkColor requested_enabled_color_;
+  SkColor actual_enabled_color_;
+  SkColor requested_disabled_color_;
+  SkColor actual_disabled_color_;
+  SkColor background_color_;
+
+  // Set to true once the corresponding setter is invoked.
+  bool enabled_color_set_;
+  bool disabled_color_set_;
+  bool background_color_set_;
+
+  bool subpixel_rendering_enabled_;
+  bool auto_color_readability_;
+  mutable gfx::Size text_size_;
+  mutable bool text_size_valid_;
   int line_height_;
   bool multi_line_;
   bool obscured_;
+  bool allow_character_break_;
+
+  gfx::ElideBehavior elide_behavior_;
+  gfx::HorizontalAlignment horizontal_alignment_;
+  gfx::ShadowValues shadows_;
   DISALLOW_COPY_AND_ASSIGN(Label);
 };
 }  // namespace views
