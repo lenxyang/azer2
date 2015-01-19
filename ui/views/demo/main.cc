@@ -48,16 +48,21 @@ class RenderFrame : public azer::widget::RenderLoopDelegate {
 };
 
 int main(int argc, char* argv[]) {
+  using azer::views::RootView;
+  using azer::widget::RenderLoop;
   scoped_ptr<azer::UIEnv> uienv;
   uienv.reset(new azer::UIEnv(argc, argv));
-
+  
   azer::widget::WidgetContext::Init();
-  azer::views::RootView root(gfx::Rect(100, 100, 800, 600));
-  root.Show();
+  scoped_ptr<RootView> root(new RootView(gfx::Rect(100, 100, 800, 600)));
+  root->Show();
 
-  RenderFrame delegate(root.GetWidgetTreeHost());
-  azer::widget::RenderLoop renderloop(&delegate);
+  scoped_ptr<RenderFrame> delegate(new RenderFrame(root->GetWidgetTreeHost()));
+  RenderLoop renderloop(delegate.get());
+  renderloop.Run(root->GetWidgetTreeHost());
 
+  root.reset();
+  delegate.reset();
   azer::widget::WidgetContext::Destroy();
   return 0;
 }
