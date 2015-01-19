@@ -22,5 +22,9 @@ void RootView::Hide() {
   DCHECK(host_.get());
   host_->Hide();
 }
+widget::WidgetTreeHost RootView::GetWidgetTreeHost() { 
+  DCHECK(host_.get());
+  return host_.get();
+}
 }  // namespace views
 }  // namespace azer
