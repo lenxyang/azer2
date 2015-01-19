@@ -12,12 +12,20 @@
 #include "ui/gfx/screen.h"
 #include "ui/wm/core/wm_state.h"
 
+#include "azer/base/appinit.h"
+
 namespace azer {
 
 UIEnv::UIEnv(int argc, char* argv[]) {
   exit_manager_.reset(new base::AtExitManager);
   CommandLine::Init(argc, argv);
   base::i18n::InitializeICU();
+
+  ::logging::LoggingSettings setting;
+  // setting.log_file = UTF16ToUTF8(path.value());
+  setting.log_file = TEXT("azer.log");
+  ::logging::InitLogging(setting);
+
   message_loop_.reset(new ::base::MessageLoopForUI);
 
   ui::RegisterPathProvider();
