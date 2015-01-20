@@ -38,5 +38,30 @@ widget::WidgetTreeHost* RootView::GetWidgetTreeHost() {
   DCHECK(host_.get());
   return host_.get();
 }
+
+bool RootView::OnMousePressed(const ui::MouseEvent& event) {
+  return View::OnMousePressed(event);
+}
+
+bool RootView::OnMouseDragged(const ui::MouseEvent& event) {
+  return View::OnMouseDragged(event);
+}
+
+void RootView::OnMouseReleased(const ui::MouseEvent& event) {
+  View::OnMouseReleased(event);
+}
+
+void RootView::OnMouseMoved(const ui::MouseEvent& event) {
+  View::OnMouseMoved(event);
+}
+
+void RootView::OnMouseEntered(const ui::MouseEvent& event) {
+  View::OnMouseEntered(event);
+}
+
+void RootView::OnMouseExited(const ui::MouseEvent& event) {
+  View::OnMouseExited(event);
+}
+
 }  // namespace views
 }  // namespace azer

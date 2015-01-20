@@ -267,7 +267,13 @@ void View::OnMouseReleased(const ui::MouseEvent& event) {
   FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMouseReleased(this, event));
 }
 
+bool View::OnMouseDragged(const ui::MouseEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMouseDragged(this, event));
+  return false;
+}
+
 void View::OnMouseCaptureLost() {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMouseCaptureLost(this));
 }
 
 void View::OnMouseMoved(const ui::MouseEvent& event) {

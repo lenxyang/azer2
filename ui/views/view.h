@@ -198,6 +198,18 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   //
   virtual bool OnMousePressed(const ui::MouseEvent& event);
 
+  // This method is invoked when the user clicked on this control.
+  // and is still moving the mouse with a button pressed.
+  // The provided event is in the receiver's coordinate system.
+  //
+  // Return true if you processed the event and want to receive
+  // subsequent MouseDragged and MouseReleased events.
+  //
+  // Default implementation returns true if a ContextMenuController has been
+  // set, false otherwise. Override as needed.
+  //
+  virtual bool OnMouseDragged(const ui::MouseEvent& event);
+
   // This method is invoked when the user releases the mouse
   // button. The event is in the receiver's coordinate system.
   //

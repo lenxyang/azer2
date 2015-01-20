@@ -11,7 +11,9 @@ class View;
 class AZER_EXPORT ViewEventObserver {
  public:
   virtual void OnMousePressed(View* view, const ui::MouseEvent& e) {}
+  virtual void OnMouseDragged(View* view) {}
   virtual void OnMouseReleased(View* view, const ui::MouseEvent& e) {}
+  virtual void OnMouseCaptureLost(View* view) {}
   virtual void OnMouseMoved(View* view, const ui::MouseEvent& e) {}
   virtual void OnMouseEntered(View* view, const ui::MouseEvent& e) {}
   virtual void OnMouseExited(View* view, const ui::MouseEvent& e) {}

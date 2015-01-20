@@ -18,6 +18,13 @@ class AZER_EXPORT RootView : public View {
   void Hide() override;
 
   widget::WidgetTreeHost* GetWidgetTreeHost();
+
+  bool OnMousePressed(const ui::MouseEvent& event) override;
+  bool OnMouseDragged(const ui::MouseEvent& event) override;
+  void OnMouseReleased(const ui::MouseEvent& event) override;
+  void OnMouseMoved(const ui::MouseEvent& event) override;
+  void OnMouseEntered(const ui::MouseEvent& event) override;
+  void OnMouseExited(const ui::MouseEvent& event) override;
  protected:
   void OnPaint(gfx::Canvas* canvas) override;
   scoped_ptr<widget::WidgetTreeHost> host_;
