@@ -61,6 +61,7 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   bool ignore_events() const { return ignore_events_;}
   
   void SetDelegate(WidgetDelegate* delegate);
+  WidgetDelegate* delegate() { return delegate_;}
 
   // Sets a new event-targeter for the window, and returns the previous
   // event-targeter.

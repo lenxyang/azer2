@@ -29,9 +29,16 @@ class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor {
   ui::EventDispatchDetails PostDispatchEvent(ui::EventTarget* target,
                                              const ui::Event& event) override;
 
+  void PreDispatchMouseEvent(Widget* target, ui::MouseEvent* event);
+  ui::EventDispatchDetails DispatchMouseEnterOrExit(const ui::MouseEvent& event,
+                                                    ui::EventType type);
+
   Widget* root();
 
   WidgetTreeHost* host_;
+
+  Widget* mouse_pressed_handler_;
+  Widget* mouse_moved_handler_;
   DISALLOW_COPY_AND_ASSIGN(WidgetEventDispatcher);
 };
 }  // namespace widget
