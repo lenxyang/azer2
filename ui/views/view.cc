@@ -175,6 +175,12 @@ bool View::ShouldDescendIntoChildForEventHandling(widget::Widget* child,
   return true;
 }
 
+void View::SchedulePaint() {
+}
+
+void View::SchedulePaintInRect(const gfx::Rect& r) {
+}
+
 void View::PaintChildren(gfx::Canvas* canvas, const CullSet& cull_set) {
   TRACE_EVENT1("views", "View::PaintChildren", "class", GetClassName());
   for (int i = 0, count = child_count(); i < count; ++i)
@@ -204,6 +210,9 @@ void View::OnPaintBorder(gfx::Canvas* canvas) {
                  "height", canvas->sk_canvas()->getDevice()->height());
     border_->Paint(*this, canvas);
   }
+}
+
+void View::Paint(gfx::Canvas* canvas, const CullSet& cull_set) {
 }
 }  // namespace views
 }  // namespace azer

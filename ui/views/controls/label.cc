@@ -70,6 +70,55 @@ void Label::SetText(const base::string16& text) {
 void Label::SetFontList(const gfx::FontList& font_list) {
 }
 
+void Label::SetEnabledColor(SkColor color) {
+  requested_enabled_color_ = color;
+  enabled_color_set_ = true;
+  RecalculateColors();
+}
+
+void Label::SetDisabledColor(SkColor color) {
+  requested_disabled_color_ = color;
+  disabled_color_set_ = true;
+  RecalculateColors();
+}
+
+void Label::SetBackgroundColor(SkColor color) {
+  background_color_ = color;
+  background_color_set_ = true;
+  RecalculateColors();
+}
+
+void Label::SetShadows(const gfx::ShadowValues& shadows) {
+  shadows_ = shadows;
+  text_size_valid_ = false;
+}
+
+void Label::SetSubpixelRenderingEnabled(bool subpixel_rendering_enabled) {
+  subpixel_rendering_enabled_ = subpixel_rendering_enabled;
+}
+
+void Label::SetHorizontalAlignment(gfx::HorizontalAlignment alignment) {
+  // If the UI layout is right-to-left, flip the alignment direction.
+  if (base::i18n::IsRTL() &&
+      (alignment == gfx::ALIGN_LEFT || alignment == gfx::ALIGN_RIGHT)) {
+    alignment = (alignment == gfx::ALIGN_LEFT) ?
+        gfx::ALIGN_RIGHT : gfx::ALIGN_LEFT;
+  }
+  if (horizontal_alignment_ != alignment) {
+    horizontal_alignment_ = alignment;
+    SchedulePaint();
+  }
+}
+
+gfx::HorizontalAlignment Label::GetHorizontalAlignment() const {
+  if (horizontal_alignment_ != gfx::ALIGN_TO_HEAD)
+    return horizontal_alignment_;
+
+  const base::i18n::TextDirection dir =
+      base::i18n::GetFirstStrongCharacterDirection(layout_text_);
+  return dir == base::i18n::RIGHT_TO_LEFT ? gfx::ALIGN_RIGHT : gfx::ALIGN_LEFT;
+}
+
 void Label::OnPaint(gfx::Canvas* canvas) {
   OnPaintBackground(canvas);
   // We skip painting the focus border because it is being handled seperately by

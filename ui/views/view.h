@@ -155,6 +155,15 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   // Returns true if |view| is contained within this View's hierarchy, even as
   // an indirect descendant. Will return true if child is also this view.
   bool Contains(const View* view) const;
+
+  // Mark all or part of the View's bounds as dirty (needing repaint).
+  // |r| is in the View's coordinates.
+  // Rectangle |r| should be in the view's coordinate system. The
+  // transformations are applied to it to convert it into the parent coordinate
+  // system before propagating SchedulePaint up the view hierarchy.
+  // TODO(beng): Make protected.
+  virtual void SchedulePaint();
+  virtual void SchedulePaintInRect(const gfx::Rect& r);
  protected:
   compositor::Layer* layer();
   const compositor::Layer* layer() const;
