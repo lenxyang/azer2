@@ -54,7 +54,7 @@ class Background;
 
 class AZER_EXPORT View : public widget::WidgetDelegate {
  public:
-  typedef std::vector<View> Views;
+  typedef std::vector<View*> Views;
   View();
   ~View() override;
   

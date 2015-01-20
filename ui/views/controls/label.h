@@ -15,6 +15,12 @@ namespace views {
 
 class AZER_EXPORT Label : public View {
  public:
+    // Internal class name.
+  static const char kViewClassName[];
+
+  // The padding for the focus border when rendering focused text.
+  static const int kFocusBorderPadding;
+
   Label();
   explicit Label(const ::base::string16& text);
   Label(const ::base::string16& text, const gfx::FontList& font_list);
@@ -27,6 +33,30 @@ class AZER_EXPORT Label : public View {
   // Get or set the label text.
   const base::string16& text() const { return text_; }
   virtual void SetText(const base::string16& text);
+
+    // Sets the color.  This will automatically force the color to be readable
+  // over the current background color, if auto color readability is enabled.
+  virtual void SetEnabledColor(SkColor color);
+  void SetDisabledColor(SkColor color);
+
+  SkColor enabled_color() const { return actual_enabled_color_; }
+
+  // Sets the background color.  This won't be explicitly drawn, but the label
+  // will force the text color to be readable over it.
+  void SetBackgroundColor(SkColor color);
+  SkColor background_color() const { return background_color_; }
+
+  // Set drop shadows underneath the text.
+  void SetShadows(const gfx::ShadowValues& shadows);
+  const gfx::ShadowValues& shadows() const { return shadows_; }
+
+  // Sets whether subpixel rendering is used; the default is true, but this
+  // feature also requires an opaque background color.
+  void SetSubpixelRenderingEnabled(bool subpixel_rendering_enabled);
+
+  // Sets the horizontal alignment; the argument value is mirrored in RTL UI.
+  void SetHorizontalAlignment(gfx::HorizontalAlignment alignment);
+  gfx::HorizontalAlignment GetHorizontalAlignment() const;
   
   // Get or set the distance in pixels between baselines of multi-line text.
   // Default is 0, indicating the distance between lines should be the standard
@@ -54,7 +84,7 @@ class AZER_EXPORT Label : public View {
 
   void Init(const base::string16& text, const gfx::FontList& font_list);
  private:
-
+  void RecalculateColors();
   // Returns where the text is drawn, in the receivers coordinate system.
   gfx::Rect GetTextBounds() const;
 
@@ -90,6 +120,7 @@ class AZER_EXPORT Label : public View {
   bool multi_line_;
   bool obscured_;
   bool allow_character_break_;
+  bool collapse_when_hidden_;
 
   gfx::ElideBehavior elide_behavior_;
   gfx::HorizontalAlignment horizontal_alignment_;

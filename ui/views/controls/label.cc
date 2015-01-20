@@ -29,6 +29,9 @@ const base::char16 kPasswordReplacementChar = '*';
 
 }  // namespace
 
+const char Label::kViewClassName[] = "Label";
+const int Label::kFocusBorderPadding = 1;
+
 Label::Label() {
 }
 
@@ -40,17 +43,14 @@ void Label::Init(const base::string16& text, const gfx::FontList& font_list) {
   enabled_color_set_ = disabled_color_set_ = background_color_set_ = false;
   subpixel_rendering_enabled_ = true;
   auto_color_readability_ = true;
-  UpdateColorsFromTheme(ui::NativeTheme::instance());
+
   horizontal_alignment_ = gfx::ALIGN_CENTER;
   line_height_ = 0;
   multi_line_ = false;
   obscured_ = false;
   allow_character_break_ = false;
   elide_behavior_ = gfx::ELIDE_TAIL;
-  handles_tooltips_ = true;
   collapse_when_hidden_ = false;
-  cached_heights_.resize(kCachedSizeLimit);
-  ResetCachedSize();
 
   SetText(text);
 }
@@ -82,27 +82,6 @@ void Label::OnPaint(gfx::Canvas* canvas) {
   int flags = 0;
   CalculateDrawStringParams(&paint_text, &text_bounds, &flags);
   PaintText(canvas, paint_text, text_bounds, flags);
-}
-
-void Label::CalculateDrawStringParams(base::string16* paint_text,
-                                      gfx::Rect* text_bounds,
-                                      int* flags) const {
-  DCHECK(paint_text && text_bounds && flags);
-
-  const bool forbid_ellipsis = elide_behavior_ == gfx::NO_ELIDE ||
-                               elide_behavior_ == gfx::FADE_TAIL;
-  if (multi_line_ || forbid_ellipsis) {
-    *paint_text = layout_text_;
-  } else {
-    *paint_text = gfx::ElideText(layout_text_, font_list_,
-                                 GetAvailableRect().width(), elide_behavior_);
-  }
-
-  *text_bounds = GetTextBounds();
-  *flags = ComputeDrawStringFlags();
-  // TODO(msw): Elide multi-line text with ElideRectangleText instead.
-  if (!multi_line_ || forbid_ellipsis)
-    *flags |= gfx::Canvas::NO_ELLIPSIS;
 }
 
 void Label::PaintText(gfx::Canvas* canvas,
@@ -148,7 +127,6 @@ gfx::Size Label::GetTextSize() const {
 
   return text_size_;
 }
-
 
 void Label::RecalculateColors() {
   actual_enabled_color_ = auto_color_readability_ ?
