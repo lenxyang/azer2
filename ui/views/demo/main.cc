@@ -32,7 +32,8 @@ class LabelEventObserver : public azer::views::ViewEventObserver {
     label1_->SetText(::base::UTF8ToWide(msg));
   }
   virtual void OnMouseReleased(View* view, const ui::MouseEvent& e) {
-    std::string msg = ::base::StringPrintf("OnMouseReleased on view[%s]",
+    std::string msg = ::base::StringPrintf("OnMouseReleased(%d, %d) on view[%s]",
+                                           e.location().x(), e.location().y(),
                                            view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
@@ -114,27 +115,29 @@ class RenderFrame : public azer::widget::RenderLoopDelegate {
 int main(int argc, char* argv[]) {
   scoped_ptr<azer::UIEnv> uienv;
   uienv.reset(new azer::UIEnv(argc, argv));
+
+  gfx::FontList label_fontlist("Arial, Bold 14px");
   
   azer::widget::WidgetContext::Init();
   scoped_ptr<RootView> root(new RootView(gfx::Rect(100, 100, 800, 600)));
-  View* panel = new View;
+  View* panel = new View(root.get());
   panel->SetName("panel");
-  root->AddChildView(panel);
   panel->SetBounds(10, 80, 100, 100);
 
-  Label* label1 = new Label(::base::UTF8ToWide("This is a Label"));
+  Label* label1 = new Label(::base::UTF8ToWide("This is a Label"), label_fontlist,
+                            root.get());
   label1->SetName("label1");
-  root->AddChildView(label1);
+  label1->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   label1->SetBounds(10, 10, 400, 20);
 
-  Label* label2 = new Label(::base::UTF8ToWide("This is a Label"));
+  Label* label2 = new Label(::base::UTF8ToWide("This is a Label"), root.get());
   label2->SetName("label2");
-  root->AddChildView(label2);
+  label2->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   label2->SetBounds(10, 30, 400, 20);
 
-  Label* label3 = new Label(::base::UTF8ToWide("This is a Label"));
+  Label* label3 = new Label(::base::UTF8ToWide("This is a Label"), root.get());
   label2->SetName("label3");
-  root->AddChildView(label3);
+  label3->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   label3->SetBounds(10, 50, 400, 20);
 
   LabelEventObserver observer(label1, label2, label3);

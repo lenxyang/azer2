@@ -57,8 +57,11 @@ class ViewEventObserver;
 class AZER_EXPORT View : public widget::WidgetDelegate {
  public:
   typedef std::vector<View*> Views;
-  View();
+  explicit View(View* parent);
   ~View() override;
+
+  widget::Widget* GetWidget() { return widget_.get();}
+  const widget::Widget* GetWidget() const { return widget_.get();}
 
   void AddEventObserver(ViewEventObserver* observer);
   void RemoveEventObserver(ViewEventObserver* observer);
@@ -160,20 +163,6 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   const View* parent() const { return parent_; }
   View* parent() { return parent_; }
 
-  // Adds |view| as a child of this view, optionally at |index|.
-  void AddChildView(View* view);
-  void AddChildViewAt(View* view, int index);
-  // Moves |view| to the specified |index|. A negative value for |index| moves
-  // the view at the end.
-  void ReorderChildView(View* view, int index);
-
-  // Removes |view| from this view. The view's parent will change to NULL.
-  void RemoveChildView(View* view);
-
-  // Removes all the children from this view. If |delete_children| is true,
-  // the views are deleted, unless marked as not parent owned.
-  void RemoveAllChildViews(bool delete_children);
-
 
   // Returns true if |view| is contained within this View's hierarchy, even as
   // an indirect descendant. Will return true if child is also this view.
@@ -249,9 +238,26 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   // if the view is focused. If the event has not been processed, the parent
   // will be given a chance.
   virtual bool OnMouseWheel(const ui::MouseWheelEvent& event);
- protected:
+protected:
+  View();  // used by RootView
+
+  void InitWidget();
   compositor::Layer* layer();
   const compositor::Layer* layer() const;
+
+  // Adds |view| as a child of this view, optionally at |index|.
+  void AddChildView(View* view);
+  void AddChildViewAt(View* view, int index);
+  // Moves |view| to the specified |index|. A negative value for |index| moves
+  // the view at the end.
+  void ReorderChildView(View* view, int index);
+
+  // Removes |view| from this view. The view's parent will change to NULL.
+  void RemoveChildView(View* view);
+
+  // Removes all the children from this view. If |delete_children| is true,
+  // the views are deleted, unless marked as not parent owned.
+  void RemoveAllChildViews(bool delete_children);
 
   // Overriden from widget::WidgetDelegate
   gfx::Size GetMinimumSize() const override;

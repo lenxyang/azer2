@@ -34,19 +34,26 @@ const base::char16 kPasswordReplacementChar = '*';
 const char Label::kViewClassName[] = "Label";
 const int Label::kFocusBorderPadding = 1;
 
-Label::Label() {
+Label::Label(View* parent)
+    : View(parent) {
   Init(base::string16(), gfx::FontList());
 }
 
-Label::Label(const base::string16& text) {
+Label::Label(const base::string16& text, View* parent)
+    : View(parent) {
   Init(text, gfx::FontList());
 }
 
-Label::Label(const base::string16& text, const gfx::FontList& font_list) {
+Label::Label(const base::string16& text, const gfx::FontList& font_list, View* p)
+    : View(p) {
   Init(text, font_list);
 }
 
 Label::~Label() {
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    delete *iter;
+  }
+  children_.clear();
 }
 
 void Label::SetFontList(const gfx::FontList& font_list) {

@@ -43,8 +43,25 @@ View::View()
     , focusable_(true) {
 }
 
+View::View(View* parent) 
+    : parent_(NULL)
+    , visible_(true)
+    , enabled_(true)
+    , focusable_(true) {
+  parent->AddChildView(this);
+  InitWidget();
+}
+
 View::~View() {
   event_observers_.Clear();
+}
+
+void View::InitWidget() {
+  CHECK(!widget_.get());
+  DCHECK(parent_);
+  widget_.reset(new widget::Widget(parent_->GetWidget()));
+  widget_->SetName(name());
+  widget_->SetDelegate(this);
 }
 
 void View::SetName(const std::string& name)  {
@@ -68,11 +85,6 @@ void View::AddChildViewAt(View* view, int index) {
   // Let's insert the view.
   view->parent_ = this;
   children_.insert(children_.begin() + index, view);
-
-  CHECK(!view->widget_.get());
-  view->widget_.reset(new widget::Widget(widget_.get()));
-  view->widget_->SetName(view->name());
-  view->widget_->SetDelegate(view);
 }
 
 bool View::Contains(const View* view) const {

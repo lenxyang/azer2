@@ -21,9 +21,9 @@ class AZER_EXPORT Label : public View {
   // The padding for the focus border when rendering focused text.
   static const int kFocusBorderPadding;
 
-  Label();
-  explicit Label(const ::base::string16& text);
-  Label(const ::base::string16& text, const gfx::FontList& font_list);
+  Label(View* parent);
+  Label(const ::base::string16& text, View* parent);
+  Label(const ::base::string16& text, const gfx::FontList& font_list, View* parent);
   ~Label() override;
 
   // Gets or sets the fonts used by this label.
