@@ -33,10 +33,46 @@ const char Label::kViewClassName[] = "Label";
 const int Label::kFocusBorderPadding = 1;
 
 Label::Label() {
+  Init(base::string16(), gfx::FontList());
+}
+
+Label::Label(const base::string16& text) {
+  Init(text, gfx::FontList());
+}
+
+Label::Label(const base::string16& text, const gfx::FontList& font_list) {
+  Init(text, font_list);
 }
 
 Label::~Label() {
 }
+
+void Label::SetFontList(const gfx::FontList& font_list) {
+  font_list_ = font_list;
+  ResetCachedSize();
+  SchedulePaint();
+}
+
+void Label::SetText(const base::string16& text) {
+  if (text != text_)
+    SetTextInternal(text);
+}
+
+void Label::SetTextInternal(const base::string16& text) {
+  text_ = text;
+
+  if (obscured_) {
+    size_t obscured_text_length =
+        static_cast<size_t>(gfx::UTF16IndexToOffset(text_, 0, text_.length()));
+    layout_text_.assign(obscured_text_length, kPasswordReplacementChar);
+  } else {
+    layout_text_ = text_;
+  }
+
+  ResetCachedSize();
+  SchedulePaint();
+}
+
 
 void Label::Init(const base::string16& text, const gfx::FontList& font_list) {
   font_list_ = font_list;
@@ -52,6 +88,8 @@ void Label::Init(const base::string16& text, const gfx::FontList& font_list) {
   elide_behavior_ = gfx::ELIDE_TAIL;
   collapse_when_hidden_ = false;
 
+  cached_heights_.resize(kCachedSizeLimit);
+  ResetCachedSize();
   SetText(text);
 }
 
@@ -62,12 +100,6 @@ void Label::SetMultiLine(bool multi_line) {
 }
 
 void Label::SetObscured(bool obscured) {
-}
-
-void Label::SetText(const base::string16& text) {
-}
-
-void Label::SetFontList(const gfx::FontList& font_list) {
 }
 
 void Label::SetEnabledColor(SkColor color) {
@@ -288,5 +320,13 @@ void Label::CalculateDrawStringParams(base::string16* paint_text,
   if (!multi_line_ || forbid_ellipsis)
     *flags |= gfx::Canvas::NO_ELLIPSIS;
 }
+
+void Label::ResetCachedSize() {
+  text_size_valid_ = false;
+  // cached_heights_cursor_ = 0;
+  for (int i = 0; i < kCachedSizeLimit; ++i)
+    cached_heights_[i] = gfx::Size();
+}
+
 }  // namespace views
 }  // namespace azer

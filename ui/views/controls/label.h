@@ -82,6 +82,10 @@ class AZER_EXPORT Label : public View {
   virtual gfx::Size GetTextSize() const;
   void OnPaint(gfx::Canvas* canvas) override;
 
+    // Sets both |text_| and |layout_text_| to appropriate values, taking
+  // the label's 'obscured' status into account.
+  void SetTextInternal(const base::string16& text);
+
   void Init(const base::string16& text, const gfx::FontList& font_list);
  private:
   void RecalculateColors();
@@ -96,6 +100,10 @@ class AZER_EXPORT Label : public View {
   void CalculateDrawStringParams(base::string16* paint_text,
                                  gfx::Rect* text_bounds,
                                  int* flags) const;
+
+  // Resets |cached_heights_| and |cached_heights_cursor_| and mark
+  // |text_size_valid_| as false.
+  void ResetCachedSize();
 
   base::string16 text_;
   base::string16 layout_text_;
@@ -125,6 +133,9 @@ class AZER_EXPORT Label : public View {
   gfx::ElideBehavior elide_behavior_;
   gfx::HorizontalAlignment horizontal_alignment_;
   gfx::ShadowValues shadows_;
+
+  // The cached heights to avoid recalculation in GetHeightForWidth().
+  mutable std::vector<gfx::Size> cached_heights_;
   DISALLOW_COPY_AND_ASSIGN(Label);
 };
 }  // namespace views

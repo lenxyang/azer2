@@ -47,12 +47,14 @@ class RenderFrame : public azer::widget::RenderLoopDelegate {
 
 int main(int argc, char* argv[]) {
   using azer::views::RootView;
+  using azer::views::Label;
   using azer::widget::RenderLoop;
   scoped_ptr<azer::UIEnv> uienv;
   uienv.reset(new azer::UIEnv(argc, argv));
   
   azer::widget::WidgetContext::Init();
   scoped_ptr<RootView> root(new RootView(gfx::Rect(100, 100, 800, 600)));
+  Label* label = new Label;
   root->Show();
 
   scoped_ptr<RenderFrame> delegate(new RenderFrame(root->GetWidgetTreeHost()));

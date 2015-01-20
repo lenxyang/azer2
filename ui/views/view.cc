@@ -45,6 +45,25 @@ View::View()
 View::~View() {
 }
 
+void View::AddChildView(View* view) {
+  if (view->parent_ == this)
+    return;
+  AddChildViewAt(view, child_count());
+}
+
+void View::AddChildViewAt(View* view, int index) {
+  CHECK_NE(view, this) << "You cannot add a view as its own child";
+  DCHECK_GE(index, 0);
+  DCHECK_LE(index, child_count());
+  
+  // Let's insert the view.
+  view->parent_ = this;
+  children_.insert(children_.begin() + index, view);
+
+  CHECK(!view->widget_.get());
+  view->widget_.reset(new widget::Widget(widget_.get()));
+}
+
 bool View::Contains(const View* view) const {
   for (const View* v = view; v; v = v->parent_) {
     if (v == this)
@@ -54,9 +73,14 @@ bool View::Contains(const View* view) const {
 }
 
 void View::SetBounds(int x, int y, int width, int height) {
+  SetBoundsRect(gfx::Rect(x, y, width, height));
 }
 
-void View::SetBoundsRect(const gfx::Rect& bounds) {  
+void View::SetBoundsRect(const gfx::Rect& bounds) {
+  bounds_ = bounds;
+  if (widget_.get()) {
+    widget_->SetBounds(bounds);
+  }
 }
 
 void View::SetSize(const gfx::Size& size) {
