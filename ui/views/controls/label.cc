@@ -18,8 +18,8 @@
 #include "ui/gfx/text_elider.h"
 #include "ui/gfx/text_utils.h"
 #include "ui/gfx/utf16_indexing.h"
-#include "ui/views/background.h"
 
+#include "azer/ui/views/background.h"
 
 namespace azer {
 namespace views {
@@ -93,7 +93,9 @@ void Label::Init(const base::string16& text, const gfx::FontList& font_list) {
 
   requested_enabled_color_ = SK_ColorLTGRAY;
   requested_disabled_color_ = SK_ColorGRAY;
-  background_color_ = SK_ColorTRANSPARENT;
+  // background_color_ = SK_ColorTRANSPARENT;
+  background_color_ = SK_ColorBLACK;
+  set_background(Background::CreateSolidBackground(background_color_));
 
   cached_heights_.resize(kCachedSizeLimit);
   ResetCachedSize();

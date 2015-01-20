@@ -18,8 +18,10 @@ class AZER_EXPORT RootView : public View {
   void Hide() override;
 
   widget::WidgetTreeHost* GetWidgetTreeHost();
- private:
+ protected:
+  void OnPaint(gfx::Canvas* canvas) override;
   scoped_ptr<widget::WidgetTreeHost> host_;
+ private:
   DISALLOW_COPY_AND_ASSIGN(RootView);
 };
 }  // namespace views

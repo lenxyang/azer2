@@ -71,6 +71,7 @@ void View::AddChildViewAt(View* view, int index) {
 
   CHECK(!view->widget_.get());
   view->widget_.reset(new widget::Widget(widget_.get()));
+  view->widget_->SetName(view->name());
   view->widget_->SetDelegate(view);
 }
 
@@ -130,6 +131,11 @@ gfx::Insets View::GetInsets() const {
 }
 
 void View::SetEnabled(bool enabled) {
+  enabled_ = enabled;
+}
+
+void View::set_background(Background* b) {
+  background_.reset(b);
 }
 
 const char* View::GetClassName() const {

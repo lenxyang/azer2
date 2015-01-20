@@ -26,44 +26,44 @@ class LabelEventObserver : public azer::views::ViewEventObserver {
 
   virtual void OnMousePressed(View* view, const ui::MouseEvent& e) {
     std::string msg = ::base::StringPrintf("OnMousePressed on view[%s]",
-                                            view->name());
+                                            view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
   virtual void OnMouseReleased(View* view, const ui::MouseEvent& e) {
     std::string msg = ::base::StringPrintf("OnMouseReleased on view[%s]",
-                                           view->name());
+                                           view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
 
   virtual void OnMouseMoved(View* view, const ui::MouseEvent& e) {
     std::string msg = ::base::StringPrintf("OnMouseMoved on view[%s]",
-                                            view->name());
+                                            view->name().c_str());
     label2_->SetText(::base::UTF8ToWide(msg));
   }
   virtual void OnMouseEntered(View* view, const ui::MouseEvent& e) {
     std::string msg = ::base::StringPrintf("OnMouseEntered on view[%s]",
-                                           view->name());
+                                           view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
   virtual void OnMouseExited(View* view, const ui::MouseEvent& e) {
     std::string msg = ::base::StringPrintf("OnMouseExited on view[%s]",
-                                           view->name());
+                                           view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
 
   virtual void OnMouseWheel(View* view, const ui::MouseWheelEvent& e) {
     std::string msg = ::base::StringPrintf("OnMouseWheel on view[%s]",
-                                           view->name());
+                                           view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
   virtual void OnKeyPressed(View* view, const ui::KeyEvent& e) {
     std::string msg = ::base::StringPrintf("OnKeyPressed on view[%s]",
-                                           view->name());
+                                           view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
   virtual void OnKeyReleased(View* view, const ui::KeyEvent& e) {
     std::string msg = ::base::StringPrintf("OnKeyReleased on view[%s]",
-                                           view->name());
+                                           view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
  private:
@@ -114,11 +114,24 @@ int main(int argc, char* argv[]) {
   azer::widget::WidgetContext::Init();
   scoped_ptr<RootView> root(new RootView(gfx::Rect(100, 100, 800, 600)));
   View* panel = new View;
+  panel->SetName("panel");
   root->AddChildView(panel);
-  panel->SetBounds(40, 40, 100, 100);
-  Label* label = new Label(::base::UTF8ToWide("This is a Label"));
-  root->AddChildView(label);
-  label->SetBounds(10, 10, 200, 20);
+  panel->SetBounds(10, 80, 100, 100);
+
+  Label* label1 = new Label(::base::UTF8ToWide("This is a Label"));
+  label1->SetName("label1");
+  root->AddChildView(label1);
+  label1->SetBounds(10, 10, 400, 20);
+
+  Label* label2 = new Label(::base::UTF8ToWide("This is a Label"));
+  label2->SetName("label2");
+  root->AddChildView(label2);
+  label2->SetBounds(10, 30, 400, 20);
+
+  LabelEventObserver observer(label1, label2);
+  panel->AddEventObserver(&observer);
+  root->AddEventObserver(&observer);
+
   root->Show();
 
   scoped_ptr<RenderFrame> delegate(new RenderFrame(root->GetWidgetTreeHost()));
