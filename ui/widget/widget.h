@@ -74,6 +74,9 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   bool Contains(const Widget* widget) const;
   const Widgets& children() const { return children_;}
 
+  void SchedulePaint();
+  void SchedulePaintInRect(const gfx::Rect& r);
+
   // Converts |point| from |source|'s coordinates to |target|'s. If |source| is
   // NULL, the function returns without modifying |point|. |target| cannot be
   // NULL.
@@ -83,7 +86,6 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   static void ConvertRectToTarget(const Widget* source,
                                   const Widget* target,
                                   gfx::Rect* rect);
-
   // Overridden from ui::EventTarget:
  protected:
   bool CanAcceptEvent(const ui::Event& event) override;

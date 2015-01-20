@@ -35,6 +35,7 @@ class AZER_EXPORT LayerTreeHost : public LayerDelegate
   const Layer* root() const { return root_;}
 
   Compositor* compositor();
+  void SetLayerNeedRedrawHierarchy(Layer* layer);
  private:
   // LayerDelegate for roort
   void OnPaintLayer(gfx::Canvas* canvas) override {}
@@ -43,9 +44,6 @@ class AZER_EXPORT LayerTreeHost : public LayerDelegate
   void OnLayerAttachedOnTree(Layer* layer) override;
   void OnLayerResized(Layer* layer) override;
   void OnLayerDestroying(Layer* layer) override;
-
-  
-  void SetLayerNeedRedrawHierarchy(Layer* layer);
 
   Compositor* compositor_;
   LayerTreeHostClient* client_;

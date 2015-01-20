@@ -67,6 +67,9 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   virtual void Hide();
   bool visible() const { return visible_;}
 
+  void SetName(const std::string& name);
+  const std::string& name() const { return name_;}
+
   // Size and disposition ------------------------------------------------------
   // Methods for obtaining and modifying the position and size of the view.
   // Position is in the coordinate system of the view's parent.
@@ -284,6 +287,7 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   bool visible_;
   bool enabled_;
   bool focusable_;
+  std::string name_;
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;

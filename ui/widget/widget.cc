@@ -206,5 +206,15 @@ void Widget::ConvertPointToTarget(const Widget* source,
   
   compositor::Layer::ConvertPointToLayer(source->layer(), target->layer(), point);
 }
+
+void Widget::SchedulePaint() {
+  DCHECK(layer());
+  layer()->SetNeedRedraw(bounds());
+}
+
+void Widget::SchedulePaintInRect(const gfx::Rect& r) {
+  DCHECK(layer());
+  layer()->SetNeedRedraw(r);
+}
 }  // namespace widget
 }  // namespace azer

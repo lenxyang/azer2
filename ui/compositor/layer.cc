@@ -201,6 +201,7 @@ void Layer::OnBoundsChanged() {
   FOR_EACH_OBSERVER(LayerObserver, observers_, OnLayerResized(this));
 }
 
+
 void Layer::CalcTargetBounds() {
   gfx::Rect parent_bounds = (parent_ ? parent_->target_bounds() : bounds());
   target_bounds_ = gfx::IntersectRects(parent_bounds , bounds());
@@ -232,6 +233,10 @@ void Layer::AddObserver(LayerObserver* observer) {
 
 void Layer::RemoveObserver(LayerObserver* observer) {
   observers_.RemoveObserver(observer);
+}
+
+void Layer::SetNeedRedraw(const gfx::Rect& rect) {
+  host_->SetLayerNeedRedrawHierarchy(this);
 }
 }  // namespace compositor
 }  // namespace azer

@@ -101,6 +101,7 @@ class AZER_EXPORT Layer {
   // ancestor of this layer).
   bool GetTargetTransformRelativeTo(const Layer* ancestor,
                                     gfx::Transform* transform) const;
+  void SetNeedRedraw(const gfx::Rect& rect);
  protected:
   void SetTreeHost(LayerTreeHost* host);
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;

@@ -47,6 +47,13 @@ View::~View() {
   event_observers_.Clear();
 }
 
+void View::SetName(const std::string& name)  {
+  name_ = name;
+  if (widget_.get()) {
+    widget_->SetName(name);
+  }
+}  
+
 void View::AddChildView(View* view) {
   if (view->parent_ == this)
     return;
@@ -187,9 +194,15 @@ bool View::ShouldDescendIntoChildForEventHandling(widget::Widget* child,
 }
 
 void View::SchedulePaint() {
+  if (widget_.get()) {
+    widget_->SchedulePaint();
+  }
 }
 
 void View::SchedulePaintInRect(const gfx::Rect& r) {
+  if (widget_.get()) {
+    widget_->SchedulePaintInRect(r);
+  }
 }
 
 void View::PaintChildren(gfx::Canvas* canvas, const CullSet& cull_set) {
