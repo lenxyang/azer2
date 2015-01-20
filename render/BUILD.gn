@@ -82,6 +82,7 @@ shared_library("render") {
     "//base",
     ":render2d",
     "../ui/adapter",
+    "../ui/base",
     "../ui/compositor",
     "../ui/widget",
     "../ui/views",
