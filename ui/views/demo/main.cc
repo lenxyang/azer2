@@ -51,14 +51,18 @@ int main(int argc, char* argv[]) {
   using azer::views::RootView;
   using azer::views::Label;
   using azer::widget::RenderLoop;
+  using azer::views::View;
   scoped_ptr<azer::UIEnv> uienv;
   uienv.reset(new azer::UIEnv(argc, argv));
   
   azer::widget::WidgetContext::Init();
   scoped_ptr<RootView> root(new RootView(gfx::Rect(100, 100, 800, 600)));
+  View* panel = new View;
+  root->AddChildView(panel);
+  panel->SetBounds(40, 40, 100, 100);
   Label* label = new Label(::base::UTF8ToWide("This is a Label"));
   root->AddChildView(label);
-  label->SetBounds(100, 100, 300, 30);
+  label->SetBounds(10, 10, 200, 20);
   root->Show();
 
   scoped_ptr<RenderFrame> delegate(new RenderFrame(root->GetWidgetTreeHost()));
