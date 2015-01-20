@@ -62,6 +62,7 @@ void View::AddChildViewAt(View* view, int index) {
 
   CHECK(!view->widget_.get());
   view->widget_.reset(new widget::Widget(widget_.get()));
+  view->widget_->SetDelegate(view);
 }
 
 bool View::Contains(const View* view) const {

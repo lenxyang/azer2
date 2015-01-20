@@ -108,7 +108,7 @@ class AZER_EXPORT Label : public View {
   base::string16 text_;
   base::string16 layout_text_;
   gfx::FontList font_list_;
-
+  
   SkColor requested_enabled_color_;
   SkColor actual_enabled_color_;
   SkColor requested_disabled_color_;

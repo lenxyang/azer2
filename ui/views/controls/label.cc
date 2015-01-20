@@ -10,6 +10,7 @@
 #include "base/strings/string_split.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
+#include "third_party/skia/include/core/SkColor.h"
 #include "ui/accessibility/ax_view_state.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/color_utils.h"
@@ -18,6 +19,7 @@
 #include "ui/gfx/text_utils.h"
 #include "ui/gfx/utf16_indexing.h"
 #include "ui/views/background.h"
+
 
 namespace azer {
 namespace views {
@@ -87,6 +89,11 @@ void Label::Init(const base::string16& text, const gfx::FontList& font_list) {
   allow_character_break_ = false;
   elide_behavior_ = gfx::ELIDE_TAIL;
   collapse_when_hidden_ = false;
+
+
+  requested_enabled_color_ = SK_ColorLTGRAY;
+  requested_disabled_color_ = SK_ColorGRAY;
+  background_color_ = SK_ColorTRANSPARENT;
 
   cached_heights_.resize(kCachedSizeLimit);
   ResetCachedSize();
