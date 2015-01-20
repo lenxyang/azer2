@@ -27,6 +27,7 @@
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/border.h"
 #include "azer/ui/views/painter.h"
+#include "azer/ui/views/view_event_observer.h"
 
 
 namespace azer {
@@ -43,6 +44,7 @@ View::View()
 }
 
 View::~View() {
+  event_observers_.Clear();
 }
 
 void View::AddChildView(View* view) {
@@ -125,22 +127,6 @@ void View::SetEnabled(bool enabled) {
 
 const char* View::GetClassName() const {
   return kViewClassName;
-}
-
-// Overridden from ui::EventHandler:
-void View::OnKeyEvent(ui::KeyEvent* event) {
-}
-
-void View::OnMouseEvent(ui::MouseEvent* event) {
-}
-
-void View::OnScrollEvent(ui::ScrollEvent* event) {
-}
-
-void View::OnTouchEvent(ui::TouchEvent* event) {
-}
-
-void View::OnGestureEvent(ui::GestureEvent* event) {
 }
 
 bool View::HasFocus() const {
@@ -238,6 +224,111 @@ void View::OnPaintBorder(gfx::Canvas* canvas) {
 }
 
 void View::Paint(gfx::Canvas* canvas, const CullSet& cull_set) {
+}
+
+// events
+bool View::OnMousePressed(const ui::MouseEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMousePressed(this, event));
+  return false;
+}
+
+void View::OnMouseReleased(const ui::MouseEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMouseReleased(this, event));
+}
+
+void View::OnMouseCaptureLost() {
+}
+
+void View::OnMouseMoved(const ui::MouseEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMouseMoved(this, event));
+}
+
+void View::OnMouseEntered(const ui::MouseEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMouseEntered(this, event));
+}
+
+void View::OnMouseExited(const ui::MouseEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMouseExited(this, event));
+}
+
+bool View::OnKeyPressed(const ui::KeyEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnKeyPressed(this, event));
+  return false;
+}
+
+bool View::OnKeyReleased(const ui::KeyEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnKeyReleased(this, event));
+  return false;
+}
+
+bool View::OnMouseWheel(const ui::MouseWheelEvent& event) {
+  FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMouseWheel(this, event));
+  return false;
+}
+
+// Overridden from ui::EventHandler:
+void View::OnKeyEvent(ui::KeyEvent* event) {
+  bool consumed = (event->type() == ui::ET_KEY_PRESSED) 
+      ? OnKeyPressed(*event)
+      : OnKeyReleased(*event);
+  if (consumed)
+    event->StopPropagation();
+}
+
+void View::OnMouseEvent(ui::MouseEvent* event) {
+  switch (event->type()) {
+    case ui::ET_MOUSE_PRESSED:
+      if (OnMousePressed(*event))
+        event->SetHandled();
+      return;
+
+    case ui::ET_MOUSE_MOVED:
+      if ((event->flags() & (ui::EF_LEFT_MOUSE_BUTTON |
+                             ui::EF_RIGHT_MOUSE_BUTTON |
+                             ui::EF_MIDDLE_MOUSE_BUTTON)) == 0) {
+        OnMouseMoved(*event);
+        return;
+      }
+      // FALL-THROUGH
+    case ui::ET_MOUSE_DRAGGED:
+      return;
+    case ui::ET_MOUSE_RELEASED:
+      OnMouseReleased(*event);
+      return;
+
+    case ui::ET_MOUSEWHEEL:
+      if (OnMouseWheel(*static_cast<ui::MouseWheelEvent*>(event)))
+        event->SetHandled();
+      break;
+
+    case ui::ET_MOUSE_ENTERED:
+      OnMouseEntered(*event);
+      break;
+
+    case ui::ET_MOUSE_EXITED:
+      OnMouseExited(*event);
+      break;
+
+    default:
+      return;
+  }
+}
+
+void View::OnScrollEvent(ui::ScrollEvent* event) {
+}
+
+void View::OnTouchEvent(ui::TouchEvent* event) {
+}
+
+void View::OnGestureEvent(ui::GestureEvent* event) {
+}
+
+void View::AddEventObserver(ViewEventObserver* observer) {
+  event_observers_.AddObserver(observer);
+}
+
+void View::RemoveEventObserver(ViewEventObserver* observer) {
+  event_observers_.RemoveObserver(observer);
 }
 }  // namespace views
 }  // namespace azer

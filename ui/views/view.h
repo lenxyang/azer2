@@ -10,6 +10,7 @@
 #include "base/i18n/rtl.h"
 #include "base/logging.h"
 #include "base/memory/scoped_ptr.h"
+#include "base/observer_list.h"
 #include "build/build_config.h"
 #include "ui/accessibility/ax_enums.h"
 #include "ui/base/accelerators/accelerator.h"
@@ -51,12 +52,16 @@ namespace views {
 
 class Border;
 class Background;
+class ViewEventObserver;
 
 class AZER_EXPORT View : public widget::WidgetDelegate {
  public:
   typedef std::vector<View*> Views;
   View();
   ~View() override;
+
+  void AddEventObserver(ViewEventObserver* observer);
+  void RemoveEventObserver(ViewEventObserver* observer);
   
   virtual void Show();
   virtual void Hide();
@@ -180,6 +185,68 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   virtual void SchedulePaint();
   virtual void SchedulePaintInRect(const gfx::Rect& r);
  protected:
+  // Returns true if the mouse cursor is over |view| and mouse events are
+  // enabled.
+  bool IsMouseHovered();
+
+  // This method is invoked when the user clicks on this view.
+  // The provided event is in the receiver's coordinate system.
+  //
+  // Return true if you processed the event and want to receive subsequent
+  // MouseDraggged and MouseReleased events.  This also stops the event from
+  // bubbling.  If you return false, the event will bubble through parent
+  // views.
+  //
+  // If you remove yourself from the tree while processing this, event bubbling
+  // stops as if you returned true, but you will not receive future events.
+  // The return value is ignored in this case.
+  //
+  // Default implementation returns true if a ContextMenuController has been
+  // set, false otherwise. Override as needed.
+  //
+  virtual bool OnMousePressed(const ui::MouseEvent& event);
+
+  // This method is invoked when the user releases the mouse
+  // button. The event is in the receiver's coordinate system.
+  //
+  // Default implementation notifies the ContextMenuController is appropriate.
+  // Subclasses that wish to honor the ContextMenuController should invoke
+  // super.
+  virtual void OnMouseReleased(const ui::MouseEvent& event);
+
+  // This method is invoked when the mouse press/drag was canceled by a
+  // system/user gesture.
+  virtual void OnMouseCaptureLost();
+
+  // This method is invoked when the mouse is above this control
+  // The event is in the receiver's coordinate system.
+  //
+  // Default implementation does nothing. Override as needed.
+  virtual void OnMouseMoved(const ui::MouseEvent& event);
+
+  // This method is invoked when the mouse enters this control.
+  //
+  // Default implementation does nothing. Override as needed.
+  virtual void OnMouseEntered(const ui::MouseEvent& event);
+
+  // This method is invoked when the mouse exits this control
+  // The provided event location is always (0, 0)
+  // Default implementation does nothing. Override as needed.
+  virtual void OnMouseExited(const ui::MouseEvent& event);
+
+  // Invoked when a key is pressed or released.
+  // Subclasser should return true if the event has been processed and false
+  // otherwise. If the event has not been processed, the parent will be given a
+  // chance.
+  virtual bool OnKeyPressed(const ui::KeyEvent& event);
+  virtual bool OnKeyReleased(const ui::KeyEvent& event);
+
+  // Invoked when the user uses the mousewheel. Implementors should return true
+  // if the event has been processed and false otherwise. This message is sent
+  // if the view is focused. If the event has not been processed, the parent
+  // will be given a chance.
+  virtual bool OnMouseWheel(const ui::MouseWheelEvent& event);
+ protected:
   compositor::Layer* layer();
   const compositor::Layer* layer() const;
 
@@ -221,6 +288,7 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;
   scoped_ptr<widget::Widget> widget_;
+  ObserverList<ViewEventObserver> event_observers_;
   DISALLOW_COPY_AND_ASSIGN(View);
 };
 }  // namespace views

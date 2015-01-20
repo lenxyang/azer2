@@ -20,6 +20,7 @@ source_set("views") {
     "shadow_border.h",
     "view.cc",
     "view.h",
+    "view_event_observer.h",
   ]
 
   deps = [
