@@ -79,31 +79,16 @@ void WidgetEventDispatcher::PreDispatchMouseEvent(Widget* target,
                                                   ui::MouseEvent* event) {
   switch (event->type()) {
     case ui::ET_MOUSE_EXITED:
-      if (!target || target == root()) {
-        DispatchDetails details = 
-            DispatchMouseEnterOrExit(*event, ui::ET_MOUSE_EXITED);
-        if (details.dispatcher_destroyed) {
-          event->SetHandled();
-          return;
-        }
-        mouse_moved_handler_ = NULL;
-      }
+      mouse_moved_handler_ = NULL;
       break;
     case ui::ET_MOUSE_MOVED:
       // Send an exit to the current |mouse_moved_handler_| and an enter to
       // |target|. Take care that both us and |target| aren't destroyed during
       // dispatch
       if (target != mouse_moved_handler_) {
-        Widget* old_mouse_moved_handler = mouse_moved_handler_;
         DispatchDetails details = 
             DispatchMouseEnterOrExit(*event, ui::ET_MOUSE_EXITED);
         if (details.dispatcher_destroyed) {
-          event->SetHandled();
-          return;
-        }
-
-        if (details.target_destroyed) {
-          mouse_moved_handler_ = NULL;
           event->SetHandled();
           return;
         }

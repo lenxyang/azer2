@@ -19,14 +19,16 @@ using azer::views::View;
 
 class LabelEventObserver : public azer::views::ViewEventObserver {
  public:
-  LabelEventObserver(Label* label1, Label* label2)
+  LabelEventObserver(Label* label1, Label* label2, Label* label3)
       : label1_(label1)
-      , label2_(label2) {
+      , label2_(label2) 
+      , label3_(label3) {
   }
 
   virtual void OnMousePressed(View* view, const ui::MouseEvent& e) {
-    std::string msg = ::base::StringPrintf("OnMousePressed on view[%s]",
-                                            view->name().c_str());
+    std::string msg = ::base::StringPrintf("OnMousePressed(%d, %d) on view[%s]",
+                                           e.location().x(), e.location().y(),
+                                           view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
   virtual void OnMouseReleased(View* view, const ui::MouseEvent& e) {
@@ -36,8 +38,9 @@ class LabelEventObserver : public azer::views::ViewEventObserver {
   }
 
   virtual void OnMouseMoved(View* view, const ui::MouseEvent& e) {
-    std::string msg = ::base::StringPrintf("OnMouseMoved on view[%s]",
-                                            view->name().c_str());
+    std::string msg = ::base::StringPrintf("OnMouseMoved(%d, %d) on view[%s]",
+                                           e.location().x(), e.location().y(),
+                                           view->name().c_str());
     label2_->SetText(::base::UTF8ToWide(msg));
   }
   virtual void OnMouseEntered(View* view, const ui::MouseEvent& e) {
@@ -48,7 +51,7 @@ class LabelEventObserver : public azer::views::ViewEventObserver {
   virtual void OnMouseExited(View* view, const ui::MouseEvent& e) {
     std::string msg = ::base::StringPrintf("OnMouseExited on view[%s]",
                                            view->name().c_str());
-    label1_->SetText(::base::UTF8ToWide(msg));
+    label3_->SetText(::base::UTF8ToWide(msg));
   }
 
   virtual void OnMouseWheel(View* view, const ui::MouseWheelEvent& e) {
@@ -69,6 +72,7 @@ class LabelEventObserver : public azer::views::ViewEventObserver {
  private:
   Label* label1_;
   Label* label2_;
+  Label* label3_;
 };
 
 class RenderFrame : public azer::widget::RenderLoopDelegate {
@@ -128,7 +132,12 @@ int main(int argc, char* argv[]) {
   root->AddChildView(label2);
   label2->SetBounds(10, 30, 400, 20);
 
-  LabelEventObserver observer(label1, label2);
+  Label* label3 = new Label(::base::UTF8ToWide("This is a Label"));
+  label2->SetName("label3");
+  root->AddChildView(label3);
+  label3->SetBounds(10, 50, 400, 20);
+
+  LabelEventObserver observer(label1, label2, label3);
   panel->AddEventObserver(&observer);
   root->AddEventObserver(&observer);
 

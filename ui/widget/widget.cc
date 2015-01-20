@@ -34,12 +34,12 @@ Widget::Widget(Widget* parent)
     : id_(WidgetContext::GetInstance()->allocate_widget_id())
     , layer_type_(kCanvas)
     , host_(parent->host_)
-    , parent_(parent) 
+    , parent_(NULL) 
     , delegate_(NULL)
     , ignore_events_(false)
     , visible_(true) {
   DCHECK(NULL != parent);
-  parent_->AddChild(this);
+  parent->AddChild(this);
   InitLayer();
 }
 
@@ -92,7 +92,7 @@ Widget::SetEventTargeter(scoped_ptr<ui::EventTargeter> targeter) {
 
 void Widget::AddChild(Widget* widget) {
   DCHECK(widget);
-  DCHECK(!Contains(widget));
+  DCHECK(!widget->parent_);
   children_.push_back(widget);
   widget->parent_ = this;
   widget->host_ = host_;
@@ -104,13 +104,11 @@ void Widget::RemoveChild(Widget* widget) {
   children_.erase(iter);
 }
 
-bool Widget::Contains(const Widget* widget) const {
-  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    if (*iter == widget) {
+bool Widget::Contains(const Widget* other) const {
+  for (const Widget* parent = other; parent; parent = parent->parent_) {
+    if (parent == this)
       return true;
-    }
   }
-
   return false;
 }
 
