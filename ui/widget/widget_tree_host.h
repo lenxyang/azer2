@@ -3,6 +3,7 @@
 #include <atomic>
 #include <string>
 
+#include "base/observer_list.h"
 #include "ui/events/event_source.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/point.h"
@@ -23,6 +24,7 @@ namespace widget {
 
 class Widget;
 class WidgetEventDispatcher;
+class WidgetTreeHostObserver;
 
 class AZER_EXPORT WidgetTreeHost {
  public:
@@ -31,6 +33,9 @@ class AZER_EXPORT WidgetTreeHost {
   static gfx::Size WidgetTreeHost::GetNativeScreenSize();
 
   virtual ~WidgetTreeHost();
+
+  void AddObserver(WidgetTreeHostObserver* observer);
+  void RemoveObserver(WidgetTreeHostObserver* observer);
 
   virtual gfx::AcceleratedWidget GetAcceleratedWidget() = 0;
   virtual void Show() = 0;
@@ -61,6 +66,7 @@ class AZER_EXPORT WidgetTreeHost {
   scoped_ptr<WidgetEventDispatcher> dispatcher_;
   scoped_ptr<compositor::Compositor> compositor_;
   scoped_ptr<compositor::LayerTreeHost> layer_host_;
+  ObserverList<WidgetTreeHostObserver> observers_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTreeHost);
 };
 

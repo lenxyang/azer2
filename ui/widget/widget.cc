@@ -30,6 +30,19 @@ Widget::Widget(WidgetType type, Widget* parent)
   InitLayer();
 }
 
+Widget::Widget(Widget* parent)
+    : id_(WidgetContext::GetInstance()->allocate_widget_id())
+    , layer_type_(kCanvas)
+    , host_(parent->host_)
+    , parent_(parent) 
+    , delegate_(NULL)
+    , ignore_events_(false)
+    , visible_(true) {
+  DCHECK(NULL != parent);
+  parent_->AddChild(this);
+  InitLayer();
+}
+
 Widget::Widget(WidgetTreeHost* host)
     : id_(WidgetContext::GetInstance()->allocate_widget_id())
     , layer_type_(kRoot)

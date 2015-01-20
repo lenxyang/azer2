@@ -5,6 +5,7 @@
 #include "azer/ui/widget/widget.h"
 #include "azer/ui/widget/widget_event_dispatcher.h"
 #include "azer/ui/widget/widget_targeter.h"
+#include "azer/ui/widget/widget_tree_host_observer.h"
 
 namespace azer {
 namespace widget {
@@ -19,9 +20,6 @@ WidgetTreeHost::WidgetTreeHost(const gfx::Rect& bounds)
 WidgetTreeHost::~WidgetTreeHost() {
   layer_host_.reset();
   compositor_.reset();
-  if (RenderSystem::Current() != NULL) {
-    UnloadRenderSystem();
-  }
 }
 
 void WidgetTreeHost::CreateCompositor(gfx::AcceleratedWidget widget) {

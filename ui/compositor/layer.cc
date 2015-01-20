@@ -208,12 +208,12 @@ void Layer::CalcTargetBounds() {
 
 void Layer::CalcOverlayBounds() {
   const gfx::Rect& root_bounds = host_->root()->bounds();
-  float x = (float)target_bounds_.x() / (float)root_bounds.width();
-  float y = (float)target_bounds_.y() / (float)root_bounds.height();
   float width_percent = (float)target_bounds_.width() / (float)root_bounds.width();
   float height_percent = (float)target_bounds_.height() / (float)root_bounds.height();
+  float x = (float)target_bounds_.x() / (float)root_bounds.width();
+  float y = (float)target_bounds_.y() / (float)root_bounds.height() + height_percent;
   overlay_bounds_ = gfx::RectF(2.0f * x - 1.0f, 
-                               2.0f * y - 1.0f,
+                               -2.0f * y + 1.0f,
                                width_percent * 2.0f,
                                height_percent * 2.0f);
 }

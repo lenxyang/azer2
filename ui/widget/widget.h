@@ -39,7 +39,8 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   };
 
   Widget(WidgetType type, Widget* parent);
-  Widget(WidgetTreeHost* host);
+  explicit Widget(Widget* parent);
+  explicit Widget(WidgetTreeHost* host);
   virtual ~Widget();
 
   Widget* root();
