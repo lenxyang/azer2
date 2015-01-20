@@ -1,5 +1,7 @@
 
 #include "base/memory/scoped_ptr.h"
+#include "base/strings/utf_string_conversions.h"
+
 #include "azer/render/render.h"
 #include "azer/ui/base/environment.h"
 #include "azer/ui/widget/api.h"
@@ -54,7 +56,9 @@ int main(int argc, char* argv[]) {
   
   azer::widget::WidgetContext::Init();
   scoped_ptr<RootView> root(new RootView(gfx::Rect(100, 100, 800, 600)));
-  Label* label = new Label;
+  Label* label = new Label(::base::UTF8ToWide("This is a Label"));
+  root->AddChildView(label);
+  label->SetBounds(100, 100, 300, 30);
   root->Show();
 
   scoped_ptr<RenderFrame> delegate(new RenderFrame(root->GetWidgetTreeHost()));
