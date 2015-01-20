@@ -54,11 +54,26 @@ class AZER_EXPORT WidgetTreeHost {
 
   compositor::Compositor* compositor();
   bool Closed() { return closed_;}
+
+  // Sets the OS capture to the root window.
+  virtual void SetCapture() = 0;
+
+  // Releases OS capture of the root window.
+  virtual void ReleaseCapture() = 0;
  protected:
   WidgetTreeHost(const gfx::Rect& rect);
 
   void SetClosed(bool closed) { closed_ = closed;}
   void CreateCompositor(gfx::AcceleratedWidget widget);
+
+  void OnHostMoved(const gfx::Point& new_location);
+  void OnHostResized(const gfx::Size& new_size);
+  void OnHostCloseRequested();
+  void OnHostActivated();
+  void OnHostLostWindowCapture();
+
+  // Sets the currently displayed cursor.
+  virtual void SetCursorNative(gfx::NativeCursor cursor) = 0;
 
   Widget* root_;
   std::atomic<bool> closed_;

@@ -1,6 +1,7 @@
 #include "azer/ui/widget/widget_tree_host_win.h"
 
 #include "base/message_loop/message_loop.h"
+#include "ui/base/cursor/cursor_loader_win.h"
 #include "ui/gfx/display.h"
 #include "ui/gfx/insets.h"
 #include "ui/gfx/native_widget_types.h"
@@ -25,6 +26,7 @@ WidgetTreeHost* WidgetTreeHost::Create(const gfx::Rect& bounds) {
 
 WidgetTreeHostWin::WidgetTreeHostWin(const gfx::Rect& bounds)
     : WidgetTreeHost(bounds)
+    , has_capture_(false)
     , hwnd_(gfx::kNullAcceleratedWidget)
     , window_(new ui::WinWindow(this, bounds)) {
 }
@@ -66,6 +68,12 @@ gfx::Point WidgetTreeHostWin::GetLocationOnNativeScreen() const {
 } 
 
 void WidgetTreeHostWin::OnBoundsChanged(const gfx::Rect& new_bounds) {
+  gfx::Rect old_bounds = bounds_;
+  bounds_ = new_bounds;
+  if (bounds_.origin() != old_bounds.origin())
+    OnHostMoved(bounds_.origin());
+  if (bounds_.size() != old_bounds.size())
+    OnHostResized(bounds_.size());
 }
 
 void WidgetTreeHostWin::OnDamageRect(const gfx::Rect& damaged_region) {
@@ -89,6 +97,10 @@ void WidgetTreeHostWin::OnWindowStateChanged(ui::PlatformWindowState new_state) 
 }
 
 void WidgetTreeHostWin::OnLostCapture() {
+  if (has_capture_) {
+    has_capture_ = false;
+    OnHostLostWindowCapture();
+  }
 }
 
 void WidgetTreeHostWin::OnAcceleratedWidgetAvailable(gfx::AcceleratedWidget widget) {
@@ -97,6 +109,28 @@ void WidgetTreeHostWin::OnAcceleratedWidgetAvailable(gfx::AcceleratedWidget widg
 }
 
 void WidgetTreeHostWin::OnActivationChanged(bool active) {
+}
+
+void WidgetTreeHostWin::SetCapture() {
+  if (!has_capture_) {
+    has_capture_ = true;
+    window_->SetCapture();
+  }
+}
+
+void WidgetTreeHostWin::ReleaseCapture() {
+  if (has_capture_)
+    window_->ReleaseCapture();
+}
+
+void WidgetTreeHostWin::SetCursorNative(gfx::NativeCursor native_cursor) {
+  // Custom web cursors are handled directly.
+  if (native_cursor == ui::kCursorCustom)
+    return;
+
+  ui::CursorLoaderWin cursor_loader;
+  cursor_loader.SetPlatformCursor(&native_cursor);
+  ::SetCursor(native_cursor.platform());
 }
 
 }  // namespace widget

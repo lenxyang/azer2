@@ -35,6 +35,12 @@ TEST_F(WidgetTest, Destroy) {
   RunFirstFrame();
 }
 
+TEST_F(WidgetTest, MouseMove) {
+}
+
+TEST_F(WidgetTest, Capture) {
+}
+
 }  // namespace testing
 }  // namespace widget
 }  // namespace azer

@@ -47,5 +47,20 @@ WidgetEventDispatcher* WidgetTreeHost::dispatcher() {
 ::ui::EventProcessor* WidgetTreeHost::event_processor() {
   return dispatcher();
 }
+
+void WidgetTreeHost::OnHostMoved(const gfx::Point& new_location) {
+}
+
+void WidgetTreeHost::OnHostResized(const gfx::Size& new_size) {
+}
+
+void WidgetTreeHost::OnHostCloseRequested() {
+}
+
+void WidgetTreeHost::OnHostActivated() {
+}
+
+void WidgetTreeHost::OnHostLostWindowCapture() {
+}
 }  // namespace widget
 }  // namespace azer

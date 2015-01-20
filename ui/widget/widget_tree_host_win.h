@@ -2,10 +2,10 @@
 
 #include "base/compiler_specific.h"
 #include "base/basictypes.h"
+#include "ui/base/cursor/cursor.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/point.h"
 #include "ui/events/event_source.h"
-
 #include "ui/platform_window/platform_window.h"
 #include "ui/platform_window/platform_window_delegate.h"
 
@@ -38,6 +38,10 @@ class AZER_EXPORT WidgetTreeHostWin
  protected:
   gfx::AcceleratedWidget hwnd() const { return hwnd_; }
 
+  void SetCapture() override;
+  void ReleaseCapture() override;
+  void SetCursorNative(gfx::NativeCursor cursor) override;
+
   // ui::PlatformWindowDelegate:
   void OnBoundsChanged(const gfx::Rect& new_bounds) override;
   void OnDamageRect(const gfx::Rect& damaged_region) override;
@@ -49,6 +53,7 @@ class AZER_EXPORT WidgetTreeHostWin
   void OnAcceleratedWidgetAvailable(gfx::AcceleratedWidget widget) override;
   void OnActivationChanged(bool active) override;
 
+  bool has_capture_;
   gfx::AcceleratedWidget hwnd_;
   scoped_ptr< ::ui::PlatformWindow> window_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTreeHostWin);
