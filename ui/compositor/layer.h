@@ -81,9 +81,6 @@ class AZER_EXPORT Layer {
   virtual void OnRemoveFromParent() {}
   virtual void OnStackingChanged() {}
 
-  // sort the children layer by order
-  // 
-  void SortChildren();
   LayerList& children() { return children_;}
   const LayerList& children() const { return children_;}
 

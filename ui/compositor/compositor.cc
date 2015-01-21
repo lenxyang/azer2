@@ -71,7 +71,6 @@ void Compositor::ScheduleDraw() {
 }
 
 void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {
-  parent->SortChildren();
   auto list = parent->children();
   for (auto iter = list.begin(); iter != list.end(); ++iter) {
     Layer* layer = (*iter);
