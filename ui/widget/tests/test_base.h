@@ -42,6 +42,8 @@ class WidgetTestBase : public ::testing::Test
   Widget* CreateWidget(WidgetDelegate* delegate, const gfx::Rect& bounds);
   Widget* CreateWidget(WidgetDelegate* delegate, const gfx::Rect& bounds,
                        Widget* parent);
+  Widget* CreateWidget(WidgetDelegate* delegate, int id, const gfx::Rect& bounds,
+                       Widget* parent);
   Widget* CreateWidget(const gfx::Rect& bounds, Widget* parent);
 
   bool DispatchEventUsingWidgetDispatcher(ui::Event* event);

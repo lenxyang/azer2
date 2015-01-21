@@ -45,9 +45,9 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
     kBitmap,
   };
 
-  Widget(WidgetType type, Widget* parent);
-  explicit Widget(Widget* parent);
-  explicit Widget(WidgetTreeHost* host);
+  Widget(WidgetType type, Widget* parent, int id=-1);
+  Widget(Widget* parent, int id = -1);
+  Widget(WidgetTreeHost* host, int id=-1);
   virtual ~Widget();
 
   WidgetTreeHost* GetHost();
@@ -186,7 +186,7 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
  protected:
   // compositor::LayerDelegate
   void OnPaintLayer(gfx::Canvas* canvas) override;
-  void InitLayer();
+  void Init();
   compositor::Layer* CreateLayerByType();
 
   bool IsRootWidget() { return parent_ == NULL;}

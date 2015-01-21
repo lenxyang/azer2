@@ -87,6 +87,132 @@ TEST_F(WidgetTest, Destroy) {
 TEST_F(WidgetTest, MouseMove) {
 }
 
+// Verifies that the WidgetDelegate receives MouseExit and MouseEnter events for
+// mouse transitions from window to window.
+TEST_F(WidgetTest, MouseEnterExit) {
+  MouseEnterExitWidgetDelegate d1;
+  scoped_ptr<Widget> w1(
+      CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
+                                   root_window()));
+  MouseEnterExitWidgetDelegate d2;
+  scoped_ptr<Widget> w2(
+      CreateWidget(&d2, 2, gfx::Rect(70, 70, 50, 50),
+                                   root_window()));
+
+  ui::test::EventGenerator generator(root_window());
+  generator.MoveMouseToCenterOf(w1.get());
+  EXPECT_TRUE(d1.entered());
+  EXPECT_FALSE(d1.exited());
+  EXPECT_FALSE(d2.entered());
+  EXPECT_FALSE(d2.exited());
+
+  generator.MoveMouseToCenterOf(w2.get());
+  EXPECT_TRUE(d1.entered());
+  EXPECT_TRUE(d1.exited());
+  EXPECT_TRUE(d2.entered());
+  EXPECT_FALSE(d2.exited());
+}
+
+// Verifies that enter / exits are sent if windows appear and are hidden
+// under the current mouse position..
+TEST_F(WidgetTest, MouseEnterExitWithHide) {
+  MouseEnterExitWidgetDelegate d1;
+  scoped_ptr<Widget> w1(
+      CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
+                                   root_window()));
+
+  ui::test::EventGenerator generator(root_window());
+  generator.MoveMouseToCenterOf(w1.get());
+  EXPECT_TRUE(d1.entered());
+  EXPECT_FALSE(d1.exited());
+
+  MouseEnterExitWidgetDelegate d2;
+  scoped_ptr<Widget> w2(
+      CreateWidget(&d2, 2, gfx::Rect(10, 10, 50, 50),
+                                   root_window()));
+  // Enters / exits can be send asynchronously.
+  RunAllPendingInMessageLoop();
+  EXPECT_TRUE(d1.entered());
+  EXPECT_TRUE(d1.exited());
+  EXPECT_TRUE(d2.entered());
+  EXPECT_FALSE(d2.exited());
+
+  d1.ResetExpectations();
+  w2->Hide();
+  // Enters / exits can be send asynchronously.
+  RunAllPendingInMessageLoop();
+  EXPECT_TRUE(d2.exited());
+  EXPECT_TRUE(d1.entered());
+}
+
+TEST_F(WidgetTest, MouseEnterExitWithParentHide) {
+  MouseEnterExitWidgetDelegate d1;
+  scoped_ptr<Widget> w1(
+      CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
+                                   root_window()));
+  MouseEnterExitWidgetDelegate d2;
+  Widget* w2 = CreateWidget(&d2, 2, gfx::Rect(10, 10, 50, 50),
+                                            w1.get());
+  ui::test::EventGenerator generator(root_window());
+  generator.MoveMouseToCenterOf(w2);
+  // Enters / exits can be send asynchronously.
+  RunAllPendingInMessageLoop();
+  EXPECT_TRUE(d2.entered());
+  EXPECT_FALSE(d2.exited());
+
+  d2.ResetExpectations();
+  w1->Hide();
+  RunAllPendingInMessageLoop();
+  EXPECT_FALSE(d2.entered());
+  EXPECT_TRUE(d2.exited());
+
+  w1.reset();
+}
+
+TEST_F(WidgetTest, MouseEnterExitWithParentDelete) {
+  MouseEnterExitWidgetDelegate d1;
+  scoped_ptr<Widget> w1(
+      CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
+                                   root_window()));
+  MouseEnterExitWidgetDelegate d2;
+  Widget* w2 = CreateWidget(&d2, 2, gfx::Rect(10, 10, 50, 50),
+                                            w1.get());
+  ui::test::EventGenerator generator(root_window());
+  generator.MoveMouseToCenterOf(w2);
+
+  // Enters / exits can be send asynchronously.
+  RunAllPendingInMessageLoop();
+  EXPECT_TRUE(d2.entered());
+  EXPECT_FALSE(d2.exited());
+
+  d2.ResetExpectations();
+  w1.reset();
+  RunAllPendingInMessageLoop();
+  EXPECT_FALSE(d2.entered());
+  EXPECT_TRUE(d2.exited());
+}
+
+// Creates a window with a delegate (w111) that can handle events at a lower
+// z-index than a window without a delegate (w12). w12 is sized to fill the
+// entire bounds of the container. This test verifies that
+// GetEventHandlerForPoint() skips w12 even though its bounds contain the event,
+// because it has no children that can handle the event and it has no delegate
+// allowing it to handle the event itself.
+TEST_F(WidgetTest, GetEventHandlerForPoint_NoDelegate) {
+  TestWidgetDelegate d111;
+  scoped_ptr<Widget> w1(CreateWidget(NULL, 1,
+      gfx::Rect(0, 0, 500, 500), root_window()));
+  scoped_ptr<Widget> w11(CreateWidget(NULL, 11,
+      gfx::Rect(0, 0, 500, 500), w1.get()));
+  scoped_ptr<Widget> w111(CreateWidget(&d111, 111,
+      gfx::Rect(50, 50, 450, 450), w11.get()));
+  scoped_ptr<Widget> w12(CreateWidget(NULL, 12,
+      gfx::Rect(0, 0, 500, 500), w1.get()));
+
+  gfx::Point target_point = w111->bounds().CenterPoint();
+  EXPECT_EQ(w111.get(), w1->GetEventHandlerForPoint(target_point));
+}
+
 TEST_F(WidgetTest, Capture) {
   gfx::Rect bounds(0, 0, 20, 20);
   CaptureWidgetDelegateImpl delegate;

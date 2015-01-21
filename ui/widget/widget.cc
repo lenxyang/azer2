@@ -22,8 +22,8 @@
 namespace azer {
 namespace widget {
 
-Widget::Widget(WidgetType type, Widget* parent) 
-    : id_(WidgetContext::GetInstance()->allocate_widget_id())
+Widget::Widget(WidgetType type, Widget* parent, int id) 
+    : id_(id)
     , layer_type_(type)
     , host_(parent->host_)
     , parent_(NULL) 
@@ -35,8 +35,8 @@ Widget::Widget(WidgetType type, Widget* parent)
   InitLayer();
 }
 
-Widget::Widget(Widget* parent)
-    : id_(WidgetContext::GetInstance()->allocate_widget_id())
+Widget::Widget(Widget* parent, int id)
+    : id_(id)
     , layer_type_(kCanvas)
     , host_(parent->host_)
     , parent_(NULL) 
@@ -45,11 +45,11 @@ Widget::Widget(Widget* parent)
     , visible_(true) {
   DCHECK(NULL != parent);
   parent->AddChild(this);
-  InitLayer();
+  Init();
 }
 
 Widget::Widget(WidgetTreeHost* host)
-    : id_(WidgetContext::GetInstance()->allocate_widget_id())
+    : id_(1)
     , layer_type_(kRoot)
     , host_(host)
     , parent_(NULL) 
@@ -197,7 +197,11 @@ compositor::Layer* Widget::CreateLayerByType() {
   return layer;
 }
 
-void Widget::InitLayer() {
+void Widget::Init() {
+  if (id_ == -1) {
+    id_ = WidgetContext::GetInstance()->allocate_widget_id();
+  }
+
   layer_ = CreateLayerByType();
   DCHECK(NULL != layer_);
   if (parent()) {

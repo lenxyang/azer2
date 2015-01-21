@@ -60,7 +60,12 @@ Widget* WidgetTestBase::CreateWidget(WidgetDelegate* delegate,
 
 Widget* WidgetTestBase::CreateWidget(WidgetDelegate* delegate,
                                      const gfx::Rect& bounds, Widget* parent) {
-  Widget* widget = new Widget(Widget::kCanvas, parent);
+  return CreateWidget(delegate, bounds, -1, parent);
+}
+
+Widget* WidgetTestBase::CreateWidget(WidgetDelegate* delegate, int id, 
+                                     const gfx::Rect& bounds, Widget* parent) {
+  Widget* widget = new Widget(Widget::kCanvas, parent, id);
   widget->SetBounds(bounds);
   widget->SetDelegate(delegate);
   return widget;
