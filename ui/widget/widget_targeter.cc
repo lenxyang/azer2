@@ -9,6 +9,7 @@
 #include "azer/ui/widget/widget.h"
 #include "azer/ui/widget/widget_delegate.h"
 #include "azer/ui/widget/widget_tree_host.h"
+#include "azer/ui/widget/client/capture_client.h"
 
 
 namespace azer {
@@ -69,6 +70,10 @@ bool WidgetTargeter::EventLocationInsideBounds(
 Widget* WidgetTargeter::FindTargetInRoot(Widget* root, 
                                          const ui::LocatedEvent& event) {
   DCHECK_EQ(root, root->GetRootWidget());
+  Window* capture_window = client::GetCaptureWindow(root_window);
+  if (capture_window)
+    return capture_window;
+
   return NULL;
 }
 }  // namespace widget
