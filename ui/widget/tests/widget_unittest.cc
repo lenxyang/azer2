@@ -87,19 +87,52 @@ TEST_F(WidgetTest, Destroy) {
 TEST_F(WidgetTest, MouseMove) {
 }
 
+class MouseEnterExitWidgetDelegate : public TestWidgetDelegate {
+ public:
+  MouseEnterExitWidgetDelegate() : entered_(false), exited_(false) {}
+
+  void OnMouseEvent(ui::MouseEvent* event) override {
+    switch (event->type()) {
+      case ui::ET_MOUSE_ENTERED:
+        EXPECT_TRUE(event->flags() & ui::EF_IS_SYNTHESIZED);
+        entered_ = true;
+        break;
+      case ui::ET_MOUSE_EXITED:
+        EXPECT_TRUE(event->flags() & ui::EF_IS_SYNTHESIZED);
+        exited_ = true;
+        break;
+      default:
+        break;
+    }
+  }
+
+  bool entered() const { return entered_; }
+  bool exited() const { return exited_; }
+
+  // Clear the entered / exited states.
+  void ResetExpectations() {
+    entered_ = false;
+    exited_ = false;
+  }
+
+ private:
+  bool entered_;
+  bool exited_;
+
+  DISALLOW_COPY_AND_ASSIGN(MouseEnterExitWidgetDelegate);
+};
+
 // Verifies that the WidgetDelegate receives MouseExit and MouseEnter events for
 // mouse transitions from window to window.
 TEST_F(WidgetTest, MouseEnterExit) {
   MouseEnterExitWidgetDelegate d1;
-  scoped_ptr<Widget> w1(
-      CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
-                                   root_window()));
+  scoped_ptr<Widget> w1(CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
+                                     root_widget()));
   MouseEnterExitWidgetDelegate d2;
-  scoped_ptr<Widget> w2(
-      CreateWidget(&d2, 2, gfx::Rect(70, 70, 50, 50),
-                                   root_window()));
+  scoped_ptr<Widget> w2(CreateWidget(&d2, 2, gfx::Rect(70, 70, 50, 50),
+                                     root_widget()));
 
-  ui::test::EventGenerator generator(root_window());
+  EventGenerator generator(root_widget());
   generator.MoveMouseToCenterOf(w1.get());
   EXPECT_TRUE(d1.entered());
   EXPECT_FALSE(d1.exited());
@@ -113,25 +146,24 @@ TEST_F(WidgetTest, MouseEnterExit) {
   EXPECT_FALSE(d2.exited());
 }
 
-// Verifies that enter / exits are sent if windows appear and are hidden
+// Verifies that enter / exits are sent if widgets appear and are hidden
 // under the current mouse position..
 TEST_F(WidgetTest, MouseEnterExitWithHide) {
   MouseEnterExitWidgetDelegate d1;
   scoped_ptr<Widget> w1(
       CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
-                                   root_window()));
+                                   root_widget()));
 
-  ui::test::EventGenerator generator(root_window());
+  EventGenerator generator(root_widget());
   generator.MoveMouseToCenterOf(w1.get());
   EXPECT_TRUE(d1.entered());
   EXPECT_FALSE(d1.exited());
 
   MouseEnterExitWidgetDelegate d2;
-  scoped_ptr<Widget> w2(
-      CreateWidget(&d2, 2, gfx::Rect(10, 10, 50, 50),
-                                   root_window()));
+  scoped_ptr<Widget> w2(CreateWidget(&d2, 2, gfx::Rect(10, 10, 50, 50),
+                                     root_widget()));
   // Enters / exits can be send asynchronously.
-  RunAllPendingInMessageLoop();
+  RunFirstFrame();
   EXPECT_TRUE(d1.entered());
   EXPECT_TRUE(d1.exited());
   EXPECT_TRUE(d2.entered());
@@ -140,29 +172,28 @@ TEST_F(WidgetTest, MouseEnterExitWithHide) {
   d1.ResetExpectations();
   w2->Hide();
   // Enters / exits can be send asynchronously.
-  RunAllPendingInMessageLoop();
+  RunFirstFrame();
   EXPECT_TRUE(d2.exited());
   EXPECT_TRUE(d1.entered());
 }
 
 TEST_F(WidgetTest, MouseEnterExitWithParentHide) {
   MouseEnterExitWidgetDelegate d1;
-  scoped_ptr<Widget> w1(
-      CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
-                                   root_window()));
+  scoped_ptr<Widget> w1(CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
+                                     root_widget()));
   MouseEnterExitWidgetDelegate d2;
   Widget* w2 = CreateWidget(&d2, 2, gfx::Rect(10, 10, 50, 50),
                                             w1.get());
-  ui::test::EventGenerator generator(root_window());
+  EventGenerator generator(root_widget());
   generator.MoveMouseToCenterOf(w2);
   // Enters / exits can be send asynchronously.
-  RunAllPendingInMessageLoop();
+  RunFirstFrame();
   EXPECT_TRUE(d2.entered());
   EXPECT_FALSE(d2.exited());
 
   d2.ResetExpectations();
   w1->Hide();
-  RunAllPendingInMessageLoop();
+  RunFirstFrame();
   EXPECT_FALSE(d2.entered());
   EXPECT_TRUE(d2.exited());
 
@@ -173,27 +204,27 @@ TEST_F(WidgetTest, MouseEnterExitWithParentDelete) {
   MouseEnterExitWidgetDelegate d1;
   scoped_ptr<Widget> w1(
       CreateWidget(&d1, 1, gfx::Rect(10, 10, 50, 50),
-                                   root_window()));
+                                   root_widget()));
   MouseEnterExitWidgetDelegate d2;
   Widget* w2 = CreateWidget(&d2, 2, gfx::Rect(10, 10, 50, 50),
                                             w1.get());
-  ui::test::EventGenerator generator(root_window());
+  EventGenerator generator(root_widget());
   generator.MoveMouseToCenterOf(w2);
 
   // Enters / exits can be send asynchronously.
-  RunAllPendingInMessageLoop();
+  RunFirstFrame();
   EXPECT_TRUE(d2.entered());
   EXPECT_FALSE(d2.exited());
 
   d2.ResetExpectations();
   w1.reset();
-  RunAllPendingInMessageLoop();
+  RunFirstFrame();
   EXPECT_FALSE(d2.entered());
   EXPECT_TRUE(d2.exited());
 }
 
-// Creates a window with a delegate (w111) that can handle events at a lower
-// z-index than a window without a delegate (w12). w12 is sized to fill the
+// Creates a widget with a delegate (w111) that can handle events at a lower
+// z-index than a widget without a delegate (w12). w12 is sized to fill the
 // entire bounds of the container. This test verifies that
 // GetEventHandlerForPoint() skips w12 even though its bounds contain the event,
 // because it has no children that can handle the event and it has no delegate
@@ -201,7 +232,7 @@ TEST_F(WidgetTest, MouseEnterExitWithParentDelete) {
 TEST_F(WidgetTest, GetEventHandlerForPoint_NoDelegate) {
   TestWidgetDelegate d111;
   scoped_ptr<Widget> w1(CreateWidget(NULL, 1,
-      gfx::Rect(0, 0, 500, 500), root_window()));
+      gfx::Rect(0, 0, 500, 500), root_widget()));
   scoped_ptr<Widget> w11(CreateWidget(NULL, 11,
       gfx::Rect(0, 0, 500, 500), w1.get()));
   scoped_ptr<Widget> w111(CreateWidget(&d111, 111,

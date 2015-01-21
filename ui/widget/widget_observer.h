@@ -15,6 +15,9 @@ class AZER_EXPORT WidgetObserver {
   virtual void OnWidgetPropertyChanged(Widget* widget, 
                                        const void* key, intptr_t old) {}
   virtual void OnWidgetStackingChanged(Widget* widget) {}
+
+  virtual void OnWidgetVisiblityChanging(Widget* widget, bool visible);
+  virtual void OnWidgetVisiblityChanged(Widget* widget, bool visible);
  protected:
   WidgetObserver() {}
   virtual ~WidgetObserver() {}

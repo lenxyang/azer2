@@ -64,6 +64,7 @@ class EventGeneratorDelegate {
 
 class EventGenerator {
  public:
+  EventGenerator(Widget* host);
   EventGenerator(Widget* host, const gfx::Point& initial_location);
   ~EventGenerator();
 
@@ -126,6 +127,9 @@ class EventGenerator {
   void DragMouseBy(int dx, int dy) {
     DragMouseTo(current_location_ + gfx::Vector2d(dx, dy));
   }
+
+  // Generates events to move the mouse to the center of the window.
+  void MoveMouseToCenterOf(ui::EventTarget* window);
 
   // Generates a key press event. On platforms except Windows and X11, a key
   // event without native_event() is generated. Note that ui::EF_ flags should

@@ -32,7 +32,7 @@ Widget::Widget(WidgetType type, Widget* parent, int id)
     , visible_(true) {
   DCHECK(NULL != parent);
   parent->AddChild(this);
-  InitLayer();
+  Init();
 }
 
 Widget::Widget(Widget* parent, int id)
@@ -100,6 +100,22 @@ compositor::Layer* Widget::layer() {
 
 const compositor::Layer* Widget::layer() const {
   return layer_;
+}
+
+void Widget::Hide() {
+  SetVisible(false);
+}
+
+void Widget::Show() {
+  SetVisible(true);
+}
+
+void Widget::SetVisible(bool visible) {
+  FOR_EACH_OBSERVER(WidgetObserver, observers_,
+                    OnWidgetVisibilityChanging(this, visible));
+  visible_ = visible;
+  FOR_EACH_OBSERVER(WidgetObserver, observers_,
+                    OnWidgetVisibilityChanged(this, visible));
 }
 
 void Widget::SetBounds(const gfx::Rect& bounds) {

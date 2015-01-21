@@ -47,7 +47,7 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
 
   Widget(WidgetType type, Widget* parent, int id=-1);
   Widget(Widget* parent, int id = -1);
-  Widget(WidgetTreeHost* host, int id=-1);
+  Widget(WidgetTreeHost* host);
   virtual ~Widget();
 
   WidgetTreeHost* GetHost();
@@ -62,7 +62,9 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   const std::string& name() const;
   WidgetType type() const { return layer_type_;}
 
-  void SetVisible(bool visible) { visible_ = visible;}
+  void Hide();
+  void Show();
+  void SetVisible(bool visible);
   bool IsVisible() const { return visible_;}
 
   void SetCapture();

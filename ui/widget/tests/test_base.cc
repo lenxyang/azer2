@@ -60,7 +60,7 @@ Widget* WidgetTestBase::CreateWidget(WidgetDelegate* delegate,
 
 Widget* WidgetTestBase::CreateWidget(WidgetDelegate* delegate,
                                      const gfx::Rect& bounds, Widget* parent) {
-  return CreateWidget(delegate, bounds, -1, parent);
+  return CreateWidget(delegate, -1, bounds, parent);
 }
 
 Widget* WidgetTestBase::CreateWidget(WidgetDelegate* delegate, int id, 

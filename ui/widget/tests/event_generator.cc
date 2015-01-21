@@ -61,6 +61,16 @@ EventGeneratorDelegate* EventGenerator::default_delegate = NULL;
 EventGenerator::EventGenerator(Widget* root_window, 
                                const gfx::Point& initial_location)
     : current_target_(NULL)
+    , current_location_(initial_location)
+    , flags_(0)
+    , grab_(false)
+    , async_(false)
+    , tick_clock_(new base::DefaultTickClock()) {
+  Init(root_window, NULL);
+}
+
+EventGenerator::EventGenerator(Widget* root_window)
+    : current_target_(NULL)
     , flags_(0)
     , grab_(false)
     , async_(false)
@@ -162,6 +172,10 @@ void EventGenerator::DragMouseTo(const gfx::Point& point)  {
   PressLeftButton();
   MoveMouseTo(point);
   ReleaseLeftButton();
+}
+
+void EventGenerator::MoveMouseToCenterOf(ui::EventTarget* window) {
+  MoveMouseTo(CenterOfWindow(window));
 }
 
 void EventGenerator::DispatchKeyEvent(bool is_press,
