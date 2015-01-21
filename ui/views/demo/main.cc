@@ -31,6 +31,12 @@ class LabelEventObserver : public azer::views::ViewEventObserver {
                                            view->name().c_str());
     label1_->SetText(::base::UTF8ToWide(msg));
   }
+  virtual void OnMouseDragged(View* view, const ui::MouseEvent& e) {
+    std::string msg = ::base::StringPrintf("OnMouseDragged(%d, %d) on view[%s]",
+                                           e.location().x(), e.location().y(),
+                                           view->name().c_str());
+    label1_->SetText(::base::UTF8ToWide(msg));
+  }
   virtual void OnMouseReleased(View* view, const ui::MouseEvent& e) {
     std::string msg = ::base::StringPrintf("OnMouseReleased(%d, %d) on view[%s]",
                                            e.location().x(), e.location().y(),
