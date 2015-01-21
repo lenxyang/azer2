@@ -1,19 +1,71 @@
 #include "azer/ui/widget/tests/event_generator.h"
 
+#include "base/bind.h"
+#include "base/location.h"
+#include "base/memory/scoped_ptr.h"
+#include "base/single_thread_task_runner.h"
+#include "base/thread_task_runner_handle.h"
+#include "ui/events/event_source.h"
+#include "ui/events/event_utils.h"
+#include "ui/events/test/events_test_utils.h"
+#include "ui/gfx/geometry/vector2d_conversions.h"
 #include "azer/ui/widget/widget.h"
 #include "azer/ui/widget/widget_tree_host.h"
+
+#if defined(USE_X11)
+#include <X11/Xlib.h>
+#include "ui/events/test/events_test_utils_x11.h"
+#endif
+
+#if defined(OS_WIN)
+#include "ui/events/keycodes/keyboard_code_conversion.h"
+#endif
+
+#include "azer/ui/widget/widget.h"
 
 
 namespace azer {
 namespace widget {
 namespace testing {
+namespace {
 
-EventGenerator::EventGenerator(Widget* w, const gfx::Point& initial_location)
-    : current_target_(NULL),
-      flags_(0),
-      grab_(false),
-      async_(false),
-      tick_clock_(new base::DefaultTickClock()) {
+class TestKeyEvent : public ui::KeyEvent {
+ public:
+  TestKeyEvent(const base::NativeEvent& native_event, int flags)
+      : KeyEvent(native_event) {
+    set_flags(flags);
+  }
+};
+
+class TestTouchEvent : public ui::TouchEvent {
+ public:
+  TestTouchEvent(ui::EventType type,
+                 const gfx::Point& root_location,
+                 int touch_id,
+                 int flags,
+                 base::TimeDelta timestamp)
+      : TouchEvent(type, root_location, flags, touch_id, timestamp,
+                   1.0f, 1.0f, 0.0f, 0.0f) {
+  }
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(TestTouchEvent);
+};
+
+const int kAllButtonMask = ui::EF_LEFT_MOUSE_BUTTON | ui::EF_RIGHT_MOUSE_BUTTON;
+
+}  // namespace
+
+EventGeneratorDelegate* EventGenerator::default_delegate = NULL;
+
+EventGenerator::EventGenerator(Widget* root_window, 
+                               const gfx::Point& initial_location)
+    : current_target_(NULL)
+    , flags_(0)
+    , grab_(false)
+    , async_(false)
+    , tick_clock_(new base::DefaultTickClock()) {
+  Init(root_window, NULL);
 }
 
 EventGenerator::~EventGenerator() {
@@ -22,6 +74,13 @@ EventGenerator::~EventGenerator() {
     delete *i;
   pending_events_.clear();
   delegate()->SetContext(NULL, NULL, NULL);
+}
+
+void EventGenerator::Init(Widget* root_window, Widget* window_context) {
+  delegate()->SetContext(this, root_window, window_context);
+  if (window_context)
+    current_location_ = delegate()->CenterOfWindow(window_context);
+  current_target_ = delegate()->GetTargetAt(current_location_);
 }
 
 void EventGenerator::PressLeftButton() {
@@ -92,8 +151,8 @@ void EventGenerator::MoveMouseTo(const gfx::Point& point_in_screen, int count) {
   current_location_ = point_in_screen;
 }
 
-void EventGenerator::MoveMouseRelativeTo(const EventTarget* window, 
-                                         const gfx::Point& point) {
+void EventGenerator::MoveMouseRelativeTo(const ui::EventTarget* window, 
+                                         const gfx::Point& point_in_parent) {
   gfx::Point point(point_in_parent);
   delegate()->ConvertPointFromTarget(window, &point);
   MoveMouseTo(point);

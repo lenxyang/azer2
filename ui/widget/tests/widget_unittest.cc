@@ -1,7 +1,7 @@
 #include "azer/ui/widget/api.h"
 
 #include "ui/events/keycodes/keyboard_codes.h"
-#include "ui/events/test/event_generator.h"
+#include "azer/ui/widget/tests/event_generator.h"
 #include "azer/ui/widget/tests/test_base.h"
 #include "azer/ui/widget/tests/test_widget_delegate.h"
 
@@ -101,7 +101,7 @@ TEST_F(WidgetTest, Capture) {
   EXPECT_TRUE(widget->HasCapture());
   EXPECT_EQ(0, delegate.capture_lost_count());
   EXPECT_EQ(0, delegate.capture_changed_event_count());
-  ui::test::EventGenerator generator(root(), gfx::Point(50, 50));
+  EventGenerator generator(root(), gfx::Point(50, 50));
   generator.PressLeftButton();
   EXPECT_EQ(1, delegate.mouse_event_count());
   generator.ReleaseLeftButton();

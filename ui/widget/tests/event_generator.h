@@ -7,9 +7,11 @@
 #include "base/callback.h"
 #include "base/memory/scoped_ptr.h"
 #include "base/time/time.h"
+#include "base/time/default_tick_clock.h"
 #include "ui/events/event_constants.h"
-#include "ui/event/event.h"
-#include "ui/event/event_target.h"
+#include "ui/events/event.h"
+#include "ui/events/event_source.h"
+#include "ui/events/event_target.h"
 #include "ui/events/keycodes/keyboard_codes.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/geometry/point.h"
@@ -21,7 +23,7 @@ class Widget;
 
 namespace testing {
 
-typedef base::Callback<void(EventType, const gfx::Vector2dF&)>
+typedef base::Callback<void(ui::EventType, const gfx::Vector2dF&)>
         ScrollStepCallback;
 
 class EventGenerator;
@@ -34,29 +36,28 @@ class EventGeneratorDelegate {
 
   // Set the context of the delegate, whilst it is being used by an active
   // EventGenerator.
-  virtual void SetContext(EventGenerator* owner,
-                          gfx::NativeWindow root_window,
-                          gfx::NativeWindow window) {}
+  virtual void SetContext(EventGenerator* owner, Widget* root_window,
+                            Widget* window) {}
 
   // The ui::EventTarget at the given |location|.
-  virtual EventTarget* GetTargetAt(const gfx::Point& location) = 0;
+  virtual ui::EventTarget* GetTargetAt(const gfx::Point& location) = 0;
 
   // The ui::EventSource for the given |target|.
-  virtual EventSource* GetEventSource(EventTarget* target) = 0;
+  virtual ui::EventSource* GetEventSource(ui::EventTarget* target) = 0;
 
   // Helper functions to determine the center point of |target| or |window|.
-  virtual gfx::Point CenterOfTarget(const EventTarget* target) const = 0;
-  virtual gfx::Point CenterOfWindow(gfx::NativeWindow window) const = 0;
+  virtual gfx::Point CenterOfTarget(const ui::EventTarget* target) const = 0;
+  virtual gfx::Point CenterOfWindow(Widget* window) const = 0;
 
   // Convert a point between API's coordinates and |target|'s coordinates.
-  virtual void ConvertPointFromTarget(const EventTarget* target,
+  virtual void ConvertPointFromTarget(const ui::EventTarget* target,
                                       gfx::Point* point) const = 0;
-  virtual void ConvertPointToTarget(const EventTarget* target,
+  virtual void ConvertPointToTarget(const ui::EventTarget* target,
                                     gfx::Point* point) const = 0;
 
   // Convert a point from the coordinate system in the host that contains
   // |hosted_target| into the root window's coordinate system.
-  virtual void ConvertPointFromHost(const EventTarget* hosted_target,
+  virtual void ConvertPointFromHost(const ui::EventTarget* hosted_target,
                                     gfx::Point* point) const = 0;
 };
 
@@ -106,8 +107,8 @@ class EventGenerator {
 
   // Generates events to move mouse to be the given |point| in |window|'s
   // coordinates.
-  void MoveMouseRelativeTo(const EventTarget* window, const gfx::Point& point);
-  void MoveMouseRelativeTo(const EventTarget* window, int x, int y) {
+  void MoveMouseRelativeTo(const ui::EventTarget* window, const gfx::Point& point);
+  void MoveMouseRelativeTo(const ui::EventTarget* window, int x, int y) {
     MoveMouseRelativeTo(window, gfx::Point(x, y));
   }
 
@@ -130,26 +131,32 @@ class EventGenerator {
   // event without native_event() is generated. Note that ui::EF_ flags should
   // be passed as |flags|, not the native ones like 'ShiftMask' in <X11/X.h>.
   // TODO(yusukes): Support native_event() on all platforms.
-  void PressKey(KeyboardCode key_code, int flags);
+  void PressKey(ui::KeyboardCode key_code, int flags);
 
   // Generates a key release event. On platforms except Windows and X11, a key
   // event without native_event() is generated. Note that ui::EF_ flags should
   // be passed as |flags|, not the native ones like 'ShiftMask' in <X11/X.h>.
   // TODO(yusukes): Support native_event() on all platforms.
-  void ReleaseKey(KeyboardCode key_code, int flags);
+  void ReleaseKey(ui::KeyboardCode key_code, int flags);
 
   // Dispatch the event to the WindowEventDispatcher.
-  void Dispatch(Event* event);
- private:
+  void Dispatch(ui::Event* event);
+
+  static EventGeneratorDelegate* default_delegate;
+ protected:
+  void Init(Widget* root_window, Widget* window_context);
   // Dispatch a key event to the WindowEventDispatcher.
-  void DispatchKeyEvent(bool is_press, KeyboardCode key_code, int flags);
+  void DispatchKeyEvent(bool is_press, ui::KeyboardCode key_code, int flags);
 
   void UpdateCurrentDispatcher(const gfx::Point& point);
   void PressButton(int flag);
   void ReleaseButton(int flag);
 
+  gfx::Point GetLocationInCurrentRoot() const;
+  gfx::Point CenterOfWindow(const ui::EventTarget* window) const;
+
   void DispatchNextPendingEvent();
-  void DoDispatchEvent(Event* event, bool async);
+  void DoDispatchEvent(ui::Event* event, bool async);
 
   const EventGeneratorDelegate* delegate() const;
   EventGeneratorDelegate* delegate();
@@ -158,12 +165,14 @@ class EventGenerator {
   scoped_ptr<EventGeneratorDelegate> delegate_;
   
   gfx::Point current_location_;
-  Widget* current_target_;
+  ui::EventTarget* current_target_;
 
   int flags_;
   bool grab_;
-  std::list<Event*> pending_events_;
+  std::list<ui::Event*> pending_events_;
   bool async_;
+  scoped_ptr<base::TickClock> tick_clock_;
+
   DISALLOW_COPY_AND_ASSIGN(EventGenerator);
 };
 }  // namespace testing

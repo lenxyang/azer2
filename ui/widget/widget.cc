@@ -16,6 +16,7 @@
 #include "azer/ui/widget/widget_property.h"
 #include "azer/ui/widget/widget_tree_host.h"
 #include "azer/ui/widget/client/capture_client.h"
+#include "azer/ui/widget/client/screen_position_client.h"
 
 namespace azer {
 namespace widget {
@@ -59,9 +60,22 @@ Widget::~Widget() {
   observers_.Clear();
 }
 
-Widget* Widget::root() {
+WidgetTreeHost* Widget::GetHost() {
+  return host_;
+}
+
+const WidgetTreeHost* Widget::GetHost() const {
+  return host_;
+}
+
+Widget* Widget::GetRootWidget() {
   DCHECK(host_ != NULL);
-  return host_->root();
+  return host_->widget();
+}
+
+const Widget* Widget::GetRootWidget() const {
+  DCHECK(host_ != NULL);
+  return host_->widget();
 }
 
 void Widget::SetName(const std::string& name) {
@@ -85,6 +99,32 @@ const compositor::Layer* Widget::layer() const {
 void Widget::SetBounds(const gfx::Rect& bounds) {
   bounds_ = bounds;
   layer_->SetBounds(bounds);
+}
+
+gfx::Rect Widget::GetBoundsInRootWidget() const {
+  // TODO(beng): There may be a better way to handle this, and the existing code
+  //             is likely wrong anyway in a multi-display world, but this will
+  //             do for now.
+  if (!GetRootWidget())
+    return bounds();
+  gfx::Point origin = bounds().origin();
+  ConvertPointToTarget(parent_, GetRootWidget(), &origin);
+  return gfx::Rect(origin, bounds().size());
+}
+
+gfx::Rect Widget::GetBoundsInScreen() const {
+  gfx::Rect bounds(GetBoundsInRootWidget());
+  const Widget* root = GetRootWidget();
+  if (root) {
+    client::ScreenPositionClient* screen_position_client =
+        client::GetScreenPositionClient(root);
+    if (screen_position_client) {
+      gfx::Point origin = bounds.origin();
+      screen_position_client->ConvertPointToScreen(root, &origin);
+      bounds.set_origin(origin);
+    }
+  }
+  return bounds;
 }
 
 scoped_ptr<ui::EventTargeter>
@@ -225,24 +265,24 @@ void Widget::SetCapture() {
     return;
   }
 
-  client::CaptureClient* capture_client = client::GetCaptureClient(root());
+  client::CaptureClient* capture_client = client::GetCaptureClient(GetRootWidget());
   if (!capture_client) {
     return;
   }
   
-  client::GetCaptureClient(root())->SetCapture(this);
+  client::GetCaptureClient(GetRootWidget())->SetCapture(this);
 }
 
 void Widget::ReleaseCapture() {
-  client::CaptureClient* capture_client = client::GetCaptureClient(root());
+  client::CaptureClient* capture_client = client::GetCaptureClient(GetRootWidget());
   if (!capture_client) {
     return;
   }
-  client::GetCaptureClient(root())->ReleaseCapture(this);
+  client::GetCaptureClient(GetRootWidget())->ReleaseCapture(this);
 }
 
 bool Widget::HasCapture() {
-  client::CaptureClient* capture_client = client::GetCaptureClient(root());
+  client::CaptureClient* capture_client = client::GetCaptureClient(GetRootWidget());
   return capture_client && capture_client->GetCaptureWidget() == this;
 }
 

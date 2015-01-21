@@ -1,5 +1,13 @@
 #include "azer/ui/widget/widget_tree_host.h"
 
+#include "ui/gfx/display.h"
+#include "ui/gfx/insets.h"
+#include "ui/gfx/point.h"
+#include "ui/gfx/point3_f.h"
+#include "ui/gfx/point_conversions.h"
+#include "ui/gfx/screen.h"
+#include "ui/gfx/size_conversions.h"
+
 #include "azer/render/render_system.h"
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget.h"
@@ -12,7 +20,7 @@ namespace widget {
 
 WidgetTreeHost::WidgetTreeHost(const gfx::Rect& bounds)
     : closed_(false)
-    , root_(NULL)
+    , widget_(NULL)
     , bounds_(bounds)
     , last_cursor_(ui::kCursorNull) {
   dispatcher_.reset(new WidgetEventDispatcher(this));
@@ -30,10 +38,10 @@ void WidgetTreeHost::CreateCompositor(gfx::AcceleratedWidget widget) {
   compositor_.reset(new compositor::Compositor);
   layer_host_->SetCompositor(compositor_.get());
   compositor_->SetTreeHost(layer_host_.get());
-  root_ = new Widget(this);
-  root_->SetName("root");
-  root_->SetEventTargeter(scoped_ptr<ui::EventTargeter>(new WidgetTargeter));
-  root_->SetBounds(gfx::Rect(bounds_.size()));
+  widget_ = new Widget(this);
+  widget_->SetName("root");
+  widget_->SetEventTargeter(scoped_ptr<ui::EventTargeter>(new WidgetTargeter));
+  widget_->SetBounds(gfx::Rect(bounds_.size()));
   dispatcher_.reset(new WidgetEventDispatcher(this));
 }
 
@@ -68,5 +76,28 @@ void WidgetTreeHost::SetCursor(gfx::NativeCursor cursor) {
   last_cursor_ = cursor;
   SetCursorNative(cursor);
 }
+
+void WidgetTreeHost::ConvertPointToNativeScreen(gfx::Point* point) const {
+  ConvertPointToHost(point);
+  gfx::Point location = GetLocationOnNativeScreen();
+  point->Offset(location.x(), location.y());
+}
+
+void WidgetTreeHost::ConvertPointFromNativeScreen(gfx::Point* point) const {
+  gfx::Point location = GetLocationOnNativeScreen();
+  point->Offset(-location.x(), -location.y());
+  ConvertPointFromHost(point);
+}
+
+void WidgetTreeHost::ConvertPointToHost(gfx::Point* point) const {
+  gfx::Point3F point_3f(*point);
+  *point = gfx::ToFlooredPoint(point_3f.AsPointF());
+}
+
+void WidgetTreeHost::ConvertPointFromHost(gfx::Point* point) const {
+  gfx::Point3F point_3f(*point);
+  *point = gfx::ToFlooredPoint(point_3f.AsPointF());
+}
+
 }  // namespace widget
 }  // namespace azer

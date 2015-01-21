@@ -4,6 +4,8 @@ source_set("widget") {
   sources = [
     "client/capture_client.cc",
     "client/capture_client.h",
+    "client/screen_position_client.cc",
+    "client/screen_position_client.h",
     "render_loop.cc",
     "render_loop.h",
     "widget_context.cc",
@@ -39,6 +41,8 @@ static_library("test_support") {
   sources = [
     "tests/event_generator.cc",
     "tests/event_generator.h",
+    "tests/event_generator_delegate.cc",
+    "tests/event_generator_delegate.h",
   ]
 
   deps = [

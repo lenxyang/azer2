@@ -50,8 +50,8 @@ class AZER_EXPORT WidgetTreeHost {
   WidgetEventDispatcher* dispatcher();
   ::ui::EventProcessor* event_processor();
 
-  Widget* root() { return root_;}
-  const Widget* root() const { return root_;}
+  Widget* widget() { return widget_;}
+  const Widget* widget() const { return widget_;}
 
   compositor::Compositor* compositor();
   bool Closed() { return closed_;}
@@ -63,6 +63,21 @@ class AZER_EXPORT WidgetTreeHost {
   virtual void ReleaseCapture() = 0;
 
   void SetCursor(gfx::NativeCursor cursor);
+
+  // Converts |point| from the root window's coordinate system to native
+  // screen's.
+  void ConvertPointToNativeScreen(gfx::Point* point) const;
+
+  // Converts |point| from native screen coordinate system to the root window's.
+  void ConvertPointFromNativeScreen(gfx::Point* point) const;
+
+  // Converts |point| from the root window's coordinate system to the
+  // host window's.
+  void ConvertPointToHost(gfx::Point* point) const;
+
+  // Converts |point| from the host window's coordinate system to the
+  // root window's.
+  void ConvertPointFromHost(gfx::Point* point) const;
  protected:
   WidgetTreeHost(const gfx::Rect& rect);
 
@@ -78,7 +93,7 @@ class AZER_EXPORT WidgetTreeHost {
   // Sets the currently displayed cursor.
   virtual void SetCursorNative(gfx::NativeCursor cursor) = 0;
 
-  Widget* root_;
+  Widget* widget_;
   std::atomic<bool> closed_;
   gfx::Rect bounds_;
   gfx::NativeCursor last_cursor_;

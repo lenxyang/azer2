@@ -50,7 +50,11 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   explicit Widget(WidgetTreeHost* host);
   virtual ~Widget();
 
-  Widget* root();
+  WidgetTreeHost* GetHost();
+  const WidgetTreeHost* GetHost() const; 
+
+  Widget* GetRootWidget();
+  const Widget* GetRootWidget() const;
   compositor::Layer* layer();
   const compositor::Layer* layer() const;
 
@@ -91,6 +95,9 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
 
   void SetBounds(const gfx::Rect& bounds);
   const gfx::Rect& bounds() const { return bounds_;}
+
+  gfx::Rect GetBoundsInRootWidget() const;
+  gfx::Rect GetBoundsInScreen() const;
 
   void set_ignore_events(bool ignore) { ignore_events_ = ignore;}
   bool ignore_events() const { return ignore_events_;}
