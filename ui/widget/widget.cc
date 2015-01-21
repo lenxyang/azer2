@@ -60,6 +60,10 @@ Widget::Widget(WidgetTreeHost* host)
 Widget::~Widget() {
   observers_.Clear();
   host_->dispatcher()->OnPostNotifiedWidgetDestroying(this);
+
+  if (parent_) {
+    parent_->RemoveChild(this);
+  }
 }
 
 WidgetTreeHost* Widget::GetHost() {
