@@ -143,6 +143,7 @@ gfx::Insets View::GetInsets() const {
 
 void View::SetEnabled(bool enabled) {
   enabled_ = enabled;
+  OnEnabledChanged();
 }
 
 void View::set_background(Background* b) {
@@ -365,6 +366,16 @@ void View::AddEventObserver(ViewEventObserver* observer) {
 
 void View::RemoveEventObserver(ViewEventObserver* observer) {
   event_observers_.RemoveObserver(observer);
+}
+
+void View::OnVisibleBoundsChanged() {
+}
+
+void View::VisibilityChanged(bool is_visible) {
+}
+
+void View::OnEnabledChanged() {
+  SchedulePaint();
 }
 }  // namespace views
 }  // namespace azer

@@ -2,5 +2,12 @@
 
 namespace azer {
 namespace views {
+
+LabelButton::LabelButton(View* parent)
+    : View(parent) {
+}
+
+LabelButton::~LabelButton() {
+}
 }  // namespace views
 }  // namespace azer

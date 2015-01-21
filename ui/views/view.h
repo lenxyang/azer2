@@ -299,6 +299,10 @@ protected:
   // Override to paint a border not specified by SetBorder().
   virtual void OnPaintBorder(gfx::Canvas* canvas);
 
+  virtual void OnVisibleBoundsChanged();
+  virtual void OnEnabledChanged();
+  virtual void OnVisibilityChanged(bool is_visible);
+
   View* parent_;
   Views children_;
   gfx::Rect bounds_;
