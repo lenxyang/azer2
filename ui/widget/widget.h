@@ -1,9 +1,11 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 
 #include "base/memory/scoped_ptr.h"
+#include "base/observer_list.h"
 #include "ui/events/event_target.h"
 #include "ui/gfx/geometry/rect.h"
 
@@ -24,7 +26,12 @@ class Layer;
 namespace widget {
 
 class WidgetDelegate;
+class WidgetObserver;
 class WidgetTreeHost;
+
+// Defined in window_property.h (which we do not include)
+template<typename T>
+struct WidgetProperty;
 
 class AZER_EXPORT Widget : public compositor::LayerDelegate 
                          , public ::ui::EventTarget {
@@ -58,21 +65,29 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   void ReleaseCapture();
   bool HasCapture();
 
+  // Add/remove observer.
+  void AddObserver(WidgetObserver* observer);
+  void RemoveObserver(WidgetObserver* observer);
+  bool HasObserver(WidgetObserver* observer);
+
   // Sets the |value| of the given window |property|. Setting to the default
   // value (e.g., NULL) removes the property. The caller is responsible for the
-  // lifetime of any object set as a property on the Window.
+  // lifetime of any object set as a property on the Widget.
   template<typename T>
-  void SetProperty(const WindowProperty<T>* property, T value);
+  void SetProperty(const WidgetProperty<T>* property, T value);
 
   // Returns the value of the given window |property|.  Returns the
   // property-specific default value if the property was not previously set.
   template<typename T>
-  T GetProperty(const WindowProperty<T>* property) const;
+  T GetProperty(const WidgetProperty<T>* property) const;
 
   // Sets the |property| to its default value. Useful for avoiding a cast when
   // setting to NULL.
   template<typename T>
-  void ClearProperty(const WindowProperty<T>* property);
+  void ClearProperty(const WidgetProperty<T>* property);
+
+  // Type of a function to delete a property that this window owns.
+  typedef void (*PropertyDeallocator)(int64 value);
 
   void SetBounds(const gfx::Rect& bounds);
   const gfx::Rect& bounds() const { return bounds_;}
@@ -117,6 +132,14 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   // access by WidgetTargeter
   void ConvertEventToTarget(ui::EventTarget* target,
                             ui::LocatedEvent* event) override;
+ private:
+    // Called by the public {Set,Get,Clear}Property functions.
+  int64 SetPropertyInternal(const void* key,
+                            const char* name,
+                            PropertyDeallocator deallocator,
+                            int64 value,
+                            int64 default_value);
+  int64 GetPropertyInternal(const void* key, int64 default_value) const;
  protected:
   // compositor::LayerDelegate
   void OnPaintLayer(gfx::Canvas* canvas) override;
@@ -138,6 +161,19 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   scoped_ptr<ui::EventTargeter> targeter_;
   
   gfx::Rect bounds_;
+
+  ObserverList<WidgetObserver, true> observers_;
+
+  // Value struct to keep the name and deallocator for this property.
+  // Key cannot be used for this purpose because it can be char* or
+  // WidgetProperty<>.
+  struct Value {
+    const char* name;
+    int64 value;
+    PropertyDeallocator deallocator;
+  };
+
+  std::map<const void*, Value> prop_map_;
 
   friend class WidgetTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Widget);

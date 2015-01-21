@@ -12,6 +12,7 @@
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget_delegate.h"
 #include "azer/ui/widget/widget_context.h"
+#include "azer/ui/widget/widget_observer.h"
 #include "azer/ui/widget/widget_property.h"
 #include "azer/ui/widget/widget_tree_host.h"
 #include "azer/ui/widget/client/capture_client.h"
@@ -55,6 +56,7 @@ Widget::Widget(WidgetTreeHost* host)
 }
 
 Widget::~Widget() {
+  observers_.Clear();
 }
 
 Widget* Widget::root() {
@@ -219,12 +221,71 @@ void Widget::SchedulePaintInRect(const gfx::Rect& r) {
 
 // capture 
 void Widget::SetCapture() {
+  if (!IsVisible()) {
+    return;
+  }
+
+  client::CaptureClient* capture_client = client::GetCaptureClient(root());
+  if (!capture_client) {
+    return;
+  }
+  
+  client::GetCaptureClient(root())->SetCapture(this);
 }
 
 void Widget::ReleaseCapture() {
+  client::CaptureClient* capture_client = client::GetCaptureClient(root());
+  if (!capture_client) {
+    return;
+  }
+  client::GetCaptureClient(root())->ReleaseCapture(this);
 }
 
 bool Widget::HasCapture() {
+  client::CaptureClient* capture_client = client::GetCaptureClient(root());
+  return capture_client && capture_client->GetCaptureWidget() == this;
+}
+
+int64 Widget::SetPropertyInternal(const void* key,
+                                  const char* name,
+                                  PropertyDeallocator deallocator,
+                                  int64 value,
+                                  int64 default_value) {
+  int64 old = GetPropertyInternal(key, default_value);
+  if (value == default_value) {
+    prop_map_.erase(key);
+  } else {
+    Value prop_value;
+    prop_value.name = name;
+    prop_value.value = value;
+    prop_value.deallocator = deallocator;
+    prop_map_[key] = prop_value;
+  }
+  FOR_EACH_OBSERVER(WidgetObserver, observers_,
+                    OnPropertyChanged(this, key, old));
+  return old;
+}
+
+int64 Widget::GetPropertyInternal(const void* key,
+                                  int64 default_value) const {
+  std::map<const void*, Value>::const_iterator iter = prop_map_.find(key);
+  if (iter == prop_map_.end())
+    return default_value;
+  return iter->second.value;
+}
+
+void Widget::AddObserver(WidgetObserver* observer) {
+  observer->OnObserving(this);
+  observers_.AddObserver(observer);
+}
+
+void Widget::RemoveObserver(WidgetObserver* observer) {
+  observer->OnUnobserving(this);
+  observers_.RemoveObserver(observer);
+}
+
+bool Widget::HasObserver(WidgetObserver* observer) {
+  return observers_.HasObserver(observer);
 }
 }  // namespace widget
 }  // namespace azer

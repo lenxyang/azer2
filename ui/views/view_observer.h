@@ -7,8 +7,10 @@ namespace views {
 class AZER_EXPORT ViewObserver {
  public:
   virtual void OnSetFocusable(View* view) {}
-  virtual void OnShow(View* view) {}
-  virtual void OnHide(View* view) {}
+  virtual void OnVisiblityChanging(View* view, bool prevval, bool newval) {}
+  virtual void OnVisiblityChanged(View* view, bool prevval, bool newval) {}
+  virtual void OnEnableStateChanging(View* view, bool prevval, bool newval) {}
+  virtual void OnEnableStateChanged(View* view, bool prevval, bool newval) {}
  protected:
   ViewObserver() {}
   virtual ~ViewObserver() {}

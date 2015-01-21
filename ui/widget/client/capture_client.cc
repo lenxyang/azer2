@@ -1,5 +1,6 @@
 #include "azer/ui/widget/client/capture_client.h"
 
+#include "base/logging.h"
 #include "azer/ui/widget/widget_event_dispatcher.h"
 #include "azer/ui/widget/widget_property.h"
 #include "azer/ui/widget/widget.h"
@@ -22,12 +23,11 @@ CaptureClient* GetCaptureClient(Widget* root_window) {
 }
 
 Widget* GetCaptureWidget(Widget* window) {
-  Widget* root_window = window->GetRootWidget();
-  if (!root_window)
-    return NULL;
+  Widget* root_window = window->root();
+  DCHECK(root_window);
   CaptureClient* capture_client = GetCaptureClient(root_window);
   return capture_client ? capture_client->GetCaptureWidget() : NULL;
-
+}
 }  // namespace client
 }  // namespace widget
 }  // namespace azer

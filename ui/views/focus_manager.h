@@ -2,22 +2,30 @@
 
 #include <map>
 #include "azer/base/export.h"
+#include "azer/ui/views/view_observer.h"
 
 namespace azer {
 namespace views {
 
 class View;
 
-class FocusGroup {
+class FocusGroup : public ViewObserver {
  public:
-  FocusGroup();
+  explicit FocusGroup(int id);
   ~FocusGroup();
 
   void AddView(View* view);
   void RemoveView(View* view);
 
-  View* GetNextView(View*);
+  View* GetCurrent();
+  View* GetNextView();
+  // is there any one of view is focusable
+  // if view is disabled, hideen or not focusable, 
+  bool focusable();
+  int id() const { return id_;}
  private:
+  int id_;
+  View* current_;
   std::vector<View*> vec_;
   DISALLOW_COPY_AND_ASSIGN(FocusGroup);
 };
@@ -28,8 +36,12 @@ class FocusManager {
   ~FocusManager();
 
   FocusGroup* GetGroup(int id);
-  FocusGroup* GetNextGroup(int id);
+  FocusGroup* NextGroup();
+
+  int current() { return focus_group_;}
  private:
+  FocusGroup* GetNextGroup(int id);
+  int focus_group_;
   typedef std::map<int, FocusGroup*> group_;
   DISALLOW_COPY_AND_ASSIGN(FocusManager);
 };
