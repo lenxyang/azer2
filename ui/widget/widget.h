@@ -54,6 +54,26 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   void SetVisible(bool visible) { visible_ = visible;}
   bool IsVisible() const { return visible_;}
 
+  void SetCapture();
+  void ReleaseCapture();
+  bool HasCapture();
+
+  // Sets the |value| of the given window |property|. Setting to the default
+  // value (e.g., NULL) removes the property. The caller is responsible for the
+  // lifetime of any object set as a property on the Window.
+  template<typename T>
+  void SetProperty(const WindowProperty<T>* property, T value);
+
+  // Returns the value of the given window |property|.  Returns the
+  // property-specific default value if the property was not previously set.
+  template<typename T>
+  T GetProperty(const WindowProperty<T>* property) const;
+
+  // Sets the |property| to its default value. Useful for avoiding a cast when
+  // setting to NULL.
+  template<typename T>
+  void ClearProperty(const WindowProperty<T>* property);
+
   void SetBounds(const gfx::Rect& bounds);
   const gfx::Rect& bounds() const { return bounds_;}
 

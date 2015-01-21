@@ -12,7 +12,9 @@
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget_delegate.h"
 #include "azer/ui/widget/widget_context.h"
+#include "azer/ui/widget/widget_property.h"
 #include "azer/ui/widget/widget_tree_host.h"
+#include "azer/ui/widget/client/capture_client.h"
 
 namespace azer {
 namespace widget {
@@ -213,6 +215,16 @@ void Widget::SchedulePaint() {
 void Widget::SchedulePaintInRect(const gfx::Rect& r) {
   DCHECK(layer());
   layer()->SetNeedRedraw(r);
+}
+
+// capture 
+void Widget::SetCapture() {
+}
+
+void Widget::ReleaseCapture() {
+}
+
+bool Widget::HasCapture() {
 }
 }  // namespace widget
 }  // namespace azer

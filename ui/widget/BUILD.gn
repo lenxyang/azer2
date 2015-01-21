@@ -2,6 +2,8 @@
 
 source_set("widget") {
   sources = [
+    "client/capture_client.cc",
+    "client/capture_client.h",
     "render_loop.cc",
     "render_loop.h",
     "widget_context.cc",
