@@ -100,10 +100,9 @@ void View::SetBounds(int x, int y, int width, int height) {
 }
 
 void View::SetBoundsRect(const gfx::Rect& bounds) {
+  DCHECK(widget_.get());
+  widget_->SetBounds(bounds);
   bounds_ = bounds;
-  if (widget_.get()) {
-    widget_->SetBounds(bounds);
-  }
 }
 
 void View::SetSize(const gfx::Size& size) {

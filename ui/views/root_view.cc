@@ -32,6 +32,7 @@ void RootView::Hide() {
 
 void RootView::OnPaint(gfx::Canvas* canvas) {
   TRACE_EVENT1("views", "RootView::OnPaint", "class", GetClassName());
+  View::OnPaint(canvas);
 }
 
 widget::WidgetTreeHost* RootView::GetWidgetTreeHost() { 
