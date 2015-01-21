@@ -117,6 +117,21 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   bool Contains(const Widget* widget) const;
   const Widgets& children() const { return children_;}
 
+  // Stacks the specified child of this Widget at the front of the z-order.
+  void StackChildAtTop(Widget* child);
+
+  // Stacks |child| above |target|.  Does nothing if |child| is already above
+  // |target|.  Does not stack on top of windows with NULL layer delegates,
+  // see WidgetTest.StackingMadrigal for details.
+  void StackChildAbove(Widget* child, Widget* target);
+
+  // Stacks the specified child of this window at the bottom of the z-order.
+  void StackChildAtBottom(Widget* child);
+
+  // Stacks |child| below |target|. Does nothing if |child| is already below
+  // |target|.
+  void StackChildBelow(Widget* child, Widget* target);
+
   void SchedulePaint();
   void SchedulePaintInRect(const gfx::Rect& r);
 
@@ -148,7 +163,7 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   // access by WidgetTargeter
   void ConvertEventToTarget(ui::EventTarget* target,
                             ui::LocatedEvent* event) override;
- private:
+ protected:
     // Called by the public {Set,Get,Clear}Property functions.
   int64 SetPropertyInternal(const void* key,
                             const char* name,
@@ -156,6 +171,18 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
                             int64 value,
                             int64 default_value);
   int64 GetPropertyInternal(const void* key, int64 default_value) const;
+
+  // Used when stacking windows.
+  enum StackDirection {
+    STACK_ABOVE,
+    STACK_BELOW
+  };
+  void StackChildRelativeTo(Widget* child, Widget* target, StackDirection direction);
+  // Invoked from StackChildRelativeTo() to stack the layers appropriately
+  // when stacking |child| relative to |target|.
+  void StackChildLayerRelativeTo(Widget* child, Widget* target, 
+                                 StackDirection direction);
+  void OnStackingChanged();
  protected:
   // compositor::LayerDelegate
   void OnPaintLayer(gfx::Canvas* canvas) override;

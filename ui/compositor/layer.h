@@ -58,12 +58,6 @@ class AZER_EXPORT Layer {
   bool Remove(Layer* layer);
   bool IsChild(Layer* layer);
 
-  // move the layer to top or bottom
-  void BringToTop(Layer* layer);
-  void BringToBottom(Layer* layer);
-  int32 order() const { return order_;}
-  void SetOrder(int32 o);
-
   virtual void SetBounds(const gfx::Rect& bounds) = 0;
   const gfx::Rect& bounds() const { return bounds_;}
 
@@ -80,9 +74,12 @@ class AZER_EXPORT Layer {
   void SetVisible(bool visible);
   bool visible() const { return visible_;}
 
+  void StackLayerAbove(Layer* child, Layer* target);
+  void StackLayerBelow(Layer* child, Layer* target);
+
   // called when remove from parent
-  void RemoveFromParent();
-  void OnChildrenOrderChanged();
+  virtual void OnRemoveFromParent() {}
+  virtual void OnStackingChanged() {}
 
   // sort the children layer by order
   // 
@@ -128,10 +125,6 @@ class AZER_EXPORT Layer {
   gfx::RectF overlay_bounds_;
   gfx::RectF tex_bounds_;
   bool visible_;
-  int32 order_;
-  int32 min_order_;
-  int32 max_order_;
-  bool sorted_;
   LayerList children_;
   Layer* parent_;
 

@@ -341,5 +341,71 @@ bool Widget::HitTestPoint(const gfx::Point& point) const {
 bool Widget::HitTestRect(const gfx::Rect& rect) const {
   return true;
 }
+
+void Widget::StackChildAtTop(Widget* child) {
+  if (children_.size() <= 1 || child == children_.back())
+    return;  // In the front already.
+  StackChildAbove(child, children_.back());
+}
+
+void Widget::StackChildAbove(Widget* child, Widget* target) {
+  StackChildRelativeTo(child, target, STACK_ABOVE);
+}
+
+void Widget::StackChildAtBottom(Widget* child) {
+  if (children_.size() <= 1 || child == children_.front())
+    return;  // At the bottom already.
+  StackChildBelow(child, children_.front());
+}
+
+void Widget::StackChildBelow(Widget* child, Widget* target) {
+  StackChildRelativeTo(child, target, STACK_BELOW);
+}
+
+void Widget::StackChildRelativeTo(Widget* child, Widget* target,
+                                  StackDirection direction) {
+  DCHECK_NE(child, target);
+  DCHECK(child);
+  DCHECK(target);
+  DCHECK_EQ(this, child->parent());
+  DCHECK_EQ(this, target->parent());
+
+  const size_t child_i =
+      std::find(children_.begin(), children_.end(), child) - children_.begin();
+  const size_t target_i =
+      std::find(children_.begin(), children_.end(), target) - children_.begin();
+
+  // Don't move the child if it is already in the right place.
+  if ((direction == STACK_ABOVE && child_i == target_i + 1) ||
+      (direction == STACK_BELOW && child_i + 1 == target_i))
+    return;
+
+  const size_t dest_i =
+      direction == STACK_ABOVE ?
+      (child_i < target_i ? target_i : target_i + 1) :
+      (child_i < target_i ? target_i - 1 : target_i);
+  children_.erase(children_.begin() + child_i);
+  children_.insert(children_.begin() + dest_i, child);
+  
+  StackChildLayerRelativeTo(child, target, direction);
+
+  child->OnStackingChanged();
+}
+
+void Widget::StackChildLayerRelativeTo(Widget* child, Widget* target, 
+                                       StackDirection direction) {
+  compositor::Layer* parent = layer();
+  DCHECK(parent == child->layer()->parent());
+  DCHECK(parent == target->layer()->parent());
+  if (direction == STACK_ABOVE) {
+    parent->StackLayerAbove(child->layer(), target->layer());
+  } else {
+    parent->StackLayerBelow(child->layer(), target->layer());
+  }
+}
+
+void Widget::OnStackingChanged() {
+  FOR_EACH_OBSERVER(WidgetObserver, observers_, OnWidgetStackingChanged(this));
+}
 }  // namespace widget
 }  // namespace azer

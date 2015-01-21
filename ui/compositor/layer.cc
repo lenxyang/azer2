@@ -28,11 +28,7 @@ Layer::Layer(LayerDelegate* delegate)
     : delegate_(delegate)
     , host_(NULL)
     , parent_(NULL)
-    , visible_(true)
-    , order_(0)
-    , min_order_(0)
-    , max_order_(0)
-    , sorted_(false) {
+    , visible_(true) {
 }
 
 Layer::~Layer() {
@@ -51,7 +47,7 @@ void Layer::Add(Layer* layer) {
   layer->parent_ = this;
   layer->SetTreeHost(GetTreeHost());
   children_.push_back(layer);
-  OnChildrenOrderChanged();
+  layer->OnStackingChanged();
 
   layer->AddObserver(host_);
   FOR_EACH_OBSERVER(LayerObserver, layer->observers_, OnLayerAttachedOnTree(layer));
@@ -72,9 +68,9 @@ bool Layer::Remove(Layer* layer) {
     if ((*iter) == layer) {
       children_.erase(iter);
       DCHECK(layer->parent() == this);
-      layer->RemoveFromParent();
+      layer->OnRemoveFromParent();
       layer->parent_ = NULL;
-      OnChildrenOrderChanged();
+      layer->OnStackingChanged();
       return true;
     }
   }
@@ -84,50 +80,6 @@ bool Layer::Remove(Layer* layer) {
 
 void Layer::SetVisible(bool visible) {
   visible_ = visible;
-}
-
-void Layer::RemoveFromParent() {
-}
-
-void Layer::OnChildrenOrderChanged() {
-  sorted_ = false;
-}
-
-namespace {
-class LayerSort {
- public:
-  bool operator() (const Layer* l1, const Layer* l2) {
-    return l1->order() < l2->order();
-  }
-};
-}
-
-void Layer::SortChildren() {
-  if (sorted_) { return;}
-  std::sort(children_.begin(), children_.end(), LayerSort());
-  int index = 0;
-  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    Layer* cur = (*iter);
-    cur->SetOrder(++index);
-  }
-
-  min_order_ = 0;
-  max_order_ = children_.size() + 1;
-  sorted_ = true;
-}
-
-void Layer::SetOrder(int32 o) {
-  if (parent()) {
-    parent()->OnChildrenOrderChanged();
-  }
-}
-
-void Layer::BringToTop(Layer* layer) {
-  layer->SetOrder(min_order_++);
-}
-
-void Layer::BringToBottom(Layer* layer) {
-  layer->SetOrder(max_order_++);
 }
 
 // static
@@ -237,6 +189,32 @@ void Layer::RemoveObserver(LayerObserver* observer) {
 
 void Layer::SetNeedRedraw(const gfx::Rect& rect) {
   host_->SetLayerNeedRedrawHierarchy(this);
+}
+
+void Layer::StackLayerAbove(Layer* child, Layer* target) {
+  DCHECK_NE(child, target);
+  DCHECK(child);
+  DCHECK(target);
+  DCHECK_NE(child->parent(), this);
+  DCHECK_NE(target->parent(), this);
+
+  const size_t child_i =
+      std::find(children_.begin(), children_.end(), child) - children_.begin();
+  const size_t target_i =
+      std::find(children_.begin(), children_.end(), target) - children_.begin();
+  if (child_i == target_i + 1) {
+    return;
+  }
+
+
+  const size_t dest_i = target_i + 1;
+  children_.erase(children_.begin() + child_i);
+  children_.insert(children_.begin() + dest_i, child);
+  child->OnStackingChanged();
+}
+
+void Layer::StackLayerBelow(Layer* child, Layer* target) {
+  StackLayerAbove(target, child);
 }
 }  // namespace compositor
 }  // namespace azer
