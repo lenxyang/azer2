@@ -6,6 +6,8 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 #include "azer/ui/widget/api.h"
+#include "azer/ui/widget/client/default_capture_client.h"
+#include "azer/ui/widget/tests/event_generator_delegate.h"
 
 namespace azer {
 namespace widget {
@@ -46,6 +48,7 @@ class WidgetTestBase : public ::testing::Test
   base::MessageLoopForUI message_loop_;
   scoped_ptr<WidgetTreeHost> host_;
   scoped_ptr<RenderLoop> render_loop_;
+  scoped_ptr<client::DefaultCaptureClient> capture_client_;
   bool first_frame_rendered_;
   DISALLOW_COPY_AND_ASSIGN(WidgetTestBase);
 };

@@ -221,6 +221,12 @@ void EventGenerator::ReleaseButton(int flag) {
   grab_ = (flags_ & kAllButtonMask) != 0;
 }
 
+gfx::Point EventGenerator::GetLocationInCurrentRoot() const {
+  gfx::Point p(current_location_);
+  delegate()->ConvertPointToTarget(current_target_, &p);
+  return p;
+}
+
 void EventGenerator::DoDispatchEvent(ui::Event* event, bool async) {
   if (async) {
     ui::Event* pending_event;

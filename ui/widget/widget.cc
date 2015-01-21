@@ -25,12 +25,12 @@ Widget::Widget(WidgetType type, Widget* parent)
     : id_(WidgetContext::GetInstance()->allocate_widget_id())
     , layer_type_(type)
     , host_(parent->host_)
-    , parent_(parent) 
+    , parent_(NULL) 
     , delegate_(NULL)
     , ignore_events_(false)
     , visible_(true) {
   DCHECK(NULL != parent);
-  parent_->AddChild(this);
+  parent->AddChild(this);
   InitLayer();
 }
 
@@ -266,7 +266,7 @@ void Widget::SetCapture() {
   }
 
   client::CaptureClient* capture_client = client::GetCaptureClient(GetRootWidget());
-  if (!capture_client) {
+  if (capture_client) {
     return;
   }
   
@@ -302,7 +302,7 @@ int64 Widget::SetPropertyInternal(const void* key,
     prop_map_[key] = prop_value;
   }
   FOR_EACH_OBSERVER(WidgetObserver, observers_,
-                    OnPropertyChanged(this, key, old));
+                    OnWidgetPropertyChanged(this, key, old));
   return old;
 }
 
@@ -315,12 +315,12 @@ int64 Widget::GetPropertyInternal(const void* key,
 }
 
 void Widget::AddObserver(WidgetObserver* observer) {
-  observer->OnObserving(this);
+  observer->OnWidgetObserving(this);
   observers_.AddObserver(observer);
 }
 
 void Widget::RemoveObserver(WidgetObserver* observer) {
-  observer->OnUnobserving(this);
+  observer->OnWidgetUnobserving(this);
   observers_.RemoveObserver(observer);
 }
 

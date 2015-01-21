@@ -7,6 +7,7 @@
 #include "ui/events/event_processor.h"
 
 #include "azer/ui/widget/api.h"
+#include "azer/ui/widget/client/default_capture_client.h"
 
 namespace azer {
 namespace widget {
@@ -14,6 +15,7 @@ namespace testing {
 
 WidgetTestBase::WidgetTestBase() 
     : first_frame_rendered_(false) {
+  InitializeAuraEventGeneratorDelegate();
 }
 
 WidgetTestBase::~WidgetTestBase() {
@@ -25,6 +27,7 @@ void WidgetTestBase::SetUp() {
   host_.reset(WidgetTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
   host_->Show();
 
+  capture_client_.reset(new client::DefaultCaptureClient(root_widget()));
   render_loop_.reset(new RenderLoop(this));
 }
 
