@@ -266,7 +266,7 @@ void Widget::SetCapture() {
   }
 
   client::CaptureClient* capture_client = client::GetCaptureClient(GetRootWidget());
-  if (capture_client) {
+  if (!capture_client) {
     return;
   }
   
