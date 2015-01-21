@@ -344,6 +344,9 @@ void View::OnMouseEvent(ui::MouseEvent* event) {
       }
       // FALL-THROUGH
     case ui::ET_MOUSE_DRAGGED:
+      if (OnMouseDragged(*event)) {
+        event->SetHandled();
+      }
       return;
     case ui::ET_MOUSE_RELEASED:
       OnMouseReleased(*event);
