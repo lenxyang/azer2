@@ -22,6 +22,9 @@ class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor
   ~WidgetEventDispatcher() override;
 
   const gfx::Point& last_mouse_location() const { return last_mouse_location_;}
+
+  Widget* mouse_pressed_handler() { return mouse_pressed_handler_;}
+  Widget* mouse_moved_handler() { return mouse_moved_handler_;}
  protected:
   // override from client::CaptureDelegate
   void UpdateCapture(Widget* old_capture, Widget* new_capture) override;

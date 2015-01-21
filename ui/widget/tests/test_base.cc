@@ -53,20 +53,21 @@ bool WidgetTestBase::RunNextFrame() {
   return render_loop_->RunNextFrame(host_.get());
 }
 
-Widget* WidgetTestBase::CreateWidget(const gfx::Rect& bounds,
-                                     WidgetDelegate* delegate) {
-  Widget* widget = new Widget(Widget::kCanvas, host_->widget());
+Widget* WidgetTestBase::CreateWidget(WidgetDelegate* delegate,
+                                     const gfx::Rect& bounds) {
+  return CreateWidget(delegate, bounds, root_widget());
+}
+
+Widget* WidgetTestBase::CreateWidget(WidgetDelegate* delegate,
+                                     const gfx::Rect& bounds, Widget* parent) {
+  Widget* widget = new Widget(Widget::kCanvas, parent);
   widget->SetBounds(bounds);
   widget->SetDelegate(delegate);
   return widget;
 }
 
-Widget* WidgetTestBase::CreateWidget(const gfx::Rect& bounds, Widget* parent, 
-                                     WidgetDelegate* delegate) {
-  Widget* widget = new Widget(Widget::kCanvas, parent);
-  widget->SetBounds(bounds);
-  widget->SetDelegate(delegate);
-  return widget;
+Widget* WidgetTestBase::CreateWidget(const gfx::Rect& bounds, Widget* parent) {
+  return CreateWidget(NULL, bounds, parent);
 }
 
 bool WidgetTestBase::DispatchEventUsingWidgetDispatcher(ui::Event* event) {

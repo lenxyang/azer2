@@ -1,6 +1,7 @@
 #include "azer/ui/widget/api.h"
 
 #include "ui/events/keycodes/keyboard_codes.h"
+#include "azer/ui/widget/widget_event_dispatcher.h"
 #include "azer/ui/widget/tests/event_generator.h"
 #include "azer/ui/widget/tests/test_base.h"
 #include "azer/ui/widget/tests/test_widget_delegate.h"
@@ -76,7 +77,7 @@ TEST_F(WidgetTest, Basic) {
 TEST_F(WidgetTest, Destroy) {
   gfx::Rect bounds(100, 100, 300, 300);
   ColorWidgetDelegate delegate(SK_ColorRED);
-  scoped_ptr<Widget> widget(CreateWidget(bounds, &delegate));
+  scoped_ptr<Widget> widget(CreateWidget(&delegate, bounds));
   widget->SetName("widget1");
 
   host_->Show();
@@ -89,7 +90,7 @@ TEST_F(WidgetTest, MouseMove) {
 TEST_F(WidgetTest, Capture) {
   gfx::Rect bounds(0, 0, 20, 20);
   CaptureWidgetDelegateImpl delegate;
-  scoped_ptr<Widget> widget(CreateWidget(bounds, &delegate));
+  scoped_ptr<Widget> widget(CreateWidget(&delegate, bounds));
   widget->SetName("widget1");
   host_->Show();
 
@@ -112,6 +113,79 @@ TEST_F(WidgetTest, Capture) {
   RunFirstFrame();
 }
 
+// Changes capture while capture is already ongoing.
+TEST_F(WidgetTest, ChangeCaptureWhileMouseDown) {
+  CaptureWidgetDelegateImpl delegate;
+  scoped_ptr<Widget> widget(CreateWidget(
+      &delegate, gfx::Rect(0, 0, 20, 20), root_widget()));
+  CaptureWidgetDelegateImpl delegate2;
+  scoped_ptr<Widget> w2(CreateWidget(
+      &delegate2, gfx::Rect(20, 20, 20, 20), root_widget()));
+
+
+  RunFirstFrame();
+  EXPECT_FALSE(widget->HasCapture());
+
+  // Do a capture.
+  delegate.ResetCounts();
+  widget->SetCapture();
+  EXPECT_TRUE(widget->HasCapture());
+  EXPECT_EQ(0, delegate.capture_lost_count());
+  EXPECT_EQ(0, delegate.capture_changed_event_count());
+  EventGenerator generator(root_widget(), gfx::Point(50, 50));
+  generator.PressLeftButton();
+  EXPECT_EQ(0, delegate.capture_lost_count());
+  EXPECT_EQ(0, delegate.capture_changed_event_count());
+  EXPECT_EQ(1, delegate.mouse_event_count());
+
+  // Set capture to |w2|, should implicitly unset capture for |widget|.
+  delegate.ResetCounts();
+  delegate2.ResetCounts();
+  w2->SetCapture();
+
+  generator.MoveMouseTo(gfx::Point(40, 40), 2);
+  EXPECT_EQ(1, delegate.capture_lost_count());
+  EXPECT_EQ(1, delegate.capture_changed_event_count());
+  EXPECT_EQ(1, delegate.mouse_event_count());
+  EXPECT_EQ(2, delegate2.mouse_event_count());
+}
+
+// Verifies capture is reset when a widget is destroyed.
+TEST_F(WidgetTest, ReleaseCaptureOnDestroy) {
+  CaptureWidgetDelegateImpl delegate;
+  scoped_ptr<Widget> widget(CreateWidget(
+      &delegate, gfx::Rect(0, 0, 20, 20), root_widget()));
+  EXPECT_FALSE(widget->HasCapture());
+
+  // Do a capture.
+  widget->SetCapture();
+  EXPECT_TRUE(widget->HasCapture());
+
+  // Destroy the widget.
+  widget.reset();
+
+  // Make sure the root widget doesn't reference the widget anymore.
+  EXPECT_EQ(NULL, host()->dispatcher()->mouse_pressed_handler());
+  EXPECT_EQ(NULL, client::GetCaptureWidget(root_widget()));
+}
+
+TEST_F(WidgetTest, GetBoundsInRootWidget) {
+  scoped_ptr<Widget> viewport(CreateWidget(
+      gfx::Rect(0, 0, 300, 300), root_widget()));
+  scoped_ptr<Widget> child(CreateWidget(
+      gfx::Rect(0, 0, 100, 100), viewport.get()));
+  // Sanity check.
+  EXPECT_EQ("0,0 100x100", child->GetBoundsInRootWidget().ToString());
+
+  // The |child| widget's screen bounds should move along with the |viewport|.
+  viewport->SetBounds(gfx::Rect(-100, -100, 300, 300));
+  EXPECT_EQ("-100,-100 100x100", child->GetBoundsInRootWidget().ToString());
+
+  // The |child| widget is moved to the 0,0 in screen coordinates.
+  // |GetBoundsInRootWidget()| should return 0,0.
+  child->SetBounds(gfx::Rect(100, 100, 100, 100));
+  EXPECT_EQ("0,0 100x100", child->GetBoundsInRootWidget().ToString());
+}
 }  // namespace testing
 }  // namespace widget
 }  // namespace azer

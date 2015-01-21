@@ -39,9 +39,10 @@ class WidgetTestBase : public ::testing::Test
 
   bool RunFirstFrame();
   bool RunNextFrame();
-  Widget* CreateWidget(const gfx::Rect& bounds, WidgetDelegate* delegate);
-  Widget* CreateWidget(const gfx::Rect& bounds, Widget* parent, 
-                       WidgetDelegate* delegate);
+  Widget* CreateWidget(WidgetDelegate* delegate, const gfx::Rect& bounds);
+  Widget* CreateWidget(WidgetDelegate* delegate, const gfx::Rect& bounds,
+                       Widget* parent);
+  Widget* CreateWidget(const gfx::Rect& bounds, Widget* parent);
 
   bool DispatchEventUsingWidgetDispatcher(ui::Event* event);
 
