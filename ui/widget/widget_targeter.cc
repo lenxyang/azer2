@@ -70,7 +70,7 @@ bool WidgetTargeter::EventLocationInsideBounds(
 Widget* WidgetTargeter::FindTargetInRoot(Widget* root, 
                                          const ui::LocatedEvent& event) {
   DCHECK_EQ(root, root->GetRootWidget());
-  Window* capture_window = client::GetCaptureWindow(root_window);
+  Widget* capture_window = client::GetCaptureWidget(root);
   if (capture_window)
     return capture_window;
 
