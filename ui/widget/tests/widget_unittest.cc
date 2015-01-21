@@ -101,7 +101,7 @@ TEST_F(WidgetTest, Capture) {
   EXPECT_TRUE(widget->HasCapture());
   EXPECT_EQ(0, delegate.capture_lost_count());
   EXPECT_EQ(0, delegate.capture_changed_event_count());
-  EventGenerator generator(root(), gfx::Point(50, 50));
+  EventGenerator generator(root_widget(), gfx::Point(50, 50));
   generator.PressLeftButton();
   EXPECT_EQ(1, delegate.mouse_event_count());
   generator.ReleaseLeftButton();

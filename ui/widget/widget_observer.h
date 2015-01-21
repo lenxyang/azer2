@@ -10,9 +10,10 @@ class Widget;
 
 class AZER_EXPORT WidgetObserver {
  public:
-  virtual void OnObserving(Widget* widget) {}
-  virtual void OnUnobserving(Widget* widget) {}
-  virtual void OnPropertyChanged(Widget* widget, const void* key, intptr_t old) {}
+  virtual void OnWidgetObserving(Widget* widget) {}
+  virtual void OnWidgetUnobserving(Widget* widget) {}
+  virtual void OnWidgetPropertyChanged(Widget* widget, 
+                                       const void* key, intptr_t old) {}
  protected:
   WidgetObserver() {}
   virtual ~WidgetObserver() {}

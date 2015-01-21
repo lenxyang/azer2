@@ -47,6 +47,7 @@ static_library("test_support") {
 
   deps = [
     "//base/test:test_support",
+    "//azer/render",
     "//skia",
     "//testing/gtest",
     "//ui/events",

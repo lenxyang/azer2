@@ -107,7 +107,7 @@ void WidgetEventDispatcher::PreDispatchMouseEvent(Widget* target,
 }
 
 Widget* WidgetEventDispatcher::root() {
-  return host_->root();
+  return host_->widget();
 }
 }  // namespace widget
 }  // namespace azer

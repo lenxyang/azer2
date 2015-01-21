@@ -10,7 +10,7 @@ namespace views {
 
 RootView::RootView(const gfx::Rect& bounds) {
   host_.reset(widget::WidgetTreeHost::Create(bounds));
-  widget_.reset(host_->root());
+  widget_.reset(host_->widget());
   widget_->SetDelegate(this);
   SetName("root");
   SetBounds(0, 0, bounds.width(), bounds.height());

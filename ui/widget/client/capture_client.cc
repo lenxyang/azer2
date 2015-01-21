@@ -23,7 +23,7 @@ CaptureClient* GetCaptureClient(Widget* root_window) {
 }
 
 Widget* GetCaptureWidget(Widget* window) {
-  Widget* root_window = window->root();
+  Widget* root_window = window->GetRootWidget();
   DCHECK(root_window);
   CaptureClient* capture_client = GetCaptureClient(root_window);
   return capture_client ? capture_client->GetCaptureWidget() : NULL;

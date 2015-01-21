@@ -32,8 +32,8 @@ void WidgetTestBase::TearDown() {
   WidgetContext::Destroy();
 }
 
-Widget* WidgetTestBase::root() {
-  return host_->root();
+Widget* WidgetTestBase::root_widget() {
+  return host_->widget();
 }
 
 bool WidgetTestBase::RunFirstFrame() {
@@ -52,7 +52,7 @@ bool WidgetTestBase::RunNextFrame() {
 
 Widget* WidgetTestBase::CreateWidget(const gfx::Rect& bounds,
                                      WidgetDelegate* delegate) {
-  Widget* widget = new Widget(Widget::kCanvas, host_->root());
+  Widget* widget = new Widget(Widget::kCanvas, host_->widget());
   widget->SetBounds(bounds);
   widget->SetDelegate(delegate);
   return widget;

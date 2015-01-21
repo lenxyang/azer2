@@ -55,7 +55,7 @@ TEST_F(WidgetTargeterTest, SubWindow) {
   widget2->SetName("widget2");
 
   ui::test::TestEventHandler handler;
-  host_->root()->AddPreTargetHandler(&handler);
+  host_->widget()->AddPreTargetHandler(&handler);
   host_->Show();
 
   ui::MouseEvent press1(ui::ET_MOUSE_PRESSED,

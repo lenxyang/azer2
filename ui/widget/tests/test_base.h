@@ -32,7 +32,7 @@ class WidgetTestBase : public ::testing::Test
   void SetUp() override;
   void TearDown() override;
  protected:
-  Widget* root();
+  Widget* root_widget();
   WidgetTreeHost* host() { return host_.get();}
 
   bool RunFirstFrame();
