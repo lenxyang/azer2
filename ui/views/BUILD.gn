@@ -6,6 +6,8 @@ source_set("views") {
     "background.h",
     "border.cc",
     "border.h",
+    "controls/control.cc",
+    "controls/control.h",
     "controls/label.cc",
     "controls/label.h",
     "controls/button/button.cc",

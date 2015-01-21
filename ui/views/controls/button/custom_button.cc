@@ -32,6 +32,10 @@ bool CustomButton::IsTriggerableEvent(const ui::Event& event) {
        (triggerable_event_flags_ & event.flags()) != 0);
 }
 
+bool CustomButton::ShouldEnterPushedState(const ui::Event& event) {
+  return IsTriggerableEvent(event);
+}
+
 void CustomButton::SetState(ButtonState state) {
   if (state == state_)
     return;

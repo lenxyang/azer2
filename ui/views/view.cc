@@ -268,6 +268,11 @@ void View::OnPaintBorder(gfx::Canvas* canvas) {
 void View::Paint(gfx::Canvas* canvas, const CullSet& cull_set) {
 }
 
+bool View::IsMouseHovered() {
+  // return HistTestPoint(cursor_pos);
+  return false;
+}
+
 // events
 bool View::OnMousePressed(const ui::MouseEvent& event) {
   FOR_EACH_OBSERVER(ViewEventObserver, event_observers_, OnMousePressed(this, event));
