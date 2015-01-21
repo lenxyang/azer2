@@ -1,10 +1,10 @@
-#include "azer/ui/views/controls/button.h"
+#include "azer/ui/views/controls/button/button.h"
 
 namespace azer {
 namespace views {
 
 Button::Button(ButtonListener* listener, View* parent)
-    : View(parent)
+    : Control(parent)
     , listener_(listener) {
 }
 

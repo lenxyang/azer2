@@ -136,6 +136,18 @@ class AZER_EXPORT View : public widget::WidgetDelegate {
   void SetFocusable(bool focusable);
   bool IsFocusable() const;
 
+  // Request keyboard focus. The receiving view will become the focused view.
+  virtual void RequestFocus();
+
+  // A convenience function which calls HitTestRect() with a rect of size
+  // 1x1 and an origin of |point|. |point| is in the local coordinate space
+  // of |this|.
+  bool HitTestPoint(const gfx::Point& point) const;
+
+  // Returns true if |rect| intersects this view's bounds. |rect| is in the
+  // local coordinate space of |this|.
+  bool HitTestRect(const gfx::Rect& rect) const;
+
   // Called by the framework to paint a View. Performs translation and clipping
   // for View coordinates and language direction as required, allows the View
   // to paint itself via the various OnPaint*() event handlers and then paints

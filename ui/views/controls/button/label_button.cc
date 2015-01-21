@@ -1,10 +1,10 @@
-#include "azer/ui/views/controls/checkbox.h"
+#include "azer/ui/views/controls/button/label_button.h"
 
 namespace azer {
 namespace views {
 
-LabelButton::LabelButton(View* parent)
-    : View(parent) {
+LabelButton::LabelButton(ButtonListener* listener, View* parent)
+    : CustomButton(listener, parent) {
 }
 
 LabelButton::~LabelButton() {

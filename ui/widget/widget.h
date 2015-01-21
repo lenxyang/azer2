@@ -123,6 +123,15 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
                                   const Widget* target,
                                   gfx::Rect* rect);
   // Overridden from ui::EventTarget:
+
+  // A convenience function which calls HitTestRect() with a rect of size
+  // 1x1 and an origin of |point|. |point| is in the local coordinate space
+  // of |this|.
+  bool HitTestPoint(const gfx::Point& point) const;
+
+  // Returns true if |rect| intersects this view's bounds. |rect| is in the
+  // local coordinate space of |this|.
+  bool HitTestRect(const gfx::Rect& rect) const;
  protected:
   bool CanAcceptEvent(const ui::Event& event) override;
   EventTarget* GetParentTarget() override;

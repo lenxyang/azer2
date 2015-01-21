@@ -287,5 +287,13 @@ void Widget::RemoveObserver(WidgetObserver* observer) {
 bool Widget::HasObserver(WidgetObserver* observer) {
   return observers_.HasObserver(observer);
 }
+
+bool Widget::HitTestPoint(const gfx::Point& point) const {
+  return HitTestRect(gfx::Rect(point, gfx::Size(1, 1)));
+}
+
+bool HitTestRect(const gfx::Rect& rect) const {
+  return true;
+}
 }  // namespace widget
 }  // namespace azer

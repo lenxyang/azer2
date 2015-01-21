@@ -1,12 +1,13 @@
 #pragma once
 
-#include "azer/ui/views/view.h"
+
+#include "azer/ui/views/controls/button/custom_button.h"
 
 namespace azer {
 namespace views {
-class AZER_EXPORT LabelButton : public View {
+class AZER_EXPORT LabelButton : public CustomButton {
  public:
-  LabelButton(View* view);
+  LabelButton(ButtonListener* listener, View* view);
   ~LabelButton() override;
  private:
   DISALLOW_COPY_AND_ASSIGN(LabelButton);

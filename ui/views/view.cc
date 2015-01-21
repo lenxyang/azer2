@@ -166,6 +166,17 @@ bool View::IsFocusable() const {
   return focusable_;
 }
 
+void View::RequestFocus() {
+}
+
+bool View::HitTestPoint(const gfx::Point& point) const {
+  return widget_->HitTestPoint(point);
+}
+
+bool View::HitTestRect(const gfx::Rect& rect) const {
+  return widget_->HitTestRect(rect);
+}
+
 const compositor::Layer* View::layer() const {
   DCHECK(widget_.get());
   return widget_->layer();
@@ -371,7 +382,7 @@ void View::RemoveEventObserver(ViewEventObserver* observer) {
 void View::OnVisibleBoundsChanged() {
 }
 
-void View::VisibilityChanged(bool is_visible) {
+void View::OnVisibilityChanged(bool is_visible) {
 }
 
 void View::OnEnabledChanged() {

@@ -6,6 +6,8 @@
 namespace azer {
 namespace views {
 
+class Button;
+
 class AZER_EXPORT ButtonListener {
  public:
   virtual void ButtonPressed(Button* sender, const ui::Event& event) = 0;
@@ -34,8 +36,7 @@ class AZER_EXPORT Button : public Control {
     STYLE_COUNT,
   };
 
-  static ButtonState GetButtonStateFrom(ui::NativeTheme::State state);
- protected:
+protected:
   Button(ButtonListener* listener, View* view);
 
   // Cause the button to notify the listener that a click occurred.
