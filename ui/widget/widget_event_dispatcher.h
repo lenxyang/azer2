@@ -25,6 +25,8 @@ class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor
 
   Widget* mouse_pressed_handler() { return mouse_pressed_handler_;}
   Widget* mouse_moved_handler() { return mouse_moved_handler_;}
+
+  void OnPostNotifiedWidgetDestroying(Widget* widget);
  protected:
   // override from client::CaptureDelegate
   void UpdateCapture(Widget* old_capture, Widget* new_capture) override;
@@ -32,6 +34,14 @@ class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor
   void SetNativeCapture() override;
   void ReleaseNativeCapture() override;
 
+  // The parameter for OnWidgetHidden() to specify why window is hidden.
+  enum WidgetHiddenReason {
+    WINDOW_DESTROYED,  // Widget is destroyed.
+    WINDOW_HIDDEN,     // Widget is hidden.
+    WINDOW_MOVING,     // Widget is temporarily marked as hidden due to move
+                       // across root windows.
+  };
+  void OnWidgetHidden(Widget* invisible, WidgetHiddenReason reason);
 
   // Creates and dispatches synthesized mouse move event using the current mouse
   // location.
@@ -60,6 +70,9 @@ class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor
 
   Widget* mouse_pressed_handler_;
   Widget* mouse_moved_handler_;
+  Widget* old_dispatch_target_;
+  Widget* event_dispatch_target_;
+  
 
   bool synthesize_mouse_move_;
   gfx::Point last_mouse_location_;

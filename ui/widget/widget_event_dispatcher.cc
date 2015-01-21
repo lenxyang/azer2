@@ -10,6 +10,7 @@
 #include "azer/ui/widget/widget_tree_host.h"
 #include "azer/ui/widget/widget_delegate.h"
 #include "azer/ui/widget/widget.h"
+#include "azer/ui/widget/client/capture_client.h"
 
 typedef ui::EventDispatchDetails DispatchDetails;
 
@@ -18,7 +19,9 @@ namespace widget {
 WidgetEventDispatcher::WidgetEventDispatcher(WidgetTreeHost* host)
     : host_(host)
     , mouse_pressed_handler_(NULL)
-    , mouse_moved_handler_(NULL) 
+    , mouse_moved_handler_(NULL)
+    , old_dispatch_target_(NULL)
+    , event_dispatch_target_(NULL)
     , synthesize_mouse_move_(false) {
 }
 
@@ -70,11 +73,15 @@ ui::EventDispatchDetails WidgetEventDispatcher::PreDispatchEvent(
     PreDispatchMouseEvent(target_widget, static_cast<ui::MouseEvent*>(event));
   }
 
+  old_dispatch_target_ = event_dispatch_target_;
+  event_dispatch_target_ = target_widget;
   return DispatchDetails();
 }
 
 ui::EventDispatchDetails WidgetEventDispatcher::PostDispatchEvent(
     ui::EventTarget* target, const ui::Event& event) {
+  event_dispatch_target_ = old_dispatch_target_;
+  old_dispatch_target_ = NULL;
   return DispatchDetails();
 }
 
@@ -216,6 +223,50 @@ void WidgetEventDispatcher::ReleaseNativeCapture() {
 void WidgetEventDispatcher::SetLastMouseLocation(Widget* widget, 
                                                  const gfx::Point& location) {
   last_mouse_location_ = location;
+}
+
+void WidgetEventDispatcher::OnPostNotifiedWidgetDestroying(Widget* widget) {
+  OnWidgetHidden(widget, WINDOW_DESTROYED);
+}
+
+void WidgetEventDispatcher::OnWidgetHidden(Widget* invisible,
+                                           WidgetHiddenReason reason) {
+  // If the window the mouse was pressed in becomes invisible, it should no
+  // longer receive mouse events.
+  if (invisible->Contains(mouse_pressed_handler_))
+    mouse_pressed_handler_ = NULL;
+  if (invisible->Contains(mouse_moved_handler_))
+    mouse_moved_handler_ = NULL;
+
+  // If events are being dispatched from a nested message-loop, and the target
+  // of the outer loop is hidden or moved to another dispatcher during
+  // dispatching events in the inner loop, then reset the target for the outer
+  // loop.
+  if (invisible->Contains(old_dispatch_target_))
+    old_dispatch_target_ = NULL;
+
+  // Do not clear the capture, and the |event_dispatch_target_| if the
+  // window is moving across hosts, because the target itself is actually still
+  // visible and clearing them stops further event processing, which can cause
+  // unexpected behaviors. See crbug.com/157583
+  if (reason != WINDOW_MOVING) {
+    // We don't ask |invisible| here, because invisible may have been removed
+    // from the window hierarchy already by the time this function is called
+    // (OnWidgetDestroyed).
+    client::CaptureClient* capture_client =
+        client::GetCaptureClient(host_->widget());
+    Widget* capture_window =
+        capture_client ? capture_client->GetCaptureWidget() : NULL;
+
+    if (invisible->Contains(event_dispatch_target_))
+      event_dispatch_target_ = NULL;
+
+    // If the ancestor of the capture window is hidden, release the capture.
+    // Note that this may delete the window so do not use capture_window
+    // after this.
+    if (invisible->Contains(capture_window) && invisible != root())
+      capture_window->ReleaseCapture();
+  }
 }
 }  // namespace widget
 }  // namespace azer

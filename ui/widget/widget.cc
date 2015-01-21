@@ -12,6 +12,7 @@
 #include "azer/ui/compositor/api.h"
 #include "azer/ui/widget/widget_delegate.h"
 #include "azer/ui/widget/widget_context.h"
+#include "azer/ui/widget/widget_event_dispatcher.h"
 #include "azer/ui/widget/widget_observer.h"
 #include "azer/ui/widget/widget_property.h"
 #include "azer/ui/widget/widget_tree_host.h"
@@ -58,6 +59,7 @@ Widget::Widget(WidgetTreeHost* host)
 
 Widget::~Widget() {
   observers_.Clear();
+  host_->dispatcher()->OnPostNotifiedWidgetDestroying(this);
 }
 
 WidgetTreeHost* Widget::GetHost() {
