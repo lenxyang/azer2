@@ -223,27 +223,6 @@ TEST_F(WidgetTest, MouseEnterExitWithParentDelete) {
   EXPECT_TRUE(d2.exited());
 }
 
-// Creates a widget with a delegate (w111) that can handle events at a lower
-// z-index than a widget without a delegate (w12). w12 is sized to fill the
-// entire bounds of the container. This test verifies that
-// GetEventHandlerForPoint() skips w12 even though its bounds contain the event,
-// because it has no children that can handle the event and it has no delegate
-// allowing it to handle the event itself.
-TEST_F(WidgetTest, GetEventHandlerForPoint_NoDelegate) {
-  TestWidgetDelegate d111;
-  scoped_ptr<Widget> w1(CreateWidget(NULL, 1,
-      gfx::Rect(0, 0, 500, 500), root_widget()));
-  scoped_ptr<Widget> w11(CreateWidget(NULL, 11,
-      gfx::Rect(0, 0, 500, 500), w1.get()));
-  scoped_ptr<Widget> w111(CreateWidget(&d111, 111,
-      gfx::Rect(50, 50, 450, 450), w11.get()));
-  scoped_ptr<Widget> w12(CreateWidget(NULL, 12,
-      gfx::Rect(0, 0, 500, 500), w1.get()));
-
-  gfx::Point target_point = w111->bounds().CenterPoint();
-  EXPECT_EQ(w111.get(), w1->GetEventHandlerForPoint(target_point));
-}
-
 TEST_F(WidgetTest, Capture) {
   gfx::Rect bounds(0, 0, 20, 20);
   CaptureWidgetDelegateImpl delegate;

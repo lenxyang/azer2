@@ -241,6 +241,10 @@ gfx::Point EventGenerator::GetLocationInCurrentRoot() const {
   return p;
 }
 
+gfx::Point EventGenerator::CenterOfWindow(const ui::EventTarget* window) const {
+  return delegate()->CenterOfTarget(window);
+}
+
 void EventGenerator::DoDispatchEvent(ui::Event* event, bool async) {
   if (async) {
     ui::Event* pending_event;
