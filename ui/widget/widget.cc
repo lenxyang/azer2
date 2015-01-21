@@ -292,7 +292,7 @@ bool Widget::HitTestPoint(const gfx::Point& point) const {
   return HitTestRect(gfx::Rect(point, gfx::Size(1, 1)));
 }
 
-bool HitTestRect(const gfx::Rect& rect) const {
+bool Widget::HitTestRect(const gfx::Rect& rect) const {
   return true;
 }
 }  // namespace widget

@@ -27,9 +27,9 @@ void CustomButton::StateChanged() {
 
 bool CustomButton::IsTriggerableEvent(const ui::Event& event) {
   return event.type() == ui::ET_GESTURE_TAP_DOWN ||
-         event.type() == ui::ET_GESTURE_TAP ||
-         (event.IsMouseEvent() &&
-             (triggerable_event_flags_ & event.flags()) != 0);
+      event.type() == ui::ET_GESTURE_TAP ||
+      (event.IsMouseEvent() &&
+       (triggerable_event_flags_ & event.flags()) != 0);
 }
 
 void CustomButton::SetState(ButtonState state) {
@@ -91,8 +91,9 @@ void CustomButton::OnMouseReleased(const ui::MouseEvent& event) {
 
 void CustomButton::OnMouseCaptureLost() {
   // Starting a drag results in a MouseCaptureLost, we need to ignore it.
-  if (state_ != STATE_DISABLED && !InDrag())
+  if (state_ != STATE_DISABLED) {
     SetState(STATE_NORMAL);
+  }
 }
 
 void CustomButton::OnMouseEntered(const ui::MouseEvent& event) {
@@ -102,8 +103,9 @@ void CustomButton::OnMouseEntered(const ui::MouseEvent& event) {
 
 void CustomButton::OnMouseExited(const ui::MouseEvent& event) {
   // Starting a drag results in a MouseExited, we need to ignore it.
-  if (state_ != STATE_DISABLED && !InDrag())
+  if (state_ != STATE_DISABLED) {
     SetState(STATE_NORMAL);
+  }
 }
 
 void CustomButton::OnMouseMoved(const ui::MouseEvent& event) {
