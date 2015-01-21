@@ -287,7 +287,6 @@ protected:
   gfx::Size GetMinimumSize() const override;
   gfx::Size GetMaximumSize() const override;
   bool CanFocus() override;
-  bool OnCaptureLost() override;
   void OnPaint(gfx::Canvas* canvas) override;
   bool ShouldDescendIntoChildForEventHandling(widget::Widget* child,
                                               const gfx::Point& location) override;

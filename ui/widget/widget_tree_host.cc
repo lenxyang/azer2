@@ -13,7 +13,8 @@ namespace widget {
 WidgetTreeHost::WidgetTreeHost(const gfx::Rect& bounds)
     : closed_(false)
     , root_(NULL)
-    , bounds_(bounds) {
+    , bounds_(bounds)
+    , last_cursor_(ui::kCursorNull) {
   dispatcher_.reset(new WidgetEventDispatcher(this));
 }
 
@@ -61,6 +62,11 @@ void WidgetTreeHost::OnHostActivated() {
 }
 
 void WidgetTreeHost::OnHostLostWindowCapture() {
+}
+
+void WidgetTreeHost::SetCursor(gfx::NativeCursor cursor) {
+  last_cursor_ = cursor;
+  SetCursorNative(cursor);
 }
 }  // namespace widget
 }  // namespace azer

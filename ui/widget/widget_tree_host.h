@@ -4,6 +4,7 @@
 #include <string>
 
 #include "base/observer_list.h"
+#include "ui/base/cursor/cursor.h"
 #include "ui/events/event_source.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/point.h"
@@ -60,6 +61,8 @@ class AZER_EXPORT WidgetTreeHost {
 
   // Releases OS capture of the root window.
   virtual void ReleaseCapture() = 0;
+
+  void SetCursor(gfx::NativeCursor cursor);
  protected:
   WidgetTreeHost(const gfx::Rect& rect);
 
@@ -78,6 +81,7 @@ class AZER_EXPORT WidgetTreeHost {
   Widget* root_;
   std::atomic<bool> closed_;
   gfx::Rect bounds_;
+  gfx::NativeCursor last_cursor_;
   scoped_ptr<WidgetEventDispatcher> dispatcher_;
   scoped_ptr<compositor::Compositor> compositor_;
   scoped_ptr<compositor::LayerTreeHost> layer_host_;
