@@ -23,8 +23,7 @@ bool TestWidgetDelegate::CanFocus() {
   return can_focus_;
 }
 
-bool TestWidgetDelegate::OnCaptureLost() {
-  return true;
+void TestWidgetDelegate::OnCaptureLost() {
 }
 
 void TestWidgetDelegate::OnPaint(gfx::Canvas* canvas) {

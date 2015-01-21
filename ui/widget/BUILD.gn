@@ -35,6 +35,21 @@ source_set("widget") {
   visibility = ["//azer/render"]
 }
 
+static_library("test_support") {
+  sources = [
+    "tests/event_generator.cc",
+    "tests/event_generator.h",
+  ]
+
+  deps = [
+    "//base/test:test_support",
+    "//skia",
+    "//testing/gtest",
+    "//ui/events",
+    "//ui/events:test_support",
+  ]
+}
+
 source_set("unittests") {
   sources = [
     "tests/test_base.cc",
@@ -51,6 +66,7 @@ source_set("unittests") {
     "//skia",
     "//testing/gtest",
     "//ui/events:test_support",
+    ":test_support",
   ]
 
   configs += ["//azer/build/config:utf8src"]

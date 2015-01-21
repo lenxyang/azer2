@@ -22,7 +22,7 @@ class AZER_EXPORT WidgetDelegate : public ::ui::EventHandler {
   virtual gfx::Size GetMaximumSize() const = 0;
 
   virtual bool CanFocus() = 0;
-  virtual bool OnCaptureLost() = 0;
+  virtual void OnCaptureLost() = 0;
   virtual void OnPaint(gfx::Canvas* canvas) = 0;
 
   // Returns true if event handling should descend into |child|. |location| is

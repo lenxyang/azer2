@@ -210,6 +210,10 @@ bool View::CanFocus() {
   return IsFocusable();
 }
 
+void View::OnCaptureLost() {
+  OnMouseCaptureLost();
+}
+
 // void View::OnPaint(gfx::Canvas* canvas) {
 // }
 
