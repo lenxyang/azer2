@@ -24,7 +24,7 @@ WidgetEventDispatcher::~WidgetEventDispatcher() {
 }
 
 ui::EventTarget* WidgetEventDispatcher::GetRootTarget() {
-  return host_->root();
+  return host_->widget();
 }
 
 void WidgetEventDispatcher::OnEventProcessingStarted(ui::Event* event) {

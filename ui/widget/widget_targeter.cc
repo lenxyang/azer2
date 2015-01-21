@@ -68,7 +68,7 @@ bool WidgetTargeter::EventLocationInsideBounds(
 
 Widget* WidgetTargeter::FindTargetInRoot(Widget* root, 
                                          const ui::LocatedEvent& event) {
-  DCHECK_EQ(root, root->root());
+  DCHECK_EQ(root, root->GetRootWidget());
   return NULL;
 }
 }  // namespace widget
