@@ -40,7 +40,7 @@ class Layer;
 class COMPOSITOR_EXPORT Compositor {
  public:
   Compositor(gfx::AcceleratedWidget widget);
-  ~Compositor() override;
+  ~Compositor();
 
   // Sets the root of the layer tree drawn by this Compositor. The root layer
   // must have no parent. The compositor's root layer is reset if the root layer
@@ -51,8 +51,11 @@ class COMPOSITOR_EXPORT Compositor {
   Layer* root_layer() { return root_layer_; }
   void SetRootLayer(Layer* root_layer);
 
+  // Sets the compositor's device scale factor and size.
+  void SetScaleAndSize(float scale, const gfx::Size& size_in_pixel);
+
   // Returns the size of the widget that is being drawn to in pixel coordinates.
-  const gfx::Size& size() const { return size_; }
+  const gfx::Size& size() const;
 
   // Sets the background color used for areas that aren't covered by
   // the |root_layer|.
@@ -64,6 +67,14 @@ class COMPOSITOR_EXPORT Compositor {
   // Returns the widget for this compositor.
   gfx::AcceleratedWidget widget() const { return widget_; }
 
+  // Where possible, draws are scissored to a damage region calculated from
+  // changes to layer properties.  This bypasses that and indicates that
+  // the whole frame needs to be drawn.
+  void ScheduleFullRedraw();
+
+  // Schedule redraw and append damage_rect to the damage region calculated
+  // from changes to layer properties.
+  void ScheduleRedrawRect(const gfx::Rect& damage_rect);
  private:
   gfx::AcceleratedWidget widget_;
 

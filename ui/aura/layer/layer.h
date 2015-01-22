@@ -23,7 +23,7 @@ class COMPOSITOR_EXPORT Layer {
  public:
   Layer();
   explicit Layer(LayerType type);
-  ~Layer() override;
+  ~Layer();
 
   // Retrieves the Layer's compositor. The Layer will walk up its parent chain
   // to locate it. Returns NULL if the Layer is not attached to a compositor.
@@ -40,9 +40,32 @@ class COMPOSITOR_EXPORT Layer {
   LayerDelegate* delegate() { return delegate_; }
   void set_delegate(LayerDelegate* delegate) { delegate_ = delegate; }
 
+  LayerOwner* owner() { return owner_; }
+
+  // Adds a new Layer to this Layer.
+  void Add(Layer* child);
+
+  // Removes a Layer from this Layer.
+  void Remove(Layer* child);
+
+  // Stacks |child| above all other children.
+  void StackAtTop(Layer* child);
+
+  // Stacks |child| directly above |other|.  Both must be children of this
+  // layer.  Note that if |child| is initially stacked even higher, calling this
+  // method will result in |child| being lowered in the stacking order.
+  void StackAbove(Layer* child, Layer* other);
+
+  // Stacks |child| below all other children.
+  void StackAtBottom(Layer* child);
+
+  // Stacks |child| directly below |other|.  Both must be children of this
+  // layer.
+  void StackBelow(Layer* child, Layer* other);
+
   // The parent.
-  const Layer* parent() const { return parent_; }
-  Layer* parent() { return parent_; }
+  const Layer* parent() const;
+  Layer* parent();
 
   LayerType type() const { return type_; }
 
@@ -56,7 +79,7 @@ class COMPOSITOR_EXPORT Layer {
 
   // The bounds, relative to the parent.
   void SetBounds(const gfx::Rect& bounds);
-  const gfx::Rect& bounds() const { return bounds_; }
+  const gfx::Rect& bounds() const;
 
   // Return the target bounds if animator is running, or the current bounds
   // otherwise.
@@ -81,10 +104,22 @@ class COMPOSITOR_EXPORT Layer {
   int background_blur() const { return background_blur_radius_; }
   void SetBackgroundBlur(int blur_radius);
 
+  // Return the target opacity if animator is running, or the current opacity
+  // otherwise.
+  float GetTargetOpacity() const;
+
   // Sets the visibility of the Layer. A Layer may be visible but not
   // drawn. This happens if any ancestor of a Layer is not visible.
   void SetVisible(bool visible);
-  bool visible() const { return visible_; }
+  bool visible() const;
+
+  // Returns the target visibility if the animator is running. Otherwise, it
+  // returns the current visibility.
+  bool GetTargetVisibility() const;
+
+  // Returns true if this Layer is drawn. A Layer is drawn only if all ancestors
+  // are visible.
+  bool IsDrawn() const;
 
   // Converts a point from the coordinates of |source| to the coordinates of
   // |target|. Necessarily, |source| and |target| must inhabit the same Layer
@@ -98,9 +133,17 @@ class COMPOSITOR_EXPORT Layer {
   // ancestor of this layer).
   bool GetTargetTransformRelativeTo(const Layer* ancestor,
                                     gfx::Transform* transform) const;
+
+  // See description in View for details
+  void SetFillsBoundsOpaquely(bool fills_bounds_opaquely);
+  bool fills_bounds_opaquely() const;
+
+  // Set to true if this layer always paints completely within its bounds. If so
+  // we can omit an unnecessary clear, even if the layer is transparent.
+  void SetFillsBoundsCompletely(bool fills_bounds_completely);
   
-  const std::string& name() const { return name_; }
-  void set_name(const std::string& name) { name_ = name; }
+  const std::string& name() const;
+  void set_name(const std::string& name);
 
   // Adds |invalid_rect| to the Layer's pending invalid rect and calls
   // ScheduleDraw(). Returns false if the paint request is ignored.
@@ -111,9 +154,17 @@ class COMPOSITOR_EXPORT Layer {
   // SchedulePaint() for that.
   void ScheduleDraw();
 
+  void CompleteAllAnimations();
+
   // Suppresses painting the content by disconnecting |delegate_|.
   void SuppressPaint();
  private:
+  LayerDelegate* delegate_;
+  LayerType type_;
+  int background_blur_radius_;
+  LayerOwner* owner_;
+
+  friend class LayerOwner;
 };
 }  // namespace ui
 

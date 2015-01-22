@@ -28,13 +28,6 @@ class COMPOSITOR_EXPORT LayerOwner {
   // end of ~LayerOwner().
   scoped_ptr<Layer> AcquireLayer();
 
-  // Asks the owner to recreate the layer, returning the old Layer. NULL is
-  // returned if there is no existing layer, or recreate is not supported.
-  //
-  // This does not recurse. Existing children of the layer are moved to the new
-  // layer.
-  scoped_ptr<Layer> RecreateLayer();
-
   ui::Layer* layer() { return layer_; }
   const ui::Layer* layer() const { return layer_; }
 

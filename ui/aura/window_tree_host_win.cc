@@ -13,7 +13,7 @@
 #include "azer/ui/aura/window_event_dispatcher.h"
 #include "ui/base/cursor/cursor_loader_win.h"
 #include "ui/base/view_prop.h"
-#include "ui/compositor/compositor.h"
+#include "azer/ui/aura/layer/compositor.h"
 #include "ui/events/event.h"
 #include "ui/gfx/display.h"
 #include "ui/gfx/insets.h"

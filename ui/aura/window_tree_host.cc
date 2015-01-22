@@ -14,8 +14,8 @@
 #include "azer/ui/aura/window_targeter.h"
 #include "azer/ui/aura/window_tree_host_observer.h"
 #include "ui/base/view_prop.h"
-#include "ui/compositor/dip_util.h"
-#include "ui/compositor/layer.h"
+#include "azer/ui/aura/layer/dip_util.h"
+#include "azer/ui/aura/layer/layer.h"
 #include "ui/gfx/display.h"
 #include "ui/gfx/insets.h"
 #include "ui/gfx/point.h"
@@ -202,12 +202,7 @@ void WindowTreeHost::DestroyDispatcher() {
 void WindowTreeHost::CreateCompositor(
     gfx::AcceleratedWidget accelerated_widget) {
   DCHECK(Env::GetInstance());
-  ui::ContextFactory* context_factory = Env::GetInstance()->context_factory();
-  DCHECK(context_factory);
-  compositor_.reset(
-      new ui::Compositor(GetAcceleratedWidget(),
-                         context_factory,
-                         base::ThreadTaskRunnerHandle::Get()));
+  compositor_.reset(new ui::Compositor(GetAcceleratedWidget()));
   // TODO(beng): I think this setup should probably all move to a "accelerated
   // widget available" function.
   if (!dispatcher()) {
