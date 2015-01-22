@@ -13,7 +13,7 @@ class AZER_EXPORT RendererLayer : public TextureLayer {
 
   ~RendererLayer() override;
 
-  void Redraw() override {}
+  void Redraw() override;
   void SetBounds(const gfx::Rect& bounds) override;
  private:
   RendererPtr renderer_;

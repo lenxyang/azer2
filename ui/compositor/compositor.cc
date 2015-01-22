@@ -59,15 +59,31 @@ gfx::Rect Compositor::CalcRect(Layer* layer, const gfx::Rect& rect) {
   return std::move(gfx::IntersectRects(rect, rc));
 }
 
+void Compositor::ScheduleRedrawRect(const gfx::Rect& damage_rect) {
+  if (root_layer()) {
+    root_layer()->ScheduleRedrawRect(damage_rect);
+  }
+}
+
 void Compositor::ScheduleDraw() {
-  for (auto iter = need_redraw_.begin();
-       iter != need_redraw_.end();
-       ++iter) {
+  for (auto iter = need_redraw_.begin(); iter != need_redraw_.end(); ++iter) {
     Layer* layer = (*iter);
     if (layer->visible()) {
       layer->Redraw();
     }
   }
+}
+
+const gfx::Size& Compositor::size() const {
+  if (root_layer()) {
+    return root_layer()->bounds().size();
+  } else {
+    return gfx::Size();
+  }
+}
+
+void Compositor::SetBackgroundColor(SkColor color) {
+  background_color_ = color;
 }
 
 void Compositor::CompositeLayer(Layer* parent, const gfx::Rect& prect) {

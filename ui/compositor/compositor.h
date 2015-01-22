@@ -47,6 +47,13 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   Layer* root_layer() { return host_->root();}
 
   LayerTreeHost* GetTreeHost() { return host_;}
+
+  // Returns the size of the widget that is being drawn to in pixel coordinates.
+  const gfx::Size& size() const;
+
+  // Sets the background color used for areas that aren't covered by
+  // the |root_layer|.
+  void SetBackgroundColor(SkColor color);
  protected:
   void AddNeedRedrawLayer(Layer* layer);
   void TryRemoveNeedRedrawLayer(Layer* layer);
@@ -70,7 +77,7 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   LayerTreeHost* host_;
   OverlayPtr overlay_;
   RendererPtr renderer_;
-
+  SkColor background_color_;
   friend class LayerTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };

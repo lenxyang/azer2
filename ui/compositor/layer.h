@@ -68,6 +68,18 @@ class AZER_EXPORT Layer {
   bool Remove(Layer* layer);
   bool IsChild(Layer* layer);
 
+  // Sets the layer's fill color.  May only be called for LAYER_SOLID_COLOR.
+  void SetColor(SkColor color);
+
+  // Adds |invalid_rect| to the Layer's pending invalid rect and calls
+  // ScheduleDraw(). Returns false if the paint request is ignored.
+  bool SchedulePaint(const gfx::Rect& invalid_rect);
+
+  // Schedules a redraw of the layer tree at the compositor.
+  // Note that this _does not_ invalidate any region of this layer; use
+  // SchedulePaint() for that.
+  void ScheduleDraw();
+
   void StackAtTop(Layer* child);
   void StackAbove(Layer* child, Layer* target);
   void StackBelow(Layer* child, Layer* target);
@@ -141,6 +153,7 @@ class AZER_EXPORT Layer {
   LayerList children_;
   Layer* parent_;
 
+  SkColor background_color_;
   LayerType type_;
   LayerObserverList observers_;
   friend class LayerTreeHost;

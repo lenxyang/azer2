@@ -235,5 +235,16 @@ void Layer::StackRelativeTo(Layer* child, Layer* other, bool above) {
   child->cc_layer_->RemoveFromParent();
   cc_layer_->InsertChild(child->cc_layer_, dest_i);
 }
+
+void Layer::SetColor(SkColor color) {
+  background_color_ = color;
+}
+
+bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
+  return true;
+}
+
+void Layer::ScheduleDraw() {
+}
 }  // namespace compositor
 }  // namespace azer
