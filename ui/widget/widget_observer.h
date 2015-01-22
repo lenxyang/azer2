@@ -10,6 +10,8 @@ class Widget;
 
 class AZER_EXPORT WidgetObserver {
  public:
+  virtual void OnWidgetAddedToRootWindow(Widget* widget) {}
+  virtual void OnWidgetRemovingFromRootWindow(Widget* widget, Widget* new_root) {}
   virtual void OnWidgetObserving(Widget* widget) {}
   virtual void OnWidgetUnobserving(Widget* widget) {}
   virtual void OnWidgetPropertyChanged(Widget* widget, 
@@ -18,6 +20,9 @@ class AZER_EXPORT WidgetObserver {
 
   virtual void OnWidgetVisibilityChanging(Widget* widget, bool visible) {}
   virtual void OnWidgetVisibilityChanged(Widget* widget, bool visible) {}
+
+  virtual void OnWidgetDestroying(Widget* widget) {}
+  virtual void OnWidgetDestroyed(Widget* widget) {}
  protected:
   WidgetObserver() {}
   virtual ~WidgetObserver() {}

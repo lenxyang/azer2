@@ -185,6 +185,13 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   void StackChildLayerRelativeTo(Widget* child, Widget* target, 
                                  StackDirection direction);
   void OnStackingChanged();
+
+  void NotifyAddedToRootWidget();
+  void NotifyRemovingFromRootWidget();
+  void NotifyWidgetVisiblityChanged(Widget* widget, bool visible);
+  bool NotifyWidgetVisibilityChangedAtReceiver(Widget* target, bool visible);
+  bool NotifyWidgetVisibilityChangedDown(Widget* target, bool visible);
+  void NotifyWidgetVisibilityChangedUp(Widget* target, bool visible);
  protected:
   // compositor::LayerDelegate
   void OnPaintLayer(gfx::Canvas* canvas) override;

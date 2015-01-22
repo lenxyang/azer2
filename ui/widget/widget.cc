@@ -15,6 +15,7 @@
 #include "azer/ui/widget/widget_event_dispatcher.h"
 #include "azer/ui/widget/widget_observer.h"
 #include "azer/ui/widget/widget_property.h"
+#include "azer/ui/widget/widget_tracker.h"
 #include "azer/ui/widget/widget_tree_host.h"
 #include "azer/ui/widget/client/capture_client.h"
 #include "azer/ui/widget/client/screen_position_client.h"
@@ -58,12 +59,14 @@ Widget::Widget(WidgetTreeHost* host)
 }
 
 Widget::~Widget() {
-  observers_.Clear();
+  FOR_EACH_OBSERVER(WidgetObserver, observers_, OnWidgetDestroying(this));
   host_->dispatcher()->OnPostNotifiedWidgetDestroying(this);
-
   if (parent_) {
     parent_->RemoveChild(this);
   }
+  
+  FOR_EACH_OBSERVER(WidgetObserver, observers_, OnWidgetDestroyed(this));
+  observers_.Clear();
 }
 
 WidgetTreeHost* Widget::GetHost() {
@@ -162,10 +165,14 @@ void Widget::AddChild(Widget* widget) {
   children_.push_back(widget);
   widget->parent_ = this;
   widget->host_ = host_;
+  GetHost()->dispatcher()->OnWidgetAddedToRootWindow(widget);
+  widget->NotifyAddedToRootWindow();
 }
 
-void Widget::RemoveChild(Widget* widget) {
-  auto iter = std::find(children_.begin(), children_.end(), widget);
+void Widget::RemoveChild(Widget* child) {
+  FOR_EACH_OBSERVER(WindowObserver, observers_, OnWillRemoveWidget(child));
+  child->NotifyRemovingFromRootWindow();
+  auto iter = std::find(children_.begin(), children_.end(), child);
   DCHECK(iter != children_.end());
   children_.erase(iter);
 }
@@ -426,6 +433,69 @@ void Widget::StackChildLayerRelativeTo(Widget* child, Widget* target,
 
 void Widget::OnStackingChanged() {
   FOR_EACH_OBSERVER(WidgetObserver, observers_, OnWidgetStackingChanged(this));
+}
+
+void Widget::NotifyAddedToRootWidget() {
+  FOR_EACH_OBSERVER(WidgetObserver, observers_, OnWidgetAddedToRootWidget(this));
+  for (auto it = children_.begin(); it != children_.end(); ++it) {
+    (*it)->NotifyAddedToRootWidget();
+  }
+}
+
+void Widget::NotifyRemovingFromRootWidget() {
+  FOR_EACH_OBSERVER(WidgetObserver, observers_,
+                    OnWidgetRemovingFromRootWidget(this, new_root));
+  for (auto it = children_.begin(); it != children_.end(); ++it) {
+    (*it)->NotifyRemovingFromRootWidget();
+  }
+}
+
+void Widget::NotifyWidgetVisiblityChanged(Widget* widget, bool visible) {
+  if (!NotifyWindowVisibilityChangedDown(target, visible)) {
+    return; // |this| has been deleted.
+  }
+  NotifyWindowVisibilityChangedUp(target, visible);
+}
+
+bool Widget::NotifyWidgetVisibilityChangedAtReceiver(Widget* target, bool visible) {
+  // |this| may be deleted during a call to OnWidgetVisibilityChanged() on one
+  // of the observers. We create an local observer for that. In that case we
+  // exit without further access to any members.
+  WidgetTracker tracker;
+  tracker.Add(this);
+  FOR_EACH_OBSERVER(WidgetObserver, observers_, 
+                    OnWidgetVisibilityChanged(target, visible));
+  return tracker.Contains(this);
+}
+
+bool Widget::NotifyWidgetVisibilityChangedDown(Widget* target, bool visible) {
+  if (!NotifyWidgetVisibilityChangedAtReceiver(target, visible))
+    return false; // |this| was deleted.
+  std::set<const Widget*> child_already_processed;
+  bool child_destroyed = false;
+  do {
+    child_destroyed = false;
+    for (auto it = children_.begin(); it != children_.end(); ++it) {
+      if (!child_already_processed.insert(*it).second)
+        continue;
+      if (!(*it)->NotifyWidgetVisibilityChangedDown(target, visible)) {
+        // |*it| was deleted, |it| is invalid and |children_| has changed.
+        // We exit the current for-loop and enter a new one.
+        child_destroyed = true;
+        break;
+      }
+    }
+  } while (child_destroyed);
+  return true;
+}
+
+void Widget::NotifyWidgetVisibilityChangedUp(Widget* target, bool visible) {
+  // Start with the parent as we already notified |this|
+  // in NotifyWidgetVisibilityChangedDown.
+  for (Widget* widget = parent(); widget; widget = widget->parent()) {
+    bool ret = widget->NotifyWidgetVisibilityChangedAtReceiver(target, visible);
+    DCHECK(ret);
+  }
 }
 }  // namespace widget
 }  // namespace azer

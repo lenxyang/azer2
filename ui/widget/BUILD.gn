@@ -16,6 +16,8 @@ source_set("widget") {
     "widget_event_dispatcher.h",
     "widget_targeter.cc",
     "widget_targeter.h",
+    "widget_tracker.cc",
+    "widget_tracker.h",
     "widget_tree_host.cc",
     "widget_tree_host.h",
     "widget_tree_host_win.cc",

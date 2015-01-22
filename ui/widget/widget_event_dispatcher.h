@@ -16,6 +16,7 @@ class Widget;
 class WidgetTreeHost;
 
 class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor
+                                        , public WidgetObserver
                                         , public client::CaptureDelegate {
  public:
   WidgetEventDispatcher(WidgetTreeHost* host);
@@ -64,8 +65,24 @@ class AZER_EXPORT WidgetEventDispatcher : public ::ui::EventProcessor
 
   void SetLastMouseLocation(Widget* widget, const gfx::Point& location);
 
-  Widget* root();
 
+  // Overridden from WindowObserver:
+  void OnWindowDestroying(Window* window) override;
+  void OnWindowDestroyed(Window* window) override;
+  void OnWindowAddedToRootWindow(Window* window) override;
+  void OnWindowRemovingFromRootWindow(Window* window,
+                                      Window* new_root) override;
+  void OnWindowVisibilityChanging(Window* window, bool visible) override;
+  void OnWindowVisibilityChanged(Window* window, bool visible) override;
+  void OnWindowBoundsChanged(Window* window,
+                             const gfx::Rect& old_bounds,
+                             const gfx::Rect& new_bounds) override;
+
+  void PostSynthesizeMouseMove();
+  void SynthesizeMouseMoveAfterChangeToWidget(Widget* widget);
+  ui::EventDispatchDetails SynthesizeMouseMoveEvent();
+
+  Widget* root();
   WidgetTreeHost* host_;
 
   Widget* mouse_pressed_handler_;

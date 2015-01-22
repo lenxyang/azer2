@@ -36,7 +36,7 @@ void WidgetEventDispatcher::OnEventProcessingStarted(ui::Event* event) {
 }
 
 bool WidgetEventDispatcher::CanDispatchToTarget(ui::EventTarget* target) {
-  return true;
+  return event_dispatch_target_ == target;
 }
 
 ui::EventDispatchDetails WidgetEventDispatcher::SynthesizeMouseMoveEvent() {
@@ -267,6 +267,148 @@ void WidgetEventDispatcher::OnWidgetHidden(Widget* invisible,
     if (invisible->Contains(capture_window) && invisible != root())
       capture_window->ReleaseCapture();
   }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// WidgetEventDispatcher, WidgetObserver implementation:
+
+void WidgetEventDispatcher::OnWidgetDestroying(Widget* widget) {
+  if (!host_->widget()->Contains(widget))
+    return;
+
+  DispatchMouseExitToHidingWidget(widget);
+  SynthesizeMouseMoveAfterChangeToWidget(widget);
+}
+
+void WidgetEventDispatcher::OnWidgetDestroyed(Widget* widget) {
+  // We observe all widgets regardless of what root Widget (if any) they're
+  // attached to.
+  observer_manager_.Remove(widget);
+}
+
+void WidgetEventDispatcher::OnWidgetAddedToRootWidget(Widget* attached) {
+  if (!observer_manager_.IsObserving(attached))
+    observer_manager_.Add(attached);
+
+  if (!host_->widget()->Contains(attached))
+    return;
+
+  SynthesizeMouseMoveAfterChangeToWidget(attached);
+}
+
+void WidgetEventDispatcher::OnWidgetRemovingFromRootWidget(Widget* detached,
+                                                           Widget* new_root) {
+  if (!host_->widget()->Contains(detached))
+    return;
+
+  DCHECK(client::GetCaptureWidget(widget()) != widget());
+
+  DispatchMouseExitToHidingWidget(detached);
+  SynthesizeMouseMoveAfterChangeToWidget(detached);
+
+  // Hiding the widget releases capture which can implicitly destroy the widget
+  // so the widget may no longer be valid after this call.
+  OnWidgetHidden(detached, new_root ? WIDGET_MOVING : WIDGET_HIDDEN);
+}
+
+void WidgetEventDispatcher::OnWidgetVisibilityChanging(Widget* widget,
+                                                       bool visible) {
+  if (!host_->widget()->Contains(widget))
+    return;
+
+  DispatchMouseExitToHidingWidget(widget);
+}
+
+void WidgetEventDispatcher::OnWidgetVisibilityChanged(Widget* widget,
+                                                      bool visible) {
+  if (!host_->widget()->Contains(widget))
+    return;
+
+  if (widget->ContainsPointInRoot(GetLastMouseLocationInRoot()))
+    PostSynthesizeMouseMove();
+
+  // Hiding the widget releases capture which can implicitly destroy the widget
+  // so the widget may no longer be valid after this call.
+  if (!visible)
+    OnWidgetHidden(widget, WIDGET_HIDDEN);
+}
+
+void WidgetEventDispatcher::OnWidgetBoundsChanged(Widget* widget,
+                                                  const gfx::Rect& old_bounds,
+                                                  const gfx::Rect& new_bounds) {
+  if (!host_->widget()->Contains(widget))
+    return;
+
+  if (widget == host_->widget()) {
+    TRACE_EVENT1("ui", "WidgetEventDispatcher::OnWidgetBoundsChanged(root)",
+                 "size", new_bounds.size().ToString());
+
+    DispatchDetails details = DispatchHeldEvents();
+    if (details.dispatcher_destroyed)
+      return;
+
+    synthesize_mouse_move_ = false;
+  }
+
+  if (widget->IsVisible() && !widget->ignore_events()) {
+    gfx::Rect old_bounds_in_root = old_bounds, new_bounds_in_root = new_bounds;
+    Widget::ConvertRectToTarget(widget->parent(), host_->widget(),
+                                &old_bounds_in_root);
+    Widget::ConvertRectToTarget(widget->parent(), host_->widget(),
+                                &new_bounds_in_root);
+    gfx::Point last_mouse_location = GetLastMouseLocationInRoot();
+    if (old_bounds_in_root.Contains(last_mouse_location) !=
+        new_bounds_in_root.Contains(last_mouse_location)) {
+      PostSynthesizeMouseMove();
+    }
+  }
+}
+
+void WidgetEventDispatcher::PostSynthesizeMouseMove() {
+  if (synthesize_mouse_move_)
+    return;
+  synthesize_mouse_move_ = true;
+  base::MessageLoop::current()->PostNonNestableTask(
+      FROM_HERE,
+      base::Bind(base::IgnoreResult(
+          &WidgetEventDispatcher::SynthesizeMouseMoveEvent),
+          held_event_factory_.GetWeakPtr()));
+}
+
+
+void WidgetEventDispatcher::SynthesizeMouseMoveAfterChangeToWidget(
+    Widget* widget) {
+  if (widget->IsVisible() &&
+      widget->ContainsPointInRoot(GetLastMouseLocationInRoot())) {
+    PostSynthesizeMouseMove();
+  }
+}
+
+ui::EventDispatchDetails WidgetEventDispatcher::SynthesizeMouseMoveEvent() {
+  DispatchDetails details;
+  if (!synthesize_mouse_move_)
+    return details;
+  synthesize_mouse_move_ = false;
+
+  // If one of the mouse buttons is currently down, then do not synthesize a
+  // mouse-move event. In such cases, aura could synthesize a DRAGGED event
+  // instead of a MOVED event, but in multi-display/multi-host scenarios, the
+  // DRAGGED event can be synthesized in the incorrect host. So avoid
+  // synthesizing any events at all.
+  if (Env::GetInstance()->mouse_button_flags())
+    return details;
+
+  gfx::Point root_mouse_location = GetLastMouseLocationInRoot();
+  if (!widget()->bounds().Contains(root_mouse_location))
+    return details;
+  gfx::Point host_mouse_location = root_mouse_location;
+  host_->ConvertPointToHost(&host_mouse_location);
+  ui::MouseEvent event(ui::ET_MOUSE_MOVED,
+                       host_mouse_location,
+                       host_mouse_location,
+                       ui::EF_IS_SYNTHESIZED,
+                       0);
+  return OnEventFromSource(&event);
 }
 }  // namespace widget
 }  // namespace azer
