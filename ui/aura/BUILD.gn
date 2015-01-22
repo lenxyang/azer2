@@ -102,7 +102,7 @@ component("aura") {
     "//base/third_party/dynamic_annotations",
     "//skia",
     "//ui/base",
-    "//azer/ui/aura/layer",
+    "//azer/ui/aura/compositor",
     "//ui/events",
     "//ui/events/platform",
     "//ui/events:events_base",

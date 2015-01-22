@@ -7,8 +7,8 @@
 
 #include "base/compiler_specific.h"
 #include "base/memory/scoped_ptr.h"
-#include "azer/ui/aura/layer/compositor_export.h"
-#include "azer/ui/aura/layer/layer.h"
+#include "azer/ui/aura/compositor/compositor_export.h"
+#include "azer/ui/aura/compositor/layer.h"
 
 namespace ui {
 class LayerOwnerDelegate;

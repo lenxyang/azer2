@@ -6,9 +6,9 @@
 #define UI_COMPOSITOR_LAYER_H_
 
 #include "azer/ui/compositor/layer.h"
-#include "azer/ui/aura/layer/compositor.h"
-#include "azer/ui/aura/layer/layer_delegate.h"
-#include "azer/ui/aura/layer/layer_type.h"
+#include "azer/ui/aura/compositor/compositor.h"
+#include "azer/ui/aura/compositor/layer_delegate.h"
+#include "azer/ui/aura/compositor/layer_type.h"
 #include "ui/gfx/rect.h"
 #include "ui/gfx/transform.h"
 

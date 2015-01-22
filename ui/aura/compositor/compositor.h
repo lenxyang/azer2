@@ -19,7 +19,7 @@
 #include "ui/gfx/size.h"
 #include "ui/gfx/vector2d.h"
 
-#include "azer/ui/aura/layer/compositor_export.h"
+#include "azer/ui/aura/compositor/compositor_export.h"
 #include "azer/ui/compositor/compositor.h"
 
 class SkBitmap;
