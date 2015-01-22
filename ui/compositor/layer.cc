@@ -24,11 +24,12 @@ const Layer* GetRoot(const Layer* layer) {
 }
 }
 
-Layer::Layer(LayerDelegate* delegate)
-    : delegate_(delegate)
+Layer::Layer(LayerType type)
+    : delegate_(NULL)
     , host_(NULL)
     , parent_(NULL)
-    , visible_(true) {
+    , visible_(true)
+    , type_(type) {
 }
 
 Layer::~Layer() {
@@ -155,7 +156,7 @@ void Layer::OnBoundsChanged() {
 
 
 void Layer::CalcTargetBounds() {
-  gfx::Rect parent_bounds = (parent_ ? parent_->target_bounds() : bounds());
+  gfx::Rect parent_bounds = (parent_ ? parent_->GetTargetBounds() : bounds());
   target_bounds_ = gfx::IntersectRects(parent_bounds , bounds());
 }
 
@@ -188,10 +189,17 @@ void Layer::RemoveObserver(LayerObserver* observer) {
 }
 
 void Layer::SetNeedRedraw(const gfx::Rect& rect) {
+  // compute the children in rect or interact with rect
   host_->SetLayerNeedRedrawHierarchy(this);
 }
 
-void Layer::StackLayerAbove(Layer* child, Layer* target) {
+void Layer::StackAtTop(Layer* child) {
+}
+
+void Layer::StackAtBottom(Layer* child) {
+}
+
+void Layer::StackAbove(Layer* child, Layer* target) {
   DCHECK_NE(child, target);
   DCHECK(child);
   DCHECK(target);
@@ -213,8 +221,8 @@ void Layer::StackLayerAbove(Layer* child, Layer* target) {
   child->OnStackingChanged();
 }
 
-void Layer::StackLayerBelow(Layer* child, Layer* target) {
-  StackLayerAbove(target, child);
+void Layer::StackBelow(Layer* child, Layer* target) {
+  StackAbove(target, child);
 }
 }  // namespace compositor
 }  // namespace azer

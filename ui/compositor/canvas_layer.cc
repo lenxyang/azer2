@@ -10,8 +10,8 @@
 namespace azer {
 namespace compositor {
 
-CanvasLayer::CanvasLayer(LayerDelegate* delegate)
-    : TextureLayer(delegate) {
+CanvasLayer::CanvasLayer()
+    : TextureLayer(kCanvasLayer) {
 }
 
 CanvasLayer::~CanvasLayer() {

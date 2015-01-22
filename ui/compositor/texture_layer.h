@@ -20,7 +20,7 @@ namespace compositor {
 
 class AZER_EXPORT TextureLayer : public Layer {
  public:
-  explicit TextureLayer(LayerDelegate* delegate);
+  explicit TextureLayer(LayerType type);
   ~TextureLayer() override;
 
   void SetBlending(BlendingPtr& ptr) { blending_ = ptr;}

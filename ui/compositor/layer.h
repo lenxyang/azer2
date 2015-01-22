@@ -32,7 +32,14 @@ class LayerDelegate;
 
 class AZER_EXPORT Layer {
  public:
-  explicit Layer(LayerDelegate* delegate);
+  enum LayerType {
+    kNotDrawnLayer,
+    kCanvasLayer,
+    kRendererLayer,
+    kBitmapLayer,
+  };
+
+  explicit Layer(LayerType type);
   virtual ~Layer();
 
   Layer* parent() { return parent_;}
@@ -51,12 +58,20 @@ class AZER_EXPORT Layer {
   virtual void Redraw() = 0;
 
   const std::string& name() const { return name_;}
-  void SetName(const std::string& name) { name_ = name;}
+  void set_name(const std::string& name) { name_ = name;}
+
+  LayerDelegate* delegate() { return delegate_; }
+  void set_delegate(LayerDelegate* delegate) { delegate_ = delegate; }
 
   // add, remove child
   void Add(Layer* layer);
   bool Remove(Layer* layer);
   bool IsChild(Layer* layer);
+
+  void StackAtTop(Layer* child);
+  void StackAbove(Layer* child, Layer* target);
+  void StackBelow(Layer* child, Layer* target);
+  void StackAtBottom(Layer* child);
 
   virtual void SetBounds(const gfx::Rect& bounds) = 0;
   const gfx::Rect& bounds() const { return bounds_;}
@@ -66,16 +81,14 @@ class AZER_EXPORT Layer {
    * 如果超出了 parent->bounds, 就不能显示了， target_bounds
    * 就是未超出的部分，或者有效部分
    */
-  const gfx::Rect& target_bounds() const { return target_bounds_;}
+  const gfx::Rect& GetTargetBounds() const { return target_bounds_;}
+  bool GetTargetVisibility() const;
 
   void SetPosition(const gfx::Point& pt) { position_ = pt;}
   const gfx::Point& position() const { return position_;}
 
   void SetVisible(bool visible);
   bool visible() const { return visible_;}
-
-  void StackLayerAbove(Layer* child, Layer* target);
-  void StackLayerBelow(Layer* child, Layer* target);
 
   // called when remove from parent
   virtual void OnRemoveFromParent() {}
@@ -95,6 +108,7 @@ class AZER_EXPORT Layer {
   // ancestor of this layer).
   bool GetTargetTransformRelativeTo(const Layer* ancestor,
                                     gfx::Transform* transform) const;
+
   void SetNeedRedraw(const gfx::Rect& rect);
  protected:
   void SetTreeHost(LayerTreeHost* host);
@@ -125,6 +139,7 @@ class AZER_EXPORT Layer {
   LayerList children_;
   Layer* parent_;
 
+  LayerType type_;
   LayerObserverList observers_;
   friend class LayerTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Layer);

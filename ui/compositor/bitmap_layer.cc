@@ -2,8 +2,8 @@
 
 namespace azer {
 namespace compositor {
-BitmapLayer::BitmapLayer(LayerDelegate* delegate)
-    : Layer(delegate) {
+BitmapLayer::BitmapLayer()
+    : Layer(kBitmapLayer) {
 }
 
 BitmapLayer::~BitmapLayer() {

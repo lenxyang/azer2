@@ -9,7 +9,7 @@ namespace azer {
 namespace compositor {
 class AZER_EXPORT RendererLayer : public TextureLayer {
  public:
-  explicit RendererLayer(LayerDelegate* delegate);
+  explicit RendererLayer();
 
   ~RendererLayer() override;
 

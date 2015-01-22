@@ -11,8 +11,8 @@
 
 namespace azer {
 namespace compositor {
-TextureLayer::TextureLayer(LayerDelegate* delegate)
-    : Layer(delegate) {
+TextureLayer::TextureLayer(LayerType type)
+    : Layer(type) {
 }
 
 TextureLayer::~TextureLayer() {

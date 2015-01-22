@@ -36,6 +36,9 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   */
   void ScheduleDraw();
 
+  // get all layer in damage_rect and repaint them
+  void ScheduleRedrawRect(const gfx::Rect& damage_rect);
+
   TexturePtr& GetOutputTexture();
   RendererPtr& GetRenderer();
   OverlayPtr& overlay() { return overlay_;}

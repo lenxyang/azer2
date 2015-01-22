@@ -12,7 +12,7 @@ class LayerDelegate;
 
 class AZER_EXPORT NoDrawLayer : public Layer {
  public:
-  explicit NoDrawLayer(LayerDelegate* delegate) : Layer(delegate) {}
+  explicit NoDrawLayer() : Layer(kNotDrawnLayer) {}
   ~NoDrawLayer() override {}
 
   void SetBounds(const gfx::Rect& bounds) override {

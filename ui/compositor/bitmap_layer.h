@@ -12,7 +12,7 @@ namespace compositor {
 
 class BitmapLayer : public Layer {
  public:
-  explicit BitmapLayer(LayerDelegate* delegate);
+  explicit BitmapLayer();
   ~BitmapLayer() override;
 
   void Render(Renderer* renderer, const gfx::Rect& parent_rc) override;

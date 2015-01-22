@@ -10,7 +10,7 @@ namespace compositor {
 
 class AZER_EXPORT CanvasLayer : public TextureLayer {
  public:
-  explicit CanvasLayer(LayerDelegate* delegate);
+  explicit CanvasLayer();
 
   ~CanvasLayer() override;
 
