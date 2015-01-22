@@ -94,6 +94,7 @@ class AZER_EXPORT Layer {
 
   virtual void SetBounds(const gfx::Rect& bounds) = 0;
   const gfx::Rect& bounds() const { return bounds_;}
+  gfx::Size size() const { return bounds().size();}
 
   /**
    * 虽然设置了 bounds, 但不是所有的 bounds 都能够显示的，

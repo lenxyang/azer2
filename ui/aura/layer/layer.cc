@@ -17,6 +17,132 @@
 
 namespace ui {
 
+Layer::Layer() {
+}
+
+Layer::Layer(LayerType type) {
+}
+
+Layer::~Layer() {
+  if (parent_) {
+    parent_->Remove(this);
+    delete layer_;
+  }
+}
+
+void Layer::Add(Layer* child) {
+  layer_->Add(child->layer());
+}
+
+void Layer::Remove(Layer* child) {
+  layer_->Remove(child->layer());
+}
+
+void Layer::StackAtTop(Layer* child) {
+  layer_->StackAtTop(child->layer());
+}
+
+void Layer::StackAbove(Layer* child, Layer* other) {
+  layer_->StackAbove(child->layer(), other->layer());
+}
+
+void Layer::StackAtBottom(Layer* child) {
+  layer_->StackAtBottom(child->layer());
+}
+
+void Layer::StackBelow(Layer* child, Layer* other) {
+  layer_->StackBelow(child->layer(), other->layer());
+}
+
+void Layer::SetTransform(const gfx::Transform& transform) {
+}
+
+gfx::Transform Layer::GetTargetTransform() const {
+  return gfx::Transform(); 
+}
+
+gfx::Transform Layer::transform() const {
+  return gfx::Transform();
+}
+
+void Layer::SetBounds(const gfx::Rect& bounds) {
+  layer_->SetBounds(bounds);
+}
+
+const gfx::Rect& Layer::bounds() const {
+  return layer_->bounds();
+}
+
+gfx::Rect Layer::GetTargetBounds() const {
+  return layer_->GetTargetBounds();
+}
+
+void Layer::SetMasksToBounds(bool masks_to_bounds) {
+}
+
+bool Layer::GetMasksToBounds() const {
+  return false;
+}
+
+float Layer::opacity() const {
+  return 1.0f;
+}
+
+void Layer::SetOpacity(float opacity) {
+}
+
+float Layer::GetTargetOpacity() const {
+  return opacity();
+}
+
+void Layer::SetVisible(bool visible) {
+  layer_->SetVisible(visible);
+}
+
+bool Layer::visible() const {
+  return layer_->visible();
+}
+
+bool Layer::GetTargetVisibility() const {
+  return true;
+}
+
+bool Layer::IsDrawn() const {
+  return true;
+}
+
+void Layer::SetFillsBoundsOpaquely(bool fills_bounds_opaquely) {
+}
+
+bool Layer::fills_bounds_opaquely() const {
+  return true;
+}
+
+void Layer::SetFillsBoundsCompletely(bool fills_bounds_completely) {
+}
+
+const std::string& Layer::name() const {
+  return layer_->name();
+}
+
+void Layer::set_name(const std::string& name) {
+  layer_->set_name(name);
+}
+
+bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
+    layer_->SchedulePaint(invalid_rect);
+  }
+
+void Layer::ScheduleDraw() {
+  layer_->ScheduleDraw();
+}
+
+void Layer::CompleteAllAnimations() {
+}
+
+void Layer::SuppressPaint() {
+}
+
 // static
 void Layer::ConvertPointToLayer(const Layer* source,
                                 const Layer* target,

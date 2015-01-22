@@ -81,8 +81,8 @@ class COMPOSITOR_EXPORT Compositor {
 
   // The root of the Layer tree drawn by this compositor.
   Layer* root_layer_;
-  scoped_ptr<compositor::LayerTreeHost> host_;
-  scoped_ptr<compositor::Compositor> compositor_;
+  scoped_ptr<azer::compositor::LayerTreeHost> host_;
+  scoped_ptr<azer::compositor::Compositor> compositor_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };
 }  // namespace ui
