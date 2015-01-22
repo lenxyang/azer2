@@ -172,7 +172,7 @@ TEST_F(WidgetTest, MouseEnterExitWithHide) {
   d1.ResetExpectations();
   w2->Hide();
   // Enters / exits can be send asynchronously.
-  RunFirstFrame();
+  RunNextFrame();
   EXPECT_TRUE(d2.exited());
   EXPECT_TRUE(d1.entered());
 }
@@ -193,7 +193,7 @@ TEST_F(WidgetTest, MouseEnterExitWithParentHide) {
 
   d2.ResetExpectations();
   w1->Hide();
-  RunFirstFrame();
+  RunNextFrame();
   EXPECT_FALSE(d2.entered());
   EXPECT_TRUE(d2.exited());
 
@@ -218,7 +218,7 @@ TEST_F(WidgetTest, MouseEnterExitWithParentDelete) {
 
   d2.ResetExpectations();
   w1.reset();
-  RunFirstFrame();
+  RunNextFrame();
   EXPECT_FALSE(d2.entered());
   EXPECT_TRUE(d2.exited());
 }
