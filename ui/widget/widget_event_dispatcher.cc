@@ -22,7 +22,9 @@ WidgetEventDispatcher::WidgetEventDispatcher(WidgetTreeHost* host)
     , mouse_moved_handler_(NULL)
     , old_dispatch_target_(NULL)
     , event_dispatch_target_(NULL)
-    , synthesize_mouse_move_(false) {
+    , synthesize_mouse_move_(false)
+    , observer_manager_(this)
+    , held_event_factory_(this) {
 }
 
 WidgetEventDispatcher::~WidgetEventDispatcher() {
@@ -37,31 +39,6 @@ void WidgetEventDispatcher::OnEventProcessingStarted(ui::Event* event) {
 
 bool WidgetEventDispatcher::CanDispatchToTarget(ui::EventTarget* target) {
   return event_dispatch_target_ == target;
-}
-
-ui::EventDispatchDetails WidgetEventDispatcher::SynthesizeMouseMoveEvent() {
-  DispatchDetails details;
-  if (!synthesize_mouse_move_)
-    return details;
-  synthesize_mouse_move_ = false;
-
-  // If one of the mouse buttons is currently down, then do not synthesize a
-  // mouse-move event. In such cases, aura could synthesize a DRAGGED event
-  // instead of a MOVED event, but in multi-display/multi-host scenarios, the
-  // DRAGGED event can be synthesized in the incorrect host. So avoid
-  // synthesizing any events at all.
-
-  gfx::Point root_mouse_location = last_mouse_location();
-  if (!root()->bounds().Contains(root_mouse_location))
-    return details;
-  gfx::Point host_mouse_location = root_mouse_location;
-  host_->ConvertPointToHost(&host_mouse_location);
-  ui::MouseEvent event(ui::ET_MOUSE_MOVED,
-                       host_mouse_location,
-                       host_mouse_location,
-                       ui::EF_IS_SYNTHESIZED,
-                       0);
-  return OnEventFromSource(&event);
 }
 
 
@@ -101,8 +78,8 @@ ui::EventDispatchDetails WidgetEventDispatcher::DispatchMouseEnterOrExit(
 
   // |event| may be an event in the process of being dispatched to a target (in
   // which case its locations will be in the event's target's coordinate
-  // system), or a synthetic event created in root-window (in which case, the
-  // event's target will be NULL, and the event will be in the root-window's
+  // system), or a synthetic event created in root-widget (in which case, the
+  // event's target will be NULL, and the event will be in the root-widget's
   // coordinate system.
   Widget* target = static_cast<Widget*>(event.target());
   if (!target)
@@ -154,9 +131,9 @@ Widget* WidgetEventDispatcher::root() {
 // override from client::CaptureDelegate
 void WidgetEventDispatcher::UpdateCapture(Widget* old_capture, 
                                           Widget* new_capture) {
-  // |mouse_moved_handler_| may have been set to a Window in a different root
+  // |mouse_moved_handler_| may have been set to a Widget in a different root
   // (see below). Clear it here to ensure we don't end up referencing a stale
-  // Window.
+  // Widget.
   if (mouse_moved_handler_ && !root()->Contains(mouse_moved_handler_))
     mouse_moved_handler_ = NULL;
 
@@ -175,7 +152,7 @@ void WidgetEventDispatcher::UpdateCapture(Widget* old_capture,
   }
 
   if (new_capture) {
-    // Make all subsequent mouse events go to the capture window. We shouldn't
+    // Make all subsequent mouse events go to the capture widget. We shouldn't
     // need to send an event here as OnCaptureLost() should take care of that.
     if (mouse_moved_handler_) {
       mouse_moved_handler_ = new_capture;
@@ -190,16 +167,16 @@ void WidgetEventDispatcher::UpdateCapture(Widget* old_capture,
 }
 
 void WidgetEventDispatcher::OnOtherRootGotCapture() {
-  // Windows provides the TrackMouseEvents API which allows us to rely on the
+  // Widgets provides the TrackMouseEvents API which allows us to rely on the
   // OS to send us the mouse exit events (WM_MOUSELEAVE). Additionally on
-  // desktop Windows, every top level window could potentially have its own
-  // root window, in which case this function will get called whenever those
-  // windows grab mouse capture. Sending mouse exit messages in these cases
+  // desktop Widgets, every top level widget could potentially have its own
+  // root widget, in which case this function will get called whenever those
+  // widgets grab mouse capture. Sending mouse exit messages in these cases
   // causes subtle bugs like (crbug.com/394672).
 #if !defined(OS_WIN)
   if (mouse_moved_handler_) {
     // Dispatch a mouse exit to reset any state associated with hover. This is
-    // important when going from no window having capture to a window having
+    // important when going from no widget having capture to a widget having
     // capture because we do not dispatch ET_MOUSE_CAPTURE_CHANGED in this case.
     DispatchDetails details = DispatchMouseExitAtPoint(
         GetLastMouseLocationInRoot());
@@ -226,12 +203,12 @@ void WidgetEventDispatcher::SetLastMouseLocation(Widget* widget,
 }
 
 void WidgetEventDispatcher::OnPostNotifiedWidgetDestroying(Widget* widget) {
-  OnWidgetHidden(widget, WINDOW_DESTROYED);
+  OnWidgetHidden(widget, WIDGET_DESTROYED);
 }
 
 void WidgetEventDispatcher::OnWidgetHidden(Widget* invisible,
                                            WidgetHiddenReason reason) {
-  // If the window the mouse was pressed in becomes invisible, it should no
+  // If the widget the mouse was pressed in becomes invisible, it should no
   // longer receive mouse events.
   if (invisible->Contains(mouse_pressed_handler_))
     mouse_pressed_handler_ = NULL;
@@ -246,26 +223,26 @@ void WidgetEventDispatcher::OnWidgetHidden(Widget* invisible,
     old_dispatch_target_ = NULL;
 
   // Do not clear the capture, and the |event_dispatch_target_| if the
-  // window is moving across hosts, because the target itself is actually still
+  // widget is moving across hosts, because the target itself is actually still
   // visible and clearing them stops further event processing, which can cause
   // unexpected behaviors. See crbug.com/157583
-  if (reason != WINDOW_MOVING) {
+  if (reason != WIDGET_MOVING) {
     // We don't ask |invisible| here, because invisible may have been removed
-    // from the window hierarchy already by the time this function is called
+    // from the widget hierarchy already by the time this function is called
     // (OnWidgetDestroyed).
     client::CaptureClient* capture_client =
         client::GetCaptureClient(host_->widget());
-    Widget* capture_window =
+    Widget* capture_widget =
         capture_client ? capture_client->GetCaptureWidget() : NULL;
 
     if (invisible->Contains(event_dispatch_target_))
       event_dispatch_target_ = NULL;
 
-    // If the ancestor of the capture window is hidden, release the capture.
-    // Note that this may delete the window so do not use capture_window
+    // If the ancestor of the capture widget is hidden, release the capture.
+    // Note that this may delete the widget so do not use capture_widget
     // after this.
-    if (invisible->Contains(capture_window) && invisible != root())
-      capture_window->ReleaseCapture();
+    if (invisible->Contains(capture_widget) && invisible != root())
+      capture_widget->ReleaseCapture();
   }
 }
 
@@ -296,19 +273,18 @@ void WidgetEventDispatcher::OnWidgetAddedToRootWidget(Widget* attached) {
   SynthesizeMouseMoveAfterChangeToWidget(attached);
 }
 
-void WidgetEventDispatcher::OnWidgetRemovingFromRootWidget(Widget* detached,
-                                                           Widget* new_root) {
+void WidgetEventDispatcher::OnWidgetRemovingFromRootWidget(Widget* detached) {
   if (!host_->widget()->Contains(detached))
     return;
 
-  DCHECK(client::GetCaptureWidget(widget()) != widget());
+  DCHECK(client::GetCaptureWidget(root()) != root());
 
   DispatchMouseExitToHidingWidget(detached);
   SynthesizeMouseMoveAfterChangeToWidget(detached);
 
   // Hiding the widget releases capture which can implicitly destroy the widget
   // so the widget may no longer be valid after this call.
-  OnWidgetHidden(detached, new_root ? WIDGET_MOVING : WIDGET_HIDDEN);
+  OnWidgetHidden(detached, WIDGET_HIDDEN);
 }
 
 void WidgetEventDispatcher::OnWidgetVisibilityChanging(Widget* widget,
@@ -372,7 +348,7 @@ void WidgetEventDispatcher::PostSynthesizeMouseMove() {
       FROM_HERE,
       base::Bind(base::IgnoreResult(
           &WidgetEventDispatcher::SynthesizeMouseMoveEvent),
-          held_event_factory_.GetWeakPtr()));
+                 held_event_factory_.GetWeakPtr()));
 }
 
 
@@ -395,11 +371,9 @@ ui::EventDispatchDetails WidgetEventDispatcher::SynthesizeMouseMoveEvent() {
   // instead of a MOVED event, but in multi-display/multi-host scenarios, the
   // DRAGGED event can be synthesized in the incorrect host. So avoid
   // synthesizing any events at all.
-  if (Env::GetInstance()->mouse_button_flags())
-    return details;
 
   gfx::Point root_mouse_location = GetLastMouseLocationInRoot();
-  if (!widget()->bounds().Contains(root_mouse_location))
+  if (!root()->bounds().Contains(root_mouse_location))
     return details;
   gfx::Point host_mouse_location = root_mouse_location;
   host_->ConvertPointToHost(&host_mouse_location);

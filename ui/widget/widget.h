@@ -156,6 +156,15 @@ class AZER_EXPORT Widget : public compositor::LayerDelegate
   // Returns true if |rect| intersects this view's bounds. |rect| is in the
   // local coordinate space of |this|.
   bool HitTestRect(const gfx::Rect& rect) const;
+
+  // Returns true if the |point_in_root| in root window's coordinate falls
+  // within this window's bounds. Returns false if the window is detached
+  // from root window.
+  bool ContainsPointInRoot(const gfx::Point& point_in_root) const;
+
+  // Returns true if relative-to-this-Window's-origin |local_point| falls
+  // within this Window's bounds.
+  bool ContainsPoint(const gfx::Point& local_point) const;
  protected:
   bool CanAcceptEvent(const ui::Event& event) override;
   EventTarget* GetParentTarget() override;

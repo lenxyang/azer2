@@ -165,13 +165,12 @@ void Widget::AddChild(Widget* widget) {
   children_.push_back(widget);
   widget->parent_ = this;
   widget->host_ = host_;
-  GetHost()->dispatcher()->OnWidgetAddedToRootWindow(widget);
-  widget->NotifyAddedToRootWindow();
+  GetHost()->dispatcher()->OnWidgetAddedToRootWidget(widget);
+  widget->NotifyAddedToRootWidget();
 }
 
 void Widget::RemoveChild(Widget* child) {
-  FOR_EACH_OBSERVER(WindowObserver, observers_, OnWillRemoveWidget(child));
-  child->NotifyRemovingFromRootWindow();
+  child->NotifyRemovingFromRootWidget();
   auto iter = std::find(children_.begin(), children_.end(), child);
   DCHECK(iter != children_.end());
   children_.erase(iter);
@@ -444,17 +443,17 @@ void Widget::NotifyAddedToRootWidget() {
 
 void Widget::NotifyRemovingFromRootWidget() {
   FOR_EACH_OBSERVER(WidgetObserver, observers_,
-                    OnWidgetRemovingFromRootWidget(this, new_root));
+                    OnWidgetRemovingFromRootWidget(this));
   for (auto it = children_.begin(); it != children_.end(); ++it) {
     (*it)->NotifyRemovingFromRootWidget();
   }
 }
 
-void Widget::NotifyWidgetVisiblityChanged(Widget* widget, bool visible) {
-  if (!NotifyWindowVisibilityChangedDown(target, visible)) {
+void Widget::NotifyWidgetVisiblityChanged(Widget* target, bool visible) {
+  if (!NotifyWidgetVisibilityChangedDown(target, visible)) {
     return; // |this| has been deleted.
   }
-  NotifyWindowVisibilityChangedUp(target, visible);
+  NotifyWidgetVisibilityChangedUp(target, visible);
 }
 
 bool Widget::NotifyWidgetVisibilityChangedAtReceiver(Widget* target, bool visible) {
