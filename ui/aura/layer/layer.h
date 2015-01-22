@@ -5,6 +5,7 @@
 #ifndef UI_COMPOSITOR_LAYER_H_
 #define UI_COMPOSITOR_LAYER_H_
 
+#include "azer/ui/compositor/layer.h"
 #include "azer/ui/aura/layer/compositor.h"
 #include "azer/ui/aura/layer/layer_delegate.h"
 #include "azer/ui/aura/layer/layer_type.h"
@@ -43,10 +44,10 @@ class COMPOSITOR_EXPORT Layer {
   LayerOwner* owner() { return owner_; }
 
   // Adds a new Layer to this Layer.
-  void Add(Layer* child) {layer_->Add(child);}
+  void Add(Layer* child) {layer_->Add(child->layer());}
 
   // Removes a Layer from this Layer.
-  void Remove(Layer* child) { layer_->Remove(child);}
+  void Remove(Layer* child) { layer_->Remove(child->layer());}
 
   // Stacks |child| above all other children.
   void StackAtTop(Layer* child) { layer_->StackAtTop(child);}
@@ -64,7 +65,7 @@ class COMPOSITOR_EXPORT Layer {
   void StackBelow(Layer* child, Layer* other) {layer_->StackBelow(child, other);}
 
   // The parent.
-  const Layer* parent() const; { return parent();}
+  const Layer* parent() const { return parent();}
   Layer* parent() { return layer_->parent();}
 
   LayerType type() const { return type_; }
@@ -106,7 +107,7 @@ class COMPOSITOR_EXPORT Layer {
 
   // Return the target opacity if animator is running, or the current opacity
   // otherwise.
-  float GetTargetOpacity() const;
+  float GetTargetOpacity() const { return opacity();}
 
   // Sets the visibility of the Layer. A Layer may be visible but not
   // drawn. This happens if any ancestor of a Layer is not visible.
@@ -119,7 +120,7 @@ class COMPOSITOR_EXPORT Layer {
 
   // Returns true if this Layer is drawn. A Layer is drawn only if all ancestors
   // are visible.
-  bool IsDrawn() const;
+  bool IsDrawn() const ;
 
   // Converts a point from the coordinates of |source| to the coordinates of
   // |target|. Necessarily, |source| and |target| must inhabit the same Layer
@@ -160,12 +161,15 @@ class COMPOSITOR_EXPORT Layer {
 
   // Suppresses painting the content by disconnecting |delegate_|.
   void SuppressPaint() {}
+
+  azer::compositor::Layer* layer() { return layer_;}
  private:
   LayerDelegate* delegate_;
   LayerType type_;
   int background_blur_radius_;
   LayerOwner* owner_;
 
+  azer::compositor::Layer* layer_;
   friend class LayerOwner;
 };
 }  // namespace ui

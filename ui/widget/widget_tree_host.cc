@@ -43,6 +43,7 @@ void WidgetTreeHost::CreateCompositor(gfx::AcceleratedWidget widget) {
   widget_->SetName("root");
   widget_->SetEventTargeter(scoped_ptr<ui::EventTargeter>(new WidgetTargeter));
   widget_->SetBounds(gfx::Rect(bounds_.size()));
+  layer_host_->SetRoot(widget_->layer());
   dispatcher_.reset(new WidgetEventDispatcher(this));
 }
 

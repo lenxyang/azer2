@@ -73,6 +73,11 @@ class AZER_EXPORT Layer {
   void SetColor(SkColor color);
   SkColor color() { return color_;}
 
+  // The opacity of the layer. The opacity is applied to each pixel of the
+  // texture (resulting alpha = opacity * alpha).
+  float opacity() const { return 1.0f;}
+  void SetOpacity(float opacity) { }
+
   // Adds |invalid_rect| to the Layer's pending invalid rect and calls
   // ScheduleDraw(). Returns false if the paint request is ignored.
   bool SchedulePaint(const gfx::Rect& invalid_rect);

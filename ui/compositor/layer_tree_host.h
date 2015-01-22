@@ -22,8 +22,7 @@ class AZER_EXPORT LayerTreeHostClient {
   virtual void OnResize(const gfx::Size& size) = 0;
 };
 
-class AZER_EXPORT LayerTreeHost : public LayerDelegate
-                                , public LayerObserver {
+class AZER_EXPORT LayerTreeHost : public LayerObserver {
  public:
   explicit LayerTreeHost(const gfx::Size& size);
   ~LayerTreeHost();
@@ -33,13 +32,11 @@ class AZER_EXPORT LayerTreeHost : public LayerDelegate
 
   Layer* root() { return root_;}
   const Layer* root() const { return root_;}
+  void SetRoot(Layer* layer);
 
   Compositor* compositor();
   void SetLayerNeedRedrawHierarchy(Layer* layer);
  private:
-  // LayerDelegate for roort
-  void OnPaintLayer(gfx::Canvas* canvas) override {}
-
   // LayerObserver for all layer in the tree
   void OnLayerAttachedOnTree(Layer* layer) override;
   void OnLayerResized(Layer* layer) override;

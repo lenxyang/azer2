@@ -26,17 +26,18 @@ LayerTreeHost::LayerTreeHost(const gfx::Size& size)
     , client_(NULL)
     , root_(NULL)
     , size_(size)  {
-  root_ = new NoDrawLayer();
-  root_->set_delegate(this);
-  root_->host_ = this;
-  root_->set_name("root");
-  root_->SetBounds(gfx::Rect(0, 0, size.width(), size.height()));
 }
 
 LayerTreeHost::~LayerTreeHost() {
   if (root_) {
     DeepDeleteLayers(root_);
   }
+}
+
+void LayerTreeHost::SetRoot(Layer* layer) {
+  DCHECK(!root_);
+  root_->host_ = this;
+  size_ = root_->size();
 }
 
 void LayerTreeHost::SetCompositor(Compositor* compositor) {

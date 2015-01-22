@@ -20,6 +20,7 @@
 #include "ui/gfx/vector2d.h"
 
 #include "azer/ui/aura/layer/compositor_export.h"
+#include "azer/ui/compositor/compositor.h"
 
 class SkBitmap;
 
@@ -55,14 +56,14 @@ class COMPOSITOR_EXPORT Compositor {
   void SetScaleAndSize(float scale, const gfx::Size& size_in_pixel);
 
   // Returns the size of the widget that is being drawn to in pixel coordinates.
-  const gfx::Size& size() const;
+  const gfx::Size& size() const { return compositor_->size();}
 
   // Sets the background color used for areas that aren't covered by
   // the |root_layer|.
-  void SetBackgroundColor(SkColor color);
+  void SetBackgroundColor(SkColor color) { compositor_->SetBackgroundColor(color);}
 
   // Set the visibility of the underlying compositor.
-  void SetVisible(bool visible);
+  void SetVisible(bool visible) {}
 
   // Returns the widget for this compositor.
   gfx::AcceleratedWidget widget() const { return widget_; }
@@ -80,6 +81,8 @@ class COMPOSITOR_EXPORT Compositor {
 
   // The root of the Layer tree drawn by this compositor.
   Layer* root_layer_;
+  scoped_ptr<compositor::LayerTreeHost> host_;
+  scoped_ptr<compositor::Compositor> compositor_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };
 }  // namespace ui

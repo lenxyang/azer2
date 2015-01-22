@@ -5,6 +5,7 @@ static_library("layer") {
     "layer_owner.cc",
     "layer_owner.h",
     "layer_owner_delegate.h",
+    "layer.cc",
     "layer.h",
     "layer_delegate.h",
     "layer_type.h",
