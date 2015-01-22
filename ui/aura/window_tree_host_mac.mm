@@ -4,8 +4,8 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "ui/aura/window_tree_host_mac.h"
-#include "ui/aura/window_tree_host.h"
+#include "azer/ui/aura/window_tree_host_mac.h"
+#include "azer/ui/aura/window_tree_host.h"
 
 namespace aura {
 

@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/client/aura_constants.h"
+#include "azer/ui/aura/client/aura_constants.h"
 
-#include "ui/aura/window_property.h"
+#include "azer/ui/aura/window_property.h"
 #include "ui/gfx/rect.h"
 
 DECLARE_EXPORTED_WINDOW_PROPERTY_TYPE(AURA_EXPORT, bool)

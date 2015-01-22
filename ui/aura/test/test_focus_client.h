@@ -8,8 +8,8 @@
 #include "base/basictypes.h"
 #include "base/compiler_specific.h"
 #include "base/scoped_observer.h"
-#include "ui/aura/client/focus_client.h"
-#include "ui/aura/window_observer.h"
+#include "azer/ui/aura/client/focus_client.h"
+#include "azer/ui/aura/window_observer.h"
 
 namespace aura {
 namespace test {

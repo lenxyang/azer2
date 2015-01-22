@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/x11_event_sender.h"
+#include "azer/ui/aura/test/x11_event_sender.h"
 
 #include <X11/Xlib.h>
 
-#include "ui/aura/window_tree_host.h"
+#include "azer/ui/aura/window_tree_host.h"
 #include "ui/gfx/geometry/point.h"
 
 namespace aura {

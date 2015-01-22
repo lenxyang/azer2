@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/window.h"
+#include "azer/ui/aura/window.h"
 
 #include <algorithm>
 
@@ -13,20 +13,20 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
-#include "ui/aura/client/capture_client.h"
-#include "ui/aura/client/cursor_client.h"
-#include "ui/aura/client/event_client.h"
-#include "ui/aura/client/focus_client.h"
-#include "ui/aura/client/screen_position_client.h"
-#include "ui/aura/client/visibility_client.h"
-#include "ui/aura/client/window_stacking_client.h"
-#include "ui/aura/env.h"
-#include "ui/aura/layout_manager.h"
-#include "ui/aura/window_delegate.h"
-#include "ui/aura/window_event_dispatcher.h"
-#include "ui/aura/window_observer.h"
-#include "ui/aura/window_tracker.h"
-#include "ui/aura/window_tree_host.h"
+#include "azer/ui/aura/client/capture_client.h"
+#include "azer/ui/aura/client/cursor_client.h"
+#include "azer/ui/aura/client/event_client.h"
+#include "azer/ui/aura/client/focus_client.h"
+#include "azer/ui/aura/client/screen_position_client.h"
+#include "azer/ui/aura/client/visibility_client.h"
+#include "azer/ui/aura/client/window_stacking_client.h"
+#include "azer/ui/aura/env.h"
+#include "azer/ui/aura/layout_manager.h"
+#include "azer/ui/aura/window_delegate.h"
+#include "azer/ui/aura/window_event_dispatcher.h"
+#include "azer/ui/aura/window_observer.h"
+#include "azer/ui/aura/window_tracker.h"
+#include "azer/ui/aura/window_tree_host.h"
 #include "ui/compositor/compositor.h"
 #include "ui/compositor/layer.h"
 #include "ui/events/event_target_iterator.h"

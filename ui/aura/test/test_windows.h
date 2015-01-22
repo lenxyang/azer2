@@ -9,8 +9,8 @@
 
 #include "base/compiler_specific.h"
 #include "third_party/skia/include/core/SkColor.h"
-#include "ui/aura/test/aura_test_base.h"
-#include "ui/aura/test/test_window_delegate.h"
+#include "azer/ui/aura/test/aura_test_base.h"
+#include "azer/ui/aura/test/test_window_delegate.h"
 #include "ui/wm/public/window_types.h"
 
 namespace aura {

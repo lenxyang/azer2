@@ -5,8 +5,8 @@
 #ifndef UI_AURA_SCREEN_POSITION_CLIENT_H_
 #define UI_AURA_SCREEN_POSITION_CLIENT_H_
 
-#include "ui/aura/aura_export.h"
-#include "ui/aura/window.h"
+#include "azer/ui/aura/aura_export.h"
+#include "azer/ui/aura/window.h"
 
 namespace gfx {
 class Display;

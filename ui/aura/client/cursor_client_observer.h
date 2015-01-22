@@ -5,7 +5,7 @@
 #ifndef UI_AURA_CLIENT_CURSOR_CLIENT_OBSERVER_H_
 #define UI_AURA_CLIENT_CURSOR_CLIENT_OBSERVER_H_
 
-#include "ui/aura/aura_export.h"
+#include "azer/ui/aura/aura_export.h"
 
 namespace aura {
 namespace client {

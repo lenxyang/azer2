@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/event_generator_delegate_aura.h"
+#include "azer/ui/aura/test/event_generator_delegate_aura.h"
 
 #include "base/memory/singleton.h"
-#include "ui/aura/client/screen_position_client.h"
-#include "ui/aura/window_event_dispatcher.h"
-#include "ui/aura/window_tree_host.h"
+#include "azer/ui/aura/client/screen_position_client.h"
+#include "azer/ui/aura/window_event_dispatcher.h"
+#include "azer/ui/aura/window_tree_host.h"
 
 namespace aura {
 namespace test {

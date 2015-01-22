@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/window.h"
+#include "azer/ui/aura/window.h"
 
 #include <string>
 #include <utility>
@@ -14,20 +14,20 @@
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "ui/aura/client/capture_client.h"
-#include "ui/aura/client/focus_change_observer.h"
-#include "ui/aura/client/visibility_client.h"
-#include "ui/aura/client/window_tree_client.h"
-#include "ui/aura/test/aura_test_base.h"
-#include "ui/aura/test/aura_test_utils.h"
-#include "ui/aura/test/test_window_delegate.h"
-#include "ui/aura/test/test_windows.h"
-#include "ui/aura/test/window_test_api.h"
-#include "ui/aura/window_delegate.h"
-#include "ui/aura/window_event_dispatcher.h"
-#include "ui/aura/window_observer.h"
-#include "ui/aura/window_property.h"
-#include "ui/aura/window_tree_host.h"
+#include "azer/ui/aura/client/capture_client.h"
+#include "azer/ui/aura/client/focus_change_observer.h"
+#include "azer/ui/aura/client/visibility_client.h"
+#include "azer/ui/aura/client/window_tree_client.h"
+#include "azer/ui/aura/test/aura_test_base.h"
+#include "azer/ui/aura/test/aura_test_utils.h"
+#include "azer/ui/aura/test/test_window_delegate.h"
+#include "azer/ui/aura/test/test_windows.h"
+#include "azer/ui/aura/test/window_test_api.h"
+#include "azer/ui/aura/window_delegate.h"
+#include "azer/ui/aura/window_event_dispatcher.h"
+#include "azer/ui/aura/window_observer.h"
+#include "azer/ui/aura/window_property.h"
+#include "azer/ui/aura/window_tree_host.h"
 #include "ui/base/hit_test.h"
 #include "ui/compositor/layer.h"
 #include "ui/compositor/layer_animation_observer.h"

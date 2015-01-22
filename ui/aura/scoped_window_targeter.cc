@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/scoped_window_targeter.h"
+#include "azer/ui/aura/scoped_window_targeter.h"
 
-#include "ui/aura/window.h"
+#include "azer/ui/aura/window.h"
 
 namespace aura {
 

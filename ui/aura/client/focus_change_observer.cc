@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/client/focus_change_observer.h"
+#include "azer/ui/aura/client/focus_change_observer.h"
 
-#include "ui/aura/window.h"
-#include "ui/aura/window_property.h"
+#include "azer/ui/aura/window.h"
+#include "azer/ui/aura/window_property.h"
 
 DECLARE_WINDOW_PROPERTY_TYPE(aura::client::FocusChangeObserver*)
 

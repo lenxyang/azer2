@@ -9,7 +9,7 @@
 #include "base/compiler_specific.h"
 #include "base/message_loop/message_loop.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "ui/aura/test/aura_test_helper.h"
+#include "azer/ui/aura/test/aura_test_helper.h"
 
 namespace aura {
 class Window;

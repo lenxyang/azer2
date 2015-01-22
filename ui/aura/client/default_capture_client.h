@@ -7,8 +7,8 @@
 
 #include "base/basictypes.h"
 #include "base/compiler_specific.h"
-#include "ui/aura/aura_export.h"
-#include "ui/aura/client/capture_client.h"
+#include "azer/ui/aura/aura_export.h"
+#include "azer/ui/aura/client/capture_client.h"
 
 namespace aura {
 namespace client {

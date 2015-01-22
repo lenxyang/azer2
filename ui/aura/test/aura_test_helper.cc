@@ -2,21 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/aura_test_helper.h"
+#include "azer/ui/aura/test/aura_test_helper.h"
 
 #include "base/message_loop/message_loop.h"
 #include "base/run_loop.h"
-#include "ui/aura/client/aura_constants.h"
-#include "ui/aura/client/default_capture_client.h"
-#include "ui/aura/client/focus_client.h"
-#include "ui/aura/env.h"
-#include "ui/aura/input_state_lookup.h"
-#include "ui/aura/test/env_test_helper.h"
-#include "ui/aura/test/event_generator_delegate_aura.h"
-#include "ui/aura/test/test_focus_client.h"
-#include "ui/aura/test/test_screen.h"
-#include "ui/aura/test/test_window_tree_client.h"
-#include "ui/aura/window_event_dispatcher.h"
+#include "azer/ui/aura/client/aura_constants.h"
+#include "azer/ui/aura/client/default_capture_client.h"
+#include "azer/ui/aura/client/focus_client.h"
+#include "azer/ui/aura/env.h"
+#include "azer/ui/aura/input_state_lookup.h"
+#include "azer/ui/aura/test/env_test_helper.h"
+#include "azer/ui/aura/test/event_generator_delegate_aura.h"
+#include "azer/ui/aura/test/test_focus_client.h"
+#include "azer/ui/aura/test/test_screen.h"
+#include "azer/ui/aura/test/test_window_tree_client.h"
+#include "azer/ui/aura/window_event_dispatcher.h"
 #include "ui/base/ime/dummy_input_method.h"
 #include "ui/base/ime/input_method_initializer.h"
 #include "ui/compositor/compositor.h"
@@ -25,7 +25,7 @@
 #include "ui/gfx/screen.h"
 
 #if defined(USE_X11)
-#include "ui/aura/window_tree_host_x11.h"
+#include "azer/ui/aura/window_tree_host_x11.h"
 #include "ui/base/x/x11_util.h"
 #endif
 

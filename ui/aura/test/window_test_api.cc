@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/window_test_api.h"
+#include "azer/ui/aura/test/window_test_api.h"
 
-#include "ui/aura/window.h"
-#include "ui/aura/window_event_dispatcher.h"
-#include "ui/aura/window_tree_host.h"
+#include "azer/ui/aura/window.h"
+#include "azer/ui/aura/window_event_dispatcher.h"
+#include "azer/ui/aura/window_tree_host.h"
 
 namespace aura {
 namespace test {

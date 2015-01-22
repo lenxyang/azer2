@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/aura_test_base.h"
+#include "azer/ui/aura/test/aura_test_base.h"
 
-#include "ui/aura/client/window_tree_client.h"
-#include "ui/aura/test/aura_test_helper.h"
-#include "ui/aura/test/test_window_delegate.h"
-#include "ui/aura/window.h"
+#include "azer/ui/aura/client/window_tree_client.h"
+#include "azer/ui/aura/test/aura_test_helper.h"
+#include "azer/ui/aura/test/test_window_delegate.h"
+#include "azer/ui/aura/window.h"
 #include "ui/base/ime/input_method_initializer.h"
 #include "ui/compositor/test/context_factories_for_test.h"
 #include "ui/events/event_dispatcher.h"

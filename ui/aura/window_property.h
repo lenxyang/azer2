@@ -6,8 +6,8 @@
 #define UI_AURA_WINDOW_PROPERTY_H_
 
 #include "base/basictypes.h"
-#include "ui/aura/aura_export.h"
-#include "ui/aura/window.h"
+#include "azer/ui/aura/aura_export.h"
+#include "azer/ui/aura/window.h"
 
 // This header should be included by code that defines WindowProperties. It
 // should not be included by code that only gets and sets WindowProperties.
@@ -15,7 +15,7 @@
 // To define a new WindowProperty:
 //
 //  #include "foo/foo_export.h"
-//  #include "ui/aura/window_property.h"
+//  #include "azer/ui/aura/window_property.h"
 //
 //  DECLARE_EXPORTED_WINDOW_PROPERTY_TYPE(FOO_EXPORT, MyType);
 //  namespace foo {

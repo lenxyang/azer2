@@ -5,8 +5,8 @@
 #ifndef UI_AURA_TEST_ENV_TEST_HELPER_H_
 #define UI_AURA_TEST_ENV_TEST_HELPER_H_
 
-#include "ui/aura/env.h"
-#include "ui/aura/input_state_lookup.h"
+#include "azer/ui/aura/env.h"
+#include "azer/ui/aura/input_state_lookup.h"
 
 namespace aura {
 namespace test {

@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/test_window_delegate.h"
+#include "azer/ui/aura/test/test_window_delegate.h"
 
 #include "base/strings/stringprintf.h"
-#include "ui/aura/window.h"
+#include "azer/ui/aura/window.h"
 #include "ui/base/hit_test.h"
 #include "ui/events/event.h"
 #include "ui/gfx/canvas.h"

@@ -5,8 +5,8 @@
 #ifndef UI_AURA_CLIENT_AURA_CONSTANTS_H_
 #define UI_AURA_CLIENT_AURA_CONSTANTS_H_
 
-#include "ui/aura/aura_export.h"
-#include "ui/aura/window.h"
+#include "azer/ui/aura/aura_export.h"
+#include "azer/ui/aura/window.h"
 #include "ui/base/ui_base_types.h"
 
 namespace ui {

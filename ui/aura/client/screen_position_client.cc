@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/client/screen_position_client.h"
+#include "azer/ui/aura/client/screen_position_client.h"
 
-#include "ui/aura/window_property.h"
+#include "azer/ui/aura/window_property.h"
 
 DECLARE_WINDOW_PROPERTY_TYPE(aura::client::ScreenPositionClient*)
 

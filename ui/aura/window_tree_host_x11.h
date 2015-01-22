@@ -6,8 +6,8 @@
 #define UI_AURA_WINDOW_TREE_HOST_X11_H_
 
 #include "base/memory/scoped_ptr.h"
-#include "ui/aura/aura_export.h"
-#include "ui/aura/window_tree_host.h"
+#include "azer/ui/aura/aura_export.h"
+#include "azer/ui/aura/window_tree_host.h"
 #include "ui/events/event_source.h"
 #include "ui/events/platform/platform_event_dispatcher.h"
 #include "ui/gfx/insets.h"

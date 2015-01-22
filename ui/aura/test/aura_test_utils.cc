@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/aura_test_utils.h"
+#include "azer/ui/aura/test/aura_test_utils.h"
 
-#include "ui/aura/window_tree_host.h"
+#include "azer/ui/aura/window_tree_host.h"
 
 namespace aura {
 namespace test {

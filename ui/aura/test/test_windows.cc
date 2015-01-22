@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/test_windows.h"
+#include "azer/ui/aura/test/test_windows.h"
 
 #include "base/strings/string_number_conversions.h"
-#include "ui/aura/client/aura_constants.h"
-#include "ui/aura/window.h"
+#include "azer/ui/aura/client/aura_constants.h"
+#include "azer/ui/aura/window.h"
 #include "ui/compositor/layer.h"
 #include "ui/gfx/rect.h"
 

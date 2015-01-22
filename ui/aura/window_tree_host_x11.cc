@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/window_tree_host_x11.h"
+#include "azer/ui/aura/window_tree_host_x11.h"
 
 #include <strings.h>
 #include <X11/cursorfont.h>
@@ -24,10 +24,10 @@
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
 #include "base/sys_info.h"
-#include "ui/aura/client/cursor_client.h"
-#include "ui/aura/env.h"
-#include "ui/aura/window.h"
-#include "ui/aura/window_event_dispatcher.h"
+#include "azer/ui/aura/client/cursor_client.h"
+#include "azer/ui/aura/env.h"
+#include "azer/ui/aura/window.h"
+#include "azer/ui/aura/window_event_dispatcher.h"
 #include "ui/base/cursor/cursor.h"
 #include "ui/base/ui_base_switches.h"
 #include "ui/base/view_prop.h"

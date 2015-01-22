@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/remote_window_tree_host_win.h"
+#include "azer/ui/aura/remote_window_tree_host_win.h"
 
 #include <windows.h>
 
@@ -11,10 +11,10 @@
 #include "base/message_loop/message_loop.h"
 #include "ipc/ipc_message.h"
 #include "ipc/ipc_sender.h"
-#include "ui/aura/client/aura_constants.h"
-#include "ui/aura/client/cursor_client.h"
-#include "ui/aura/window_event_dispatcher.h"
-#include "ui/aura/window_property.h"
+#include "azer/ui/aura/client/aura_constants.h"
+#include "azer/ui/aura/client/cursor_client.h"
+#include "azer/ui/aura/window_event_dispatcher.h"
+#include "azer/ui/aura/window_property.h"
 #include "ui/base/cursor/cursor_loader_win.h"
 #include "ui/base/ime/composition_text.h"
 #include "ui/base/ime/input_method.h"

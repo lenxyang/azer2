@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/aura/test/test_cursor_client.h"
+#include "azer/ui/aura/test/test_cursor_client.h"
 
-#include "ui/aura/client/cursor_client_observer.h"
+#include "azer/ui/aura/client/cursor_client_observer.h"
 
 namespace aura {
 namespace test {
