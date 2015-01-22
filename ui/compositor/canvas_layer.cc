@@ -30,7 +30,7 @@ void CanvasLayer::Redraw() {
     scoped_ptr<gfx::Canvas> canvas(
         gfx::Canvas::CreateCanvasWithoutScaling(skcanvas, 1.0f));
     delegate_->OnPaintLayer(canvas.get());
-    canvas->DrawColor(background_color_);
+    canvas->DrawColor(color());
     canvas_->EndPaint();
     texture_ = canvas_->GetTexture();
   }

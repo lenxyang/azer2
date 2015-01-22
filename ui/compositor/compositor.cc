@@ -61,7 +61,7 @@ gfx::Rect Compositor::CalcRect(Layer* layer, const gfx::Rect& rect) {
 
 void Compositor::ScheduleRedrawRect(const gfx::Rect& damage_rect) {
   if (root_layer()) {
-    root_layer()->ScheduleRedrawRect(damage_rect);
+    root_layer()->SchedulePaint(damage_rect);
   }
 }
 

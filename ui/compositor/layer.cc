@@ -205,11 +205,11 @@ void Layer::StackAtBottom(Layer* child) {
   StackBelow(child, children_.front());
 }
 
-void Layer::StackAbove(Layer* child, Layer* target) {
+void Layer::StackAbove(Layer* child, Layer* other) {
   StackRelativeTo(child, other, true);
 }
 
-void Layer::StackBelow(Layer* child, Layer* target) {
+void Layer::StackBelow(Layer* child, Layer* other) {
   StackRelativeTo(child, other, false);
 }
 
@@ -231,13 +231,10 @@ void Layer::StackRelativeTo(Layer* child, Layer* other, bool above) {
       (child_i < other_i ? other_i - 1 : other_i);
   children_.erase(children_.begin() + child_i);
   children_.insert(children_.begin() + dest_i, child);
-
-  child->cc_layer_->RemoveFromParent();
-  cc_layer_->InsertChild(child->cc_layer_, dest_i);
 }
 
 void Layer::SetColor(SkColor color) {
-  background_color_ = color;
+  color_ = color;
 }
 
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {

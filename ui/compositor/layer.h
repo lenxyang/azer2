@@ -4,6 +4,7 @@
 
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
+#include "third_party/skia/include/core/SkColor.h"
 #include "ui/gfx/geometry/size.h"
 #include "ui/gfx/geometry/point.h"
 #include "ui/gfx/geometry/rect.h"
@@ -70,6 +71,7 @@ class AZER_EXPORT Layer {
 
   // Sets the layer's fill color.  May only be called for LAYER_SOLID_COLOR.
   void SetColor(SkColor color);
+  SkColor color() { return color_;}
 
   // Adds |invalid_rect| to the Layer's pending invalid rect and calls
   // ScheduleDraw(). Returns false if the paint request is ignored.
@@ -153,7 +155,7 @@ class AZER_EXPORT Layer {
   LayerList children_;
   Layer* parent_;
 
-  SkColor background_color_;
+  SkColor color_;
   LayerType type_;
   LayerObserverList observers_;
   friend class LayerTreeHost;

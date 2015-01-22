@@ -5,8 +5,9 @@
 #include <vector>
 
 #include "base/basictypes.h"
-#include "ui/gfx/geometry/rect.h"
 #include "base/memory/ref_counted.h"
+#include "third_party/skia/include/core/SkColor.h"
+#include "ui/gfx/geometry/rect.h"
 
 #include "azer/base/export.h"
 #include "azer/render/renderer.h"

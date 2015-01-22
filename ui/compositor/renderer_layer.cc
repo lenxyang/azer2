@@ -19,10 +19,10 @@ void RendererLayer::SetBounds(const gfx::Rect& bounds) {
 }
 
 void RendererLayer::Redraw() {
-  renderer_->Clear(Vector4(SkColorGetR(background_color_), 
-                           SkColorGetG(background_color_), 
-                           SkColorGetB(background_color_), 
-                           SkColorGetA(background_color_)));
+  renderer_->Clear(Vector4(SkColorGetR(color()), 
+                           SkColorGetG(color()), 
+                           SkColorGetB(color()), 
+                           SkColorGetA(color())));
 }
 }  // namespace compositor
 }  // namespace azer
