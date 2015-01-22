@@ -194,35 +194,46 @@ void Layer::SetNeedRedraw(const gfx::Rect& rect) {
 }
 
 void Layer::StackAtTop(Layer* child) {
+  if (children_.size() <= 1 || child == children_.back())
+    return;  // Already in front.
+  StackAbove(child, children_.back());
 }
 
 void Layer::StackAtBottom(Layer* child) {
+  if (children_.size() <= 1 || child == children_.front())
+    return;  // Already on bottom.
+  StackBelow(child, children_.front());
 }
 
 void Layer::StackAbove(Layer* child, Layer* target) {
-  DCHECK_NE(child, target);
-  DCHECK(child);
-  DCHECK(target);
-  DCHECK_NE(child->parent(), this);
-  DCHECK_NE(target->parent(), this);
-
-  const size_t child_i =
-      std::find(children_.begin(), children_.end(), child) - children_.begin();
-  const size_t target_i =
-      std::find(children_.begin(), children_.end(), target) - children_.begin();
-  if (child_i == target_i + 1) {
-    return;
-  }
-
-
-  const size_t dest_i = target_i + 1;
-  children_.erase(children_.begin() + child_i);
-  children_.insert(children_.begin() + dest_i, child);
-  child->OnStackingChanged();
+  StackRelativeTo(child, other, true);
 }
 
 void Layer::StackBelow(Layer* child, Layer* target) {
-  StackAbove(target, child);
+  StackRelativeTo(child, other, false);
+}
+
+void Layer::StackRelativeTo(Layer* child, Layer* other, bool above) {
+  DCHECK_NE(child, other);
+  DCHECK_EQ(this, child->parent());
+  DCHECK_EQ(this, other->parent());
+
+  const size_t child_i =
+      std::find(children_.begin(), children_.end(), child) - children_.begin();
+  const size_t other_i =
+      std::find(children_.begin(), children_.end(), other) - children_.begin();
+  if ((above && child_i == other_i + 1) || (!above && child_i + 1 == other_i))
+    return;
+
+  const size_t dest_i =
+      above ?
+      (child_i < other_i ? other_i : other_i + 1) :
+      (child_i < other_i ? other_i - 1 : other_i);
+  children_.erase(children_.begin() + child_i);
+  children_.insert(children_.begin() + dest_i, child);
+
+  child->cc_layer_->RemoveFromParent();
+  cc_layer_->InsertChild(child->cc_layer_, dest_i);
 }
 }  // namespace compositor
 }  // namespace azer

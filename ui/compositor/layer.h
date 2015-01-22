@@ -124,6 +124,8 @@ class AZER_EXPORT Layer {
   void OnParentBoundsChanged();
   void OnBoundsChanged();
  protected:
+  void StackRelativeTo(Layer* child, Layer* other, bool above);
+
   void CalcTargetBounds();
   void CalcOverlayBounds();
   void CalcTexBounds();
