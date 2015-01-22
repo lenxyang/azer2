@@ -89,7 +89,7 @@ const Widget* Widget::GetRootWidget() const {
 
 void Widget::SetName(const std::string& name) {
   DCHECK(layer_);
-  layer_->SetName(name);
+  layer_->set_name(name);
 }
 
 const std::string& Widget::name() const {
@@ -202,20 +202,21 @@ compositor::Layer* Widget::CreateLayerByType() {
       NOTREACHED();
       break;
     case kNoDraw:
-      layer = new compositor::NoDrawLayer(this);
+      layer = new compositor::NoDrawLayer();
       break;
     case kCanvas:
-      layer = new compositor::CanvasLayer(this);
+      layer = new compositor::CanvasLayer();
       break;
     case k3DRenderer:
-      layer = new compositor::RendererLayer(this);
+      layer = new compositor::RendererLayer();
       break;
     case kBitmap:
-      layer = new compositor::BitmapLayer(this);
+      layer = new compositor::BitmapLayer();
       break;
     default: layer = NULL;
       break;
   }
+  layer->set_delegate(this);
   return layer;
 }
 
@@ -424,9 +425,9 @@ void Widget::StackChildLayerRelativeTo(Widget* child, Widget* target,
   DCHECK(parent == child->layer()->parent());
   DCHECK(parent == target->layer()->parent());
   if (direction == STACK_ABOVE) {
-    parent->StackLayerAbove(child->layer(), target->layer());
+    parent->StackAbove(child->layer(), target->layer());
   } else {
-    parent->StackLayerBelow(child->layer(), target->layer());
+    parent->StackBelow(child->layer(), target->layer());
   }
 }
 

@@ -134,7 +134,7 @@ gfx::Rect View::GetLocalBounds() const {
 }
 
 gfx::Rect View::GetLayerBoundsInPixel() const {
-  return layer()->target_bounds();
+  return layer()->GetTargetBounds();
 }
 
 gfx::Insets View::GetInsets() const {
