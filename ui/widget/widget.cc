@@ -496,5 +496,18 @@ void Widget::NotifyWidgetVisibilityChangedUp(Widget* target, bool visible) {
     DCHECK(ret);
   }
 }
+
+bool Widget::ContainsPointInRoot(const gfx::Point& point_in_root) const {
+  const Widget* root_widget = GetRootWidget();
+  if (!root_widget)
+    return false;
+  gfx::Point local_point(point_in_root);
+  ConvertPointToTarget(root_widget, this, &local_point);
+  return gfx::Rect(bounds().size()).Contains(local_point);
+}
+
+bool Widget::ContainsPoint(const gfx::Point& local_point) const {
+  return gfx::Rect(bounds().size()).Contains(local_point);
+}
 }  // namespace widget
 }  // namespace azer

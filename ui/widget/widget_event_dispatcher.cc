@@ -257,6 +257,9 @@ void WidgetEventDispatcher::OnWidgetDestroying(Widget* widget) {
   SynthesizeMouseMoveAfterChangeToWidget(widget);
 }
 
+void WidgetEventDispatcher::DispatchMouseExitToHidingWidget(Widget* widget) {
+}
+
 void WidgetEventDispatcher::OnWidgetDestroyed(Widget* widget) {
   // We observe all widgets regardless of what root Widget (if any) they're
   // attached to.
@@ -307,6 +310,10 @@ void WidgetEventDispatcher::OnWidgetVisibilityChanged(Widget* widget,
   // so the widget may no longer be valid after this call.
   if (!visible)
     OnWidgetHidden(widget, WIDGET_HIDDEN);
+}
+
+ui::EventDispatchDetails WidgetEventDispatcher::DispatchHeldEvents() {
+  return DispatchDetails();
 }
 
 void WidgetEventDispatcher::OnWidgetBoundsChanged(Widget* widget,
