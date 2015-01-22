@@ -1,4 +1,4 @@
-#include "azer/ui/aura/layer/layer.cc"
+#include "azer/ui/aura/layer/layer.h"
 
 #include <algorithm>
 
@@ -16,6 +16,12 @@
 #include "ui/gfx/size_conversions.h"
 
 namespace ui {
+
+const Layer* GetRoot(const Layer* layer) {
+  while (layer->parent())
+    layer = layer->parent();
+  return layer;
+}
 
 Layer::Layer() {
 }
@@ -130,8 +136,8 @@ void Layer::set_name(const std::string& name) {
 }
 
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
-    layer_->SchedulePaint(invalid_rect);
-  }
+  layer_->SchedulePaint(invalid_rect);
+}
 
 void Layer::ScheduleDraw() {
   layer_->ScheduleDraw();
