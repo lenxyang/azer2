@@ -93,6 +93,7 @@ component("aura") {
 
   defines = [
     "AURA_IMPLEMENTATION",
+    "COMPOSITOR_IMPLEMENTATION",
   ]
 
   deps = [

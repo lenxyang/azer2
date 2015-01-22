@@ -1,5 +1,5 @@
 
-static_library("layer") {
+source_set("compositor") {
   sources = [
     "compositor_export.h",
     "layer_owner.cc",
@@ -17,4 +17,6 @@ static_library("layer") {
     "//ui/gfx",
     "//ui/gfx/geometry",
   ]
+
+  defines = ["COMPOSITOR_IMPLEMENTATION"]
 }

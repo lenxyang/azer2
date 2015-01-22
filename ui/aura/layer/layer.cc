@@ -137,6 +137,7 @@ void Layer::set_name(const std::string& name) {
 
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
   layer_->SchedulePaint(invalid_rect);
+  return true;
 }
 
 void Layer::ScheduleDraw() {
