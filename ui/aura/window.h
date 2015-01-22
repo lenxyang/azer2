@@ -17,7 +17,6 @@
 #include "azer/ui/aura/aura_export.h"
 #include "azer/ui/aura/window_layer_type.h"
 #include "azer/ui/aura/window_observer.h"
-#include "ui/compositor/layer_animator.h"
 #include "ui/compositor/layer_delegate.h"
 #include "ui/compositor/layer_owner.h"
 #include "ui/events/event_constants.h"
