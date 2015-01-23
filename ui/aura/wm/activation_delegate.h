@@ -5,7 +5,7 @@
 #ifndef UI_WM_PUBLIC_ACTIVATION_DELEGATE_H_
 #define UI_WM_PUBLIC_ACTIVATION_DELEGATE_H_
 
-#include "ui/aura/aura_export.h"
+#include "azer/ui/aura/aura_export.h"
 
 namespace ui {
 class Event;

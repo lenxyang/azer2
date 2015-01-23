@@ -5,7 +5,7 @@
 #ifndef UI_WM_PUBLIC_ACTIVATION_CHANGE_OBSERVER_H_
 #define UI_WM_PUBLIC_ACTIVATION_CHANGE_OBSERVER_H_
 
-#include "ui/aura/aura_export.h"
+#include "azer/ui/aura/aura_export.h"
 
 namespace aura {
 class Window;

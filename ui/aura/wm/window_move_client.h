@@ -5,7 +5,7 @@
 #ifndef UI_WM_PUBLIC_WINDOW_MOVE_CLIENT_H_
 #define UI_WM_PUBLIC_WINDOW_MOVE_CLIENT_H_
 
-#include "ui/aura/aura_export.h"
+#include "azer/ui/aura/aura_export.h"
 #include "ui/gfx/vector2d.h"
 
 namespace gfx {

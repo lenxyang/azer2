@@ -5,7 +5,7 @@
 #ifndef UI_WM_PUBLIC_SCOPED_TOOLTIP_DISABLER_H_
 #define UI_WM_PUBLIC_SCOPED_TOOLTIP_DISABLER_H_
 
-#include "ui/aura/window_observer.h"
+#include "azer/ui/aura/window_observer.h"
 
 namespace aura {
 namespace client {
