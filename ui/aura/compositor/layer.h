@@ -161,6 +161,8 @@ class COMPOSITOR_EXPORT Layer {
   void SuppressPaint();
 
   azer::compositor::Layer* layer() { return layer_;}
+  float device_scale_factor() const { return 1.0f;}
+  bool Contains(Layer* layer);
  private:
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;

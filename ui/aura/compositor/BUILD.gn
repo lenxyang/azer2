@@ -2,6 +2,8 @@
 source_set("compositor") {
   sources = [
     "compositor_export.h",
+    "dip_util.cc",
+    "dip_util.h",
     "layer_owner.cc",
     "layer_owner.h",
     "layer_owner_delegate.h",

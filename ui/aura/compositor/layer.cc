@@ -36,6 +36,10 @@ Layer::~Layer() {
   }
 }
 
+const Compositor* Layer::GetCompositor() const {
+  return NULL;
+}
+
 void Layer::Add(Layer* child) {
   layer_->Add(child->layer());
 }
