@@ -65,7 +65,7 @@ class COMPOSITOR_EXPORT Layer {
   void StackBelow(Layer* child, Layer* other);
 
   // The parent.
-  const Layer* parent() const { return parent();}
+  const Layer* parent() const { return parent_;}
   Layer* parent() { return parent_;}
 
   LayerType type() const { return type_; }

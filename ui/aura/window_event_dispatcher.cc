@@ -20,7 +20,7 @@
 #include "azer/ui/aura/window_tracker.h"
 #include "azer/ui/aura/window_tree_host.h"
 #include "ui/base/hit_test.h"
-#include "azer/ui/aura/layer/dip_util.h"
+#include "azer/ui/aura/compositor/dip_util.h"
 #include "ui/events/event.h"
 #include "ui/events/gestures/gesture_recognizer.h"
 #include "ui/events/gestures/gesture_types.h"
