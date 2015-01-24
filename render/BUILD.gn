@@ -80,10 +80,10 @@ shared_library("render") {
     "//ui/gfx",
     "//ui/gfx/geometry",
     "//base",
+    "compositor",
     ":render2d",
     "../ui/adapter",
     "../ui/base",
-    "../ui/compositor",
     "../ui/widget",
     "../ui/views",
   ]
@@ -119,7 +119,7 @@ test("unittests") {
 
   defines = ["AZER_UNITTEST"]
   deps = [
-    "//azer/ui/compositor:unittests",
+    "compositor:unittests",
     "//azer/ui/widget:unittests",
     "//azer/math:math",
     "//azer/third_party/glm:glm",
