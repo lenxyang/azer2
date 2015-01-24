@@ -205,4 +205,11 @@ bool Layer::GetTargetTransformRelativeTo(const Layer* ancestor,
   }
   return p == ancestor;
 }
+
+void Layer::SetSubpixelPositionOffset(const gfx::Vector2dF offset) {
+}
+
+bool Layer::Contains(Layer* layer) {
+  return true;
+}
 }  // namespace ui

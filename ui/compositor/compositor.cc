@@ -74,7 +74,7 @@ void Compositor::ScheduleDraw() {
   }
 }
 
-const gfx::Size& Compositor::size() const {
+gfx::Size Compositor::size() const {
   if (root_layer()) {
     return root_layer()->bounds().size();
   } else {

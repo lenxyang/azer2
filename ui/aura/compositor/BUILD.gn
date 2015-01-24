@@ -1,6 +1,7 @@
 
 source_set("compositor") {
   sources = [
+    "compositor.cc",
     "compositor_export.h",
     "dip_util.cc",
     "dip_util.h",

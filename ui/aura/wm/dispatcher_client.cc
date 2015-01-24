@@ -2,9 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "azer/azer/ui/aura/wm/dispatcher_client.h"
+#include "azer/ui/aura/wm/dispatcher_client.h"
 
 #include "base/callback.h"
+#include "base/message_loop/message_loop.h"
 #include "azer/ui/aura/window.h"
 #include "azer/ui/aura/window_property.h"
 

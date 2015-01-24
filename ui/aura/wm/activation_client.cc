@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "azer/azer/ui/aura/wm/activation_client.h"
+#include "azer/ui/aura/wm/activation_client.h"
 
 #include "azer/ui/aura/window.h"
 #include "azer/ui/aura/window_property.h"

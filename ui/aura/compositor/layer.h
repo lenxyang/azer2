@@ -163,6 +163,8 @@ class COMPOSITOR_EXPORT Layer {
   azer::compositor::Layer* layer() { return layer_;}
   float device_scale_factor() const { return 1.0f;}
   bool Contains(Layer* layer);
+
+  void SetSubpixelPositionOffset(const gfx::Vector2dF offset);
  private:
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;

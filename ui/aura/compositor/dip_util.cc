@@ -5,10 +5,8 @@
 #include "ui/compositor/dip_util.h"
 
 #include "base/command_line.h"
-#include "cc/layers/layer.h"
-#include "ui/compositor/compositor.h"
-#include "ui/compositor/compositor_switches.h"
-#include "ui/compositor/layer.h"
+#include "azer/ui/aura/compositor/compositor.h"
+#include "azer/ui/aura/compositor/layer.h"
 #include "ui/gfx/display.h"
 #include "ui/gfx/geometry/safe_integer_conversions.h"
 #include "ui/gfx/point.h"
@@ -17,10 +15,6 @@
 #include "ui/gfx/rect_conversions.h"
 #include "ui/gfx/size.h"
 #include "ui/gfx/size_conversions.h"
-
-#if DCHECK_IS_ON
-#include "ui/compositor/layer_animator.h"
-#endif
 
 namespace ui {
 
@@ -107,21 +101,6 @@ void SnapLayerToPhysicalPixelBoundary(ui::Layer* snapped_layer,
   gfx::Vector2dF fudge = view_offset_snapped - view_offset;
   fudge.Scale(1.0 / scale_factor);
   layer_to_snap->SetSubpixelPositionOffset(fudge);
-#if DCHECK_IS_ON
-  gfx::Point layer_offset;
-  gfx::PointF origin;
-  Layer::ConvertPointToLayer(
-      layer_to_snap->parent(), snapped_layer, &layer_offset);
-  if (layer_to_snap->GetAnimator()->is_animating()) {
-    origin = layer_to_snap->GetTargetBounds().origin() +
-             layer_to_snap->subpixel_position_offset();
-  } else {
-    cc::Layer* cc_layer = layer_to_snap->cc_layer();
-    origin = cc_layer->position();
-  }
-  CheckSnapped((layer_offset.x() + origin.x()) * scale_factor);
-  CheckSnapped((layer_offset.y() + origin.y()) * scale_factor);
-#endif
 }
 
 }  // namespace ui

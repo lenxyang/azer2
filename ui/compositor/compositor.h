@@ -50,7 +50,7 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   LayerTreeHost* GetTreeHost() { return host_;}
 
   // Returns the size of the widget that is being drawn to in pixel coordinates.
-  const gfx::Size& size() const;
+  gfx::Size size() const;
 
   // Sets the background color used for areas that aren't covered by
   // the |root_layer|.
