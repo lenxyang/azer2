@@ -4,8 +4,7 @@
 
 import ("//build/config/ui.gni")
 
-component("aura") {
-  output_name="aura2"
+source_set("aura") {
   sources = [
     "client/aura_constants.cc",
     "client/aura_constants.h",
@@ -102,7 +101,6 @@ component("aura") {
     "//base/third_party/dynamic_annotations",
     "//skia",
     "//ui/base",
-    "//azer/ui/compositor",
     "//ui/events",
     "//ui/events/platform",
     "//ui/events:events_base",
@@ -185,7 +183,7 @@ source_set("test_support") {
   ]
 
   public_deps = [
-    ":aura",
+    "//azer/ui",
   ]
   deps = [
     "//skia",
@@ -234,38 +232,6 @@ executable("demo") {
     ":test_support",
     "//base",
     "//base:i18n",
-    "//skia",
-    "//third_party/icu",
-    "//ui/base",
-    "//ui/compositor",
-    "//ui/compositor:test_support",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
-    "//ui/gl",
-  ]
-
-  if (use_x11) {
-    deps += [
-      "//ui/gfx/x",
-    ]
-  }
-}
-
-executable("bench") {
-  output_name = "aura2_bench"
-  testonly = true
-
-  sources = [
-    "bench/bench_main.cc",
-  ]
-
-  deps = [
-    ":test_support",
-    "//base",
-    "//base:i18n",
-    "//cc",
-    "//gpu/command_buffer/client:gles2_interface",
     "//skia",
     "//third_party/icu",
     "//ui/base",

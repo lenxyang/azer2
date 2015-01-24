@@ -1,0 +1,8 @@
+
+component("ui") {
+  output_name = "aui"
+  deps = [
+    "aura",
+    "compositor",
+  ]
+}
