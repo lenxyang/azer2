@@ -1,10 +1,10 @@
-#include "azer/ui/compositor/layer_tree_host.h"
+#include "azer/render/compositor/layer_tree_host.h"
 
-#include "azer/ui/compositor/layer.h"
-#include "azer/ui/compositor/canvas_layer.h"
-#include "azer/ui/compositor/nodraw_layer.h"
-#include "azer/ui/compositor/renderer_layer.h"
-#include "azer/ui/compositor/compositor.h"
+#include "azer/render/compositor/layer.h"
+#include "azer/render/compositor/canvas_layer.h"
+#include "azer/render/compositor/nodraw_layer.h"
+#include "azer/render/compositor/renderer_layer.h"
+#include "azer/render/compositor/compositor.h"
 #include "azer/render/render_system.h"
 
 namespace azer {

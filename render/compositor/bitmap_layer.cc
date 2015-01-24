@@ -1,4 +1,4 @@
-#include "azer/ui/compositor/bitmap_layer.h"
+#include "azer/render/compositor/bitmap_layer.h"
 
 namespace azer {
 namespace compositor {

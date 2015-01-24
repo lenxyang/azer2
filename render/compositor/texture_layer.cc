@@ -1,12 +1,12 @@
-#include "azer/ui/compositor/texture_layer.h"
+#include "azer/render/compositor/texture_layer.h"
 
 
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/rect_f.h"
 #include "base/logging.h"
 
-#include "azer/ui/compositor/compositor.h"
-#include "azer/ui/compositor/layer_tree_host.h"
+#include "azer/render/compositor/compositor.h"
+#include "azer/render/compositor/layer_tree_host.h"
 #include "azer/render/render.h"
 
 namespace azer {

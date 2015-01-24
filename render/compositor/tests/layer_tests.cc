@@ -1,4 +1,4 @@
-#include "azer/ui/compositor/tests/test_base.h"
+#include "azer/render/compositor/tests/test_base.h"
 
 namespace azer {
 namespace compositor {

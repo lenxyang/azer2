@@ -5,9 +5,9 @@
 #include "base/message_loop/message_loop.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-#include "azer/ui/compositor/layer.h"
-#include "azer/ui/compositor/layer_tree_host.h"
-#include "azer/ui/compositor/compositor.h"
+#include "azer/render/compositor/layer.h"
+#include "azer/render/compositor/layer_tree_host.h"
+#include "azer/render/compositor/compositor.h"
 
 namespace azer {
 namespace compositor {

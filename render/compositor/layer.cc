@@ -1,4 +1,4 @@
-#include "azer/ui/compositor/layer.h"
+#include "azer/render/compositor/layer.h"
 
 #include <algorithm>
 #include "base/logging.h"
@@ -10,8 +10,8 @@
 #include "ui/gfx/size_conversions.h"
 #include "ui/gfx/transform.h"
 
-#include "azer/ui/compositor/compositor.h"
-#include "azer/ui/compositor/layer_tree_host.h"
+#include "azer/render/compositor/compositor.h"
+#include "azer/render/compositor/layer_tree_host.h"
 
 namespace azer {
 namespace compositor {

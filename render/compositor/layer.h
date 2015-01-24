@@ -11,7 +11,7 @@
 #include "ui/gfx/transform.h"
 
 #include "azer/base/export.h"
-#include "azer/ui/compositor/layer_observer.h"
+#include "azer/render/compositor/layer_observer.h"
 
 namespace gfx {
 class Transform;

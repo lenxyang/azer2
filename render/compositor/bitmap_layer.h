@@ -3,7 +3,7 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "azer/render/render.h"
-#include "azer/ui/compositor/layer.h"
+#include "azer/render/compositor/layer.h"
 
 class SkBitmap;
 

@@ -7,8 +7,8 @@
 #include "azer/base/export.h"
 #include "azer/render/render.h"
 #include "azer/render/render_system_observer.h"
-#include "azer/ui/compositor/layer_delegate.h"
-#include "azer/ui/compositor/layer_observer.h"
+#include "azer/render/compositor/layer_delegate.h"
+#include "azer/render/compositor/layer_observer.h"
 
 
 namespace azer {

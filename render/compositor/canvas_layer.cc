@@ -1,10 +1,10 @@
-#include "azer/ui/compositor/canvas_layer.h"
+#include "azer/render/compositor/canvas_layer.h"
 
 #include "base/logging.h"
 #include "ui/gfx/canvas.h"
 #include "azer/render/render.h"
 #include "azer/render/context2d.h"
-#include "azer/ui/compositor/layer_delegate.h"
+#include "azer/render/compositor/layer_delegate.h"
 
 
 namespace azer {

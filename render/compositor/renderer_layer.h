@@ -3,7 +3,7 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "azer/render/render.h"
-#include "azer/ui/compositor/texture_layer.h"
+#include "azer/render/compositor/texture_layer.h"
 
 namespace azer {
 namespace compositor {
