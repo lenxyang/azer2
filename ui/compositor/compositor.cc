@@ -1,9 +1,9 @@
 #include "azer/ui/aura/compositor/compositor.h"
 
 #include "azer/ui/aura/compositor/layer.h"
-#include "azer/ui/compositor/compositor.h"
-#include "azer/ui/compositor/layer.h"
-#include "azer/ui/compositor/layer_tree_host.h"
+#include "azer/render/compositor/compositor.h"
+#include "azer/render/compositor/layer.h"
+#include "azer/render/compositor/layer_tree_host.h"
 
 namespace ui {
 
