@@ -5,8 +5,8 @@
 #include "ui/compositor/dip_util.h"
 
 #include "base/command_line.h"
-#include "azer/ui/aura/compositor/compositor.h"
-#include "azer/ui/aura/compositor/layer.h"
+#include "azer/ui/compositor/compositor.h"
+#include "azer/ui/compositor/layer.h"
 #include "ui/gfx/display.h"
 #include "ui/gfx/geometry/safe_integer_conversions.h"
 #include "ui/gfx/point.h"

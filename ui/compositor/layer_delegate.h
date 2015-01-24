@@ -6,7 +6,7 @@
 #define UI_COMPOSITOR_LAYER_DELEGATE_H_
 
 #include "base/callback_forward.h"
-#include "azer/ui/aura/compositor/compositor_export.h"
+#include "azer/ui/compositor/compositor_export.h"
 
 namespace gfx {
 class Canvas;

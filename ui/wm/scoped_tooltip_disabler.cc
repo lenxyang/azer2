@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "azer/ui/aura/wm/scoped_tooltip_disabler.h"
+#include "azer/ui/wm/scoped_tooltip_disabler.h"
 
 #include "azer/ui/aura/window.h"
-#include "azer/ui/aura/wm/tooltip_client.h"
+#include "azer/ui/wm/tooltip_client.h"
 
 namespace aura {
 namespace client {
