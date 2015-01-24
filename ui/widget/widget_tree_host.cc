@@ -9,7 +9,7 @@
 #include "ui/gfx/size_conversions.h"
 
 #include "azer/render/render_system.h"
-#include "azer/ui/compositor/api.h"
+#include "azer/render/compositor/api.h"
 #include "azer/ui/widget/widget.h"
 #include "azer/ui/widget/widget_event_dispatcher.h"
 #include "azer/ui/widget/widget_targeter.h"

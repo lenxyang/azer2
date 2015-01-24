@@ -21,8 +21,8 @@
 #include "base/win/scoped_gdi_object.h"
 #endif
 
-#include "azer/ui/compositor/layer.h"
-#include "azer/ui/compositor/compositor.h"
+#include "azer/render/compositor/layer.h"
+#include "azer/render/compositor/compositor.h"
 #include "azer/ui/widget/widget.h"
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/border.h"

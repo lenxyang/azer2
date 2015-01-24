@@ -10,7 +10,7 @@
 #include "ui/gfx/geometry/rect.h"
 
 #include "azer/base/export.h"
-#include "azer/ui/compositor/layer_delegate.h"
+#include "azer/render/compositor/layer_delegate.h"
 
 
 namespace gfx {

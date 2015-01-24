@@ -5,7 +5,7 @@
 #ifndef UI_COMPOSITOR_LAYER_H_
 #define UI_COMPOSITOR_LAYER_H_
 
-#include "azer/ui/compositor/layer.h"
+#include "azer/render/compositor/layer.h"
 #include "azer/ui/aura/compositor/compositor.h"
 #include "azer/ui/aura/compositor/layer_delegate.h"
 #include "azer/ui/aura/compositor/layer_type.h"

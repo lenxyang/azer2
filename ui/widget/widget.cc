@@ -9,7 +9,7 @@
 #include "ui/gfx/scoped_canvas.h"
 #include "ui/gfx/screen.h"
 
-#include "azer/ui/compositor/api.h"
+#include "azer/render/compositor/api.h"
 #include "azer/ui/widget/widget_delegate.h"
 #include "azer/ui/widget/widget_context.h"
 #include "azer/ui/widget/widget_event_dispatcher.h"
