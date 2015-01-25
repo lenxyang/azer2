@@ -64,6 +64,9 @@ class COMPOSITOR_EXPORT Layer {
   // layer.
   void StackBelow(Layer* child, Layer* other);
 
+  // Returns the child Layers.
+  const std::vector<Layer*>& children() const { return children_; }
+
   // The parent.
   const Layer* parent() const { return parent_;}
   Layer* parent() { return parent_;}
@@ -177,6 +180,10 @@ class COMPOSITOR_EXPORT Layer {
  private:
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
+
+  // This layer's children, in bottom-to-top stacking order.
+  std::vector<Layer*> children_;
+
   Layer* parent_;
   LayerDelegate* delegate_;
   LayerType type_;
