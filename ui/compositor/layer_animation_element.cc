@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/compositor/layer_animation_element.h"
+#include "azer/ui/compositor/layer_animation_element.h"
 
 #include "base/compiler_specific.h"
 #include "cc/animation/animation.h"
 #include "cc/animation/animation_id_provider.h"
-#include "ui/compositor/float_animation_curve_adapter.h"
-#include "ui/compositor/layer.h"
-#include "ui/compositor/layer_animation_delegate.h"
-#include "ui/compositor/layer_animator.h"
-#include "ui/compositor/scoped_animation_duration_scale_mode.h"
-#include "ui/compositor/transform_animation_curve_adapter.h"
+#include "azer/ui/compositor/float_animation_curve_adapter.h"
+#include "azer/ui/compositor/layer.h"
+#include "azer/ui/compositor/layer_animation_delegate.h"
+#include "azer/ui/compositor/layer_animator.h"
+#include "azer/ui/compositor/scoped_animation_duration_scale_mode.h"
+#include "azer/ui/compositor/transform_animation_curve_adapter.h"
 #include "ui/gfx/animation/tween.h"
 #include "ui/gfx/interpolated_transform.h"
 

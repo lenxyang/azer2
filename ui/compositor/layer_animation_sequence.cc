@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/compositor/layer_animation_sequence.h"
+#include "azer/ui/compositor/layer_animation_sequence.h"
 
 #include <algorithm>
 #include <iterator>
 
 #include "base/debug/trace_event.h"
 #include "cc/animation/animation_id_provider.h"
-#include "ui/compositor/layer_animation_delegate.h"
-#include "ui/compositor/layer_animation_element.h"
-#include "ui/compositor/layer_animation_observer.h"
+#include "azer/ui/compositor/layer_animation_delegate.h"
+#include "azer/ui/compositor/layer_animation_element.h"
+#include "azer/ui/compositor/layer_animation_observer.h"
 
 namespace ui {
 

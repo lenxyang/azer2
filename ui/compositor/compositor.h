@@ -76,6 +76,10 @@ class COMPOSITOR_EXPORT Compositor {
   // Schedule redraw and append damage_rect to the damage region calculated
   // from changes to layer properties.
   void ScheduleRedrawRect(const gfx::Rect& damage_rect);
+
+  void AddAnimationObserver(CompositorAnimationObserver* observer);
+  void RemoveAnimationObserver(CompositorAnimationObserver* observer);
+  bool HasAnimationObserver(CompositorAnimationObserver* observer);
  private:
   gfx::AcceleratedWidget widget_;
 

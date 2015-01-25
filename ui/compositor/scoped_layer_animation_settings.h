@@ -10,8 +10,8 @@
 #include "base/memory/scoped_vector.h"
 #include "base/time/time.h"
 
-#include "ui/compositor/compositor_export.h"
-#include "ui/compositor/layer_animator.h"
+#include "azer/ui/compositor/compositor_export.h"
+#include "azer/ui/compositor/layer_animator.h"
 #include "ui/gfx/animation/tween.h"
 
 namespace ui {

@@ -2,19 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/compositor/layer_animator.h"
+#include "azer/ui/compositor/layer_animator.h"
 
 #include "base/debug/trace_event.h"
 #include "base/logging.h"
 #include "base/memory/scoped_ptr.h"
 #include "cc/animation/animation_id_provider.h"
 #include "cc/output/begin_frame_args.h"
-#include "ui/compositor/compositor.h"
-#include "ui/compositor/layer.h"
-#include "ui/compositor/layer_animation_delegate.h"
-#include "ui/compositor/layer_animation_observer.h"
-#include "ui/compositor/layer_animation_sequence.h"
-#include "ui/compositor/layer_animator_collection.h"
+#include "azer/ui/compositor/compositor.h"
+#include "azer/ui/compositor/layer.h"
+#include "azer/ui/compositor/layer_animation_delegate.h"
+#include "azer/ui/compositor/layer_animation_observer.h"
+#include "azer/ui/compositor/layer_animation_sequence.h"
+#include "azer/ui/compositor/layer_animator_collection.h"
 #include "ui/gfx/frame_time.h"
 
 #define SAFE_INVOKE_VOID(function, running_anim, ...) \

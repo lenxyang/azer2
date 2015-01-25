@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/compositor/scoped_layer_animation_settings.h"
+#include "azer/ui/compositor/scoped_layer_animation_settings.h"
 
-#include "ui/compositor/layer.h"
-#include "ui/compositor/layer_animation_observer.h"
-#include "ui/compositor/layer_animation_sequence.h"
-#include "ui/compositor/layer_animator.h"
+#include "azer/ui/compositor/layer.h"
+#include "azer/ui/compositor/layer_animation_observer.h"
+#include "azer/ui/compositor/layer_animation_sequence.h"
+#include "azer/ui/compositor/layer_animator.h"
 
 namespace {
 

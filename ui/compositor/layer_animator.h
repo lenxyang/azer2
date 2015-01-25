@@ -14,8 +14,8 @@
 #include "base/memory/ref_counted.h"
 #include "base/observer_list.h"
 #include "base/time/time.h"
-#include "ui/compositor/compositor_export.h"
-#include "ui/compositor/layer_animation_element.h"
+#include "azer/ui/compositor/compositor_export.h"
+#include "azer/ui/compositor/layer_animation_element.h"
 #include "ui/gfx/animation/tween.h"
 
 namespace gfx {

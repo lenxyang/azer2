@@ -165,6 +165,15 @@ class COMPOSITOR_EXPORT Layer {
   bool Contains(Layer* layer);
 
   void SetSubpixelPositionOffset(const gfx::Vector2dF offset);
+
+  // The layer's animator is responsible for causing automatic animations when
+  // properties are set. It also manages a queue of pending animations and
+  // handles blending of animations. The layer takes ownership of the animator.
+  void SetAnimator(LayerAnimator* animator);
+
+  // Returns the layer's animator. Creates a default animator of one has not
+  // been set. Will not return NULL.
+  LayerAnimator* GetAnimator();
  private:
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
