@@ -17,7 +17,6 @@
 #include "ui/events/event.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/rect.h"
-#include "ui/gl/gl_surface.h"
 #if defined(USE_X11)
 #include "ui/gfx/x/x11_connection.h"
 #endif
@@ -84,12 +83,6 @@ class DemoWindowTreeClient : public aura::client::WindowTreeClient {
   DISALLOW_COPY_AND_ASSIGN(DemoWindowTreeClient);
 };
 int DemoMain() {
-#if defined(USE_X11)
-  // This demo uses InProcessContextFactory which uses X on a separate Gpu
-  // thread.
-  gfx::InitializeThreadedX11();
-#endif
-  gfx::GLSurface::InitializeOneOff();
 #if defined(OS_WIN)
   gfx::InitDeviceScaleFactor(1.0f);
 #endif

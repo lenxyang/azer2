@@ -12,6 +12,10 @@
 
 #include "azer/render/compositor/compositor.h"
 #include "azer/render/compositor/layer_tree_host.h"
+#include "azer/render/compositor/bitmap_layer.h"
+#include "azer/render/compositor/canvas_layer.h"
+#include "azer/render/compositor/nodraw_layer.h"
+#include "azer/render/compositor/renderer_layer.h"
 
 namespace azer {
 namespace compositor {
@@ -22,6 +26,20 @@ const Layer* GetRoot(const Layer* layer) {
     layer = layer->parent();
   return layer;
 }
+}
+
+Layer* Layer::CreateLayer(LayerType type) {
+  switch (type) {
+    case kNotDrawnLayer:
+      return new NoDrawLayer();
+    case kCanvasLayer:
+      return new RendererLayer();
+    case kRendererLayer:
+      return new RendererLayer();
+    case kBitmapLayer: 
+      return new BitmapLayer();
+    default: NOTREACHED(); return NULL;
+  }
 }
 
 Layer::Layer(LayerType type)

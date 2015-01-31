@@ -31,13 +31,26 @@ Layer::Layer(LayerType type)
     , type_(type)
     , background_blur_radius_(0)
     , compositor_(NULL)
-    , owner_(NULL) {
+    , owner_(NULL)
+    , layer_(NULL)  {
+  layer_ = CreateCCLayer(type);
+  CHECK(layer_);
 }
 
 Layer::~Layer() {
-  if (parent_) {
-    parent_->Remove(this);
+  if (!parent_) {
     delete layer_;
+  }
+}
+
+azer::compositor::Layer* Layer::CreateCCLayer(LayerType type) {
+  switch (type) {
+    case LAYER_NOT_DRAWN:
+      return azer::compositor::Layer::CreateLayer(azer::compositor::Layer::kNotDrawnLayer);
+    case LAYER_TEXTURED:
+      return azer::compositor::Layer::CreateLayer(azer::compositor::Layer::kCanvasLayer);
+    default: CHECK(false) << "not support";
+      return NULL;
   }
 }
 

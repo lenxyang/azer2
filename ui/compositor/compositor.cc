@@ -14,6 +14,8 @@ Compositor::Compositor(gfx::AcceleratedWidget widget) {
   CHECK(azer::LoadRenderSystem(widget));
   host_.reset(new azer::compositor::LayerTreeHost(gfx::Size(1, 1)));
   compositor_.reset(new azer::compositor::Compositor);
+  Layer* layer = new Layer(LAYER_NOT_DRAWN);
+  SetRootLayer(layer);
 }
 
 Compositor::~Compositor() {
@@ -32,9 +34,9 @@ void Compositor::ScheduleRedrawRect(const gfx::Rect& damage_rect) {
 
 void Compositor::SetRootLayer(Layer* root_layer) {
   DCHECK(!host_->root());
+  host_->SetRoot(root_layer->layer());
   host_->SetCompositor(compositor_.get());
   compositor_->SetTreeHost(host_.get());
-  host_->SetRoot(root_layer->layer());
   root_layer_->compositor_ = this;
 }
 

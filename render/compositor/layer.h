@@ -40,6 +40,8 @@ class AZER_EXPORT Layer {
     kBitmapLayer,
   };
 
+  static Layer* CreateLayer(LayerType);
+
   explicit Layer(LayerType type);
   virtual ~Layer();
 

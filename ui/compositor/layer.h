@@ -180,6 +180,8 @@ class COMPOSITOR_EXPORT Layer {
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
+  azer::compositor::Layer* CreateCCLayer(LayerType type);
+
   // This layer's children, in bottom-to-top stacking order.
   std::vector<Layer*> children_;
 

@@ -220,7 +220,7 @@ source_set("test_support") {
 }
 
 executable("demo") {
-  output_name = "azer_aura_demo2"
+  output_name = "aui_aura_demo"
   testonly = true
 
   sources = [
