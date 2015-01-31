@@ -219,37 +219,6 @@ source_set("test_support") {
   }
 }
 
-executable("demo") {
-  output_name = "aura2_demo"
-  testonly = true
-
-  sources = [
-    "demo/demo_main.cc",
-  ]
-
-  deps = [
-    ":aura",
-    ":test_support",
-    "//base",
-    "//base:i18n",
-    "//skia",
-    "//third_party/icu",
-    "//ui/base",
-    "//ui/compositor",
-    "//ui/compositor:test_support",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
-    "//ui/gl",
-  ]
-
-  if (use_x11) {
-    deps += [
-      "//ui/gfx/x",
-    ]
-  }
-}
-
 test("aura2_unittests") {
   sources = [
     "gestures/gesture_recognizer_unittest.cc",
