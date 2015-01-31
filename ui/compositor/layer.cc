@@ -17,16 +17,21 @@
 
 namespace ui {
 
+namespace {
 const Layer* GetRoot(const Layer* layer) {
   while (layer->parent())
     layer = layer->parent();
   return layer;
 }
+}  // namespace
 
-Layer::Layer() {
-}
-
-Layer::Layer(LayerType type) {
+Layer::Layer(LayerType type)
+    : parent_(NULL)
+    , delegate_(NULL)
+    , type_(type)
+    , background_blur_radius_(0)
+    , compositor_(NULL)
+    , owner_(NULL) {
 }
 
 Layer::~Layer() {
@@ -37,14 +42,25 @@ Layer::~Layer() {
 }
 
 const Compositor* Layer::GetCompositor() const {
-  return NULL;
+  return GetRoot(this)->compositor_;
 }
 
 void Layer::Add(Layer* child) {
+if (child->parent_)
+    child->parent_->Remove(child);
+  child->parent_ = this;
+  children_.push_back(child);
+
   layer_->Add(child->layer());
 }
 
 void Layer::Remove(Layer* child) {
+  std::vector<Layer*>::iterator i =
+    std::find(children_.begin(), children_.end(), child);
+  DCHECK(i != children_.end());
+  children_.erase(i);
+  child->parent_ = NULL;
+
   layer_->Remove(child->layer());
 }
 

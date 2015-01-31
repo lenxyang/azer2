@@ -29,11 +29,9 @@
 #include "azer/ui/aura/window_property.h"
 #include "azer/ui/aura/window_tree_host.h"
 #include "ui/base/hit_test.h"
-#include "ui/compositor/layer.h"
-#include "ui/compositor/layer_animation_observer.h"
-#include "ui/compositor/scoped_animation_duration_scale_mode.h"
-#include "ui/compositor/scoped_layer_animation_settings.h"
-#include "ui/compositor/test/test_layers.h"
+#include "azer/ui/compositor/layer.h"
+#include "azer/ui/compositor/scoped_animation_duration_scale_mode.h"
+#include "azer/ui/compositor/test/test_layers.h"
 #include "ui/events/event.h"
 #include "ui/events/event_utils.h"
 #include "ui/events/gesture_detection/gesture_configuration.h"
@@ -1603,51 +1601,6 @@ TEST_F(WindowTest, OwnedProperty) {
   EXPECT_EQ(p3, TestProperty::last_deleted());
 }
 
-TEST_F(WindowTest, SetBoundsInternalShouldCheckTargetBounds) {
-  // We cannot short-circuit animations in this test.
-  ui::ScopedAnimationDurationScaleMode test_duration_mode(
-      ui::ScopedAnimationDurationScaleMode::NON_ZERO_DURATION);
-
-  scoped_ptr<Window> w1(
-      CreateTestWindowWithBounds(gfx::Rect(0, 0, 100, 100), root_window()));
-
-  EXPECT_FALSE(!w1->layer());
-  w1->layer()->GetAnimator()->set_disable_timer_for_test(true);
-  ui::LayerAnimator* animator = w1->layer()->GetAnimator();
-
-  EXPECT_EQ("0,0 100x100", w1->bounds().ToString());
-  EXPECT_EQ("0,0 100x100", w1->layer()->GetTargetBounds().ToString());
-
-  // Animate to a different position.
-  {
-    ui::ScopedLayerAnimationSettings settings(w1->layer()->GetAnimator());
-    w1->SetBounds(gfx::Rect(100, 100, 100, 100));
-  }
-
-  EXPECT_EQ("0,0 100x100", w1->bounds().ToString());
-  EXPECT_EQ("100,100 100x100", w1->layer()->GetTargetBounds().ToString());
-
-  // Animate back to the first position. The animation hasn't started yet, so
-  // the current bounds are still (0, 0, 100, 100), but the target bounds are
-  // (100, 100, 100, 100). If we step the animator ahead, we should find that
-  // we're at (0, 0, 100, 100). That is, the second animation should be applied.
-  {
-    ui::ScopedLayerAnimationSettings settings(w1->layer()->GetAnimator());
-    w1->SetBounds(gfx::Rect(0, 0, 100, 100));
-  }
-
-  EXPECT_EQ("0,0 100x100", w1->bounds().ToString());
-  EXPECT_EQ("0,0 100x100", w1->layer()->GetTargetBounds().ToString());
-
-  // Confirm that the target bounds are reached.
-  base::TimeTicks start_time =
-      w1->layer()->GetAnimator()->last_step_time();
-
-  animator->Step(start_time + base::TimeDelta::FromMilliseconds(1000));
-
-  EXPECT_EQ("0,0 100x100", w1->bounds().ToString());
-}
-
 
 typedef std::pair<const void*, intptr_t> PropertyChangeInfo;
 
@@ -1939,61 +1892,6 @@ TEST_F(WindowTest, AcquireLayer) {
   EXPECT_EQ(1U, parent->children().size());
 }
 
-// Make sure that properties which should persist from the old layer to the new
-// layer actually do.
-TEST_F(WindowTest, RecreateLayer) {
-  // Set properties to non default values.
-  Window w(new ColorTestWindowDelegate(SK_ColorWHITE));
-  w.set_id(1);
-  w.Init(aura::WINDOW_LAYER_SOLID_COLOR);
-  w.SetBounds(gfx::Rect(0, 0, 100, 100));
-
-  ui::Layer* layer = w.layer();
-  layer->SetVisible(false);
-  layer->SetMasksToBounds(true);
-
-  ui::Layer child_layer;
-  layer->Add(&child_layer);
-
-  scoped_ptr<ui::Layer> old_layer(w.RecreateLayer());
-  layer = w.layer();
-  EXPECT_EQ(ui::LAYER_SOLID_COLOR, layer->type());
-  EXPECT_FALSE(layer->visible());
-  EXPECT_EQ(1u, layer->children().size());
-  EXPECT_TRUE(layer->GetMasksToBounds());
-  EXPECT_EQ("0,0 100x100", w.bounds().ToString());
-  EXPECT_EQ("0,0 100x100", layer->bounds().ToString());
-}
-
-// Verify that RecreateLayer() stacks the old layer above the newly creatd
-// layer.
-TEST_F(WindowTest, RecreateLayerZOrder) {
-  scoped_ptr<Window> w(
-      CreateTestWindow(SK_ColorWHITE, 1, gfx::Rect(0, 0, 100, 100),
-                       root_window()));
-  scoped_ptr<ui::Layer> old_layer(w->RecreateLayer());
-
-  const std::vector<ui::Layer*>& child_layers =
-      root_window()->layer()->children();
-  ASSERT_EQ(2u, child_layers.size());
-  EXPECT_EQ(w->layer(), child_layers[0]);
-  EXPECT_EQ(old_layer.get(), child_layers[1]);
-}
-
-// Ensure that acquiring a layer then recreating a layer does not crash
-// and that RecreateLayer returns null.
-TEST_F(WindowTest, AcquireThenRecreateLayer) {
-  scoped_ptr<Window> w(
-      CreateTestWindow(SK_ColorWHITE, 1, gfx::Rect(0, 0, 100, 100),
-                       root_window()));
-  scoped_ptr<ui::Layer> acquired_layer(w->AcquireLayer());
-  scoped_ptr<ui::Layer> doubly_acquired_layer(w->RecreateLayer());
-  EXPECT_EQ(NULL, doubly_acquired_layer.get());
-
-  // Destroy window before layer gets destroyed.
-  w.reset();
-}
-
 TEST_F(WindowTest, StackWindowAtBottomBelowWindowWhoseLayerHasNoDelegate) {
   scoped_ptr<Window> window1(CreateTestWindowWithId(1, root_window()));
   window1->layer()->set_name("1");
@@ -2278,7 +2176,6 @@ TEST_F(WindowTest, RootWindowSetWhenReparenting) {
   // We need animations to start in order to observe the bounds changes.
   ui::ScopedAnimationDurationScaleMode test_duration_mode(
       ui::ScopedAnimationDurationScaleMode::NON_ZERO_DURATION);
-  ui::ScopedLayerAnimationSettings settings1(child.layer()->GetAnimator());
   settings1.SetTransitionDuration(base::TimeDelta::FromMilliseconds(100));
   gfx::Rect new_bounds(gfx::Rect(35, 35, 50, 50));
   child.SetBounds(new_bounds);
@@ -2355,113 +2252,6 @@ TEST_F(WindowTest, DeleteWindowFromOnWindowDestroyed) {
   parent.reset();
 }
 
-namespace {
-
-// Used by DelegateNotifiedAsBoundsChange to verify OnBoundsChanged() is
-// invoked.
-class BoundsChangeDelegate : public TestWindowDelegate {
- public:
-  BoundsChangeDelegate() : bounds_changed_(false) {}
-
-  void clear_bounds_changed() { bounds_changed_ = false; }
-  bool bounds_changed() const {
-    return bounds_changed_;
-  }
-
-  // Window
-  void OnBoundsChanged(const gfx::Rect& old_bounds,
-                       const gfx::Rect& new_bounds) override {
-    bounds_changed_ = true;
-  }
-
- private:
-  // Was OnBoundsChanged() invoked?
-  bool bounds_changed_;
-
-  DISALLOW_COPY_AND_ASSIGN(BoundsChangeDelegate);
-};
-
-}  // namespace
-
-// Verifies the delegate is notified when the actual bounds of the layer
-// change.
-TEST_F(WindowTest, DelegateNotifiedAsBoundsChange) {
-  BoundsChangeDelegate delegate;
-
-  // We cannot short-circuit animations in this test.
-  ui::ScopedAnimationDurationScaleMode test_duration_mode(
-      ui::ScopedAnimationDurationScaleMode::NON_ZERO_DURATION);
-
-  scoped_ptr<Window> window(
-      CreateTestWindowWithDelegate(&delegate, 1,
-                                   gfx::Rect(0, 0, 100, 100), root_window()));
-  window->layer()->GetAnimator()->set_disable_timer_for_test(true);
-
-  delegate.clear_bounds_changed();
-
-  // Animate to a different position.
-  {
-    ui::ScopedLayerAnimationSettings settings(window->layer()->GetAnimator());
-    window->SetBounds(gfx::Rect(100, 100, 100, 100));
-  }
-
-  // Bounds shouldn't immediately have changed.
-  EXPECT_EQ("0,0 100x100", window->bounds().ToString());
-  EXPECT_FALSE(delegate.bounds_changed());
-
-  // Animate to the end, which should notify of the change.
-  base::TimeTicks start_time =
-      window->layer()->GetAnimator()->last_step_time();
-  ui::LayerAnimator* animator = window->layer()->GetAnimator();
-  animator->Step(start_time + base::TimeDelta::FromMilliseconds(1000));
-  EXPECT_TRUE(delegate.bounds_changed());
-  EXPECT_NE("0,0 100x100", window->bounds().ToString());
-}
-
-// Verifies the delegate is notified when the actual bounds of the layer
-// change even when the window is not the layer's delegate
-TEST_F(WindowTest, DelegateNotifiedAsBoundsChangeInHiddenLayer) {
-  BoundsChangeDelegate delegate;
-
-  // We cannot short-circuit animations in this test.
-  ui::ScopedAnimationDurationScaleMode test_duration_mode(
-      ui::ScopedAnimationDurationScaleMode::NON_ZERO_DURATION);
-
-  scoped_ptr<Window> window(
-      CreateTestWindowWithDelegate(&delegate, 1,
-                                   gfx::Rect(0, 0, 100, 100), root_window()));
-  window->layer()->GetAnimator()->set_disable_timer_for_test(true);
-
-  delegate.clear_bounds_changed();
-
-  // Suppress paint on the window since it is hidden (should reset the layer's
-  // delegate to NULL)
-  window->SuppressPaint();
-  EXPECT_EQ(NULL, window->layer()->delegate());
-
-  // Animate to a different position.
-  {
-    ui::ScopedLayerAnimationSettings settings(window->layer()->GetAnimator());
-    window->SetBounds(gfx::Rect(100, 100, 110, 100));
-  }
-
-  // Layer delegate is NULL but we should still get bounds changed notification.
-  EXPECT_EQ("100,100 110x100", window->GetTargetBounds().ToString());
-  EXPECT_TRUE(delegate.bounds_changed());
-
-  delegate.clear_bounds_changed();
-
-  // Animate to the end: will *not* notify of the change since we are hidden.
-  base::TimeTicks start_time =
-      window->layer()->GetAnimator()->last_step_time();
-  ui::LayerAnimator* animator = window->layer()->GetAnimator();
-  animator->Step(start_time + base::TimeDelta::FromMilliseconds(1000));
-
-  // No bounds changed notification at the end of animation since layer
-  // delegate is NULL.
-  EXPECT_FALSE(delegate.bounds_changed());
-  EXPECT_NE("0,0 100x100", window->layer()->bounds().ToString());
-}
 
 namespace {
 
@@ -3379,92 +3169,6 @@ TEST_F(WindowTest, StackChildAtLayerless) {
   }
 }
 
-namespace {
-
-class TestLayerAnimationObserver : public ui::LayerAnimationObserver {
- public:
-  TestLayerAnimationObserver()
-      : animation_completed_(false),
-        animation_aborted_(false) {}
-  ~TestLayerAnimationObserver() override {}
-
-  bool animation_completed() const { return animation_completed_; }
-  bool animation_aborted() const { return animation_aborted_; }
-
-  void Reset() {
-    animation_completed_ = false;
-    animation_aborted_ = false;
-  }
-
- private:
-  // ui::LayerAnimationObserver:
-  void OnLayerAnimationEnded(ui::LayerAnimationSequence* sequence) override {
-    animation_completed_ = true;
-  }
-
-  void OnLayerAnimationAborted(ui::LayerAnimationSequence* sequence) override {
-    animation_aborted_ = true;
-  }
-
-  void OnLayerAnimationScheduled(
-      ui::LayerAnimationSequence* sequence) override {}
-
-  bool animation_completed_;
-  bool animation_aborted_;
-
-  DISALLOW_COPY_AND_ASSIGN(TestLayerAnimationObserver);
-};
-
-}
-
-TEST_F(WindowTest, WindowDestroyCompletesAnimations) {
-  ui::ScopedAnimationDurationScaleMode test_duration_mode(
-      ui::ScopedAnimationDurationScaleMode::NON_ZERO_DURATION);
-  scoped_refptr<ui::LayerAnimator> animator =
-      ui::LayerAnimator::CreateImplicitAnimator();
-  TestLayerAnimationObserver observer;
-  animator->AddObserver(&observer);
-  // Make sure destroying a Window completes the animation.
-  {
-    scoped_ptr<Window> window(CreateTestWindowWithId(1, root_window()));
-    window->layer()->SetAnimator(animator.get());
-
-    gfx::Transform transform;
-    transform.Scale(0.5f, 0.5f);
-    window->SetTransform(transform);
-
-    EXPECT_TRUE(animator->is_animating());
-    EXPECT_FALSE(observer.animation_completed());
-  }
-  EXPECT_TRUE(animator.get());
-  EXPECT_FALSE(animator->is_animating());
-  EXPECT_TRUE(observer.animation_completed());
-  EXPECT_FALSE(observer.animation_aborted());
-  animator->RemoveObserver(&observer);
-  observer.Reset();
-
-  animator = ui::LayerAnimator::CreateImplicitAnimator();
-  animator->AddObserver(&observer);
-  ui::Layer layer;
-  layer.SetAnimator(animator.get());
-  {
-    scoped_ptr<Window> window(CreateTestWindowWithId(1, root_window()));
-    window->layer()->Add(&layer);
-
-    gfx::Transform transform;
-    transform.Scale(0.5f, 0.5f);
-    layer.SetTransform(transform);
-
-    EXPECT_TRUE(animator->is_animating());
-    EXPECT_FALSE(observer.animation_completed());
-  }
-
-  EXPECT_TRUE(animator.get());
-  EXPECT_FALSE(animator->is_animating());
-  EXPECT_TRUE(observer.animation_completed());
-  EXPECT_FALSE(observer.animation_aborted());
-  animator->RemoveObserver(&observer);
-}
 
 }  // namespace test
 }  // namespace aura

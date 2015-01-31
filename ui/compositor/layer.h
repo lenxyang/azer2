@@ -22,7 +22,6 @@ class LayerOwner;
 
 class COMPOSITOR_EXPORT Layer {
  public:
-  Layer();
   explicit Layer(LayerType type);
   ~Layer();
 
@@ -188,10 +187,14 @@ class COMPOSITOR_EXPORT Layer {
   LayerDelegate* delegate_;
   LayerType type_;
   int background_blur_radius_;
+  Compositor* compositor_;
   LayerOwner* owner_;
 
   azer::compositor::Layer* layer_;
+
   friend class LayerOwner;
+  friend class Compositor;
+  DISALLOW_COPY_AND_ASSIGN(Layer);
 };
 }  // namespace ui
 
