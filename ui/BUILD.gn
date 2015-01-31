@@ -4,5 +4,6 @@ component("ui") {
   deps = [
     "aura",
     "compositor",
+    "//azer/render",
   ]
 }

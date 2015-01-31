@@ -42,4 +42,11 @@ void Compositor::SetScaleAndSize(float scale, const gfx::Size& size_in_pixel) {
   DCHECK(host_.get());
   host_->resize(size_in_pixel);
 }
+
+void Compositor::SetBackgroundColor(SkColor color) {
+}
+
+gfx::Size Compositor::size() const { 
+  return compositor_->size();
+}
 }  // namespace ui

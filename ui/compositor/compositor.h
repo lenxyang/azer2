@@ -56,11 +56,11 @@ class COMPOSITOR_EXPORT Compositor {
   void SetScaleAndSize(float scale, const gfx::Size& size_in_pixel);
 
   // Returns the size of the widget that is being drawn to in pixel coordinates.
-  gfx::Size size() const { return compositor_->size();}
+  gfx::Size size() const;
 
   // Sets the background color used for areas that aren't covered by
   // the |root_layer|.
-  void SetBackgroundColor(SkColor color) { compositor_->SetBackgroundColor(color);}
+  void SetBackgroundColor(SkColor color);
 
   // Set the visibility of the underlying compositor.
   void SetVisible(bool visible) {}
