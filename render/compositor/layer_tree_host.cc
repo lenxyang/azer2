@@ -36,6 +36,7 @@ LayerTreeHost::~LayerTreeHost() {
 
 void LayerTreeHost::SetRoot(Layer* layer) {
   DCHECK(!root_);
+  root_ = layer;
   root_->host_ = this;
   size_ = root_->size();
 }
