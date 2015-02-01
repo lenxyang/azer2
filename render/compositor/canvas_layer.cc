@@ -27,7 +27,7 @@ void CanvasLayer::SetBounds(const gfx::Rect& bounds) {
                                                    bounds.height()));
   }
 
-  TextureLayer::SetBounds(bounds);
+  SetBoundsInternal(bounds);
 }
 
 void CanvasLayer::Redraw() {
