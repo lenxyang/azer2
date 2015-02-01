@@ -37,6 +37,7 @@ class AZER_EXPORT LayerTreeHost : public LayerObserver {
   Compositor* compositor();
   void SetLayerNeedRedrawHierarchy(Layer* layer);
  private:
+  void UpdateResourceHierarchy(Layer* layer);
   // LayerObserver for all layer in the tree
   void OnLayerAttachedOnTree(Layer* layer) override;
   void OnLayerResized(Layer* layer) override;

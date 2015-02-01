@@ -159,9 +159,11 @@ void Layer::OnParentBoundsChanged() {
 }
 
 void Layer::OnBoundsChanged() {
-  CalcTargetBounds();
-  CalcOverlayBounds();
-  CalcTexBounds();
+  if (host_) {
+    CalcTargetBounds();
+    CalcOverlayBounds();
+    CalcTexBounds();
+  }
 
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     Layer* i = (*iter);

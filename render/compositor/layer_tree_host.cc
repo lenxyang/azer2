@@ -38,13 +38,15 @@ void LayerTreeHost::SetRoot(Layer* layer) {
   DCHECK(!root_);
   root_ = layer;
   root_->host_ = this;
-  size_ = root_->size();
+  layer->SetBounds(gfx::Rect(size_));
 }
 
 void LayerTreeHost::SetCompositor(Compositor* compositor) {
   DCHECK(NULL != root());
   client_ = compositor;
   compositor_ = compositor;
+
+  UpdateResourceHierarchy(root());
   if (compositor) {
     client_->OnResize(size_);
     SetLayerNeedRedrawHierarchy(root());
@@ -55,10 +57,22 @@ void LayerTreeHost::resize(const gfx::Size& size) {
   RenderSystem* rs = RenderSystem::Current();
   if (size_ != size) {
     size_= size;
-    root_->SetBounds(gfx::Rect(0, 0, size.width(), size.height()));
+    if (root_) {
+      root_->SetBounds(gfx::Rect(0, 0, size.width(), size.height()));
+    }
+
     if (client_) {
       client_->OnResize(size);
     }
+  }
+}
+
+void LayerTreeHost::UpdateResourceHierarchy(Layer* layer) {
+  layer->SetBounds(layer->bounds());
+  for (auto iter = layer->children_.begin();
+       iter != layer->children_.end();
+       ++iter) {
+    (*iter)->SetBounds((*iter)->bounds());
   }
 }
 

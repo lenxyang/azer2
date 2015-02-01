@@ -9,15 +9,13 @@
 
 namespace ui {
 
-Compositor::Compositor(gfx::AcceleratedWidget widget) {
+Compositor::Compositor(gfx::AcceleratedWidget widget) 
+    : root_layer_(NULL) {
   gfx::Size size(1, 1);
   CHECK(azer::RenderSystem::Current() == NULL);
   CHECK(azer::LoadRenderSystem(widget));
   host_.reset(new azer::compositor::LayerTreeHost(size));
   compositor_.reset(new azer::compositor::Compositor);
-  Layer* layer = new Layer(LAYER_NOT_DRAWN);
-  layer->SetBounds(gfx::Rect(size));
-  SetRootLayer(layer);
 }
 
 Compositor::~Compositor() {
@@ -39,7 +37,8 @@ void Compositor::SetRootLayer(Layer* root_layer) {
   host_->SetRoot(root_layer->layer());
   host_->SetCompositor(compositor_.get());
   compositor_->SetTreeHost(host_.get());
-  root_layer_->compositor_ = this;
+  root_layer->compositor_ = this;
+  root_layer_ = root_layer;
 }
 
 void Compositor::SetScaleAndSize(float scale, const gfx::Size& size_in_pixel) {
