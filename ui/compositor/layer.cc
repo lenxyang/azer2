@@ -143,7 +143,7 @@ bool Layer::visible() const {
 }
 
 bool Layer::GetTargetVisibility() const {
-  return true;
+  return visible();
 }
 
 bool Layer::IsDrawn() const {
