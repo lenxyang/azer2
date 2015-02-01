@@ -159,11 +159,9 @@ void Layer::OnParentBoundsChanged() {
 }
 
 void Layer::OnBoundsChanged() {
-  if (host_) {
-    CalcTargetBounds();
-    CalcOverlayBounds();
-    CalcTexBounds();
-  }
+  CalcTargetBounds();
+  CalcOverlayBounds();
+  CalcTexBounds();
 
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     Layer* i = (*iter);
@@ -180,23 +178,31 @@ void Layer::CalcTargetBounds() {
 }
 
 void Layer::CalcOverlayBounds() {
-  const gfx::Rect& root_bounds = host_->root()->bounds();
-  float width_percent = (float)target_bounds_.width() / (float)root_bounds.width();
-  float height_percent = (float)target_bounds_.height() / (float)root_bounds.height();
-  float x = (float)target_bounds_.x() / (float)root_bounds.width();
-  float y = (float)target_bounds_.y() / (float)root_bounds.height() + height_percent;
-  overlay_bounds_ = gfx::RectF(2.0f * x - 1.0f, 
-                               -2.0f * y + 1.0f,
-                               width_percent * 2.0f,
-                               height_percent * 2.0f);
+  if (AttachedToTreeHost()) {
+    const gfx::Rect& root_bounds = host_->root()->bounds();
+    float width_percent = (float)target_bounds_.width() / (float)root_bounds.width();
+    float height_percent = (float)target_bounds_.height() / (float)root_bounds.height();
+    float x = (float)target_bounds_.x() / (float)root_bounds.width();
+    float y = (float)target_bounds_.y() / (float)root_bounds.height() + height_percent;
+    overlay_bounds_ = gfx::RectF(2.0f * x - 1.0f, 
+                                 -2.0f * y + 1.0f,
+                                 width_percent * 2.0f,
+                                 height_percent * 2.0f);
+  } else {
+    overlay_bounds_ = gfx::RectF(-1.0f, -1.0f, 2.0f, 2.0f);
+  }
 }
 
 void Layer::CalcTexBounds() {
-  float tu = (float)(target_bounds_.x()  - bounds().x()) / (float)bounds().width();
-  float tv = (float)(target_bounds_.y()  - bounds().y()) / (float)bounds().height();
-  float width = (float)target_bounds_.width() / (float)bounds().width();
-  float height = (float)target_bounds_.height() / (float)bounds().height();
-  tex_bounds_ = gfx::RectF(tu, tv, width, height);
+  if (AttachedToTreeHost()) {
+    float tu = (float)(target_bounds_.x()  - bounds().x()) / (float)bounds().width();
+    float tv = (float)(target_bounds_.y()  - bounds().y()) / (float)bounds().height();
+    float width = (float)target_bounds_.width() / (float)bounds().width();
+    float height = (float)target_bounds_.height() / (float)bounds().height();
+    tex_bounds_ = gfx::RectF(tu, tv, width, height);
+  } else {
+    tex_bounds_ = gfx::RectF(0.0f, 0.0f, 1.0f, 1.0f);
+  }
 }
 
 void Layer::AddObserver(LayerObserver* observer) {
@@ -261,6 +267,10 @@ bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
 }
 
 void Layer::ScheduleDraw() {
+}
+
+bool Layer::AttachedToTreeHost() const {
+  return (host_ != NULL);
 }
 }  // namespace compositor
 }  // namespace azer

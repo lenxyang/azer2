@@ -147,6 +147,7 @@ class AZER_EXPORT Layer {
   void OnBoundsChanged();
  protected:
   void StackRelativeTo(Layer* child, Layer* other, bool above);
+  bool AttachedToTreeHost() const;
 
   void CalcTargetBounds();
   void CalcOverlayBounds();
