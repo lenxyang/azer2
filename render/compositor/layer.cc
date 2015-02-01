@@ -263,10 +263,24 @@ void Layer::SetColor(SkColor color) {
 }
 
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
+  DCHECK(AttachedToTreeHost());
+  gfx::Point pt(invalid_rect.origin());
+  ConvertPointToLayer(GetTreeHost()->root(), this, &pt);
+  gfx::Rect rect(pt, invalid_rect.size());
+  // mark all layer interacted with rect 'needed render'
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    const gfx::Rect& child_bounds = (*iter)->bounds();
+    if (child_bounds.Intersects(rect)) {
+      GetTreeHost()->SetLayerNeedRedraw(*iter);
+      (*iter)->SchedulePaint(invalid_rect);
+    }
+  }
   return true;
 }
 
 void Layer::ScheduleDraw() {
+  DCHECK(AttachedToTreeHost());
+  GetTreeHost()->SetLayerNeedRedrawHierarchy(this);
 }
 
 bool Layer::AttachedToTreeHost() const {

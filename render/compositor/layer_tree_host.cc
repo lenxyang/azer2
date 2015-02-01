@@ -76,11 +76,15 @@ void LayerTreeHost::UpdateResourceHierarchy(Layer* layer) {
   }
 }
 
-void LayerTreeHost::SetLayerNeedRedrawHierarchy(Layer* layer) {
-  if (compositor()) {
-    compositor()->AddNeedRedrawLayer(layer);
-  }
+void LayerTreeHost::SetLayerNeedRedraw(Layer* layer) {
+  DCHECK(compositor());
+  compositor()->AddNeedRedrawLayer(layer);
+}
 
+void LayerTreeHost::SetLayerNeedRedrawHierarchy(Layer* layer) {
+  DCHECK(compositor());
+  compositor()->AddNeedRedrawLayer(layer);
+  
   for (auto iter = layer->children().begin();
        iter != layer->children().end();
        ++iter) {
