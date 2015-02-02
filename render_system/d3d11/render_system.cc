@@ -39,14 +39,14 @@ D3DRenderSystem::D3DRenderSystem(D3DEnvironmentPtr envptr)
 D3DRenderSystem::~D3DRenderSystem() {
 }
 
-bool D3DRenderSystem::Init() {
+SwapChainPtr D3DRenderSystem::CreateSwapChainForSurface(Surface* surface) {
   SwapChainPtr swapchain(envptr_->CreateSwapChain(this));
   if (swapchain.get() == NULL) {
     return false;
   }
+}
 
-  SetSwapchain(swapchain);
-  GetSwapchainRenderer()->Use();
+bool D3DRenderSystem::Init() {
   std::unique_ptr<D3DReusableObject> ptr(new D3DReusableObject());
   if (ptr->Init(this)) {
     reusable_object_ = ptr.release();
@@ -54,17 +54,6 @@ bool D3DRenderSystem::Init() {
     return false;
   }
   
-  return true;
-}
-
-bool D3DRenderSystem::Present() {
-  DCHECK(GetSwapchain().get() != NULL) << "swap_chain cannto be NULL";
-  if (!GetSwapchain()->Present()) {
-    LOG(ERROR) << " failed to Present.";
-
-    return GetSwapchain()->reset(envptr_->GetSurface());
-  }
-
   return true;
 }
 

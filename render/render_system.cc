@@ -30,17 +30,10 @@ RenderSystem* RenderSystem::Current() {
   return render_system_;
 }
 
-RenderSystem::RenderSystem(Surface* surface)
-    : surface_(surface) 
-    , current_renderer_(NULL) {
+RenderSystem::RenderSystem()
+    : current_renderer_(NULL) {
 }
 
 RenderSystem::~RenderSystem() {
-}
-
-void RenderSystem::SetSwapchain(SwapChainPtr& swapchain) {
-  DCHECK(swapchain.get() != NULL);
-  DCHECK(swap_chain_.get() == NULL);
-  swap_chain_ = swapchain;
 }
 }  // namespace azer

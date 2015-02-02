@@ -91,9 +91,10 @@ bool InternalD3DEnvironment::Initialize() {
   return true;
 }
 
-SwapChain* InternalD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs) {
+SwapChain* InternalD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs, 
+                                                   Surface* surface) {
   std::unique_ptr<D3DSwapChain> ptr(new D3DSwapChain(rs));
-  if (!ptr->Init(GetSurface())) {
+  if (!ptr->Init(surface)) {
     return NULL;
   }
 

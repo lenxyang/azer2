@@ -31,35 +31,35 @@ class D3DRenderSystem : public RenderSystem {
   ~D3DRenderSystem();
 
   bool Init();
-  virtual const StringType& name() const override;
-  virtual const StringType& short_name() const override;
+  const StringType& name() const override;
+  const StringType& short_name() const override;
 
-  virtual Renderer* CreateRenderer(const Texture::Options& opt) override;
-  virtual Renderer* CreateDeferredRenderer(const Texture::Options& opt) override;
-  virtual Blending* CreateBlending(const Blending::Desc& desc) override;
-  virtual VertexBuffer* CreateVertexBuffer(const VertexBuffer::Options& opt,
+  SwapChainPtr CreateSwapChainForSurface(Surface* surface) override;
+
+  Renderer* CreateRenderer(const Texture::Options& opt) override;
+  Renderer* CreateDeferredRenderer(const Texture::Options& opt) override;
+  Blending* CreateBlending(const Blending::Desc& desc) override;
+  VertexBuffer* CreateVertexBuffer(const VertexBuffer::Options& opt,
                                            VertexData*) override;
-  virtual IndicesBuffer* CreateIndicesBuffer(const IndicesBuffer::Options& opt,
+  IndicesBuffer* CreateIndicesBuffer(const IndicesBuffer::Options& opt,
                                              IndicesData*) override;
-  virtual GpuConstantsTable* CreateGpuConstantsTable(
+  GpuConstantsTable* CreateGpuConstantsTable(
       int32 num, const GpuConstantsTable::Desc* desc) override;
 
   // texutre functions
-  virtual Texture* CreateTexture(const Texture::Options& opt) override;
-  virtual Texture* CreateTexture(const Texture::Options& opt,
-                                 const Image* image) override;
-  // virtual RenderTarget* CreateRenderTarget(const Texture::Options& opt);
-  // virtual DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
+  Texture* CreateTexture(const Texture::Options& opt) override;
+  Texture* CreateTexture(const Texture::Options& opt, const Image* image) override;
+  // RenderTarget* CreateRenderTarget(const Texture::Options& opt);
+  // DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
 
-  virtual VertexGpuProgram* CreateVertexGpuProgram(VertexDescPtr desc,
+  VertexGpuProgram* CreateVertexGpuProgram(VertexDescPtr desc,
                                                    const std::string& str) override;
-  virtual GpuProgram* CreateGpuProgram(RenderPipelineStage stage,
+  GpuProgram* CreateGpuProgram(RenderPipelineStage stage,
                                        const std::string& program) override;
-  virtual Overlay* CreateOverlay() override;
-  virtual Technique* CreateTechnique() override;
+  Overlay* CreateOverlay() override;
+  Technique* CreateTechnique() override;
 
-  virtual bool Present() override;
-  virtual bool reset() override;
+  bool reset() override;
 
   D3DEnvironmentPtr& GetD3DEnv() { return envptr_;}
   /**

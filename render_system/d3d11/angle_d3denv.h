@@ -14,7 +14,7 @@ class AngleD3DEnvironment : public D3DEnvironment {
   bool ResetSwapChain() override;
   bool Initialize() override;
 
-  SwapChain* CreateSwapChain(D3DRenderSystem* rs) override;
+  SwapChain* CreateSwapChain(D3DRenderSystem* rs, Surface* surface) override;
  private:
   DISALLOW_COPY_AND_ASSIGN(AngleD3DEnvironment);
 };

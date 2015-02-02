@@ -7,22 +7,29 @@
 
 namespace azer {
 namespace d3d11 {
-D3DEnvironment::D3DEnvironment(Surface* surface) 
-    : d3d_device_(NULL)
-    , d3d_context_(NULL)
-    , dxgi_factory_(NULL)
-    , dxgi_adapter_(NULL)
+
+D3DSwapChainEnv::D3DSwapChainEnv(Surface* surface) 
+    : d3d_context_(NULL)
     , swap_chain_(NULL)
     , surface_(surface) {
+}
+
+D3DSwapChainEnv::D3DSwapChainEnv() {
+  SAFE_RELEASE(d3d_context_);
+  SAFE_RELEASE(swap_chain_);
+}
+
+D3DEnvironment::D3DEnvironment(Surface* surface) 
+    : d3d_device_(NULL)
+    , dxgi_factory_(NULL)
+    , dxgi_adapter_(NULL) {
   memset(&feature_level_, 0, sizeof(feature_level_));
 }
 
 D3DEnvironment::~D3DEnvironment() {
   SAFE_RELEASE(d3d_device_);
-  SAFE_RELEASE(d3d_context_);
   SAFE_RELEASE(dxgi_factory_);
   SAFE_RELEASE(dxgi_adapter_);
-  SAFE_RELEASE(swap_chain_);
 }
 
 bool D3DEnvironment::InitDXGI() {

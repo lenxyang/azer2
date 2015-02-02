@@ -11,7 +11,7 @@ class InternalD3DEnvironment : public D3DEnvironment {
   InternalD3DEnvironment(Surface* surface);
   bool ResetSwapChain() override;
   bool Initialize() override;
-  SwapChain* CreateSwapChain(D3DRenderSystem* rs) override;
+  SwapChain* CreateSwapChain(D3DRenderSystem* rs, Surface* surface) override;
  private:
   bool InitD3DDevice();
   DISALLOW_COPY_AND_ASSIGN(InternalD3DEnvironment);

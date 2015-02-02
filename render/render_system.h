@@ -36,9 +36,10 @@ class AZER_EXPORT RenderSystem {
   virtual ~RenderSystem();
   virtual const StringType& name() const = 0;
   virtual const StringType& short_name() const = 0;
-
   static void SetRenderSystem(RenderSystem* rs);
   static RenderSystem* Current();
+
+  virtual SwapChainPtr CreateSwapChainForSurface(Surface* surface) = 0;
 
   virtual Renderer* CreateRenderer(const Texture::Options& opt) = 0;
   virtual Renderer* CreateDeferredRenderer(const Texture::Options& opt) = 0;
@@ -65,7 +66,6 @@ class AZER_EXPORT RenderSystem {
                                        const std::string& program) = 0;
   virtual Overlay* CreateOverlay() = 0;
 
-  virtual bool Present() = 0;
   virtual bool reset() = 0;
 
   ReusableObject* GetReusableObject() { return reusable_object_.get();}
@@ -77,27 +77,15 @@ class AZER_EXPORT RenderSystem {
 
   Surface* GetSurface() { return surface_;}
   const Surface* GetSurface() const { return surface_;}
-
-  // renderers
-  Renderer* GetSwapchainRenderer();
-  Renderer* GetCurrentRenderer() { return current_renderer_;}
-  void SetCurrentRenderer(Renderer* ptr) { current_renderer_ = ptr;}
   static const int32 kMaxRenderTarget = 256;
-
-  SwapChainPtr& GetSwapchain() { return swap_chain_;}
  protected:
-  void SetSwapchain(SwapChainPtr& swapchain);
-
   // context2d, init by sub render-system
   RenderSystemCapability capability_;
   std::unique_ptr<Context2D> context2d_;
 
-  Surface* surface_;
   ReusableObjectPtr reusable_object_;
   friend class AutoRenderSystemInit;
 private:
-  Renderer* current_renderer_;
-  SwapChainPtr swap_chain_;
   static RenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(RenderSystem);
 };

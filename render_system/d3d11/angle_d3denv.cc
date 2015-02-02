@@ -38,9 +38,10 @@ bool AngleD3DEnvironment::Initialize() {
   return true;
 }
 
-SwapChain* AngleD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs) {
+SwapChain* AngleD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs,
+                                                Surface* surface) {
   std::unique_ptr<AngleSwapChain> ptr(new AngleSwapChain(rs));
-  if (!ptr->Init(GetSurface())) {
+  if (!ptr->Init(surface)) {
     return NULL;
   }
 
