@@ -10,8 +10,8 @@
 namespace azer {
 namespace d3d11 {
 
-InternalD3DEnvironment::InternalD3DEnvironment(Surface* surface)
-    : D3DEnvironment(surface) {
+InternalD3DEnvironment::InternalD3DEnvironment()
+    : D3DEnvironment() {
 }
 
 bool InternalD3DEnvironment::InitD3DDevice() {

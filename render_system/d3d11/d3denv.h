@@ -60,7 +60,7 @@ class D3DEnvironment {
   ID3D11DeviceContext* GetContext() { return d3d_context_;}
   const D3D_FEATURE_LEVEL&  feature_level() const { return feature_level_;}
  protected:
-  D3DEnvironment(Surface* ptr);
+  D3DEnvironment();
 
   // after get D3D11Device, get dxgi interface pointer
   bool InitDXGI();

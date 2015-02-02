@@ -11,8 +11,8 @@ using azer::d3d11::InternalD3DEnvironment;
 using azer::d3d11::AngleD3DEnvironment;
 
 extern "C" {
-azer::RenderSystem* CreateRenderSystem(azer::Surface* sur) {
-  D3DEnvironmentPtr envptr(new InternalD3DEnvironment(sur));
+azer::RenderSystem* CreateRenderSystem() {
+  D3DEnvironmentPtr envptr(new InternalD3DEnvironment());
   if (!envptr->Initialize()) {
     LOG(ERROR) << "Failed to inititialize D3D11Environment";
     return NULL;
@@ -25,12 +25,8 @@ azer::RenderSystem* CreateRenderSystem(azer::Surface* sur) {
   }
   */
 
-  CHECK(sur->GetSwapChain() == NULL);
   std::unique_ptr<D3DRenderSystem> rs(new D3DRenderSystem(envptr));
   if (rs->Init()) {
-    azer::SwapChain* swapchain = rs->CreateSwapChainForSurface(sur);
-    sur->SetSwapChain(swapchain);
-    swapchain->GetRenderer()->SetViewport(azer::Renderer::Viewport());
     return rs.release();
   } else {
     return NULL;

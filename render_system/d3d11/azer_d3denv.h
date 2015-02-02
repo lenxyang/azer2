@@ -8,7 +8,7 @@ namespace d3d11 {
 
 class InternalD3DEnvironment : public D3DEnvironment {
  public:
-  InternalD3DEnvironment(Surface* surface);
+  InternalD3DEnvironment();
   bool Initialize() override;
   D3DEnvSwapChain* CreateSwapChain(Surface* surface) override;
  private:

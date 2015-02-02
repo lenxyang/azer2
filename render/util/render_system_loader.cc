@@ -10,17 +10,15 @@
 namespace azer {
 
 namespace {
-typedef azer::RenderSystem* (*CreateRenderSystemFunc)(azer::Surface* surface);
+typedef azer::RenderSystem* (*CreateRenderSystemFunc)();
 
 AutoRenderSystemInit *s_render_system_env = NULL;
 }  // namespace
 
-AutoRenderSystemInit::AutoRenderSystemInit(const base::FilePath& path,
-                                           SurfacePtr surface)
+AutoRenderSystemInit::AutoRenderSystemInit(const base::FilePath& path)
     : dynlib_(path, true)
-    , current_(NULL)
-    , surface_(surface) {
-  Init(surface_);
+    , current_(NULL) {
+  Init();
   RenderSystem::SetRenderSystem(current_);
 }
 
@@ -29,14 +27,14 @@ AutoRenderSystemInit:: ~AutoRenderSystemInit() {
   delete current_;
 }
 
-bool AutoRenderSystemInit::Init(SurfacePtr surface) {
+bool AutoRenderSystemInit::Init() {
   if(!dynlib_.load()) {
     return false;
   }
 
   CreateRenderSystemFunc func = (CreateRenderSystemFunc)
       dynlib_.GetSymbol("CreateRenderSystem");
-  if (func != NULL && (current_ = (*func)(surface.get()))) {
+  if (func != NULL && (current_ = (*func)())) {
     LOG(ERROR) << "RenderSystem(" << current_->name() << ") Created";
     return true;
   } else {
@@ -45,15 +43,14 @@ bool AutoRenderSystemInit::Init(SurfacePtr surface) {
   }
 }
 
-bool LoadRenderSystem(gfx::AcceleratedWidget window) {
+bool LoadRenderSystem() {
   DCHECK(RenderSystem::Current() == NULL);
   DCHECK(NULL != CommandLine::ForCurrentProcess());
   ::base::FilePath path = CommandLine::ForCurrentProcess()->GetProgram();
   ::base::FilePath dllpath = path.DirName();
   dllpath = dllpath.Append(::base::UTF8ToWide("d3d11_render_system.dll"));
 
-  SurfacePtr surface(new Surface(window));
-  s_render_system_env = new AutoRenderSystemInit(dllpath, surface);
+  s_render_system_env = new AutoRenderSystemInit(dllpath);
   return s_render_system_env->GetRenderSystem() != NULL;
 }
 

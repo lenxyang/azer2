@@ -5,10 +5,9 @@
 
 namespace azer {
 class RenderSystem;
-class Surface;
 }  // namespace azer
 
-extern "C" AZER_D3D11RS_EXPORT azer::RenderSystem* CreateRenderSystem(azer::Surface*);
+extern "C" AZER_D3D11RS_EXPORT azer::RenderSystem* CreateRenderSystem();
 
 extern "C" AZER_D3D11RS_EXPORT void ReleaseRenderSystem(azer::RenderSystem* rs);
     

@@ -7,7 +7,7 @@
 
 namespace azer {
 namespace d3d11 {
-D3DEnvironment::D3DEnvironment(Surface* surface) 
+D3DEnvironment::D3DEnvironment() 
     : d3d_device_(NULL)
     , d3d_context_(NULL)
     , dxgi_factory_(NULL)

@@ -12,18 +12,17 @@ class RenderSystem;
 
 class AZER_EXPORT AutoRenderSystemInit {
  public:
-  AutoRenderSystemInit(const base::FilePath& path, SurfacePtr surface);
+  AutoRenderSystemInit(const base::FilePath& path);
   ~AutoRenderSystemInit();
 
   RenderSystem* GetRenderSystem() { return current_; }
  private:
-  bool Init(SurfacePtr surface);
+  bool Init();
   ::azer::Dynlib dynlib_;
   RenderSystem* current_;
-  SurfacePtr surface_;
   DISALLOW_COPY_AND_ASSIGN(AutoRenderSystemInit);
 };
 
-bool AZER_EXPORT LoadRenderSystem(gfx::AcceleratedWidget window);
+bool AZER_EXPORT LoadRenderSystem();
 void AZER_EXPORT UnloadRenderSystem();
 }  // namespace azer
