@@ -13,8 +13,7 @@ namespace d3d11 {
 
 void D3DRenderTarget::Clear(const azer::Vector4& color) {
   DCHECK(NULL != target_);
-  DCHECK(NULL != renderer_);
-  ID3D11DeviceContext* d3d_context = renderer_->GetContext();
+  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
   d3d_context->ClearRenderTargetView(
       target_, D3DXCOLOR(color.x, color.y, color.z, color.w));
 }
@@ -41,14 +40,15 @@ bool D3DRenderTarget::Init(D3DRenderSystem* rs) {
 }
 
 bool D3DSurfaceRenderTarget::Init() {
-  D3DRenderSystem* rs = (D3DRenderSystem*)renderer_->GetRenderSystem();
+  D3DRenderSystem* rs = render_system_;
   DCHECK(target_ == NULL);
+  DCHECK(swapchain_);
   DCHECK(default_render_target_);
-  ID3D11Device* d3d_device = renderer_->GetDevice();
+  ID3D11Device* d3d_device = rs->GetDevice();
   std::unique_ptr<D3DTexture2D> ptr(new D3DTexture2D(options(), rs));
   HRESULT hr;
-  
-  ID3D11Texture2D* buffer = rs->GetD3DEnv()->GetSwapTexture();
+
+  ID3D11Texture2D* buffer = swapchain_->GetSwapTexture();
   ptr->Attach(buffer);
   hr = d3d_device->CreateRenderTargetView(ptr->resource_, NULL, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateRenderTargetView failed ");
@@ -57,12 +57,11 @@ bool D3DSurfaceRenderTarget::Init() {
 }
 
 D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
-                                         D3DRenderer* r) {
-  D3DRenderSystem* rs = (D3DRenderSystem*)r->GetRenderSystem();
+                                         D3DRenderSystem* rs) {
   Texture::Options opt;
   opt = o;
   opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
-  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, r));
+  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, rs));
   if (!target->Init(rs)) {
     return NULL;
   }
@@ -70,19 +69,20 @@ D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
   return target.release();
 }
 
-D3DSurfaceRenderTarget* D3DSurfaceRenderTarget::Create(Surface* surface,
-                                                       D3DRenderer* r) {
+D3DRenderTarget* D3DSurfaceRenderTarget::Create(D3DEnvSwapChain* swapchain,
+                                                       D3DRenderSystem* rs) {
+  Surface* surface = swapchain->GetSurface();
   Texture::Options opt;
-  opt.size = surface->GetBounds().size();
-  opt.target = Texture::kRenderTarget;
-
-  std::unique_ptr<D3DSurfaceRenderTarget> target(
-      new D3DSurfaceRenderTarget(opt, surface, r));
-  if (!target->Init()) {
+  opt.size = gfx::Size(surface->GetBounds().size());
+  opt.target = (Texture::BindTarget)(Texture::kRenderTarget);
+  std::unique_ptr<D3DRenderTarget> target(
+      new D3DSurfaceRenderTarget(opt, swapchain, rs));
+  if (!target->Init(rs)) {
     return NULL;
   }
-  
+
   return target.release();
+  
 }
 }  // namespace d3d11
 }  // namespace azer

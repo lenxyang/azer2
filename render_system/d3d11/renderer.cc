@@ -330,8 +330,8 @@ bool D3DRenderer::Init(const Texture::Options& o) {
   DCHECK(targets_[0].get() == NULL);
   DCHECK(depth_.get() == NULL);
 
-  RenderTargetPtr target(D3DRenderTarget::Create(o, this));
-  DepthBufferPtr depth(D3DDepthBuffer::Create(o, this));
+  RenderTargetPtr target(D3DRenderTarget::Create(o, d3d11_render_system_));
+  DepthBufferPtr depth(D3DDepthBuffer::Create(o, d3d11_render_system_));
   if (target.get() == NULL || depth.get() == NULL) {
     return false;
   }

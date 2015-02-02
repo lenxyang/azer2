@@ -19,16 +19,16 @@ class D3DRenderer;
 
 class D3DSwapChain : public SwapChain {
  public:
+  D3DSwapChain(D3DRenderSystem* rs);
   virtual ~D3DSwapChain();
 
   bool Init(Surface* surface);
   virtual bool reset(Surface* surface) override;
   virtual bool resize(Surface* surface) override;
   virtual bool Present() override;
- private:
-  D3DSwapChain(D3DRenderSystem* rs);
-  friend class InternalD3DEnvironment;;
 
+  D3DEnvSwapChain* GetD3DEnvSwapChain() { return d3d_swapchain_.get();}
+ private:
   Renderer* CreateSurfaceRenderer(Surface* surface);
   D3DRenderSystem* render_system_;
   std::unique_ptr<D3DEnvSwapChain> d3d_swapchain_;

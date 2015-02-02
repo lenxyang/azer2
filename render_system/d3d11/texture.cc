@@ -99,8 +99,7 @@ void D3DTexture::SetVSSampler(int index, D3DRenderer* renderer) {
 void D3DTexture::GenerateMips(int level) {
   DCHECK(view_ != NULL);
   ID3D11Device* d3d_device = render_system_->GetDevice();
-  D3DRenderer* renderer = (D3DRenderer*)(render_system_->GetSwapchainRenderer());
-  ID3D11DeviceContext* d3d_context = renderer->GetContext();
+  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
   // D3DX11FilterTexture(d3d_context, (ID3D11Resource*)view_, 0, level);
   d3d_context->GenerateMips(view_);
 }
@@ -159,8 +158,7 @@ Texture::MapData D3DTexture::map(MapType maptype) {
   DCHECK(NULL != resource_);
   MapData mapdata;
   ZeroMemory(&mapdata, sizeof(mapdata));
-  D3DRenderer* renderer = (D3DRenderer*)(render_system_->GetSwapchainRenderer());
-  ID3D11DeviceContext* d3d_context = renderer->GetContext();
+  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
 
   D3D11_MAPPED_SUBRESOURCE mapped;
   ZeroMemory(&mapped, sizeof(D3D11_MAPPED_SUBRESOURCE));
@@ -187,8 +185,7 @@ void D3DTexture::unmap() {
   mapped_ = false;
 #endif
   DCHECK(NULL != resource_);
-  D3DRenderer* renderer = (D3DRenderer*)(render_system_->GetSwapchainRenderer());
-  ID3D11DeviceContext* d3d_context = renderer->GetContext();
+  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
   d3d_context->Unmap(resource_, 0);
 }
 
@@ -204,8 +201,7 @@ bool D3DTexture::CopyTo(Texture* texture) {
     return false;
   }
 
-  D3DRenderer* renderer = (D3DRenderer*)(render_system_->GetSwapchainRenderer());
-  ID3D11DeviceContext* d3d_context = renderer->GetContext();
+  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
   d3d_context->CopyResource(tex->resource_, resource_);
   return true;
 }

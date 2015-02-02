@@ -12,24 +12,23 @@ namespace azer {
 namespace d3d11 {
 
 D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o, 
-                                       D3DRenderer* renderer) {
+                                       D3DRenderSystem* rs) {
   Texture::Options opt;
   opt = o;
   opt.format = kDepth24Stencil8;
   opt.target = Texture::kDepthStencil;
-  std::unique_ptr<D3DDepthBuffer> ptr(new D3DDepthBuffer(opt, renderer));
-  if (!ptr->Init((D3DRenderSystem*)renderer->GetRenderSystem())) {
+  std::unique_ptr<D3DDepthBuffer> ptr(new D3DDepthBuffer(opt, rs));
+  if (!ptr->Init(rs)) {
     return NULL;
   }
 
   return ptr.release();
 }
 
-D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface,
-                                       D3DRenderer* renderer) {
+D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
   Texture::Options o;
   o.size = surface->GetBounds().size();
-  return Create(o, renderer);
+  return Create(o, rs);
 }
 
 bool D3DDepthBuffer::InitDepthAndStencilState(D3DRenderSystem* rs) {
@@ -75,10 +74,10 @@ void D3DDepthBuffer::Enable(bool enable) {
 }
 
 void D3DDepthBuffer::UpdateState() {
-  ID3D11DeviceContext* d3d_context = renderer_->GetContext();
+  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
 
   ID3D11DepthStencilState* state = NULL;
-  ID3D11Device* d3d_device = renderer_->GetDevice();
+  ID3D11Device* d3d_device = render_system_->GetDevice();
   HRESULT hr = d3d_device->CreateDepthStencilState(&desc_, &state);
   
   HRESULT_HANDLE_NORET(hr, ERROR, "CreateDepthStencilState failed");

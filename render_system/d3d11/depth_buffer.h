@@ -17,15 +17,15 @@ class D3DRenderer;
 
 class D3DDepthBuffer : public DepthBuffer {
  public:
-  static D3DDepthBuffer* Create(Surface* surface, D3DRenderer* renderer);
+  static D3DDepthBuffer* Create(Surface* surface, D3DRenderSystem* rs);
   static D3DDepthBuffer* Create(const Texture::Options& opt, 
-                                  D3DRenderer* renderer);
+                                D3DRenderSystem* rs);
    // create by rendersystem
-  D3DDepthBuffer(const Texture::Options& opt, D3DRenderer* renderer)
+  D3DDepthBuffer(const Texture::Options& opt, D3DRenderSystem* rs)
       : DepthBuffer(opt)
       , stencil_ref_value_(0)
       , target_(NULL)
-      , renderer_(renderer) {
+      , render_system_(rs) {
   }
 
   virtual ~D3DDepthBuffer() {
@@ -56,9 +56,8 @@ class D3DDepthBuffer : public DepthBuffer {
 
   int32 stencil_ref_value_;
   ID3D11DepthStencilView* target_;
-  D3DRenderer* renderer_;
+  D3DRenderSystem* render_system_;
   D3D11_DEPTH_STENCIL_DESC desc_;
-  friend class D3DRenderer;
   friend class D3DRenderSystem;
   DISALLOW_COPY_AND_ASSIGN(D3DDepthBuffer);
 };

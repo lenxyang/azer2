@@ -31,8 +31,7 @@ const StringType& D3DRenderSystem::name_ = AZER_LITERAL("Direct3D11RenderSystem"
 const StringType& D3DRenderSystem::short_name_ = AZER_LITERAL("d3d11");
 
 D3DRenderSystem::D3DRenderSystem(D3DEnvironmentPtr envptr)
-    : envptr_(envptr)
-    , RenderSystem(envptr->GetSurface()) {
+    : envptr_(envptr) {
   InitContext2D();
 }
 
@@ -40,7 +39,7 @@ D3DRenderSystem::~D3DRenderSystem() {
 }
 
 SwapChain* D3DRenderSystem::CreateSwapChainForSurface(Surface* surface) {
-  std::unique_ptr<SwapChain> swapchain(new D3DSwapChain(this));
+  std::unique_ptr<D3DSwapChain> swapchain(new D3DSwapChain(this));
   if (swapchain->Init(surface)) {
     return swapchain.release();
   } else {

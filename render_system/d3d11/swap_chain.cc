@@ -25,9 +25,9 @@ Renderer* D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   std::unique_ptr<D3DSurfaceRenderer> renderer(
       new D3DSurfaceRenderer(surface, d3d_context, render_system_));
   
-  RenderTargetPtr target(D3DSurfaceRenderTarget::Create(
-      surface, renderer.get()));
-  DepthBufferPtr depth(D3DDepthBuffer::Create(surface, renderer.get()));
+  RenderTargetPtr target(D3DSurfaceRenderTarget::Create(d3d_swapchain_.get(),
+                                                        render_system_));
+  DepthBufferPtr depth(D3DDepthBuffer::Create(surface, render_system_));
   if (!renderer->InitForSurface(target, depth)) {
     return false;
   }
