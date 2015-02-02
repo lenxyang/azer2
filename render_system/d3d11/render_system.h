@@ -34,7 +34,7 @@ class D3DRenderSystem : public RenderSystem {
   const StringType& name() const override;
   const StringType& short_name() const override;
 
-  SwapChainPtr CreateSwapChainForSurface(Surface* surface) override;
+  SwapChain* CreateSwapChainForSurface(Surface* surface) override;
 
   Renderer* CreateRenderer(const Texture::Options& opt) override;
   Renderer* CreateDeferredRenderer(const Texture::Options& opt) override;

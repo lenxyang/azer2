@@ -31,6 +31,7 @@ class D3DSwapChain : public SwapChain {
 
   Renderer* CreateSurfaceRenderer(Surface* surface);
   D3DRenderSystem* render_system_;
+  std::unique_ptr<D3DEnvSwapChain> d3d_swapchain_;
   DISALLOW_COPY_AND_ASSIGN(D3DSwapChain);
 };
 

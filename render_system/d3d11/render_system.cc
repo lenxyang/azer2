@@ -39,10 +39,12 @@ D3DRenderSystem::D3DRenderSystem(D3DEnvironmentPtr envptr)
 D3DRenderSystem::~D3DRenderSystem() {
 }
 
-SwapChainPtr D3DRenderSystem::CreateSwapChainForSurface(Surface* surface) {
-  SwapChainPtr swapchain(envptr_->CreateSwapChain(this));
-  if (swapchain.get() == NULL) {
-    return false;
+SwapChain* D3DRenderSystem::CreateSwapChainForSurface(Surface* surface) {
+  std::unique_ptr<SwapChain> swapchain(new D3DSwapChain(this));
+  if (swapchain->Init(surface)) {
+    return swapchain.release();
+  } else {
+    return NULL;
   }
 }
 
@@ -58,8 +60,7 @@ bool D3DRenderSystem::Init() {
 }
 
 bool D3DRenderSystem::reset() {
-  DCHECK(GetSwapchain().get() != NULL);
-  return GetSwapchain()->reset(envptr_->GetSurface());
+  return true;
 }
 
 void D3DRenderSystem::GetDriverCapability() {

@@ -7,20 +7,9 @@
 
 namespace azer {
 namespace d3d11 {
-
-D3DSwapChainEnv::D3DSwapChainEnv(Surface* surface) 
-    : d3d_context_(NULL)
-    , swap_chain_(NULL)
-    , surface_(surface) {
-}
-
-D3DSwapChainEnv::D3DSwapChainEnv() {
-  SAFE_RELEASE(d3d_context_);
-  SAFE_RELEASE(swap_chain_);
-}
-
 D3DEnvironment::D3DEnvironment(Surface* surface) 
     : d3d_device_(NULL)
+    , d3d_context_(NULL)
     , dxgi_factory_(NULL)
     , dxgi_adapter_(NULL) {
   memset(&feature_level_, 0, sizeof(feature_level_));
@@ -28,6 +17,7 @@ D3DEnvironment::D3DEnvironment(Surface* surface)
 
 D3DEnvironment::~D3DEnvironment() {
   SAFE_RELEASE(d3d_device_);
+  SAFE_RELEASE(d3d_context_);
   SAFE_RELEASE(dxgi_factory_);
   SAFE_RELEASE(dxgi_adapter_);
 }
@@ -56,7 +46,17 @@ bool D3DEnvironment::InitDXGI() {
   return true;
 }
 
-ID3D11Texture2D* D3DEnvironment::GetSwapTexture() {
+D3DEnvSwapChain::D3DEnvSwapChain(D3DEnvironment* env, Surface* surface) 
+    : swap_chain_(NULL)
+    , d3denv_(env)
+    , surface_(surface) {
+}
+
+D3DEnvSwapChain::~D3DEnvSwapChain() {
+  SAFE_RELEASE(swap_chain_);
+}
+
+ID3D11Texture2D* D3DEnvSwapChain::GetSwapTexture() {
   HRESULT hr = 0;
   ID3D11Texture2D* texture_buffer = NULL;
   hr = swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&texture_buffer);
@@ -66,6 +66,39 @@ ID3D11Texture2D* D3DEnvironment::GetSwapTexture() {
   return texture_buffer;
 }
 
+
+bool D3DEnvSwapChain::ResetSwapChain() {
+  HRESULT hr = 0;
+  int32 width = surface_->GetBounds().width();
+  int32 height = surface_->GetBounds().height();
+  SAFE_RELEASE(swap_chain_);
+  //Describe our SwapChain
+  DXGI_MODE_DESC bufferDesc;
+  ZeroMemory(&bufferDesc, sizeof(DXGI_MODE_DESC));
+  bufferDesc.Width = width;
+  bufferDesc.Height = height;
+  bufferDesc.RefreshRate.Numerator = 60;
+  bufferDesc.RefreshRate.Denominator = 1;
+  bufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  bufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+  bufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+
+  DXGI_SWAP_CHAIN_DESC swapChainDesc; 
+  ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
+  swapChainDesc.BufferDesc = bufferDesc;
+  swapChainDesc.SampleDesc.Count = 1;
+  swapChainDesc.SampleDesc.Quality = 0;
+  swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+  swapChainDesc.BufferCount = 1;
+  swapChainDesc.OutputWindow = (HWND)surface_->GetWindow();
+  swapChainDesc.Windowed = !surface_->fullscreen();
+  swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+  IDXGIFactory* factory = d3denv_->GetDxgiFactory();
+  hr = factory->CreateSwapChain(d3denv_->GetDevice(), &swapChainDesc, &swap_chain_);
+  HRESULT_HANDLE(hr, ERROR, "Failed to create D3D11 and Swapchain ");
+
+  return true;
+}
 }  // namespace d3d11
 }  // namespace azer
 

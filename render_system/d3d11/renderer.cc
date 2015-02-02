@@ -66,7 +66,6 @@ void D3DRenderer::Use() {
   d3d_context_->OMSetRenderTargets(1, target_view, depth_view);
 
   // reset all state to current
-  GetRenderSystem()->SetCurrentRenderer(this);
   SetViewport(viewport_);
 }
 

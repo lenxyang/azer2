@@ -18,12 +18,8 @@ AngleD3DEnvironment::AngleD3DEnvironment(Surface* surface)
     : D3DEnvironment(surface) {
 }
 
-bool AngleD3DEnvironment::ResetSwapChain() {
-  CHECK(false);
-  return false;
-}
-
 bool AngleD3DEnvironment::Initialize() {
+  /*
   if (!AngleEnv::Pointer()->InitForView(surface_)) {
     LOG(ERROR) << "Failed to initialize ANGLE.";
   }
@@ -35,17 +31,12 @@ bool AngleD3DEnvironment::Initialize() {
     return false;
   }
 
+  */
   return true;
 }
 
-SwapChain* AngleD3DEnvironment::CreateSwapChain(D3DRenderSystem* rs,
-                                                Surface* surface) {
-  std::unique_ptr<AngleSwapChain> ptr(new AngleSwapChain(rs));
-  if (!ptr->Init(surface)) {
-    return NULL;
-  }
-
-  return ptr.release();
+D3DEnvSwapChain* AngleD3DEnvironment::CreateSwapChain(Surface* surface) {
+  return NULL;
 }
 }  // namespace d3d11
 }  // namespace azer

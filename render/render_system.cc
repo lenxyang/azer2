@@ -30,8 +30,7 @@ RenderSystem* RenderSystem::Current() {
   return render_system_;
 }
 
-RenderSystem::RenderSystem()
-    : current_renderer_(NULL) {
+RenderSystem::RenderSystem() {
 }
 
 RenderSystem::~RenderSystem() {

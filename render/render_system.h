@@ -31,7 +31,7 @@ typedef std::shared_ptr<IndicesData> IndicesDataPtr;
 
 class AZER_EXPORT RenderSystem {
  public:
-  RenderSystem(Surface* surface);
+  RenderSystem();
 
   virtual ~RenderSystem();
   virtual const StringType& name() const = 0;
@@ -39,7 +39,7 @@ class AZER_EXPORT RenderSystem {
   static void SetRenderSystem(RenderSystem* rs);
   static RenderSystem* Current();
 
-  virtual SwapChainPtr CreateSwapChainForSurface(Surface* surface) = 0;
+  virtual SwapChain* CreateSwapChainForSurface(Surface* surface) = 0;
 
   virtual Renderer* CreateRenderer(const Texture::Options& opt) = 0;
   virtual Renderer* CreateDeferredRenderer(const Texture::Options& opt) = 0;
@@ -74,9 +74,6 @@ class AZER_EXPORT RenderSystem {
   const RenderSystemCapability& capability() const {
     return capability_;
   }
-
-  Surface* GetSurface() { return surface_;}
-  const Surface* GetSurface() const { return surface_;}
   static const int32 kMaxRenderTarget = 256;
  protected:
   // context2d, init by sub render-system
@@ -85,14 +82,9 @@ class AZER_EXPORT RenderSystem {
 
   ReusableObjectPtr reusable_object_;
   friend class AutoRenderSystemInit;
-private:
+ private:
   static RenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(RenderSystem);
 };
-
-inline Renderer* RenderSystem::GetSwapchainRenderer() {
-  DCHECK(swap_chain_.get() != NULL);
-  return swap_chain_->GetRenderer().get();
-}
 }  // namespace azer
 

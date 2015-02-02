@@ -21,24 +21,22 @@ class D3DEnvironment;
 
 typedef std::shared_ptr<D3DEnvironment> D3DEnvironmentPtr;
 
-class D3DSwapChainEnv {
+class D3DEnvSwapChain {
  public:
-  D3DSwapChainEnv(Surface* ptr);
+  D3DEnvSwapChain(D3DEnvironment* env, Surface* ptr);
 
-  virtual ~D3DSwapChainEnv();
+  virtual ~D3DEnvSwapChain();
 
-  ID3D11DeviceContext* GetContext() { return d3d_context_;}
   IDXGISwapChain* GetSwapChain() { return swap_chain_;}
 
   ID3D11Texture2D* GetSwapTexture();
-
-  virtual bool ResetSwapChain() = 0;
+  virtual bool ResetSwapChain();
   Surface* GetSurface() { return surface_;}
  private:
-  ID3D11DeviceContext* d3d_context_;
   IDXGISwapChain* swap_chain_;
+  D3DEnvironment* d3denv_;
   Surface* surface_;
-  DISALLOW_COPY_AND_ASSIGN(D3DSwapChainEnv);
+  DISALLOW_COPY_AND_ASSIGN(D3DEnvSwapChain);
 };
 /**
  * D3DEnviroment 的作用是封装 D3D11 的初始化过程
@@ -53,12 +51,13 @@ class D3DEnvironment {
   virtual ~D3DEnvironment();
 
   virtual bool Initialize() = 0;
-  virtual SwapChain* CreateSwapChain(D3DRenderSystem* rs, Surface* surface) = 0;
+  virtual D3DEnvSwapChain* CreateSwapChain(Surface* surface) = 0;
   /**
    * direct3d relevent
    */
   ID3D11Device* GetDevice() { return d3d_device_;}
   IDXGIFactory* GetDxgiFactory() { return dxgi_factory_;}
+  ID3D11DeviceContext* GetContext() { return d3d_context_;}
   const D3D_FEATURE_LEVEL&  feature_level() const { return feature_level_;}
  protected:
   D3DEnvironment(Surface* ptr);
@@ -69,6 +68,7 @@ class D3DEnvironment {
   IDXGIFactory* dxgi_factory_;
   IDXGIAdapter* dxgi_adapter_;
   ID3D11Device* d3d_device_;
+  ID3D11DeviceContext* d3d_context_;
   D3D_FEATURE_LEVEL feature_level_;
   DISALLOW_COPY_AND_ASSIGN(D3DEnvironment);
 };

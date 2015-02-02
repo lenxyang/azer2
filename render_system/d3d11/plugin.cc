@@ -25,9 +25,12 @@ azer::RenderSystem* CreateRenderSystem(azer::Surface* sur) {
   }
   */
 
+  CHECK(sur->GetSwapChain() == NULL);
   std::unique_ptr<D3DRenderSystem> rs(new D3DRenderSystem(envptr));
   if (rs->Init()) {
-    rs->GetSwapchainRenderer()->SetViewport(azer::Renderer::Viewport());
+    azer::SwapChain* swapchain = rs->CreateSwapChainForSurface(sur);
+    sur->SetSwapChain(swapchain);
+    swapchain->GetRenderer()->SetViewport(azer::Renderer::Viewport());
     return rs.release();
   } else {
     return NULL;

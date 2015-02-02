@@ -81,8 +81,10 @@ using azer::d3d11::AngleSwapChain;
 extern "C" {
 void SwapRectHookANGLE(ID3D11ShaderResourceView* angle, 
                        ID3D11ShaderResourceView** resource) {
+  /*
   azer::RenderSystem* rs = azer::RenderSystem::Current();
   AngleSwapChain* swapchain = (AngleSwapChain*)(rs->GetSwapchain().get());
   Combined(angle, swapchain, resource);
+  */
 }
 }

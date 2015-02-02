@@ -8,6 +8,8 @@
 
 namespace azer {
 
+class SwapChain;
+
 /**
  * Surface 类似于 egl Surface， 在 SwapBuffer 之后最终结果展示与此
  */
@@ -21,6 +23,7 @@ class AZER_EXPORT Surface {
   Surface(gfx::AcceleratedWidget window) 
       : type_(kViewSurface)
       , fullscreen_(false)
+      , swapchain_(NULL)
       , window_(window)  {
     UpdateBounds();
   }
@@ -28,6 +31,7 @@ class AZER_EXPORT Surface {
   Surface(const gfx::Rect& rect)
       : type_(kOffscreenSurface)
       , fullscreen_(false)
+      , swapchain_(NULL)
       , bounds_(rect)
       , window_(0)  {
   }
@@ -37,11 +41,17 @@ class AZER_EXPORT Surface {
 
   Type type() const { return type_;}
   bool fullscreen() const { return fullscreen_;}
+
+  SwapChain* GetSwapChain() { return swapchain_;}
+
+  // dont call it
+  void SetSwapChain(SwapChain* swapchain) {swapchain_ = swapchain;}
  protected:
   void UpdateBounds();
 
   Type type_;
   bool fullscreen_;
+  SwapChain* swapchain_;
   gfx::Rect bounds_;
   gfx::AcceleratedWidget window_;
   DISALLOW_COPY_AND_ASSIGN(Surface);

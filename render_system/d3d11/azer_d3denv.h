@@ -9,9 +9,8 @@ namespace d3d11 {
 class InternalD3DEnvironment : public D3DEnvironment {
  public:
   InternalD3DEnvironment(Surface* surface);
-  bool ResetSwapChain() override;
   bool Initialize() override;
-  SwapChain* CreateSwapChain(D3DRenderSystem* rs, Surface* surface) override;
+  D3DEnvSwapChain* CreateSwapChain(Surface* surface) override;
  private:
   bool InitD3DDevice();
   DISALLOW_COPY_AND_ASSIGN(InternalD3DEnvironment);

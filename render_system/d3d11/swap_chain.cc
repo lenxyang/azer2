@@ -41,8 +41,8 @@ bool D3DSwapChain::resize(Surface* surface) {
 }
 
 bool D3DSwapChain::Present() {
-  D3DEnvironmentPtr& ptr = render_system_->GetD3DEnv();
-  IDXGISwapChain* swap_chain = ptr->GetSwapChain();
+  DCHECK(d3d_swapchain_.get());
+  IDXGISwapChain* swap_chain = d3d_swapchain_->GetSwapChain();
   DCHECK(NULL != swap_chain);
   HRESULT hr = swap_chain->Present(0, 0);
   if (FAILED(hr)) {
@@ -62,9 +62,8 @@ bool D3DSwapChain::Present() {
 }
 
 bool D3DSwapChain::reset(Surface* surface) {
-  D3DEnvironmentPtr& ptr = render_system_->GetD3DEnv();
-  ptr->ResetSwapChain();
-
+  D3DEnvironmentPtr ptr = render_system_->GetD3DEnv();
+  d3d_swapchain_.reset(ptr->CreateSwapChain(surface));
   renderer_.reset(CreateSurfaceRenderer(surface));
   if (renderer_.get() == NULL) {
     return false;
