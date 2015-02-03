@@ -66,6 +66,12 @@ void Compositor::ScheduleRedrawRect(const gfx::Rect& damage_rect) {
 }
 
 void Compositor::ScheduleDraw() {
+  if (root_layer()) {
+    root_layer()->ScheduleDraw();
+  }
+}
+
+void Compositor::DoDraw() {
   for (auto iter = need_redraw_.begin(); iter != need_redraw_.end(); ++iter) {
     Layer* layer = (*iter);
     if (layer->visible()) {

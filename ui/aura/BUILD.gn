@@ -229,6 +229,7 @@ executable("demo") {
 
   deps = [
     "//azer/ui",
+    "//azer/render",
     ":test_support",
     "//base",
     "//base:i18n",

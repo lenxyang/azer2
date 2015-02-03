@@ -60,6 +60,7 @@ azer::SwapChainPtr& Compositor::GetSwapChain() {
 }
 
 void Compositor::DoComposite() {
+  compositor_->DoDraw();
   compositor_->DoComposite();
 }
 }  // namespace ui

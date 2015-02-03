@@ -19,6 +19,7 @@ namespace ui {
 class Compositor;
 class LayerAnimator;
 class LayerOwner;
+class CCLayerDelegate;
 
 class COMPOSITOR_EXPORT Layer {
  public:
@@ -38,7 +39,7 @@ class COMPOSITOR_EXPORT Layer {
   void SetCompositor(Compositor* compositor);
 
   LayerDelegate* delegate() { return delegate_; }
-  void set_delegate(LayerDelegate* delegate) { delegate_ = delegate; }
+  void set_delegate(LayerDelegate* delegate);
 
   LayerOwner* owner() { return owner_; }
 
@@ -193,6 +194,7 @@ class COMPOSITOR_EXPORT Layer {
   LayerOwner* owner_;
 
   azer::compositor::Layer* layer_;
+  std::unique_ptr<CCLayerDelegate> cc_delegate_;
 
   friend class LayerOwner;
   friend class Compositor;

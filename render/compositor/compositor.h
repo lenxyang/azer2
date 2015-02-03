@@ -35,10 +35,11 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   * （例如 GL 调用必须等到 glFinish 返回之后才能确保所有操作已经完成 ）
   * (save the layer need to redraw, and just draw them)
   */
-  void ScheduleDraw();
+  void DoDraw();
 
   // get all layer in damage_rect and repaint them
   void ScheduleRedrawRect(const gfx::Rect& damage_rect);
+  void ScheduleDraw();
 
   TexturePtr& GetOutputTexture();
   RendererPtr& GetRenderer();

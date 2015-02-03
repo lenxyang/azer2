@@ -33,7 +33,7 @@ Layer* Layer::CreateLayer(LayerType type) {
     case kNotDrawnLayer:
       return new NoDrawLayer();
     case kCanvasLayer:
-      return new RendererLayer();
+      return new CanvasLayer();
     case kRendererLayer:
       return new RendererLayer();
     case kBitmapLayer: 
@@ -158,9 +158,7 @@ void Layer::OnParentBoundsChanged() {
 
 void Layer::OnAttachedtoTreeHost() {
   OnBoundsChanged();
-  if (visible()) {
-    GetTreeHost()->SetLayerNeedRedrawHierarchy(this);
-  }
+  ScheduleDraw();
 }
 
 void Layer::OnBoundsChanged() {
@@ -285,8 +283,9 @@ bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
 }
 
 void Layer::ScheduleDraw() {
-  DCHECK(AttachedToTreeHost());
-  GetTreeHost()->SetLayerNeedRedrawHierarchy(this);
+  if (AttachedToTreeHost()) {
+    GetTreeHost()->SetLayerNeedRedrawHierarchy(this);
+  }
 }
 
 bool Layer::AttachedToTreeHost() const {

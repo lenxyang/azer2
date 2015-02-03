@@ -17,6 +17,21 @@
 
 namespace ui {
 
+class CCLayerDelegate : public azer::compositor::LayerDelegate {
+ public:
+  CCLayerDelegate(ui::LayerDelegate* delegate)
+      : delegate_(delegate) {
+  }
+
+  void OnPaintLayer(gfx::Canvas* canvas) override {
+    if (delegate_) {
+      delegate_->OnPaintLayer(canvas);
+    }
+  }
+ protected:
+  ui::LayerDelegate* delegate_;
+};
+
 namespace {
 const Layer* GetRoot(const Layer* layer) {
   while (layer->parent())
@@ -168,6 +183,12 @@ void Layer::set_name(const std::string& name) {
   layer_->set_name(name);
 }
 
+void Layer::set_delegate(LayerDelegate* delegate) {
+  delegate_ = delegate;
+  cc_delegate_.reset(new CCLayerDelegate(delegate_));
+  layer_->set_delegate(cc_delegate_.get());
+}
+
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
   layer_->SchedulePaint(invalid_rect);
   return true;
@@ -241,4 +262,5 @@ void Layer::SetSubpixelPositionOffset(const gfx::Vector2dF offset) {
 bool Layer::Contains(Layer* layer) {
   return layer_->Contains(layer->layer());
 }
+
 }  // namespace ui
