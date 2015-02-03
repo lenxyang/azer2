@@ -32,7 +32,7 @@ class D3DRenderTarget : public RenderTarget {
   
   virtual void Clear(const azer::Vector4& color);
 
-  bool Init(D3DRenderSystem* rs);
+  bool Init();
   ID3D11RenderTargetView* GetD3DRenderTargetView() { return target_;}
  protected:
   ID3D11RenderTargetView* target_;

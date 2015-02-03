@@ -18,14 +18,14 @@ void D3DRenderTarget::Clear(const azer::Vector4& color) {
       target_, D3DXCOLOR(color.x, color.y, color.z, color.w));
 }
 
-bool D3DRenderTarget::Init(D3DRenderSystem* rs) {
+bool D3DRenderTarget::Init() {
   DCHECK(!default_render_target_);
   DCHECK(target_ == NULL);
 
-  ID3D11Device* d3d_device = rs->GetDevice();
+  ID3D11Device* d3d_device = render_system_->GetDevice();
   HRESULT hr;
   DCHECK(texture_.get() == NULL);
-  D3DTexture2D* tex = new D3DTexture2D(options_, rs);
+  D3DTexture2D* tex = new D3DTexture2D(options_, render_system_);
   texture_.reset(tex);
   if (!tex->Init(NULL, 1)) {
     return false;
@@ -62,7 +62,7 @@ D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
   opt = o;
   opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
   std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, rs));
-  if (!target->Init(rs)) {
+  if (!target->Init()) {
     return NULL;
   }
 
@@ -75,9 +75,9 @@ D3DRenderTarget* D3DSurfaceRenderTarget::Create(D3DEnvSwapChain* swapchain,
   Texture::Options opt;
   opt.size = gfx::Size(surface->GetBounds().size());
   opt.target = (Texture::BindTarget)(Texture::kRenderTarget);
-  std::unique_ptr<D3DRenderTarget> target(
+  std::unique_ptr<D3DSurfaceRenderTarget> target(
       new D3DSurfaceRenderTarget(opt, swapchain, rs));
-  if (!target->Init(rs)) {
+  if (!target->Init()) {
     return NULL;
   }
 

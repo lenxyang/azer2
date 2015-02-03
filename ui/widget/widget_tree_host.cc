@@ -34,7 +34,7 @@ WidgetTreeHost::~WidgetTreeHost() {
 
 void WidgetTreeHost::CreateCompositor(gfx::AcceleratedWidget widget) {
   CHECK(RenderSystem::Current() == NULL);
-  CHECK(LoadRenderSystem(widget));
+  CHECK(LoadRenderSystem());
   layer_host_.reset(new compositor::LayerTreeHost(bounds_.size()));
   compositor_.reset(new compositor::Compositor);
   layer_host_->SetCompositor(compositor_.get());

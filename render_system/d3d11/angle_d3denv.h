@@ -9,7 +9,7 @@ namespace d3d11 {
 
 class AngleD3DEnvironment : public D3DEnvironment {
  public:
-  AngleD3DEnvironment(Surface* surface);
+  AngleD3DEnvironment();
 
   bool Initialize() override;
 

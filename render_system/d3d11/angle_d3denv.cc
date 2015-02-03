@@ -14,8 +14,8 @@
 namespace azer {
 namespace d3d11 {
 
-AngleD3DEnvironment::AngleD3DEnvironment(Surface* surface)
-    : D3DEnvironment(surface) {
+AngleD3DEnvironment::AngleD3DEnvironment()
+    : D3DEnvironment() {
 }
 
 bool AngleD3DEnvironment::Initialize() {
