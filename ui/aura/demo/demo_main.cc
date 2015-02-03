@@ -23,6 +23,9 @@
 #if defined(OS_WIN)
 #include "ui/gfx/win/dpi.h"
 #endif
+
+#include "azer/render/util/render_system_loader.h"
+
 namespace {
 // Trivial WindowDelegate implementation that draws a colored background.
 class DemoWindowDelegate : public aura::WindowDelegate {
@@ -86,6 +89,7 @@ int DemoMain() {
 #if defined(OS_WIN)
   gfx::InitDeviceScaleFactor(1.0f);
 #endif
+  CHECK(azer::LoadRenderSystem());
   // Create the message-loop here before creating the root window.
   base::MessageLoopForUI message_loop;
   aura::Env::CreateInstance(true);
@@ -121,7 +125,11 @@ int DemoMain() {
   window3.Show();
   window2.AddChild(&window3);
   host->Show();
-  base::MessageLoopForUI::current()->Run();
+  while (true) {
+    base::MessageLoopForUI::current()->RunUntilIdle();
+    host->compositor()->DoComposite();
+    host->compositor()->GetSwapChain()->Present();
+  }
   return 0;
 }
 }  // namespace

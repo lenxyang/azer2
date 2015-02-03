@@ -92,6 +92,7 @@ class COMPOSITOR_EXPORT Compositor {
   azer::SurfacePtr surface_;
   azer::SwapChainPtr swapchain_;
   azer::RendererPtr renderer_;
+  azer::OverlayPtr overlay_;
   Layer* root_layer_;
   scoped_ptr<azer::compositor::LayerTreeHost> host_;
   scoped_ptr<azer::compositor::Compositor> compositor_;

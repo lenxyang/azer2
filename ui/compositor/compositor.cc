@@ -16,6 +16,9 @@ Compositor::Compositor(gfx::AcceleratedWidget widget)
   surface_.reset(new azer::Surface(widget));
   azer::RenderSystem* render_system = azer::RenderSystem::Current();
   swapchain_.reset(render_system->CreateSwapChainForSurface(surface_.get()));
+  renderer_ = swapchain_->GetRenderer();
+  overlay_.reset(render_system->CreateOverlay());
+
   host_.reset(new azer::compositor::LayerTreeHost(size));
   compositor_.reset(new azer::compositor::Compositor);
 }
@@ -62,5 +65,14 @@ azer::SwapChainPtr& Compositor::GetSwapChain() {
 void Compositor::DoComposite() {
   compositor_->DoDraw();
   compositor_->DoComposite();
+
+  renderer_->Use();
+  renderer_->Clear(azer::Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+  renderer_->ClearDepthAndStencil();
+
+  overlay_->SetTexture(compositor_->GetOutputTexture());
+  overlay_->SetBounds(gfx::RectF(-1.0f, -1.0f, 2.0f, 2.0f));
+  overlay_->SetTexCoord(gfx::PointF(0.0f, 0.0f), gfx::PointF(1.0f, 1.0f));
+  overlay_->Render(renderer_.get());
 }
 }  // namespace ui
