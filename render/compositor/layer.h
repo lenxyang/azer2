@@ -47,7 +47,6 @@ class AZER_EXPORT Layer {
 
   Layer* parent() { return parent_;}
   const Layer* parent() const { return parent_;}
-  
   LayerTreeHost* GetTreeHost() { return host_;}
 
   void AddObserver(LayerObserver* observer);
@@ -69,7 +68,7 @@ class AZER_EXPORT Layer {
   // add, remove child
   void Add(Layer* layer);
   bool Remove(Layer* layer);
-  bool IsChild(Layer* layer);
+  bool Contains(Layer* layer);
 
   // Sets the layer's fill color.  May only be called for LAYER_SOLID_COLOR.
   void SetColor(SkColor color);
@@ -148,6 +147,7 @@ class AZER_EXPORT Layer {
  protected:
   void StackRelativeTo(Layer* child, Layer* other, bool above);
   bool AttachedToTreeHost() const;
+  void OnAttachedtoTreeHost();
 
   void CalcTargetBounds();
   void CalcOverlayBounds();

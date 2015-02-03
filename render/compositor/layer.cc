@@ -58,11 +58,11 @@ Layer::~Layer() {
 void Layer::SetTreeHost(LayerTreeHost* host) {
   DCHECK(host_ == NULL);
   host_ = host;
+  this->OnAttachedtoTreeHost();
 }
 
 void Layer::Add(Layer* layer) {
   DCHECK(host_ != NULL);
-  DCHECK(!IsChild(layer));
   layer->parent_ = this;
   layer->SetTreeHost(GetTreeHost());
   children_.push_back(layer);
@@ -72,13 +72,11 @@ void Layer::Add(Layer* layer) {
   FOR_EACH_OBSERVER(LayerObserver, layer->observers_, OnLayerAttachedOnTree(layer));
 }
 
-bool Layer::IsChild(Layer* layer) {
-  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    if ((*iter) == layer) {
+bool Layer::Contains(Layer* other) {
+  for (const Layer* parent = other; parent; parent = parent->parent()) {
+    if (parent == this)
       return true;
-    }
   }
-
   return false;
 }
 
@@ -156,6 +154,13 @@ void Layer::SetBoundsInternal(const gfx::Rect& new_bounds) {
 
 void Layer::OnParentBoundsChanged() {
   OnBoundsChanged();
+}
+
+void Layer::OnAttachedtoTreeHost() {
+  OnBoundsChanged();
+  if (visible()) {
+    GetTreeHost()->SetLayerNeedRedrawHierarchy(this);
+  }
 }
 
 void Layer::OnBoundsChanged() {
@@ -263,16 +268,17 @@ void Layer::SetColor(SkColor color) {
 }
 
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
-  DCHECK(AttachedToTreeHost());
-  gfx::Point pt(invalid_rect.origin());
-  ConvertPointToLayer(GetTreeHost()->root(), this, &pt);
-  gfx::Rect rect(pt, invalid_rect.size());
-  // mark all layer interacted with rect 'needed render'
-  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    const gfx::Rect& child_bounds = (*iter)->bounds();
-    if (child_bounds.Intersects(rect)) {
-      GetTreeHost()->SetLayerNeedRedraw(*iter);
-      (*iter)->SchedulePaint(invalid_rect);
+  if (AttachedToTreeHost()) {
+    gfx::Point pt(invalid_rect.origin());
+    ConvertPointToLayer(GetTreeHost()->root(), this, &pt);
+    gfx::Rect rect(pt, invalid_rect.size());
+    // mark all layer interacted with rect 'needed render'
+    for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+      const gfx::Rect& child_bounds = (*iter)->bounds();
+      if (child_bounds.Intersects(rect)) {
+        GetTreeHost()->SetLayerNeedRedraw(*iter);
+        (*iter)->SchedulePaint(invalid_rect);
+      }
     }
   }
   return true;

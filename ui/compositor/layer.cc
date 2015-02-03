@@ -239,6 +239,6 @@ void Layer::SetSubpixelPositionOffset(const gfx::Vector2dF offset) {
 }
 
 bool Layer::Contains(Layer* layer) {
-  return true;
+  return layer_->Contains(layer->layer());
 }
 }  // namespace ui

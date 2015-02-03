@@ -21,6 +21,8 @@
 
 #include "azer/ui/compositor/compositor_export.h"
 #include "azer/render/compositor/compositor.h"
+#include "azer/render/renderer.h"
+#include "azer/render/swap_chain.h"
 
 class SkBitmap;
 
@@ -80,10 +82,16 @@ class COMPOSITOR_EXPORT Compositor {
   void AddAnimationObserver(CompositorAnimationObserver* observer);
   void RemoveAnimationObserver(CompositorAnimationObserver* observer);
   bool HasAnimationObserver(CompositorAnimationObserver* observer);
+
+  azer::SwapChainPtr& GetSwapChain();
+  void DoComposite();
  private:
   gfx::AcceleratedWidget widget_;
 
   // The root of the Layer tree drawn by this compositor.
+  azer::SurfacePtr surface_;
+  azer::SwapChainPtr swapchain_;
+  azer::RendererPtr renderer_;
   Layer* root_layer_;
   scoped_ptr<azer::compositor::LayerTreeHost> host_;
   scoped_ptr<azer::compositor::Compositor> compositor_;

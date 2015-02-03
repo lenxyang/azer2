@@ -12,8 +12,10 @@ namespace ui {
 Compositor::Compositor(gfx::AcceleratedWidget widget) 
     : root_layer_(NULL) {
   gfx::Size size(1, 1);
-  CHECK(azer::RenderSystem::Current() == NULL);
-  CHECK(azer::LoadRenderSystem(widget));
+  CHECK(azer::RenderSystem::Current() != NULL);
+  surface_.reset(new azer::Surface(widget));
+  azer::RenderSystem* render_system = azer::RenderSystem::Current();
+  swapchain_.reset(render_system->CreateSwapChainForSurface(surface_.get()));
   host_.reset(new azer::compositor::LayerTreeHost(size));
   compositor_.reset(new azer::compositor::Compositor);
 }
@@ -51,5 +53,13 @@ void Compositor::SetBackgroundColor(SkColor color) {
 
 gfx::Size Compositor::size() const { 
   return compositor_->size();
+}
+
+azer::SwapChainPtr& Compositor::GetSwapChain() { 
+  return swapchain_;
+}
+
+void Compositor::DoComposite() {
+  compositor_->DoComposite();
 }
 }  // namespace ui
