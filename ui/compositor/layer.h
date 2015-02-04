@@ -160,8 +160,8 @@ class COMPOSITOR_EXPORT Layer {
   // Note that this _does not_ invalidate any region of this layer; use
   // SchedulePaint() for that.
   void ScheduleDraw();
-  void SendDamagedRects();
-  void CompleteAllAnimations() {}
+  void SendDamagedRects() {}
+  void CompleteAllAnimations();
 
   const SkRegion& damaged_region() const { return damaged_region_;}
 

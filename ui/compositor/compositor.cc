@@ -26,7 +26,6 @@ Compositor::Compositor(gfx::AcceleratedWidget widget)
 Compositor::~Compositor() {
   compositor_.reset();
   host_.reset();
-  azer::UnloadRenderSystem();
 }
 
 void Compositor::ScheduleFullRedraw() {

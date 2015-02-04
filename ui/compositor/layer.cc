@@ -53,9 +53,6 @@ Layer::Layer(LayerType type)
 }
 
 Layer::~Layer() {
-  if (!parent_) {
-    delete layer_;
-  }
 }
 
 azer::compositor::Layer* Layer::CreateCCLayer(LayerType type) {
