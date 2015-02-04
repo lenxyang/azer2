@@ -112,24 +112,8 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
 
   LayerList& children() { return children_;}
   const LayerList& children() const { return children_;}
-
-  // Converts a point from the coordinates of |source| to the coordinates of
-  // |target|. Necessarily, |source| and |target| must inhabit the same Layer
-  // tree.
-  static void ConvertPointToLayer(const Layer* source,
-                                  const Layer* target,
-                                  gfx::Point* point);
-  // Converts a transform to be relative to the given |ancestor|. Returns
-  // whether success (that is, whether the given ancestor was really an
-  // ancestor of this layer).
-  bool GetTargetTransformRelativeTo(const Layer* ancestor,
-                                    gfx::Transform* transform) const;
-
-  void SetNeedRedraw(const gfx::Rect& rect);
  protected:
   void SetTreeHost(LayerTreeHost* host);
-  bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
-  bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
   /**
    * 在更改窗口的 bounds 时，需要重新计算 overly_bounds 和 tex_bounds

@@ -66,6 +66,7 @@ class COMPOSITOR_EXPORT Layer {
   // Stacks |child| directly below |other|.  Both must be children of this
   // layer.
   void StackBelow(Layer* child, Layer* other);
+  void StackRelativeTo(Layer* child, Layer* other, bool above);
 
   // Returns the child Layers.
   const std::vector<Layer*>& children() const { return children_; }

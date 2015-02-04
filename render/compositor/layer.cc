@@ -101,54 +101,6 @@ void Layer::SetVisible(bool visible) {
   visible_ = visible;
 }
 
-// static
-void Layer::ConvertPointToLayer(const Layer* source,
-                                const Layer* target,
-                                gfx::Point* point) {
-  if (source == target)
-    return;
-
-  const Layer* root_layer = GetRoot(source);
-  CHECK_EQ(root_layer, GetRoot(target));
-
-  if (source != root_layer)
-    source->ConvertPointForAncestor(root_layer, point);
-  if (target != root_layer)
-    target->ConvertPointFromAncestor(root_layer, point);
-}
-
-bool Layer::GetTargetTransformRelativeTo(const Layer* ancestor,
-                                         gfx::Transform* transform) const {
-  const Layer* p = this;
-  for (; p && p != ancestor; p = p->parent()) {
-    gfx::Transform translation;
-    translation.Translate(static_cast<float>(p->bounds().x()),
-                            static_cast<float>(p->bounds().y()));
-    transform->ConcatTransform(translation);
-  }
-  return p == ancestor;
-}
-
-bool Layer::ConvertPointForAncestor(const Layer* ancestor,
-                                    gfx::Point* point) const {
-  gfx::Transform transform;
-  bool result = GetTargetTransformRelativeTo(ancestor, &transform);
-  gfx::Point3F p(*point);
-  transform.TransformPoint(&p);
-  *point = gfx::ToFlooredPoint(p.AsPointF());
-  return result;
-}
-
-bool Layer::ConvertPointFromAncestor(const Layer* ancestor,
-                                     gfx::Point* point) const {
-  gfx::Transform transform;
-  bool result = GetTargetTransformRelativeTo(ancestor, &transform);
-  gfx::Point3F p(*point);
-  transform.TransformPointReverse(&p);
-  *point = gfx::ToFlooredPoint(p.AsPointF());
-  return result;
-}
-
 void Layer::SetBoundsInternal(const gfx::Rect& new_bounds) { 
   bounds_ = new_bounds;
   OnBoundsChanged();
@@ -224,17 +176,12 @@ void Layer::RemoveObserver(LayerObserver* observer) {
   observers_.RemoveObserver(observer);
 }
 
-void Layer::SetNeedRedraw(const gfx::Rect& rect) {
-  // compute the children in rect or interact with rect
-  host_->SetLayerNeedRedrawHierarchy(this);
-}
-
-
 void Layer::SetColor(SkColor color) {
   color_ = color;
 }
 
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
+  /*
   if (AttachedToTreeHost()) {
     gfx::Point pt(invalid_rect.origin());
     ConvertPointToLayer(GetTreeHost()->root(), this, &pt);
@@ -248,6 +195,8 @@ bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
       }
     }
   }
+  return true;
+  */
   return true;
 }
 

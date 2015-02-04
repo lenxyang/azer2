@@ -90,19 +90,43 @@ void Layer::Remove(Layer* child) {
 }
 
 void Layer::StackAtTop(Layer* child) {
-  layer_->StackAtTop(child->layer());
+  if (children_.size() <= 1 || child == children_.back())
+    return;  // Already in front.
+  StackAbove(child, children_.back());
 }
 
 void Layer::StackAbove(Layer* child, Layer* other) {
-  layer_->StackAbove(child->layer(), other->layer());
+  StackRelativeTo(child, other, true);
 }
 
 void Layer::StackAtBottom(Layer* child) {
-  layer_->StackAtBottom(child->layer());
+  if (children_.size() <= 1 || child == children_.front())
+    return;  // Already on bottom.
+  StackBelow(child, children_.front());
 }
 
 void Layer::StackBelow(Layer* child, Layer* other) {
-  layer_->StackBelow(child->layer(), other->layer());
+  StackRelativeTo(child, other, false);
+}
+
+void Layer::StackRelativeTo(Layer* child, Layer* other, bool above) {
+  DCHECK_NE(child, other);
+  DCHECK_EQ(this, child->parent());
+  DCHECK_EQ(this, other->parent());
+
+  const size_t child_i =
+      std::find(children_.begin(), children_.end(), child) - children_.begin();
+  const size_t other_i =
+      std::find(children_.begin(), children_.end(), other) - children_.begin();
+  if ((above && child_i == other_i + 1) || (!above && child_i + 1 == other_i))
+    return;
+
+  const size_t dest_i =
+      above ?
+      (child_i < other_i ? other_i : other_i + 1) :
+      (child_i < other_i ? other_i - 1 : other_i);
+  children_.erase(children_.begin() + child_i);
+  children_.insert(children_.begin() + dest_i, child);
 }
 
 void Layer::SetTransform(const gfx::Transform& transform) {
