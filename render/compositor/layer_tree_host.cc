@@ -10,17 +10,6 @@
 namespace azer {
 namespace compositor {
 
-namespace {
-void DeepDeleteLayers(Layer* layer) {
-  LayerList children = layer->children();
-  for (auto it = children.begin(); it != children.end(); ++it) {
-    Layer* child = *it;
-    DeepDeleteLayers(child);
-  }
-  delete layer;
-}
-}  // namespace
-
 LayerTreeHost::LayerTreeHost(const gfx::Size& size)
     : compositor_(NULL)
     , client_(NULL)
@@ -29,12 +18,9 @@ LayerTreeHost::LayerTreeHost(const gfx::Size& size)
 }
 
 LayerTreeHost::~LayerTreeHost() {
-  if (root_) {
-    DeepDeleteLayers(root_);
-  }
 }
 
-void LayerTreeHost::SetRoot(Layer* layer) {
+void LayerTreeHost::SetRoot(scoped_refptr<Layer> layer) {
   DCHECK(!root_);
   root_ = layer;
   root_->host_ = this;

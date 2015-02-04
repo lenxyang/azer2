@@ -25,13 +25,13 @@ namespace compositor {
 
 class Layer;
 class LayerTreeHost;
-typedef std::vector<Layer*> LayerList;
+typedef std::vector<scoped_refptr<Layer>> LayerList;
 
 class CanvasLayer;
 class RendererLayer;
 class LayerDelegate;
 
-class AZER_EXPORT Layer {
+class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
  public:
   enum LayerType {
     kNotDrawnLayer,
@@ -40,7 +40,7 @@ class AZER_EXPORT Layer {
     kBitmapLayer,
   };
 
-  static Layer* CreateLayer(LayerType);
+  static scoped_refptr<Layer> CreateLayer(LayerType);
 
   explicit Layer(LayerType type);
   virtual ~Layer();
@@ -66,9 +66,9 @@ class AZER_EXPORT Layer {
   void set_delegate(LayerDelegate* delegate) { delegate_ = delegate; }
 
   // add, remove child
-  void Add(Layer* layer);
-  bool Remove(Layer* layer);
-  bool Contains(Layer* layer);
+  void Add(scoped_refptr<Layer> layer);
+  bool Remove(scoped_refptr<Layer> layer);
+  bool Contains(scoped_refptr<Layer> layer);
 
   // Sets the layer's fill color.  May only be called for LAYER_SOLID_COLOR.
   void SetColor(SkColor color);
@@ -87,11 +87,6 @@ class AZER_EXPORT Layer {
   // Note that this _does not_ invalidate any region of this layer; use
   // SchedulePaint() for that.
   void ScheduleDraw();
-
-  void StackAtTop(Layer* child);
-  void StackAbove(Layer* child, Layer* target);
-  void StackBelow(Layer* child, Layer* target);
-  void StackAtBottom(Layer* child);
 
   virtual void SetBounds(const gfx::Rect& bounds) = 0;
   const gfx::Rect& bounds() const { return bounds_;}

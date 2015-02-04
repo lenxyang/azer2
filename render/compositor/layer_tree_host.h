@@ -32,7 +32,7 @@ class AZER_EXPORT LayerTreeHost : public LayerObserver {
 
   Layer* root() { return root_;}
   const Layer* root() const { return root_;}
-  void SetRoot(Layer* layer);
+  void SetRoot(scoped_refptr<Layer> layer);
 
   Compositor* compositor();
   void SetLayerNeedRedrawHierarchy(Layer* layer);
@@ -46,7 +46,7 @@ class AZER_EXPORT LayerTreeHost : public LayerObserver {
 
   Compositor* compositor_;
   LayerTreeHostClient* client_;
-  Layer* root_;
+  scoped_refptr<Layer> root_;
   gfx::Size size_;
   friend class Compositor;
   DISALLOW_COPY_AND_ASSIGN(LayerTreeHost);
