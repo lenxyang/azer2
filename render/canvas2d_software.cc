@@ -40,9 +40,10 @@ bool SoftwareCanvas2D::UpdateTexture() {
   Texture::MapData mapdata = texture_->map(kWriteDiscard);
   if (mapdata.pdata) {
     /*
-    skbitmap_->readPixels(skbitmap_->info(),
-                          mapdata.pdata, 
-                          mapdata.row_pitch, 0, 0);
+    SkImageInfo imageinfo = SkImageInfo::Make(skbitmap_->info().width(),
+                                              skbitmap_->info().height(),
+                                              kRGBA_8888_SkColorType,
+                                              skbitmap_->info().alphaType());
     */
     skcanvas_->readPixels(skbitmap_->info(),
                           mapdata.pdata, 

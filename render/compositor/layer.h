@@ -143,7 +143,7 @@ class AZER_EXPORT Layer {
    */
   void SetBoundsInternal(const gfx::Rect& new_bounds);
   void OnParentBoundsChanged();
-  void OnBoundsChanged();
+  virtual void OnBoundsChanged();
  protected:
   void StackRelativeTo(Layer* child, Layer* other, bool above);
   bool AttachedToTreeHost() const;

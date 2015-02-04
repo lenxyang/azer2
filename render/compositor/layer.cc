@@ -58,7 +58,9 @@ Layer::~Layer() {
 void Layer::SetTreeHost(LayerTreeHost* host) {
   DCHECK(host_ == NULL);
   host_ = host;
-  this->OnAttachedtoTreeHost();
+  if (host_) {
+    this->OnAttachedtoTreeHost();
+  }
 }
 
 void Layer::Add(Layer* layer) {
@@ -159,6 +161,10 @@ void Layer::OnParentBoundsChanged() {
 void Layer::OnAttachedtoTreeHost() {
   OnBoundsChanged();
   ScheduleDraw();
+
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    (*iter)->OnAttachedtoTreeHost();
+  }
 }
 
 void Layer::OnBoundsChanged() {

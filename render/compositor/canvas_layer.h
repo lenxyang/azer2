@@ -16,7 +16,8 @@ class AZER_EXPORT CanvasLayer : public TextureLayer {
 
   void Redraw() override;
   void SetBounds(const gfx::Rect& bounds) override;
- private:
+ protected:
+  void OnBoundsChanged() override;
   Canvas2DPtr canvas_;
   DISALLOW_COPY_AND_ASSIGN(CanvasLayer);
 };

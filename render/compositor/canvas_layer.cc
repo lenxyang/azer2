@@ -17,16 +17,20 @@ CanvasLayer::CanvasLayer()
 CanvasLayer::~CanvasLayer() {
 }
 
-void CanvasLayer::SetBounds(const gfx::Rect& bounds) {
+void CanvasLayer::OnBoundsChanged() {
   // before the layer putted into tree host, it cannot be drawn
   // so need not to create canvas
   if (GetTreeHost()) {
-    DCHECK(!bounds.IsEmpty());
+    DCHECK(!bounds_.IsEmpty());
     RenderSystem* rs = RenderSystem::Current();
-    canvas_.reset(rs->GetContext2D()->CreateCanvas(bounds.width(), 
-                                                   bounds.height()));
+    canvas_.reset(rs->GetContext2D()->CreateCanvas(bounds_.width(), 
+                                                   bounds_.height()));
   }
 
+  TextureLayer::OnBoundsChanged();
+}
+
+void CanvasLayer::SetBounds(const gfx::Rect& bounds) {
   SetBoundsInternal(bounds);
 }
 

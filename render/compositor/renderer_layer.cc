@@ -15,10 +15,14 @@ RendererLayer::~RendererLayer() {
 }
 
 void RendererLayer::SetBounds(const gfx::Rect& bounds) {
+  SetBoundsInternal(bounds);
+}
+
+void RendererLayer::OnBoundsChanged() {
   if (GetTreeHost()) {
   }
 
-  SetBoundsInternal(bounds);
+  TextureLayer::OnBoundsChanged();
 }
 
 void RendererLayer::Redraw() {
