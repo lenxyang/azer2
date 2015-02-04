@@ -168,16 +168,18 @@ void Layer::OnAttachedtoTreeHost() {
 }
 
 void Layer::OnBoundsChanged() {
-  CalcTargetBounds();
-  CalcOverlayBounds();
-  CalcTexBounds();
+  if (AttachedToTreeHost()) {
+    CalcTargetBounds();
+    CalcOverlayBounds();
+    CalcTexBounds();
 
-  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    Layer* i = (*iter);
-    i->OnParentBoundsChanged();
+    for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+      Layer* i = (*iter);
+      i->OnParentBoundsChanged();
+    }
+
+    FOR_EACH_OBSERVER(LayerObserver, observers_, OnLayerResized(this));
   }
-
-  FOR_EACH_OBSERVER(LayerObserver, observers_, OnLayerResized(this));
 }
 
 
