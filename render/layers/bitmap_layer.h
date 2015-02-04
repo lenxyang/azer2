@@ -3,12 +3,12 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "azer/render/render.h"
-#include "azer/render/compositor/layer.h"
+#include "azer/render/layers/layer.h"
 
 class SkBitmap;
 
 namespace azer {
-namespace compositor {
+namespace layers {
 
 class BitmapLayer : public Layer {
  public:
@@ -21,5 +21,5 @@ class BitmapLayer : public Layer {
  private:
   DISALLOW_COPY_AND_ASSIGN(BitmapLayer);
 };
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

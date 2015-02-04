@@ -5,7 +5,7 @@
 #include "azer/render/render.h"
 #include "azer/render/blending.h"
 #include "azer/render/texture.h"
-#include "azer/render/compositor/layer.h"
+#include "azer/render/layers/layer.h"
 
 namespace gfx {
 class RectF;
@@ -16,7 +16,7 @@ namespace azer {
 
 class Renderer;
 
-namespace compositor {
+namespace layers {
 
 class AZER_EXPORT TextureLayer : public Layer {
  public:
@@ -34,5 +34,5 @@ class AZER_EXPORT TextureLayer : public Layer {
   TexturePtr texture_;
   DISALLOW_COPY_AND_ASSIGN(TextureLayer);
 };
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

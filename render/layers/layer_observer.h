@@ -6,7 +6,7 @@
 #include "azer/base/export.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 
 class Layer;
 
@@ -26,5 +26,5 @@ class AZER_EXPORT LayerObserver {
 };
 
 typedef ObserverList<LayerObserver, true> LayerObserverList;
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

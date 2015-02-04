@@ -8,12 +8,12 @@ class Rect;
 }  // namespace ui
 
 namespace azer {
-namespace compositor {
+namespace layers {
 class AZER_EXPORT LayerDelegate {
  public:
   virtual void OnPaintLayer(gfx::Canvas* canvas) = 0;
  protected:
   virtual ~LayerDelegate() {}
 };
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

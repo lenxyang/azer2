@@ -1,7 +1,7 @@
-#include "azer/render/compositor/bitmap_layer.h"
+#include "azer/render/layers/bitmap_layer.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 BitmapLayer::BitmapLayer()
     : Layer(kBitmapLayer) {
 }
@@ -14,5 +14,5 @@ void BitmapLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
 
 void BitmapLayer::SetBounds(const gfx::Rect& bounds) {
 }
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

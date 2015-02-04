@@ -2176,7 +2176,8 @@ TEST_F(WindowTest, RootWindowSetWhenReparenting) {
   // We need animations to start in order to observe the bounds changes.
   ui::ScopedAnimationDurationScaleMode test_duration_mode(
       ui::ScopedAnimationDurationScaleMode::NON_ZERO_DURATION);
-  settings1.SetTransitionDuration(base::TimeDelta::FromMilliseconds(100));
+  // ui::ScopedLayerAnimationSettings settings1(child.layer()->GetAnimator());
+  // settings1.SetTransitionDuration(base::TimeDelta::FromMilliseconds(100));
   gfx::Rect new_bounds(gfx::Rect(35, 35, 50, 50));
   child.SetBounds(new_bounds);
 

@@ -8,7 +8,7 @@
 #include "third_party/skia/include/core/SkColor.h"
 #include "third_party/skia/include/core/SkRegion.h"
 
-#include "azer/render/compositor/layer.h"
+#include "azer/render/layers/layer.h"
 #include "azer/ui/compositor/compositor.h"
 #include "azer/ui/compositor/layer_delegate.h"
 #include "azer/ui/compositor/layer_type.h"
@@ -169,7 +169,7 @@ class COMPOSITOR_EXPORT Layer {
   // Suppresses painting the content by disconnecting |delegate_|.
   void SuppressPaint();
 
-  azer::compositor::Layer* layer() { return layer_;}
+  azer::layers::Layer* layer() { return layer_.get();}
   float device_scale_factor() const { return 1.0f;}
   bool Contains(Layer* layer);
 
@@ -187,7 +187,7 @@ class COMPOSITOR_EXPORT Layer {
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
 
-  azer::compositor::Layer* CreateCCLayer(LayerType type);
+  scoped_refptr<azer::layers::Layer> CreateCCLayer(LayerType type);
 
   // This layer's children, in bottom-to-top stacking order.
   std::vector<Layer*> children_;
@@ -199,7 +199,7 @@ class COMPOSITOR_EXPORT Layer {
   Compositor* compositor_;
   LayerOwner* owner_;
 
-  azer::compositor::Layer* layer_;
+  scoped_refptr<azer::layers::Layer> layer_;
   std::unique_ptr<CCLayerDelegate> cc_delegate_;
   
 

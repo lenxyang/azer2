@@ -1,11 +1,11 @@
-#include "azer/render/compositor/compositor.h"
+#include "azer/render/layers/compositor.h"
 
-#include "azer/render/compositor/layer.h"
+#include "azer/render/layers/layer.h"
 #include "azer/render/render.h"
 #include "azer/render/context2d.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 
 Compositor::Compositor()
     : host_(NULL) {
@@ -117,5 +117,5 @@ void Compositor::TryRemoveNeedRedrawLayer(Layer* layer) {
     need_redraw_.erase(iter);
   }
 }
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

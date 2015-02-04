@@ -20,7 +20,7 @@
 #include "ui/gfx/vector2d.h"
 
 #include "azer/ui/compositor/compositor_export.h"
-#include "azer/render/compositor/compositor.h"
+#include "azer/render/layers/compositor.h"
 #include "azer/render/renderer.h"
 #include "azer/render/swap_chain.h"
 
@@ -94,8 +94,8 @@ class COMPOSITOR_EXPORT Compositor {
   azer::RendererPtr renderer_;
   azer::OverlayPtr overlay_;
   Layer* root_layer_;
-  scoped_ptr<azer::compositor::LayerTreeHost> host_;
-  scoped_ptr<azer::compositor::Compositor> compositor_;
+  scoped_ptr<azer::layers::LayerTreeHost> host_;
+  scoped_ptr<azer::layers::Compositor> compositor_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };
 }  // namespace ui

@@ -11,13 +11,13 @@
 
 #include "azer/base/export.h"
 #include "azer/render/renderer.h"
-#include "azer/render/compositor/layer_tree_host.h"
+#include "azer/render/layers/layer_tree_host.h"
 
 namespace azer {
 
 class RenderSystem;
 
-namespace compositor {
+namespace layers {
 
 class Layer;
 class LayerTreeHost;
@@ -84,5 +84,5 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   DISALLOW_COPY_AND_ASSIGN(Compositor);
 };
 
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

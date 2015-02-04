@@ -3,10 +3,10 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "azer/render/render.h"
-#include "azer/render/compositor/texture_layer.h"
+#include "azer/render/layers/texture_layer.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 class AZER_EXPORT RendererLayer : public TextureLayer {
  public:
   explicit RendererLayer();
@@ -20,5 +20,5 @@ class AZER_EXPORT RendererLayer : public TextureLayer {
   RendererPtr renderer_;
   DISALLOW_COPY_AND_ASSIGN(RendererLayer);
 };
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

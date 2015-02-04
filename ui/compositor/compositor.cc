@@ -3,9 +3,9 @@
 #include "azer/ui/compositor/layer.h"
 
 #include "azer/render/render_system.h"
-#include "azer/render/compositor/compositor.h"
-#include "azer/render/compositor/layer.h"
-#include "azer/render/compositor/layer_tree_host.h"
+#include "azer/render/layers/compositor.h"
+#include "azer/render/layers/layer.h"
+#include "azer/render/layers/layer_tree_host.h"
 
 namespace ui {
 
@@ -19,8 +19,8 @@ Compositor::Compositor(gfx::AcceleratedWidget widget)
   renderer_ = swapchain_->GetRenderer();
   overlay_.reset(render_system->CreateOverlay());
 
-  host_.reset(new azer::compositor::LayerTreeHost(size));
-  compositor_.reset(new azer::compositor::Compositor);
+  host_.reset(new azer::layers::LayerTreeHost(size));
+  compositor_.reset(new azer::layers::Compositor);
 }
 
 Compositor::~Compositor() {

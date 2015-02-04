@@ -1,4 +1,4 @@
-#include "azer/render/compositor/layer.h"
+#include "azer/render/layers/layer.h"
 
 #include <algorithm>
 #include "base/logging.h"
@@ -10,15 +10,15 @@
 #include "ui/gfx/size_conversions.h"
 #include "ui/gfx/transform.h"
 
-#include "azer/render/compositor/compositor.h"
-#include "azer/render/compositor/layer_tree_host.h"
-#include "azer/render/compositor/bitmap_layer.h"
-#include "azer/render/compositor/canvas_layer.h"
-#include "azer/render/compositor/nodraw_layer.h"
-#include "azer/render/compositor/renderer_layer.h"
+#include "azer/render/layers/compositor.h"
+#include "azer/render/layers/layer_tree_host.h"
+#include "azer/render/layers/bitmap_layer.h"
+#include "azer/render/layers/canvas_layer.h"
+#include "azer/render/layers/nodraw_layer.h"
+#include "azer/render/layers/renderer_layer.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 
 namespace {
 const Layer* GetRoot(const Layer* layer) {
@@ -209,5 +209,5 @@ void Layer::ScheduleDraw() {
 bool Layer::AttachedToTreeHost() const {
   return (host_ != NULL);
 }
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

@@ -17,7 +17,7 @@
 
 namespace ui {
 
-class CCLayerDelegate : public azer::compositor::LayerDelegate {
+class CCLayerDelegate : public azer::layers::LayerDelegate {
  public:
   CCLayerDelegate(ui::LayerDelegate* delegate)
       : delegate_(delegate) {
@@ -55,12 +55,12 @@ Layer::Layer(LayerType type)
 Layer::~Layer() {
 }
 
-azer::compositor::Layer* Layer::CreateCCLayer(LayerType type) {
+scoped_refptr<azer::layers::Layer> Layer::CreateCCLayer(LayerType type) {
   switch (type) {
     case LAYER_NOT_DRAWN:
-      return azer::compositor::Layer::CreateLayer(azer::compositor::Layer::kNotDrawnLayer);
+      return azer::layers::Layer::CreateLayer(azer::layers::Layer::kNotDrawnLayer);
     case LAYER_TEXTURED:
-      return azer::compositor::Layer::CreateLayer(azer::compositor::Layer::kCanvasLayer);
+      return azer::layers::Layer::CreateLayer(azer::layers::Layer::kCanvasLayer);
     default: CHECK(false) << "not support";
       return NULL;
   }

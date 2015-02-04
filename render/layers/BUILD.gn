@@ -1,5 +1,5 @@
 
-source_set("compositor") {
+source_set("layers") {
   sources = [
     "bitmap_layer.cc",
     "bitmap_layer.h",
@@ -48,7 +48,7 @@ source_set("unittests") {
 }
 
 executable("demo") {
-  output_name = "compositor_demo"
+  output_name = "layers_demo"
   sources = ["demo/main.cc"]
   deps = [
        "//base",

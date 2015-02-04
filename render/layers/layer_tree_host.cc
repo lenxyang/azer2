@@ -1,17 +1,17 @@
-#include "azer/render/compositor/layer_tree_host.h"
+#include "azer/render/layers/layer_tree_host.h"
 
-#include "azer/render/compositor/layer.h"
-#include "azer/render/compositor/canvas_layer.h"
-#include "azer/render/compositor/nodraw_layer.h"
-#include "azer/render/compositor/renderer_layer.h"
-#include "azer/render/compositor/compositor.h"
+#include "azer/render/layers/layer.h"
+#include "azer/render/layers/canvas_layer.h"
+#include "azer/render/layers/nodraw_layer.h"
+#include "azer/render/layers/renderer_layer.h"
+#include "azer/render/layers/compositor.h"
 #include "azer/render/render_system.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 
 LayerTreeHost::LayerTreeHost(const gfx::Size& size)
-    : compositor_(NULL)
+    : layers_(NULL)
     , client_(NULL)
     , root_(NULL)
     , size_(size)  {
@@ -27,13 +27,13 @@ void LayerTreeHost::SetRoot(scoped_refptr<Layer> layer) {
   layer->SetBounds(gfx::Rect(size_));
 }
 
-void LayerTreeHost::SetCompositor(Compositor* compositor) {
+void LayerTreeHost::SetCompositor(Compositor* layers) {
   DCHECK(NULL != root());
-  client_ = compositor;
-  compositor_ = compositor;
+  client_ = layers;
+  layers_ = layers;
 
   UpdateResourceHierarchy(root());
-  if (compositor) {
+  if (layers) {
     client_->OnResize(size_);
     SetLayerNeedRedrawHierarchy(root());
   }
@@ -63,13 +63,13 @@ void LayerTreeHost::UpdateResourceHierarchy(Layer* layer) {
 }
 
 void LayerTreeHost::SetLayerNeedRedraw(Layer* layer) {
-  DCHECK(compositor());
-  compositor()->AddNeedRedrawLayer(layer);
+  DCHECK(layers());
+  layers()->AddNeedRedrawLayer(layer);
 }
 
 void LayerTreeHost::SetLayerNeedRedrawHierarchy(Layer* layer) {
-  DCHECK(compositor());
-  compositor()->AddNeedRedrawLayer(layer);
+  DCHECK(layers());
+  layers()->AddNeedRedrawLayer(layer);
   
   for (auto iter = layer->children().begin();
        iter != layer->children().end();
@@ -78,26 +78,26 @@ void LayerTreeHost::SetLayerNeedRedrawHierarchy(Layer* layer) {
   }
 }
 
-Compositor* LayerTreeHost::compositor() {
-  return compositor_;
+Compositor* LayerTreeHost::layers() {
+  return layers_;
 }
 
 void LayerTreeHost::OnLayerAttachedOnTree(Layer* layer) {
-  if (compositor()) {
-    compositor()->AddNeedRedrawLayer(layer);
+  if (layers()) {
+    layers()->AddNeedRedrawLayer(layer);
   }
 }
 
 void LayerTreeHost::OnLayerResized(Layer* layer) {
-  if (compositor()) {
-    compositor()->AddNeedRedrawLayer(layer);
+  if (layers()) {
+    layers()->AddNeedRedrawLayer(layer);
   }
 }
 
 void LayerTreeHost::OnLayerDestroying(Layer* layer) {
-  if (compositor()) {
-    compositor()->TryRemoveNeedRedrawLayer(layer);
+  if (layers()) {
+    layers()->TryRemoveNeedRedrawLayer(layer);
   }
 }
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

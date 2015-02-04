@@ -11,7 +11,7 @@
 #include "ui/gfx/transform.h"
 
 #include "azer/base/export.h"
-#include "azer/render/compositor/layer_observer.h"
+#include "azer/render/layers/layer_observer.h"
 
 namespace gfx {
 class Transform;
@@ -21,7 +21,7 @@ namespace azer {
 
 class Renderer;
 
-namespace compositor {
+namespace layers {
 
 class Layer;
 class LayerTreeHost;
@@ -83,7 +83,7 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   // ScheduleDraw(). Returns false if the paint request is ignored.
   bool SchedulePaint(const gfx::Rect& invalid_rect);
 
-  // Schedules a redraw of the layer tree at the compositor.
+  // Schedules a redraw of the layer tree at the layers.
   // Note that this _does not_ invalidate any region of this layer; use
   // SchedulePaint() for that.
   void ScheduleDraw();
@@ -149,5 +149,5 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   friend class LayerTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Layer);
 };
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

@@ -1,11 +1,11 @@
-#include "azer/render/compositor/renderer_layer.h"
+#include "azer/render/layers/renderer_layer.h"
 
 #include "third_party/skia/include/core/SkColor.h"
 #include "azer/render/render.h"
 #include "base/logging.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 
 RendererLayer::RendererLayer()
     : TextureLayer(kRendererLayer) {
@@ -31,5 +31,5 @@ void RendererLayer::Redraw() {
                            SkColorGetB(color()), 
                            SkColorGetA(color())));
 }
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer
