@@ -120,7 +120,16 @@ gfx::Transform Layer::transform() const {
 }
 
 void Layer::SetBounds(const gfx::Rect& bounds) {
+  if (layer_->bounds() == bounds) {
+    return;
+  }
+
   layer_->SetBounds(bounds);
+  base::Closure closure;
+  if (delegate_)
+    closure = delegate_->PrepareForLayerBoundsChange();
+  if (!closure.is_null())
+    closure.Run();
 }
 
 const gfx::Rect& Layer::bounds() const {
