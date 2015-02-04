@@ -5,6 +5,8 @@
 #include "azer/render/render.h"
 #include "azer/render/context2d.h"
 #include "azer/render/compositor/layer_delegate.h"
+#include "base/strings/stringprintf.h"
+#include "base/strings/utf_string_conversions.h"
 
 
 namespace azer {
@@ -43,6 +45,8 @@ void CanvasLayer::Redraw() {
     canvas->DrawColor(color());
     canvas_->EndPaint();
     texture_ = canvas_->GetTexture();
+    canvas_->Save(::base::FilePath(::base::UTF8ToWide(
+        ::base::StringPrintf("%s.png", name().c_str()))));
   }
 }
 }  // namespace compositor
