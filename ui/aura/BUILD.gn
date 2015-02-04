@@ -261,6 +261,7 @@ test("aura2_unittests") {
   ]
 
   deps = [
+    "//azer/render",
     ":test_support",
     #"//base/allocator",
     "//base/test:test_support",

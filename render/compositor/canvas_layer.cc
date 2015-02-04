@@ -22,8 +22,7 @@ CanvasLayer::~CanvasLayer() {
 void CanvasLayer::OnBoundsChanged() {
   // before the layer putted into tree host, it cannot be drawn
   // so need not to create canvas
-  if (GetTreeHost()) {
-    DCHECK(!bounds_.IsEmpty());
+  if (GetTreeHost() && !bounds_.IsEmpty()) {
     RenderSystem* rs = RenderSystem::Current();
     canvas_.reset(rs->GetContext2D()->CreateCanvas(bounds_.width(), 
                                                    bounds_.height()));
@@ -37,7 +36,7 @@ void CanvasLayer::SetBounds(const gfx::Rect& bounds) {
 }
 
 void CanvasLayer::Redraw() {
-  if (delegate_) {
+  if (delegate_ && !bounds_.IsEmpty()) {
     SkCanvas* skcanvas = canvas_->BeginPaint();
     scoped_ptr<gfx::Canvas> canvas(
         gfx::Canvas::CreateCanvasWithoutScaling(skcanvas, 1.0f));
@@ -45,8 +44,10 @@ void CanvasLayer::Redraw() {
     canvas->DrawColor(color());
     canvas_->EndPaint();
     texture_ = canvas_->GetTexture();
+    /*
     canvas_->Save(::base::FilePath(::base::UTF8ToWide(
         ::base::StringPrintf("%s.png", name().c_str()))));
+    */
   }
 }
 }  // namespace compositor

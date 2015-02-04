@@ -5,6 +5,9 @@
 #ifndef UI_COMPOSITOR_LAYER_H_
 #define UI_COMPOSITOR_LAYER_H_
 
+#include "third_party/skia/include/core/SkColor.h"
+#include "third_party/skia/include/core/SkRegion.h"
+
 #include "azer/render/compositor/layer.h"
 #include "azer/ui/compositor/compositor.h"
 #include "azer/ui/compositor/layer_delegate.h"
@@ -157,8 +160,10 @@ class COMPOSITOR_EXPORT Layer {
   // Note that this _does not_ invalidate any region of this layer; use
   // SchedulePaint() for that.
   void ScheduleDraw();
+  void SendDamagedRects();
+  void CompleteAllAnimations() {}
 
-  void CompleteAllAnimations();
+  const SkRegion& damaged_region() const { return damaged_region_;}
 
   // Suppresses painting the content by disconnecting |delegate_|.
   void SuppressPaint();
@@ -195,7 +200,9 @@ class COMPOSITOR_EXPORT Layer {
 
   azer::compositor::Layer* layer_;
   std::unique_ptr<CCLayerDelegate> cc_delegate_;
+  
 
+  SkRegion damaged_region_;
   friend class LayerOwner;
   friend class Compositor;
   DISALLOW_COPY_AND_ASSIGN(Layer);

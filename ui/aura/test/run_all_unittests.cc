@@ -7,9 +7,13 @@
 #include "base/test/test_suite.h"
 #include "ui/gl/gl_surface.h"
 
+#include "azer/render/util/render_system_loader.h"
+
 int main(int argc, char** argv) {
   base::TestSuite test_suite(argc, argv);
   gfx::GLSurface::InitializeOneOffForTests();
+
+  CHECK(azer::LoadRenderSystem());
 
   return base::LaunchUnitTests(
       argc,
