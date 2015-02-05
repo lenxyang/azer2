@@ -103,9 +103,6 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   const gfx::Rect& GetTargetBounds() const { return target_bounds_;}
   bool GetTargetVisibility() const;
 
-  void SetPosition(const gfx::Point& pt) { position_ = pt;}
-  const gfx::Point& position() const { return position_;}
-
   void SetVisible(bool visible);
   bool visible() const { return visible_;}
   void SetHideLayerAndSubtree(bool visible);

@@ -148,7 +148,15 @@ void Layer::OnBoundsChanged() {
 
 void Layer::CalcTargetBounds() {
   gfx::Rect parent_bounds = (parent_ ? parent_->GetTargetBounds() : bounds());
-  target_bounds_ = gfx::IntersectRects(parent_bounds , bounds());
+  Layer* cur = parent_;
+  gfx::Point origin = bounds().origin();
+  while (cur) {
+    origin.set_x(origin.x() + cur->bounds().origin().x());
+    origin.set_y(origin.y() + cur->bounds().origin().y());
+    cur = cur->parent_;
+  }
+  target_bounds_ = gfx::Rect(origin, bounds_.size());
+  target_bounds_ = gfx::IntersectRects(parent_bounds , target_bounds_);
 }
 
 void Layer::CalcOverlayBounds() {
