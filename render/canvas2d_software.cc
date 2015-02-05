@@ -7,6 +7,8 @@
 #include "third_party/skia/include/core/SkString.h"
 
 #include "base/logging.h"
+#include "base/strings/stringprintf.h"
+#include "base/strings/utf_string_conversions.h"
 #include "azer/render/render_system.h"
 
 namespace azer {
@@ -39,16 +41,13 @@ bool SoftwareCanvas2D::UpdateTexture() {
   DCHECK(NULL != texture_.get());
   Texture::MapData mapdata = texture_->map(kWriteDiscard);
   if (mapdata.pdata) {
-    /*
-    SkImageInfo imageinfo = SkImageInfo::Make(skbitmap_->info().width(),
-                                              skbitmap_->info().height(),
+    SkImageInfo imageinfo = SkImageInfo::Make(skcanvas_->imageInfo().width(),
+                                              skcanvas_->imageInfo().height(),
                                               kRGBA_8888_SkColorType,
-                                              skbitmap_->info().alphaType());
-    */
-    skcanvas_->readPixels(skbitmap_->info(),
-                          mapdata.pdata, 
-                          mapdata.row_pitch, 0, 0);
-    
+                                              kOpaque_SkAlphaType);
+    CHECK(skcanvas_->readPixels(imageinfo,
+                                mapdata.pdata, 
+                                mapdata.row_pitch, 0, 0));
   }
   texture_->unmap();
   return true;

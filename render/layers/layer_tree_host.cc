@@ -11,9 +11,12 @@
 namespace azer {
 namespace layers {
 
-LayerTreeHost::LayerTreeHost(const gfx::Size& size)
+LayerTreeHost::LayerTreeHost()
     : root_(NULL)
-    , background_color_(SK_ColorTRANSPARENT) {
+    , size_(0, 0)
+    , scale_(1.0f)
+    , background_color_(SK_ColorTRANSPARENT) 
+{
 }
 
 LayerTreeHost::~LayerTreeHost() {
@@ -22,7 +25,8 @@ LayerTreeHost::~LayerTreeHost() {
 void LayerTreeHost::SetRoot(scoped_refptr<Layer> layer) {
   DCHECK(!root_);
   root_ = layer;
-  root_->host_ = this;
+  root_->layer_tree_host_ = this;
+  root_->SetBounds(gfx::Rect(0, 0, size_.width(), size_.height()));
 }
 
 void LayerTreeHost::SetBackgroundColor(SkColor color) {
@@ -39,6 +43,9 @@ void LayerTreeHost::SetScaleAndSize(float scale, const gfx::Size& size_in_pixel)
   if (!overlay_.get()) {
     overlay_.reset(rs->CreateOverlay());
   }
+
+  size_ = size_in_pixel;
+  scale_ = scale;
 }
 
 void LayerTreeHost::SetNeedsRedraw() {
@@ -95,14 +102,6 @@ void LayerTreeHost::Composite() {
   CompositeRecusive(root_.get(), rect);
 }
 
-gfx::Rect LayerTreeHost::CalcRect(Layer* layer, const gfx::Rect& rect) {
-  gfx::Point pt(rect.origin().x() + layer->bounds().x(),
-                rect.origin().y() + layer->bounds().y());
-  gfx::Rect rc(pt, layer->bounds().size());
-
-  return std::move(gfx::IntersectRects(rect, rc));
-}
-
 void LayerTreeHost::CompositeRecusive(Layer* parent, const gfx::Rect& prect) {
   auto list = parent->children();
   for (auto iter = list.begin(); iter != list.end(); ++iter) {
@@ -111,6 +110,14 @@ void LayerTreeHost::CompositeRecusive(Layer* parent, const gfx::Rect& prect) {
     layer->Render(renderer_.get(), overlay_.get(), rc);
     CompositeRecusive(layer, rc);
   }
+}
+
+gfx::Rect LayerTreeHost::CalcRect(Layer* layer, const gfx::Rect& rect) {
+  gfx::Point pt(rect.origin().x() + layer->bounds().x(),
+                rect.origin().y() + layer->bounds().y());
+  gfx::Rect rc(pt, layer->bounds().size());
+
+  return std::move(gfx::IntersectRects(rect, rc));
 }
 
 azer::TexturePtr& LayerTreeHost::GetCompositedTexture() {

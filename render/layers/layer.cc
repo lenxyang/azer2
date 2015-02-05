@@ -43,8 +43,8 @@ scoped_refptr<Layer> Layer::CreateLayer(LayerType type) {
 
 Layer::Layer(LayerType type)
     : delegate_(NULL)
-    , host_(NULL)
     , parent_(NULL)
+    , layer_tree_host_(NULL)
     , visible_(true)
     , type_(type) {
 }
@@ -52,23 +52,11 @@ Layer::Layer(LayerType type)
 Layer::~Layer() {
 }
 
-void Layer::SetTreeHost(LayerTreeHost* host) {
-  DCHECK(host_ == NULL);
-  host_ = host;
-  if (host_) {
-    this->OnAttachedtoTreeHost();
-  }
+void Layer::AddChild(scoped_refptr<Layer> child) {
+  InsertChild(child, children_.size());
 }
 
-void Layer::Add(scoped_refptr<Layer> layer) {
-  DCHECK(host_ != NULL);
-  layer->parent_ = this;
-  layer->SetTreeHost(GetTreeHost());
-  children_.push_back(layer);
-  layer->OnStackingChanged();
-}
-
-bool Layer::Contains(scoped_refptr<Layer> other) {
+bool Layer::HasAncestor(scoped_refptr<Layer> other) {
   for (const Layer* parent = other.get(); parent; parent = parent->parent()) {
     if (parent == this)
       return true;
@@ -76,19 +64,44 @@ bool Layer::Contains(scoped_refptr<Layer> other) {
   return false;
 }
 
-bool Layer::Remove(scoped_refptr<Layer> layer) {
-  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    if ((*iter).get() == layer.get()) {
-      children_.erase(iter);
-      DCHECK(layer->parent() == this);
-      layer->OnRemoveFromParent();
-      layer->parent_ = NULL;
-      layer->OnStackingChanged();
-      return true;
-    }
-  }
+void Layer::SetLayerTreeHost(LayerTreeHost* host) {
+  if (layer_tree_host_ == host)
+    return;
 
-  return false;
+  layer_tree_host_ = host;
+}
+
+void Layer::SetParent(Layer* layer) {
+  parent_ = layer;
+  SetLayerTreeHost(parent_ ? parent_->layer_tree_host() : nullptr);
+}
+
+void Layer::InsertChild(scoped_refptr<Layer> child, size_t index) {
+  child->RemoveFromParent();
+  child->SetParent(this);
+
+  index = std::min(index, children_.size());
+  children_.insert(children_.begin() + index, child);
+  child->SetNeedsRedrawRecusive();
+  child->OnAttachedLayerTreeHost();
+}
+
+void Layer::RemoveFromParent() {
+  if (parent_)
+    parent_->RemoveChildOrDependent(this);
+}
+
+void Layer::RemoveChildOrDependent(Layer* child) {
+  for (LayerList::iterator iter = children_.begin();
+       iter != children_.end();
+       ++iter) {
+    if (iter->get() != child)
+      continue;
+
+    child->SetParent(nullptr);
+    children_.erase(iter);
+    return;
+  }
 }
 
 void Layer::SetTransform(const gfx::Transform& transform) {
@@ -115,16 +128,8 @@ void Layer::OnParentBoundsChanged() {
   OnBoundsChanged();
 }
 
-void Layer::OnAttachedtoTreeHost() {
-  OnBoundsChanged();
-
-  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    (*iter)->OnAttachedtoTreeHost();
-  }
-}
-
 void Layer::OnBoundsChanged() {
-  if (AttachedToTreeHost()) {
+  if (layer_tree_host()) {
     CalcTargetBounds();
     CalcOverlayBounds();
     CalcTexBounds();
@@ -143,8 +148,8 @@ void Layer::CalcTargetBounds() {
 }
 
 void Layer::CalcOverlayBounds() {
-  if (AttachedToTreeHost()) {
-    const gfx::Rect& root_bounds = host_->root()->bounds();
+  if (layer_tree_host()) {
+    const gfx::Rect& root_bounds = layer_tree_host()->root()->bounds();
     float width_percent = (float)target_bounds_.width() / (float)root_bounds.width();
     float height_percent = (float)target_bounds_.height() / (float)root_bounds.height();
     float x = (float)target_bounds_.x() / (float)root_bounds.width();
@@ -159,7 +164,7 @@ void Layer::CalcOverlayBounds() {
 }
 
 void Layer::CalcTexBounds() {
-  if (AttachedToTreeHost()) {
+  if (layer_tree_host()) {
     float tu = (float)(target_bounds_.x()  - bounds().x()) / (float)bounds().width();
     float tv = (float)(target_bounds_.y()  - bounds().y()) / (float)bounds().height();
     float width = (float)target_bounds_.width() / (float)bounds().width();
@@ -172,50 +177,6 @@ void Layer::CalcTexBounds() {
 
 void Layer::SetColor(SkColor color) {
   color_ = color;
-}
-
-bool Layer::AttachedToTreeHost() const {
-  return (host_ != NULL);
-}
-
-void Layer::StackAtTop(Layer* child) {
-  if (children_.size() <= 1 || child == children_.back())
-    return;  // Already in front.
-  StackAbove(child, children_.back());
-}
-
-void Layer::StackAbove(Layer* child, Layer* other) {
-  StackRelativeTo(child, other, true);
-}
-
-void Layer::StackAtBottom(Layer* child) {
-  if (children_.size() <= 1 || child == children_.front())
-    return;  // Already on bottom.
-  StackBelow(child, children_.front());
-}
-
-void Layer::StackBelow(Layer* child, Layer* other) {
-  StackRelativeTo(child, other, false);
-}
-
-void Layer::StackRelativeTo(Layer* child, Layer* other, bool above) {
-  DCHECK_NE(child, other);
-  DCHECK_EQ(this, child->parent());
-  DCHECK_EQ(this, other->parent());
-
-  const size_t child_i =
-      std::find(children_.begin(), children_.end(), child) - children_.begin();
-  const size_t other_i =
-      std::find(children_.begin(), children_.end(), other) - children_.begin();
-  if ((above && child_i == other_i + 1) || (!above && child_i + 1 == other_i))
-    return;
-
-  const size_t dest_i =
-      above ?
-      (child_i < other_i ? other_i : other_i + 1) :
-      (child_i < other_i ? other_i - 1 : other_i);
-  children_.erase(children_.begin() + child_i);
-  children_.insert(children_.begin() + dest_i, child);
 }
 
 // static
@@ -268,6 +229,17 @@ bool Layer::GetTargetTransformRelativeTo(const Layer* ancestor,
     transform->ConcatTransform(translation);
   }
   return p == ancestor;
+}
+
+void Layer::SetNeedsRedrawRecusive() {
+  if (layer_tree_host()) {
+    scoped_refptr<Layer> thisptr(this);
+    layer_tree_host_->SetLayerNeedsRedrawRecusive(thisptr);
+  }
+}
+
+void Layer::OnAttachedLayerTreeHost() {
+  OnBoundsChanged();
 }
 }  // namespace layers
 }  // namespace azer

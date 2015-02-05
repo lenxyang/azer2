@@ -2,8 +2,11 @@
 #include "base/at_exit.h"
 #include "base/command_line.h"
 #include "base/i18n/icu_util.h"
+#include "base/files/file_util.h"
 #include "base/memory/scoped_ptr.h"
 #include "base/message_loop/message_loop.h"
+#include "base/strings/stringprintf.h"
+#include "base/strings/utf_string_conversions.h"
 #include "third_party/skia/include/core/SkXfermode.h"
 #include "azer/ui/aura/client/default_capture_client.h"
 #include "azer/ui/aura/client/window_tree_client.h"
@@ -17,6 +20,8 @@
 #include "ui/events/event.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/rect.h"
+#include "ui/gfx/image/image.h"
+#include "ui/gfx/codec/png_codec.h"
 #if defined(USE_X11)
 #include "ui/gfx/x/x11_connection.h"
 #endif
@@ -25,6 +30,7 @@
 #endif
 
 #include "azer/render/util/render_system_loader.h"
+#include "azer/render/app_context.h"
 
 namespace {
 // Trivial WindowDelegate implementation that draws a colored background.
@@ -50,7 +56,12 @@ class DemoWindowDelegate : public aura::WindowDelegate {
   bool CanFocus() override { return true; }
   void OnCaptureLost() override {}
   void OnPaint(gfx::Canvas* canvas) override {
-    canvas->DrawColor(color_, SkXfermode::kSrc_Mode);
+    // canvas->DrawColor(color_, SkXfermode::kSrc_Mode);
+    canvas->sk_canvas()->drawARGB(SkColorGetA(color_),
+                                  SkColorGetR(color_),
+                                  SkColorGetG(color_),
+                                  SkColorGetB(color_)
+                                  );
   }
   void OnDeviceScaleFactorChanged(float device_scale_factor) override {}
   void OnWindowDestroying(aura::Window* window) override {}
@@ -125,10 +136,19 @@ int DemoMain() {
   window3.Show();
   window2.AddChild(&window3);
   host->Show();
+
+  azer::AppContext* appcontext = azer::AppContext::GetInstance();
+  CHECK(appcontext);
   while (true) {
-    base::MessageLoopForUI::current()->RunUntilIdle();
     host->compositor()->DoComposite();
-    host->compositor()->GetSwapChain()->Present();
+
+    base::MessageLoopForUI::current()->RunUntilIdle();
+    azer::RendererPtr& renderer = appcontext->GetRenderer();
+    renderer->Use();
+    renderer->Clear(azer::Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+    renderer->ClearDepthAndStencil();
+    appcontext->RenderUI(host->compositor()->GetCompositedTexture());
+    appcontext->GetSwapchain()->Present();
   }
   return 0;
 }

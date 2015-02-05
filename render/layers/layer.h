@@ -47,7 +47,11 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
 
   Layer* parent() { return parent_;}
   const Layer* parent() const { return parent_;}
-  LayerTreeHost* GetTreeHost() { return host_;}
+
+  void SetParent(Layer* layer);
+  void SetLayerTreeHost(LayerTreeHost* host);
+
+  LayerTreeHost* layer_tree_host() { return layer_tree_host_;}
 
   /**
    * 将 Layer 的内容渲染到 Renderer 当中
@@ -64,10 +68,12 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   void set_delegate(LayerDelegate* delegate) { delegate_ = delegate; }
 
   // add, remove child
-  void Add(scoped_refptr<Layer> layer);
-  bool Remove(scoped_refptr<Layer> layer);
-  bool Contains(scoped_refptr<Layer> layer);
-
+  void AddChild(scoped_refptr<Layer> layer);
+  void RemoveFromParent();
+  void RemoveChildOrDependent(Layer* child);
+  void InsertChild(scoped_refptr<Layer> layer, size_t index);
+  bool HasAncestor(scoped_refptr<Layer> layer);
+  
   // Sets the layer's fill color.  May only be called for LAYER_SOLID_COLOR.
   void SetColor(SkColor color);
   SkColor color() { return color_;}
@@ -120,22 +126,6 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   virtual void OnRemoveFromParent() {}
   virtual void OnStackingChanged() {}
 
-  // Stacks |child| above all other children.
-  void StackAtTop(Layer* child);
-
-  // Stacks |child| directly above |other|.  Both must be children of this
-  // layer.  Note that if |child| is initially stacked even higher, calling this
-  // method will result in |child| being lowered in the stacking order.
-  void StackAbove(Layer* child, Layer* other);
-
-  // Stacks |child| below all other children.
-  void StackAtBottom(Layer* child);
-
-  // Stacks |child| directly below |other|.  Both must be children of this
-  // layer.
-  void StackBelow(Layer* child, Layer* other);
-  void StackRelativeTo(Layer* child, Layer* other, bool above);
-
   LayerList& children() { return children_;}
   const LayerList& children() const { return children_;}
  protected:
@@ -149,18 +139,18 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   void SetBoundsInternal(const gfx::Rect& new_bounds);
   void OnParentBoundsChanged();
   virtual void OnBoundsChanged();
+  void OnAttachedLayerTreeHost();
  protected:
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
-  bool AttachedToTreeHost() const;
-  void OnAttachedtoTreeHost();
 
   void CalcTargetBounds();
   void CalcOverlayBounds();
   void CalcTexBounds();
+
+  void SetNeedsRedrawRecusive();
   std::string name_;
   LayerDelegate* delegate_;
-  LayerTreeHost* host_;
   gfx::Point position_;
   gfx::Rect bounds_;
   gfx::Rect target_bounds_;
@@ -169,6 +159,7 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   bool visible_;
   LayerList children_;
   Layer* parent_;
+  LayerTreeHost* layer_tree_host_;
 
   SkColor color_;
   LayerType type_;

@@ -19,7 +19,7 @@ void RendererLayer::SetBounds(const gfx::Rect& bounds) {
 }
 
 void RendererLayer::OnBoundsChanged() {
-  if (GetTreeHost()) {
+  if (layer_tree_host()) {
   }
 
   TextureLayer::OnBoundsChanged();

@@ -52,8 +52,7 @@ SkImageEncoder::Type ImageType(const FilePath::StringType& ext) {
   }
 }
 
-std::vector<uint8> EncodeBitmap(const SkBitmap& bitmap, 
-                                    SkImageEncoder::Type type) {
+std::vector<uint8> EncodeBitmap(const SkBitmap& bitmap, SkImageEncoder::Type type) {
   std::vector<uint8> data;
   if (type == SkImageEncoder::kPNG_Type) {
     CHECK(gfx::PNGCodec::Encode((const uint8*)bitmap.getPixels(),

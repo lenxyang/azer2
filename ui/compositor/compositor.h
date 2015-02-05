@@ -86,7 +86,9 @@ class COMPOSITOR_EXPORT Compositor {
 
   void ScheduleLayerRedraw(Layer* layer);
   void ScheduleDraw() {}
- protected:
+
+  azer::TexturePtr& GetCompositedTexture();
+  void DoComposite();
  private:
   gfx::AcceleratedWidget widget_;
 

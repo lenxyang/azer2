@@ -76,7 +76,7 @@ if (child->parent_)
   child->parent_ = this;
   children_.push_back(child);
 
-  layer_->Add(child->layer());
+  layer_->AddChild(child->layer());
 }
 
 void Layer::Remove(Layer* child) {
@@ -84,9 +84,10 @@ void Layer::Remove(Layer* child) {
     std::find(children_.begin(), children_.end(), child);
   DCHECK(i != children_.end());
   children_.erase(i);
-  child->parent_ = NULL;
 
-  layer_->Remove(child->layer());
+  CHECK(child->layer_);
+  child->parent_ = NULL;
+  child->layer_->RemoveFromParent();
 }
 
 void Layer::StackAtTop(Layer* child) {
@@ -128,7 +129,8 @@ void Layer::StackRelativeTo(Layer* child, Layer* other, bool above) {
   children_.erase(children_.begin() + child_i);
   children_.insert(children_.begin() + dest_i, child);
 
-  layer_->StackRelativeTo(child->layer_.get(), other->layer_.get(), above);
+  child->layer_->RemoveFromParent();
+  layer_->InsertChild(child->layer_, dest_i);
 }
 
 void Layer::SetTransform(const gfx::Transform& transform) {
@@ -301,7 +303,7 @@ void Layer::SetSubpixelPositionOffset(const gfx::Vector2dF offset) {
 }
 
 bool Layer::Contains(Layer* layer) {
-  return layer_->Contains(layer->layer());
+  return layer_->HasAncestor(layer->layer());
 }
 
 }  // namespace ui

@@ -22,7 +22,7 @@ class Layer;
 
 class AZER_EXPORT LayerTreeHost {
  public:
-  explicit LayerTreeHost(const gfx::Size& size);
+  LayerTreeHost();
   ~LayerTreeHost();
 
   Layer* root() { return root_;}
@@ -45,7 +45,6 @@ class AZER_EXPORT LayerTreeHost {
   void SetLayerNeedsRedraw(scoped_refptr<Layer>& layer);
   void SetLayerNeedsRedrawRecusive(scoped_refptr<Layer>& layer);
 
-  
   struct CompositeArgs {
     ::base::Time time;
     ::base::TimeDelta delta;
@@ -69,6 +68,8 @@ class AZER_EXPORT LayerTreeHost {
   std::set<LayerPtr> need_redraw_;
   scoped_refptr<Layer> root_;
   bool visible_;
+  gfx::Size size_;
+  float scale_;
 
   SkColor background_color_;
   azer::OverlayPtr overlay_;

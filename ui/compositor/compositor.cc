@@ -16,8 +16,7 @@ Compositor::Compositor(gfx::AcceleratedWidget widget)
     , visible_(true)
     , root_layer_(NULL) {
   azer::AppContext::CreateInstance(widget);
-  gfx::Size size(1,1);
-  host_.reset(new azer::layers::LayerTreeHost(size));
+  host_.reset(new azer::layers::LayerTreeHost());
 }
 
 Compositor::~Compositor() {
@@ -33,8 +32,6 @@ void Compositor::SetRootLayer(Layer* root_layer) {
 
 void Compositor::SetScaleAndSize(float scale, const gfx::Size& size_in_pixel) {
   DCHECK(host_.get());
-  root_layer()->SetBounds(gfx::Rect(0, 0, size_in_pixel.width(),
-                                    size_in_pixel.height()));
   host_->SetScaleAndSize(scale, size_in_pixel);
 }
 
@@ -50,12 +47,12 @@ gfx::Size Compositor::size() const {
   }
 }
 
-void Compositor::DoRender() {
+azer::TexturePtr& Compositor::GetCompositedTexture() {
+  return host_->GetCompositedTexture();
+}
+
+void Compositor::DoComposite() {
   host_->Composite();
-  azer::AppContext* app = azer::AppContext::GetInstance();
-  if (visible_) {
-    app->RenderUI(host_->GetCompositedTexture());
-  }
 }
 
 void Compositor::ScheduleFullRedraw() {
