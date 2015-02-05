@@ -112,15 +112,6 @@ class VIEWS_EXPORT ViewsDelegate {
   virtual void AddRef();
   virtual void ReleaseRef();
 
-  // Creates a web contents. This will return NULL unless overriden.
-  virtual content::WebContents* CreateWebContents(
-      content::BrowserContext* browser_context,
-      content::SiteInstance* site_instance);
-
-  // Gives the platform a chance to modify the properties of a Widget.
-  virtual void OnBeforeWidgetInit(Widget::InitParams* params,
-                                  internal::NativeWidgetDelegate* delegate) = 0;
-
   // Returns the default obscured text reveal duration.
   virtual base::TimeDelta GetDefaultTextfieldObscuredRevealDuration();
 
