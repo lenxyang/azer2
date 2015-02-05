@@ -13,6 +13,8 @@
 #include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/views/views_export.h"
 #include "azer/ui/views/focus/focus_manager.h"
+#include "azer/ui/views/window/client_view.h"
+#include "azer/ui/views/window/non_client_view.h"
 
 #if defined(OS_WIN)
 // Windows headers define macros for these function names which screw with us.
@@ -334,8 +336,8 @@ public:
   // WidgetDelegate is given the first opportunity to create one, followed by
   // the NativeWidget implementation. If both return NULL, a default one is
   // created.
-  // virtual NonClientFrameView* CreateNonClientFrameView();
-
+  virtual NonClientFrameView* CreateNonClientFrameView();
+  
   // Whether we should be using a native frame.
   bool ShouldUseNativeFrame() const;
 
@@ -450,7 +452,100 @@ public:
   // closes.
   virtual void OnOwnerClosing();
  protected:
+  // The root of the View hierarchy attached to this window.
+  // WARNING: see warning in tooltip_manager_ for ordering dependencies with
+  // this and tooltip_manager_.
+  scoped_ptr<internal::RootView> root_view_;
 
+  // The View that provides the non-client area of the window (title bar,
+  // window controls, sizing borders etc). To use an implementation other than
+  // the default, this class must be sub-classed and this value set to the
+  // desired implementation before calling |InitWindow()|.
+  NonClientView* non_client_view_;
+
+  // The focus manager keeping track of focus for this Widget and any of its
+  // children.  NULL for non top-level widgets.
+  // WARNING: RootView's destructor calls into the FocusManager. As such, this
+  // must be destroyed AFTER root_view_. This is enforced in DestroyRootView().
+  scoped_ptr<FocusManager> focus_manager_;
+
+  // A theme provider to use when no other theme provider is specified.
+  scoped_ptr<ui::DefaultThemeProvider> default_theme_provider_;
+
+  // Valid for the lifetime of RunShellDrag(), indicates the view the drag
+  // started from.
+  View* dragged_view_;
+
+  // See class documentation for Widget above for a note about ownership.
+  InitParams::Ownership ownership_;
+
+  // See set_is_secondary_widget().
+  bool is_secondary_widget_;
+
+  // The current frame type in use by this window. Defaults to
+  // FRAME_TYPE_DEFAULT.
+  FrameType frame_type_;
+
+  // True when the window should be rendered as active, regardless of whether
+  // or not it actually is.
+  bool disable_inactive_rendering_;
+
+  // Set to true if the widget is in the process of closing.
+  bool widget_closed_;
+
+  // The saved "show" state for this window. See note in SetInitialBounds
+  // that explains why we save this.
+  ui::WindowShowState saved_show_state_;
+
+  // The restored bounds used for the initial show. This is only used if
+  // |saved_show_state_| is maximized.
+  gfx::Rect initial_restored_bounds_;
+
+  // Focus is automatically set to the view provided by the delegate
+  // when the widget is shown. Set this value to false to override
+  // initial focus for the widget.
+  bool focus_on_creation_;
+
+  mutable scoped_ptr<InputMethod> input_method_;
+
+  // See |is_top_level()| accessor.
+  bool is_top_level_;
+
+  // Tracks whether native widget has been initialized.
+  bool native_widget_initialized_;
+
+  // Whether native widget has been destroyed.
+  bool native_widget_destroyed_;
+
+  // TODO(beng): Remove NativeWidgetGtk's dependence on these:
+  // If true, the mouse is currently down.
+  bool is_mouse_button_pressed_;
+
+  // True if capture losses should be ignored.
+  bool ignore_capture_loss_;
+
+  // TODO(beng): Remove NativeWidgetGtk's dependence on these:
+  // The following are used to detect duplicate mouse move events and not
+  // deliver them. Displaying a window may result in the system generating
+  // duplicate move events even though the mouse hasn't moved.
+  bool last_mouse_event_was_move_;
+  gfx::Point last_mouse_event_position_;
+
+  // True if event capture should be released on a mouse up event. Default is
+  // true.
+  bool auto_release_capture_;
+
+  // See description in GetRootLayers().
+  std::vector<ui::Layer*> root_layers_;
+
+  // Is |root_layers_| out of date?
+  bool root_layers_dirty_;
+
+  // True when window movement via mouse interaction with the frame should be
+  // disabled.
+  bool movement_disabled_;
+
+  ScopedObserver<ui::NativeTheme, ui::NativeThemeObserver> observer_manager_;
   DISALLOW_COPY_AND_ASSIGN(Widget);
 };
 
