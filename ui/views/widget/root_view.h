@@ -1,8 +1,8 @@
-#include "azer/ui/views/widget/widget.h"
+#pragma once
 
-#include "base/logging.h"
 #include "azer/ui/views/view.h"
 
 namespace views {
-
+class RootView : public View {
+};
 }  // namespace views

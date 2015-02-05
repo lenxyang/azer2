@@ -4,7 +4,7 @@
 
 #define _USE_MATH_DEFINES // For VC++ to get M_PI. This has to be first.
 
-#include "ui/views/view.h"
+#include "azer/ui/views/view.h"
 
 #include <algorithm>
 #include <cmath>
@@ -34,18 +34,17 @@
 #include "ui/gfx/skia_util.h"
 #include "ui/gfx/transform.h"
 #include "ui/native_theme/native_theme.h"
-#include "ui/views/accessibility/native_view_accessibility.h"
-#include "ui/views/background.h"
-#include "ui/views/border.h"
-#include "ui/views/context_menu_controller.h"
-#include "ui/views/drag_controller.h"
-#include "ui/views/focus/view_storage.h"
-#include "ui/views/layout/layout_manager.h"
-#include "ui/views/views_delegate.h"
-#include "ui/views/widget/native_widget_private.h"
-#include "ui/views/widget/root_view.h"
-#include "ui/views/widget/tooltip_manager.h"
-#include "ui/views/widget/widget.h"
+#include "azer/ui/views/accessibility/native_view_accessibility.h"
+#include "azer/ui/views/background.h"
+#include "azer/ui/views/border.h"
+#include "azer/ui/views/context_menu_controller.h"
+#include "azer/ui/views/drag_controller.h"
+#include "azer/ui/views/focus/view_storage.h"
+#include "azer/ui/views/layout/layout_manager.h"
+#include "azer/ui/views/views_delegate.h"
+#include "azer/ui/views/widget/root_view.h"
+#include "azer/ui/views/widget/tooltip_manager.h"
+#include "azer/ui/views/widget/widget.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_gdi_object.h"
@@ -847,11 +846,11 @@ const ui::NativeTheme* View::GetNativeTheme() const {
 // Input -----------------------------------------------------------------------
 
 View* View::GetEventHandlerForPoint(const gfx::Point& point) {
-  return GetEventHandlerForRect(gfx::Rect(point, gfx::Size(1, 1)));
+  CHECK(false);
 }
 
 View* View::GetEventHandlerForRect(const gfx::Rect& rect) {
-  return GetEffectiveViewTargeter()->TargetForRect(this, rect);
+  CHECK(false);
 }
 
 bool View::CanProcessEventsWithinSubtree() const {
@@ -895,7 +894,7 @@ bool View::HitTestPoint(const gfx::Point& point) const {
 }
 
 bool View::HitTestRect(const gfx::Rect& rect) const {
-  return GetEffectiveViewTargeter()->DoesIntersectRect(this, rect);
+  CHECK(false);
 }
 
 bool View::IsMouseHovered() {
@@ -1029,44 +1028,6 @@ InputMethod* View::GetInputMethod() {
 const InputMethod* View::GetInputMethod() const {
   const Widget* widget = GetWidget();
   return widget ? widget->GetInputMethod() : NULL;
-}
-
-scoped_ptr<ViewTargeter>
-View::SetEventTargeter(scoped_ptr<ViewTargeter> targeter) {
-  scoped_ptr<ViewTargeter> old_targeter = targeter_.Pass();
-  targeter_ = targeter.Pass();
-  return old_targeter.Pass();
-}
-
-ViewTargeter* View::GetEffectiveViewTargeter() const {
-  DCHECK(GetWidget());
-  ViewTargeter* view_targeter = targeter();
-  if (!view_targeter)
-    view_targeter = GetWidget()->GetRootView()->targeter();
-  CHECK(view_targeter);
-  return view_targeter;
-}
-
-bool View::CanAcceptEvent(const ui::Event& event) {
-  return IsDrawn();
-}
-
-ui::EventTarget* View::GetParentTarget() {
-  return parent_;
-}
-
-scoped_ptr<ui::EventTargetIterator> View::GetChildIterator() const {
-  return scoped_ptr<ui::EventTargetIterator>(
-      new ui::EventTargetIteratorImpl<View>(children_));
-}
-
-ui::EventTargeter* View::GetEventTargeter() {
-  return targeter_.get();
-}
-
-void View::ConvertEventToTarget(ui::EventTarget* target,
-                                ui::LocatedEvent* event) {
-  event->ConvertLocationToTarget(this, static_cast<View*>(target));
 }
 
 // Accelerators ----------------------------------------------------------------

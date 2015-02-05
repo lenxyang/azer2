@@ -33,7 +33,7 @@
 #include "ui/gfx/vector2d.h"
 #include "azer/ui/views/cull_set.h"
 #include "azer/ui/views/views_export.h"
-#include "azer/ui/views/widget/widget.h"
+#include "azer/ui/views/widget/window.h"
 
 #if defined(OS_WIN)
 #include "base/win/scoped_comptr.h"
@@ -106,7 +106,7 @@ class RootView;
 class VIEWS_EXPORT View : public ui::LayerDelegate,
                           public ui::AcceleratorTarget,
                           public ui::EventTarget,
-                          public WidgetOwner {
+                          public WindowOwner {
  public:
   typedef std::vector<View*> Views;
 
