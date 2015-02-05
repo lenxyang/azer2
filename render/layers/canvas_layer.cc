@@ -22,8 +22,9 @@ CanvasLayer::~CanvasLayer() {
 void CanvasLayer::OnBoundsChanged() {
   // before the layer putted into tree host, it cannot be drawn
   // so need not to create canvas
-  if (GetTreeHost() && !bounds_.IsEmpty()) {
+  if (!bounds_.IsEmpty()) {
     RenderSystem* rs = RenderSystem::Current();
+    DCHECK(rs);
     canvas_.reset(rs->GetContext2D()->CreateCanvas(bounds_.width(), 
                                                    bounds_.height()));
   }

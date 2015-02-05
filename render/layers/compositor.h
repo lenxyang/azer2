@@ -56,11 +56,16 @@ class AZER_EXPORT Compositor : public LayerTreeHostClient {
   // Sets the background color used for areas that aren't covered by
   // the |root_layer|.
   void SetBackgroundColor(SkColor color);
+
+  // override from LayerTreeHostClient
+  void OnResize(const gfx::Size& size) override;
+  void OnLayerNeedRedraw(Layer* layer) override;
+  void OnLayerAttached(Layer* layer) override;
+  void OnLayerRemoved(Layer* layer) override;
  protected:
   void AddNeedRedrawLayer(Layer* layer);
   void TryRemoveNeedRedrawLayer(Layer* layer);
 
-  void OnResize(const gfx::Size& size) override;
   /**
    * Layer 仅保留相对于父窗口的坐标和大小, 此函数负责计算
    * Layer 的窗口坐标， 参数 rect 为父窗口的窗口坐标

@@ -4,15 +4,13 @@
 #include "azer/render/layers/canvas_layer.h"
 #include "azer/render/layers/nodraw_layer.h"
 #include "azer/render/layers/renderer_layer.h"
-#include "azer/render/layers/compositor.h"
 #include "azer/render/render_system.h"
 
 namespace azer {
 namespace layers {
 
 LayerTreeHost::LayerTreeHost(const gfx::Size& size)
-    : layers_(NULL)
-    , client_(NULL)
+    : client_(NULL)
     , root_(NULL)
     , size_(size)  {
 }
@@ -27,16 +25,9 @@ void LayerTreeHost::SetRoot(scoped_refptr<Layer> layer) {
   layer->SetBounds(gfx::Rect(size_));
 }
 
-void LayerTreeHost::SetCompositor(Compositor* layers) {
+void LayerTreeHost::SetClient(LayerTreeHostClient* client) {
   DCHECK(NULL != root());
-  client_ = layers;
-  layers_ = layers;
-
-  UpdateResourceHierarchy(root());
-  if (layers) {
-    client_->OnResize(size_);
-    SetLayerNeedRedrawHierarchy(root());
-  }
+  client_ = client;
 }
 
 void LayerTreeHost::resize(const gfx::Size& size) {
@@ -53,23 +44,14 @@ void LayerTreeHost::resize(const gfx::Size& size) {
   }
 }
 
-void LayerTreeHost::UpdateResourceHierarchy(Layer* layer) {
-  layer->SetBounds(layer->bounds());
-  for (auto iter = layer->children_.begin();
-       iter != layer->children_.end();
-       ++iter) {
-    (*iter)->SetBounds((*iter)->bounds());
-  }
-}
-
 void LayerTreeHost::SetLayerNeedRedraw(Layer* layer) {
-  DCHECK(layers());
-  layers()->AddNeedRedrawLayer(layer);
+  DCHECK(client_);
+  client_->OnLayerNeedRedraw(layer);
 }
 
 void LayerTreeHost::SetLayerNeedRedrawHierarchy(Layer* layer) {
-  DCHECK(layers());
-  layers()->AddNeedRedrawLayer(layer);
+  DCHECK(client_);
+  client_->OnLayerNeedRedraw(layer);
   
   for (auto iter = layer->children().begin();
        iter != layer->children().end();
@@ -78,25 +60,21 @@ void LayerTreeHost::SetLayerNeedRedrawHierarchy(Layer* layer) {
   }
 }
 
-Compositor* LayerTreeHost::layers() {
-  return layers_;
-}
-
 void LayerTreeHost::OnLayerAttachedOnTree(Layer* layer) {
-  if (layers()) {
-    layers()->AddNeedRedrawLayer(layer);
+  if (client_) {
+    client_->OnLayerAttached(layer);
   }
 }
 
 void LayerTreeHost::OnLayerResized(Layer* layer) {
-  if (layers()) {
-    layers()->AddNeedRedrawLayer(layer);
+  if (client_) {
+    client_->OnLayerNeedRedraw(layer);
   }
 }
 
 void LayerTreeHost::OnLayerDestroying(Layer* layer) {
-  if (layers()) {
-    layers()->TryRemoveNeedRedrawLayer(layer);
+  if (client_) {
+    client_->OnLayerRemoved(layer);
   }
 }
 }  // namespace layers
