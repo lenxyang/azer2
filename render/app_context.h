@@ -4,13 +4,14 @@
 #include "ui/gfx/native_widget_types.h"
 #include "azer/render/swap_chain.h"
 #include "azer/render/renderer.h"
+#include "azer/render/overlay.h"
 #include "azer/render/surface.h"
 
 namespace azer {
 
 class RenderSystem;
 
-class AppContext {
+class AZER_EXPORT AppContext {
  public:
   virtual ~AppContext();
 

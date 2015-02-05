@@ -1,5 +1,7 @@
 #include "azer/render/layers/bitmap_layer.h"
 
+#include "base/logging.h"
+
 namespace azer {
 namespace layers {
 BitmapLayer::BitmapLayer()
@@ -9,7 +11,9 @@ BitmapLayer::BitmapLayer()
 BitmapLayer::~BitmapLayer() {
 }
 
-void BitmapLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
+void BitmapLayer::Render(Renderer* renderer, Overlay* overlay,
+                         const gfx::Rect& parent_rc) {
+  NOTREACHED();
 }
 
 void BitmapLayer::SetBounds(const gfx::Rect& bounds) {

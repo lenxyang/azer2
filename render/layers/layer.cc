@@ -10,7 +10,6 @@
 #include "ui/gfx/size_conversions.h"
 #include "ui/gfx/transform.h"
 
-#include "azer/render/layers/compositor.h"
 #include "azer/render/layers/layer_tree_host.h"
 #include "azer/render/layers/bitmap_layer.h"
 #include "azer/render/layers/canvas_layer.h"
@@ -51,8 +50,6 @@ Layer::Layer(LayerType type)
 }
 
 Layer::~Layer() {
-  FOR_EACH_OBSERVER(LayerObserver, observers_, OnLayerDestroying(this));
-  observers_.Clear();
 }
 
 void Layer::SetTreeHost(LayerTreeHost* host) {
@@ -69,9 +66,6 @@ void Layer::Add(scoped_refptr<Layer> layer) {
   layer->SetTreeHost(GetTreeHost());
   children_.push_back(layer);
   layer->OnStackingChanged();
-
-  layer->AddObserver(host_);
-  FOR_EACH_OBSERVER(LayerObserver, layer->observers_, OnLayerAttachedOnTree(layer));
 }
 
 bool Layer::Contains(scoped_refptr<Layer> other) {
@@ -97,6 +91,17 @@ bool Layer::Remove(scoped_refptr<Layer> layer) {
   return false;
 }
 
+void Layer::SetTransform(const gfx::Transform& transform) {
+}
+
+gfx::Transform Layer::GetTargetTransform() const {
+  return gfx::Transform(); 
+}
+
+gfx::Transform Layer::transform() const {
+  return gfx::Transform();
+}
+
 void Layer::SetVisible(bool visible) {
   visible_ = visible;
 }
@@ -112,7 +117,6 @@ void Layer::OnParentBoundsChanged() {
 
 void Layer::OnAttachedtoTreeHost() {
   OnBoundsChanged();
-  ScheduleDraw();
 
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     (*iter)->OnAttachedtoTreeHost();
@@ -129,8 +133,6 @@ void Layer::OnBoundsChanged() {
       Layer* i = (*iter);
       i->OnParentBoundsChanged();
     }
-
-    FOR_EACH_OBSERVER(LayerObserver, observers_, OnLayerResized(this));
   }
 }
 
@@ -168,46 +170,104 @@ void Layer::CalcTexBounds() {
   }
 }
 
-void Layer::AddObserver(LayerObserver* observer) {
-  observers_.AddObserver(observer);
-}
-
-void Layer::RemoveObserver(LayerObserver* observer) {
-  observers_.RemoveObserver(observer);
-}
-
 void Layer::SetColor(SkColor color) {
   color_ = color;
 }
 
-bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
-  /*
-  if (AttachedToTreeHost()) {
-    gfx::Point pt(invalid_rect.origin());
-    ConvertPointToLayer(GetTreeHost()->root(), this, &pt);
-    gfx::Rect rect(pt, invalid_rect.size());
-    // mark all layer interacted with rect 'needed render'
-    for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-      const gfx::Rect& child_bounds = (*iter)->bounds();
-      if (child_bounds.Intersects(rect)) {
-        GetTreeHost()->SetLayerNeedRedraw(*iter);
-        (*iter)->SchedulePaint(invalid_rect);
-      }
-    }
-  }
-  return true;
-  */
-  return true;
-}
-
-void Layer::ScheduleDraw() {
-  if (AttachedToTreeHost()) {
-    GetTreeHost()->SetLayerNeedRedrawHierarchy(this);
-  }
-}
-
 bool Layer::AttachedToTreeHost() const {
   return (host_ != NULL);
+}
+
+void Layer::StackAtTop(Layer* child) {
+  if (children_.size() <= 1 || child == children_.back())
+    return;  // Already in front.
+  StackAbove(child, children_.back());
+}
+
+void Layer::StackAbove(Layer* child, Layer* other) {
+  StackRelativeTo(child, other, true);
+}
+
+void Layer::StackAtBottom(Layer* child) {
+  if (children_.size() <= 1 || child == children_.front())
+    return;  // Already on bottom.
+  StackBelow(child, children_.front());
+}
+
+void Layer::StackBelow(Layer* child, Layer* other) {
+  StackRelativeTo(child, other, false);
+}
+
+void Layer::StackRelativeTo(Layer* child, Layer* other, bool above) {
+  DCHECK_NE(child, other);
+  DCHECK_EQ(this, child->parent());
+  DCHECK_EQ(this, other->parent());
+
+  const size_t child_i =
+      std::find(children_.begin(), children_.end(), child) - children_.begin();
+  const size_t other_i =
+      std::find(children_.begin(), children_.end(), other) - children_.begin();
+  if ((above && child_i == other_i + 1) || (!above && child_i + 1 == other_i))
+    return;
+
+  const size_t dest_i =
+      above ?
+      (child_i < other_i ? other_i : other_i + 1) :
+      (child_i < other_i ? other_i - 1 : other_i);
+  children_.erase(children_.begin() + child_i);
+  children_.insert(children_.begin() + dest_i, child);
+}
+
+// static
+void Layer::ConvertPointToLayer(const Layer* source,
+                                const Layer* target,
+                                gfx::Point* point) {
+  if (source == target)
+    return;
+
+  const Layer* root_layer = GetRoot(source);
+  CHECK_EQ(root_layer, GetRoot(target));
+
+  if (source != root_layer)
+    source->ConvertPointForAncestor(root_layer, point);
+  if (target != root_layer)
+    target->ConvertPointFromAncestor(root_layer, point);
+}
+
+bool Layer::ConvertPointForAncestor(const Layer* ancestor,
+                                    gfx::Point* point) const {
+  gfx::Transform transform;
+  bool result = GetTargetTransformRelativeTo(ancestor, &transform);
+  gfx::Point3F p(*point);
+  transform.TransformPoint(&p);
+  *point = gfx::ToFlooredPoint(p.AsPointF());
+  return result;
+}
+
+bool Layer::ConvertPointFromAncestor(const Layer* ancestor,
+                                     gfx::Point* point) const {
+  gfx::Transform transform;
+  bool result = GetTargetTransformRelativeTo(ancestor, &transform);
+  gfx::Point3F p(*point);
+  transform.TransformPointReverse(&p);
+  *point = gfx::ToFlooredPoint(p.AsPointF());
+  return result;
+}
+
+bool Layer::GetTargetTransformRelativeTo(const Layer* ancestor,
+                                         gfx::Transform* transform) const {
+  const Layer* p = this;
+  for (; p && p != ancestor; p = p->parent()) {
+    gfx::Transform translation;
+    translation.Translate(static_cast<float>(p->bounds().x()),
+                          static_cast<float>(p->bounds().y()));
+    // Use target transform so that result will be correct once animation is
+    // finished.
+    if (!p->GetTargetTransform().IsIdentity())
+      transform->ConcatTransform(p->GetTargetTransform());
+    transform->ConcatTransform(translation);
+  }
+  return p == ancestor;
 }
 }  // namespace layers
 }  // namespace azer

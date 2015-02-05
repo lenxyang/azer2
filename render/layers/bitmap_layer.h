@@ -15,7 +15,8 @@ class BitmapLayer : public Layer {
   explicit BitmapLayer();
   ~BitmapLayer() override;
 
-  void Render(Renderer* renderer, const gfx::Rect& parent_rc) override;
+  void Render(Renderer* renderer, Overlay* overlay,
+              const gfx::Rect& parent_rc) override;
   void Redraw() override {}
   void SetBounds(const gfx::Rect& bounds) override;
  private:

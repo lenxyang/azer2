@@ -169,7 +169,7 @@ class COMPOSITOR_EXPORT Layer {
   // Suppresses painting the content by disconnecting |delegate_|.
   void SuppressPaint();
 
-  azer::layers::Layer* layer() { return layer_.get();}
+  azer::LayerPtr& layer() { return layer_;}
   float device_scale_factor() const { return 1.0f;}
   bool Contains(Layer* layer);
 

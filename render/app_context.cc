@@ -9,6 +9,7 @@ AppContext* AppContext::context_ = NULL;
 AppContext* AppContext::CreateInstance(gfx::AcceleratedWidget widget) {
   CHECK(!context_);
   context_ = new AppContext(widget);
+  return context_;
 }
 
 AppContext* AppContext::GetInstance() {
@@ -24,13 +25,12 @@ void AppContext::DestroyInstance() {
 
 AppContext::AppContext(gfx::AcceleratedWidget widget) 
     : render_system_(NULL) {
-  gfx::Size size(1, 1);
   surface_.reset(new azer::Surface(widget));
   render_system_ = azer::RenderSystem::Current();
   CHECK(render_system_);
-  swapchain_.reset(render_system->CreateSwapChainForSurface(surface_.get()));
+  swapchain_.reset(render_system_->CreateSwapChainForSurface(surface_.get()));
   renderer_ = swapchain_->GetRenderer();
-  overlay_.reset(render_system->CreateOverlay());
+  overlay_.reset(render_system_->CreateOverlay());
 }
 
 AppContext::~AppContext() {
@@ -38,7 +38,7 @@ AppContext::~AppContext() {
 
 
 void AppContext::RenderUI(TexturePtr& texture) {
-  overlay_->SetTexture(compositor_->GetOutputTexture());
+  overlay_->SetTexture(texture);
   overlay_->SetBounds(gfx::RectF(-1.0f, -1.0f, 2.0f, 2.0f));
   overlay_->SetTexCoord(gfx::PointF(0.0f, 0.0f), gfx::PointF(1.0f, 1.0f));
   overlay_->Render(renderer_.get());

@@ -5,6 +5,7 @@
 #ifndef UI_COMPOSITOR_COMPOSITOR_H_
 #define UI_COMPOSITOR_COMPOSITOR_H_
 
+#include <set>
 #include <string>
 
 #include "base/containers/hash_tables.h"
@@ -20,7 +21,7 @@
 #include "ui/gfx/vector2d.h"
 
 #include "azer/ui/compositor/compositor_export.h"
-#include "azer/render/layers/compositor.h"
+#include "azer/render/layers/layer_tree_host.h"
 #include "azer/render/renderer.h"
 
 class SkBitmap;
@@ -39,7 +40,7 @@ namespace ui {
 
 class Layer;
 
-class COMPOSITOR_EXPORT Compositor : public azer::layers::LayerTreeHostClient {
+class COMPOSITOR_EXPORT Compositor {
  public:
   Compositor(gfx::AcceleratedWidget widget);
   ~Compositor();
@@ -64,7 +65,7 @@ class COMPOSITOR_EXPORT Compositor : public azer::layers::LayerTreeHostClient {
   void SetBackgroundColor(SkColor color);
 
   // Set the visibility of the underlying compositor.
-  void SetVisible(bool visible) {}
+  void SetVisible(bool visible) {visible_ = visible;}
 
   // Returns the widget for this compositor.
   gfx::AcceleratedWidget widget() const { return widget_; }
@@ -81,43 +82,15 @@ class COMPOSITOR_EXPORT Compositor : public azer::layers::LayerTreeHostClient {
   void AddAnimationObserver(CompositorAnimationObserver* observer);
   void RemoveAnimationObserver(CompositorAnimationObserver* observer);
   bool HasAnimationObserver(CompositorAnimationObserver* observer);
-
-  azer::SwapChainPtr& GetSwapChain();
-  void DoComposite();
-  void DoDraw();
   void DoRender();
 
-  TexturePtr& GetOutputTexture();
-  RendererPtr& GetRenderer();
-  OverlayPtr& overlay() { return overlay_;}
-
-  // override from LayerTreeHostClient
-  void OnResize(const gfx::Size& size) override;
-  void OnLayerNeedRedraw(Layer* layer) override;
-  void OnLayerAttached(Layer* layer) override;
-  void OnLayerRemoved(Layer* layer) override;
+  void ScheduleLayerRedraw(Layer* layer);
+  void ScheduleDraw() {}
  protected:
-  /**
-   * Layer 仅保留相对于父窗口的坐标和大小, 此函数负责计算
-   * Layer 的窗口坐标， 参数 rect 为父窗口的窗口坐标
-   * Notes: 如果子窗口的坐标超出了父窗口的坐标，
-   * 那么 rect 的 size 小于 layer 的 size
-   */
-  gfx::Rect CalcRect(Layer* layer, const gfx::Rect& rect);
-
-  /**
-   * 递归的调用每一层的 Layer 并渲染到一个 texture 当中
-   * rect 为当前 layer 的位置(先对于整个Texture来说)
-   */
-  void CompositeLayer(Layer* layer, const gfx::Rect& rect);
  private:
   gfx::AcceleratedWidget widget_;
 
-  OverlayPtr overlay_;
-  RendererPtr renderer_;
-  SkColor background_color_;
-  std::set<Layer*> need_redraw_;
-
+  bool visible_;
   Layer* root_layer_;
   scoped_ptr<azer::layers::LayerTreeHost> host_;
   DISALLOW_COPY_AND_ASSIGN(Compositor);

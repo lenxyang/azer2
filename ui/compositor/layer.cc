@@ -55,7 +55,7 @@ Layer::Layer(LayerType type)
 Layer::~Layer() {
 }
 
-scoped_refptr<azer::layers::Layer> Layer::CreateCCLayer(LayerType type) {
+azer::LayerPtr Layer::CreateCCLayer(LayerType type) {
   switch (type) {
     case LAYER_NOT_DRAWN:
       return azer::layers::Layer::CreateLayer(azer::layers::Layer::kNotDrawnLayer);
@@ -127,6 +127,8 @@ void Layer::StackRelativeTo(Layer* child, Layer* other, bool above) {
       (child_i < other_i ? other_i - 1 : other_i);
   children_.erase(children_.begin() + child_i);
   children_.insert(children_.begin() + dest_i, child);
+
+  layer_->StackRelativeTo(child->layer_.get(), other->layer_.get(), above);
 }
 
 void Layer::SetTransform(const gfx::Transform& transform) {
@@ -220,12 +222,21 @@ void Layer::set_delegate(LayerDelegate* delegate) {
 }
 
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
-  layer_->SchedulePaint(invalid_rect);
+  if (!GetCompositor()) { return false;}
+
+  GetCompositor()->ScheduleRedrawRect(invalid_rect);
+  damaged_region_.op(invalid_rect.x(),
+                     invalid_rect.y(),
+                     invalid_rect.right(),
+                     invalid_rect.bottom(),
+                     SkRegion::kUnion_Op);
   return true;
 }
 
 void Layer::ScheduleDraw() {
-  layer_->ScheduleDraw();
+  Compositor* compositor = GetCompositor();
+  if (compositor)
+    compositor->ScheduleDraw();
 }
 
 void Layer::CompleteAllAnimations() {

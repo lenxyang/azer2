@@ -11,7 +11,6 @@
 #include "ui/gfx/transform.h"
 
 #include "azer/base/export.h"
-#include "azer/render/layers/layer_observer.h"
 
 namespace gfx {
 class Transform;
@@ -20,6 +19,7 @@ class Transform;
 namespace azer {
 
 class Renderer;
+class Overlay;
 
 namespace layers {
 
@@ -49,14 +49,12 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   const Layer* parent() const { return parent_;}
   LayerTreeHost* GetTreeHost() { return host_;}
 
-  void AddObserver(LayerObserver* observer);
-  void RemoveObserver(LayerObserver* observer);
-
   /**
    * 将 Layer 的内容渲染到 Renderer 当中
    * parent_rc 为父窗口当前的 rect
    **/
-  virtual void Render(Renderer* renderer, const gfx::Rect& parent_rc) = 0;
+  virtual void Render(Renderer* renderer, Overlay* overlay,
+                      const gfx::Rect& parent_rc) = 0;
   virtual void Redraw() = 0;
 
   const std::string& name() const { return name_;}
@@ -79,14 +77,13 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   float opacity() const { return 1.0f;}
   void SetOpacity(float opacity) { }
 
-  // Adds |invalid_rect| to the Layer's pending invalid rect and calls
-  // ScheduleDraw(). Returns false if the paint request is ignored.
-  bool SchedulePaint(const gfx::Rect& invalid_rect);
+  // The transform, relative to the parent.
+  void SetTransform(const gfx::Transform& transform);
+  gfx::Transform transform() const;
 
-  // Schedules a redraw of the layer tree at the layers.
-  // Note that this _does not_ invalidate any region of this layer; use
-  // SchedulePaint() for that.
-  void ScheduleDraw();
+  // Return the target transform if animator is running, or the current
+  // transform otherwise.
+  gfx::Transform GetTargetTransform() const;
 
   virtual void SetBounds(const gfx::Rect& bounds) = 0;
   const gfx::Rect& bounds() const { return bounds_;}
@@ -106,9 +103,38 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   void SetVisible(bool visible);
   bool visible() const { return visible_;}
 
+  // Converts a point from the coordinates of |source| to the coordinates of
+  // |target|. Necessarily, |source| and |target| must inhabit the same Layer
+  // tree.
+  static void ConvertPointToLayer(const Layer* source,
+                                  const Layer* target,
+                                  gfx::Point* point);
+
+  // Converts a transform to be relative to the given |ancestor|. Returns
+  // whether success (that is, whether the given ancestor was really an
+  // ancestor of this layer).
+  bool GetTargetTransformRelativeTo(const Layer* ancestor,
+                                    gfx::Transform* transform) const;
+
   // called when remove from parent
   virtual void OnRemoveFromParent() {}
   virtual void OnStackingChanged() {}
+
+  // Stacks |child| above all other children.
+  void StackAtTop(Layer* child);
+
+  // Stacks |child| directly above |other|.  Both must be children of this
+  // layer.  Note that if |child| is initially stacked even higher, calling this
+  // method will result in |child| being lowered in the stacking order.
+  void StackAbove(Layer* child, Layer* other);
+
+  // Stacks |child| below all other children.
+  void StackAtBottom(Layer* child);
+
+  // Stacks |child| directly below |other|.  Both must be children of this
+  // layer.
+  void StackBelow(Layer* child, Layer* other);
+  void StackRelativeTo(Layer* child, Layer* other, bool above);
 
   LayerList& children() { return children_;}
   const LayerList& children() const { return children_;}
@@ -124,7 +150,8 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
   void OnParentBoundsChanged();
   virtual void OnBoundsChanged();
  protected:
-  void StackRelativeTo(Layer* child, Layer* other, bool above);
+  bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
+  bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool AttachedToTreeHost() const;
   void OnAttachedtoTreeHost();
 
@@ -145,9 +172,10 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
 
   SkColor color_;
   LayerType type_;
-  LayerObserverList observers_;
   friend class LayerTreeHost;
   DISALLOW_COPY_AND_ASSIGN(Layer);
 };
 }  // namespace layers
+
+typedef scoped_refptr<layers::Layer> LayerPtr;
 }  // namespace azer

@@ -5,7 +5,6 @@
 #include "ui/gfx/geometry/rect_f.h"
 #include "base/logging.h"
 
-#include "azer/render/layers/compositor.h"
 #include "azer/render/layers/layer_tree_host.h"
 #include "azer/render/render.h"
 
@@ -18,10 +17,10 @@ TextureLayer::TextureLayer(LayerType type)
 TextureLayer::~TextureLayer() {
 }
 
-void TextureLayer::Render(Renderer* renderer, const gfx::Rect& parent_rc) {
+void TextureLayer::Render(Renderer* renderer, Overlay* overlay,
+                          const gfx::Rect& parent_rc) {
   if (texture_.get()) {
-    OverlayPtr& overlay = host_->layers()->overlay();
-    DCHECK(overlay.get() != NULL);
+    DCHECK(overlay);
     overlay->SetTexture(texture_);
     overlay->SetTexCoord(tex_bounds_);
     overlay->SetBounds(overlay_bounds_);

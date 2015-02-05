@@ -5,8 +5,6 @@ source_set("layers") {
     "bitmap_layer.h",
     "canvas_layer.cc",
     "canvas_layer.h",
-    "compositor.cc",
-    "compositor.h",
     "layer.cc",
     "layer.h",
     "layer_tree_host.cc",
