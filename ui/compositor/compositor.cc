@@ -21,6 +21,7 @@ Compositor::Compositor(gfx::AcceleratedWidget widget)
 
 Compositor::~Compositor() {
   host_.reset();
+  azer::AppContext::DestroyInstance();
 }
 
 void Compositor::SetRootLayer(Layer* root_layer) {
