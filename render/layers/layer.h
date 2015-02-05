@@ -108,6 +108,7 @@ class AZER_EXPORT Layer : public ::base::RefCounted<Layer> {
 
   void SetVisible(bool visible);
   bool visible() const { return visible_;}
+  void SetHideLayerAndSubtree(bool visible);
 
   // Converts a point from the coordinates of |source| to the coordinates of
   // |target|. Necessarily, |source| and |target| must inhabit the same Layer

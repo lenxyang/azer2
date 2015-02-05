@@ -119,6 +119,10 @@ void Layer::SetVisible(bool visible) {
   visible_ = visible;
 }
 
+void Layer::SetHideLayerAndSubtree(bool visible) {
+  SetVisible(visible);
+}
+
 void Layer::SetBoundsInternal(const gfx::Rect& new_bounds) { 
   bounds_ = new_bounds;
   OnBoundsChanged();

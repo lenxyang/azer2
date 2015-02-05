@@ -56,12 +56,7 @@ class DemoWindowDelegate : public aura::WindowDelegate {
   bool CanFocus() override { return true; }
   void OnCaptureLost() override {}
   void OnPaint(gfx::Canvas* canvas) override {
-    // canvas->DrawColor(color_, SkXfermode::kSrc_Mode);
-    canvas->sk_canvas()->drawARGB(SkColorGetA(color_),
-                                  SkColorGetR(color_),
-                                  SkColorGetG(color_),
-                                  SkColorGetB(color_)
-                                  );
+    canvas->DrawColor(color_, SkXfermode::kSrc_Mode);
   }
   void OnDeviceScaleFactorChanged(float device_scale_factor) override {}
   void OnWindowDestroying(aura::Window* window) override {}

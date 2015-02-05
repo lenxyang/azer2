@@ -184,7 +184,7 @@ float Layer::GetTargetOpacity() const {
 }
 
 void Layer::SetVisible(bool visible) {
-  layer_->SetVisible(visible);
+  layer_->SetHideLayerAndSubtree(visible);
 }
 
 bool Layer::visible() const {
@@ -196,7 +196,10 @@ bool Layer::GetTargetVisibility() const {
 }
 
 bool Layer::IsDrawn() const {
-  return true;
+  const Layer* layer = this;
+  while (layer && layer->visible())
+    layer = layer->parent_;
+  return layer == NULL;
 }
 
 void Layer::SetFillsBoundsOpaquely(bool fills_bounds_opaquely) {
