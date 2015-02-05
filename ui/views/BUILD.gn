@@ -1,0 +1,30 @@
+
+
+source_set("views") {
+  sources = [
+    "color_constants.cc",
+    "color_constants.h",
+    "cull_set.cc",
+    "cull_set.h"
+    "metrics.cc",
+    "metrics.h",
+  ]
+  defines = [ 
+    "VIEWS_IMPLEMENTATION",
+    "AURA_IMPLEMENTATION",
+    "COMPOSITOR_IMPLEMENTATION", 
+  ]
+
+  deps = [
+    "//base:i18n",
+    "//base/third_party/dynamic_annotations",
+    "//skia",
+    "//third_party/icu",
+    "//ui/accessibility",
+    "//ui/native_theme",
+    "//ui/resources",
+    "//ui/strings",
+    "//ui/wm",
+    "//url",
+  ]  
+}
