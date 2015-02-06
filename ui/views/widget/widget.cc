@@ -112,6 +112,7 @@ void Widget::OnWindowTargetVisibilityChanged(bool visible) {
 }
 
 bool Widget::HasHitTestMask() const {
+  return false;
 }
 
 void Widget::GetHitTestMask(gfx::Path* mask) const {
