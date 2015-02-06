@@ -4,11 +4,13 @@
 #include "azer/ui/aura/window.h"
 
 namespace views {
-WindowOwner::WindowOwner()
-    : window_(NULL) {
+WindowOwner::WindowOwner(View* view)
+    : window_(NULL)
+    , view_(view) {
 }
 
 WindowOwner::~WindowOwner() {
+  bridge_.reset();
 }
 
 ui::Layer* WindowOwner::layer() {
@@ -16,9 +18,10 @@ ui::Layer* WindowOwner::layer() {
   return window_->layer();
 }
 
-aura::Window* WindowOwner::Create(aura::WindowDelegate* delegate) {
+aura::Window* WindowOwner::Create() {
   CHECK(!window_);
-  window_ = new aura::Window(delegate);
+  bridge_.reset(new ViewBridge(view_));
+  window_ = new aura::Window(bridge_);
   return window_;
 }
 
@@ -79,4 +82,25 @@ bool ViewBridge::HasHitTestMask() const {
 
 void ViewBridge::GetHitTestMask(gfx::Path* mask) const {
 }
+
+void ViewBridge::OnKeyEvent(ui::KeyEvent* event) {
+  view_->OnKeyEvent(event);
+}
+
+void ViewBridge::OnMouseEvent(ui::MouseEvent* event) {
+  view_->OnMouseEvent(event);
+}
+
+void ViewBridge::OnScrollEvent(ui::ScrollEvent* event) {
+  view_->OnScrollEvent(event);
+}
+
+void ViewBridge::OnTouchEvent(ui::TouchEvent* event) {
+  view_->OnTouchEvent(event);
+}
+
+void ViewBridge::OnGestureEvent(ui::GestureEvent* event) {
+  view_->OnGestureEvent(event);
+}
+
 }  // namespace views

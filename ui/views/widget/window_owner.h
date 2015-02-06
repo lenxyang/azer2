@@ -43,23 +43,32 @@ class ViewBridge : public aura::WindowDelegate {
   void OnWindowTargetVisibilityChanged(bool visible) override;
   bool HasHitTestMask() const override;
   void GetHitTestMask(gfx::Path* mask) const override;
+
+  void OnKeyEvent(ui::KeyEvent* event) override;
+  void OnMouseEvent(ui::MouseEvent* event) override;
+  void OnScrollEvent(ui::ScrollEvent* event) override;
+  void OnTouchEvent(ui::TouchEvent* event) override;
+  void OnGestureEvent(ui::GestureEvent* event) override;
  private:
+  View* view_;
   DISALLOW_COPY_AND_ASSIGN(ViewBridge);
 };
 
 class VIEWS_EXPORT WindowOwner {
  public:
-  WindowOwner();
+  WindowOwner(View* view);
   ~WindowOwner();
 
   ui::Layer* layer();
 
-  aura::Window* Create(aura::WindowDelegate* delegate);
+  aura::Window* Create();
   void SetWindow(aura::Window* window);
 
   aura::Window* window() { return window_;}
   const aura::Window* window() const { return window_;}
  private:
+  View* view_;
+  scoped_ptr<ViewBridge> bridge_;
   aura::Window* window_;
   DISALLOW_COPY_AND_ASSIGN(WindowOwner);
 };

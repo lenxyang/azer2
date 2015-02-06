@@ -105,7 +105,6 @@ class RootView;
 //
 /////////////////////////////////////////////////////////////////////////////
 class VIEWS_EXPORT View : public WindowOwner,
-                          public aura::WindowDelegate,
                           public ui::AcceleratorTarget {
 public:
   typedef std::vector<View*> Views;
