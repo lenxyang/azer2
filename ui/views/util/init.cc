@@ -30,6 +30,7 @@ ViewsInitialize::ViewsInitialize(int argc, char* argv[]) {
 
   aura::Env::CreateInstance(true);
   aura_screen_.reset(AuraScreen::Create(gfx::Size()));
+  gfx::Screen::SetScreenInstance(gfx::SCREEN_TYPE_NATIVE, aura_screen_.get());
 
   ::logging::LoggingSettings setting;
   // setting.log_file = UTF16ToUTF8(path.value());
