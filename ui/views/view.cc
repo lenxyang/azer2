@@ -859,6 +859,11 @@ bool View::HitTestRect(const gfx::Rect& rect) const {
   return false;
 }
 
+bool View::CanProcessEventsWithinSubtree() const {
+  CHECK(false);
+  return true;
+}
+
 bool View::IsMouseHovered() {
   CHECK(false);
   return false;
@@ -1154,10 +1159,13 @@ bool View::ExceededDragThreshold(const gfx::Vector2d& delta) {
 // Accessibility----------------------------------------------------------------
 
 gfx::NativeViewAccessible View::GetNativeViewAccessible() {
+  /*
   if (!native_view_accessibility_)
     native_view_accessibility_ = NativeViewAccessibility::Create(this);
   if (native_view_accessibility_)
     return native_view_accessibility_->GetNativeObject();
+  */
+  CHECK(false);
   return NULL;
 }
 

@@ -11,6 +11,11 @@ WindowOwner::WindowOwner()
 WindowOwner::~WindowOwner() {
 }
 
+ui::Layer* WindowOwner::layer() {
+  CHECK(!window_);
+  return window_->layer();
+}
+
 aura::Window* WindowOwner::Create(aura::WindowDelegate* delegate) {
   CHECK(!window_);
   window_ = new aura::Window(delegate);

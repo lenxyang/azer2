@@ -1,10 +1,14 @@
 
 source_set("views") {
   sources = [
+    "accessibility/native_view_accessibility.cc",
+    "accessibility/native_view_accessibility.h",
     "background.cc",
     "background.h",
     "cull_set.cc",
     "cull_set.h",
+    "focus/view_storage.cc",
+    "focus/view_storage.h",
     "layout/box_layout.cc",
     "layout/box_layout.h",
     "layout/fill_layout.cc",

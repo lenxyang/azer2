@@ -8,7 +8,7 @@
 
 namespace views {
 
-Widget::Widget(const gfx::Rect& bounds) 
+Widget::Widget() 
     : cursor_(gfx::kNullCursor) {
 }
 
