@@ -31,6 +31,7 @@
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/rect.h"
 #include "ui/gfx/vector2d.h"
+#include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/views/cull_set.h"
 #include "azer/ui/views/widget/window_owner.h"
 #include "azer/ui/views/views_export.h"
@@ -104,8 +105,8 @@ class RootView;
 //
 /////////////////////////////////////////////////////////////////////////////
 class VIEWS_EXPORT View : public WindowOwner,
-                          public ui::AcceleratorTarget,
-                          public ui::EventTarget {
+                          public aura::WindowDelegate,
+                          public ui::AcceleratorTarget {
 public:
   typedef std::vector<View*> Views;
 
@@ -1201,6 +1202,25 @@ public:
   std::string DoPrintViewGraph(bool first, View* view_with_children);
 #endif
 
+  // Overridden from aura::WindowDelegate:
+  gfx::Size GetMinimumSize() const override;
+  gfx::Size GetMaximumSize() const override;
+  void OnBoundsChanged(const gfx::Rect& old_bounds,
+                       const gfx::Rect& new_bounds) override;
+  gfx::NativeCursor GetCursor(const gfx::Point& point) override;
+  int GetNonClientComponent(const gfx::Point& point) const override;
+  bool ShouldDescendIntoChildForEventHandling(
+      aura::Window* child,
+      const gfx::Point& location) override;
+  bool CanFocus() override;
+  void OnCaptureLost() override;
+  void OnPaint(gfx::Canvas* canvas) override;
+  void OnDeviceScaleFactorChanged(float device_scale_factor) override;
+  void OnWindowDestroying(aura::Window* window) override;
+  void OnWindowDestroyed(aura::Window* window) override;
+  void OnWindowTargetVisibilityChanged(bool visible) override;
+  bool HasHitTestMask() const override;
+  void GetHitTestMask(gfx::Path* mask) const override;
  private:
   friend class internal::PreEventDispatchHandler;
   friend class internal::PostEventDispatchHandler;
