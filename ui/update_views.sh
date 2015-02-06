@@ -1,0 +1,6 @@
+find views | grep "\.cc$" | xargs -n1 sed -i "s/\"ui\/views/\"azer\/ui\/views/g"
+find views | grep "\.h$" | xargs -n1 sed -i "s/\"ui\/views/\"azer\/ui\/views/g"
+find views | grep "\.cc$" | xargs -n1 sed -i "s/\"ui\/aura/\"azer\/ui\/aura/g"
+find views | grep "\.h$" | xargs -n1 sed -i "s/\"ui\/aura/\"azer\/ui\/aura/g"
+find views | grep "\.cc$" | xargs -n1 sed -i "s/\"ui\/compositor/\"azer\/ui\/compositor/g"
+find views | grep "\.h$" | xargs -n1 sed -i "s/\"ui\/compositor/\"azer\/ui\/compositor/g"
