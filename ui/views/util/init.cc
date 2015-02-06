@@ -23,12 +23,13 @@ ViewsInitialize::ViewsInitialize(int argc, char* argv[]) {
 #if defined(OS_WIN)
   gfx::InitDeviceScaleFactor(1.0f);
 #endif
-  aura::Env::CreateInstance(true);
-
   exit_manager_.reset(new base::AtExitManager);
   CommandLine::Init(argc, argv);
   base::i18n::InitializeICU();
   CHECK(azer::LoadRenderSystem());
+
+  aura::Env::CreateInstance(true);
+  aura_screen_.reset(AuraScreen::Create(gfx::Size()));
 
   ::logging::LoggingSettings setting;
   // setting.log_file = UTF16ToUTF8(path.value());
