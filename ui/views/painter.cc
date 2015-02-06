@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/painter.h"
+#include "azer/ui/views/painter.h"
 
 #include "base/logging.h"
 #include "base/memory/scoped_ptr.h"
@@ -16,7 +16,7 @@
 #include "ui/gfx/nine_image_painter.h"
 #include "ui/gfx/point.h"
 #include "ui/gfx/rect.h"
-#include "ui/views/view.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
 

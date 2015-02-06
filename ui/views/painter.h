@@ -10,7 +10,7 @@
 #include "base/memory/scoped_ptr.h"
 #include "third_party/skia/include/core/SkColor.h"
 #include "ui/base/nine_image_painter_factory.h"
-#include "ui/views/views_export.h"
+#include "azer/ui/views/views_export.h"
 
 namespace gfx {
 class Canvas;
