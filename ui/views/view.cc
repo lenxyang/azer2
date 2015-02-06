@@ -109,6 +109,7 @@ View::View()
       context_menu_controller_(NULL),
       drag_controller_(NULL),
       native_view_accessibility_(NULL) {
+  WindowOwner::Create(this);
 }
 
 View::~View() {
@@ -437,46 +438,13 @@ void View::OnEnabledChanged() {
 // Transformations -------------------------------------------------------------
 
 gfx::Transform View::GetTransform() const {
-  CHECK(false);
   return gfx::Transform();
 }
 
 void View::SetTransform(const gfx::Transform& transform) {
-  CHECK(false);
 }
 
 void View::SetPaintToLayer(bool paint_to_layer) {
-  if (paint_to_layer_ == paint_to_layer)
-    return;
-
-  // If this is a change in state we will also need to update bounds trees.
-  if (paint_to_layer) {
-    // Gaining a layer means becoming a paint root. We must remove ourselves
-    // from our old paint root, if we had one. Traverse up view tree to find old
-    // paint root.
-    View* old_paint_root = parent_;
-    while (old_paint_root && !old_paint_root->IsPaintRoot())
-      old_paint_root = old_paint_root->parent_;
-
-    // Remove our and our children's bounds from the old tree. This will also
-    // mark all of our bounds as dirty.
-    if (old_paint_root && old_paint_root->bounds_tree_)
-      RemoveRootBounds(old_paint_root->bounds_tree_.get());
-
-  } else {
-    // Losing a layer means we are no longer a paint root, so delete our
-    // bounds tree and mark ourselves as dirty for future insertion into our
-    // new paint root's bounds tree.
-    bounds_tree_.reset();
-    SetRootBoundsDirty(true);
-  }
-
-  paint_to_layer_ = paint_to_layer;
-  if (paint_to_layer_ && !layer()) {
-    CreateLayer();
-  } else if (!paint_to_layer_ && layer()) {
-    DestroyLayer();
-  }
 }
 
 // RTL positioning -------------------------------------------------------------
@@ -1983,10 +1951,6 @@ bool View::ConvertRectFromAncestor(const View* ancestor,
 }
 
 // Accelerated painting --------------------------------------------------------
-
-void View::CreateLayer() {
-  CHECK(false);
-}
 
 void View::UpdateParentLayers() {
   // Attach all top-level un-parented layers.

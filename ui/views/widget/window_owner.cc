@@ -2,14 +2,19 @@
 
 #include "base/logging.h"
 #include "azer/ui/aura/window.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
-WindowOwner::WindowOwner(View* view)
+WindowOwner::WindowOwner()
     : window_(NULL)
-    , view_(view) {
+    , view_(NULL)
+    , attached_(false){
 }
 
 WindowOwner::~WindowOwner() {
+  if (window_ && attached_) {
+    delete window_;
+  }
   bridge_.reset();
 }
 
@@ -18,15 +23,37 @@ ui::Layer* WindowOwner::layer() {
   return window_->layer();
 }
 
-aura::Window* WindowOwner::Create() {
+aura::Window* WindowOwner::Create(View* view) {
   CHECK(!window_);
+  CHECK(view_);
+  view_ = view;
   bridge_.reset(new ViewBridge(view_));
-  window_ = new aura::Window(bridge_);
+  window_ = new aura::Window(bridge_.get());
+  attached_ = false;
   return window_;
 }
 
-void WindowOwner::SetWindow(aura::Window* window) {
+void WindowOwner::Destroy() {
+  DCHECK(!attached_);
+  delete window_;
+  window_ = NULL;
+}
+
+void WindowOwner::Attach(aura::Window* window) {
+  attached_ = true;
   CHECK(!window_);
+}
+
+void WindowOwner::Detach()  {
+  DCHECK(attached_);
+  window_ = NULL;
+}
+    
+ViewBridge::ViewBridge(View* view)
+    : view_(view) {
+}
+
+ViewBridge::~ViewBridge() {
 }
 
 gfx::Size ViewBridge::GetMinimumSize() const {

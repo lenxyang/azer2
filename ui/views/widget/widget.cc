@@ -11,15 +11,19 @@ Widget::Widget()
 }
 
 Widget::~Widget() {
-  // content_window_.reset();
-  // content_window_container_.reset();
-  // host_->RemoveObserver(this);
+  root_view_->WindowOwner::Detach();
+  content_window_.reset();
+  content_window_container_.reset();
+  host_->RemoveObserver(this);
 }
 
 void Widget::Init(const InitParams& params) {
   host_.reset(aura::WindowTreeHost::Create(params.bounds));
   content_window_.reset(new aura::Window(this));
   content_window_->Init(aura::WINDOW_LAYER_TEXTURED);
+  root_view_.reset(new RootView(this));
+  root_view_->WindowOwner::Destroy();
+  root_view_->WindowOwner::Attach(content_window_.get());
   // wm::SetShadowType(content_window_.get(), wm::SHADOW_TYPE_NONE);
 
   content_window_container_.reset(new aura::Window(NULL));

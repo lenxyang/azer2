@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
+#include "base/memory/scoped_ptr.h"
 #include "ui/base/cursor/cursor.h"
 
 #include "azer/ui/views/views_export.h"
@@ -23,7 +24,7 @@ class ViewBridge : public aura::WindowDelegate {
  public:
   explicit ViewBridge(View* view);
   ~ViewBridge() override;
-
+ protected:
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;
   gfx::Size GetMaximumSize() const override;
@@ -49,6 +50,7 @@ class ViewBridge : public aura::WindowDelegate {
   void OnScrollEvent(ui::ScrollEvent* event) override;
   void OnTouchEvent(ui::TouchEvent* event) override;
   void OnGestureEvent(ui::GestureEvent* event) override;
+
  private:
   View* view_;
   DISALLOW_COPY_AND_ASSIGN(ViewBridge);
@@ -56,13 +58,15 @@ class ViewBridge : public aura::WindowDelegate {
 
 class VIEWS_EXPORT WindowOwner {
  public:
-  WindowOwner(View* view);
+  WindowOwner();
   ~WindowOwner();
 
   ui::Layer* layer();
 
-  aura::Window* Create();
-  void SetWindow(aura::Window* window);
+  aura::Window* Create(View* view);
+  void Destroy();
+  void Attach(aura::Window* window);
+  void Detach();
 
   aura::Window* window() { return window_;}
   const aura::Window* window() const { return window_;}
@@ -70,6 +74,7 @@ class VIEWS_EXPORT WindowOwner {
   View* view_;
   scoped_ptr<ViewBridge> bridge_;
   aura::Window* window_;
+  bool attached_;
   DISALLOW_COPY_AND_ASSIGN(WindowOwner);
 };
 

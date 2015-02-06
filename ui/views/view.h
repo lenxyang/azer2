@@ -105,6 +105,7 @@ class RootView;
 //
 /////////////////////////////////////////////////////////////////////////////
 class VIEWS_EXPORT View : public WindowOwner,
+                          public ui::EventHandler,
                           public ui::AcceleratorTarget {
 public:
   typedef std::vector<View*> Views;
@@ -1346,9 +1347,6 @@ public:
   bool ConvertRectFromAncestor(const View* ancestor, gfx::RectF* rect) const;
 
   // Accelerated painting ------------------------------------------------------
-
-  // Creates the layer and related fields for this view.
-  void CreateLayer();
 
   // Parents all un-parented layers within this view's hierarchy to this view's
   // layer.

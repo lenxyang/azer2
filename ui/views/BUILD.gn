@@ -19,6 +19,8 @@ source_set("views") {
     "layout/layout_manager.h",
     "painter.cc",
     "painter.h",
+    "widget/root_view.cc",
+    "widget/root_view.h",
     "widget/widget.cc",
     "widget/widget.h",
     "widget/window_owner.cc",
