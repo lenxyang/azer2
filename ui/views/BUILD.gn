@@ -17,6 +17,8 @@ source_set("views") {
     "painter.h",
     "widget/widget.cc",
     "widget/widget.h",
+    "widget/window_owner.cc",
+    "widget/window_owner.h",
     "view.cc",
     "view.h",
     "view_export.h",

@@ -1,6 +1,13 @@
 #pragma once
 
+#include "base/memory/scoped_ptr.h"
+#include "ui/base/cursor/cursor.h"
+
 #include "azer/ui/views/views_export.h"
+#include "azer/ui/views/widget/root_view.h"
+#include "azer/ui/aura/window_delegate.h"
+#include "azer/ui/aura/window_tree_host_observer.h"
+
 namespace aura {
 class WindowTreeHost;
 }
@@ -15,7 +22,6 @@ class InputMethod;
 
 class VIEWS_EXPORT Widget : public aura::WindowDelegate,
                             public aura::WindowTreeHostObserver {
-{
  public:
   explicit Widget(const gfx::Rect& bounds);
   ~Widget() override;
@@ -29,18 +35,17 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   void NotifyWillRemoveView(View* view);
 
   RootView* GetRootView();
-  const RootView* GetRootView();
-  FocusManager* GetMocusManager();
-  bool IsMouseEventsEnabled();
+  const RootView* GetRootView() const;
 
+  bool IsMouseEventsEnabled();
   InputMethod* GetInputMethod();
-  const InputMethod* GetInputMethod();
+  const InputMethod* GetInputMethod() const;
 
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;
   gfx::Size GetMaximumSize() const override;
   void OnBoundsChanged(const gfx::Rect& old_bounds,
-                       const gfx::Rect& new_bounds) override {}
+                       const gfx::Rect& new_bounds) override;
   gfx::NativeCursor GetCursor(const gfx::Point& point) override;
   int GetNonClientComponent(const gfx::Point& point) const override;
   bool ShouldDescendIntoChildForEventHandling(
@@ -69,6 +74,7 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   void OnGestureEvent(ui::GestureEvent* event) override;
  protected:
   gfx::NativeCursor cursor_;
+  scoped_ptr<RootView> root_view_;
   scoped_ptr<aura::WindowTreeHost> host_;
   scoped_ptr<aura::Window> content_window_;
   scoped_ptr<aura::Window> content_window_container_;

@@ -1,5 +1,8 @@
 #include "azer/ui/views/widget/widget.h"
 
+#include "ui/wm/core/shadow_types.h"
+#include "ui/wm/core/window_animations.h"
+#include "ui/wm/core/window_util.h"
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
 
@@ -7,23 +10,25 @@ namespace views {
 
 Widget::Widget(const gfx::Rect& bounds) 
     : cursor_(gfx::kNullCursor) {
-  host_->reset(aura::WindowTreeHost::Create(bounds));
-  content_window_ = new aura::Window(this);
-  content_window_->Init(WINDOW_LAYER_TEXTURED);
-  wm::SetShadowType(content_window_, wm::SHADOW_TYPE_NONE);
+  host_.reset(aura::WindowTreeHost::Create(bounds));
+  content_window_.reset(new aura::Window(this));
+  content_window_->Init(aura::WINDOW_LAYER_TEXTURED);
+  wm::SetShadowType(content_window_.get(), wm::SHADOW_TYPE_NONE);
 
-  content_window_container_ = new aura::Window(NULL);
+  content_window_container_.reset(new aura::Window(NULL));
   content_window_container_->Init(aura::WINDOW_LAYER_NOT_DRAWN);
   content_window_container_->Show();
-  content_window_container_->AddChild(content_window_);
+  content_window_container_->AddChild(content_window_.get());
 
   host_->InitHost();
-  host_->window()->AddChild(content_window_container_);
+  host_->window()->AddChild(content_window_container_.get());
   
   host_->AddObserver(this);
 }
 
 Widget::~Widget() {
+  content_window_.reset();
+  content_window_container_.reset();
   host_->RemoveObserver(this);
 }
 
@@ -38,15 +43,11 @@ void Widget::NotifyWillRemoveView(View* view) {
 }
 
 RootView* Widget::GetRootView() { 
-  return root_view_;
+  return root_view_.get();
 }
 
 const RootView* Widget::GetRootView() const { 
-  return root_view_;
-}
-
-FocusManager* Widget::GetMocusManager() { 
-  return NULL;
+  return root_view_.get();
 }
 
 bool Widget::IsMouseEventsEnabled() { 
@@ -125,7 +126,7 @@ void Widget::OnHostResized(const aura::WindowTreeHost* host) {
 }
 
 void Widget::OnHostMoved(const aura::WindowTreeHost* host,
-                         const gfx::Point& new_origin) override {
+                         const gfx::Point& new_origin) {
 }
 
   // Overridden from ui::EventHandler:

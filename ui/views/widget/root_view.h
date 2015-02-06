@@ -11,10 +11,14 @@ class Widget;
 class VIEWS_EXPORT RootView : public View {
  public:
   explicit RootView(Widget* widget);
-  RootView() override;
+  ~RootView() override;
+
+  virtual const Widget* GetWidget() const { return widget_;}
+  virtual Widget* GetWidget() { return widget_;}
 
   void SetBounds(const gfx::Rect& bounds);
  private:
+  Widget* widget_;
   DISALLOW_COPY_AND_ASSIGN(RootView);
 };
 }  // namespace views

@@ -43,6 +43,7 @@
 #include "azer/ui/views/border.h"
 #include "azer/ui/views/context_menu_controller.h"
 #include "azer/ui/views/drag_controller.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace {
 
@@ -1522,10 +1523,13 @@ std::string View::DoPrintViewGraph(bool first, View* view_with_children) {
   if (!parent_)
     result.append(", shape=box");
   if (layer()) {
+    result.append(", color=green");
+    /*
     if (layer()->has_external_content())
       result.append(", color=green");
     else
       result.append(", color=red");
+    */
 
     if (layer()->fills_bounds_opaquely())
       result.append(", style=filled");

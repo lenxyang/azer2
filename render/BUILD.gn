@@ -118,7 +118,6 @@ test("unittests") {
   defines = ["AZER_UNITTEST"]
   deps = [
     "layers:unittests",
-    "//azer/ui/widget:unittests",
     "//azer/math:math",
     "//azer/third_party/glm:glm",
     "//base/test:run_all_unittests",

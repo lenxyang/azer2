@@ -11,7 +11,6 @@
 #include "ui/gfx/insets.h"
 #include "azer/ui/views/layout/layout_constants.h"
 #include "azer/ui/views/view.h"
-#include "azer/ui/views/window/dialog_delegate.h"
 
 namespace views {
 
