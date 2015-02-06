@@ -10,7 +10,16 @@ namespace views {
 
 Widget::Widget(const gfx::Rect& bounds) 
     : cursor_(gfx::kNullCursor) {
-  host_.reset(aura::WindowTreeHost::Create(bounds));
+}
+
+Widget::~Widget() {
+  content_window_.reset();
+  content_window_container_.reset();
+  host_->RemoveObserver(this);
+}
+
+void Widget::Init(const InitParams& params) {
+  host_.reset(aura::WindowTreeHost::Create(params.bounds));
   content_window_.reset(new aura::Window(this));
   content_window_->Init(aura::WINDOW_LAYER_TEXTURED);
   wm::SetShadowType(content_window_.get(), wm::SHADOW_TYPE_NONE);
@@ -24,12 +33,6 @@ Widget::Widget(const gfx::Rect& bounds)
   host_->window()->AddChild(content_window_container_.get());
   
   host_->AddObserver(this);
-}
-
-Widget::~Widget() {
-  content_window_.reset();
-  content_window_container_.reset();
-  host_->RemoveObserver(this);
 }
 
 bool Widget::IsVisible() {

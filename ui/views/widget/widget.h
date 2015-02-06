@@ -23,8 +23,14 @@ class InputMethod;
 class VIEWS_EXPORT Widget : public aura::WindowDelegate,
                             public aura::WindowTreeHostObserver {
  public:
-  explicit Widget(const gfx::Rect& bounds);
+  struct VIEWS_EXPORT InitParams {
+    gfx::Rect bounds;
+  };
+
+  explicit Widget();
   ~Widget() override;
+
+  void Init(const InitParams& params);
 
   aura::WindowTreeHost* host() {
     return host_.get();
