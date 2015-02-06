@@ -1,6 +1,6 @@
 #include "azer/ui/views/widget/widget.h"
 
-#include "ui/wm/core/shadow_types.h"
+// #include "ui/wm/core/shadow_types.h"
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
 
@@ -11,16 +11,16 @@ Widget::Widget()
 }
 
 Widget::~Widget() {
-  content_window_.reset();
-  content_window_container_.reset();
-  host_->RemoveObserver(this);
+  // content_window_.reset();
+  // content_window_container_.reset();
+  // host_->RemoveObserver(this);
 }
 
 void Widget::Init(const InitParams& params) {
   host_.reset(aura::WindowTreeHost::Create(params.bounds));
   content_window_.reset(new aura::Window(this));
   content_window_->Init(aura::WINDOW_LAYER_TEXTURED);
-  wm::SetShadowType(content_window_.get(), wm::SHADOW_TYPE_NONE);
+  // wm::SetShadowType(content_window_.get(), wm::SHADOW_TYPE_NONE);
 
   content_window_container_.reset(new aura::Window(NULL));
   content_window_container_->Init(aura::WINDOW_LAYER_NOT_DRAWN);
@@ -143,5 +143,4 @@ void Widget::OnScrollEvent(ui::ScrollEvent* event) {
 
 void Widget::OnGestureEvent(ui::GestureEvent* event) {
 }
-
 }  // namespace views {
