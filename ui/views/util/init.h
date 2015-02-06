@@ -16,12 +16,14 @@ class WMState;
 
 namespace views {
 
+class AuraScreen;
+
 class VIEWS_EXPORT ViewsInitialize {
  public:
   ViewsInitialize(int argc, char* argv[]);
   ~ViewsInitialize();
  private:
-  scoped_ptr<aura::TestScreen> aura_screen_;
+  scoped_ptr<AuraScreen> aura_screen_;
   ui::ScopedOleInitializer ole_initializer_;
   scoped_ptr< ::base::AtExitManager> exit_manager_;
   scoped_ptr< ::base::MessageLoopForUI> message_loop_;

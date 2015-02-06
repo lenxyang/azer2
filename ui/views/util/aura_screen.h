@@ -9,6 +9,7 @@
 #include "azer/ui/aura/window_observer.h"
 #include "ui/gfx/display.h"
 #include "ui/gfx/screen.h"
+#include "azer/ui/views/views_export.h"
 
 namespace gfx {
 class Insets;
@@ -21,9 +22,11 @@ class Window;
 class WindowTreeHost;
 }  // namespace aura
 
+namespace views {
+
 // A minimal, testing Aura implementation of gfx::Screen.
 class VIEWS_EXPORT AuraScreen : public gfx::Screen,
-                                 public WindowObserver {
+                                public aura::WindowObserver {
  public:
   // Creates a gfx::Screen of the specified size. If no size is specified, then
   // creates a 800x600 screen. |size| is in physical pixels.
@@ -32,7 +35,7 @@ class VIEWS_EXPORT AuraScreen : public gfx::Screen,
   static AuraScreen* CreateFullscreen();
   ~AuraScreen() override;
 
-  WindowTreeHost* CreateHostForPrimaryDisplay();
+  aura::WindowTreeHost* CreateHostForPrimaryDisplay();
 
   void SetDeviceScaleFactor(float device_scale_fator);
   void SetDisplayRotation(gfx::Display::Rotation rotation);
@@ -44,10 +47,10 @@ class VIEWS_EXPORT AuraScreen : public gfx::Screen,
   gfx::Transform GetUIScaleTransform() const;
 
   // WindowObserver overrides:
-  void OnWindowBoundsChanged(Window* window,
+  void OnWindowBoundsChanged(aura::Window* window,
                              const gfx::Rect& old_bounds,
                              const gfx::Rect& new_bounds) override;
-  void OnWindowDestroying(Window* window) override;
+  void OnWindowDestroying(aura::Window* window) override;
 
   // gfx::Screen overrides:
   gfx::Point GetCursorScreenPoint() override;

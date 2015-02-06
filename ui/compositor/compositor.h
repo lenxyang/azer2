@@ -15,7 +15,6 @@
 #include "base/single_thread_task_runner.h"
 #include "base/time/time.h"
 #include "third_party/skia/include/core/SkColor.h"
-#include "ui/compositor/layer_animator_collection.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/gfx/size.h"
 #include "ui/gfx/vector2d.h"
@@ -39,6 +38,7 @@ class Size;
 namespace ui {
 
 class Layer;
+class CompositorAnimationObserver;
 
 class COMPOSITOR_EXPORT Compositor {
  public:

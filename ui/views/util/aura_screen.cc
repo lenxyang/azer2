@@ -35,15 +35,15 @@ AuraScreen* AuraScreen::Create(const gfx::Size& size) {
 
 // static
 AuraScreen* AuraScreen::CreateFullscreen() {
-  return new AuraScreen(gfx::Rect(WindowTreeHost::GetNativeScreenSize()));
+  return new AuraScreen(gfx::Rect(aura::WindowTreeHost::GetNativeScreenSize()));
 }
 
 AuraScreen::~AuraScreen() {
 }
 
-WindowTreeHost* AuraScreen::CreateHostForPrimaryDisplay() {
+aura::WindowTreeHost* AuraScreen::CreateHostForPrimaryDisplay() {
   DCHECK(!host_);
-  host_ = WindowTreeHost::Create(gfx::Rect(display_.GetSizeInPixel()));
+  host_ = aura::WindowTreeHost::Create(gfx::Rect(display_.GetSizeInPixel()));
   host_->window()->AddObserver(this);
   host_->InitHost();
   return host_;
@@ -52,7 +52,7 @@ WindowTreeHost* AuraScreen::CreateHostForPrimaryDisplay() {
 void AuraScreen::SetDeviceScaleFactor(float device_scale_factor) {
   gfx::Rect bounds_in_pixel(display_.GetSizeInPixel());
   display_.SetScaleAndBounds(device_scale_factor, bounds_in_pixel);
-  host_->OnHostResized(bounds_in_pixel.size());
+  // host_->OnHostResized(bounds_in_pixel.size());
 }
 
 void AuraScreen::SetDisplayRotation(gfx::Display::Rotation rotation) {
@@ -110,19 +110,19 @@ gfx::Transform AuraScreen::GetUIScaleTransform() const {
 }
 
 void AuraScreen::OnWindowBoundsChanged(
-    Window* window, const gfx::Rect& old_bounds, const gfx::Rect& new_bounds) {
+    aura::Window* window, const gfx::Rect& old_bounds, const gfx::Rect& new_bounds) {
   DCHECK_EQ(host_->window(), window);
   display_.SetSize(gfx::ToFlooredSize(
       gfx::ScaleSize(new_bounds.size(), display_.device_scale_factor())));
 }
 
-void AuraScreen::OnWindowDestroying(Window* window) {
+void AuraScreen::OnWindowDestroying(aura::Window* window) {
   if (host_->window() == window)
     host_ = NULL;
 }
 
 gfx::Point AuraScreen::GetCursorScreenPoint() {
-  return Env::GetInstance()->last_mouse_location();
+  return aura::Env::GetInstance()->last_mouse_location();
 }
 
 gfx::NativeWindow AuraScreen::GetWindowUnderCursor() {

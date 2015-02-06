@@ -19,15 +19,15 @@
 #include "azer/ui/aura/window_event_dispatcher.h"
 #include "ui/base/ime/dummy_input_method.h"
 #include "ui/base/ime/input_method_initializer.h"
-#include "ui/compositor/compositor.h"
-#include "ui/compositor/layer_animator.h"
-#include "ui/compositor/scoped_animation_duration_scale_mode.h"
 #include "ui/gfx/screen.h"
 
 #if defined(USE_X11)
 #include "azer/ui/aura/window_tree_host_x11.h"
 #include "ui/base/x/x11_util.h"
 #endif
+
+#include "azer/ui/compositor/compositor.h"
+#include "azer/ui/compositor/scoped_animation_duration_scale_mode.h"
 
 namespace aura {
 namespace test {

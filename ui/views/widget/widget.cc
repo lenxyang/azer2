@@ -1,8 +1,6 @@
 #include "azer/ui/views/widget/widget.h"
 
 #include "ui/wm/core/shadow_types.h"
-#include "ui/wm/core/window_animations.h"
-#include "ui/wm/core/window_util.h"
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
 
