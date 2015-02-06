@@ -10,8 +10,8 @@
 #include "base/basictypes.h"
 #include "base/compiler_specific.h"
 #include "ui/base/ime/composition_text.h"
-#include "ui/views/ime/input_method_base.h"
-#include "ui/views/view.h"
+#include "azer/ui/views/ime/input_method_base.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
 

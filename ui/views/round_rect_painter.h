@@ -6,8 +6,8 @@
 #define UI_VIEWS_ROUNDED_RECT_PAINTER_H_
 
 #include "ui/gfx/rect.h"
-#include "ui/views/painter.h"
-#include "ui/views/views_export.h"
+#include "azer/ui/views/painter.h"
+#include "azer/ui/views/views_export.h"
 
 namespace gfx {
 class Canvas;

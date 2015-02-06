@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/accessibility/ax_aura_obj_cache.h"
+#include "azer/ui/views/accessibility/ax_aura_obj_cache.h"
 
 #include "base/memory/singleton.h"
 #include "base/stl_util.h"
-#include "ui/aura/window.h"
-#include "ui/views/accessibility/ax_aura_obj_wrapper.h"
-#include "ui/views/accessibility/ax_view_obj_wrapper.h"
-#include "ui/views/accessibility/ax_widget_obj_wrapper.h"
-#include "ui/views/accessibility/ax_window_obj_wrapper.h"
-#include "ui/views/view.h"
-#include "ui/views/widget/widget.h"
+#include "azer/ui/aura/window.h"
+#include "azer/ui/views/accessibility/ax_aura_obj_wrapper.h"
+#include "azer/ui/views/accessibility/ax_view_obj_wrapper.h"
+#include "azer/ui/views/accessibility/ax_widget_obj_wrapper.h"
+#include "azer/ui/views/accessibility/ax_window_obj_wrapper.h"
+#include "azer/ui/views/view.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace views {
 

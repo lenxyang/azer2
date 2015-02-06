@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/accessibility/native_view_accessibility_win.h"
+#include "azer/ui/views/accessibility/native_view_accessibility_win.h"
 
 #include <oleacc.h>
 #include <UIAutomationClient.h>
@@ -21,11 +21,11 @@
 #include "ui/base/win/accessibility_ids_win.h"
 #include "ui/base/win/accessibility_misc_utils.h"
 #include "ui/base/win/atl_module.h"
-#include "ui/views/controls/button/custom_button.h"
-#include "ui/views/focus/focus_manager.h"
-#include "ui/views/focus/view_storage.h"
-#include "ui/views/widget/widget.h"
-#include "ui/views/win/hwnd_util.h"
+#include "azer/ui/views/controls/button/custom_button.h"
+#include "azer/ui/views/focus/focus_manager.h"
+#include "azer/ui/views/focus/view_storage.h"
+#include "azer/ui/views/widget/widget.h"
+#include "azer/ui/views/win/hwnd_util.h"
 
 namespace views {
 namespace {

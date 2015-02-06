@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/ime/input_method_base.h"
+#include "azer/ui/views/ime/input_method_base.h"
 
 #include "base/logging.h"
 #include "ui/base/ime/text_input_client.h"
 #include "ui/events/event.h"
-#include "ui/views/view.h"
-#include "ui/views/widget/widget.h"
+#include "azer/ui/views/view.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace views {
 

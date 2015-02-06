@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/border.h"
+#include "azer/ui/views/border.h"
 
 #include "base/logging.h"
 #include "base/memory/scoped_ptr.h"
 #include "ui/gfx/canvas.h"
-#include "ui/views/painter.h"
-#include "ui/views/view.h"
+#include "azer/ui/views/painter.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
 

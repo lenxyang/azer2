@@ -8,7 +8,7 @@
 #include "base/basictypes.h"
 #include "base/observer_list.h"
 #include "ui/gfx/native_widget_types.h"
-#include "ui/views/views_export.h"
+#include "azer/ui/views/views_export.h"
 
 template <typename T> struct DefaultSingletonTraits;
 

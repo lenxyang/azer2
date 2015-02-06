@@ -5,9 +5,9 @@
 #ifndef UI_VIEWS_ACCESSIBILITY_AX_WIDGET_OBJ_WRAPPER_H_
 #define UI_VIEWS_ACCESSIBILITY_AX_WIDGET_OBJ_WRAPPER_H_
 
-#include "ui/views/accessibility/ax_aura_obj_wrapper.h"
-#include "ui/views/widget/widget_observer.h"
-#include "ui/views/widget/widget_removals_observer.h"
+#include "azer/ui/views/accessibility/ax_aura_obj_wrapper.h"
+#include "azer/ui/views/widget/widget_observer.h"
+#include "azer/ui/views/widget/widget_removals_observer.h"
 
 namespace views {
 class Widget;

@@ -5,7 +5,7 @@
 #ifndef UI_VIEWS_IME_INPUT_METHOD_DELEGATE_H_
 #define UI_VIEWS_IME_INPUT_METHOD_DELEGATE_H_
 
-#include "ui/views/views_export.h"
+#include "azer/ui/views/views_export.h"
 
 namespace ui {
 class KeyEvent;

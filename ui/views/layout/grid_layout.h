@@ -10,8 +10,8 @@
 
 #include "base/compiler_specific.h"
 #include "ui/gfx/insets.h"
-#include "ui/views/layout/layout_manager.h"
-#include "ui/views/view.h"
+#include "azer/ui/views/layout/layout_manager.h"
+#include "azer/ui/views/view.h"
 
 // GridLayout is a LayoutManager that positions child Views in a grid. You
 // define the structure of the Grid first, then add the Views.

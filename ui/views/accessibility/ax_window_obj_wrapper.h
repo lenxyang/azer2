@@ -5,8 +5,8 @@
 #ifndef UI_VIEWS_ACCESSIBILITY_AX_WINDOW_OBJ_WRAPPER_H_
 #define UI_VIEWS_ACCESSIBILITY_AX_WINDOW_OBJ_WRAPPER_H_
 
-#include "ui/aura/window_observer.h"
-#include "ui/views/accessibility/ax_aura_obj_wrapper.h"
+#include "azer/ui/aura/window_observer.h"
+#include "azer/ui/views/accessibility/ax_aura_obj_wrapper.h"
 
 namespace aura {
 class Window;
