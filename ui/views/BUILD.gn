@@ -52,3 +52,14 @@ source_set("views") {
     "//url",
   ]
 }
+
+executable("demo") {
+  output_name = "aui_views_demo"
+  sources = [
+    "demo/main.cc",
+  ]
+  deps = [
+    "//azer/ui/",
+    "//azer/render",
+  ]
+}
