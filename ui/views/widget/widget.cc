@@ -37,6 +37,14 @@ void Widget::Init(const InitParams& params) {
   host_->AddObserver(this);
 }
 
+void Widget::Show() {
+  host_->Show();
+}
+
+void Widget::Hide() {
+  host_->Hide();
+}
+
 bool Widget::IsVisible() {
   return host_->window()->IsVisible();
 }

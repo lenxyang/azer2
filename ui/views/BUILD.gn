@@ -59,7 +59,10 @@ executable("demo") {
     "demo/main.cc",
   ]
   deps = [
-    "//azer/ui/",
+    "//azer/ui",
     "//azer/render",
+    "//base",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
   ]
 }

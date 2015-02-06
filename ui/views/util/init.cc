@@ -15,6 +15,7 @@
 
 #include "azer/ui/aura/env.h"
 #include "azer/ui/views/util/aura_screen.h"
+#include "azer/render/util/render_system_loader.h"
 
 
 namespace views {
@@ -22,12 +23,12 @@ ViewsInitialize::ViewsInitialize(int argc, char* argv[]) {
 #if defined(OS_WIN)
   gfx::InitDeviceScaleFactor(1.0f);
 #endif
-
   aura::Env::CreateInstance(true);
 
   exit_manager_.reset(new base::AtExitManager);
   CommandLine::Init(argc, argv);
   base::i18n::InitializeICU();
+  CHECK(azer::LoadRenderSystem());
 
   ::logging::LoggingSettings setting;
   // setting.log_file = UTF16ToUTF8(path.value());
@@ -40,5 +41,8 @@ ViewsInitialize::ViewsInitialize(int argc, char* argv[]) {
   base::FilePath ui_test_pak_path;
   DCHECK(PathService::Get(ui::UI_TEST_PAK, &ui_test_pak_path));
   ui::ResourceBundle::InitSharedInstanceWithPakPath(ui_test_pak_path);
+}
+
+ViewsInitialize::~ViewsInitialize() {
 }
 }  // namespace views

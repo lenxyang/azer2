@@ -36,6 +36,9 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
     return host_.get();
   }
 
+  void Show();
+  void Hide();
+
   bool IsVisible();
   void UpdateRootLayers();
   void NotifyWillRemoveView(View* view);

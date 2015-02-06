@@ -25,7 +25,7 @@ ui::Layer* WindowOwner::layer() {
 
 aura::Window* WindowOwner::Create(View* view) {
   CHECK(!window_);
-  CHECK(view_);
+  CHECK(!view_);
   view_ = view;
   bridge_.reset(new ViewBridge(view_));
   window_ = new aura::Window(bridge_.get());
@@ -41,6 +41,7 @@ void WindowOwner::Destroy() {
 
 void WindowOwner::Attach(aura::Window* window) {
   attached_ = true;
+  CHECK(view_);
   CHECK(!window_);
 }
 
