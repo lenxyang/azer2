@@ -66,3 +66,26 @@ executable("demo") {
     "//ui/gfx/geometry",
   ]
 }
+
+test("views_unittests") {
+  output_name = "azer_views_unittests"
+  sources = [
+    "test/views_test_base.cc",
+    "test/views_test_base.h",
+    "test/run_all_unittests.cc",
+    "view_unittest.cc",
+  ]
+
+  deps = [
+    "//azer/render",
+    "//azer/ui",
+    "//skia",
+    "//testing/gtest",
+    "//ui/base:test_support",
+    "//ui/events:test_support",
+    "//ui/events:gesture_detection",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//ui/gl",
+  ]
+}
