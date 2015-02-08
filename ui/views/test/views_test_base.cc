@@ -2,6 +2,10 @@
 
 #include "base/logging.h"
 #include "ui/base/ime/input_method_initializer.h"
+#include "ui/base/ui_base_paths.h"
+#include "ui/gfx/screen.h"
+#include "ui/wm/core/wm_state.h"
+#include "ui/gfx/win/dpi.h"
 
 #include "azer/ui/aura/env.h"
 #include "azer/ui/views/util/aura_screen.h"

@@ -62,6 +62,7 @@ class VIEWS_EXPORT WindowOwner {
   ~WindowOwner();
 
   ui::Layer* layer();
+  const ui::Layer* layer() const;
 
   aura::Window* Create(View* view);
   void Destroy();

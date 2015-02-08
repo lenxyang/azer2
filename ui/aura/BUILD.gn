@@ -274,6 +274,10 @@ test("aura2_unittests") {
     "//ui/gfx",
     "//ui/gfx/geometry",
     "//ui/gl",
+    "//ui/resources",
+    "//ui/resources:ui_test_pak",
+    "//ui/strings",
+    "//ui/wm",
   ]
 
   if (is_linux) {

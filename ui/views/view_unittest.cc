@@ -254,15 +254,6 @@ class TestView : public View {
   bool can_process_events_within_subtree_;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-// OnBoundsChanged
-////////////////////////////////////////////////////////////////////////////////
-
-void TestView::OnBoundsChanged(const gfx::Rect& previous_bounds) {
-  did_change_bounds_ = true;
-  new_bounds_ = bounds();
-}
-
 TEST_F(ViewTest, OnBoundsChanged) {
   TestView v;
 
@@ -276,5 +267,60 @@ TEST_F(ViewTest, OnBoundsChanged) {
   EXPECT_TRUE(v.did_change_bounds_);
   EXPECT_EQ(v.new_bounds_, new_rect);
   EXPECT_EQ(v.bounds(), new_rect);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Painting
+////////////////////////////////////////////////////////////////////////////////
+
+bool TestView::OnMousePressed(const ui::MouseEvent& event) {
+  last_mouse_event_type_ = event.type();
+  location_.SetPoint(event.x(), event.y());
+  if (delete_on_pressed_)
+    delete this;
+  return true;
+}
+
+bool TestView::OnMouseDragged(const ui::MouseEvent& event) {
+  last_mouse_event_type_ = event.type();
+  location_.SetPoint(event.x(), event.y());
+  return true;
+}
+
+void TestView::OnMouseReleased(const ui::MouseEvent& event) {
+  last_mouse_event_type_ = event.type();
+  location_.SetPoint(event.x(), event.y());
+}
+
+void TestView::OnMouseEntered(const ui::MouseEvent& event) {
+  received_mouse_enter_ = true;
+}
+
+void TestView::OnMouseExited(const ui::MouseEvent& event) {
+  received_mouse_exit_ = true;
+}
+
+void TestView::OnBoundsChanged(const gfx::Rect& previous_bounds) {
+  did_change_bounds_ = true;
+  new_bounds_ = bounds();
+}
+
+void TestView::Paint(gfx::Canvas* canvas, const CullSet& cull_set) {
+  canvas->sk_canvas()->getClipBounds(&last_clip_);
+}
+
+bool TestView::AcceleratorPressed(const ui::Accelerator& accelerator) {
+  accelerator_count_map_[accelerator]++;
+  return true;
+}
+
+void TestView::SchedulePaintInRect(const gfx::Rect& rect) {
+  scheduled_paint_rects_.push_back(rect);
+  View::SchedulePaintInRect(rect);
+}
+
+void TestView::OnNativeThemeChanged(const ui::NativeTheme* native_theme) {
+  native_theme_ = native_theme;
 }
 }  // namespace views

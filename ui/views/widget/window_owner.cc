@@ -23,6 +23,11 @@ ui::Layer* WindowOwner::layer() {
   return window_->layer();
 }
 
+const ui::Layer* WindowOwner::layer() const {
+  CHECK(!window_);
+  return window_->layer();
+}
+
 aura::Window* WindowOwner::Create(View* view) {
   CHECK(!window_);
   CHECK(!view_);

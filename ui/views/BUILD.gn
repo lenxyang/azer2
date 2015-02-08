@@ -79,6 +79,8 @@ test("views_unittests") {
   deps = [
     "//azer/render",
     "//azer/ui",
+    "//base",
+    "//base/test:test_support",
     "//skia",
     "//testing/gtest",
     "//ui/base:test_support",
