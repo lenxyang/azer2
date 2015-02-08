@@ -70,6 +70,9 @@ executable("demo") {
 test("views_unittests") {
   output_name = "azer_views_unittests"
   sources = [
+    "ime/input_method_bridge_unittest.cc",
+#    "layout/box_layout_unittest.cc",
+#    "layout/grid_layout_unittest.cc",
     "test/views_test_base.cc",
     "test/views_test_base.h",
     "test/run_all_unittests.cc",
