@@ -1574,6 +1574,7 @@ public:
   // so we can't use a scoped_ptr. It's dereferenced in the destructor.
   NativeViewAccessibility* native_view_accessibility_;
 
+  friend class ViewBridge;
   DISALLOW_COPY_AND_ASSIGN(View);
 };
 

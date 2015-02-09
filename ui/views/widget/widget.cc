@@ -7,7 +7,8 @@
 namespace views {
 
 Widget::Widget() 
-    : cursor_(gfx::kNullCursor) {
+    : cursor_(gfx::kNullCursor) 
+    , widget_closed_(false) {
 }
 
 Widget::~Widget() {
@@ -37,12 +38,40 @@ void Widget::Init(const InitParams& params) {
   host_->AddObserver(this);
 }
 
+void Widget::Close() {
+  if (widget_closed_) {
+    return;
+  }
+
+  // host_->Close();
+  widget_closed_ = true;
+}
+
+bool Widget::IsClosed() const {
+  return widget_closed_;
+}
+
 void Widget::Show() {
   host_->Show();
 }
 
 void Widget::Hide() {
   host_->Hide();
+}
+
+void Widget::ShowInactive() {
+}
+
+void Widget::Activate() {
+}
+
+void Widget::Deactivate() {
+}
+
+bool Widget::IsActive() const {
+}
+
+bool Widget::CanActivate() const {
 }
 
 bool Widget::IsVisible() {

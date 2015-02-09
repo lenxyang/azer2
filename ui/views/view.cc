@@ -152,9 +152,9 @@ void View::AddChildViewAt(View* view, int index) {
 
   // If |view| has a parent, remove it from its parent.
   View* parent = view->parent_;
-  ui::NativeTheme* old_theme = NULL;
+  // ui::NativeTheme* old_theme = NULL;
   if (parent) {
-    old_theme = view->GetNativeTheme();
+    // old_theme = view->GetNativeTheme();
     if (parent == this) {
       ReorderChildView(view, index);
       return;
@@ -173,11 +173,13 @@ void View::AddChildViewAt(View* view, int index) {
   view->SetRootBoundsDirty(true);
 
   views::Widget* widget = GetWidget();
+  /*
   if (widget) {
     const ui::NativeTheme* new_theme = view->GetNativeTheme();
     if (new_theme != old_theme)
       view->PropagateNativeThemeChanged(new_theme);
   }
+  */
 
   ViewHierarchyChangedDetails details(true, this, view, parent);
 
