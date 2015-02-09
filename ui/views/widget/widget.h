@@ -36,8 +36,35 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
     return host_.get();
   }
 
-  void Show();
+  // Sets a shape on the widget. Passing a NULL |shape| reverts the widget to
+  // be rectangular. Takes ownership of |shape|.
+  void SetShape(gfx::NativeRegion shape);
+
+  // Hides the widget then closes it after a return to the message loop.
+  virtual void Close();
+
+  // Whether the widget has been asked to close itself. In particular this is
+  // set to true after Close() has been invoked on the NativeWidget.
+  bool IsClosed() const;
+
+  // Shows the widget. The widget is activated if during initialization the
+  // can_activate flag in the InitParams structure is set to true.
+  virtual void Show();
+  // Hides the widget.
   void Hide();
+
+  // Like Show(), but does not activate the window.
+  void ShowInactive();
+
+  // Activates the widget, assuming it already exists and is visible.
+  void Activate();
+
+  // Deactivates the widget, making the next window in the Z order the active
+  // window.
+  void Deactivate();
+
+  // Returns whether the Widget is the currently active window.
+  virtual bool IsActive() const;
 
   bool IsVisible();
   void UpdateRootLayers();
@@ -49,6 +76,8 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   bool IsMouseEventsEnabled();
   InputMethod* GetInputMethod();
   const InputMethod* GetInputMethod() const;
+
+  virtual bool CanActivate() const;
 
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;
@@ -87,6 +116,8 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   scoped_ptr<aura::WindowTreeHost> host_;
   scoped_ptr<aura::Window> content_window_;
   scoped_ptr<aura::Window> content_window_container_;
+
+  bool widget_closed_;
   DISALLOW_COPY_AND_ASSIGN(Widget);
 };
 }  // namespace views
