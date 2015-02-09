@@ -19,7 +19,7 @@ WindowOwner::~WindowOwner() {
 }
 
 ui::Layer* WindowOwner::layer() {
-  CHECK(!window_);
+  CHECK(window_);
   return window_->layer();
 }
 
@@ -29,6 +29,7 @@ aura::Window* WindowOwner::Create(View* view) {
   view_ = view;
   bridge_.reset(new ViewBridge(view_));
   window_ = new aura::Window(bridge_.get());
+  window_->Init(aura::WINDOW_LAYER_TEXTURED);
   attached_ = false;
   return window_;
 }
@@ -43,6 +44,7 @@ void WindowOwner::Attach(aura::Window* window) {
   attached_ = true;
   CHECK(view_);
   CHECK(!window_);
+  window_ = window;
 }
 
 void WindowOwner::Detach()  {
@@ -90,6 +92,9 @@ void ViewBridge::OnCaptureLost() {
 }
 
 void ViewBridge::OnPaint(gfx::Canvas* canvas) {
+  if (view_) {
+    view_->OnPaint(canvas);
+  }
 }
 
 void ViewBridge::OnDeviceScaleFactorChanged(float device_scale_factor) {
