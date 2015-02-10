@@ -3,6 +3,7 @@
 // #include "ui/wm/core/shadow_types.h"
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
+#include "azer/ui/widget/aura/focus_client.h"
 
 namespace views {
 
@@ -16,10 +17,15 @@ Widget::~Widget() {
   content_window_.reset();
   content_window_container_.reset();
   host_->RemoveObserver(this);
+  focus_client_.reset();
+  host_.reset();
 }
 
 void Widget::Init(const InitParams& params) {
   host_.reset(aura::WindowTreeHost::Create(params.bounds));
+  focus_client_.reset(new FocusClient);
+  aura::client::SetFocusClient(host->window(), &focus_client_.get());
+  
   content_window_.reset(new aura::Window(this));
   content_window_->Init(aura::WINDOW_LAYER_TEXTURED);
   root_view_.reset(new RootView(this));
