@@ -1,10 +1,27 @@
 #include "azer/ui/views/adapter/window_owner.h"
 
+#include <atomic>
 #include "base/logging.h"
+#include "base/lazy_instance.h"
 #include "azer/ui/aura/window.h"
 #include "azer/ui/views/view.h"
 
 namespace views {
+
+namespace {
+class AuraIdAllocator {
+ public:
+  AuraIdAllocator() : allocated_id_(0) {}
+
+  int64 allocate_id() { return allocated_id_++;}
+ protected:
+  std::atomic<int64> allocated_id_;
+  DISALLOW_COPY_AND_ASSIGN(AuraIdAllocator);
+};
+
+::base::LazyInstance<AuraIdAllocator> id_allocator_ = LAZY_INSTANCE_INITIALIZER;
+}  // namespace
+
 WindowOwner::WindowOwner()
     : window_(NULL)
     , view_(NULL)
@@ -35,6 +52,7 @@ aura::Window* WindowOwner::Create(View* view) {
   bridge_.reset(new ViewBridge(view_));
   window_ = new aura::Window(bridge_.get());
   window_->Init(aura::WINDOW_LAYER_TEXTURED);
+  window_->set_id(id_allocator_->allocate_id());
   attached_ = false;
 
   return window_;
