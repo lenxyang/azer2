@@ -1271,7 +1271,7 @@ void View::MoveLayerToParent(ui::Layer* parent_layer,
 }
 
 void View::UpdateLayerVisibility() {
-  CHECK(false);
+  // TOIMPLEMENT(yanglei)
 }
 
 void View::UpdateChildLayerVisibility(bool ancestor_visible) {
@@ -1317,7 +1317,7 @@ base::Closure View::PrepareForLayerBoundsChange() {
 }
 
 void View::ReorderLayers() {
-  CHECK(false);
+  // TOIMPLEMENT(yanglei)
 }
 
 void View::ReorderChildLayers(ui::Layer* parent_layer) {
@@ -1344,7 +1344,7 @@ View::DragInfo* View::GetDragInfo() {
 // Focus -----------------------------------------------------------------------
 
 void View::OnFocus() {
-  CHECK(false);
+  // TOIMPLEMENT(yanglei)
 }
 
 void View::OnBlur() {
@@ -2114,7 +2114,7 @@ void View::AdvanceFocusIfNecessary() {
 // Tooltips --------------------------------------------------------------------
 
 void View::UpdateTooltip() {
-  CHECK(false);
+  // TOIMPLEMENT(YANGLEI);
 }
 
 // Drag and drop ---------------------------------------------------------------
