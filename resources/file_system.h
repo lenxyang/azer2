@@ -12,6 +12,11 @@
 namespace azer {
 class FileSystem;
 
+struct AZER_EXPORT FileContent {
+  int64 length;
+  char* data;
+};
+
 class ResFilePath {
  public:
   ResFilePath(const char* path);

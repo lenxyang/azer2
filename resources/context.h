@@ -4,21 +4,17 @@
 #include "azer/base/export.h"
 
 namespace azer {
-namespace resource {
-
 class ResourceLoaderCreator;
 
-class AZER_EXPORT Context {
+class AZER_EXPORT ResourceContext {
  public:
-  virtual ~Context() {}
+  virtual ~ResourceContext() {}
  protected:
   /**
    * create resource loader
    */
   virtual ResourceLoaderCreator* CreateResourceLoaderCreator();
  private:
-  
-  DISALLOW_COPY_AND_ASSIGN(Context);
+  DISALLOW_COPY_AND_ASSIGN(ResourceContext);
 };
-}  // namespace resource
 }  // namespace azer

@@ -509,18 +509,6 @@ public:
   const Border* border() const { return border_.get(); }
   Border* border() { return border_.get(); }
 
-  // Get the theme provider from the parent widget.
-  ui::ThemeProvider* GetThemeProvider() const;
-
-  // Returns the NativeTheme to use for this View. This calls through to
-  // GetNativeTheme() on the Widget this View is in. If this View is not in a
-  // Widget this returns ui::NativeTheme::instance().
-  ui::NativeTheme* GetNativeTheme() {
-    return const_cast<ui::NativeTheme*>(
-        const_cast<const View*>(this)->GetNativeTheme());
-  }
-  const ui::NativeTheme* GetNativeTheme() const;
-
   // RTL painting --------------------------------------------------------------
 
   // This method determines whether the gfx::Canvas object passed to
@@ -1136,12 +1124,6 @@ public:
 
   // System events -------------------------------------------------------------
 
-  // Called when the UI theme (not the NativeTheme) has changed, overriding
-  // allows individual Views to do special cleanup and processing (such as
-  // dropping resource caches).  To dispatch a theme changed notification, call
-  // Widget::ThemeChanged().
-  virtual void OnThemeChanged() {}
-
   // Called when the locale has changed, overriding allows individual Views to
   // update locale-dependent strings.
   // To dispatch a locale changed notification, call Widget::LocaleChanged().
@@ -1180,11 +1162,6 @@ public:
   // used by the public static method ExceededDragThreshold().
   static int GetHorizontalDragThreshold();
   static int GetVerticalDragThreshold();
-
-  // NativeTheme ---------------------------------------------------------------
-
-  // Invoked when the NativeTheme associated with this View changes.
-  virtual void OnNativeThemeChanged(const ui::NativeTheme* theme) {}
 
   // Debugging -----------------------------------------------------------------
 
@@ -1260,9 +1237,6 @@ public:
   // |register_accelerators| true and calls ViewHierarchyChanged().
   void ViewHierarchyChangedImpl(bool register_accelerators,
                                 const ViewHierarchyChangedDetails& details);
-
-  // Invokes OnNativeThemeChanged() on this and all descendants.
-  void PropagateNativeThemeChanged(const ui::NativeTheme* theme);
 
   // Size and disposition ------------------------------------------------------
 
@@ -1397,16 +1371,6 @@ public:
   // Helper function to advance focus, in case the currently focused view has
   // become unfocusable.
   void AdvanceFocusIfNecessary();
-
-  // System events -------------------------------------------------------------
-
-  // Used to propagate theme changed notifications from the root view to all
-  // views in the hierarchy.
-  virtual void PropagateThemeChanged();
-
-  // Used to propagate locale changed notifications from the root view to all
-  // views in the hierarchy.
-  virtual void PropagateLocaleChanged();
 
   // Tooltips ------------------------------------------------------------------
 

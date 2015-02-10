@@ -37,7 +37,6 @@
 
 #include "azer/ui/compositor/dip_util.h"
 #include "azer/ui/views/layout/layout_manager.h"
-#include "azer/ui/views/focus/view_storage.h"
 #include "azer/ui/views/accessibility/native_view_accessibility.h"
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/border.h"
@@ -152,9 +151,7 @@ void View::AddChildViewAt(View* view, int index) {
 
   // If |view| has a parent, remove it from its parent.
   View* parent = view->parent_;
-  // ui::NativeTheme* old_theme = NULL;
   if (parent) {
-    // old_theme = view->GetNativeTheme();
     if (parent == this) {
       ReorderChildView(view, index);
       return;
@@ -173,14 +170,6 @@ void View::AddChildViewAt(View* view, int index) {
   view->SetRootBoundsDirty(true);
 
   views::Widget* widget = GetWidget();
-  /*
-  if (widget) {
-    const ui::NativeTheme* new_theme = view->GetNativeTheme();
-    if (new_theme != old_theme)
-      view->PropagateNativeThemeChanged(new_theme);
-  }
-  */
-
   ViewHierarchyChangedDetails details(true, this, view, parent);
 
   for (View* v = this; v; v = v->parent_)
@@ -765,16 +754,6 @@ void View::set_background(Background* b) {
 }
 
 void View::SetBorder(scoped_ptr<Border> b) { border_ = b.Pass(); }
-
-ui::ThemeProvider* View::GetThemeProvider() const {
-  CHECK(false);
-  return NULL;
-}
-
-const ui::NativeTheme* View::GetNativeTheme() const {
-  CHECK(false);
-  return NULL;
-}
 
 // Input -----------------------------------------------------------------------
 
@@ -1700,12 +1679,6 @@ void View::ViewHierarchyChangedImpl(
   details.parent->needs_layout_ = true;
 }
 
-void View::PropagateNativeThemeChanged(const ui::NativeTheme* theme) {
-  for (int i = 0, count = child_count(); i < count; ++i)
-    child_at(i)->PropagateNativeThemeChanged(theme);
-  OnNativeThemeChanged(theme);
-}
-
 // Size and disposition --------------------------------------------------------
 
 void View::PropagateVisibilityNotifications(View* start, bool is_visible) {
@@ -2018,15 +1991,6 @@ bool View::ProcessMousePressed(const ui::MouseEvent& event) {
       context_menu_controller_ : 0;
   View::DragInfo* drag_info = GetDragInfo();
 
-  // TODO(sky): for debugging 360238.
-  int storage_id = 0;
-  if (event.IsOnlyRightMouseButton() && context_menu_controller &&
-      kContextMenuOnMousePress && HitTestPoint(event.location())) {
-    ViewStorage* view_storage = ViewStorage::GetInstance();
-    storage_id = view_storage->CreateStorageID();
-    view_storage->StoreView(storage_id, this);
-  }
-
   const bool enabled = enabled_;
   const bool result = OnMousePressed(event);
 
@@ -2039,8 +2003,6 @@ bool View::ProcessMousePressed(const ui::MouseEvent& event) {
     // from mouse pressed.
     gfx::Point location(event.location());
     if (HitTestPoint(location)) {
-      if (storage_id != 0)
-        CHECK_EQ(this, ViewStorage::GetInstance()->RetrieveView(storage_id));
       ConvertPointToScreen(this, &location);
       ShowContextMenu(location, ui::MENU_SOURCE_MOUSE);
       return true;
@@ -2149,20 +2111,6 @@ void View::InitFocusSiblings(View* v, int index) {
 
 void View::AdvanceFocusIfNecessary() {
   CHECK(false);
-}
-
-// System events ---------------------------------------------------------------
-
-void View::PropagateThemeChanged() {
-  for (int i = child_count() - 1; i >= 0; --i)
-    child_at(i)->PropagateThemeChanged();
-  OnThemeChanged();
-}
-
-void View::PropagateLocaleChanged() {
-  for (int i = child_count() - 1; i >= 0; --i)
-    child_at(i)->PropagateLocaleChanged();
-  OnLocaleChanged();
 }
 
 // Tooltips --------------------------------------------------------------------
