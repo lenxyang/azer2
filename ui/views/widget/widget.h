@@ -117,7 +117,7 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   gfx::NativeCursor cursor_;
   scoped_ptr<RootView> root_view_;
   scoped_ptr<aura::WindowTreeHost> host_;
-  scoepd_ptr<aura::client::FocusClient> focus_client_;
+  scoped_ptr<aura::client::FocusClient> focus_client_;
   scoped_ptr<aura::Window> content_window_;
   scoped_ptr<aura::Window> content_window_container_;
 

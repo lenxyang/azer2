@@ -8,27 +8,27 @@
 
 namespace views {
 
-class FocusClient : public client::FocusClient,
-                    public WindowObserver {
+class FocusClient : public aura::client::FocusClient,
+                    public aura::WindowObserver {
  public:
-  TestFocusClient();
-  ~TestFocusClient() override;
+  FocusClient();
+  ~FocusClient() override;
 
  private:
   // Overridden from client::FocusClient:
-  void AddObserver(client::FocusChangeObserver* observer) override;
-  void RemoveObserver(client::FocusChangeObserver* observer) override;
-  void FocusWindow(Window* window) override;
-  void ResetFocusWithinActiveWindow(Window* window) override;
-  Window* GetFocusedWindow() override;
+  void AddObserver(aura::client::FocusChangeObserver* observer) override;
+  void RemoveObserver(aura::client::FocusChangeObserver* observer) override;
+  void FocusWindow(aura::Window* window) override;
+  void ResetFocusWithinActiveWindow(aura::Window* window) override;
+  aura::Window* GetFocusedWindow() override;
 
   // Overridden from WindowObserver:
-  void OnWindowDestroying(Window* window) override;
+  void OnWindowDestroying(aura::Window* window) override;
 
-  Window* focused_window_;
-  ScopedObserver<Window, WindowObserver> observer_manager_;
+  aura::Window* focused_window_;
+  ScopedObserver<aura::Window, aura::WindowObserver> observer_manager_;
 
-  DISALLOW_COPY_AND_ASSIGN(TestFocusClient);
+  DISALLOW_COPY_AND_ASSIGN(FocusClient);
 };
 
 }  // namespace views

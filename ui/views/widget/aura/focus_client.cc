@@ -19,13 +19,13 @@ FocusClient::~FocusClient() {
 ////////////////////////////////////////////////////////////////////////////////
 // FocusClient, client::FocusClient implementation:
 
-void FocusClient::AddObserver(client::FocusChangeObserver* observer) {
+void FocusClient::AddObserver(aura::client::FocusChangeObserver* observer) {
 }
 
-void FocusClient::RemoveObserver(client::FocusChangeObserver* observer) {
+void FocusClient::RemoveObserver(aura::client::FocusChangeObserver* observer) {
 }
 
-void FocusClient::FocusWindow(Window* window) {
+void FocusClient::FocusWindow(aura::Window* window) {
   if (window && !window->CanFocus())
     return;
   if (focused_window_)
@@ -35,28 +35,28 @@ void FocusClient::FocusWindow(Window* window) {
   if (focused_window_)
     observer_manager_.Add(focused_window_);
 
-  client::FocusChangeObserver* observer =
-      client::GetFocusChangeObserver(old_focused_window);
+  aura::client::FocusChangeObserver* observer =
+      aura::client::GetFocusChangeObserver(old_focused_window);
   if (observer)
     observer->OnWindowFocused(focused_window_, old_focused_window);
-  observer = client::GetFocusChangeObserver(focused_window_);
+  observer = aura::client::GetFocusChangeObserver(focused_window_);
   if (observer)
     observer->OnWindowFocused(focused_window_, old_focused_window);
 }
 
-void FocusClient::ResetFocusWithinActiveWindow(Window* window) {
+void FocusClient::ResetFocusWithinActiveWindow(aura::Window* window) {
   if (!window->Contains(focused_window_))
     FocusWindow(window);
 }
 
-Window* FocusClient::GetFocusedWindow() {
+aura::Window* FocusClient::GetFocusedWindow() {
   return focused_window_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // FocusClient, WindowObserver implementation:
 
-void FocusClient::OnWindowDestroying(Window* window) {
+void FocusClient::OnWindowDestroying(aura::Window* window) {
   DCHECK_EQ(window, focused_window_);
   FocusWindow(NULL);
 }
