@@ -36,6 +36,7 @@ aura::Window* WindowOwner::Create(View* view) {
   window_ = new aura::Window(bridge_.get());
   window_->Init(aura::WINDOW_LAYER_TEXTURED);
   attached_ = false;
+
   return window_;
 }
 
