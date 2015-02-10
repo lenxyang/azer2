@@ -79,11 +79,16 @@ void Layer::SetParent(Layer* layer) {
 void Layer::InsertChild(scoped_refptr<Layer> child, size_t index) {
   child->RemoveFromParent();
   child->SetParent(this);
+  
 
   index = std::min(index, children_.size());
   children_.insert(children_.begin() + index, child);
   child->SetNeedsRedrawRecusive();
-  child->OnAttachedLayerTreeHost();
+
+  if (layer_tree_host_) {
+    child->layer_tree_host_ = layer_tree_host_;
+    child->OnAttachedLayerTreeHost();
+  }
 }
 
 void Layer::RemoveFromParent() {
@@ -251,7 +256,12 @@ void Layer::SetNeedsRedrawRecusive() {
 }
 
 void Layer::OnAttachedLayerTreeHost() {
+  DCHECK(layer_tree_host_);
   OnBoundsChanged();
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    (*iter)->layer_tree_host_ = layer_tree_host_;
+    (*iter)->OnBoundsChanged();
+  }
 }
 }  // namespace layers
 }  // namespace azer
