@@ -36,6 +36,7 @@
 #endif
 
 #include "azer/ui/compositor/dip_util.h"
+#include "azer/ui/aura/window.h"
 #include "azer/ui/views/layout/layout_manager.h"
 #include "azer/ui/views/accessibility/native_view_accessibility.h"
 #include "azer/ui/views/background.h"
@@ -1150,6 +1151,7 @@ int View::GetLineScrollIncrement(ScrollView* scroll_view,
 // Size and disposition --------------------------------------------------------
 
 void View::OnBoundsChanged(const gfx::Rect& previous_bounds) {
+  window()->SetBounds(bounds_);
 }
 
 void View::PreferredSizeChanged() {
@@ -1951,7 +1953,7 @@ void View::OrphanLayers() {
 void View::ReparentLayer(const gfx::Vector2d& offset, ui::Layer* parent_layer) {
   layer()->SetBounds(GetLocalBounds() + offset);
   DCHECK_NE(layer(), parent_layer);
-  if (parent_layer)
+  if (!parent_layer->Contains(layer()))
     parent_layer->Add(layer());
   layer()->SchedulePaint(GetLocalBounds());
   MoveLayerToParent(layer(), gfx::Point());

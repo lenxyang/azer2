@@ -118,7 +118,7 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   scoped_ptr<RootView> root_view_;
   scoped_ptr<aura::WindowTreeHost> host_;
   scoped_ptr<aura::client::FocusClient> focus_client_;
-  scoped_ptr<aura::Window> content_window_;
+  aura::Window* content_window_;
   scoped_ptr<aura::Window> content_window_container_;
 
   bool widget_closed_;

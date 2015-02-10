@@ -14,7 +14,6 @@ Widget::Widget()
 
 Widget::~Widget() {
   root_view_->WindowOwner::Detach();
-  content_window_.reset();
   content_window_container_.reset();
   host_->RemoveObserver(this);
   focus_client_.reset();
@@ -26,17 +25,14 @@ void Widget::Init(const InitParams& params) {
   focus_client_.reset(new FocusClient);
   aura::client::SetFocusClient(host_->window(), focus_client_.get());
   
-  content_window_.reset(new aura::Window(this));
-  content_window_->Init(aura::WINDOW_LAYER_TEXTURED);
   root_view_.reset(new RootView(this));
-  root_view_->WindowOwner::Destroy();
-  root_view_->WindowOwner::Attach(content_window_.get());
+  content_window_ = root_view_->window();
   // wm::SetShadowType(content_window_.get(), wm::SHADOW_TYPE_NONE);
 
   content_window_container_.reset(new aura::Window(NULL));
   content_window_container_->Init(aura::WINDOW_LAYER_NOT_DRAWN);
   content_window_container_->Show();
-  content_window_container_->AddChild(content_window_.get());
+  content_window_container_->AddChild(content_window_);
 
   host_->InitHost();
   host_->window()->AddChild(content_window_container_.get());
