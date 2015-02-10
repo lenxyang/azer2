@@ -138,6 +138,7 @@ void WindowTreeHostWin::DispatchEvent(ui::Event* event) {
 void WindowTreeHostWin::OnCloseRequest() {
   // TODO: this obviously shouldn't be here.
   base::MessageLoopForUI::current()->Quit();
+  OnHostCloseRequested();
 }
 
 void WindowTreeHostWin::OnClosed() {
