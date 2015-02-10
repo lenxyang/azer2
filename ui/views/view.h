@@ -33,7 +33,7 @@
 #include "ui/gfx/vector2d.h"
 #include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/views/cull_set.h"
-#include "azer/ui/views/widget/window_owner.h"
+#include "azer/ui/views/adapter/window_owner.h"
 #include "azer/ui/views/views_export.h"
 
 #if defined(OS_WIN)

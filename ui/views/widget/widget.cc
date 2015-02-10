@@ -69,9 +69,11 @@ void Widget::Deactivate() {
 }
 
 bool Widget::IsActive() const {
+  return true;
 }
 
 bool Widget::CanActivate() const {
+  return true;
 }
 
 bool Widget::IsVisible() {

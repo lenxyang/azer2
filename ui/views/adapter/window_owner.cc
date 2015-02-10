@@ -1,4 +1,4 @@
-#include "azer/ui/views/widget/window_owner.h"
+#include "azer/ui/views/adapter/window_owner.h"
 
 #include "base/logging.h"
 #include "azer/ui/aura/window.h"
@@ -73,7 +73,7 @@ gfx::Size ViewBridge::GetMaximumSize() const {
 }
 
 void ViewBridge::OnBoundsChanged(const gfx::Rect& old_bounds,
-                             const gfx::Rect& new_bounds)  {
+                                 const gfx::Rect& new_bounds)  {
 }
 
 gfx::NativeCursor ViewBridge::GetCursor(const gfx::Point& point) {
