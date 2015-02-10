@@ -8,6 +8,7 @@ namespace views {
 
 RootView::RootView(Widget* widget)
     : widget_(widget) {
+  window()->SetName("root");
 }
 
 RootView::~RootView() {
