@@ -9,7 +9,8 @@ namespace views {
 
 Widget::Widget() 
     : cursor_(gfx::kNullCursor) 
-    , widget_closed_(false) {
+    , widget_closed_(false) 
+    , closed_requested_(false) {
 }
 
 Widget::~Widget() {
@@ -55,6 +56,10 @@ void Widget::Close() {
 
 bool Widget::IsClosed() const {
   return widget_closed_;
+}
+
+bool Widget::IsClosing() const {
+  return closed_requested_;
 }
 
 void Widget::Show() {
@@ -171,6 +176,7 @@ void Widget::GetHitTestMask(gfx::Path* mask) const {
 
   // Overridden from aura::WindowTreeHostObserver:
 void Widget::OnHostCloseRequested(const aura::WindowTreeHost* host) {
+  closed_requested_ = true;
 }
 
 void Widget::OnHostResized(const aura::WindowTreeHost* host) {

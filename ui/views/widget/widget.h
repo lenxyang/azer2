@@ -49,6 +49,7 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   // Whether the widget has been asked to close itself. In particular this is
   // set to true after Close() has been invoked on the NativeWidget.
   bool IsClosed() const;
+  bool IsClosing() const;
 
   // Shows the widget. The widget is activated if during initialization the
   // can_activate flag in the InitParams structure is set to true.
@@ -122,6 +123,7 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   scoped_ptr<aura::Window> content_window_container_;
 
   bool widget_closed_;
+  bool closed_requested_;
   DISALLOW_COPY_AND_ASSIGN(Widget);
 };
 }  // namespace views
