@@ -166,6 +166,7 @@ void View::AddChildViewAt(View* view, int index) {
   // Let's insert the view.
   view->parent_ = this;
   children_.insert(children_.begin() + index, view);
+  WindowOwner::OnAddChildViewAt(view, index);
 
   // Instruct the view to recompute its root bounds on next Paint().
   view->SetRootBoundsDirty(true);
@@ -226,6 +227,7 @@ void View::ReorderChildView(View* view, int index) {
 
 void View::RemoveChildView(View* view) {
   DoRemoveChildView(view, true, true, false, NULL);
+  WindowOwner::OnRemoveChildView(view);
 }
 
 void View::RemoveAllChildViews(bool delete_children) {
@@ -1245,16 +1247,6 @@ gfx::Vector2d View::CalculateOffsetToAncestorWithLayer(
 }
 
 void View::UpdateParentLayer() {
-  if (!layer())
-    return;
-
-  ui::Layer* parent_layer = NULL;
-  gfx::Vector2d offset(GetMirroredX(), y());
-
-  if (parent_)
-    offset += parent_->CalculateOffsetToAncestorWithLayer(&parent_layer);
-
-  ReparentLayer(offset, parent_layer);
 }
 
 void View::MoveLayerToParent(ui::Layer* parent_layer,
@@ -1951,12 +1943,6 @@ void View::OrphanLayers() {
 }
 
 void View::ReparentLayer(const gfx::Vector2d& offset, ui::Layer* parent_layer) {
-  layer()->SetBounds(GetLocalBounds() + offset);
-  DCHECK_NE(layer(), parent_layer);
-  if (!parent_layer->Contains(layer()))
-    parent_layer->Add(layer());
-  layer()->SchedulePaint(GetLocalBounds());
-  MoveLayerToParent(layer(), gfx::Point());
 }
 
 void View::DestroyLayer() {

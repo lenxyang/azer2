@@ -52,10 +52,27 @@ aura::Window* WindowOwner::Create(View* view) {
   bridge_.reset(new ViewBridge(view_));
   window_ = new aura::Window(bridge_.get());
   window_->Init(aura::WINDOW_LAYER_TEXTURED);
-  window_->set_id(id_allocator_->allocate_id());
+  window_->set_id(id_allocator_.Pointer()->allocate_id());
+  view->set_id(window_->id());
   attached_ = false;
 
   return window_;
+}
+
+void WindowOwner::OnAddChildViewAt(View* child, int index) {
+  window()->AddChild(child->window());
+  if (index == view_->child_count()) {
+    window()->StackChildAtBottom(child->window());
+  } else if (index == 0) {
+    window()->StackChildAtTop(child->window());
+  } else {
+    View* back = child->child_at(index);
+    window()->StackChildBelow(child->window(), back->window());
+  }
+}
+
+void WindowOwner::OnRemoveChildView(View* child) {
+  window()->RemoveChild(child->window());
 }
 
 void WindowOwner::Destroy() {

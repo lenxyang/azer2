@@ -71,6 +71,9 @@ class VIEWS_EXPORT WindowOwner {
 
   aura::Window* window() { return window_;}
   const aura::Window* window() const { return window_;}
+
+  void OnAddChildViewAt(View* view, int index);
+  void OnRemoveChildView(View* view);
  private:
   View* view_;
   scoped_ptr<ViewBridge> bridge_;
