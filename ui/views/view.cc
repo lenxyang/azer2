@@ -1015,12 +1015,10 @@ void View::SetAccessibilityFocusable(bool accessibility_focusable) {
 }
 
 FocusManager* View::GetFocusManager() {
-  CHECK(false);
   return NULL;
 }
 
 const FocusManager* View::GetFocusManager() const {
-  CHECK(false);
   return NULL;
 }
 
