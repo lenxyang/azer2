@@ -27,12 +27,14 @@ void Widget::Init(const InitParams& params) {
   
   root_view_.reset(new RootView(this));
   content_window_ = root_view_->window();
+  content_window_->SetBounds(params.bounds);
   // wm::SetShadowType(content_window_.get(), wm::SHADOW_TYPE_NONE);
 
   content_window_container_.reset(new aura::Window(NULL));
   content_window_container_->Init(aura::WINDOW_LAYER_NOT_DRAWN);
   content_window_container_->Show();
   content_window_container_->AddChild(content_window_);
+  content_window_container_->SetBounds(params.bounds);
 
   host_->InitHost();
   host_->window()->AddChild(content_window_container_.get());
