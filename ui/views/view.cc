@@ -971,7 +971,7 @@ bool View::CanHandleAccelerators() const {
 // Focus -----------------------------------------------------------------------
 
 bool View::HasFocus() const {
-  CHECK(false);
+  // TOIMPLEMENT(yanglei)
   return false;
 }
 

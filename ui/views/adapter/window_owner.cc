@@ -66,7 +66,7 @@ void WindowOwner::OnAddChildViewAt(View* child, int index) {
   } else if (index == 0) {
     window()->StackChildAtTop(child->window());
   } else {
-    View* back = child->child_at(index);
+    View* back = view_->child_at(index - 1);
     window()->StackChildBelow(child->window(), back->window());
   }
 }

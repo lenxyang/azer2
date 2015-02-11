@@ -2,18 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/window/dialog_delegate.h"
+#include "azer/ui/views/controls/window/dialog_delegate.h"
 
 #include "base/logging.h"
 #include "ui/accessibility/ax_view_state.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/strings/grit/ui_strings.h"
-#include "ui/views/bubble/bubble_border.h"
-#include "ui/views/bubble/bubble_frame_view.h"
-#include "ui/views/controls/button/label_button.h"
-#include "ui/views/widget/widget.h"
-#include "ui/views/widget/widget_observer.h"
-#include "ui/views/window/dialog_client_view.h"
+#include "azer/ui/views/controls/bubble/bubble_border.h"
+#include "azer/ui/views/controls/bubble/bubble_frame_view.h"
+#include "azer/ui/views/controls/controls/button/label_button.h"
+#include "azer/ui/views/controls/widget/widget.h"
+#include "azer/ui/views/controls/widget/widget_observer.h"
+#include "azer/ui/views/controls/window/dialog_client_view.h"
 
 #if defined(OS_WIN)
 #include "ui/base/win/shell.h"
