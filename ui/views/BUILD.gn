@@ -7,6 +7,8 @@ source_set("views") {
     "adapter/window_owner.h",
     "background.cc",
     "background.h",
+    "controls/label.cc",
+    "controls/label.h",
     "cull_set.cc",
     "cull_set.h",
     "layout/box_layout.cc",
