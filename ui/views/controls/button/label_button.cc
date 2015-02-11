@@ -14,9 +14,10 @@
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/controls/button/label_button_border.h"
 #include "azer/ui/views/painter.h"
+#include "azer/ui/views/window/dialog_delegate.h"
 
 #if defined(OS_LINUX) && !defined(OS_CHROMEOS)
-#include "ui/views/linux_ui/linux_ui.h"
+#include "azer/ui/views/linux_ui/linux_ui.h"
 #endif
 
 namespace {

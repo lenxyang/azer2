@@ -17,6 +17,7 @@
 #include "ui/resources/grit/ui_resources.h"
 #include "azer/ui/views/border.h"
 #include "azer/ui/views/controls/button/label_button.h"
+#include "azer/ui/views/native_theme_delegate.h"
 
 namespace views {
 
@@ -107,7 +108,13 @@ gfx::Insets LabelButtonBorder::GetDefaultInsetsForStyle(
 }
 
 void LabelButtonBorder::Paint(const View& view, gfx::Canvas* canvas) {
-  ui::NativeTheme::State state = ui::NativeTheme::kNormal;
+  const NativeThemeDelegate* native_theme_delegate =
+      static_cast<const LabelButton*>(&view);
+  gfx::Rect rect(native_theme_delegate->GetThemePaintRect());
+  ui::NativeTheme::ExtraParams extra;
+  const gfx::Animation* animation = native_theme_delegate->GetThemeAnimation();
+  ui::NativeTheme::State state = native_theme_delegate->GetThemeState(&extra);
+
   if (animation && animation->is_animating()) {
     // Linearly interpolate background and foreground painters during animation.
     const SkRect sk_rect = gfx::RectToSkRect(rect);

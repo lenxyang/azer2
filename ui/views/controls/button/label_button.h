@@ -104,7 +104,6 @@ class VIEWS_EXPORT LabelButton : public CustomButton,
   void OnPaint(gfx::Canvas* canvas) override;
   void OnFocus() override;
   void OnBlur() override;
-  void OnNativeThemeChanged(const ui::NativeTheme* theme) override;
 
   // Fill |params| with information about the button.
   virtual void GetExtraParams(ui::NativeTheme::ExtraParams* params) const;
