@@ -6,6 +6,7 @@
 #include "azer/ui/aura/window.h"
 
 namespace views {
+namespace internal {
 
 RootView::RootView(Widget* widget)
     : widget_(widget) {
@@ -15,4 +16,5 @@ RootView::RootView(Widget* widget)
 RootView::~RootView() {
 }
 
+}  // namespace internal
 }  // namespace views

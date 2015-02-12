@@ -26,7 +26,7 @@ void Widget::Init(const InitParams& params) {
   focus_client_.reset(new FocusClient);
   aura::client::SetFocusClient(host_->window(), focus_client_.get());
   
-  root_view_.reset(new RootView(this));
+  root_view_.reset(new internal::RootView(this));
   content_window_ = root_view_->window();
   content_window_->SetBounds(gfx::Rect(params.bounds.size()));
   content_window_->SetName("ContentWindow");
@@ -97,11 +97,11 @@ void Widget::UpdateRootLayers() {
 void Widget::NotifyWillRemoveView(View* view) {
 }
 
-RootView* Widget::GetRootView() { 
+internal::RootView* Widget::GetRootView() { 
   return root_view_.get();
 }
 
-const RootView* Widget::GetRootView() const { 
+const internal::RootView* Widget::GetRootView() const { 
   return root_view_.get();
 }
 
@@ -197,5 +197,9 @@ void Widget::OnScrollEvent(ui::ScrollEvent* event) {
 }
 
 void Widget::OnGestureEvent(ui::GestureEvent* event) {
+}
+
+gfx::Rect Widget::GetWorkAreaBoundsInScreen() const {
+  return host_->window()->GetBoundsInScreen();
 }
 }  // namespace views {

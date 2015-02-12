@@ -8,6 +8,7 @@ namespace views {
 
 class Widget;
 
+namespace internal {
 class VIEWS_EXPORT RootView : public View {
  public:
   explicit RootView(Widget* widget);
@@ -21,4 +22,5 @@ class VIEWS_EXPORT RootView : public View {
   Widget* widget_;
   DISALLOW_COPY_AND_ASSIGN(RootView);
 };
+}  // namespace internal
 }  // namespace views

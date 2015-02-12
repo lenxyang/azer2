@@ -20,9 +20,12 @@ namespace views {
 class FocusManager;
 class FocusTraversable;
 class NonClientView;
-class RootView;
 class View;
 class InputMethod;
+
+namespace internal {
+class RootView;
+}  // namespace internal
 
 class VIEWS_EXPORT Widget : public aura::WindowDelegate,
                             public aura::WindowTreeHostObserver {
@@ -71,12 +74,15 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   // Returns whether the Widget is the currently active window.
   virtual bool IsActive() const;
 
+  // Returns the work area bounds of the screen the Widget belongs to.
+  gfx::Rect GetWorkAreaBoundsInScreen() const;
+
   bool IsVisible();
   void UpdateRootLayers();
   void NotifyWillRemoveView(View* view);
 
-  RootView* GetRootView();
-  const RootView* GetRootView() const;
+  internal::RootView* GetRootView();
+  const internal::RootView* GetRootView() const;
 
   bool IsMouseEventsEnabled();
   InputMethod* GetInputMethod();
@@ -120,7 +126,7 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   void OnGestureEvent(ui::GestureEvent* event) override;
  protected:
   gfx::NativeCursor cursor_;
-  scoped_ptr<RootView> root_view_;
+  scoped_ptr<internal::RootView> root_view_;
   scoped_ptr<aura::WindowTreeHost> host_;
   scoped_ptr<aura::client::FocusClient> focus_client_;
   aura::Window* content_window_;
