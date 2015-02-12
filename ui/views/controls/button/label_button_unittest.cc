@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/button/label_button.h"
+#include "azer/ui/views/controls/button/label_button.h"
 
 #include "base/strings/utf_string_conversions.h"
 #include "third_party/skia/include/core/SkBitmap.h"
@@ -10,7 +10,7 @@
 #include "ui/gfx/font_list.h"
 #include "ui/gfx/size.h"
 #include "ui/gfx/text_utils.h"
-#include "ui/views/test/views_test_base.h"
+#include "azer/ui/views/test/views_test_base.h"
 
 using base::ASCIIToUTF16;
 

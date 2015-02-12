@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/button/blue_button.h"
+#include "azer/ui/views/controls/button/blue_button.h"
 
 #include "base/strings/string16.h"
 #include "base/strings/utf_string_conversions.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/skia_util.h"
-#include "ui/views/controls/button/label_button_border.h"
-#include "ui/views/test/views_test_base.h"
+#include "azer/ui/views/controls/button/label_button_border.h"
+#include "azer/ui/views/test/views_test_base.h"
 
 namespace views {
 

@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/widget/widget_delegate.h"
+#include "azer/ui/views/widget/widget_delegate.h"
 
 #include "base/strings/utf_string_conversions.h"
 #include "ui/gfx/image/image_skia.h"
-#include "ui/views/bubble/bubble_delegate.h"
-#include "ui/views/view.h"
-#include "ui/views/views_delegate.h"
-#include "ui/views/widget/widget.h"
-#include "ui/views/window/client_view.h"
+#include "azer/ui/views/bubble/bubble_delegate.h"
+#include "azer/ui/views/view.h"
+// #include "azer/ui/views/views_delegate.h"
+#include "azer/ui/views/widget/widget.h"
+#include "azer/ui/views/window/client_view.h"
 
 namespace views {
 

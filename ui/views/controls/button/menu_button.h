@@ -10,8 +10,8 @@
 #include "base/memory/weak_ptr.h"
 #include "base/strings/string16.h"
 #include "base/time/time.h"
-#include "ui/views/background.h"
-#include "ui/views/controls/button/label_button.h"
+#include "azer/ui/views/background.h"
+#include "azer/ui/views/controls/button/label_button.h"
 
 namespace views {
 

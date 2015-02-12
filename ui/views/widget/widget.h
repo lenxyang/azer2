@@ -19,6 +19,7 @@ namespace views {
 
 class FocusManager;
 class FocusTraversable;
+class NonClientView;
 class RootView;
 class View;
 class InputMethod;
@@ -82,6 +83,9 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
   const InputMethod* GetInputMethod() const;
 
   virtual bool CanActivate() const;
+
+  NonClientView* non_client_view();
+  const NonClientView* non_client_view() const;
 
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;

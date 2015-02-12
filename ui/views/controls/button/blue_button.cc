@@ -26,6 +26,7 @@ BlueButton::~BlueButton() {}
 void BlueButton::ResetColorsFromNativeTheme() {
   LabelButton::ResetColorsFromNativeTheme();
   if (!gfx::IsInvertedColorScheme()) {
+    /*
     SetTextColor(STATE_NORMAL, GetNativeTheme()->
         GetSystemColor(ui::NativeTheme::kColorId_BlueButtonEnabledColor));
     SetTextColor(STATE_HOVERED, GetNativeTheme()->
@@ -42,6 +43,7 @@ void BlueButton::ResetColorsFromNativeTheme() {
             0,
             GetNativeTheme()->GetSystemColor(
                 ui::NativeTheme::kColorId_BlueButtonShadowColor))));
+    */
   }
 }
 

@@ -202,7 +202,7 @@ void LabelButton::SetStyle(ButtonStyle style) {
   }
   if (style == STYLE_BUTTON)
     SetMinSize(gfx::Size(70, 33));
-  OnNativeThemeChanged(GetNativeTheme());
+  // OnNativeThemeChanged(GetNativeTheme());
   ResetCachedPreferredSize();
 }
 
@@ -376,12 +376,19 @@ void LabelButton::GetExtraParams(ui::NativeTheme::ExtraParams* params) const {
 }
 
 void LabelButton::ResetColorsFromNativeTheme() {
-  const ui::NativeTheme* theme = GetNativeTheme();
-  SkColor colors[STATE_COUNT] = {
+  /* const ui::NativeTheme* theme = GetNativeTheme();
+     SkColor colors[STATE_COUNT] = {
     theme->GetSystemColor(ui::NativeTheme::kColorId_ButtonEnabledColor),
     theme->GetSystemColor(ui::NativeTheme::kColorId_ButtonHoverColor),
     theme->GetSystemColor(ui::NativeTheme::kColorId_ButtonHoverColor),
     theme->GetSystemColor(ui::NativeTheme::kColorId_ButtonDisabledColor),
+  };
+  */
+  SkColor colors[STATE_COUNT] = {
+    SK_ColorWHITE,
+    SK_ColorWHITE,
+    SK_ColorWHITE,
+    SK_ColorWHITE,
   };
 
   // Certain styles do not change text color when hovered or pressed.
@@ -402,8 +409,9 @@ void LabelButton::ResetColorsFromNativeTheme() {
 #if !(defined(OS_LINUX) && !defined(OS_CHROMEOS))
     constant_text_color = true;
     colors[STATE_NORMAL] = kStyleButtonTextColor;
-    label_->SetBackgroundColor(theme->GetSystemColor(
-        ui::NativeTheme::kColorId_ButtonBackgroundColor));
+    // label_->SetBackgroundColor(theme->GetSystemColor(
+    // ui::NativeTheme::kColorId_ButtonBackgroundColor));
+    label_->SetBackgroundColor(SK_ColorWHITE);
     label_->SetAutoColorReadabilityEnabled(false);
     label_->SetShadows(gfx::ShadowValues(
         1, gfx::ShadowValue(gfx::Point(0, 1), 0, kStyleButtonShadowColor)));
@@ -464,13 +472,6 @@ void LabelButton::StateChanged() {
 void LabelButton::ChildPreferredSizeChanged(View* child) {
   ResetCachedPreferredSize();
   PreferredSizeChanged();
-}
-
-void LabelButton::OnNativeThemeChanged(const ui::NativeTheme* theme) {
-  ResetColorsFromNativeTheme();
-  UpdateThemedBorder();
-  // Invalidate the layout to pickup the new insets from the border.
-  InvalidateLayout();
 }
 
 ui::NativeTheme::Part LabelButton::GetThemePart() const {
