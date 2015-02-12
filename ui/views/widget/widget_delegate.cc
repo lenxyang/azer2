@@ -8,7 +8,7 @@
 #include "ui/gfx/image/image_skia.h"
 #include "azer/ui/views/bubble/bubble_delegate.h"
 #include "azer/ui/views/view.h"
-// #include "azer/ui/views/views_delegate.h"
+#include "azer/ui/views/views_delegate.h"
 #include "azer/ui/views/widget/widget.h"
 #include "azer/ui/views/window/client_view.h"
 

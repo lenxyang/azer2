@@ -31,6 +31,7 @@ namespace views {
 
 class View;
 class Widget;
+class NonClientFrameView;
 
 
 // ViewsDelegate is an interface implemented by an object using the views
@@ -96,10 +97,6 @@ class VIEWS_EXPORT ViewsDelegate {
   // ensure we don't attempt to exit while a menu is showing.
   virtual void AddRef();
   virtual void ReleaseRef();
-
-  // Gives the platform a chance to modify the properties of a Widget.
-  virtual void OnBeforeWidgetInit(Widget::InitParams* params,
-                                  internal::NativeWidgetDelegate* delegate) = 0;
 
   // Returns the default obscured text reveal duration.
   virtual base::TimeDelta GetDefaultTextfieldObscuredRevealDuration();

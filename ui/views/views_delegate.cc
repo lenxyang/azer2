@@ -6,8 +6,7 @@
 
 namespace views {
 
-ViewsDelegate::ViewsDelegate()
-    : views_tsc_factory_(new ViewsTouchSelectionControllerFactory) {
+ViewsDelegate::ViewsDelegate() {
 }
 
 ViewsDelegate::~ViewsDelegate() {
@@ -61,12 +60,6 @@ void ViewsDelegate::AddRef() {
 }
 
 void ViewsDelegate::ReleaseRef() {
-}
-
-content::WebContents* ViewsDelegate::CreateWebContents(
-    content::BrowserContext* browser_context,
-    content::SiteInstance* site_instance) {
-  return NULL;
 }
 
 base::TimeDelta ViewsDelegate::GetDefaultTextfieldObscuredRevealDuration() {
