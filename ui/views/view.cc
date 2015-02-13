@@ -807,8 +807,7 @@ bool View::HitTestPoint(const gfx::Point& point) const {
 }
 
 bool View::HitTestRect(const gfx::Rect& rect) const {
-  CHECK(false);
-  return false;
+  return true;
 }
 
 bool View::CanProcessEventsWithinSubtree() const {
