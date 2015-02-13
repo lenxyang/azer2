@@ -40,6 +40,7 @@ void Widget::Init(const InitParams& params) {
   content_window_container_->SetBounds(gfx::Rect(params.bounds.size()));
   content_window_container_->SetName("ContentWindowContainer");
 
+  content_window_->Show();
   host_->InitHost();
   host_->window()->AddChild(content_window_container_.get());
   
