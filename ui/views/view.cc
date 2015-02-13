@@ -1381,8 +1381,7 @@ void View::WriteDragData(const gfx::Point& press_pt, OSExchangeData* data) {
 }
 
 bool View::InDrag() {
-  CHECK(false);
-  return true;
+  return false;
 }
 
 int View::GetHorizontalDragThreshold() {
