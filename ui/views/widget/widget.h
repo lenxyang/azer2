@@ -90,8 +90,8 @@ class VIEWS_EXPORT Widget : public aura::WindowDelegate,
 
   virtual bool CanActivate() const;
 
-  NonClientView* non_client_view();
-  const NonClientView* non_client_view() const;
+  NonClientView* non_client_view() { return NULL;}
+  const NonClientView* non_client_view() const { return NULL;}
 
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;

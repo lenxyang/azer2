@@ -6,6 +6,8 @@
 
 namespace views {
 
+ViewsDelegate* ViewsDelegate::views_delegate = NULL;
+
 ViewsDelegate::ViewsDelegate() {
 }
 
@@ -70,4 +72,10 @@ bool ViewsDelegate::WindowManagerProvidesTitleBar(bool maximized) {
   return false;
 }
 
+#if defined(OS_WIN)
+int ViewsDelegate::GetAppbarAutohideEdges(HMONITOR monitor,
+                                          const base::Closure& callback) {
+  return 0;
+}
+#endif
 }  // namespace views

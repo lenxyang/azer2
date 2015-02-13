@@ -2096,7 +2096,7 @@ void View::InitFocusSiblings(View* v, int index) {
 }
 
 void View::AdvanceFocusIfNecessary() {
-  CHECK(false);
+  // CHECK(false);
 }
 
 // Tooltips --------------------------------------------------------------------
