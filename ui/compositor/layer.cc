@@ -229,12 +229,16 @@ void Layer::set_delegate(LayerDelegate* delegate) {
 bool Layer::SchedulePaint(const gfx::Rect& invalid_rect) {
   if (!GetCompositor()) { return false;}
 
+  /*
   GetCompositor()->ScheduleRedrawRect(invalid_rect);
   damaged_region_.op(invalid_rect.x(),
                      invalid_rect.y(),
                      invalid_rect.right(),
                      invalid_rect.bottom(),
                      SkRegion::kUnion_Op);
+  */
+  DCHECK(layer_->layer_tree_host());
+  layer_->layer_tree_host()->SetLayerNeedsRedrawRecusive(layer_);
   return true;
 }
 
