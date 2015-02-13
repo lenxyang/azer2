@@ -1,0 +1,27 @@
+
+source_set("views") {
+  sources = [
+    "view.cc",
+    "view.h",
+  ]
+
+  defines = [
+    "AURA_IMPLEMENTATION",
+    "COMPOSITOR_IMPLEMENTATION",
+    "VIEWS_IMPLEMENTATION",
+  ]
+
+  deps = [
+    "//base:i18n",
+    "//base/third_party/dynamic_annotations",
+    "//skia",
+    "//third_party/icu",
+    "//ui/accessibility",
+    "//ui/native_theme",
+    "//ui/events",
+    "//ui/resources",
+    "//ui/strings",
+    "//ui/wm",
+    "//url",
+  ]
+}
