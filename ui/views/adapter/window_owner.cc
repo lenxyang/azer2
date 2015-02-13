@@ -53,6 +53,7 @@ aura::Window* WindowOwner::Create(View* view) {
   window_ = new aura::Window(bridge_.get());
   window_->Init(aura::WINDOW_LAYER_TEXTURED);
   window_->set_id(id_allocator_.Pointer()->allocate_id());
+  window_->SetName(view->kViewClassName);
   view->set_id(window_->id());
   attached_ = false;
 

@@ -23,6 +23,7 @@ Widget::~Widget() {
 
 void Widget::Init(const InitParams& params) {
   host_.reset(aura::WindowTreeHost::Create(params.bounds));
+  host_->window()->SetBounds(gfx::Rect(params.bounds.size()));
   focus_client_.reset(new FocusClient);
   aura::client::SetFocusClient(host_->window(), focus_client_.get());
   
