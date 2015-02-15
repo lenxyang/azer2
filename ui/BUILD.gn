@@ -5,6 +5,7 @@ component("ui") {
     "aura",
     "compositor",
     "views",
+    "skinned",
     "//azer/render",
   ]
 
