@@ -5,6 +5,7 @@
 #include "base/basictypes.h"
 #include "base/memory/scoped_ptr.h"
 #include "ui/base/cursor/cursor.h"
+#include "ui/gfx/geometry/rect.h"
 
 #include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/widget/widgets_export.h"
@@ -14,6 +15,10 @@ class Window;
 }  // namespace aura
 
 namespace widget {
+
+class Background;
+class Border;
+
 class WIDGET_EXPORT Widget : public aura::WindowDelegate {
  public:
   typedef std::vector<Widget*> Widgets;
@@ -30,8 +35,23 @@ class WIDGET_EXPORT Widget : public aura::WindowDelegate {
   const std::string& name() const;
   void SetName(const std::string& name);
 
-  void Show();
-  void Hide();
+  void SetBounds(int x, int y, int width, int height);
+  void SetBoundsRect(const gfx::Rect& bounds);
+  void SetSize(const gfx::Size& size);
+  void SetPosition(const gfx::Point& position);
+  void SetX(int x);
+  void SetY(int y);
+
+  // No transformation is applied on the size or the locations.
+  const gfx::Rect& bounds() const { return bounds_; }
+  int x() const { return bounds_.x(); }
+  int y() const { return bounds_.y(); }
+  int width() const { return bounds_.width(); }
+  int height() const { return bounds_.height(); }
+  const gfx::Size& size() const { return bounds_.size(); }
+
+  virtual void Show();
+  virtual void Hide();
 
   aura::Window* window() { return window_.get();}
   const aura::Window* window() const { return window_.get();}
@@ -39,6 +59,11 @@ class WIDGET_EXPORT Widget : public aura::WindowDelegate {
   Widget* GetRootWidget() { return root_;}
   const Widget* GetRootWidget() const { return root_;}
   virtual const char* GetClassName();
+
+  virtual gfx::Size GetPreferredSize() const;
+  void OnPaint(gfx::Canvas* canvas) override;
+  virtual void OnPaintBackground(gfx::Canvas* canvas);
+  virtual void OnPaintBorder(gfx::Canvas* canvas);
  protected:
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;
@@ -52,7 +77,7 @@ class WIDGET_EXPORT Widget : public aura::WindowDelegate {
       const gfx::Point& location) override;
   bool CanFocus() override;
   void OnCaptureLost() override;
-  void OnPaint(gfx::Canvas* canvas) override;
+  // void OnPaint(gfx::Canvas* canvas) override;
   void OnDeviceScaleFactorChanged(float device_scale_factor) override;
   void OnWindowDestroying(aura::Window* window) override;
   void OnWindowDestroyed(aura::Window* window) override;
@@ -70,6 +95,11 @@ class WIDGET_EXPORT Widget : public aura::WindowDelegate {
   Widgets children_;
   Widget* parent_;
   Widget* root_;
+
+  gfx::Rect bounds_;
+
+  scoped_ptr<Background> background_;
+  scoped_ptr<Border> border_;
   DISALLOW_COPY_AND_ASSIGN(Widget);
 };
 }  // namespace widget

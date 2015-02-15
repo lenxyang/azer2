@@ -39,4 +39,12 @@ void RootWidget::Init(const InitParams& params) {
 void RootWidget::Close() {
   closing_ = true;
 }
+
+void RootWidget::Show() {
+  host_->Show();
+}
+
+void RootWidget::Hide() {
+  host_->Hide();
+}
 }  // namespace widget

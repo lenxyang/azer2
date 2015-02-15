@@ -34,6 +34,9 @@ class WIDGET_EXPORT RootWidget : public aura::WindowTreeHostObserver,
   void Close();
   bool IsClosing() const { return closing_;}
 
+  void Show() override;
+  void Hide() override;
+
   aura::WindowTreeHost* host() { return host_.get();}
   const aura::WindowTreeHost* host() const { return host_.get();}
  private:

@@ -56,6 +56,31 @@ void Widget::SetName(const std::string& name) {
   window_->SetName(name);
 }
 
+void Widget::SetBounds(int x, int y, int width, int height) {
+  SetBoundsRect(gfx::Rect(x, y, std::max(0, width), std::max(0, height)));
+}
+
+void Widget::SetBoundsRect(const gfx::Rect& bounds) {
+  bounds_ = bounds;
+  window()->SetBounds(bounds);
+}
+
+void Widget::SetSize(const gfx::Size& size) {
+  SetBounds(x(), y(), size.width(), size.height());
+}
+
+void Widget::SetPosition(const gfx::Point& position) {
+  SetBounds(position.x(), position.y(), width(), height());
+}
+
+void Widget::SetX(int x) {
+  SetBounds(x, y(), width(), height());
+}
+
+void Widget::SetY(int y) {
+  SetBounds(x(), y, width(), height());
+}
+
 void Widget::Show() {
   window()->Show();
 }
@@ -118,8 +143,8 @@ bool Widget::CanFocus() {
 void Widget::OnCaptureLost() {
 }
 
-void Widget::OnPaint(gfx::Canvas* canvas) {
-}
+// void Widget::OnPaint(gfx::Canvas* canvas) {
+// }
 
 void Widget::OnDeviceScaleFactorChanged(float device_scale_factor) {
 }
@@ -155,4 +180,19 @@ void Widget::OnTouchEvent(ui::TouchEvent* event) {
 void Widget::OnGestureEvent(ui::GestureEvent* event) {
 }
 
+
+gfx::Size Widget::GetPreferredSize() const {
+  return gfx::Size(0, 0);
+}
+
+void Widget::OnPaint(gfx::Canvas* canvas) {
+  OnPaintBackground(canvas);
+  OnPaintBorder(canvas);
+}
+
+void Widget::OnPaintBackground(gfx::Canvas* canvas) {
+}
+
+void Widget::OnPaintBorder(gfx::Canvas* canvas) {
+}
 }  // namespace widget
