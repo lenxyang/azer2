@@ -1,8 +1,10 @@
 
 source_set("widget") {
   sources = [
-    "aura_screen.cc",
-    "aura_screen.h",
+    "aura/aura_screen.cc",
+    "aura/aura_screen.h",
+    "aura/focus_client.cc",
+    "aura/focus_client.h",
     "env.cc",
     "env.h",
     "widget.cc",
@@ -10,7 +12,7 @@ source_set("widget") {
     "root_widget.cc",
     "root_widget.h",
   ]
-  deps = [
+  defines = [
     "AURA_IMPLEMENTATION",
     "COMPOSITOR_IMPLEMENTATION",
     "WIDGET_IMPLEMENTATION",

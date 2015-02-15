@@ -7,15 +7,16 @@
 #include "ui/base/cursor/cursor.h"
 
 #include "azer/ui/aura/window_delegate.h"
+#include "azer/ui/widget/widgets_export.h"
 
 namespace aura {
 class Window;
 }  // namespace aura
 
 namespace widget {
-class WIDGET_EXPORT Widget : public {
+class WIDGET_EXPORT Widget : public aura::WindowDelegate {
  public:
-  typedef std::vector<Widget> Widgets;
+  typedef std::vector<Widget*> Widgets;
   Widget();
   virtual ~Widget();
 
@@ -37,7 +38,8 @@ class WIDGET_EXPORT Widget : public {
 
   Widget* GetRootWidget() { return root_;}
   const Widget* GetRootWidget() const { return root_;}
- private:
+  virtual const char* GetClassName();
+ protected:
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;
   gfx::Size GetMaximumSize() const override;
@@ -66,6 +68,7 @@ class WIDGET_EXPORT Widget : public {
 
   scoped_ptr<aura::Window> window_;
   Widgets children_;
+  Widget* parent_;
   Widget* root_;
   DISALLOW_COPY_AND_ASSIGN(Widget);
 };

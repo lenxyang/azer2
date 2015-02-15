@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/memory/scoped_ptr.h"
-#include "azer/ui/widget/widget_export.h"
+#include "azer/ui/widget/widgets_export.h"
 
 namespace base {
 class AtExitManager;
@@ -22,9 +22,8 @@ class AuraScreen;
 
 class WIDGET_EXPORT Env {
  public:
-  Env();
+  Env(int argc, char* argv[]);
   virtual ~Env();
-  bool Init(int argc, char* argv[]);
  private:
   scoped_ptr<AuraScreen> aura_screen_;
   scoped_ptr<ui::ScopedOleInitializer> ole_initializer_;

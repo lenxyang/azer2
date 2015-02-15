@@ -3,10 +3,12 @@
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
 
+#include "azer/ui/widget/aura/focus_client.h"
+
 namespace widget {
 
 RootWidget::RootWidget() 
-    : closed_(false) {
+    : closing_(false) {
 }
 
 RootWidget::~RootWidget() {
@@ -16,7 +18,7 @@ RootWidget::~RootWidget() {
   host_.reset();
 }
 
-void RootWidget::Init(const InitParams& param) {
+void RootWidget::Init(const InitParams& params) {
   host_.reset(aura::WindowTreeHost::Create(params.bounds));
   host_->window()->SetBounds(gfx::Rect(params.bounds.size()));
   focus_client_.reset(new FocusClient);

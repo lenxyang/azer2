@@ -27,13 +27,17 @@ class AuraIdAllocator {
 }  // namespace
 
 Widget::Widget() {
-  window_ = new aura::Window(this);
-  window_->Init(aura::WINDOW_LAYER_TEXTURED);
-  window_->set_id(id_allocator_.Pointer()->allocate_id());
-  window_->SetName(kViewClassName);
+  window_.reset(new aura::Window(this));
+  window()->Init(aura::WINDOW_LAYER_TEXTURED);
+  window()->set_id(id_allocator_.Pointer()->allocate_id());
+  window()->SetName(GetClassName());
 }
 
 Widget::~Widget() {
+}
+
+const char* Widget::GetClassName() {
+  return "Widget";
 }
 
 int Widget::id() const {
@@ -44,7 +48,7 @@ void Widget::set_id(int id) {
   window_->set_id(id);
 }
 
-const std::string& name() const {
+const std::string& Widget::name() const {
   return window_->name();
 }
 
@@ -69,8 +73,8 @@ void Widget::AddChild(Widget* widget) {
 }
 
 void Widget::RemoveChild(Widget* child) {
-  DCHECK(widget->parent_ == this);
-  std::vector<Layer*>::iterator i =
+  DCHECK(child->parent_ == this);
+  Widgets::iterator i =
     std::find(children_.begin(), children_.end(), child);
   DCHECK(i != children_.end());
   children_.erase(i);

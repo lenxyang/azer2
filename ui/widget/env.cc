@@ -15,17 +15,12 @@
 #include "ui/gfx/win/dpi.h"
 
 #include "azer/ui/aura/env.h"
-#include "azer/ui/widget/aura_screen.h"
+#include "azer/ui/widget/aura/aura_screen.h"
 #include "azer/render/util/render_system_loader.h"
 
 namespace widget {
-Env::Env() {
-}
 
-Env::~Env() {
-}
-
-bool Env::Init(int argc, char* argv) {
+Env::Env(int argc, char* argv[]) {
 #if defined(OS_WIN)
   gfx::InitDeviceScaleFactor(1.0f);
 #endif
@@ -44,6 +39,9 @@ bool Env::Init(int argc, char* argv) {
   base::FilePath ui_test_pak_path;
   DCHECK(PathService::Get(ui::UI_TEST_PAK, &ui_test_pak_path));
   ui::ResourceBundle::InitSharedInstanceWithPakPath(ui_test_pak_path);
-  return true;
 }
+
+Env::~Env() {
+}
+
 }  // namespace widget

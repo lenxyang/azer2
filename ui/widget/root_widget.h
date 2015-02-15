@@ -14,6 +14,10 @@
 namespace aura {
 class Window;
 class WindowTreeHost;
+
+namespace client {
+class FocusClient;
+}  // namespace client
 }  // namespace aura
 
 namespace widget {
@@ -22,17 +26,19 @@ class WIDGET_EXPORT RootWidget : public aura::WindowTreeHostObserver,
  public:
   RootWidget();
   virtual ~RootWidget();
+
   struct WIDGET_EXPORT InitParams {
     gfx::Rect bounds;
   };
   void Init(const InitParams& param);
   void Close();
-  bool closing() const { return closing_;}
+  bool IsClosing() const { return closing_;}
 
   aura::WindowTreeHost* host() { return host_.get();}
   const aura::WindowTreeHost* host() const { return host_.get();}
  private:
-  scoped_ptr<WindowTreeHost> host_;
+  scoped_ptr<aura::client::FocusClient> focus_client_;
+  scoped_ptr<aura::WindowTreeHost> host_;
   bool closing_;
   DISALLOW_COPY_AND_ASSIGN(RootWidget);
 };
