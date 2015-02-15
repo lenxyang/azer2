@@ -1,0 +1,32 @@
+
+source_set("widget") {
+  sources = [
+    "aura_screen.cc",
+    "aura_screen.h",
+    "env.cc",
+    "env.h",
+    "widget.cc",
+    "widget.h",
+    "root_widget.cc",
+    "root_widget.h",
+  ]
+  deps = [
+    "AURA_IMPLEMENTATION",
+    "COMPOSITOR_IMPLEMENTATION",
+    "WIDGET_IMPLEMENTATION",
+  ]
+
+  deps = [
+    "//base:i18n",
+    "//base/third_party/dynamic_annotations",
+    "//skia",
+    "//third_party/icu",
+    "//ui/accessibility",
+    "//ui/native_theme",
+    "//ui/events",
+    "//ui/resources",
+    "//ui/strings",
+    "//ui/wm",
+    "//url",
+  ]
+}
