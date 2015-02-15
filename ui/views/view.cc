@@ -1025,7 +1025,6 @@ const FocusManager* View::GetFocusManager() const {
 }
 
 void View::RequestFocus() {
-  CHECK(false);
 }
 
 bool View::SkipDefaultKeyEventProcessing(const ui::KeyEvent& event) {

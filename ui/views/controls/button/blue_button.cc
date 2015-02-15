@@ -26,16 +26,11 @@ BlueButton::~BlueButton() {}
 void BlueButton::ResetColorsFromNativeTheme() {
   LabelButton::ResetColorsFromNativeTheme();
   if (!gfx::IsInvertedColorScheme()) {
+    SetTextColor(STATE_NORMAL, SkColorSetARGBInline(0xff, 0xff, 0xff, 0xff));
+    SetTextColor(STATE_HOVERED, SkColorSetARGBInline(0xff, 0xff, 0xff, 0xff));
+    SetTextColor(STATE_PRESSED, SkColorSetARGBInline(0xff, 0xff, 0xff, 0xff));
+    SetTextColor(STATE_DISABLED, SkColorSetARGBInline(0xff, 0xff, 0xff, 0xff));
     /*
-    SetTextColor(STATE_NORMAL, GetNativeTheme()->
-        GetSystemColor(ui::NativeTheme::kColorId_BlueButtonEnabledColor));
-    SetTextColor(STATE_HOVERED, GetNativeTheme()->
-        GetSystemColor(ui::NativeTheme::kColorId_BlueButtonHoverColor));
-    SetTextColor(STATE_PRESSED, GetNativeTheme()->
-        GetSystemColor(ui::NativeTheme::kColorId_BlueButtonPressedColor));
-    SetTextColor(STATE_DISABLED, GetNativeTheme()->
-        GetSystemColor(ui::NativeTheme::kColorId_BlueButtonDisabledColor));
-
     label()->SetShadows(gfx::ShadowValues(
         1,
         gfx::ShadowValue(

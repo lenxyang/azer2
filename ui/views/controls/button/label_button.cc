@@ -376,19 +376,11 @@ void LabelButton::GetExtraParams(ui::NativeTheme::ExtraParams* params) const {
 }
 
 void LabelButton::ResetColorsFromNativeTheme() {
-  /* const ui::NativeTheme* theme = GetNativeTheme();
-     SkColor colors[STATE_COUNT] = {
-    theme->GetSystemColor(ui::NativeTheme::kColorId_ButtonEnabledColor),
-    theme->GetSystemColor(ui::NativeTheme::kColorId_ButtonHoverColor),
-    theme->GetSystemColor(ui::NativeTheme::kColorId_ButtonHoverColor),
-    theme->GetSystemColor(ui::NativeTheme::kColorId_ButtonDisabledColor),
-  };
-  */
   SkColor colors[STATE_COUNT] = {
-    SK_ColorWHITE,
-    SK_ColorWHITE,
-    SK_ColorWHITE,
-    SK_ColorWHITE,
+    SkColorSetARGBInline(0xff, 0x22, 0x22, 0x22),
+    SkColorSetARGBInline(0xff, 0x22, 0x22, 0x22),
+    SkColorSetARGBInline(0xff, 0x22, 0x22, 0x22),
+    SkColorSetARGBInline(0xff, 0xa1, 0xa1, 0x92),
   };
 
   // Certain styles do not change text color when hovered or pressed.
