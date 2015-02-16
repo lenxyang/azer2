@@ -12,7 +12,10 @@
 
 namespace views {
 
-View::View() {
+View::View()
+    : parent_(NULL)
+    , root_(NULL)
+    , focusable_(false) {
   window_.reset(new aura::Window(this));
   window()->Init(aura::WINDOW_LAYER_TEXTURED);
   window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
@@ -198,5 +201,55 @@ void View::OnPaintBackground(gfx::Canvas* canvas) {
 }
 
 void View::OnPaintBorder(gfx::Canvas* canvas) {
+}
+
+bool View::HasFocus() {
+  return false;
+}
+
+gfx::Rect View::GetContentsBounds() const {
+  gfx::Rect contents_bounds(GetLocalBounds());
+  if (border_.get())
+    contents_bounds.Inset(border_->GetInsets());
+  return contents_bounds;
+}
+
+gfx::Rect View::GetLocalBounds() const {
+  return gfx::Rect(size());
+}
+
+gfx::Rect View::GetVisibleBounds() const {
+  return bounds_;
+}
+
+gfx::Rect View::GetBoundsInScreen() const {
+  DCHECK(window());
+  return window()->GetBoundsInScreen();
+}
+
+gfx::Insets View::GetInsets() const {
+  return border_.get() ? border_->GetInsets() : gfx::Insets();
+}
+
+gfx::NativeCursor View::GetCursor(const ui::MouseEvent& event) {
+#if defined(OS_WIN)
+  static ui::Cursor arrow;
+  if (!arrow.platform())
+    arrow.SetPlatformCursor(LoadCursor(NULL, IDC_ARROW));
+  return arrow;
+#else
+  return gfx::kNullCursor;
+#endif
+}
+
+bool View::HitTestPoint(const gfx::Point& point) const {
+  return HitTestRect(gfx::Rect(point, gfx::Size(1, 1)));
+}
+
+bool View::HitTestRect(const gfx::Rect& rect) const {
+  return true;
+}
+
+void View::Layout() {
 }
 }  // namespace views

@@ -10,6 +10,7 @@ namespace views {
 
 RootView::RootView() 
     : closing_(false) {
+  root_ = this;
 }
 
 RootView::~RootView() {

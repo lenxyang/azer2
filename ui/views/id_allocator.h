@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include "base/basictypes.h"
 
 namespace views {

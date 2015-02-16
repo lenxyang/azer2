@@ -51,6 +51,36 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   int height() const { return bounds_.height(); }
   const gfx::Size& size() const { return bounds_.size(); }
 
+  // Returns the bounds of the content area of the view, i.e. the rectangle
+  // enclosed by the view's border.
+  gfx::Rect GetContentsBounds() const;
+
+  // Returns the bounds of the view in its own coordinates (i.e. position is
+  // 0, 0).
+  gfx::Rect GetLocalBounds() const;
+
+  void SetFocusable(bool focusable) { focusable_ = focusable;}
+  bool focusable() { return focusable_;}
+  virtual bool HasFocus();
+
+  // Returns the insets of the current border. If there is no border an empty
+  // insets is returned.
+  virtual gfx::Insets GetInsets() const;
+
+  // Returns the visible bounds of the receiver in the receivers coordinate
+  // system.
+  //
+  // When traversing the View hierarchy in order to compute the bounds, the
+  // function takes into account the mirroring setting and transformation for
+  // each View and therefore it will return the mirrored and transformed version
+  // of the visible bounds if need be.
+  gfx::Rect GetVisibleBounds() const;
+
+  // Return the bounds of the View in screen coordinate system.
+  gfx::Rect GetBoundsInScreen() const;
+
+  virtual void Layout();
+
   virtual void Show();
   virtual void Hide();
 
@@ -65,6 +95,22 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void OnPaint(gfx::Canvas* canvas) override;
   virtual void OnPaintBackground(gfx::Canvas* canvas);
   virtual void OnPaintBorder(gfx::Canvas* canvas);
+
+  // Return the cursor that should be used for this view or the default cursor.
+  // The event location is in the receiver's coordinate system. The caller is
+  // responsible for managing the lifetime of the returned object, though that
+  // lifetime may vary from platform to platform. On Windows and Aura,
+  // the cursor is a shared resource.
+  virtual gfx::NativeCursor GetCursor(const ui::MouseEvent& event);
+
+  // A convenience function which calls HitTestRect() with a rect of size
+  // 1x1 and an origin of |point|. |point| is in the local coordinate space
+  // of |this|.
+  bool HitTestPoint(const gfx::Point& point) const;
+
+  // Returns true if |rect| intersects this view's bounds. |rect| is in the
+  // local coordinate space of |this|.
+  bool HitTestRect(const gfx::Rect& rect) const;
  protected:
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;
@@ -92,8 +138,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void OnTouchEvent(ui::TouchEvent* event) override;
   void OnGestureEvent(ui::GestureEvent* event) override;
 
-
-  //
+  // when view attached to parent with root.
   void OnAttachedRecusive(RootView* view);
   void OnDetachRecusive();
 
@@ -103,6 +148,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   RootView* root_;
 
   gfx::Rect bounds_;
+  bool focusable_;
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;
