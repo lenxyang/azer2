@@ -9,7 +9,7 @@
 
 #include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/aura/window_tree_host_observer.h"
-#include "azer/ui/widget/widget.h"
+#include "azer/ui/views/view.h"
 
 namespace aura {
 class Window;
@@ -20,14 +20,14 @@ class FocusClient;
 }  // namespace client
 }  // namespace aura
 
-namespace widget {
-class WIDGET_EXPORT RootWidget : public aura::WindowTreeHostObserver,
-                                 public Widget {
+namespace views {
+class VIEWS_EXPORT RootView : public aura::WindowTreeHostObserver,
+                              public View {
  public:
-  RootWidget();
-  virtual ~RootWidget();
+  RootView();
+  virtual ~RootView();
 
-  struct WIDGET_EXPORT InitParams {
+  struct VIEW_EXPORT InitParams {
     gfx::Rect bounds;
   };
   void Init(const InitParams& param);
@@ -43,6 +43,6 @@ class WIDGET_EXPORT RootWidget : public aura::WindowTreeHostObserver,
   scoped_ptr<aura::client::FocusClient> focus_client_;
   scoped_ptr<aura::WindowTreeHost> host_;
   bool closing_;
-  DISALLOW_COPY_AND_ASSIGN(RootWidget);
+  DISALLOW_COPY_AND_ASSIGN(RootView);
 };
-}  // namespace widget
+}  // namespace views

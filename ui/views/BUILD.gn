@@ -1,5 +1,5 @@
 
-source_set("widget") {
+source_set("views") {
   sources = [
     "aura/aura_screen.cc",
     "aura/aura_screen.h",
@@ -7,15 +7,15 @@ source_set("widget") {
     "aura/focus_client.h",
     "env.cc",
     "env.h",
-    "widget.cc",
-    "widget.h",
-    "root_widget.cc",
-    "root_widget.h",
+    "view.cc",
+    "view.h",
+    "root_view.cc",
+    "root_view.h",
   ]
   defines = [
     "AURA_IMPLEMENTATION",
     "COMPOSITOR_IMPLEMENTATION",
-    "WIDGET_IMPLEMENTATION",
+    "VIEWS_IMPLEMENTATION",
   ]
 
   deps = [

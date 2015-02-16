@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/memory/scoped_ptr.h"
-#include "azer/ui/widget/widgets_export.h"
+#include "azer/ui/views/viewss_export.h"
 
 namespace base {
 class AtExitManager;
@@ -16,11 +16,11 @@ namespace ui {
 class ScopedOleInitializer;
 }
 
-namespace widget {
+namespace views {
 
 class AuraScreen;
 
-class WIDGET_EXPORT Env {
+class VIEWS_EXPORT Env {
  public:
   Env(int argc, char* argv[]);
   virtual ~Env();
@@ -31,4 +31,4 @@ class WIDGET_EXPORT Env {
   scoped_ptr< ::base::MessageLoopForUI> message_loop_;
   DISALLOW_COPY_AND_ASSIGN(Env);
 };
-}  // namespace widget
+}  // namespace views

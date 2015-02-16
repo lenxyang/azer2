@@ -1,4 +1,4 @@
-#include "azer/ui/widget/env.h"
+#include "azer/ui/views/env.h"
 
 #include "base/at_exit.h"
 #include "base/command_line.h"
@@ -15,10 +15,10 @@
 #include "ui/gfx/win/dpi.h"
 
 #include "azer/ui/aura/env.h"
-#include "azer/ui/widget/aura/aura_screen.h"
+#include "azer/ui/views/aura/aura_screen.h"
 #include "azer/render/util/render_system_loader.h"
 
-namespace widget {
+namespace views {
 
 Env::Env(int argc, char* argv[]) {
 #if defined(OS_WIN)
@@ -44,4 +44,4 @@ Env::Env(int argc, char* argv[]) {
 Env::~Env() {
 }
 
-}  // namespace widget
+}  // namespace views

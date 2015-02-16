@@ -4,7 +4,7 @@ component("ui") {
   deps = [
     "aura",
     "compositor",
-    "widget",
+    "views",
     "//azer/render",
   ]
 

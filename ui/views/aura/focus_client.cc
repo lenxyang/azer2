@@ -1,9 +1,9 @@
-#include "azer/ui/widget/aura/focus_client.h"
+#include "azer/ui/views/aura/focus_client.h"
 
 #include "azer/ui/aura/client/focus_change_observer.h"
 #include "azer/ui/aura/window.h"
 
-namespace widget {
+namespace views {
 
 ////////////////////////////////////////////////////////////////////////////////
 // FocusClient, public:
@@ -61,4 +61,4 @@ void FocusClient::OnWindowDestroying(aura::Window* window) {
   FocusWindow(NULL);
 }
 
-}  // namespace widget
+}  // namespace views

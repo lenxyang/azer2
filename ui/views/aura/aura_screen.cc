@@ -1,4 +1,4 @@
-#include "azer/ui/widget/aura/aura_screen.h"
+#include "azer/ui/views/aura/aura_screen.h"
 
 #include "base/logging.h"
 #include "azer/ui/aura/env.h"
@@ -6,11 +6,11 @@
 #include "azer/ui/aura/window_event_dispatcher.h"
 #include "azer/ui/aura/window_tree_host.h"
 #include "ui/gfx/geometry/size_conversions.h"
-#include "ui/gfx/native_widget_types.h"
+#include "ui/gfx/native_views_types.h"
 #include "ui/gfx/rect_conversions.h"
 #include "ui/gfx/screen.h"
 
-namespace widget {
+namespace views {
 
 namespace {
 
@@ -168,4 +168,4 @@ AuraScreen::AuraScreen(const gfx::Rect& screen_bounds)
   display_.SetScaleAndBounds(1.0f, screen_bounds);
 }
 
-}  // namespace widget
+}  // namespace views

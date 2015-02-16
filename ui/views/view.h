@@ -8,27 +8,27 @@
 #include "ui/gfx/geometry/rect.h"
 
 #include "azer/ui/aura/window_delegate.h"
-#include "azer/ui/widget/widgets_export.h"
+#include "azer/ui/views/views_export.h"
 
 namespace aura {
 class Window;
 }  // namespace aura
 
-namespace widget {
+namespace views {
 
 class Background;
 class Border;
-class RootWidget;
+class RootView;
 
-class WIDGET_EXPORT Widget : public aura::WindowDelegate {
+class VIEWS_EXPORT View : public aura::WindowDelegate {
  public:
-  typedef std::vector<Widget*> Widgets;
-  Widget();
-  virtual ~Widget();
+  typedef std::vector<View*> Views;
+  View();
+  virtual ~View();
 
-  void AddChild(Widget* widget);
-  void RemoveChild(Widget* widget);
-  bool Contains(Widget* widget);
+  void AddChild(View* view);
+  void RemoveChild(View* view);
+  bool Contains(View* view);
 
   int id() const;
   void set_id(int id);
@@ -57,8 +57,8 @@ class WIDGET_EXPORT Widget : public aura::WindowDelegate {
   aura::Window* window() { return window_.get();}
   const aura::Window* window() const { return window_.get();}
 
-  RootWidget* GetRootWidget() { return root_;}
-  const RootWidget* GetRootWidget() const { return root_;}
+  RootView* GetRootView() { return root_;}
+  const RootView* GetRootView() const { return root_;}
   virtual const char* GetClassName();
 
   virtual gfx::Size GetPreferredSize() const;
@@ -94,18 +94,18 @@ class WIDGET_EXPORT Widget : public aura::WindowDelegate {
 
 
   //
-  void OnAttachedRecusive(RootWidget* widget);
+  void OnAttachedRecusive(RootView* view);
   void OnDetachRecusive();
 
   scoped_ptr<aura::Window> window_;
-  Widgets children_;
-  Widget* parent_;
-  RootWidget* root_;
+  Views children_;
+  View* parent_;
+  RootView* root_;
 
   gfx::Rect bounds_;
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;
-  DISALLOW_COPY_AND_ASSIGN(Widget);
+  DISALLOW_COPY_AND_ASSIGN(View);
 };
-}  // namespace widget
+}  // namespace views

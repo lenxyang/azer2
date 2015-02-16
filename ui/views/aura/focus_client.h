@@ -6,10 +6,10 @@
 #include "azer/ui/aura/client/focus_client.h"
 #include "azer/ui/aura/window_observer.h"
 
-namespace widget {
+namespace views {
 
-class FocusClient : public aura::client::FocusClient,
-                    public aura::WindowObserver {
+class VIEWS_EXPORT FocusClient : public aura::client::FocusClient,
+                                 public aura::WindowObserver {
  public:
   FocusClient();
   ~FocusClient() override;
@@ -31,4 +31,4 @@ class FocusClient : public aura::client::FocusClient,
   DISALLOW_COPY_AND_ASSIGN(FocusClient);
 };
 
-}  // namespace widget
+}  // namespace views

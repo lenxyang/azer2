@@ -1,24 +1,24 @@
-#include "azer/ui/widget/root_widget.h"
+#include "azer/ui/views/root_view.h"
 
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
 
-#include "azer/ui/widget/aura/focus_client.h"
+#include "azer/ui/views/aura/focus_client.h"
 
-namespace widget {
+namespace views {
 
-RootWidget::RootWidget() 
+RootView::RootView() 
     : closing_(false) {
 }
 
-RootWidget::~RootWidget() {
+RootView::~RootView() {
   window_.reset();
   host_->RemoveObserver(this);
   focus_client_.reset();
   host_.reset();
 }
 
-void RootWidget::Init(const InitParams& params) {
+void RootView::Init(const InitParams& params) {
   host_.reset(aura::WindowTreeHost::Create(params.bounds));
   host_->window()->SetBounds(gfx::Rect(params.bounds.size()));
   focus_client_.reset(new FocusClient);
@@ -36,15 +36,15 @@ void RootWidget::Init(const InitParams& params) {
   host_->AddObserver(this);
 }
 
-void RootWidget::Close() {
+void RootView::Close() {
   closing_ = true;
 }
 
-void RootWidget::Show() {
+void RootView::Show() {
   host_->Show();
 }
 
-void RootWidget::Hide() {
+void RootView::Hide() {
   host_->Hide();
 }
-}  // namespace widget
+}  // namespace views

@@ -4,7 +4,7 @@
 #include "azer/ui/aura/window_observer.h"
 #include "ui/gfx/display.h"
 #include "ui/gfx/screen.h"
-#include "azer/ui/widget/widgets_export.h"
+#include "azer/ui/views/viewss_export.h"
 
 namespace gfx {
 class Insets;
@@ -17,10 +17,10 @@ class Window;
 class WindowTreeHost;
 }  // namespace aura
 
-namespace widget {
+namespace views {
 
 // A minimal, testing Aura implementation of gfx::Screen.
-class WIDGET_EXPORT AuraScreen : public gfx::Screen,
+class VIEWS_EXPORT AuraScreen : public gfx::Screen,
                                  public aura::WindowObserver {
  public:
   // Creates a gfx::Screen of the specified size. If no size is specified, then
@@ -72,5 +72,5 @@ class WIDGET_EXPORT AuraScreen : public gfx::Screen,
   DISALLOW_COPY_AND_ASSIGN(AuraScreen);
 };
 
-}  // namespace widget
+}  // namespace views
 
