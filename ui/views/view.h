@@ -5,6 +5,7 @@
 #include "base/basictypes.h"
 #include "base/memory/scoped_ptr.h"
 #include "ui/base/cursor/cursor.h"
+#include "ui/events/event.h"
 #include "ui/gfx/geometry/rect.h"
 
 #include "azer/ui/aura/window_delegate.h"
@@ -34,6 +35,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void AddChildView(View* view);
   void RemoveChildView(View* view);
   bool Contains(View* view);
+  int32 child_count() const { return static_cast<int32>(children_.size());}
+  View* child_at(int32 index) { return children_.at(index);}
 
   int id() const;
   void set_id(int id);
@@ -68,7 +71,24 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
 
   void SetFocusable(bool focusable) { focusable_ = focusable;}
   bool focusable() const { return focusable_;}
-  virtual bool HasFocus();
+  virtual bool HasFocus() const;
+
+  void SetEnabled(bool enabled);
+  bool enabled() const { return enabled_;}
+
+
+  // Get the theme provider from the parent widget.
+  ui::ThemeProvider* GetThemeProvider() const;
+
+  // Returns the NativeTheme to use for this View. This calls through to
+  // GetNativeTheme() on the Widget this View is in. If this View is not in a
+  // Widget this returns ui::NativeTheme::instance().
+  ui::NativeTheme* GetNativeTheme() {
+    return const_cast<ui::NativeTheme*>(
+        const_cast<const View*>(this)->GetNativeTheme());
+  }
+  const ui::NativeTheme* GetNativeTheme() const;
+
 
   // Returns the insets of the current border. If there is no border an empty
   // insets is returned.
@@ -102,8 +122,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   virtual void Hide();
 
   bool visible() const { return visible_;}
-  
-
+ 
   aura::Window* window() { return window_.get();}
   const aura::Window* window() const { return window_.get();}
 
@@ -117,6 +136,16 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void OnPaint(gfx::Canvas* canvas) override;
   virtual void OnPaintBackground(gfx::Canvas* canvas);
   virtual void OnPaintBorder(gfx::Canvas* canvas);
+
+  // The background object is owned by this object and may be NULL.
+  void set_background(Background* b);
+  const Background* background() const { return background_.get(); }
+  Background* background() { return background_.get(); }
+
+  // The border object is owned by this object and may be NULL.
+  virtual void SetBorder(scoped_ptr<Border> b);
+  const Border* border() const { return border_.get(); }
+  Border* border() { return border_.get(); }
 
   // Return the cursor that should be used for this view or the default cursor.
   // The event location is in the receiver's coordinate system. The caller is
@@ -135,7 +164,86 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   bool HitTestRect(const gfx::Rect& rect) const;
 
   void SchedulePaint();
+
+
+  // Returns true if the mouse cursor is over |view| and mouse events are
+  // enabled.
+  bool IsMouseHovered();
+
+  // This method is invoked when the user clicks on this view.
+  // The provided event is in the receiver's coordinate system.
+  //
+  // Return true if you processed the event and want to receive subsequent
+  // MouseDraggged and MouseReleased events.  This also stops the event from
+  // bubbling.  If you return false, the event will bubble through parent
+  // views.
+  //
+  // If you remove yourself from the tree while processing this, event bubbling
+  // stops as if you returned true, but you will not receive future events.
+  // The return value is ignored in this case.
+  //
+  // Default implementation returns true if a ContextMenuController has been
+  // set, false otherwise. Override as needed.
+  //
+  virtual bool OnMousePressed(const ui::MouseEvent& event);
+
+  // This method is invoked when the user clicked on this control.
+  // and is still moving the mouse with a button pressed.
+  // The provided event is in the receiver's coordinate system.
+  //
+  // Return true if you processed the event and want to receive
+  // subsequent MouseDragged and MouseReleased events.
+  //
+  // Default implementation returns true if a ContextMenuController has been
+  // set, false otherwise. Override as needed.
+  //
+  virtual bool OnMouseDragged(const ui::MouseEvent& event);
+
+  // This method is invoked when the user releases the mouse
+  // button. The event is in the receiver's coordinate system.
+  //
+  // Default implementation notifies the ContextMenuController is appropriate.
+  // Subclasses that wish to honor the ContextMenuController should invoke
+  // super.
+  virtual void OnMouseReleased(const ui::MouseEvent& event);
+
+  // This method is invoked when the mouse press/drag was canceled by a
+  // system/user gesture.
+  virtual void OnMouseCaptureLost();
+
+  // This method is invoked when the mouse is above this control
+  // The event is in the receiver's coordinate system.
+  //
+  // Default implementation does nothing. Override as needed.
+  virtual void OnMouseMoved(const ui::MouseEvent& event);
+
+  // This method is invoked when the mouse enters this control.
+  //
+  // Default implementation does nothing. Override as needed.
+  virtual void OnMouseEntered(const ui::MouseEvent& event);
+
+  // This method is invoked when the mouse exits this control
+  // The provided event location is always (0, 0)
+  // Default implementation does nothing. Override as needed.
+  virtual void OnMouseExited(const ui::MouseEvent& event);
+
+  // Invoked when a key is pressed or released.
+  // Subclasser should return true if the event has been processed and false
+  // otherwise. If the event has not been processed, the parent will be given a
+  // chance.
+  virtual bool OnKeyPressed(const ui::KeyEvent& event);
+  virtual bool OnKeyReleased(const ui::KeyEvent& event);
+
+  // Invoked when the user uses the mousewheel. Implementors should return true
+  // if the event has been processed and false otherwise. This message is sent
+  // if the view is focused. If the event has not been processed, the parent
+  // will be given a chance.
+  virtual bool OnMouseWheel(const ui::MouseWheelEvent& event);
  protected:
+  bool ProcessMousePressed(const ui::MouseEvent& event);
+  bool ProcessMouseDragged(const ui::MouseEvent& event);
+  void ProcessMouseReleased(const ui::MouseEvent& event);
+
   // Invoked when the NativeTheme associated with this View changes.
   virtual void OnNativeThemeChanged(const ui::NativeTheme* theme) {}
 
@@ -169,6 +277,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void OnAttachedRecusive(RootView* view);
   void OnDetachRecusive();
 
+  void PropagateNativeThemeChanged(const ui::NativeTheme* theme);
+
   virtual void InitAuraWindow();
 
   scoped_ptr<aura::Window> window_;
@@ -179,6 +289,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   gfx::Rect bounds_;
   bool focusable_;
   bool visible_;
+  bool enabled_;
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;

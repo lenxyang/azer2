@@ -1,16 +1,24 @@
 #include "azer/ui/views/root_view.h"
 
+
+#include "ui/native_theme/native_theme_aura.h"
+#include "ui/base/default_theme_provider.h"
+#include "ui/base/hit_test.h"
+#include "ui/base/l10n/l10n_font_util.h"
+#include "ui/base/resource/resource_bundle.h"
+
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
-
 #include "azer/ui/views/aura/focus_client.h"
 #include "azer/ui/views/id_allocator.h"
 
 namespace views {
 
 RootView::RootView() 
-    : closing_(false) {
+    : closing_(false)
+    , observer_manager_(this) {
   root_ = this;
+  default_theme_provider_.reset(new ui::DefaultThemeProvider);
 }
 
 RootView::~RootView() {
@@ -36,6 +44,8 @@ void RootView::Init(const InitParams& params) {
   host_->InitHost();
   host_->window()->AddChild(window());
   host_->AddObserver(this);
+
+  observer_manager_.Add(GetNativeTheme());
 }
 
 void RootView::Close() {
@@ -48,5 +58,25 @@ void RootView::Show() {
 
 void RootView::Hide() {
   host_->Hide();
+}
+
+ui::ThemeProvider* RootView::GetThemeProvider() const {
+  return default_theme_provider_.get();
+}
+
+const ui::NativeTheme* RootView::GetNativeTheme() const {
+  return ui::NativeThemeAura::instance();
+}
+
+void RootView::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
+  DCHECK(observer_manager_.IsObserving(observed_theme));
+
+  ui::NativeTheme* current_native_theme = GetNativeTheme();
+  if (!observer_manager_.IsObserving(current_native_theme)) {
+    observer_manager_.RemoveAll();
+    observer_manager_.Add(current_native_theme);
+  }
+
+  root_->PropagateNativeThemeChanged(current_native_theme);
 }
 }  // namespace views

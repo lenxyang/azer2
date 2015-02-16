@@ -2,8 +2,7 @@
 
 namespace views {
 Control::Control()
-    : group_id_(-1)
-    , enabled_(true) {
+    : group_id_(-1) {
 }
 
 Control::~Control() {

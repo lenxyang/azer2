@@ -2,13 +2,16 @@
 
 #include <atomic>
 #include "base/logging.h"
-
+#include "ui/accessibility/ax_enums.h"
+#include "ui/native_theme/native_theme.h"
 #include "azer/ui/aura/window.h"
 #include "azer/ui/aura/window_property.h"
+
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/border.h"
-#include "azer/ui/views/painter.h"
 #include "azer/ui/views/id_allocator.h"
+#include "azer/ui/views/painter.h"
+#include "azer/ui/views/root_view.h"
 
 namespace views {
 
@@ -16,7 +19,8 @@ View::View()
     : parent_(NULL)
     , root_(NULL)
     , focusable_(false)
-    , visible_(false) {
+    , visible_(false)
+    , enabled_(false) {
   InitAuraWindow();
 }
 
@@ -155,12 +159,16 @@ int View::GetNonClientComponent(const gfx::Point& point) const {
 }
 
 bool View::ShouldDescendIntoChildForEventHandling(aura::Window* child,
-                                                    const gfx::Point& location) {
+                                                  const gfx::Point& location) {
   return true;
 }
 
 bool View::CanFocus() {
-  return false;
+  return window()->CanFocus();
+}
+
+void View::SetEnabled(bool enabled) {
+  enabled_ = enabled;
 }
 
 void View::OnCaptureLost() {
@@ -189,9 +197,52 @@ void View::GetHitTestMask(gfx::Path* mask) const {
 }
 
 void View::OnKeyEvent(ui::KeyEvent* event) {
+  bool consumed = (event->type() == ui::ET_KEY_PRESSED) ? OnKeyPressed(*event) :
+      OnKeyReleased(*event);
+  if (consumed)
+    event->StopPropagation();
 }
 
 void View::OnMouseEvent(ui::MouseEvent* event) {
+  switch (event->type()) {
+    case ui::ET_MOUSE_PRESSED:
+      if (ProcessMousePressed(*event))
+        event->SetHandled();
+      return;
+
+    case ui::ET_MOUSE_MOVED:
+      if ((event->flags() & (ui::EF_LEFT_MOUSE_BUTTON |
+                             ui::EF_RIGHT_MOUSE_BUTTON |
+                             ui::EF_MIDDLE_MOUSE_BUTTON)) == 0) {
+        OnMouseMoved(*event);
+        return;
+      }
+      // FALL-THROUGH
+    case ui::ET_MOUSE_DRAGGED:
+      if (ProcessMouseDragged(*event))
+        event->SetHandled();
+      return;
+
+    case ui::ET_MOUSE_RELEASED:
+      ProcessMouseReleased(*event);
+      return;
+
+    case ui::ET_MOUSEWHEEL:
+      if (OnMouseWheel(*static_cast<ui::MouseWheelEvent*>(event)))
+        event->SetHandled();
+      break;
+
+    case ui::ET_MOUSE_ENTERED:
+      OnMouseEntered(*event);
+      break;
+
+    case ui::ET_MOUSE_EXITED:
+      OnMouseExited(*event);
+      break;
+
+    default:
+      return;
+  }
 }
 
 void View::OnScrollEvent(ui::ScrollEvent* event) {
@@ -208,6 +259,12 @@ gfx::Size View::GetPreferredSize() const {
   return gfx::Size(0, 0);
 }
 
+void View::set_background(Background* b) {
+  background_.reset(b);
+}
+
+void View::SetBorder(scoped_ptr<Border> b) { border_ = b.Pass(); }
+
 void View::OnPaint(gfx::Canvas* canvas) {
   OnPaintBackground(canvas);
   OnPaintBorder(canvas);
@@ -219,7 +276,7 @@ void View::OnPaintBackground(gfx::Canvas* canvas) {
 void View::OnPaintBorder(gfx::Canvas* canvas) {
 }
 
-bool View::HasFocus() {
+bool View::HasFocus() const {
   DCHECK(window());
   return window()->HasFocus();
 }
@@ -267,6 +324,56 @@ bool View::HitTestRect(const gfx::Rect& rect) const {
   return true;
 }
 
+bool View::OnMousePressed(const ui::MouseEvent& event) {
+  return false;
+}
+
+bool View::OnMouseDragged(const ui::MouseEvent& event) {
+  return false;
+}
+
+void View::OnMouseReleased(const ui::MouseEvent& event) {
+}
+
+void View::OnMouseCaptureLost() {
+}
+
+void View::OnMouseMoved(const ui::MouseEvent& event) {
+}
+
+void View::OnMouseEntered(const ui::MouseEvent& event) {
+}
+
+void View::OnMouseExited(const ui::MouseEvent& event) {
+}
+
+bool View::OnKeyPressed(const ui::KeyEvent& event) {
+  return false;
+}
+
+bool View::OnKeyReleased(const ui::KeyEvent& event) {
+  return false;
+}
+
+bool View::OnMouseWheel(const ui::MouseWheelEvent& event) {
+  return false;
+}
+
+bool View::ProcessMousePressed(const ui::MouseEvent& event)  {
+  return OnMousePressed(event);
+}
+
+bool View::ProcessMouseDragged(const ui::MouseEvent& event) {
+  if (OnMouseDragged(event))
+    return true;
+
+  return false;
+}
+
+void View::ProcessMouseReleased(const ui::MouseEvent& event) {
+  OnMouseReleased(event);
+}
+
 void View::Layout() {
 }
 
@@ -281,5 +388,19 @@ int View::GetBaseline() const {
 
 int View::GetHeightForWidth(int w) const {
   return GetPreferredSize().height();
+}
+
+ui::ThemeProvider* View::GetThemeProvider() const {
+  return root_ ? root_->GetThemeProvider() : NULL;
+}
+
+const ui::NativeTheme* View::GetNativeTheme() const {
+  return root_ ? root_->GetNativeTheme() : ui::NativeTheme::instance();
+}
+
+void View::PropagateNativeThemeChanged(const ui::NativeTheme* theme) {
+  for (int i = 0, count = child_count(); i < count; ++i)
+    child_at(i)->PropagateNativeThemeChanged(theme);
+  OnNativeThemeChanged(theme);
 }
 }  // namespace views
