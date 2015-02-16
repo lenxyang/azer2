@@ -3,7 +3,7 @@
 #include "base/basictypes.h"
 #include "azer/ui/views/view.h"
 
-namespace widget {
+namespace views {
 class VIEWS_EXPORT Control : public View {
  public:
   Control();
@@ -22,8 +22,11 @@ class VIEWS_EXPORT Control : public View {
   void SetGroup(int32 gid);
   int32 GetGroup() const;
   virtual View* GetSelectedViewForGroup(int group);
+
+  virtual void PreferredSizeChanged() {}
  private:
   int32 group_id_;
+  bool enabled_;
   DISALLOW_COPY_AND_ASSIGN(Control);
 };
-}  // namespace widget
+}  // namespace views

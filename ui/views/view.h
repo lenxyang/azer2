@@ -51,6 +51,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   int height() const { return bounds_.height(); }
   const gfx::Size& size() const { return bounds_.size(); }
 
+  void SizeToPreferredSize();
+
   // Returns the bounds of the content area of the view, i.e. the rectangle
   // enclosed by the view's border.
   gfx::Rect GetContentsBounds() const;
@@ -60,7 +62,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   gfx::Rect GetLocalBounds() const;
 
   void SetFocusable(bool focusable) { focusable_ = focusable;}
-  bool focusable() { return focusable_;}
+  bool focusable() const { return focusable_;}
   virtual bool HasFocus();
 
   // Returns the insets of the current border. If there is no border an empty
@@ -79,10 +81,23 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   // Return the bounds of the View in screen coordinate system.
   gfx::Rect GetBoundsInScreen() const;
 
+  // Returns the baseline of this view, or -1 if this view has no baseline. The
+  // return value is relative to the preferred height.
+  virtual int GetBaseline() const;
+
+  // Return the height necessary to display this view with the provided width.
+  // View's implementation returns the value from getPreferredSize.cy.
+  // Override if your View's preferred height depends upon the width (such
+  // as with Labels).
+  virtual int GetHeightForWidth(int w) const;
+
   virtual void Layout();
 
   virtual void Show();
   virtual void Hide();
+
+  bool visible() const { return visible_;}
+  
 
   aura::Window* window() { return window_.get();}
   const aura::Window* window() const { return window_.get();}
@@ -111,6 +126,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   // Returns true if |rect| intersects this view's bounds. |rect| is in the
   // local coordinate space of |this|.
   bool HitTestRect(const gfx::Rect& rect) const;
+
+  void SchedulePaint();
  protected:
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;
@@ -149,6 +166,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
 
   gfx::Rect bounds_;
   bool focusable_;
+  bool visible_;
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;

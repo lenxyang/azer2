@@ -15,7 +15,8 @@ namespace views {
 View::View()
     : parent_(NULL)
     , root_(NULL)
-    , focusable_(false) {
+    , focusable_(false)
+    , visible_(false) {
   window_.reset(new aura::Window(this));
   window()->Init(aura::WINDOW_LAYER_TEXTURED);
   window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
@@ -70,12 +71,20 @@ void View::SetY(int y) {
   SetBounds(x(), y, width(), height());
 }
 
+void View::SizeToPreferredSize() {
+  gfx::Size prefsize = GetPreferredSize();
+  if ((prefsize.width() != width()) || (prefsize.height() != height()))
+    SetBounds(x(), y(), prefsize.width(), prefsize.height());
+}
+
 void View::Show() {
   window()->Show();
+  visible_ = true;
 }
 
 void View::Hide() {
   window()->Hide();
+  visible_ = false;
 }
 
 void View::AddChildView(View* child) {
@@ -251,5 +260,18 @@ bool View::HitTestRect(const gfx::Rect& rect) const {
 }
 
 void View::Layout() {
+}
+
+void View::SchedulePaint() {
+  DCHECK(window());
+  window()->SchedulePaintInRect(window()->bounds());
+}
+
+int View::GetBaseline() const {
+  return -1;
+}
+
+int View::GetHeightForWidth(int w) const {
+  return GetPreferredSize().height();
 }
 }  // namespace views
