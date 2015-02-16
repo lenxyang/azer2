@@ -1,12 +1,14 @@
 #pragma once
 
-#include "azer/ui/widget/widget.h"
+#include "base/basictypes.h"
+#include "azer/ui/views/view.h"
 
 namespace widget {
-class WIDGET_EXPORT Control : public Widget {
+class VIEWS_EXPORT Control : public View {
  public:
   Control();
   ~Control() override;
+
   // Set whether this view is enabled. A disabled view does not receive keyboard
   // or mouse inputs. If |enabled| differs from the current value, SchedulePaint
   // is invoked. Also, clears focus if the focused view is disabled.
@@ -17,11 +19,11 @@ class WIDGET_EXPORT Control : public Widget {
 
   void Layout() override {}
 
-  void SetGroup(int gid);
-  int GetGroup() const;
-  void GetViewsInGroup(int group, Views* views);
+  void SetGroup(int32 gid);
+  int32 GetGroup() const;
   virtual View* GetSelectedViewForGroup(int group);
  private:
+  int32 group_id_;
   DISALLOW_COPY_AND_ASSIGN(Control);
 };
 }  // namespace widget

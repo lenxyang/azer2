@@ -6,10 +6,10 @@
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/text_constants.h"
 #include "ui/gfx/geometry/rect.h"
-#include "azer/ui/widget/controls/label.h"
+#include "azer/ui/views/controls/label.h"
 
-namespace widget {
-class WIDGET_EXPORT LabelPainter {
+namespace views {
+class VIEWS_EXPORT LabelPainter {
  public:
   LabelPainter();
   ~LabelPainter();
@@ -21,6 +21,7 @@ class WIDGET_EXPORT LabelPainter {
                                  int* flags) const;
   void PaintText(gfx::Canvas* canvas, const base::string16& text,
                  const gfx::Rect& text_bounds, int flags);
+  gfx::Rect GetTextBounds() const;
 
   void ResetCachedSize();
   int ComputeDrawStringFlags() const;
@@ -29,4 +30,4 @@ class WIDGET_EXPORT LabelPainter {
   Label* label_;
   DISALLOW_COPY_AND_ASSIGN(LabelPainter);
 };
-}  // namespace widget
+}  // namespace views

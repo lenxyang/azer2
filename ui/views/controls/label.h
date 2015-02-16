@@ -10,12 +10,12 @@
 #include "ui/gfx/shadow_value.h"
 #include "ui/gfx/text_constants.h"
 
-#include "azer/ui/widget/controls/control.h"
+#include "azer/ui/views/controls/control.h"
 
-namespace widget {
-class WIDGET_EXPORT Label : public Control {
+namespace views {
+class VIEWS_EXPORT Label : public Control {
  public:
-  struct WIDGET_EXPORT Params {
+  struct VIEWS_EXPORT Params {
     int32 line_height;
     bool multi_line;
     bool obscured;
@@ -26,6 +26,8 @@ class WIDGET_EXPORT Label : public Control {
     gfx::HorizontalAlignment horizontal_alignment;
     gfx::FontList fontlist;
     gfx::ShadowValues shadows;
+
+    Params();
   };
 
   Label();
@@ -40,9 +42,13 @@ class WIDGET_EXPORT Label : public Control {
   // Get or set the label text.
   const base::string16& text() const { return text_; }
   virtual void SetText(const base::string16& text);
+
+  const Params& params() const { return params_;}
+  void SetParam(const Params& param);
  protected:
   void SetTextInternal(const base::string16& text);
   // The cached heights to avoid recalculation in GetHeightForWidth().
+  Params params_;
   DISALLOW_COPY_AND_ASSIGN(Label);
 };
-}  // namespace widget
+}  // namespace views
