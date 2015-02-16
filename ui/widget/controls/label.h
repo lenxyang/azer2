@@ -43,8 +43,6 @@ class WIDGET_EXPORT Label : public Control {
  protected:
   void SetTextInternal(const base::string16& text);
   // The cached heights to avoid recalculation in GetHeightForWidth().
-  mutable std::vector<gfx::Size> cached_heights_;
-  mutable int cached_heights_cursor_;
   DISALLOW_COPY_AND_ASSIGN(Label);
 };
 }  // namespace widget

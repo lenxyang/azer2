@@ -18,6 +18,7 @@ namespace widget {
 
 class Background;
 class Border;
+class RootWidget;
 
 class WIDGET_EXPORT Widget : public aura::WindowDelegate {
  public:
@@ -56,8 +57,8 @@ class WIDGET_EXPORT Widget : public aura::WindowDelegate {
   aura::Window* window() { return window_.get();}
   const aura::Window* window() const { return window_.get();}
 
-  Widget* GetRootWidget() { return root_;}
-  const Widget* GetRootWidget() const { return root_;}
+  RootWidget* GetRootWidget() { return root_;}
+  const RootWidget* GetRootWidget() const { return root_;}
   virtual const char* GetClassName();
 
   virtual gfx::Size GetPreferredSize() const;
@@ -91,10 +92,15 @@ class WIDGET_EXPORT Widget : public aura::WindowDelegate {
   void OnTouchEvent(ui::TouchEvent* event) override;
   void OnGestureEvent(ui::GestureEvent* event) override;
 
+
+  //
+  void OnAttachedRecusive(RootWidget* widget);
+  void OnDetachRecusive();
+
   scoped_ptr<aura::Window> window_;
   Widgets children_;
   Widget* parent_;
-  Widget* root_;
+  RootWidget* root_;
 
   gfx::Rect bounds_;
 

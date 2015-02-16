@@ -89,12 +89,15 @@ void Widget::Hide() {
   window()->Hide();
 }
 
-void Widget::AddChild(Widget* widget) {
-  DCHECK(widget->parent_ == NULL);
-  widget->parent_ = this;
-  children_.push_back(widget);
+void Widget::AddChild(Widget* child) {
+  DCHECK(child->parent_ == NULL);
+  child->parent_ = this;
+  children_.push_back(child);
 
-  window()->AddChild(widget->window());
+  window()->AddChild(child->window());
+  if (root_) {
+    child->OnAttachedRecusive(root_);
+  }
 }
 
 void Widget::RemoveChild(Widget* child) {
@@ -105,10 +108,25 @@ void Widget::RemoveChild(Widget* child) {
   children_.erase(i);
 
   window()->RemoveChild(child->window());
+  child->OnDetachRecusive();
 }
 
 bool Widget::Contains(Widget* widget) {
   return window()->Contains(widget->window());
+}
+
+void Widget::OnAttachedRecusive(RootWidget* widget) {
+  root_ = widget;
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    (*iter)->OnAttachedRecusive(widget);
+  }
+}
+
+void Widget::OnDetachRecusive() {
+  root_ = NULL;
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    (*iter)->OnDetachRecusive();
+  }
 }
 
 gfx::Size Widget::GetMinimumSize() const {
