@@ -6,6 +6,7 @@ namespace views {
 ::base::LazyInstance<ViewsIDAllocator> id_allocator_ = LAZY_INSTANCE_INITIALIZER;
 
 ViewsIDAllocator* ViewsIDAllocator::Pointer() {
-  return id_allocator_.Pointer();
+  static ViewsIDAllocator allocator;
+  return &allocator;
 }
 }  // namespace views

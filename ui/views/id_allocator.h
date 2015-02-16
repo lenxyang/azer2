@@ -2,10 +2,11 @@
 
 #include <atomic>
 #include "base/basictypes.h"
+#include "azer/ui/views/views_export.h"
 
 namespace views {
 
-class ViewsIDAllocator {
+class VIEWS_EXPORT ViewsIDAllocator {
  public:
   ViewsIDAllocator() : allocated_id_(0) {}
 
