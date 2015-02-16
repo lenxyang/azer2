@@ -4,6 +4,7 @@
 #include "azer/ui/aura/window.h"
 
 #include "azer/ui/views/aura/focus_client.h"
+#include "azer/ui/views/id_allocator.h"
 
 namespace views {
 
@@ -26,7 +27,7 @@ void RootView::Init(const InitParams& params) {
 
   window_.reset(new aura::Window(NULL));
   window()->Init(aura::WINDOW_LAYER_NOT_DRAWN);
-  window()->set_id(0);
+  window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
   window()->SetBounds(gfx::Rect(params.bounds.size()));
   window()->SetName("ContentWindowContainer");
   window()->Show();

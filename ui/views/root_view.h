@@ -27,7 +27,7 @@ class VIEWS_EXPORT RootView : public aura::WindowTreeHostObserver,
   RootView();
   virtual ~RootView();
 
-  struct VIEW_EXPORT InitParams {
+  struct VIEWS_EXPORT InitParams {
     gfx::Rect bounds;
   };
   void Init(const InitParams& param);

@@ -5,6 +5,7 @@
 #include "base/scoped_observer.h"
 #include "azer/ui/aura/client/focus_client.h"
 #include "azer/ui/aura/window_observer.h"
+#include "azer/ui/views/views_export.h"
 
 namespace views {
 

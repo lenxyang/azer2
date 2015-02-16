@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/memory/scoped_ptr.h"
-#include "azer/ui/views/viewss_export.h"
+#include "azer/ui/views/views_export.h"
 
 namespace base {
 class AtExitManager;

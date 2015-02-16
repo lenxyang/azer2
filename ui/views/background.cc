@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/background.h"
+#include "azer/ui/views/background.h"
 
 #include "base/logging.h"
 #include "skia/ext/skia_utils_win.h"
 #include "third_party/skia/include/core/SkPaint.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/color_utils.h"
-#include "ui/views/painter.h"
-#include "ui/views/view.h"
+#include "azer/ui/views/painter.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
 

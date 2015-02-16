@@ -26,8 +26,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   View();
   virtual ~View();
 
-  void AddChild(View* view);
-  void RemoveChild(View* view);
+  void AddChildView(View* view);
+  void RemoveChildView(View* view);
   bool Contains(View* view);
 
   int id() const;
