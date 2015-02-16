@@ -21,7 +21,7 @@ class VIEWS_EXPORT Control : public View {
 
   void SetGroup(int32 gid);
   int32 GetGroup() const;
-  virtual View* GetSelectedViewForGroup(int group);
+  virtual View* GetSelectedViewForGroup(int32 group);
 
   virtual void PreferredSizeChanged() {}
  private:

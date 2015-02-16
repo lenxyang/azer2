@@ -11,3 +11,5 @@
 #include "azer/ui/views/env.h"
 #include "azer/ui/views/view.h"
 #include "azer/ui/views/root_view.h"
+#include "azer/ui/views/controls/control.h"
+#include "azer/ui/views/controls/label.h"

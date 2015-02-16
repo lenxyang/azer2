@@ -9,4 +9,7 @@ Control::Control()
 Control::~Control() {
 }
 
+View* Control::GetSelectedViewForGroup(int32 group) {
+  return NULL;
+}
 }  // namespace views

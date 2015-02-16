@@ -126,6 +126,7 @@ class VIEWS_EXPORT Label : public Control {
   // View:
   void OnBoundsChanged(const gfx::Rect& previous_bounds) override;
   void OnPaint(gfx::Canvas* canvas) override;
+  void OnNativeThemeChanged(const ui::NativeTheme* theme) override;
  private:
   // These tests call CalculateDrawStringParams in order to verify the
   // calculations done for drawing text.
@@ -155,6 +156,9 @@ class VIEWS_EXPORT Label : public Control {
   void CalculateDrawStringParams(base::string16* paint_text,
                                  gfx::Rect* text_bounds,
                                  int* flags) const;
+  
+  // Updates any colors that have not been explicitly set from the theme.
+  void UpdateColorsFromTheme(const ui::NativeTheme* theme);
 
   // Resets |cached_heights_| and |cached_heights_cursor_| and mark
   // |text_size_valid_| as false.

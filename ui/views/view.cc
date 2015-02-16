@@ -17,17 +17,21 @@ View::View()
     , root_(NULL)
     , focusable_(false)
     , visible_(false) {
-  window_.reset(new aura::Window(this));
-  window()->Init(aura::WINDOW_LAYER_TEXTURED);
-  window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
-  window()->SetName(GetClassName());
+  InitAuraWindow();
 }
 
 View::~View() {
 }
 
-const char* View::GetClassName() {
+const char* View::GetClassName() const {
   return "View";
+}
+
+void View::InitAuraWindow() {
+  window_.reset(new aura::Window(this));
+  window()->Init(aura::WINDOW_LAYER_TEXTURED);
+  window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
+  window()->SetName(GetClassName());
 }
 
 int View::id() const {
@@ -75,6 +79,9 @@ void View::SizeToPreferredSize() {
   gfx::Size prefsize = GetPreferredSize();
   if ((prefsize.width() != width()) || (prefsize.height() != height()))
     SetBounds(x(), y(), prefsize.width(), prefsize.height());
+}
+
+void View::OnBoundsChanged(const gfx::Rect& ) {
 }
 
 void View::Show() {
@@ -213,7 +220,8 @@ void View::OnPaintBorder(gfx::Canvas* canvas) {
 }
 
 bool View::HasFocus() {
-  return false;
+  DCHECK(window());
+  return window()->HasFocus();
 }
 
 gfx::Rect View::GetContentsBounds() const {

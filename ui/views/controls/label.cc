@@ -21,6 +21,7 @@
 #include "ui/gfx/text_elider.h"
 #include "ui/gfx/text_utils.h"
 #include "ui/gfx/utf16_indexing.h"
+#include "ui/native_theme/native_theme.h"
 #include "azer/ui/views/background.h"
 
 namespace {
@@ -336,11 +337,16 @@ void Label::OnPaint(gfx::Canvas* canvas) {
   PaintText(canvas, paint_text, text_bounds, flags);
 }
 
+void Label::OnNativeThemeChanged(const ui::NativeTheme* theme) {
+  UpdateColorsFromTheme(theme);
+}
+
 void Label::Init(const base::string16& text, const gfx::FontList& font_list) {
   font_list_ = font_list;
   enabled_color_set_ = disabled_color_set_ = background_color_set_ = false;
   subpixel_rendering_enabled_ = true;
   auto_color_readability_ = true;
+  UpdateColorsFromTheme(ui::NativeTheme::instance());
   horizontal_alignment_ = gfx::ALIGN_CENTER;
   line_height_ = 0;
   multi_line_ = false;
@@ -465,6 +471,22 @@ void Label::CalculateDrawStringParams(base::string16* paint_text,
   // TODO(msw): Elide multi-line text with ElideRectangleText instead.
   if (!multi_line_ || forbid_ellipsis)
     *flags |= gfx::Canvas::NO_ELLIPSIS;
+}
+
+void Label::UpdateColorsFromTheme(const ui::NativeTheme* theme) {
+  if (!enabled_color_set_) {
+    requested_enabled_color_ = theme->GetSystemColor(
+        ui::NativeTheme::kColorId_LabelEnabledColor);
+  }
+  if (!disabled_color_set_) {
+    requested_disabled_color_ = theme->GetSystemColor(
+        ui::NativeTheme::kColorId_LabelDisabledColor);
+  }
+  if (!background_color_set_) {
+    background_color_ = theme->GetSystemColor(
+        ui::NativeTheme::kColorId_LabelBackgroundColor);
+  }
+  RecalculateColors();
 }
 
 void Label::ResetCachedSize() {

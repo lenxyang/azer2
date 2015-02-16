@@ -10,6 +10,11 @@
 #include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/views/views_export.h"
 
+namespace ui {
+class NativeTheme;
+class ThemeProvider;
+}
+
 namespace aura {
 class Window;
 }  // namespace aura
@@ -104,9 +109,11 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
 
   RootView* GetRootView() { return root_;}
   const RootView* GetRootView() const { return root_;}
-  virtual const char* GetClassName();
+  virtual const char* GetClassName() const;
 
   virtual gfx::Size GetPreferredSize() const;
+  virtual void OnBoundsChanged(const gfx::Rect& previous_bounds);
+  
   void OnPaint(gfx::Canvas* canvas) override;
   virtual void OnPaintBackground(gfx::Canvas* canvas);
   virtual void OnPaintBorder(gfx::Canvas* canvas);
@@ -129,6 +136,9 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
 
   void SchedulePaint();
  protected:
+  // Invoked when the NativeTheme associated with this View changes.
+  virtual void OnNativeThemeChanged(const ui::NativeTheme* theme) {}
+
   // Overridden from aura::WindowDelegate:
   gfx::Size GetMinimumSize() const override;
   gfx::Size GetMaximumSize() const override;
@@ -158,6 +168,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   // when view attached to parent with root.
   void OnAttachedRecusive(RootView* view);
   void OnDetachRecusive();
+
+  virtual void InitAuraWindow();
 
   scoped_ptr<aura::Window> window_;
   Views children_;
