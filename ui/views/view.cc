@@ -20,7 +20,7 @@ View::View()
     , root_(NULL)
     , focusable_(false)
     , visible_(false)
-    , enabled_(false) {
+    , enabled_(true) {
   InitAuraWindow();
 }
 
