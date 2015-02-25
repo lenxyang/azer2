@@ -89,6 +89,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void SetEnabled(bool enabled);
   bool enabled() const { return enabled_;}
 
+  
 
   // Get the theme provider from the parent widget.
   ui::ThemeProvider* GetThemeProvider() const;
@@ -166,6 +167,11 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
 
   virtual void OnFocus();
   virtual void OnBlur();
+
+  // Handle view focus/blur events for this view.
+  void Focus();
+  void Blur();
+
   virtual void VisibilityChanged(View* starting_from, bool is_visible);
   virtual void OnEnabledChanged();
 

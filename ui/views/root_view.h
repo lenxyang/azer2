@@ -28,11 +28,13 @@ class WindowTreeHost;
 
 namespace client {
 class FocusClient;
-class EventClient;
 }  // namespace client
 }  // namespace aura
 
 namespace views {
+
+class EventClient;
+
 class VIEWS_EXPORT RootView : public aura::WindowTreeHostObserver,
                               public ui::NativeThemeObserver,
                               public View {
@@ -66,7 +68,7 @@ class VIEWS_EXPORT RootView : public aura::WindowTreeHostObserver,
   const aura::WindowTreeHost* host() const { return host_.get();}
  private:
   scoped_ptr<aura::client::FocusClient> focus_client_;
-  scoped_ptr<aura::client::EventClient> event_client_;
+  scoped_ptr<EventClient> event_client_;
   scoped_ptr<aura::WindowTreeHost> host_;
   bool closing_;
 

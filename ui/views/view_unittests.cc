@@ -69,8 +69,8 @@ class TestView : public View {
   void OnMouseExited(const ui::MouseEvent& event) override;
 
   void OnPaint(gfx::Canvas* canvas) override;
-  void SchedulePaintInRect(const gfx::Rect& rect) override;
-  bool AcceleratorPressed(const ui::Accelerator& accelerator) override;
+  // void SchedulePaintInRect(const gfx::Rect& rect) override;
+  // bool AcceleratorPressed(const ui::Accelerator& accelerator) override;
 
   void OnNativeThemeChanged(const ui::NativeTheme* native_theme) override;
 

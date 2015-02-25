@@ -14,6 +14,8 @@ class RootView;
 class VIEWS_EXPORT EventClient : public aura::client::EventClient {
  public:
   EventClient(RootView* root_view);
+  ~EventClient() override;
+
   bool CanProcessEventsWithinSubtree(const aura::Window* window) const override;
 
   ui::EventTarget* GetToplevelEventTarget() override;

@@ -13,11 +13,11 @@
 #include "azer/ui/views/painter.h"
 #include "azer/ui/views/root_view.h"
 
-DECLARE_WINDOW_PROPERTY_TYPE(view::View*)
+DECLARE_WINDOW_PROPERTY_TYPE(views::View*)
 
 namespace views {
 
-DEFINE_WINDOW_PROPERTY_KEY(Views*, kAzerView, NULL);
+DEFINE_WINDOW_PROPERTY_KEY(View*, kAzerView, NULL);
 
 View::View()
     : parent_(NULL)
