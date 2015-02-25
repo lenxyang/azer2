@@ -161,11 +161,6 @@ void ImageView::OnPaint(gfx::Canvas* canvas) {
   Painter::PaintFocusPainter(this, canvas, focus_painter_.get());
 }
 
-void ImageView::GetAccessibleState(ui::AXViewState* state) {
-  state->role = ui::AX_ROLE_IMAGE;
-  state->name = tooltip_text_;
-}
-
 void ImageView::SetHorizontalAlignment(Alignment ha) {
   if (ha != horiz_alignment_) {
     horiz_alignment_ = ha;
@@ -194,19 +189,6 @@ void ImageView::SetTooltipText(const base::string16& tooltip) {
 
 base::string16 ImageView::GetTooltipText() const {
   return tooltip_text_;
-}
-
-bool ImageView::GetTooltipText(const gfx::Point& p,
-                               base::string16* tooltip) const {
-  if (tooltip_text_.empty())
-    return false;
-
-  *tooltip = GetTooltipText();
-  return true;
-}
-
-bool ImageView::CanProcessEventsWithinSubtree() const {
-  return interactive_;
 }
 
 void ImageView::OnPaintImage(gfx::Canvas* canvas) {

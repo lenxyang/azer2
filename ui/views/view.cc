@@ -167,6 +167,9 @@ bool View::CanFocus() {
   return window()->CanFocus();
 }
 
+void View::RequestFocus() {
+}
+
 void View::SetEnabled(bool enabled) {
   if (enabled_ != enabled) {
     enabled_ = enabled;
@@ -201,6 +204,10 @@ bool View::HasHitTestMask() const {
 }
 
 void View::GetHitTestMask(gfx::Path* mask) const {
+}
+
+bool View::IsMouseHovered() {
+  return false;
 }
 
 void View::OnKeyEvent(ui::KeyEvent* event) {
@@ -411,7 +418,12 @@ void View::PropagateNativeThemeChanged(const ui::NativeTheme* theme) {
   OnNativeThemeChanged(theme);
 }
 
-bool View::CanDrop(const OSExchangeData& data) {
+void View::PreferredSizeChanged() {
+  if (parent_)
+    parent_->ChildPreferredSizeChanged(this);
+}
+
+bool View::CanDrop(const ui::OSExchangeData& data) {
   // TODO(sky): when I finish up migration, this should default to true.
   return false;
 }
@@ -433,9 +445,19 @@ int View::OnPerformDrop(const ui::DropTargetEvent& event) {
 void View::OnDragDone() {
 }
 
+bool View::InDrag() {
+  return false;
+}
+
 void View::OnBlur() {
 }
 
 void View::OnFocus() {
+}
+
+void View::VisibilityChanged(View* starting_from, bool is_visible) {
+}
+
+void View::InvalidateLayout() {
 }
 }  // namespace views

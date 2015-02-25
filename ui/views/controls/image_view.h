@@ -84,7 +84,6 @@ class VIEWS_EXPORT ImageView : public View {
   void OnFocus() override;
   void OnBlur() override;
   void OnPaint(gfx::Canvas* canvas) override;
-  bool CanProcessEventsWithinSubtree() const override;
  private:
   void OnPaintImage(gfx::Canvas* canvas);
 

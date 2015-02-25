@@ -15,6 +15,8 @@ source_set("views") {
     "controls/button/custom_button.h",
     "controls/button/label_button.cc",
     "controls/button/label_button.h",
+    "controls/button/label_button_border.cc",
+    "controls/button/label_button_border.h",
     "controls/control.cc",
     "controls/control.h",
     "controls/focusable_border.cc",

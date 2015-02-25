@@ -1,7 +1,13 @@
 #pragma once
 
+#include <algorithm>
+#include <map>
+#include <set>
+#include <string>
 #include <vector>
 
+#include "base/compiler_specific.h"
+#include "base/i18n/rtl.h"
 #include "base/basictypes.h"
 #include "base/memory/scoped_ptr.h"
 #include "ui/base/cursor/cursor.h"
@@ -77,6 +83,9 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   bool focusable() const { return focusable_;}
   virtual bool HasFocus() const;
 
+  // Request keyboard focus. The receiving view will become the focused view.
+  virtual void RequestFocus();
+
   void SetEnabled(bool enabled);
   bool enabled() const { return enabled_;}
 
@@ -134,12 +143,16 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   const RootView* GetRootView() const { return root_;}
   virtual const char* GetClassName() const;
 
+  void InvalidateLayout();
+
   virtual gfx::Size GetPreferredSize() const;
   virtual void OnBoundsChanged(const gfx::Rect& previous_bounds);
   
   void OnPaint(gfx::Canvas* canvas) override;
   virtual void OnPaintBackground(gfx::Canvas* canvas);
   virtual void OnPaintBorder(gfx::Canvas* canvas);
+  virtual void ChildPreferredSizeChanged(View* child) {}
+  virtual void PreferredSizeChanged();
 
   // The background object is owned by this object and may be NULL.
   void set_background(Background* b);
@@ -156,6 +169,9 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   virtual void VisibilityChanged(View* starting_from, bool is_visible);
   virtual void OnEnabledChanged();
 
+  // Returns whether we're in the middle of a drag session that was initiated
+  // by us.
+  bool InDrag();
   virtual bool CanDrop(const ui::OSExchangeData& data);
   virtual void OnDragEntered(const ui::DropTargetEvent& event);
   virtual int OnDragUpdated(const ui::DropTargetEvent& event);
