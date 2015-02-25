@@ -147,6 +147,9 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   const Border* border() const { return border_.get(); }
   Border* border() { return border_.get(); }
 
+  virtual void OnFocus() {}
+  virtual void OnBlur() {}
+
   // Return the cursor that should be used for this view or the default cursor.
   // The event location is in the receiver's coordinate system. The caller is
   // responsible for managing the lifetime of the returned object, though that

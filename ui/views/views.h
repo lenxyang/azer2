@@ -13,3 +13,5 @@
 #include "azer/ui/views/root_view.h"
 #include "azer/ui/views/controls/control.h"
 #include "azer/ui/views/controls/label.h"
+#include "azer/ui/views/controls/progress_bar.h"
+#include "azer/ui/views/controls/slider.h"
