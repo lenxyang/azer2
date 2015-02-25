@@ -24,7 +24,7 @@ class ViewsTestBase : public testing::Test {
  private:
   bool setup_called_;
   bool teardown_called_;
-  scoped_ptr<RootView> view_view_;
+  scoped_ptr<RootView> root_view_;
   DISALLOW_COPY_AND_ASSIGN(ViewsTestBase);
 };
 }  // namespace test

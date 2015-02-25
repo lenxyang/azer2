@@ -10,6 +10,7 @@
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
 #include "azer/ui/views/aura/focus_client.h"
+#include "azer/ui/views/aura/event_client.h"
 #include "azer/ui/views/id_allocator.h"
 
 namespace views {
@@ -33,6 +34,9 @@ void RootView::Init(const InitParams& params) {
   host_->window()->SetBounds(gfx::Rect(params.bounds.size()));
   focus_client_.reset(new FocusClient);
   aura::client::SetFocusClient(host_->window(), focus_client_.get());
+
+  event_client_.reset(new EventClient(this));
+  aura::client::SetEventClient(host_->window(), event_client_.get());
 
   window_.reset(new aura::Window(NULL));
   window()->Init(aura::WINDOW_LAYER_NOT_DRAWN);

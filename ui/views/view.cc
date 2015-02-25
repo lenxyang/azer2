@@ -13,7 +13,11 @@
 #include "azer/ui/views/painter.h"
 #include "azer/ui/views/root_view.h"
 
+DECLARE_WINDOW_PROPERTY_TYPE(view::View*)
+
 namespace views {
+
+DEFINE_WINDOW_PROPERTY_KEY(Views*, kAzerView, NULL);
 
 View::View()
     : parent_(NULL)
@@ -36,6 +40,8 @@ void View::InitAuraWindow() {
   window()->Init(aura::WINDOW_LAYER_TEXTURED);
   window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
   window()->SetName(GetClassName());
+
+  window()->SetProperty(kAzerView, this);
 }
 
 int View::id() const {
@@ -459,5 +465,9 @@ void View::VisibilityChanged(View* starting_from, bool is_visible) {
 }
 
 void View::InvalidateLayout() {
+}
+
+bool View::CanProcessEventsWithinSubtree() const {
+  return true;
 }
 }  // namespace views

@@ -14,10 +14,11 @@
 #include "ui/strings/grit/ui_strings.h"
 
 #include "azer/ui/views/view.h"
+#include "azer/ui/views/tests/views_test_base.h"
 
 namespace views {
 
-typedef ViewsTestBase ViewTest;
+typedef test::ViewsTestBase ViewTest;
 
 // A derived class for testing purpose.
 class TestView : public View {
@@ -67,7 +68,7 @@ class TestView : public View {
   void OnMouseEntered(const ui::MouseEvent& event) override;
   void OnMouseExited(const ui::MouseEvent& event) override;
 
-  void Paint(gfx::Canvas* canvas, const CullSet& cull_set) override;
+  void OnPaint(gfx::Canvas* canvas) override;
   void SchedulePaintInRect(const gfx::Rect& rect) override;
   bool AcceleratorPressed(const ui::Accelerator& accelerator) override;
 

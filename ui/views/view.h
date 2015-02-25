@@ -195,6 +195,10 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   // local coordinate space of |this|.
   bool HitTestRect(const gfx::Rect& rect) const;
 
+  // Returns true if this view or any of its descendants are permitted to
+  // be the target of an event.
+  virtual bool CanProcessEventsWithinSubtree() const;
+
   void SchedulePaint();
 
 
