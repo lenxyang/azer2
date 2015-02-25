@@ -3,6 +3,8 @@ source_set("views") {
   sources = [
     "aura/aura_screen.cc",
     "aura/aura_screen.h",
+    "aura/event_client.cc",
+    "aura/event_client.h",
     "aura/focus_client.cc",
     "aura/focus_client.h",
     "background.cc",

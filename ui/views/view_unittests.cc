@@ -62,17 +62,17 @@ class TestView : public View {
   }
 
   void OnBoundsChanged(const gfx::Rect& previous_bounds) override;
-  bool OnMousePressed(const ui::MouseEvent& event) override;
-  bool OnMouseDragged(const ui::MouseEvent& event) override;
-  void OnMouseReleased(const ui::MouseEvent& event) override;
-  void OnMouseEntered(const ui::MouseEvent& event) override;
-  void OnMouseExited(const ui::MouseEvent& event) override;
+  // bool OnMousePressed(const ui::MouseEvent& event) override;
+  // bool OnMouseDragged(const ui::MouseEvent& event) override;
+  // void OnMouseReleased(const ui::MouseEvent& event) override;
+  // void OnMouseEntered(const ui::MouseEvent& event) override;
+  // void OnMouseExited(const ui::MouseEvent& event) override;
 
-  void OnPaint(gfx::Canvas* canvas) override;
+  // void OnPaint(gfx::Canvas* canvas) override;
   // void SchedulePaintInRect(const gfx::Rect& rect) override;
   // bool AcceleratorPressed(const ui::Accelerator& accelerator) override;
-
-  void OnNativeThemeChanged(const ui::NativeTheme* native_theme) override;
+  
+  // void OnNativeThemeChanged(const ui::NativeTheme* native_theme) override;
 
   // OnBoundsChanged.
   bool did_change_bounds_;

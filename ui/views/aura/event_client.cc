@@ -3,6 +3,7 @@
 #include "azer/ui/views/root_view.h"
 #include "azer/ui/views/view.h"
 #include "azer/ui/aura/window.h"
+#include "azer/ui/aura/window_property.h"
 #include "azer/ui/aura/env.h"
 
 namespace views {
