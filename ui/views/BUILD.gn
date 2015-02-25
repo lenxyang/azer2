@@ -65,3 +65,30 @@ source_set("views") {
     "//url",
   ]
 }
+
+
+test("azer_views_unittests") {
+  sources = [
+    "tests/views_test_base.cc",
+    "tests/views_test_base.h",
+    "tests/run_all_unittests.cc",
+    "view_unittests.cc",
+  ]
+
+  deps = [
+    "//azer/render",
+    "//azer/ui",
+    "//base/test:test_support",
+    "//testing/gtest",
+    "//ui/base:test_support",
+    "//ui/events:test_support",
+    "//ui/events:gesture_detection",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//ui/gl",
+    "//ui/resources",
+    "//ui/resources:ui_test_pak",
+    "//ui/strings",
+    "//ui/wm",
+  ]
+}
