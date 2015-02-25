@@ -49,4 +49,6 @@ void Button::NotifyClick(const ui::Event& event) {
     listener_->ButtonPressed(this, event);
 }
 
+void Button::SetAccessibleName(const base::string16& name) {
+}
 }  // namespace views
