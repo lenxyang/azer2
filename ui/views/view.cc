@@ -168,7 +168,14 @@ bool View::CanFocus() {
 }
 
 void View::SetEnabled(bool enabled) {
-  enabled_ = enabled;
+  if (enabled_ != enabled) {
+    enabled_ = enabled;
+    OnEnabledChanged();
+  }
+}
+
+void View::OnEnabledChanged() {
+  SchedulePaint();
 }
 
 void View::OnCaptureLost() {
@@ -402,5 +409,33 @@ void View::PropagateNativeThemeChanged(const ui::NativeTheme* theme) {
   for (int i = 0, count = child_count(); i < count; ++i)
     child_at(i)->PropagateNativeThemeChanged(theme);
   OnNativeThemeChanged(theme);
+}
+
+bool View::CanDrop(const OSExchangeData& data) {
+  // TODO(sky): when I finish up migration, this should default to true.
+  return false;
+}
+
+void View::OnDragEntered(const ui::DropTargetEvent& event) {
+}
+
+int View::OnDragUpdated(const ui::DropTargetEvent& event) {
+  return ui::DragDropTypes::DRAG_NONE;
+}
+
+void View::OnDragExited() {
+}
+
+int View::OnPerformDrop(const ui::DropTargetEvent& event) {
+  return ui::DragDropTypes::DRAG_NONE;
+}
+
+void View::OnDragDone() {
+}
+
+void View::OnBlur() {
+}
+
+void View::OnFocus() {
 }
 }  // namespace views

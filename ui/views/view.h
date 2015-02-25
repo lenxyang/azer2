@@ -7,6 +7,10 @@
 #include "ui/base/cursor/cursor.h"
 #include "ui/events/event.h"
 #include "ui/gfx/geometry/rect.h"
+#include "ui/base/accelerators/accelerator.h"
+#include "ui/base/dragdrop/drag_drop_types.h"
+#include "ui/base/dragdrop/drop_target_event.h"
+#include "ui/base/dragdrop/os_exchange_data.h"
 
 #include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/views/views_export.h"
@@ -147,8 +151,17 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   const Border* border() const { return border_.get(); }
   Border* border() { return border_.get(); }
 
-  virtual void OnFocus() {}
-  virtual void OnBlur() {}
+  virtual void OnFocus();
+  virtual void OnBlur();
+  virtual void VisibilityChanged(View* starting_from, bool is_visible);
+  virtual void OnEnabledChanged();
+
+  virtual bool CanDrop(const ui::OSExchangeData& data);
+  virtual void OnDragEntered(const ui::DropTargetEvent& event);
+  virtual int OnDragUpdated(const ui::DropTargetEvent& event);
+  virtual void OnDragExited();
+  virtual int OnPerformDrop(const ui::DropTargetEvent& event);
+  virtual void OnDragDone();
 
   // Return the cursor that should be used for this view or the default cursor.
   // The event location is in the receiver's coordinate system. The caller is
