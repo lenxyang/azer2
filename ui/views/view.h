@@ -44,7 +44,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   virtual ~View();
 
   Widget* GetWidget();
-  const Widget* GetWidget();
+  const Widget* GetWidget() const;
 
   void AddChildView(View* view);
   void RemoveChildView(View* view);

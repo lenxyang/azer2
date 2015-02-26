@@ -8,7 +8,7 @@
 
 #include "azer/ui/views/env.h"
 #include "azer/ui/views/view.h"
-#include "azer/ui/views/root_view.h"
+#include "azer/ui/views/widget/root_view.h"
 
 namespace views {
 
@@ -23,12 +23,9 @@ class ViewsTestBase : public testing::Test {
   void SetUp() override;
   void TearDown() override;
 
-  void InitRootView(const RootView::InitParams& params);
  private:
   bool setup_called_;
   bool teardown_called_;
-  scoped_ptr<RootView> root_view_;
-
   scoped_ptr<AuraScreen> aura_screen_;
   scoped_ptr< ::base::MessageLoopForUI> message_loop_;
   DISALLOW_COPY_AND_ASSIGN(ViewsTestBase);

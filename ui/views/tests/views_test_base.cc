@@ -36,9 +36,5 @@ void ViewsTestBase::TearDown() {
   */
 }
 
-void ViewsTestBase::InitRootView(const RootView::InitParams& params) {
-  root_view_.reset(new RootView);
-  root_view_->Init(params);
-}
 }  // namespace test
 }  // namespace views
