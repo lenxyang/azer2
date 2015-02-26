@@ -15,6 +15,7 @@
 #include "ui/strings/grit/ui_strings.h"
 
 #include "azer/ui/views/view.h"
+#include "azer/ui/views/widget/widget.h"
 #include "azer/ui/views/tests/views_test_base.h"
 
 namespace views {
@@ -165,8 +166,7 @@ TEST_F(ViewTest, MouseEvent) {
   v2->SetBoundsRect(gfx::Rect(100, 100, 100, 100));
 
   scoped_ptr<Widget> widget(new Widget);
-  Widget::InitParams params = CreateParams(Widget::InitParams::TYPE_POPUP);
-  params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  Widget::InitParams params;
   params.bounds = gfx::Rect(50, 50, 650, 650);
   widget->Init(params);
   internal::RootView* root =

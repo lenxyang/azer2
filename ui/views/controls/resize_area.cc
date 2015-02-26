@@ -10,7 +10,7 @@
 #include "ui/base/cursor/cursor.h"
 
 #include "azer/ui/aura/window.h"
-#include "azer/ui/views/root_view.h"
+#include "azer/ui/views/widget/root_view.h"
 #include "azer/ui/views/controls/resize_area_delegate.h"
 #include "azer/ui/views/native_cursor.h"
 

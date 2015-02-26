@@ -34,8 +34,11 @@ namespace views {
 
 class Background;
 class Border;
-class RootView;
 class Widget;
+
+namespace internal {
+class RootView;
+}  // namespace internal
 
 class VIEWS_EXPORT View : public aura::WindowDelegate {
  public:
@@ -144,8 +147,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   aura::Window* window() { return window_.get();}
   const aura::Window* window() const { return window_.get();}
 
-  RootView* GetRootView() { return root_;}
-  const RootView* GetRootView() const { return root_;}
+  internal::RootView* GetRootView() { return root_;}
+  const internal::RootView* GetRootView() const { return root_;}
   virtual const char* GetClassName() const;
 
   void InvalidateLayout();
@@ -320,7 +323,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void OnGestureEvent(ui::GestureEvent* event) override;
 
   // when view attached to parent with root.
-  void OnAttachedRecusive(RootView* view);
+  void OnAttachedRecusive(internal::RootView* view);
   void OnDetachRecusive();
 
   void PropagateNativeThemeChanged(const ui::NativeTheme* theme);
@@ -330,7 +333,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   scoped_ptr<aura::Window> window_;
   Views children_;
   View* parent_;
-  RootView* root_;
+  internal::RootView* root_;
 
   gfx::Rect bounds_;
   bool focusable_;
@@ -339,6 +342,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;
+  friend class Widget;
   DISALLOW_COPY_AND_ASSIGN(View);
 };
 }  // namespace views

@@ -9,18 +9,27 @@
 
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
-#include "azer/ui/views/aura/focus_client.h"
-#include "azer/ui/views/aura/event_client.h"
 #include "azer/ui/views/id_allocator.h"
 
 namespace views {
+namespace internal {
 
 RootView::RootView(Widget* widget) 
-    : root_(this)
-    , widget_(widget) {
+    : widget_(widget) {
+  View::root_ = this;
 }
 
 RootView::~RootView() {
 }
 
+void RootView::Init(const gfx::Rect& bounds) {
+  window_.reset(new aura::Window(NULL));
+  window()->Init(aura::WINDOW_LAYER_NOT_DRAWN);
+  window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
+  window()->SetBounds(gfx::Rect(bounds.size()));
+  window()->SetName("ContentWindowContainer");
+  window()->Show();
+}
+
+}  // namespace internal
 }  // namespace views

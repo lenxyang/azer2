@@ -9,18 +9,20 @@
 
 namespace views {
 
+namespace internal {
 class RootView;
+}  // namespace internal
 
 class VIEWS_EXPORT EventClient : public aura::client::EventClient {
  public:
-  EventClient(RootView* root_view);
+  EventClient(internal::RootView* root_view);
   ~EventClient() override;
 
   bool CanProcessEventsWithinSubtree(const aura::Window* window) const override;
 
   ui::EventTarget* GetToplevelEventTarget() override;
  private:
-  RootView* root_view_;
+  internal::RootView* root_view_;
   DISALLOW_COPY_AND_ASSIGN(EventClient);
 };
 }  // namespace views

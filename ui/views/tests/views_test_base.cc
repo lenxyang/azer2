@@ -28,12 +28,9 @@ void ViewsTestBase::SetUp() {
 
 void ViewsTestBase::TearDown() {
   teardown_called_ = true;
-  /*
   message_loop_.reset();
-  root_view_.reset();
   gfx::Screen::SetScreenInstance(gfx::SCREEN_TYPE_NATIVE, NULL);
   aura::Env::DeleteInstance();
-  */
 }
 
 }  // namespace test

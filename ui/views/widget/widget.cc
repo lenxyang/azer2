@@ -9,24 +9,24 @@
 
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
+#include "azer/ui/views/id_allocator.h"
+#include "azer/ui/views/widget/root_view.h"
 #include "azer/ui/views/aura/focus_client.h"
 #include "azer/ui/views/aura/event_client.h"
-#include "azer/ui/views/id_allocator.h"
 
 namespace views {
 
 Widget::Widget() 
     : closing_(false)
     , observer_manager_(this) {
-  root_ = this;
   default_theme_provider_.reset(new ui::DefaultThemeProvider);
 }
 
 Widget::~Widget() {
-  window_.reset();
+  root_view_.reset();
   host_->RemoveObserver(this);
   focus_client_.reset();
-  host_.reset();
+  event_client_.reset();
 }
 
 void Widget::Init(const InitParams& params) {
@@ -35,25 +35,23 @@ void Widget::Init(const InitParams& params) {
   focus_client_.reset(new FocusClient);
   aura::client::SetFocusClient(host_->window(), focus_client_.get());
 
-  event_client_.reset(new EventClient(this));
-  aura::client::SetEventClient(host_->window(), event_client_.get());
-
-  window_.reset(new aura::Window(NULL));
-  window()->Init(aura::WINDOW_LAYER_NOT_DRAWN);
-  window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
-  window()->SetBounds(gfx::Rect(params.bounds.size()));
-  window()->SetName("ContentWindowContainer");
-  window()->Show();
-
+  root_view_.reset(new internal::RootView(this));
+  root_view_->Init(params.bounds);
   host_->InitHost();
-  host_->window()->AddChild(window());
+  host_->window()->AddChild(root_view_->window());
   host_->AddObserver(this);
 
+  event_client_.reset(new EventClient(root_view_.get()));
+  aura::client::SetEventClient(host_->window(), event_client_.get());
   observer_manager_.Add(GetNativeTheme());
 }
 
 void Widget::Close() {
   closing_ = true;
+}
+
+void Widget::CloseNow() {
+  Close();
 }
 
 void Widget::Show() {
@@ -81,6 +79,6 @@ void Widget::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
     observer_manager_.Add(current_native_theme);
   }
 
-  root_->PropagateNativeThemeChanged(current_native_theme);
+  root_view_->PropagateNativeThemeChanged(current_native_theme);
 }
 }  // namespace views

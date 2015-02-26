@@ -30,6 +30,7 @@ View::View()
 }
 
 View::~View() {
+  window_.reset();
 }
 
 const char* View::GetClassName() const {
@@ -141,7 +142,7 @@ bool View::Contains(View* view) {
   return window()->Contains(view->window());
 }
 
-void View::OnAttachedRecusive(RootView* view) {
+void View::OnAttachedRecusive(internal::RootView* view) {
   root_ = view;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     (*iter)->OnAttachedRecusive(view);
