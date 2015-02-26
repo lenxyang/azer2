@@ -44,8 +44,10 @@ source_set("views") {
     "painter.h",
     "view.cc",
     "view.h",
-    "root_view.cc",
-    "root_view.h",
+    "widget/root_view.cc",
+    "widget/root_view.h",
+    "widget/widget.cc",
+    "widget/widget.h",
   ]
   defines = [
     "AURA_IMPLEMENTATION",
@@ -74,6 +76,8 @@ test("azer_views_unittests") {
     "tests/views_test_base.cc",
     "tests/views_test_base.h",
     "tests/run_all_unittests.cc",
+    "tests/test_env.cc",
+    "tests/test_env.h",
     "view_unittests.cc",
   ]
 
@@ -82,7 +86,6 @@ test("azer_views_unittests") {
     "//azer/ui",
     "//base",
     "//base:i18n",
-    "//base/allocator",
     "//base/test:test_support",
     "//skia",
     "//testing/gtest",

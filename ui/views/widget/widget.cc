@@ -1,4 +1,4 @@
-#include "azer/ui/views/root_view.h"
+#include "azer/ui/views/widget/widget.h"
 
 
 #include "ui/native_theme/native_theme_aura.h"
@@ -15,21 +15,21 @@
 
 namespace views {
 
-RootView::RootView() 
+Widget::Widget() 
     : closing_(false)
     , observer_manager_(this) {
   root_ = this;
   default_theme_provider_.reset(new ui::DefaultThemeProvider);
 }
 
-RootView::~RootView() {
+Widget::~Widget() {
   window_.reset();
   host_->RemoveObserver(this);
   focus_client_.reset();
   host_.reset();
 }
 
-void RootView::Init(const InitParams& params) {
+void Widget::Init(const InitParams& params) {
   host_.reset(aura::WindowTreeHost::Create(params.bounds));
   host_->window()->SetBounds(gfx::Rect(params.bounds.size()));
   focus_client_.reset(new FocusClient);
@@ -52,27 +52,27 @@ void RootView::Init(const InitParams& params) {
   observer_manager_.Add(GetNativeTheme());
 }
 
-void RootView::Close() {
+void Widget::Close() {
   closing_ = true;
 }
 
-void RootView::Show() {
+void Widget::Show() {
   host_->Show();
 }
 
-void RootView::Hide() {
+void Widget::Hide() {
   host_->Hide();
 }
 
-ui::ThemeProvider* RootView::GetThemeProvider() const {
+ui::ThemeProvider* Widget::GetThemeProvider() const {
   return default_theme_provider_.get();
 }
 
-const ui::NativeTheme* RootView::GetNativeTheme() const {
+const ui::NativeTheme* Widget::GetNativeTheme() const {
   return ui::NativeThemeAura::instance();
 }
 
-void RootView::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
+void Widget::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
   DCHECK(observer_manager_.IsObserving(observed_theme));
 
   ui::NativeTheme* current_native_theme = GetNativeTheme();

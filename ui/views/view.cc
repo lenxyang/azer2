@@ -11,7 +11,8 @@
 #include "azer/ui/views/border.h"
 #include "azer/ui/views/id_allocator.h"
 #include "azer/ui/views/painter.h"
-#include "azer/ui/views/root_view.h"
+#include "azer/ui/views/widget/widget.h"
+#include "azer/ui/views/widget/root_view.h"
 
 DECLARE_WINDOW_PROPERTY_TYPE(views::View*)
 
@@ -33,6 +34,14 @@ View::~View() {
 
 const char* View::GetClassName() const {
   return "View";
+}
+
+Widget* View::GetWidget() {
+  return root_->widget_;
+}
+
+const Widget* View::GetWidget() const {
+  return root_->widget_;
 }
 
 void View::InitAuraWindow() {
@@ -65,8 +74,10 @@ void View::SetBounds(int x, int y, int width, int height) {
 }
 
 void View::SetBoundsRect(const gfx::Rect& bounds) {
-  bounds_ = bounds;
-  window()->SetBounds(bounds);
+  if (bounds_ != bounds) {
+    bounds_ = bounds;
+    window()->SetBounds(bounds_);
+  }
 }
 
 void View::SetSize(const gfx::Size& size) {
@@ -91,7 +102,7 @@ void View::SizeToPreferredSize() {
     SetBounds(x(), y(), prefsize.width(), prefsize.height());
 }
 
-void View::OnBoundsChanged(const gfx::Rect& ) {
+void View::OnBoundsChanged(const gfx::Rect& old_bounds) {
 }
 
 void View::Show() {
@@ -153,7 +164,9 @@ gfx::Size View::GetMaximumSize() const {
 }
 
 void View::OnBoundsChanged(const gfx::Rect& old_bounds,
-                             const gfx::Rect& new_bounds)  {
+                           const gfx::Rect& new_bounds)  {
+  // from aura::Window::Delegate
+  OnBoundsChanged(old_bounds);
 }
 
 gfx::NativeCursor View::GetCursor(const gfx::Point& point) {

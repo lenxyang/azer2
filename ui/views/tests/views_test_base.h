@@ -11,6 +11,9 @@
 #include "azer/ui/views/root_view.h"
 
 namespace views {
+
+class AuraScreen;
+
 namespace test {
 class ViewsTestBase : public testing::Test {
  public:
@@ -25,6 +28,9 @@ class ViewsTestBase : public testing::Test {
   bool setup_called_;
   bool teardown_called_;
   scoped_ptr<RootView> root_view_;
+
+  scoped_ptr<AuraScreen> aura_screen_;
+  scoped_ptr< ::base::MessageLoopForUI> message_loop_;
   DISALLOW_COPY_AND_ASSIGN(ViewsTestBase);
 };
 }  // namespace test

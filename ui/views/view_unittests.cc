@@ -63,11 +63,11 @@ class TestView : public View {
   }
 
   void OnBoundsChanged(const gfx::Rect& previous_bounds) override;
-  // bool OnMousePressed(const ui::MouseEvent& event) override;
-  // bool OnMouseDragged(const ui::MouseEvent& event) override;
-  // void OnMouseReleased(const ui::MouseEvent& event) override;
-  // void OnMouseEntered(const ui::MouseEvent& event) override;
-  // void OnMouseExited(const ui::MouseEvent& event) override;
+  bool OnMousePressed(const ui::MouseEvent& event) override;
+  bool OnMouseDragged(const ui::MouseEvent& event) override;
+  void OnMouseReleased(const ui::MouseEvent& event) override;
+  void OnMouseEntered(const ui::MouseEvent& event) override;
+  void OnMouseExited(const ui::MouseEvent& event) override;
 
   // void OnPaint(gfx::Canvas* canvas) override;
   // void SchedulePaintInRect(const gfx::Rect& rect) override;
@@ -123,7 +123,97 @@ TEST_F(ViewTest, OnBoundsChanged) {
 
   EXPECT_TRUE(v.did_change_bounds_);
   EXPECT_EQ(v.new_bounds_, new_rect);
-  // EXPECT_EQ(v.bounds(), new_rect);
+  EXPECT_EQ(v.bounds(), new_rect);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// MouseEvent
+////////////////////////////////////////////////////////////////////////////////
+
+bool TestView::OnMousePressed(const ui::MouseEvent& event) {
+  last_mouse_event_type_ = event.type();
+  location_.SetPoint(event.x(), event.y());
+  if (delete_on_pressed_)
+    delete this;
+  return true;
+}
+
+bool TestView::OnMouseDragged(const ui::MouseEvent& event) {
+  last_mouse_event_type_ = event.type();
+  location_.SetPoint(event.x(), event.y());
+  return true;
+}
+
+void TestView::OnMouseReleased(const ui::MouseEvent& event) {
+  last_mouse_event_type_ = event.type();
+  location_.SetPoint(event.x(), event.y());
+}
+
+void TestView::OnMouseEntered(const ui::MouseEvent& event) {
+  received_mouse_enter_ = true;
+}
+
+void TestView::OnMouseExited(const ui::MouseEvent& event) {
+  received_mouse_exit_ = true;
+}
+
+TEST_F(ViewTest, MouseEvent) {
+  TestView* v1 = new TestView();
+  v1->SetBoundsRect(gfx::Rect(0, 0, 300, 300));
+
+  TestView* v2 = new TestView();
+  v2->SetBoundsRect(gfx::Rect(100, 100, 100, 100));
+
+  scoped_ptr<Widget> widget(new Widget);
+  Widget::InitParams params = CreateParams(Widget::InitParams::TYPE_POPUP);
+  params.ownership = views::Widget::InitParams::WIDGET_OWNS_NATIVE_WIDGET;
+  params.bounds = gfx::Rect(50, 50, 650, 650);
+  widget->Init(params);
+  internal::RootView* root =
+      static_cast<internal::RootView*>(widget->GetRootView());
+
+  root->AddChildView(v1);
+  v1->AddChildView(v2);
+
+  v1->Reset();
+  v2->Reset();
+
+  gfx::Point p1(110, 120);
+  ui::MouseEvent pressed(ui::ET_MOUSE_PRESSED, p1, p1,
+                         ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
+  root->OnMousePressed(pressed);
+  EXPECT_EQ(v2->last_mouse_event_type_, ui::ET_MOUSE_PRESSED);
+  EXPECT_EQ(v2->location_.x(), 10);
+  EXPECT_EQ(v2->location_.y(), 20);
+  // Make sure v1 did not receive the event
+  EXPECT_EQ(v1->last_mouse_event_type_, 0);
+
+  // Drag event out of bounds. Should still go to v2
+  v1->Reset();
+  v2->Reset();
+  gfx::Point p2(50, 40);
+  ui::MouseEvent dragged(ui::ET_MOUSE_DRAGGED, p2, p2,
+                         ui::EF_LEFT_MOUSE_BUTTON, 0);
+  root->OnMouseDragged(dragged);
+  EXPECT_EQ(v2->last_mouse_event_type_, ui::ET_MOUSE_DRAGGED);
+  EXPECT_EQ(v2->location_.x(), -50);
+  EXPECT_EQ(v2->location_.y(), -60);
+  // Make sure v1 did not receive the event
+  EXPECT_EQ(v1->last_mouse_event_type_, 0);
+
+  // Releasted event out of bounds. Should still go to v2
+  v1->Reset();
+  v2->Reset();
+  ui::MouseEvent released(ui::ET_MOUSE_RELEASED, gfx::Point(), gfx::Point(), 0,
+                          0);
+  root->OnMouseDragged(released);
+  EXPECT_EQ(v2->last_mouse_event_type_, ui::ET_MOUSE_RELEASED);
+  EXPECT_EQ(v2->location_.x(), -100);
+  EXPECT_EQ(v2->location_.y(), -100);
+  // Make sure v1 did not receive the event
+  EXPECT_EQ(v1->last_mouse_event_type_, 0);
+
+  widget->CloseNow();
 }
 
 }  // namespace views

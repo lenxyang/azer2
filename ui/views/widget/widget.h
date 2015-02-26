@@ -12,35 +12,14 @@
 
 #include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/aura/window_tree_host_observer.h"
-#include "azer/ui/views/view.h"
-
-namespace ui {
-class Accelerator;
-class DefaultThemeProvider;
-class InputMethod;
-class NativeTheme;
-class ThemeProvider;
-}
-
-namespace aura {
-class Window;
-class WindowTreeHost;
-
-namespace client {
-class FocusClient;
-}  // namespace client
-}  // namespace aura
 
 namespace views {
-
-class EventClient;
-
-class VIEWS_EXPORT RootView : public aura::WindowTreeHostObserver,
-                              public ui::NativeThemeObserver,
-                              public View {
+class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
+                            public ui::NativeThemeObserver,
+                            public View {
  public:
-  RootView();
-  virtual ~RootView();
+  Widget();
+  virtual ~Widget();
 
   struct VIEWS_EXPORT InitParams {
     gfx::Rect bounds;
@@ -55,12 +34,9 @@ class VIEWS_EXPORT RootView : public aura::WindowTreeHostObserver,
   // Returns the ThemeProvider that provides theme resources for this Widget.
   virtual ui::ThemeProvider* GetThemeProvider() const;
 
-  // Overridden from ui::NativeThemeObserver:
-  void OnNativeThemeUpdated(ui::NativeTheme* observed_theme) override;
-
   ui::NativeTheme* GetNativeTheme() {
     return const_cast<ui::NativeTheme*>(
-        const_cast<const RootView*>(this)->GetNativeTheme());
+        const_cast<const Widget*>(this)->GetNativeTheme());
   }
   const ui::NativeTheme* GetNativeTheme() const;
 
@@ -76,6 +52,6 @@ class VIEWS_EXPORT RootView : public aura::WindowTreeHostObserver,
   scoped_ptr<ui::DefaultThemeProvider> default_theme_provider_;
 
   ScopedObserver<ui::NativeTheme, ui::NativeThemeObserver> observer_manager_;
-  DISALLOW_COPY_AND_ASSIGN(RootView);
+  DISALLOW_COPY_AND_ASSIGN(Widget);
 };
 }  // namespace views

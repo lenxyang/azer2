@@ -35,12 +35,16 @@ namespace views {
 class Background;
 class Border;
 class RootView;
+class Widget;
 
 class VIEWS_EXPORT View : public aura::WindowDelegate {
  public:
   typedef std::vector<View*> Views;
   View();
   virtual ~View();
+
+  Widget* GetWidget();
+  const Widget* GetWidget();
 
   void AddChildView(View* view);
   void RemoveChildView(View* view);
