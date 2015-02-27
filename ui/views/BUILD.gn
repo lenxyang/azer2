@@ -65,6 +65,8 @@ source_set("views") {
     "widget/widget.h",
     "window/client_view.cc",
     "window/client_view.h",
+    "window/frame_background.cc",
+    "window/frame_background.h",
   ]
   defines = [
     "AURA_IMPLEMENTATION",
