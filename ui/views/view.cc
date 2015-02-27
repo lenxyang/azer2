@@ -272,9 +272,11 @@ void View::OnMouseEvent(ui::MouseEvent* event) {
       break;
 
     case ui::ET_MOUSE_ENTERED:
-      mouse_in_ = true;
-      OnMouseEntered(*event);
-      PropagateMouseEntered(*event);
+      if (!mouse_in_) {
+        mouse_in_ = true;
+        OnMouseEntered(*event);
+        PropagateMouseEntered(*event);
+      }
       break;
 
     case ui::ET_MOUSE_EXITED:
@@ -496,7 +498,7 @@ bool View::CanProcessEventsWithinSubtree() const {
 
 void View::PropagateMouseEntered(const ui::MouseEvent& event) {
   View* top_view = NULL;
-  for (View* p = parent(); p && !p->mouse_in_; p = p->parent()) {
+  for (View* p = parent(); p && p->window(); p = p->parent()) {
     if (p->notify_enter_exit_on_child()) {
       top_view = p;
     }
@@ -504,8 +506,8 @@ void View::PropagateMouseEntered(const ui::MouseEvent& event) {
 
   if (top_view) {
     for (View* p = parent(); p; p = p->parent()) {
-      p->mouse_in_ = true;
       p->OnMouseEntered(event);
+	  p->mouse_in_ = true;
       if (p == top_view) {
         break;
       }
@@ -515,20 +517,21 @@ void View::PropagateMouseEntered(const ui::MouseEvent& event) {
 
 void View::PropagateMouseExited(const ui::MouseEvent& event) {
   View* top_view = NULL;
-  for (View* p = parent(); 
-       p && p->window()->ContainsPointInRoot(event.root_location()); 
-       p = p->parent()) {
-    if (p->notify_enter_exit_on_child()) {
+  for (View* p = parent(); p && p->window(); p = p->parent()) {
+    if (p->notify_enter_exit_on_child()
+        && !p->window()->ContainsPointInRoot(event.root_location())) {
       top_view = p;
     }
   }
 
   if (top_view) {
     for (View* p = parent(); p; p = p->parent()) {
-      p->mouse_in_ = false;
-      p->OnMouseExited(event);
-      if (p == top_view) {
-        break;
+      if (!p->window()->ContainsPointInRoot(event.root_location())) {
+        p->OnMouseExited(event);
+		p->mouse_in_ = false;
+        if (p == top_view) {
+          break;
+        }
       }
     }
   }
