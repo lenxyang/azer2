@@ -14,8 +14,8 @@ class VIEWS_EXPORT Focusable {
 
   void Add(Focusable* focusable);
   void Remove(Focusable* focusable);
+  bool IsGroupHead() const { return group_head_;}
  private:
-  Focusable* first_sibling_;
   Focusable* next_sibling_;
   Focusable* prev_sibling_;
   int32 group_id_;

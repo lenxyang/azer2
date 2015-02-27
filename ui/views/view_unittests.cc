@@ -216,4 +216,138 @@ TEST_F(ViewTest, MouseEvent) {
   widget->CloseNow();
 }
 
+TEST_F(ViewTest, NotifyEnterExitOnChild) {
+  scoped_ptr<Widget> widget(new Widget);
+  Widget::InitParams params;
+  params.bounds = gfx::Rect(1, 1);
+  widget->Init(params);
+  View* root_view = widget->GetRootView();
+  root_view->SetBoundsRect(gfx::Rect(0, 0, 500, 500));
+
+  // Have this hierarchy of views (the coords here are in root coord):
+  // v1 (0, 0, 100, 100)
+  //  - v11 (0, 0, 20, 30)
+  //    - v111 (5, 5, 5, 15)
+  //  - v12 (50, 10, 30, 90)
+  //    - v121 (60, 20, 10, 10)
+  // v2 (105, 0, 100, 100)
+  //  - v21 (120, 10, 50, 20)
+
+  TestView* v1 = new TestView;
+  v1->SetBounds(0, 0, 100, 100);
+  root_view->AddChildView(v1);
+  v1->set_notify_enter_exit_on_child(true);
+
+  TestView* v11 = new TestView;
+  v11->SetBounds(0, 0, 20, 30);
+  v1->AddChildView(v11);
+
+  TestView* v111 = new TestView;
+  v111->SetBounds(5, 5, 5, 15);
+  v11->AddChildView(v111);
+
+  TestView* v12 = new TestView;
+  v12->SetBounds(50, 10, 30, 90);
+  v1->AddChildView(v12);
+
+  TestView* v121 = new TestView;
+  v121->SetBounds(10, 10, 10, 10);
+  v12->AddChildView(v121);
+
+  TestView* v2 = new TestView;
+  v2->SetBounds(105, 0, 100, 100);
+  root_view->AddChildView(v2);
+
+  TestView* v21 = new TestView;
+  v21->SetBounds(15, 10, 50, 20);
+  v2->AddChildView(v21);
+
+  v1->Reset();
+  v11->Reset();
+  v111->Reset();
+  v12->Reset();
+  v121->Reset();
+  v2->Reset();
+  v21->Reset();
+
+  // Move the mouse in v111.
+  gfx::Point p1(6, 6);
+  ui::MouseEvent move1(ui::ET_MOUSE_MOVED, p1, p1, 0, 0);
+  SendEvent(&move1, widget.get());
+  EXPECT_TRUE(v111->received_mouse_enter_);
+  EXPECT_FALSE(v11->last_mouse_event_type_);
+  EXPECT_TRUE(v1->received_mouse_enter_);
+
+  v111->Reset();
+  v1->Reset();
+
+  // Now, move into v121.
+  gfx::Point p2(65, 21);
+  ui::MouseEvent move2(ui::ET_MOUSE_MOVED, p2, p2, 0, 0);
+  SendEvent(&move2, widget.get());
+  EXPECT_TRUE(v111->received_mouse_exit_);
+  EXPECT_TRUE(v121->received_mouse_enter_);
+  EXPECT_FALSE(v1->last_mouse_event_type_);
+
+  v111->Reset();
+  v121->Reset();
+
+  // Now, move into v11.
+  gfx::Point p3(1, 1);
+  ui::MouseEvent move3(ui::ET_MOUSE_MOVED, p3, p3, 0, 0);
+  SendEvent(&move3, widget.get());
+  EXPECT_TRUE(v121->received_mouse_exit_);
+  EXPECT_TRUE(v11->received_mouse_enter_);
+  EXPECT_FALSE(v1->last_mouse_event_type_);
+
+  v121->Reset();
+  v11->Reset();
+
+  // Move to v21.
+  gfx::Point p4(121, 15);
+  ui::MouseEvent move4(ui::ET_MOUSE_MOVED, p4, p4, 0, 0);
+  SendEvent(&move4, widget.get());
+  EXPECT_TRUE(v21->received_mouse_enter_);
+  EXPECT_FALSE(v2->last_mouse_event_type_);
+  EXPECT_TRUE(v11->received_mouse_exit_);
+  EXPECT_TRUE(v1->received_mouse_exit_);
+
+  v21->Reset();
+  v11->Reset();
+  v1->Reset();
+
+  // Move to v1.
+  gfx::Point p5(21, 0);
+  ui::MouseEvent move5(ui::ET_MOUSE_MOVED, p5, p5, 0, 0);
+  SendEvent(&move5, widget.get());
+  EXPECT_TRUE(v21->received_mouse_exit_);
+  EXPECT_TRUE(v1->received_mouse_enter_);
+
+  v21->Reset();
+  v1->Reset();
+
+  // Now, move into v11.
+  gfx::Point p6(15, 15);
+  ui::MouseEvent mouse6(ui::ET_MOUSE_MOVED, p6, p6, 0, 0);
+  SendEvent(&mouse6, widget.get());
+  EXPECT_TRUE(v11->received_mouse_enter_);
+  EXPECT_FALSE(v1->last_mouse_event_type_);
+
+  v11->Reset();
+  v1->Reset();
+
+  // Move back into v1. Although |v1| had already received an ENTER for mouse6,
+  // and the mouse remains inside |v1| the whole time, it receives another ENTER
+  // when the mouse leaves v11.
+  gfx::Point p7(21, 0);
+  ui::MouseEvent mouse7(ui::ET_MOUSE_MOVED, p7, p7, 0, 0);
+  SendEvent(&mouse7, widget.get());
+  EXPECT_TRUE(v11->received_mouse_exit_);
+  EXPECT_FALSE(v1->received_mouse_enter_);
+
+  widget->CloseNow();
+}
+
+
+
 }  // namespace views

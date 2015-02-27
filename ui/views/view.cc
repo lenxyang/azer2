@@ -25,7 +25,8 @@ View::View()
     , root_(NULL)
     , focusable_(false)
     , visible_(false)
-    , enabled_(true) {
+    , enabled_(true)
+    , notify_enter_exit_on_child_(false) {
   InitAuraWindow(aura::WINDOW_LAYER_TEXTURED);
 }
 
@@ -270,11 +271,15 @@ void View::OnMouseEvent(ui::MouseEvent* event) {
       break;
 
     case ui::ET_MOUSE_ENTERED:
-      OnMouseEntered(*event);
+      if (notify_enter_exit_on_child()) {
+        OnMouseEntered(*event);
+      }
       break;
 
     case ui::ET_MOUSE_EXITED:
-      OnMouseExited(*event);
+      if (notify_enter_exit_on_child()) {
+        OnMouseExited(*event);
+      }
       break;
 
     default:

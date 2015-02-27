@@ -51,6 +51,8 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   void Show();
   void Hide();
 
+  void SetBounds(const gfx::Rect& bounds);
+
   // Returns the ThemeProvider that provides theme resources for this Widget.
   virtual ui::ThemeProvider* GetThemeProvider() const;
 

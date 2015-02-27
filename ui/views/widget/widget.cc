@@ -48,6 +48,11 @@ void Widget::Init(const InitParams& params) {
   observer_manager_.Add(GetNativeTheme());
 }
 
+void Widget::SetBounds(const gfx::Rect& bounds) {
+  host_->SetBounds(bounds);
+  host_->window()->SetBounds(gfx::Rect(bounds.size()));
+}
+
 void Widget::Close() {
   closing_ = true;
 }

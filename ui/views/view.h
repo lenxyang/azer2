@@ -184,6 +184,14 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   virtual void VisibilityChanged(View* starting_from, bool is_visible);
   virtual void OnEnabledChanged();
 
+  // See field for description.
+  void set_notify_enter_exit_on_child(bool notify) {
+    notify_enter_exit_on_child_ = notify;
+  }
+  bool notify_enter_exit_on_child() const {
+    return notify_enter_exit_on_child_;
+  }
+
   // Returns whether we're in the middle of a drag session that was initiated
   // by us.
   bool InDrag();
@@ -341,6 +349,21 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   bool focusable_;
   bool visible_;
   bool enabled_;
+
+  // When this flag is on, a View receives a mouse-enter and mouse-leave event
+  // even if a descendant View is the event-recipient for the real mouse
+  // events. When this flag is turned on, and mouse moves from outside of the
+  // view into a child view, both the child view and this view receives
+  // mouse-enter event. Similarly, if the mouse moves from inside a child view
+  // and out of this view, then both views receive a mouse-leave event.
+  // When this flag is turned off, if the mouse moves from inside this view into
+  // a child view, then this view receives a mouse-leave event. When this flag
+  // is turned on, it does not receive the mouse-leave event in this case.
+  // When the mouse moves from inside the child view out of the child view but
+  // still into this view, this view receives a mouse-enter event if this flag
+  // is turned off, but doesn't if this flag is turned on.
+  // This flag is initialized to false.
+  bool notify_enter_exit_on_child_;
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;

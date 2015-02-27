@@ -9,6 +9,7 @@
 
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace views {
 namespace internal {
@@ -28,6 +29,12 @@ void RootView::Init(const gfx::Rect& bounds) {
 
 const char* RootView::GetClassName() const {
   return "RootView";
+}
+
+void RootView::OnBoundsChanged(const gfx::Rect& previous_bounds,
+                               const gfx::Rect& new_bounds) {
+  widget_->SetBounds(new_bounds);
+  bounds_ = gfx::Rect(new_bounds.size());
 }
 
 }  // namespace internal
