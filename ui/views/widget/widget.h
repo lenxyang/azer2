@@ -29,6 +29,7 @@ class FocusClient;
 
 namespace views {
 
+class View;
 class EventClient;
 namespace internal {
 class RootView;
@@ -51,9 +52,27 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   void Show();
   void Hide();
 
-  bool visible() const;
+  bool IsVisible() const;
 
+  // Sets the specified view as the contents of this Widget. There can only
+  // be one contents view child of this Widget's RootView. This view is sized to
+  // fit the entire size of the RootView. The RootView takes ownership of this
+  // View, unless it is set as not being parent-owned.
+  void SetContentsView(View* view);
+  View* GetContentsView();
+
+  // Returns the bounds of the Widget in screen coordinates.
+  gfx::Rect GetWindowBoundsInScreen() const;
+
+  // Returns the bounds of the Widget's client area in screen coordinates.
+  gfx::Rect GetClientAreaBoundsInScreen() const;
+
+  // Sizes and/or places the widget to the specified bounds, size or position.
   void SetBounds(const gfx::Rect& bounds);
+  void SetSize(const gfx::Size& size);
+
+  // Sizes the window to the specified size and centerizes it.
+  void CenterWindow(const gfx::Size& size);
 
   // Returns the ThemeProvider that provides theme resources for this Widget.
   virtual ui::ThemeProvider* GetThemeProvider() const;
@@ -69,6 +88,9 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
 
   aura::WindowTreeHost* host() { return host_.get();}
   const aura::WindowTreeHost* host() const { return host_.get();}
+
+  // internal
+  void OnRootViewSetBoundsChanged(const gfx::Rect& bounds);
  protected:
   void OnNativeThemeUpdated(ui::NativeTheme* observed_theme) override;
   scoped_ptr<aura::WindowTreeHost> host_;

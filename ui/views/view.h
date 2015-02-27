@@ -55,7 +55,9 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
 
   void AddChildView(View* view);
   void RemoveChildView(View* view);
-  bool Contains(View* view);
+  void RemoveAllChildViews();
+  bool Contains(View* view) const;
+  bool has_children() const { return child_count() > 0;}
   int32 child_count() const { return static_cast<int32>(children_.size());}
   View* child_at(int32 index) { return children_.at(index);}
   View* parent() { return parent_;}

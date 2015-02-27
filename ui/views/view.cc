@@ -159,7 +159,13 @@ void View::RemoveChildView(View* child) {
   child->OnDetachRecusive();
 }
 
-bool View::Contains(View* view) {
+void View::RemoveAllChildViews() {
+  while (!children_.empty()) {
+    RemoveChildView(children_[0]);
+  }
+}
+
+bool View::Contains(View* view) const{
   return window()->Contains(view->window());
 }
 
@@ -589,7 +595,7 @@ bool View::AcceleratorPressed(const ui::Accelerator& accelerator) {
 }
 
 bool View::CanHandleAccelerators() const {
-  return enabled() && visible() && GetWidget() && GetWidget()->visible();
+  return enabled() && visible() && GetWidget() && GetWidget()->IsVisible();
 }
 
 void View::RegisterPendingAccelerators() {

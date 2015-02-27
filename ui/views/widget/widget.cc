@@ -49,8 +49,19 @@ void Widget::Init(const InitParams& params) {
 }
 
 void Widget::SetBounds(const gfx::Rect& bounds) {
+  root_view_->SetBoundsRect(bounds);
+}
+
+void Widget::SetSize(const gfx::Size& size) {
+  root_view_->SetBoundsRect(gfx::Rect(host_->window()->bounds().origin(), size));
+}
+
+void Widget::OnRootViewSetBoundsChanged(const gfx::Rect& bounds) {
   host_->SetBounds(bounds);
   host_->window()->SetBounds(gfx::Rect(bounds.size()));
+}
+
+void Widget::CenterWindow(const gfx::Size& size) {
 }
 
 void Widget::Close() {
@@ -89,8 +100,26 @@ void Widget::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
   root_view_->PropagateNativeThemeChanged(current_native_theme);
 }
 
-bool Widget::visible() const {
+bool Widget::IsVisible() const {
   DCHECK(host_.get());
   return host_->window()->IsVisible();
+}
+
+void Widget::SetContentsView(View* view) {
+  if (view == GetContentsView())
+    return;
+  root_view_->SetContentsView(view);
+}
+
+View* Widget::GetContentsView() {
+  return root_view_->GetContentsView();
+}
+
+gfx::Rect Widget::GetWindowBoundsInScreen() const {
+  return host_->window()->GetBoundsInScreen();
+}
+
+gfx::Rect Widget::GetClientAreaBoundsInScreen() const {
+  return root_view_->window()->GetBoundsInScreen();
 }
 }  // namespace views

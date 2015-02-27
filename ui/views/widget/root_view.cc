@@ -15,7 +15,8 @@ namespace views {
 namespace internal {
 
 RootView::RootView(Widget* widget) 
-    : widget_(widget) {
+    : widget_(widget)
+    , contents_view_(NULL) {
   View::root_ = this;
 }
 
@@ -33,9 +34,20 @@ const char* RootView::GetClassName() const {
 
 void RootView::OnBoundsChanged(const gfx::Rect& previous_bounds,
                                const gfx::Rect& new_bounds) {
-  widget_->SetBounds(new_bounds);
+  widget_->OnRootViewSetBoundsChanged(new_bounds);
   bounds_ = gfx::Rect(new_bounds.size());
 }
 
+void RootView::SetContentsView(View* contents_view) {
+  if (has_children()) {
+    RemoveAllChildViews();
+  }
+  AddChildView(contents_view);
+  contents_view_ = contents_view;
+}
+
+View* RootView::GetContentsView() {
+  return contents_view_;
+}
 }  // namespace internal
 }  // namespace views
