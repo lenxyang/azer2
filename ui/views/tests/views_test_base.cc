@@ -4,7 +4,9 @@
 
 #include "ui/gfx/screen.h"
 #include "azer/ui/aura/env.h"
+#include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/views/aura/aura_screen.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace views {
 namespace test {

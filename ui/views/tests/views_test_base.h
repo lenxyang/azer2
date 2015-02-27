@@ -6,9 +6,15 @@
 #include "base/message_loop/message_loop.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
+#include "ui/events/event_dispatcher.h"
+#include "ui/events/event_processor.h"
 #include "azer/ui/views/env.h"
 #include "azer/ui/views/view.h"
 #include "azer/ui/views/widget/root_view.h"
+
+namespace ui {
+struct EventDispatchDetails;
+}
 
 namespace views {
 
