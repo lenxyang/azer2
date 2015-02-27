@@ -428,7 +428,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   void OnScrollEvent(ui::ScrollEvent* event) override;
   void OnTouchEvent(ui::TouchEvent* event) override;
   void OnGestureEvent(ui::GestureEvent* event) override;
- private:
+
   // Accelerators --------------------------------------------------------------
 
   // Registers this view's keyboard accelerators that are not registered to

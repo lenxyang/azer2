@@ -589,12 +589,12 @@ bool View::AcceleratorPressed(const ui::Accelerator& accelerator) {
 }
 
 bool View::CanHandleAccelerators() const {
-  return enabled() && vislble() && GetWidget() && GetWidget()->IsVisible();
+  return enabled() && visible() && GetWidget() && GetWidget()->visible();
 }
 
 void View::RegisterPendingAccelerators() {
 }
 
-void View::UnregisterAccelerators() {
+void View::UnregisterAccelerators(bool leave_data_intact) {
 }
 }  // namespace views

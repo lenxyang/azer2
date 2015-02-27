@@ -88,4 +88,9 @@ void Widget::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
 
   root_view_->PropagateNativeThemeChanged(current_native_theme);
 }
+
+bool Widget::visible() const {
+  DCHECK(host_.get());
+  return host_->window()->IsVisible();
+}
 }  // namespace views
