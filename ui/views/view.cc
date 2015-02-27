@@ -4,9 +4,14 @@
 #include "base/logging.h"
 #include "ui/accessibility/ax_enums.h"
 #include "ui/native_theme/native_theme.h"
+#include "ui/gfx/canvas.h"
+#include "ui/gfx/path.h"
+#include "ui/gfx/scoped_canvas.h"
+#include "ui/gfx/screen.h"
+#include "ui/gfx/skia_util.h"
+
 #include "azer/ui/aura/window.h"
 #include "azer/ui/aura/window_property.h"
-
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/border.h"
 #include "azer/ui/views/id_allocator.h"
@@ -418,12 +423,38 @@ gfx::NativeCursor View::GetCursor(const ui::MouseEvent& event) {
 #endif
 }
 
-bool View::HitTestPoint(const gfx::Point& point) const {
-  return HitTestRect(gfx::Rect(point, gfx::Size(1, 1)));
+bool View::HitTestPoint(const gfx::Point& local_point) const {
+  gfx::Rect local_bounds(bounds().size());
+  if (!HasHitTestMask())
+    return local_bounds.Contains(local_point);
+
+  gfx::Path mask;
+  GetHitTestMask(&mask);
+
+  SkRegion clip_region;
+  clip_region.setRect(local_bounds.x(), local_bounds.y(),
+                      local_bounds.width(), local_bounds.height());
+  SkRegion mask_region;
+  return mask_region.setPath(mask, clip_region) &&
+      mask_region.contains(local_point.x(), local_point.y());
 }
 
-bool View::HitTestRect(const gfx::Rect& rect) const {
-  return window()->GetBoundsInRootWindow().Intersects(rect);
+bool View::HitTestRect(const gfx::Rect& local_rect) const {
+  if (!HasHitTestMask()) {
+    return local_rect.Intersects(bounds_);
+  } else {
+    // Early return if |mask| is not a valid hit test mask.
+    gfx::Path mask;
+    GetHitTestMask(&mask);
+
+    // Return whether or not |rect| intersects the custom hit test mask
+    // of |target|.
+    SkRegion clip_region;
+    clip_region.setRect(0, 0, bounds_.width(), bounds_.height());
+    SkRegion mask_region;
+    return mask_region.setPath(mask, clip_region) &&
+        mask_region.intersects(RectToSkIRect(local_rect));
+  }
 }
 
 bool View::OnMousePressed(const ui::MouseEvent& event) {

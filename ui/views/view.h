@@ -288,11 +288,11 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   // A convenience function which calls HitTestRect() with a rect of size
   // 1x1 and an origin of |point|. |point| is in the local coordinate space
   // of |this|.
-  bool HitTestPoint(const gfx::Point& point) const;
+  bool HitTestPoint(const gfx::Point& local_point) const;
 
   // Returns true if |rect| intersects this view's bounds. |rect| is in the
   // local coordinate space of |this|.
-  bool HitTestRect(const gfx::Rect& rect) const;
+  bool HitTestRect(const gfx::Rect& local_rect) const;
 
   // Returns true if this view or any of its descendants are permitted to
   // be the target of an event.

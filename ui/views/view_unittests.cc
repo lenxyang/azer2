@@ -367,6 +367,32 @@ TEST_F(ViewTest, NotifyEnterExitOnChild) {
   widget->CloseNow();
 }
 
+namespace {
+// A derived class of View having a triangular-shaped hit test mask.
+class TestMaskedView : public View {
+ public:
+  TestMaskedView() {}
+  ~TestMaskedView() override {}
+
+ private:
+  // override from aura::WindowDelegate
+  bool HasHitTestMask() const {return true;}
+  void GetHitTestMask(gfx::Path* mask) const override {
+    DCHECK(mask);
+    SkScalar w = SkIntToScalar(width());
+    SkScalar h = SkIntToScalar(height());
+
+    // Create a triangular mask within the bounds of this View.
+    mask->moveTo(w / 2, 0);
+    mask->lineTo(w, h);
+    mask->lineTo(0, h);
+    mask->close();
+  }
+
+  DISALLOW_COPY_AND_ASSIGN(TestMaskedView);
+};
+}
+
 
 // Tests that calls made directly on the hit-testing methods in View
 // (HitTestPoint(), HitTestRect(), etc.) return the correct values.
@@ -390,7 +416,7 @@ TEST_F(ViewTest, HitTestCallsOnView) {
   // |v2| has a triangular hit test mask. Install a ViewTargeter on |v2| which
   // will be called into by View::HitTestRect().
   gfx::Rect v2_bounds = gfx::Rect(105, 0, 100, 100);
-  View* v2 = new View();
+  View* v2 = new TestMaskedView();
   v2->SetBoundsRect(v2_bounds);
   root_view->AddChildView(v2);
 
