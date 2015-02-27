@@ -181,7 +181,7 @@ TEST_F(ViewTest, MouseEvent) {
   gfx::Point p1(110, 120);
   ui::MouseEvent pressed(ui::ET_MOUSE_PRESSED, p1, p1,
                          ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON);
-  root->OnMousePressed(pressed);
+  SendEvent(&pressed, widget.get());
   EXPECT_EQ(v2->last_mouse_event_type_, ui::ET_MOUSE_PRESSED);
   EXPECT_EQ(v2->location_.x(), 10);
   EXPECT_EQ(v2->location_.y(), 20);
@@ -194,7 +194,7 @@ TEST_F(ViewTest, MouseEvent) {
   gfx::Point p2(50, 40);
   ui::MouseEvent dragged(ui::ET_MOUSE_DRAGGED, p2, p2,
                          ui::EF_LEFT_MOUSE_BUTTON, 0);
-  root->OnMouseDragged(dragged);
+  SendEvent(&dragged, widget.get());
   EXPECT_EQ(v2->last_mouse_event_type_, ui::ET_MOUSE_DRAGGED);
   EXPECT_EQ(v2->location_.x(), -50);
   EXPECT_EQ(v2->location_.y(), -60);
@@ -206,7 +206,7 @@ TEST_F(ViewTest, MouseEvent) {
   v2->Reset();
   ui::MouseEvent released(ui::ET_MOUSE_RELEASED, gfx::Point(), gfx::Point(), 0,
                           0);
-  root->OnMouseDragged(released);
+  SendEvent(&released, widget.get());
   EXPECT_EQ(v2->last_mouse_event_type_, ui::ET_MOUSE_RELEASED);
   EXPECT_EQ(v2->location_.x(), -100);
   EXPECT_EQ(v2->location_.y(), -100);

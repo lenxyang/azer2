@@ -39,6 +39,7 @@ void Widget::Init(const InitParams& params) {
   root_view_->Init(params.bounds);
   host_->InitHost();
   host_->window()->AddChild(root_view_->window());
+  host_->window()->Show();
   host_->AddObserver(this);
 
   event_client_.reset(new EventClient(root_view_.get()));

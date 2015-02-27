@@ -30,6 +30,9 @@ View::View()
 }
 
 View::~View() {
+  if (parent()) {
+    parent()->RemoveChildView(this);
+  }
   window_.reset();
 }
 

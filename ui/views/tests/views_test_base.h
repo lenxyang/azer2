@@ -23,6 +23,7 @@ class ViewsTestBase : public testing::Test {
   void SetUp() override;
   void TearDown() override;
 
+  ui::EventDispatchDetails SendEvent(ui::Event* event, Widget* widget);
  private:
   bool setup_called_;
   bool teardown_called_;

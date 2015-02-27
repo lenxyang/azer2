@@ -33,5 +33,9 @@ void ViewsTestBase::TearDown() {
   aura::Env::DeleteInstance();
 }
 
+ui::EventDispatchDetails ViewsTestBase::SendEvent(ui::Event* event, Widget* widget) {
+  ui::EventProcessor* processor = widget->host()->event_processor();
+  return processor->OnEventFromSource(event);
+}
 }  // namespace test
 }  // namespace views

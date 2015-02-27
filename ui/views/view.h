@@ -54,6 +54,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   bool Contains(View* view);
   int32 child_count() const { return static_cast<int32>(children_.size());}
   View* child_at(int32 index) { return children_.at(index);}
+  View* parent() { return parent_;}
+  const View* parent() const { return parent_;}
 
   int id() const;
   void set_id(int id);
@@ -97,7 +99,6 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   bool enabled() const { return enabled_;}
 
   
-
   // Get the theme provider from the parent widget.
   ui::ThemeProvider* GetThemeProvider() const;
 
