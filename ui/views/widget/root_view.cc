@@ -9,7 +9,6 @@
 
 #include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/aura/window.h"
-#include "azer/ui/views/id_allocator.h"
 
 namespace views {
 namespace internal {
@@ -23,12 +22,12 @@ RootView::~RootView() {
 }
 
 void RootView::Init(const gfx::Rect& bounds) {
-  window_.reset(new aura::Window(NULL));
-  window()->Init(aura::WINDOW_LAYER_NOT_DRAWN);
-  window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
+  InitAuraWindow(aura::WINDOW_LAYER_NOT_DRAWN);
   window()->SetBounds(gfx::Rect(bounds.size()));
-  window()->SetName("ContentWindowContainer");
-  window()->Show();
+}
+
+const char* RootView::GetClassName() const {
+  return "RootView";
 }
 
 }  // namespace internal

@@ -19,7 +19,11 @@ EventClient::~EventClient() {
 
 bool EventClient::CanProcessEventsWithinSubtree(const aura::Window* window) const {
   View* view = window->GetProperty(kAzerView);
-  return view->CanProcessEventsWithinSubtree();
+  if (view) {
+    return view->CanProcessEventsWithinSubtree();
+  } else {
+    return true;
+  }
 }
 
 ui::EventTarget* EventClient::GetToplevelEventTarget() {

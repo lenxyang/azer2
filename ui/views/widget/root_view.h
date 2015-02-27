@@ -14,6 +14,7 @@ class VIEWS_EXPORT RootView : public View {
   virtual ~RootView();
 
   void Init(const gfx::Rect& bounds);
+  const char* GetClassName() const override;
  private:
   Widget* widget_;
 

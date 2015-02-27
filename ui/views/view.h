@@ -19,6 +19,7 @@
 #include "ui/base/dragdrop/os_exchange_data.h"
 
 #include "azer/ui/aura/window_delegate.h"
+#include "azer/ui/aura/window.h"
 #include "azer/ui/views/views_export.h"
 
 namespace ui {
@@ -329,7 +330,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
 
   void PropagateNativeThemeChanged(const ui::NativeTheme* theme);
 
-  virtual void InitAuraWindow();
+  virtual void InitAuraWindow(aura::WindowLayerType layer_type);
 
   scoped_ptr<aura::Window> window_;
   Views children_;

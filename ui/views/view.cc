@@ -26,7 +26,7 @@ View::View()
     , focusable_(false)
     , visible_(false)
     , enabled_(true) {
-  InitAuraWindow();
+  InitAuraWindow(aura::WINDOW_LAYER_TEXTURED);
 }
 
 View::~View() {
@@ -48,13 +48,13 @@ const Widget* View::GetWidget() const {
   return root_->widget_;
 }
 
-void View::InitAuraWindow() {
+void View::InitAuraWindow(aura::WindowLayerType layer_type) {
   window_.reset(new aura::Window(this));
-  window()->Init(aura::WINDOW_LAYER_TEXTURED);
+  window()->Init(layer_type);
   window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
   window()->SetName(GetClassName());
-
   window()->SetProperty(kAzerView, this);
+  window()->Show();
 }
 
 int View::id() const {
