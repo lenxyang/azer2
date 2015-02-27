@@ -13,6 +13,7 @@
 #include "ui/base/cursor/cursor.h"
 #include "ui/events/event.h"
 #include "ui/gfx/geometry/rect.h"
+#include "ui/accessibility/ax_enums.h"
 #include "ui/base/accelerators/accelerator.h"
 #include "ui/base/dragdrop/drag_drop_types.h"
 #include "ui/base/dragdrop/drop_target_event.h"
@@ -23,6 +24,7 @@
 #include "azer/ui/views/views_export.h"
 
 namespace ui {
+struct AXViewState;
 class NativeTheme;
 class ThemeProvider;
 }
@@ -41,7 +43,8 @@ namespace internal {
 class RootView;
 }  // namespace internal
 
-class VIEWS_EXPORT View : public aura::WindowDelegate {
+class VIEWS_EXPORT View : public aura::WindowDelegate, 
+                          public ui::AcceleratorTarget {
  public:
   typedef std::vector<View*> Views;
   View();
@@ -156,13 +159,43 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void InvalidateLayout();
 
   virtual gfx::Size GetPreferredSize() const;
-  virtual void OnBoundsChanged(const gfx::Rect& previous_bounds);
   
   void OnPaint(gfx::Canvas* canvas) override;
   virtual void OnPaintBackground(gfx::Canvas* canvas);
   virtual void OnPaintBorder(gfx::Canvas* canvas);
+
+
+  // Size and disposition ------------------------------------------------------
+
+  // Override to be notified when the bounds of the view have changed.
+  virtual void OnBoundsChanged(const gfx::Rect& previous_bounds);
+
+  // Called when the preferred size of a child view changed.  This gives the
+  // parent an opportunity to do a fresh layout if that makes sense.
   virtual void ChildPreferredSizeChanged(View* child) {}
+
+  // Called when the visibility of a child view changed.  This gives the parent
+  // an opportunity to do a fresh layout if that makes sense.
+  virtual void ChildVisibilityChanged(View* child) {}
+
+  // Invalidates the layout and calls ChildPreferredSizeChanged on the parent
+  // if there is one. Be sure to call View::PreferredSizeChanged when
+  // overriding such that the layout is properly invalidated.
   virtual void PreferredSizeChanged();
+
+  // Override returning true when the view needs to be notified when its visible
+  // bounds relative to the root view may have changed. Only used by
+  // NativeViewHost.
+  virtual bool GetNeedsNotificationWhenVisibleBoundsChange() const;
+
+  // Notification that this View's visible bounds relative to the root view may
+  // have changed. The visible bounds are the region of the View not clipped by
+  // its ancestors. This is used for clipping NativeViewHost.
+  virtual void OnVisibleBoundsChanged();
+
+  // Override to be notified when the enabled state of this View has
+  // changed. The default implementation calls SchedulePaint() on this View.
+  virtual void OnEnabledChanged();
 
   // The background object is owned by this object and may be NULL.
   void set_background(Background* b);
@@ -182,7 +215,35 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void Blur();
 
   virtual void VisibilityChanged(View* starting_from, bool is_visible);
-  virtual void OnEnabledChanged();
+
+
+  // System events -------------------------------------------------------------
+
+  // Called when the UI theme (not the NativeTheme) has changed, overriding
+  // allows individual Views to do special cleanup and processing (such as
+  // dropping resource caches).  To dispatch a theme changed notification, call
+  // Widget::ThemeChanged().
+  virtual void OnThemeChanged() {}
+
+  // Used to propagate theme changed notifications from the root view to all
+  // views in the hierarchy.
+  virtual void PropagateThemeChanged();
+
+  // Tooltips ------------------------------------------------------------------
+
+  // Gets the tooltip for this View. If the View does not have a tooltip,
+  // return false. If the View does have a tooltip, copy the tooltip into
+  // the supplied string and return true.
+  // Any time the tooltip text that a View is displaying changes, it must
+  // invoke TooltipTextChanged.
+  // |p| provides the coordinates of the mouse (relative to this view).
+  virtual bool GetTooltipText(const gfx::Point& p,
+                              base::string16* tooltip) const;
+
+  // Returns the location (relative to this View) for the text on the tooltip
+  // to display. If false is returned (the default), the tooltip is placed at
+  // a default position.
+  virtual bool GetTooltipTextOrigin(const gfx::Point& p, gfx::Point* loc) const;
 
   // See field for description.
   void set_notify_enter_exit_on_child(bool notify) {
@@ -201,6 +262,19 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   virtual void OnDragExited();
   virtual int OnPerformDrop(const ui::DropTargetEvent& event);
   virtual void OnDragDone();
+
+
+  // Modifies |state| to reflect the current accessible state of this view.
+  virtual void GetAccessibleState(ui::AXViewState* state) { }
+
+  // Notifies assistive technology that an accessibility event has
+  // occurred on this view, such as when the view is focused or when its
+  // value changes. Pass true for |send_native_event| except for rare
+  // cases where the view is a native control that's already sending a
+  // native accessibility event and the duplicate event would cause
+  // problems.
+  void NotifyAccessibilityEvent(ui::AXEvent event_type,
+                                bool send_native_event);
 
   // Return the cursor that should be used for this view or the default cursor.
   // The event location is in the receiver's coordinate system. The caller is
@@ -229,6 +303,29 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   // enabled.
   bool IsMouseHovered();
 
+  // Accelerators --------------------------------------------------------------
+
+  // Sets a keyboard accelerator for that view. When the user presses the
+  // accelerator key combination, the AcceleratorPressed method is invoked.
+  // Note that you can set multiple accelerators for a view by invoking this
+  // method several times. Note also that AcceleratorPressed is invoked only
+  // when CanHandleAccelerators() is true.
+  virtual void AddAccelerator(const ui::Accelerator& accelerator);
+
+  // Removes the specified accelerator for this view.
+  virtual void RemoveAccelerator(const ui::Accelerator& accelerator);
+
+  // Removes all the keyboard accelerators for this view.
+  virtual void ResetAccelerators();
+
+  // Overridden from AcceleratorTarget:
+  bool AcceleratorPressed(const ui::Accelerator& accelerator) override;
+
+  // Returns whether accelerators are enabled for this view. Accelerators are
+  // enabled if the containing widget is visible and the view is enabled() and
+  // IsDrawn()
+  bool CanHandleAccelerators() const override;
+ protected:
   // This method is invoked when the user clicks on this view.
   // The provided event is in the receiver's coordinate system.
   //
@@ -298,7 +395,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   // if the view is focused. If the event has not been processed, the parent
   // will be given a chance.
   virtual bool OnMouseWheel(const ui::MouseWheelEvent& event);
- protected:
+
   bool ProcessMousePressed(const ui::MouseEvent& event);
   bool ProcessMouseDragged(const ui::MouseEvent& event);
   void ProcessMouseReleased(const ui::MouseEvent& event);
@@ -331,6 +428,18 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   void OnScrollEvent(ui::ScrollEvent* event) override;
   void OnTouchEvent(ui::TouchEvent* event) override;
   void OnGestureEvent(ui::GestureEvent* event) override;
+ private:
+  // Accelerators --------------------------------------------------------------
+
+  // Registers this view's keyboard accelerators that are not registered to
+  // FocusManager yet, if possible.
+  void RegisterPendingAccelerators();
+
+  // Unregisters all the keyboard accelerators associated with this view.
+  // |leave_data_intact| if true does not remove data from accelerators_ array,
+  // so it could be re-registered with other focus manager
+  void UnregisterAccelerators(bool leave_data_intact);
+
 
   // when view attached to parent with root.
   void OnAttachedRecusive(internal::RootView* view);
@@ -351,6 +460,12 @@ class VIEWS_EXPORT View : public aura::WindowDelegate {
   bool focusable_;
   bool visible_;
   bool enabled_;
+
+  // The list of accelerators. List elements in the range
+  // [0, registered_accelerator_count_) are already registered to FocusManager,
+  // and the rest are not yet.
+  scoped_ptr<std::vector<ui::Accelerator> > accelerators_;
+  size_t registered_accelerator_count_;
 
   // notify parent if child receive mouse level(enter) event.
   bool notify_enter_exit_on_child_;

@@ -26,6 +26,7 @@ View::View()
     , focusable_(false)
     , visible_(false)
     , enabled_(true)
+    , registered_accelerator_count_(0)
     , notify_enter_exit_on_child_(false) 
     , mouse_in_(false) {
   InitAuraWindow(aura::WINDOW_LAYER_TEXTURED);
@@ -109,6 +110,21 @@ void View::SizeToPreferredSize() {
 }
 
 void View::OnBoundsChanged(const gfx::Rect& old_bounds) {
+}
+
+void View::PreferredSizeChanged() {
+  if (parent_)
+    parent_->ChildPreferredSizeChanged(this);
+}
+
+bool View::GetNeedsNotificationWhenVisibleBoundsChange() const {
+  return false;
+}
+
+void View::OnVisibleBoundsChanged() {
+}
+
+void View::VisibilityChanged(View* starting_from, bool is_visible) {
 }
 
 void View::Show() {
@@ -366,7 +382,7 @@ bool View::HitTestPoint(const gfx::Point& point) const {
 }
 
 bool View::HitTestRect(const gfx::Rect& rect) const {
-  return true;
+  return window()->GetBoundsInRootWindow().Intersects(rect);
 }
 
 bool View::OnMousePressed(const ui::MouseEvent& event) {
@@ -449,11 +465,6 @@ void View::PropagateNativeThemeChanged(const ui::NativeTheme* theme) {
   OnNativeThemeChanged(theme);
 }
 
-void View::PreferredSizeChanged() {
-  if (parent_)
-    parent_->ChildPreferredSizeChanged(this);
-}
-
 bool View::CanDrop(const ui::OSExchangeData& data) {
   // TODO(sky): when I finish up migration, this should default to true.
   return false;
@@ -484,9 +495,6 @@ void View::OnBlur() {
 }
 
 void View::OnFocus() {
-}
-
-void View::VisibilityChanged(View* starting_from, bool is_visible) {
 }
 
 void View::InvalidateLayout() {
@@ -535,5 +543,58 @@ void View::PropagateMouseExited(const ui::MouseEvent& event) {
       }
     }
   }
+}
+
+// Tooltips --------------------------------------------------------------------
+
+bool View::GetTooltipText(const gfx::Point& p, base::string16* tooltip) const {
+  return false;
+}
+
+bool View::GetTooltipTextOrigin(const gfx::Point& p, gfx::Point* loc) const {
+  return false;
+}
+
+// System events ---------------------------------------------------------------
+
+void View::PropagateThemeChanged() {
+  for (int i = child_count() - 1; i >= 0; --i)
+    child_at(i)->PropagateThemeChanged();
+  OnThemeChanged();
+}
+
+// Accelerators ----------------------------------------------------------------
+
+void View::AddAccelerator(const ui::Accelerator& accelerator) {
+  if (!accelerators_.get())
+    accelerators_.reset(new std::vector<ui::Accelerator>());
+
+  if (std::find(accelerators_->begin(), accelerators_->end(), accelerator) ==
+      accelerators_->end()) {
+    accelerators_->push_back(accelerator);
+  }
+  RegisterPendingAccelerators();
+}
+
+void View::RemoveAccelerator(const ui::Accelerator& accelerator) {
+}
+
+void View::ResetAccelerators() {
+  if (accelerators_.get())
+    UnregisterAccelerators(false);
+}
+
+bool View::AcceleratorPressed(const ui::Accelerator& accelerator) {
+  return false;
+}
+
+bool View::CanHandleAccelerators() const {
+  return enabled() && vislble() && GetWidget() && GetWidget()->IsVisible();
+}
+
+void View::RegisterPendingAccelerators() {
+}
+
+void View::UnregisterAccelerators() {
 }
 }  // namespace views
