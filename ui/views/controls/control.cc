@@ -11,4 +11,7 @@ Control::~Control() {
 View* Control::GetSelectedViewForGroup(int32 group) {
   return NULL;
 }
+
+void Control::SetGroup(int32 group) {
+}
 }  // namespace views

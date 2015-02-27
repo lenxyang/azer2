@@ -432,8 +432,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
 
   // Invoked when the NativeTheme associated with this View changes.
   virtual void OnNativeThemeChanged(const ui::NativeTheme* theme) {}
-
-  // Overridden from aura::WindowDelegate:
+  
+  // Overridden from aura::WindowDelegate --------------------------------------
   gfx::Size GetMinimumSize() const override;
   gfx::Size GetMaximumSize() const override;
   void OnBoundsChanged(const gfx::Rect& old_bounds,
