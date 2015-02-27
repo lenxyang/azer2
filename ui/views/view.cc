@@ -28,6 +28,7 @@ View::View()
     , enabled_(true)
     , registered_accelerator_count_(0)
     , notify_enter_exit_on_child_(false) 
+    , registered_for_visible_bounds_notification_(false)
     , mouse_in_(false) {
   InitAuraWindow(aura::WINDOW_LAYER_TEXTURED);
 }
@@ -146,6 +147,10 @@ void View::AddChildView(View* child) {
   if (root_) {
     child->OnAttachedRecusive(root_);
   }
+
+  if (root_) {
+    RegisterChildrenForVisibleBoundsNotification(child);
+  }
 }
 
 void View::RemoveChildView(View* child) {
@@ -154,6 +159,10 @@ void View::RemoveChildView(View* child) {
     std::find(children_.begin(), children_.end(), child);
   DCHECK(i != children_.end());
   children_.erase(i);
+
+  if (root_) {
+    UnregisterChildrenForVisibleBoundsNotification(child);
+  }
 
   window()->RemoveChild(child->window());
   child->OnDetachRecusive();
@@ -194,7 +203,7 @@ gfx::Size View::GetMaximumSize() const {
 void View::OnBoundsChanged(const gfx::Rect& old_bounds,
                            const gfx::Rect& new_bounds)  {
   // from aura::Window::Delegate
-  OnBoundsChanged(old_bounds);
+  BoundsChanged(old_bounds);
 }
 
 gfx::NativeCursor View::GetCursor(const gfx::Point& point) {
@@ -360,7 +369,33 @@ gfx::Rect View::GetLocalBounds() const {
 }
 
 gfx::Rect View::GetVisibleBounds() const {
-  return bounds_;
+  if (visible()) {
+    return gfx::Rect();
+  }
+
+  gfx::Rect vis_bounds(GetLocalBounds());
+  gfx::Rect ancestor_bounds;
+  const View* view = this;
+
+  while (view != NULL && view != root_ && !vis_bounds.IsEmpty()) {
+    const View* ancestor = view->parent_;
+    aura::Window::ConvertRectToTarget(view->window(),
+                                      ancestor->window(),
+                                      &vis_bounds);
+    if (ancestor != NULL) {
+      ancestor_bounds.SetRect(0, 0, ancestor->width(), ancestor->height());
+      vis_bounds.Intersect(ancestor_bounds);
+    } else if (!view->GetWidget()) {
+      // If the view has no Widget, we're not visible. Return an empty rect.
+      return gfx::Rect();
+    }
+    view = ancestor;
+  }
+
+  if (vis_bounds.IsEmpty())
+    return vis_bounds;
+
+  return vis_bounds;
 }
 
 gfx::Rect View::GetBoundsInScreen() const {
@@ -469,6 +504,34 @@ void View::PropagateNativeThemeChanged(const ui::NativeTheme* theme) {
   for (int i = 0, count = child_count(); i < count; ++i)
     child_at(i)->PropagateNativeThemeChanged(theme);
   OnNativeThemeChanged(theme);
+}
+
+// Size and disposition --------------------------------------------------------
+
+void View::PropagateVisibilityNotifications(View* start, bool is_visible) {
+  for (int i = 0, count = child_count(); i < count; ++i)
+    child_at(i)->PropagateVisibilityNotifications(start, is_visible);
+  VisibilityChangedImpl(start, is_visible);
+}
+
+void View::VisibilityChangedImpl(View* starting_from, bool is_visible) {
+  VisibilityChanged(starting_from, is_visible);
+}
+
+void View::BoundsChanged(const gfx::Rect& previous_bounds) {
+  OnBoundsChanged(previous_bounds);
+
+  if (GetNeedsNotificationWhenVisibleBoundsChange())
+    OnVisibleBoundsChanged();
+
+  // Notify interested Views that visible bounds within the root view may have
+  // changed.
+  if (descendants_to_notify_.get()) {
+    for (Views::iterator i(descendants_to_notify_->begin());
+         i != descendants_to_notify_->end(); ++i) {
+      (*i)->OnVisibleBoundsChanged();
+    }
+  }
 }
 
 bool View::CanDrop(const ui::OSExchangeData& data) {
@@ -602,5 +665,56 @@ void View::RegisterPendingAccelerators() {
 }
 
 void View::UnregisterAccelerators(bool leave_data_intact) {
+}
+
+// static
+void View::RegisterChildrenForVisibleBoundsNotification(View* view) {
+  if (view->GetNeedsNotificationWhenVisibleBoundsChange())
+    view->RegisterForVisibleBoundsNotification();
+  for (int i = 0; i < view->child_count(); ++i)
+    RegisterChildrenForVisibleBoundsNotification(view->child_at(i));
+}
+
+// static
+void View::UnregisterChildrenForVisibleBoundsNotification(View* view) {
+  if (view->GetNeedsNotificationWhenVisibleBoundsChange())
+    view->UnregisterForVisibleBoundsNotification();
+  for (int i = 0; i < view->child_count(); ++i)
+    UnregisterChildrenForVisibleBoundsNotification(view->child_at(i));
+}
+
+void View::RegisterForVisibleBoundsNotification() {
+  if (registered_for_visible_bounds_notification_)
+    return;
+
+  registered_for_visible_bounds_notification_ = true;
+  for (View* ancestor = parent_; ancestor; ancestor = ancestor->parent_)
+    ancestor->AddDescendantToNotify(this);
+}
+
+void View::UnregisterForVisibleBoundsNotification() {
+  if (!registered_for_visible_bounds_notification_)
+    return;
+
+  registered_for_visible_bounds_notification_ = false;
+  for (View* ancestor = parent_; ancestor; ancestor = ancestor->parent_)
+    ancestor->RemoveDescendantToNotify(this);
+}
+
+void View::AddDescendantToNotify(View* view) {
+  DCHECK(view);
+  if (!descendants_to_notify_.get())
+    descendants_to_notify_.reset(new Views);
+  descendants_to_notify_->push_back(view);
+}
+
+void View::RemoveDescendantToNotify(View* view) {
+  DCHECK(view && descendants_to_notify_.get());
+  Views::iterator i(std::find(
+      descendants_to_notify_->begin(), descendants_to_notify_->end(), view));
+  DCHECK(i != descendants_to_notify_->end());
+  descendants_to_notify_->erase(i);
+  if (descendants_to_notify_->empty())
+    descendants_to_notify_.reset();
 }
 }  // namespace views

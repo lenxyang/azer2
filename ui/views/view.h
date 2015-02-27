@@ -328,6 +328,34 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   // IsDrawn()
   bool CanHandleAccelerators() const override;
  protected:
+  // Size and disposition ------------------------------------------------------
+
+  // Call VisibilityChanged() recursively for all children.
+  void PropagateVisibilityNotifications(View* from, bool is_visible);
+
+  // Registers/unregisters accelerators as necessary and calls
+  // VisibilityChanged().
+  void VisibilityChangedImpl(View* starting_from, bool is_visible);
+
+  // Responsible for propagating bounds change notifications to relevant
+  // views.
+  void BoundsChanged(const gfx::Rect& previous_bounds);
+
+  // Visible bounds notification registration.
+  // When a view is added to a hierarchy, it and all its children are asked if
+  // they need to be registered for "visible bounds within root" notifications
+  // (see comment on OnVisibleBoundsChanged()). If they do, they are registered
+  // with every ancestor between them and the root of the hierarchy.
+  static void RegisterChildrenForVisibleBoundsNotification(View* view);
+  static void UnregisterChildrenForVisibleBoundsNotification(View* view);
+  void RegisterForVisibleBoundsNotification();
+  void UnregisterForVisibleBoundsNotification();
+
+  // Adds/removes view to the list of descendants that are notified any time
+  // this views location and possibly size are changed.
+  void AddDescendantToNotify(View* view);
+  void RemoveDescendantToNotify(View* view);
+
   // This method is invoked when the user clicks on this view.
   // The provided event is in the receiver's coordinate system.
   //
@@ -471,6 +499,14 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
 
   // notify parent if child receive mouse level(enter) event.
   bool notify_enter_exit_on_child_;
+
+  // Whether or not RegisterViewForVisibleBoundsNotification on the RootView
+  // has been invoked.
+  bool registered_for_visible_bounds_notification_;
+
+  // List of descendants wanting notification when their visible bounds change.
+  scoped_ptr<Views> descendants_to_notify_;
+
   bool mouse_in_;
 
   scoped_ptr<Background> background_;

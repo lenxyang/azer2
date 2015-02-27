@@ -372,7 +372,7 @@ TEST_F(ViewTest, NotifyEnterExitOnChild) {
 // (HitTestPoint(), HitTestRect(), etc.) return the correct values.
 TEST_F(ViewTest, HitTestCallsOnView) {
   // The coordinates in this test are in the coordinate space of the root view.
-  Widget* widget = new Widget;
+  scoped_ptr<Widget> widget(new Widget);
   Widget::InitParams params;
   params.bounds = gfx::Rect(1, 1);
   widget->Init(params);
