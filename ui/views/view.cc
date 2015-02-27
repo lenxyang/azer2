@@ -26,7 +26,8 @@ View::View()
     , focusable_(false)
     , visible_(false)
     , enabled_(true)
-    , notify_enter_exit_on_child_(false) {
+    , notify_enter_exit_on_child_(false) 
+    , mouse_in_(false) {
   InitAuraWindow(aura::WINDOW_LAYER_TEXTURED);
 }
 
@@ -271,15 +272,15 @@ void View::OnMouseEvent(ui::MouseEvent* event) {
       break;
 
     case ui::ET_MOUSE_ENTERED:
-      if (notify_enter_exit_on_child()) {
-        OnMouseEntered(*event);
-      }
+      mouse_in_ = true;
+      OnMouseEntered(*event);
+      PropagateMouseEntered(*event);
       break;
 
     case ui::ET_MOUSE_EXITED:
-      if (notify_enter_exit_on_child()) {
-        OnMouseExited(*event);
-      }
+      mouse_in_ = false;
+      OnMouseExited(*event);
+      PropagateMouseExited(*event);
       break;
 
     default:
@@ -491,5 +492,45 @@ void View::InvalidateLayout() {
 
 bool View::CanProcessEventsWithinSubtree() const {
   return true;
+}
+
+void View::PropagateMouseEntered(const ui::MouseEvent& event) {
+  View* top_view = NULL;
+  for (View* p = parent(); p && !p->mouse_in_; p = p->parent()) {
+    if (p->notify_enter_exit_on_child()) {
+      top_view = p;
+    }
+  }
+
+  if (top_view) {
+    for (View* p = parent(); p; p = p->parent()) {
+      p->mouse_in_ = true;
+      p->OnMouseEntered(event);
+      if (p == top_view) {
+        break;
+      }
+    }
+  }
+}
+
+void View::PropagateMouseExited(const ui::MouseEvent& event) {
+  View* top_view = NULL;
+  for (View* p = parent(); 
+       p && p->window()->ContainsPointInRoot(event.root_location()); 
+       p = p->parent()) {
+    if (p->notify_enter_exit_on_child()) {
+      top_view = p;
+    }
+  }
+
+  if (top_view) {
+    for (View* p = parent(); p; p = p->parent()) {
+      p->mouse_in_ = false;
+      p->OnMouseExited(event);
+      if (p == top_view) {
+        break;
+      }
+    }
+  }
 }
 }  // namespace views
