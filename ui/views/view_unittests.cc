@@ -14,6 +14,7 @@
 #include "ui/gfx/geometry/rect.h"
 #include "ui/strings/grit/ui_strings.h"
 
+#include "azer/ui/aura/window.h"
 #include "azer/ui/views/view.h"
 #include "azer/ui/views/widget/widget.h"
 #include "azer/ui/views/tests/views_test_base.h"
@@ -21,6 +22,24 @@
 namespace views {
 
 typedef test::ViewsTestBase ViewTest;
+
+namespace {
+
+gfx::Point ConvertPointFromWidgetToView(View* view, const gfx::Point& p) {
+  gfx::Point tmp(p);
+  View* root = view->GetRootView();
+  aura::Window::ConvertPointToTarget(root->window(), view->window(), &tmp);
+  return tmp;
+}
+
+gfx::Rect ConvertRectFromWidgetToView(View* view, const gfx::Rect& r) {
+  gfx::Rect tmp(r);
+  tmp.set_origin(ConvertPointFromWidgetToView(view, r.origin()));
+  return tmp;
+}
+
+}  // namespace
+
 
 // A derived class for testing purpose.
 class TestView : public View {
@@ -349,5 +368,63 @@ TEST_F(ViewTest, NotifyEnterExitOnChild) {
 }
 
 
+// Tests that calls made directly on the hit-testing methods in View
+// (HitTestPoint(), HitTestRect(), etc.) return the correct values.
+TEST_F(ViewTest, HitTestCallsOnView) {
+  // The coordinates in this test are in the coordinate space of the root view.
+  Widget* widget = new Widget;
+  Widget::InitParams params;
+  params.bounds = gfx::Rect(1, 1);
+  widget->Init(params);
+  View* root_view = widget->GetRootView();
+  root_view->SetBoundsRect(gfx::Rect(0, 0, 500, 500));
 
+  // |v1| has no hit test mask. No ViewTargeter is installed on |v1|, which
+  // means that View::HitTestRect() will call into the targeter installed on
+  // the root view instead when we hit test against |v1|.
+  gfx::Rect v1_bounds = gfx::Rect(0, 0, 100, 100);
+  View* v1 = new View();
+  v1->SetBoundsRect(v1_bounds);
+  root_view->AddChildView(v1);
+
+  // |v2| has a triangular hit test mask. Install a ViewTargeter on |v2| which
+  // will be called into by View::HitTestRect().
+  gfx::Rect v2_bounds = gfx::Rect(105, 0, 100, 100);
+  View* v2 = new View();
+  v2->SetBoundsRect(v2_bounds);
+  root_view->AddChildView(v2);
+
+  gfx::Point v1_centerpoint = v1_bounds.CenterPoint();
+  gfx::Point v2_centerpoint = v2_bounds.CenterPoint();
+  gfx::Point v1_origin = v1_bounds.origin();
+  gfx::Point v2_origin = v2_bounds.origin();
+  gfx::Rect r1(10, 10, 110, 15);
+  gfx::Rect r2(106, 1, 98, 98);
+  gfx::Rect r3(0, 0, 300, 300);
+  gfx::Rect r4(115, 342, 200, 10);
+
+  // Test calls into View::HitTestPoint().
+  EXPECT_TRUE(
+      v1->HitTestPoint(ConvertPointFromWidgetToView(v1, v1_centerpoint)));
+  EXPECT_TRUE(
+      v2->HitTestPoint(ConvertPointFromWidgetToView(v2, v2_centerpoint)));
+
+  EXPECT_TRUE(v1->HitTestPoint(ConvertPointFromWidgetToView(v1, v1_origin)));
+  EXPECT_FALSE(v2->HitTestPoint(ConvertPointFromWidgetToView(v2, v2_origin)));
+
+  // Test calls into View::HitTestRect().
+  EXPECT_TRUE(v1->HitTestRect(ConvertRectFromWidgetToView(v1, r1)));
+  EXPECT_FALSE(v2->HitTestRect(ConvertRectFromWidgetToView(v2, r1)));
+
+  EXPECT_FALSE(v1->HitTestRect(ConvertRectFromWidgetToView(v1, r2)));
+  EXPECT_TRUE(v2->HitTestRect(ConvertRectFromWidgetToView(v2, r2)));
+
+  EXPECT_TRUE(v1->HitTestRect(ConvertRectFromWidgetToView(v1, r3)));
+  EXPECT_TRUE(v2->HitTestRect(ConvertRectFromWidgetToView(v2, r3)));
+
+  EXPECT_FALSE(v1->HitTestRect(ConvertRectFromWidgetToView(v1, r4)));
+  EXPECT_FALSE(v2->HitTestRect(ConvertRectFromWidgetToView(v2, r4)));
+
+  widget->CloseNow();
+}
 }  // namespace views
