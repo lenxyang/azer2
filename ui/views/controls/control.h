@@ -21,14 +21,7 @@ class VIEWS_EXPORT Control : public View {
   ~Control() override;
 
   void Layout() override {}
-
-  void SetGroup(int32 gid);
-  int32 GetGroup() const;
-  virtual View* GetSelectedViewForGroup(int32 group);
-
-  virtual void PreferredSizeChanged() {}
  private:
-  int32 group_id_;
   DISALLOW_COPY_AND_ASSIGN(Control);
 };
 }  // namespace views

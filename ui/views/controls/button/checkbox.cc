@@ -82,14 +82,12 @@ void Checkbox::Layout() {
   LabelButton::Layout();
 
   // Construct a focus painter that only surrounds the label area.
-  /*
   gfx::Rect rect = label()->GetMirroredBounds();
   rect.Inset(-2, 3);
   SetFocusPainter(Painter::CreateDashedFocusPainterWithInsets(
                       gfx::Insets(rect.y(), rect.x(),
                                   height() - rect.bottom(),
                                   width() - rect.right())));
-  */
 }
 
 const char* Checkbox::GetClassName() const {

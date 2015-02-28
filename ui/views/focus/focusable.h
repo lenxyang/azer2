@@ -4,21 +4,38 @@
 #include "azer/ui/views/views_export.h"
 
 namespace views {
+
+class VIEWS_EXPORT FocusableDelegate {
+ public:
+  FocusableDelegate() {}
+  virtual void OnFocusableGetFocus() = 0;
+  virtual void OnFocusableLostFocus() = 0;
+  // when the accelerator pressed
+  virtual void OnFocusableAcceleratorPressed() = 0;
+};
+
 class VIEWS_EXPORT Focusable {
  public:
   Focusable();
   virtual ~Focusable();
 
-  Focusable* GetNext();
+  Focusable* GetNext() {
+    return const_cast<Focusable*>(
+        static_cast<const Focusable*>(this)->GetNext());
+  }
   const Focusable* GetNext() const;
 
-  void Add(Focusable* focusable);
-  void Remove(Focusable* focusable);
-  bool IsGroupHead() const { return group_head_;}
+  FocusGroup* GetGroup() { return group_;}
+
+  void SetFocusable();
+  bool focusable() const;
  private:
   Focusable* next_sibling_;
   Focusable* prev_sibling_;
-  int32 group_id_;
+  FocusGroup* group_;
+
+  friend class FocusGroup;
   DISALLOW_COPY_AND_ASSIGN(Focusable);
 };
+
 }  // namespace views

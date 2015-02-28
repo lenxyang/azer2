@@ -74,6 +74,25 @@ void View::set_id(int id) {
   window_->set_id(id);
 }
 
+// focus and group
+void View::SetGroup(int gid) {
+}
+
+int View::GetGroup() const {
+  return 0;
+}
+
+bool View::IsGroupFocusTraversable() const {
+  return false;
+}
+
+void View::GetViewsInGroup(int group, Views* views) {
+}
+
+View* View::GetSelectedViewForGroup(int group) {
+  return NULL;
+}
+
 const std::string& View::name() const {
   return window_->name();
 }
@@ -505,6 +524,35 @@ bool View::ProcessMouseDragged(const ui::MouseEvent& event) {
 
 void View::ProcessMouseReleased(const ui::MouseEvent& event) {
   OnMouseReleased(event);
+}
+
+// RTL positioning -------------------------------------------------------------
+
+gfx::Rect View::GetMirroredBounds() const {
+  gfx::Rect bounds(bounds_);
+  bounds.set_x(GetMirroredX());
+  return bounds;
+}
+
+gfx::Point View::GetMirroredPosition() const {
+  return gfx::Point(GetMirroredX(), y());
+}
+
+int View::GetMirroredX() const {
+  return parent_ ? parent_->GetMirroredXForRect(bounds_) : x();
+}
+
+int View::GetMirroredXForRect(const gfx::Rect& bounds) const {
+  return base::i18n::IsRTL() ?
+      (width() - bounds.x() - bounds.width()) : bounds.x();
+}
+
+int View::GetMirroredXInView(int x) const {
+  return base::i18n::IsRTL() ? width() - x : x;
+}
+
+int View::GetMirroredXWithWidthInView(int x, int w) const {
+  return base::i18n::IsRTL() ? width() - x - w : x;
 }
 
 void View::Layout() {

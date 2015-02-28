@@ -66,6 +66,29 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   int id() const;
   void set_id(int id);
 
+  // A group id is used to tag views which are part of the same logical group.
+  // Focus can be moved between views with the same group using the arrow keys.
+  // Groups are currently used to implement radio button mutual exclusion.
+  // The group id is immutable once it's set.
+  void SetGroup(int gid);
+  // Returns the group id of the view, or -1 if the id is not set yet.
+  int GetGroup() const;
+
+  // If this returns true, the views from the same group can each be focused
+  // when moving focus with the Tab/Shift-Tab key.  If this returns false,
+  // only the selected view from the group (obtained with
+  // GetSelectedViewForGroup()) is focused.
+  virtual bool IsGroupFocusTraversable() const;
+
+  // Fills |views| with all the available views which belong to the provided
+  // |group|.
+  void GetViewsInGroup(int group, Views* views);
+
+  // Returns the View that is currently selected in |group|.
+  // The default implementation simply returns the first View found for that
+  // group.
+  virtual View* GetSelectedViewForGroup(int group);
+
   const std::string& name() const;
   void SetName(const std::string& name);
 
@@ -143,6 +166,53 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   // Override if your View's preferred height depends upon the width (such
   // as with Labels).
   virtual int GetHeightForWidth(int w) const;
+
+
+  // RTL positioning -----------------------------------------------------------
+
+  // Methods for accessing the bounds and position of the view, relative to its
+  // parent. The position returned is mirrored if the parent view is using a RTL
+  // layout.
+  //
+  // NOTE: in the vast majority of the cases, the mirroring implementation is
+  //       transparent to the View subclasses and therefore you should use the
+  //       bounds() accessor instead.
+  gfx::Rect GetMirroredBounds() const;
+  gfx::Point GetMirroredPosition() const;
+  int GetMirroredX() const;
+
+  // Given a rectangle specified in this View's coordinate system, the function
+  // computes the 'left' value for the mirrored rectangle within this View. If
+  // the View's UI layout is not right-to-left, then bounds.x() is returned.
+  //
+  // UI mirroring is transparent to most View subclasses and therefore there is
+  // no need to call this routine from anywhere within your subclass
+  // implementation.
+  int GetMirroredXForRect(const gfx::Rect& rect) const;
+
+  // Given the X coordinate of a point inside the View, this function returns
+  // the mirrored X coordinate of the point if the View's UI layout is
+  // right-to-left. If the layout is left-to-right, the same X coordinate is
+  // returned.
+  //
+  // Following are a few examples of the values returned by this function for
+  // a View with the bounds {0, 0, 100, 100} and a right-to-left layout:
+  //
+  // GetMirroredXCoordinateInView(0) -> 100
+  // GetMirroredXCoordinateInView(20) -> 80
+  // GetMirroredXCoordinateInView(99) -> 1
+  int GetMirroredXInView(int x) const;
+
+  // Given a X coordinate and a width inside the View, this function returns
+  // the mirrored X coordinate if the View's UI layout is right-to-left. If the
+  // layout is left-to-right, the same X coordinate is returned.
+  //
+  // Following are a few examples of the values returned by this function for
+  // a View with the bounds {0, 0, 100, 100} and a right-to-left layout:
+  //
+  // GetMirroredXCoordinateInView(0, 10) -> 90
+  // GetMirroredXCoordinateInView(20, 20) -> 60
+  int GetMirroredXWithWidthInView(int x, int w) const;
 
   virtual void Layout();
 

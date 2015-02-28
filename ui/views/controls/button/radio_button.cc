@@ -62,7 +62,6 @@ RadioButton::~RadioButton() {
 }
 
 void RadioButton::SetChecked(bool checked) {
-  /*
   if (checked == RadioButton::checked())
     return;
   if (checked) {
@@ -89,7 +88,6 @@ void RadioButton::SetChecked(bool checked) {
     }
   }
   Checkbox::SetChecked(checked);
-  */
 }
 
 const char* RadioButton::GetClassName() const {
