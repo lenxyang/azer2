@@ -182,8 +182,8 @@ void Layer::CalcOverlayBounds() {
 
 void Layer::CalcTexBounds() {
   if (layer_tree_host()) {
-    float tu = (float)(target_bounds_.x()  - bounds().x()) / (float)bounds().width();
-    float tv = (float)(target_bounds_.y()  - bounds().y()) / (float)bounds().height();
+    float tu = 0.0f;
+    float tv = 0.0f;
     float width = (float)target_bounds_.width() / (float)bounds().width();
     float height = (float)target_bounds_.height() / (float)bounds().height();
     tex_bounds_ = gfx::RectF(tu, tv, width, height);
