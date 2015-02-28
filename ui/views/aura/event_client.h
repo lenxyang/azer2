@@ -9,6 +9,8 @@
 
 namespace views {
 
+class View;
+
 namespace internal {
 class RootView;
 }  // namespace internal
@@ -25,4 +27,6 @@ class VIEWS_EXPORT EventClient : public aura::client::EventClient {
   internal::RootView* root_view_;
   DISALLOW_COPY_AND_ASSIGN(EventClient);
 };
+
+void VIEWS_EXPORT SetViewInAuraWindowProperty(View* view);
 }  // namespace views

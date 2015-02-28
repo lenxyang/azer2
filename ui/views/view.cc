@@ -12,6 +12,7 @@
 
 #include "azer/ui/aura/window.h"
 #include "azer/ui/aura/window_property.h"
+#include "azer/ui/views/aura/event_client.h"
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/border.h"
 #include "azer/ui/views/id_allocator.h"
@@ -19,11 +20,7 @@
 #include "azer/ui/views/widget/widget.h"
 #include "azer/ui/views/widget/root_view.h"
 
-DECLARE_WINDOW_PROPERTY_TYPE(views::View*)
-
 namespace views {
-
-DEFINE_WINDOW_PROPERTY_KEY(View*, kAzerView, NULL);
 
 const char View::kViewClassName[] = "View";
 
@@ -65,7 +62,7 @@ void View::InitAuraWindow(aura::WindowLayerType layer_type) {
   window()->Init(layer_type);
   window()->set_id(ViewsIDAllocator::Pointer()->allocate_id());
   window()->SetName(GetClassName());
-  window()->SetProperty(kAzerView, this);
+  SetViewInAuraWindowProperty(this);
   window()->Show();
 }
 
@@ -376,9 +373,15 @@ void View::OnPaint(gfx::Canvas* canvas) {
 }
 
 void View::OnPaintBackground(gfx::Canvas* canvas) {
+  if (background_.get()) {
+    background_->Paint(canvas, this);
+  }
 }
 
 void View::OnPaintBorder(gfx::Canvas* canvas) {
+  if (border_.get()) {
+    border_->Paint(*this, canvas);
+  }
 }
 
 bool View::HasFocus() const {

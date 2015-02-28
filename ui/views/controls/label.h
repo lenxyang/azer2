@@ -112,6 +112,7 @@ class VIEWS_EXPORT Label : public Control {
   gfx::Size GetMinimumSize() const override;
   int GetHeightForWidth(int w) const override;
   const char* GetClassName() const override;
+  bool CanProcessEventsWithinSubtree() const override;
  protected:
   // Called by Paint to paint the text.
   void PaintText(gfx::Canvas* canvas,

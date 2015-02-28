@@ -275,6 +275,11 @@ const char* Label::GetClassName() const {
   return kViewClassName;
 }
 
+bool Label::CanProcessEventsWithinSubtree() const {
+  // Send events to the parent view for handling.
+  return false;
+}
+
 void Label::PaintText(gfx::Canvas* canvas,
                       const base::string16& text,
                       const gfx::Rect& text_bounds,

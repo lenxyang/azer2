@@ -6,6 +6,8 @@
 #include "azer/ui/aura/window_property.h"
 #include "azer/ui/aura/env.h"
 
+DECLARE_WINDOW_PROPERTY_TYPE(views::View*)
+
 namespace views {
 
 DEFINE_WINDOW_PROPERTY_KEY(View*, kAzerView, NULL);
@@ -28,5 +30,9 @@ bool EventClient::CanProcessEventsWithinSubtree(const aura::Window* window) cons
 
 ui::EventTarget* EventClient::GetToplevelEventTarget() {
   return aura::Env::GetInstance();
+}
+
+void VIEWS_EXPORT SetViewInAuraWindowProperty(View* view) {
+  view->window()->SetProperty(kAzerView, view);
 }
 }  // namespace views
