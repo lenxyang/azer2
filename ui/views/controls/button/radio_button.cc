@@ -116,13 +116,11 @@ View* RadioButton::GetSelectedViewForGroup(int group) {
   return NULL;
 }
 
-/*
 bool RadioButton::IsGroupFocusTraversable() const {
   // When focusing a radio button with tab/shift+tab, only the selected button
   // from the group should be focused.
   return false;
 }
-*/
 
 void RadioButton::OnFocus() {
   Checkbox::OnFocus();
