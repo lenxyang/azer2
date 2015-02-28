@@ -20,7 +20,6 @@ class VIEWS_EXPORT Control : public View {
   Control();
   ~Control() override;
 
-  void Layout() override {}
  private:
   DISALLOW_COPY_AND_ASSIGN(Control);
 };

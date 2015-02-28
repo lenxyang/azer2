@@ -569,6 +569,8 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   bool visible_;
   bool enabled_;
 
+  bool needs_layout_;
+
   // The list of accelerators. List elements in the range
   // [0, registered_accelerator_count_) are already registered to FocusManager,
   // and the rest are not yet.

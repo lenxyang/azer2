@@ -33,6 +33,7 @@ View::View()
     , focusable_(false)
     , visible_(true)
     , enabled_(true)
+    , needs_layout_(false)
     , registered_accelerator_count_(0)
     , notify_enter_exit_on_child_(false) 
     , registered_for_visible_bounds_notification_(false)
@@ -140,6 +141,7 @@ void View::OnBoundsChanged(const gfx::Rect& old_bounds) {
 }
 
 void View::PreferredSizeChanged() {
+  InvalidateLayout();
   if (parent_)
     parent_->ChildPreferredSizeChanged(this);
 }
@@ -171,6 +173,7 @@ void View::AddChildView(View* child) {
 
   window()->AddChild(child->window());
   if (root_) {
+    Layout();
     child->OnAttachedRecusive(root_);
   }
 
@@ -558,6 +561,26 @@ int View::GetMirroredXWithWidthInView(int x, int w) const {
 }
 
 void View::Layout() {
+  needs_layout_ = false;
+
+  // If we have a layout manager, let it handle the layout for us.
+
+  // Make sure to propagate the Layout() call to any children that haven't
+  // received it yet through the layout manager and need to be laid out. This
+  // is needed for the case when the child requires a layout but its bounds
+  // weren't changed by the layout manager. If there is no layout manager, we
+  // just propagate the Layout() call down the hierarchy, so whoever receives
+  // the call can take appropriate action.
+  for (int i = 0, count = child_count(); i < count; ++i) {
+    View* child = child_at(i);
+    child->Layout();
+    /*
+    if (child->needs_layout_ || !layout_manager_.get()) {
+      child->needs_layout_ = false;
+      child->Layout();
+    }
+    */
+  }
 }
 
 void View::SchedulePaint() {
@@ -601,6 +624,11 @@ void View::VisibilityChangedImpl(View* starting_from, bool is_visible) {
 
 void View::BoundsChanged(const gfx::Rect& previous_bounds) {
   OnBoundsChanged(previous_bounds);
+
+  if (previous_bounds.size() != size()) {
+    needs_layout_ = false;
+    Layout();
+  }
 
   if (GetNeedsNotificationWhenVisibleBoundsChange())
     OnVisibleBoundsChanged();
@@ -648,6 +676,11 @@ void View::OnFocus() {
 }
 
 void View::InvalidateLayout() {
+  // Always invalidate up. This is needed to handle the case of us already being
+  // valid, but not our parent.
+  needs_layout_ = true;
+  if (parent_)
+    parent_->InvalidateLayout();
 }
 
 bool View::CanProcessEventsWithinSubtree() const {
