@@ -39,9 +39,11 @@ void CanvasLayer::SetBounds(const gfx::Rect& bounds) {
 void CanvasLayer::Redraw() {
   if (delegate_ && !bounds_.IsEmpty()) {
     SkCanvas* skcanvas = canvas_->BeginPaint();
-    skcanvas->clear(color());
+    
     scoped_ptr<gfx::Canvas> canvas(
         gfx::Canvas::CreateCanvasWithoutScaling(skcanvas, 1.0f));
+    // canvas->DrawColor(color(), SkXfermode::kSrc_Mode);
+    canvas->DrawColor(color());
     delegate_->OnPaintLayer(canvas.get());
     canvas_->EndPaint();
     texture_ = canvas_->GetTexture();

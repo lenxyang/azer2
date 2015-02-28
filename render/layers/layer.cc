@@ -46,7 +46,7 @@ Layer::Layer(LayerType type)
     , parent_(NULL)
     , layer_tree_host_(NULL)
     , visible_(true)
-    , color_(SK_ColorTRANSPARENT)
+      // , color_(SK_ColorTRANSPARENT)
     , type_(type) {
 }
 
