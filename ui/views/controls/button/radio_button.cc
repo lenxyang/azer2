@@ -9,6 +9,7 @@
 #include "ui/base/resource/resource_bundle.h"
 #include "ui/resources/grit/ui_resources.h"
 #include "azer/ui/views/widget/widget.h"
+#include "azer/ui/views/widget/root_view.h"
 
 namespace views {
 
@@ -100,7 +101,6 @@ void RadioButton::GetAccessibleState(ui::AXViewState* state) {
 }
 
 View* RadioButton::GetSelectedViewForGroup(int group) {
-  /*
   Views views;
   GetWidget()->GetRootView()->GetViewsInGroup(group, &views);
   if (views.empty())
@@ -113,7 +113,6 @@ View* RadioButton::GetSelectedViewForGroup(int group) {
       return radio_button;
   }
   
-  */
   return NULL;
 }
 
