@@ -226,6 +226,14 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
 
   internal::RootView* GetRootView() { return root_;}
   const internal::RootView* GetRootView() const { return root_;}
+
+  // The view class name.
+  static const char kViewClassName[];
+
+  // Return the receiving view's class name. A view class is a string which
+  // uniquely identifies the view class. It is intended to be used as a way to
+  // find out during run time if a view can be safely casted to a specific view
+  // subclass. The default implementation returns kViewClassName.
   virtual const char* GetClassName() const;
 
   void InvalidateLayout();

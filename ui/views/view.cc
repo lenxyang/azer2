@@ -25,11 +25,13 @@ namespace views {
 
 DEFINE_WINDOW_PROPERTY_KEY(View*, kAzerView, NULL);
 
+const char View::kViewClassName[] = "View";
+
 View::View()
     : parent_(NULL)
     , root_(NULL)
     , focusable_(false)
-    , visible_(false)
+    , visible_(true)
     , enabled_(true)
     , registered_accelerator_count_(0)
     , notify_enter_exit_on_child_(false) 
@@ -46,7 +48,7 @@ View::~View() {
 }
 
 const char* View::GetClassName() const {
-  return "View";
+  return kViewClassName;
 }
 
 Widget* View::GetWidget() {
