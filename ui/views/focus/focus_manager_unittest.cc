@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/focus/focus_manager.h"
+#include "azer/ui/views/focus/focus_manager.h"
 
 #include <utility>
 #include <vector>
@@ -16,12 +16,12 @@
 #include "ui/base/ime/text_input_focus_manager.h"
 #include "ui/base/ui_base_switches.h"
 #include "ui/events/keycodes/keyboard_codes.h"
-#include "ui/views/accessible_pane_view.h"
-#include "ui/views/controls/button/label_button.h"
-#include "ui/views/focus/focus_manager_factory.h"
-#include "ui/views/focus/widget_focus_manager.h"
-#include "ui/views/test/focus_manager_test.h"
-#include "ui/views/widget/widget.h"
+#include "azer/ui/views/accessible_pane_view.h"
+#include "azer/ui/views/controls/button/label_button.h"
+#include "azer/ui/views/focus/focus_manager_factory.h"
+#include "azer/ui/views/focus/widget_focus_manager.h"
+#include "azer/ui/views/test/focus_manager_test.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace views {
 

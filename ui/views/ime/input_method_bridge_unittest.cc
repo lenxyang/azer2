@@ -7,11 +7,11 @@
 #include "ui/base/ime/dummy_input_method_delegate.h"
 #include "ui/base/ime/input_method_minimal.h"
 #include "ui/base/ime/text_input_client.h"
-#include "ui/views/ime/input_method.h"
-#include "ui/views/test/views_test_base.h"
-#include "ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
-#include "ui/views/widget/native_widget_aura.h"
-#include "ui/views/widget/widget.h"
+#include "azer/ui/views/ime/input_method.h"
+#include "azer/ui/views/test/views_test_base.h"
+#include "azer/ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
+#include "azer/ui/views/widget/native_widget_aura.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace views {
 

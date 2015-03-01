@@ -3,9 +3,9 @@
 // found in the LICENSE file.
 
 #include "base/logging.h"
-#include "ui/views/focus/focus_manager.h"
-#include "ui/views/focus/focus_search.h"
-#include "ui/views/view.h"
+#include "azer/ui/views/focus/focus_manager.h"
+#include "azer/ui/views/focus/focus_search.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
 
