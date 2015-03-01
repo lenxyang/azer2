@@ -13,12 +13,14 @@
 #include "azer/ui/views/widget/root_view.h"
 #include "azer/ui/views/aura/focus_client.h"
 #include "azer/ui/views/aura/event_client.h"
+#include "azer/ui/views/ime/input_method.h"
 
 namespace views {
 
 Widget::Widget() 
     : closing_(false)
-    , observer_manager_(this) {
+    , observer_manager_(this)
+    , is_top_level_(true) {
   default_theme_provider_.reset(new ui::DefaultThemeProvider);
 }
 
@@ -34,7 +36,7 @@ void Widget::Init(const InitParams& params) {
   focus_client_.reset(new FocusClient);
   aura::client::SetFocusClient(host_->window(), focus_client_.get());
 
-  root_view_.reset(new internal::RootView(this));
+  root_view_.reset(CreateRootView());
   root_view_->Init(params.bounds);
   host_->InitHost();
   host_->window()->AddChild(root_view_->window());
@@ -88,6 +90,27 @@ const ui::NativeTheme* Widget::GetNativeTheme() const {
   return ui::NativeThemeAura::instance();
 }
 
+InputMethod* Widget::GetInputMethod() {
+  return const_cast<InputMethod*>(
+      const_cast<const Widget*>(this)->GetInputMethod());
+}
+
+const InputMethod* Widget::GetInputMethod() const {
+  if (is_top_level()) {
+    if (!input_method_.get())
+      input_method_ = const_cast<Widget*>(this)->CreateInputMethod().Pass();
+    return input_method_.get();
+  } else {
+    const Widget* toplevel = GetTopLevelWidget();
+    // If GetTopLevelWidget() returns itself which is not toplevel,
+    // the widget is detached from toplevel widget.
+    // TODO(oshima): Fix GetTopLevelWidget() to return NULL
+    // if there is no toplevel. We probably need to add GetTopMostWidget()
+    // to replace some use cases.
+    return (toplevel && toplevel != this) ? toplevel->GetInputMethod() : NULL;
+  }
+}
+
 void Widget::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
   DCHECK(observer_manager_.IsObserving(observed_theme));
 
@@ -103,6 +126,19 @@ void Widget::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
 bool Widget::IsVisible() const {
   DCHECK(host_.get());
   return host_->window()->IsVisible();
+}
+
+Widget* Widget::GetTopLevelWidget() {
+  return const_cast<Widget*>(
+      static_cast<const Widget*>(this)->GetTopLevelWidget());
+}
+
+const Widget* Widget::GetTopLevelWidget() const {
+  // GetTopLevelNativeWidget doesn't work during destruction because
+  // property is gone after gobject gets deleted. Short circuit here
+  // for toplevel so that InputMethod can remove itself from
+  // focus manager.
+  return this;
 }
 
 void Widget::SetContentsView(View* view) {
@@ -125,5 +161,36 @@ gfx::Rect Widget::GetClientAreaBoundsInScreen() const {
 
 gfx::Rect Widget::GetWorkAreaBoundsInScreen() const {
   return GetClientAreaBoundsInScreen();
+}
+
+internal::RootView* Widget::CreateRootView() {
+  return new internal::RootView(this);
+}
+
+scoped_ptr<InputMethod> Widget::CreateInputMethod() {
+  aura::Window* root_window = window_->GetRootWindow();
+  ui::InputMethod* host =
+      root_window->GetProperty(aura::client::kRootWindowInputMethodKey);
+  scoped_ptr<InputMethod> input_method(new InputMethodBridge(this, host, true));
+  input_method->Init(this);
+
+  return input_method.Pass();
+}
+
+void Widget::ReplaceInputMethod(InputMethod* input_method) {
+  input_method_.reset(input_method);
+  input_method->SetDelegate(native_widget_->GetInputMethodDelegate());
+  input_method->Init(this);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NativeWidgetAura, views::InputMethodDelegate implementation:
+
+void NativeWidgetAura::DispatchKeyEventPostIME(const ui::KeyEvent& key) {
+  FocusManager* focus_manager = GetWidget()->GetFocusManager();
+  delegate_->OnKeyEvent(const_cast<ui::KeyEvent*>(&key));
+  if (key.handled() || !focus_manager)
+    return;
+  focus_manager->OnKeyEvent(key);
 }
 }  // namespace views

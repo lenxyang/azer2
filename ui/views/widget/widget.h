@@ -13,9 +13,14 @@
 #include "azer/ui/aura/window_delegate.h"
 #include "azer/ui/aura/window_tree_host_observer.h"
 #include "azer/ui/views/views_export.h"
+#include "azer/ui/views/ime/input_method_delegate.h"
 
 namespace ui {
+class Accelerator;
 class DefaultThemeProvider;
+class InputMethod;
+class NativeTheme;
+class OSExchangeData;
 class ThemeProvider;
 }  // namespace ui
 
@@ -29,13 +34,16 @@ class FocusClient;
 
 namespace views {
 
-class View;
 class EventClient;
+class InputMethod;
+class View;
+
 namespace internal {
 class RootView;
 }  // namespace internal
 
 class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
+                            public internal::InputMethodDelegate,
                             public ui::NativeThemeObserver {
  public:
   Widget();
@@ -53,6 +61,12 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   void Hide();
 
   bool IsVisible() const;
+
+  // Returns the top level widget in a hierarchy (see is_top_level() for
+  // the definition of top level widget.) Will return NULL if called
+  // before the widget is attached to the top level widget's hierarchy.
+  Widget* GetTopLevelWidget();
+  const Widget* GetTopLevelWidget() const;
 
   // Sets the specified view as the contents of this Widget. There can only
   // be one contents view child of this Widget's RootView. This view is sized to
@@ -86,6 +100,11 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   }
   const ui::NativeTheme* GetNativeTheme() const;
 
+  // Returns the InputMethod for this widget.
+  // Note that all widgets in a widget hierarchy share the same input method.
+  InputMethod* GetInputMethod();
+  const InputMethod* GetInputMethod() const;
+
   internal::RootView* GetRootView() { return root_view_.get();}
   const internal::RootView* GetRootView() const { return root_view_.get();}
 
@@ -94,13 +113,40 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
 
   // internal
   void OnRootViewSetBoundsChanged(const gfx::Rect& bounds);
+
+  // True if the widget is considered top level widget. Top level widget
+  // is a widget of TYPE_WINDOW, TYPE_PANEL, TYPE_WINDOW_FRAMELESS, BUBBLE,
+  // POPUP or MENU, and has a focus manager and input method object associated
+  // with it. TYPE_CONTROL and TYPE_TOOLTIP is not considered top level.
+  bool is_top_level() const { return is_top_level_; }
+
+  // Overridden from views::InputMethodDelegate:
+  void DispatchKeyEventPostIME(const ui::KeyEvent& key) override;
  protected:
+  // Creates the RootView to be used within this Widget. Subclasses may override
+  // to create custom RootViews that do specialized event processing.
+  // TODO(beng): Investigate whether or not this is needed.
+  virtual internal::RootView* CreateRootView();
+
+  // Creates and initializes a new InputMethod and returns it, otherwise null.
+  scoped_ptr<InputMethod> CreateInputMethod();
+
+  // Sets a different InputMethod instance to this widget. The instance
+  // must not be initialized, the ownership will be assumed by the widget.
+  // It's only for testing purpose.
+  void ReplaceInputMethod(InputMethod* input_method);
+
   void OnNativeThemeUpdated(ui::NativeTheme* observed_theme) override;
   scoped_ptr<aura::WindowTreeHost> host_;
   scoped_ptr<internal::RootView> root_view_;
   scoped_ptr<aura::client::FocusClient> focus_client_;
   scoped_ptr<EventClient> event_client_;
   bool closing_;
+
+  mutable scoped_ptr<InputMethod> input_method_;
+
+  // See |is_top_level()| accessor.
+  bool is_top_level_;
 
   // A theme provider to use when no other theme provider is specified.
   scoped_ptr<ui::DefaultThemeProvider> default_theme_provider_;

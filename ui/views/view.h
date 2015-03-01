@@ -28,6 +28,7 @@ using ui::OSExchangeData;
 namespace ui {
 struct AXViewState;
 class NativeTheme;
+class TextInputClient;
 class ThemeProvider;
 }
 
@@ -39,6 +40,7 @@ namespace views {
 
 class Background;
 class Border;
+class InputMethod;
 class Widget;
 
 namespace internal {
@@ -367,6 +369,16 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   bool notify_enter_exit_on_child() const {
     return notify_enter_exit_on_child_;
   }
+
+  // Returns the View's TextInputClient instance or NULL if the View doesn't
+  // support text input.
+  virtual ui::TextInputClient* GetTextInputClient();
+
+  // Convenience method to retrieve the InputMethod associated with the
+  // Widget that contains this view. Returns NULL if this view is not part of a
+  // view hierarchy with a Widget.
+  virtual InputMethod* GetInputMethod();
+  virtual const InputMethod* GetInputMethod() const;
 
   // Drag and drop -------------------------------------------------------------
 

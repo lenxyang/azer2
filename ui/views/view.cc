@@ -349,6 +349,20 @@ void View::OnMouseEvent(ui::MouseEvent* event) {
   }
 }
 
+ui::TextInputClient* View::GetTextInputClient() {
+  return NULL;
+}
+
+InputMethod* View::GetInputMethod() {
+  Widget* widget = GetWidget();
+  return widget ? widget->GetInputMethod() : NULL;
+}
+
+const InputMethod* View::GetInputMethod() const {
+  const Widget* widget = GetWidget();
+  return widget ? widget->GetInputMethod() : NULL;
+}
+
 void View::OnScrollEvent(ui::ScrollEvent* event) {
 }
 
