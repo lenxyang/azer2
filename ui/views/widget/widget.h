@@ -57,8 +57,53 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   void CloseNow();
   bool IsClosing() const { return closing_;}
 
-  void Show();
+  // Shows the widget. The widget is activated if during initialization the
+  // can_activate flag in the InitParams structure is set to true.
+  virtual void Show();
+  // Hides the widget.
   void Hide();
+
+  // Like Show(), but does not activate the window.
+  void ShowInactive();
+
+  // Activates the widget, assuming it already exists and is visible.
+  void Activate();
+
+  // Deactivates the widget, making the next window in the Z order the active
+  // window.
+  void Deactivate();
+
+  // Returns whether the Widget is the currently active window.
+  virtual bool IsActive() const;
+
+  // Sets the widget to be on top of all other widgets in the windowing system.
+  void SetAlwaysOnTop(bool on_top);
+
+  // Returns whether the widget has been set to be on top of most other widgets
+  // in the windowing system.
+  bool IsAlwaysOnTop() const;
+
+  // Sets the widget to be visible on all work spaces.
+  void SetVisibleOnAllWorkspaces(bool always_visible);
+
+  // Maximizes/minimizes/restores the window.
+  void Maximize();
+  void Minimize();
+  void Restore();
+
+  // Whether or not the window is maximized or minimized.
+  virtual bool IsMaximized() const;
+  bool IsMinimized() const;
+
+  // Accessors for fullscreen state.
+  void SetFullscreen(bool fullscreen);
+  bool IsFullscreen() const;
+
+  // Returns the View at the root of the View hierarchy contained by this
+  // Widget.
+  internal::RootView* GetRootView() { return root_view_.get();}
+  const internal::RootView* GetRootView() const { return root_view_.get();}
+
 
   bool IsVisible() const;
 
@@ -100,13 +145,29 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   }
   const ui::NativeTheme* GetNativeTheme() const;
 
+  // Returns the FocusManager for this widget.
+  // Note that all widgets in a widget hierarchy share the same focus manager.
+  FocusManager* GetFocusManager();
+  const FocusManager* GetFocusManager() const;
+
   // Returns the InputMethod for this widget.
   // Note that all widgets in a widget hierarchy share the same input method.
   InputMethod* GetInputMethod();
   const InputMethod* GetInputMethod() const;
 
-  internal::RootView* GetRootView() { return root_view_.get();}
-  const internal::RootView* GetRootView() const { return root_view_.get();}
+  // Returns the ui::InputMethod for this widget.
+  // TODO(yukishiino): Rename this method to GetInputMethod once we remove
+  // views::InputMethod.
+  ui::InputMethod* GetHostInputMethod();
+
+  // Retrieves the focus traversable for this widget.
+  FocusTraversable* GetFocusTraversable();
+
+  void SetFocusTraversableParent(FocusTraversable* parent);
+  void SetFocusTraversableParentView(View* parent_view);
+
+  // Clear native focus set to the Widget's NativeWidget.
+  void ClearNativeFocus();
 
   aura::WindowTreeHost* host() { return host_.get();}
   const aura::WindowTreeHost* host() const { return host_.get();}
@@ -122,6 +183,22 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
 
   // Overridden from views::InputMethodDelegate:
   void DispatchKeyEventPostIME(const ui::KeyEvent& key) override;
+
+  // Sets capture to the specified view. This makes it so that all mouse, touch
+  // and gesture events go to |view|. If |view| is NULL, the widget still
+  // obtains event capture, but the events will go to the view they'd normally
+  // go to.
+  void SetCapture(View* view);
+
+  // Releases capture.
+  void ReleaseCapture();
+
+  // Returns true if the widget has capture.
+  bool HasCapture();
+
+  void set_auto_release_capture(bool auto_release_capture) {
+    auto_release_capture_ = auto_release_capture;
+  }
  protected:
   // Creates the RootView to be used within this Widget. Subclasses may override
   // to create custom RootViews that do specialized event processing.
@@ -147,6 +224,10 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
 
   // See |is_top_level()| accessor.
   bool is_top_level_;
+
+  // True if event capture should be released on a mouse up event. Default is
+  // true.
+  bool auto_release_capture_;
 
   // A theme provider to use when no other theme provider is specified.
   scoped_ptr<ui::DefaultThemeProvider> default_theme_provider_;

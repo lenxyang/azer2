@@ -64,7 +64,7 @@ source_set("views") {
     "env.h",
     "focus/external_focus_tracker.cc",
     "focus/external_focus_tracker.h",
-#    "focus/focus_manager.cc",
+    "focus/focus_manager.cc",
     "focus/focus_manager.h",
     "focus/focus_manager_delegate.h",
     "focus/focus_manager_factory.cc",
