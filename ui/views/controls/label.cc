@@ -329,6 +329,7 @@ void Label::OnBoundsChanged(const gfx::Rect& previous_bounds) {
 }
 
 void Label::OnPaint(gfx::Canvas* canvas) {
+  set_background(Background::CreateSolidBackground(0xffcdcdcd));
   OnPaintBackground(canvas);
   // We skip painting the focus border because it is being handled seperately by
   // some subclasses of Label. We do not want View's focus border painting to

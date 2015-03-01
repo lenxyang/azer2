@@ -67,6 +67,9 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   // Returns the bounds of the Widget's client area in screen coordinates.
   gfx::Rect GetClientAreaBoundsInScreen() const;
 
+  // Returns the work area bounds of the screen the Widget belongs to.
+  gfx::Rect GetWorkAreaBoundsInScreen() const;
+
   // Sizes and/or places the widget to the specified bounds, size or position.
   void SetBounds(const gfx::Rect& bounds);
   void SetSize(const gfx::Size& size);

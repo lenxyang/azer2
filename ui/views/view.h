@@ -23,6 +23,8 @@
 #include "azer/ui/aura/window.h"
 #include "azer/ui/views/views_export.h"
 
+using ui::OSExchangeData;
+
 namespace ui {
 struct AXViewState;
 class NativeTheme;
@@ -140,6 +142,33 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   }
   const ui::NativeTheme* GetNativeTheme() const;
 
+  // RTL painting --------------------------------------------------------------
+
+  // This method determines whether the gfx::Canvas object passed to
+  // View::Paint() needs to be transformed such that anything drawn on the
+  // canvas object during View::Paint() is flipped horizontally.
+  //
+  // By default, this function returns false (which is the initial value of
+  // |flip_canvas_on_paint_for_rtl_ui_|). View subclasses that need to paint on
+  // a flipped gfx::Canvas when the UI layout is right-to-left need to call
+  // EnableCanvasFlippingForRTLUI().
+  bool FlipCanvasOnPaintForRTLUI() const {
+    return flip_canvas_on_paint_for_rtl_ui_ ? base::i18n::IsRTL() : false;
+  }
+
+  // Enables or disables flipping of the gfx::Canvas during View::Paint().
+  // Note that if canvas flipping is enabled, the canvas will be flipped only
+  // if the UI layout is right-to-left; that is, the canvas will be flipped
+  // only if base::i18n::IsRTL() returns true.
+  //
+  // Enabling canvas flipping is useful for leaf views that draw an image that
+  // needs to be flipped horizontally when the UI layout is right-to-left
+  // (views::Button, for example). This method is helpful for such classes
+  // because their drawing logic stays the same and they can become agnostic to
+  // the UI directionality.
+  void EnableCanvasFlippingForRTLUI(bool enable) {
+    flip_canvas_on_paint_for_rtl_ui_ = enable;
+  }
 
   // Returns the insets of the current border. If there is no border an empty
   // insets is returned.
@@ -226,6 +255,12 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
 
   internal::RootView* GetRootView() { return root_;}
   const internal::RootView* GetRootView() const { return root_;}
+
+  // Convert a point from a View's coordinate system to that of the screen.
+  static void ConvertPointToScreen(const View* src, gfx::Point* point);
+
+  // Convert a point from a View's coordinate system to that of the screen.
+  static void ConvertPointFromScreen(const View* dst, gfx::Point* point);
 
   // The view class name.
   static const char kViewClassName[];
@@ -333,9 +368,19 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
     return notify_enter_exit_on_child_;
   }
 
+  // Drag and drop -------------------------------------------------------------
+
+  // These are cover methods that invoke the method of the same name on
+  // the DragController. Subclasses may wish to override rather than install
+  // a DragController.
+  // See DragController for a description of these methods.
+  virtual int GetDragOperations(const gfx::Point& press_pt);
+  virtual void WriteDragData(const gfx::Point& press_pt, OSExchangeData* data);
+
   // Returns whether we're in the middle of a drag session that was initiated
   // by us.
   bool InDrag();
+
   virtual bool CanDrop(const ui::OSExchangeData& data);
   virtual void OnDragEntered(const ui::DropTargetEvent& event);
   virtual int OnDragUpdated(const ui::DropTargetEvent& event);
@@ -591,6 +636,14 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
 
   scoped_ptr<Background> background_;
   scoped_ptr<Border> border_;
+
+
+  // RTL painting --------------------------------------------------------------
+
+  // Indicates whether or not the gfx::Canvas object passed to View::Paint()
+  // is going to be flipped horizontally (using the appropriate transform) on
+  // right-to-left locales for this View.
+  bool flip_canvas_on_paint_for_rtl_ui_;
   friend class Widget;
   DISALLOW_COPY_AND_ASSIGN(View);
 };

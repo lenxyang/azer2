@@ -12,6 +12,7 @@
 
 #include "azer/ui/aura/window.h"
 #include "azer/ui/aura/window_property.h"
+#include "azer/ui/aura/window_tree_host.h"
 #include "azer/ui/views/aura/event_client.h"
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/border.h"
@@ -34,7 +35,8 @@ View::View()
     , registered_accelerator_count_(0)
     , notify_enter_exit_on_child_(false) 
     , registered_for_visible_bounds_notification_(false)
-    , mouse_in_(false) {
+    , mouse_in_(false)
+    , flip_canvas_on_paint_for_rtl_ui_(false) {
   InitAuraWindow(aura::WINDOW_LAYER_TEXTURED);
 }
 
@@ -668,8 +670,21 @@ int View::OnPerformDrop(const ui::DropTargetEvent& event) {
 void View::OnDragDone() {
 }
 
+int View::GetDragOperations(const gfx::Point& press_pt) {
+  return ui::DragDropTypes::DRAG_NONE;
+}
+
+void View::WriteDragData(const gfx::Point& press_pt, OSExchangeData* data) {
+  CHECK(false);
+}
+
 bool View::InDrag() {
   return false;
+}
+
+void View::NotifyAccessibilityEvent(
+    ui::AXEvent event_type,
+    bool send_native_event) {
 }
 
 void View::OnBlur() {
@@ -833,5 +848,25 @@ void View::RemoveDescendantToNotify(View* view) {
   descendants_to_notify_->erase(i);
   if (descendants_to_notify_->empty())
     descendants_to_notify_.reset();
+}
+
+// Convert a point from a View's coordinate system to that of the screen.
+void View::ConvertPointToScreen(const View* src, gfx::Point* point) {
+  DCHECK(src->GetWidget());
+  const aura::WindowTreeHost* host = src->GetWidget()->host();
+  aura::Window::ConvertPointToTarget(src->window(), 
+                                     host->window(),
+                                     point);
+  host->ConvertPointToNativeScreen(point);
+}
+
+  // Convert a point from a View's coordinate system to that of the screen.
+void View::ConvertPointFromScreen(const View* dst, gfx::Point* point) {
+  DCHECK(dst->GetWidget());
+  const aura::WindowTreeHost* host = dst->GetWidget()->host();
+  host->ConvertPointFromNativeScreen(point);
+  aura::Window::ConvertPointToTarget(host->window(),
+                                     dst->window(), 
+                                     point);
 }
 }  // namespace views

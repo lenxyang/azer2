@@ -122,4 +122,8 @@ gfx::Rect Widget::GetWindowBoundsInScreen() const {
 gfx::Rect Widget::GetClientAreaBoundsInScreen() const {
   return root_view_->window()->GetBoundsInScreen();
 }
+
+gfx::Rect Widget::GetWorkAreaBoundsInScreen() const {
+  return GetClientAreaBoundsInScreen();
+}
 }  // namespace views
