@@ -24,7 +24,7 @@
 #include "azer/ui/views/view.h"
 #include "azer/ui/views/widget/root_view.h"
 #include "azer/ui/views/widget/widget.h"
-#include "azer/ui/views/widget/widget_delegate.h"
+// #include "azer/ui/views/widget/widget_delegate.h"
 
 namespace views {
 

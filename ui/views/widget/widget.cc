@@ -168,6 +168,7 @@ internal::RootView* Widget::CreateRootView() {
 }
 
 scoped_ptr<InputMethod> Widget::CreateInputMethod() {
+  /*
   aura::Window* root_window = window_->GetRootWindow();
   ui::InputMethod* host =
       root_window->GetProperty(aura::client::kRootWindowInputMethodKey);
@@ -175,22 +176,28 @@ scoped_ptr<InputMethod> Widget::CreateInputMethod() {
   input_method->Init(this);
 
   return input_method.Pass();
+  */
+  return scoped_ptr<InputMethod>().Pass();
 }
 
 void Widget::ReplaceInputMethod(InputMethod* input_method) {
+  /*
   input_method_.reset(input_method);
   input_method->SetDelegate(native_widget_->GetInputMethodDelegate());
   input_method->Init(this);
+  */
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // NativeWidgetAura, views::InputMethodDelegate implementation:
 
-void NativeWidgetAura::DispatchKeyEventPostIME(const ui::KeyEvent& key) {
+void Widget::DispatchKeyEventPostIME(const ui::KeyEvent& key) {
+  /*
   FocusManager* focus_manager = GetWidget()->GetFocusManager();
   delegate_->OnKeyEvent(const_cast<ui::KeyEvent*>(&key));
   if (key.handled() || !focus_manager)
     return;
   focus_manager->OnKeyEvent(key);
+  */
 }
 }  // namespace views

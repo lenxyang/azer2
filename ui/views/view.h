@@ -60,7 +60,7 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   void AddChildView(View* view);
   void RemoveChildView(View* view);
   void RemoveAllChildViews();
-  bool Contains(View* view) const;
+  bool Contains(const View* view) const;
   bool has_children() const { return child_count() > 0;}
   int32 child_count() const { return static_cast<int32>(children_.size());}
   View* child_at(int32 index) { return children_.at(index);}
@@ -121,12 +121,103 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   // 0, 0).
   gfx::Rect GetLocalBounds() const;
 
-  void SetFocusable(bool focusable) { focusable_ = focusable;}
-  bool focusable() const { return focusable_;}
-  virtual bool HasFocus() const;
+  // Accelerators --------------------------------------------------------------
+
+  // Sets a keyboard accelerator for that view. When the user presses the
+  // accelerator key combination, the AcceleratorPressed method is invoked.
+  // Note that you can set multiple accelerators for a view by invoking this
+  // method several times. Note also that AcceleratorPressed is invoked only
+  // when CanHandleAccelerators() is true.
+  virtual void AddAccelerator(const ui::Accelerator& accelerator);
+
+  // Removes the specified accelerator for this view.
+  virtual void RemoveAccelerator(const ui::Accelerator& accelerator);
+
+  // Removes all the keyboard accelerators for this view.
+  virtual void ResetAccelerators();
+
+  // Overridden from AcceleratorTarget:
+  bool AcceleratorPressed(const ui::Accelerator& accelerator) override;
+
+  // Returns whether accelerators are enabled for this view. Accelerators are
+  // enabled if the containing widget is visible and the view is enabled() and
+  // IsDrawn()
+  bool CanHandleAccelerators() const override;
+
+  // Focus ---------------------------------------------------------------------
+
+  // Returns whether this view currently has the focus.
+  virtual bool HasFocus() const;  
+  
+  // Returns the view that should be selected next when pressing Tab.
+  View* GetNextFocusableView();
+  const View* GetNextFocusableView() const;
+
+  // Returns the view that should be selected next when pressing Shift-Tab.
+  View* GetPreviousFocusableView();
+
+  // Sets the component that should be selected next when pressing Tab, and
+  // makes the current view the precedent view of the specified one.
+  // Note that by default views are linked in the order they have been added to
+  // their container. Use this method if you want to modify the order.
+  // IMPORTANT NOTE: loops in the focus hierarchy are not supported.
+  void SetNextFocusableView(View* view);
+
+  // Sets whether this view is capable of taking focus. It will clear focus if
+  // the focused view is set to be non-focusable.
+  // Note that this is false by default so that a view used as a container does
+  // not get the focus.
+  void SetFocusable(bool focusable);
+
+  // Returns true if this view is |focusable_|, |enabled_| and drawn.
+  bool IsFocusable() const;
+
+  // Return whether this view is focusable when the user requires full keyboard
+  // access, even though it may not be normally focusable.
+  bool IsAccessibilityFocusable() const;
+
+  // Set whether this view can be made focusable if the user requires
+  // full keyboard access, even though it's not normally focusable. It will
+  // clear focus if the focused view is set to be non-focusable.
+  // Note that this is false by default.
+  void SetAccessibilityFocusable(bool accessibility_focusable);
+
+  // Convenience method to retrieve the FocusManager associated with the
+  // Widget that contains this view.  This can return NULL if this view is not
+  // part of a view hierarchy with a Widget.
+  virtual FocusManager* GetFocusManager();
+  virtual const FocusManager* GetFocusManager() const;
 
   // Request keyboard focus. The receiving view will become the focused view.
   virtual void RequestFocus();
+
+  // Invoked when a view is about to be requested for focus due to the focus
+  // traversal. Reverse is this request was generated going backward
+  // (Shift-Tab).
+  virtual void AboutToRequestFocusFromTabTraversal(bool reverse) {}
+
+  // Invoked when a key is pressed before the key event is processed (and
+  // potentially eaten) by the focus manager for tab traversal, accelerators and
+  // other focus related actions.
+  // The default implementation returns false, ensuring that tab traversal and
+  // accelerators processing is performed.
+  // Subclasses should return true if they want to process the key event and not
+  // have it processed as an accelerator (if any) or as a tab traversal (if the
+  // key event is for the TAB key).  In that case, OnKeyPressed will
+  // subsequently be invoked for that event.
+  virtual bool SkipDefaultKeyEventProcessing(const ui::KeyEvent& event);
+
+  // Subclasses that contain traversable children that are not directly
+  // accessible through the children hierarchy should return the associated
+  // FocusTraversable for the focus traversal to work properly.
+  virtual FocusTraversable* GetFocusTraversable();
+
+  // Subclasses that can act as a "pane" must implement their own
+  // FocusTraversable to keep the focus trapped within the pane.
+  // If this method returns an object, any view that's a direct or
+  // indirect child of this view will always use this FocusTraversable
+  // rather than the one from the widget.
+  virtual FocusTraversable* GetPaneFocusTraversable();
 
   void SetEnabled(bool enabled);
   bool enabled() const { return enabled_;}
@@ -439,29 +530,6 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   // Returns true if the mouse cursor is over |view| and mouse events are
   // enabled.
   bool IsMouseHovered();
-
-  // Accelerators --------------------------------------------------------------
-
-  // Sets a keyboard accelerator for that view. When the user presses the
-  // accelerator key combination, the AcceleratorPressed method is invoked.
-  // Note that you can set multiple accelerators for a view by invoking this
-  // method several times. Note also that AcceleratorPressed is invoked only
-  // when CanHandleAccelerators() is true.
-  virtual void AddAccelerator(const ui::Accelerator& accelerator);
-
-  // Removes the specified accelerator for this view.
-  virtual void RemoveAccelerator(const ui::Accelerator& accelerator);
-
-  // Removes all the keyboard accelerators for this view.
-  virtual void ResetAccelerators();
-
-  // Overridden from AcceleratorTarget:
-  bool AcceleratorPressed(const ui::Accelerator& accelerator) override;
-
-  // Returns whether accelerators are enabled for this view. Accelerators are
-  // enabled if the containing widget is visible and the view is enabled() and
-  // IsDrawn()
-  bool CanHandleAccelerators() const override;
  protected:
   // Size and disposition ------------------------------------------------------
 

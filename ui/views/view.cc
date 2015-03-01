@@ -202,7 +202,7 @@ void View::RemoveAllChildViews() {
   }
 }
 
-bool View::Contains(View* view) const{
+bool View::Contains(const View* view) const{
   return window()->Contains(view->window());
 }
 
