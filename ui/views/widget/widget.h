@@ -235,8 +235,13 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   // WARNING: see warning in tooltip_manager_ for ordering dependencies with
   // this and tooltip_manager_.
   scoped_ptr<internal::RootView> root_view_;
-  scoped_ptr<aura::client::FocusClient> focus_client_;
-  scoped_ptr<EventClient> event_client_;
+
+  // The focus manager keeping track of focus for this Widget and any of its
+  // children.  NULL for non top-level widgets.
+  // WARNING: RootView's destructor calls into the FocusManager. As such, this
+  // must be destroyed AFTER root_view_. This is enforced in DestroyRootView().
+  scoped_ptr<FocusManager> focus_manager_;
+
   bool closing_;
 
   mutable scoped_ptr<InputMethod> input_method_;
@@ -254,6 +259,8 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   ScopedObserver<ui::NativeTheme, ui::NativeThemeObserver> observer_manager_;
 
   scoped_ptr<aura::WindowTreeHost> host_;
+  scoped_ptr<aura::client::FocusClient> focus_client_;
+  scoped_ptr<EventClient> event_client_;
   DISALLOW_COPY_AND_ASSIGN(Widget);
 };
 }  // namespace views

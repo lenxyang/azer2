@@ -784,6 +784,14 @@ void View::OnBlur() {
 void View::OnFocus() {
 }
 
+void View::Focus() {
+  OnFocus();
+}
+
+void View::Blur() {
+  OnBlur();
+}
+
 void View::InvalidateLayout() {
   // Always invalidate up. This is needed to handle the case of us already being
   // valid, but not our parent.
