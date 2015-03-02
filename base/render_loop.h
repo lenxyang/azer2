@@ -49,7 +49,7 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
   uint32 which_;
   ::base::Time time_[2];
   int64 frame_count_;
-  std::atomic<bool> stop_;
+  std::atomic<bool> stopping_;
   DISALLOW_COPY_AND_ASSIGN(RenderLoop);
 };
 }  // namespace azer

@@ -14,7 +14,7 @@ RenderLoop::RenderLoop(Delegate* delegate)
     , message_loop_(NULL)
     , which_(0)
     , frame_count_(0) 
-    , stop_(false) {
+    , stopping_(false) {
 }
 
 RenderLoop::~RenderLoop() {
@@ -45,12 +45,23 @@ void RenderLoop::PostTask() {
   DCHECK(NULL != delegate_);
   DCHECK(NULL != message_loop_);
   DCHECK(message_loop_ == ::base::MessageLoop::current());
+  if (stopping_) {
+    return;
+  }
+
   ::base::Closure closure = ::base::Bind(&RenderLoop::RenderTask, this);
   ::base::MessageLoop* cur = ::base::MessageLoop::current();
+
+  ::base::MessageLoop::ScopedNestableTaskAllower
+        allow(::base::MessageLoop::current());
   message_loop_->PostTask(FROM_HERE, closure);
 }
 
 void RenderLoop::RenderTask() {
+  if (stopping_) {
+    return;
+  }
+
   DCHECK(NULL != delegate_);
   which_ ^= 1;
     
@@ -61,6 +72,8 @@ void RenderLoop::RenderTask() {
   delegate_->OnRender(time_[cur], delta);
   frame_count_++;
   delegate_->OnUpdate(time_[cur], delta);
+
+  PostTask();
 }
 
 bool RenderLoop::Run() {
@@ -71,20 +84,14 @@ bool RenderLoop::Run() {
   }
 
   DCHECK(cur == message_loop_);
-  while (true) {
-    base::RunLoop().RunUntilIdle();
-    if (stop_.load()) {
-      break;
-    }
-
-    RenderTask();
-  }
+  PostTask();
+  base::RunLoop().Run();
   return true;
 }
 
 void RenderLoop::Quit() {
-  DCHECK_EQ(stop_, false);
-  stop_ = false;
+  DCHECK_EQ(stopping_, false);
+  stopping_ = true;
 }
 
 }  // namespace azer
