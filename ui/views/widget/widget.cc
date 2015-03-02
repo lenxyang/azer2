@@ -14,12 +14,17 @@
 #include "azer/ui/views/aura/focus_client.h"
 #include "azer/ui/views/aura/event_client.h"
 #include "azer/ui/views/ime/input_method.h"
+#include "azer/ui/views/widget/widget_delegate.h"
 
 namespace views {
+Widget::InitParams::InitParams()
+    : delegate(NULL) {
+}
 
 Widget::Widget() 
     : closing_(false)
     , observer_manager_(this)
+    , widget_delegate_(NULL)
     , is_top_level_(true) {
   default_theme_provider_.reset(new ui::DefaultThemeProvider);
 }
@@ -32,6 +37,9 @@ Widget::~Widget() {
 }
 
 void Widget::Init(const InitParams& params) {
+  widget_delegate_ = params.delegate ?
+      params.delegate : new DefaultWidgetDelegate(this);
+
   host_.reset(aura::WindowTreeHost::Create(params.bounds));
   focus_client_.reset(new FocusClient);
   aura::client::SetFocusClient(host_->window(), focus_client_.get());

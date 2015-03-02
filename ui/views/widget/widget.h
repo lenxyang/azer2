@@ -39,6 +39,7 @@ class FocusManager;
 class FocusTraversable;
 class InputMethod;
 class View;
+class WidgetDelegate;
 
 namespace internal {
 class RootView;
@@ -52,7 +53,13 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   virtual ~Widget();
 
   struct VIEWS_EXPORT InitParams {
+    // If NULL, a default implementation will be constructed.
+    WidgetDelegate* delegate;
+
     gfx::Rect bounds;
+
+    InitParams();
+    ~InitParams();
   };
   void Init(const InitParams& param);
   void Close();
@@ -114,6 +121,9 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   // before the widget is attached to the top level widget's hierarchy.
   Widget* GetTopLevelWidget();
   const Widget* GetTopLevelWidget() const;
+
+  // Gets/Sets the WidgetDelegate.
+  WidgetDelegate* widget_delegate() const { return widget_delegate_; }
 
   // Sets the specified view as the contents of this Widget. There can only
   // be one contents view child of this Widget's RootView. This view is sized to
@@ -216,7 +226,14 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   void ReplaceInputMethod(InputMethod* input_method);
 
   void OnNativeThemeUpdated(ui::NativeTheme* observed_theme) override;
-  scoped_ptr<aura::WindowTreeHost> host_;
+
+  // Non-owned pointer to the Widget's delegate. If a NULL delegate is supplied
+  // to Init() a default WidgetDelegate is created.
+  WidgetDelegate* widget_delegate_;
+
+  // The root of the View hierarchy attached to this window.
+  // WARNING: see warning in tooltip_manager_ for ordering dependencies with
+  // this and tooltip_manager_.
   scoped_ptr<internal::RootView> root_view_;
   scoped_ptr<aura::client::FocusClient> focus_client_;
   scoped_ptr<EventClient> event_client_;
@@ -235,6 +252,8 @@ class VIEWS_EXPORT Widget : public aura::WindowTreeHostObserver,
   scoped_ptr<ui::DefaultThemeProvider> default_theme_provider_;
 
   ScopedObserver<ui::NativeTheme, ui::NativeThemeObserver> observer_manager_;
+
+  scoped_ptr<aura::WindowTreeHost> host_;
   DISALLOW_COPY_AND_ASSIGN(Widget);
 };
 }  // namespace views

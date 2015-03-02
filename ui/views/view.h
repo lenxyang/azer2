@@ -449,10 +449,6 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   // Widget::ThemeChanged().
   virtual void OnThemeChanged() {}
 
-  // Used to propagate theme changed notifications from the root view to all
-  // views in the hierarchy.
-  virtual void PropagateThemeChanged();
-
   // Tooltips ------------------------------------------------------------------
 
   // Gets the tooltip for this View. If the View does not have a tooltip,
@@ -693,6 +689,20 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   // when view attached to parent with root.
   void OnAttachedRecusive(internal::RootView* view);
   void OnDetachRecusive();
+
+  // Focus ---------------------------------------------------------------------
+
+  // Initialize the previous/next focusable views of the specified view relative
+  // to the view at the specified index.
+  void InitFocusSiblings(View* view, int index);
+
+  // Helper function to advance focus, in case the currently focused view has
+  // become unfocusable.
+  void AdvanceFocusIfNecessary();
+
+  // Used to propagate theme changed notifications from the root view to all
+  // views in the hierarchy.
+  virtual void PropagateThemeChanged();
 
   void PropagateNativeThemeChanged(const ui::NativeTheme* theme);
   void PropagateMouseEntered(const ui::MouseEvent& event);

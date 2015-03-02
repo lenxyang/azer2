@@ -20,6 +20,7 @@
 #include "azer/ui/views/painter.h"
 #include "azer/ui/views/widget/widget.h"
 #include "azer/ui/views/widget/root_view.h"
+#include "azer/ui/views/focus/focus_manager.h"
 
 namespace views {
 
@@ -29,10 +30,10 @@ View::View()
     : group_(-1)
     , parent_(NULL)
     , root_(NULL)
-    , next_focusable_view_(NULL),
-    , previous_focusable_view_(NULL),
+    , next_focusable_view_(NULL)
+    , previous_focusable_view_(NULL)
     , focusable_(false)
-    , accessibility_focusable_(false),
+    , accessibility_focusable_(false)
     , visible_(true)
     , enabled_(true)
     , notify_enter_exit_on_child_(false) 
