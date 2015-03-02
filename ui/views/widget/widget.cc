@@ -116,6 +116,69 @@ void Widget::Hide() {
   host_->Hide();
 }
 
+void Widget::ShowInactive() {
+  // If this gets called with saved_show_state_ == ui::SHOW_STATE_MAXIMIZED,
+  // call SetBounds()with the restored bounds to set the correct size. This
+  // normally should not happen, but if it does we should avoid showing unsized
+  // windows.
+  if (saved_show_state_ == ui::SHOW_STATE_MAXIMIZED &&
+      !initial_restored_bounds_.IsEmpty()) {
+    SetBounds(initial_restored_bounds_);
+    saved_show_state_ = ui::SHOW_STATE_NORMAL;
+  }
+  native_widget_->ShowWithWindowState(ui::SHOW_STATE_INACTIVE);
+}
+
+void Widget::Activate() {
+}
+
+void Widget::Deactivate() {
+}
+
+bool Widget::IsActive() const {
+  return true;
+}
+
+void Widget::DisableInactiveRendering() {
+}
+
+void Widget::SetAlwaysOnTop(bool on_top) {
+}
+
+bool Widget::IsAlwaysOnTop() const {
+  return false;
+}
+
+void Widget::SetVisibleOnAllWorkspaces(bool always_visible) {
+}
+
+void Widget::Maximize() {
+}
+
+void Widget::Minimize() {
+}
+
+void Widget::Restore() {
+}
+
+bool Widget::IsMaximized() const {
+  return false;
+}
+
+bool Widget::IsMinimized() const {
+  return false;
+}
+
+void Widget::SetFullscreen(bool fullscreen) {
+  if (IsFullscreen() == fullscreen)
+    return;
+}
+
+bool Widget::IsFullscreen() const {
+  return false;
+}
+
+
 ui::ThemeProvider* Widget::GetThemeProvider() const {
   return default_theme_provider_.get();
 }

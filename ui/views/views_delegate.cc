@@ -8,13 +8,13 @@
 
 namespace views {
 
-ViewsDelegate::ViewsDelegate()
-    : views_tsc_factory_(new ViewsTouchSelectionControllerFactory) {
-  ui::TouchSelectionControllerFactory::SetInstance(views_tsc_factory_.get());
+ViewsDelegate::ViewsDelegate() {
+// : views_tsc_factory_(new ViewsTouchSelectionControllerFactory) {
+  // ui::TouchSelectionControllerFactory::SetInstance(views_tsc_factory_.get());
 }
 
 ViewsDelegate::~ViewsDelegate() {
-  ui::TouchSelectionControllerFactory::SetInstance(NULL);
+  // ui::TouchSelectionControllerFactory::SetInstance(NULL);
 }
 
 void ViewsDelegate::SaveWindowPlacement(const Widget* widget,

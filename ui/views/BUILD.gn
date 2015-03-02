@@ -87,6 +87,8 @@ source_set("views") {
     "shadow_border.h",
     "view.cc",
     "view.h",
+    "views_delegate.cc",
+    "views_delegate.h",
     "widget/root_view.cc",
     "widget/root_view.h",
     "widget/widget.cc",
