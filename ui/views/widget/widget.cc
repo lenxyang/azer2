@@ -13,6 +13,7 @@
 #include "azer/ui/views/widget/root_view.h"
 #include "azer/ui/views/aura/focus_client.h"
 #include "azer/ui/views/aura/event_client.h"
+#include "azer/ui/views/focus/focus_manager.h"
 #include "azer/ui/views/ime/input_method.h"
 #include "azer/ui/views/widget/widget_delegate.h"
 
@@ -203,6 +204,10 @@ const InputMethod* Widget::GetInputMethod() const {
   }
 }
 
+ui::InputMethod* Widget::GetHostInputMethod() {
+  return NULL;
+}
+
 void Widget::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
   DCHECK(observer_manager_.IsObserving(observed_theme));
 
@@ -291,5 +296,20 @@ void Widget::DispatchKeyEventPostIME(const ui::KeyEvent& key) {
     return;
   focus_manager->OnKeyEvent(key);
   */
+}
+
+FocusTraversable* Widget::GetFocusTraversable() {
+  return static_cast<internal::RootView*>(root_view_.get());
+}
+
+void Widget::SetFocusTraversableParent(FocusTraversable* parent) {
+  root_view_->SetFocusTraversableParent(parent);
+}
+
+void Widget::SetFocusTraversableParentView(View* parent_view) {
+  root_view_->SetFocusTraversableParentView(parent_view);
+}
+
+void Widget::ClearNativeFocus() {
 }
 }  // namespace views

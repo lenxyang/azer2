@@ -3,12 +3,15 @@
 #include <vector>
 
 #include "azer/ui/views/view.h"
+#include "azer/ui/views/focus/focus_manager.h"
+#include "azer/ui/views/focus/focus_search.h"
 
 namespace views {
 class Widget;
 
 namespace internal {
-class VIEWS_EXPORT RootView : public View {
+class VIEWS_EXPORT RootView : public View,
+                              public FocusTraversable {
  public:
   RootView(Widget* widget);
   virtual ~RootView();
