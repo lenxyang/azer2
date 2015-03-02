@@ -78,7 +78,6 @@ bool RenderLoop::Run() {
     }
 
     RenderTask();
-    render_system_->Present();
   }
   return true;
 }
