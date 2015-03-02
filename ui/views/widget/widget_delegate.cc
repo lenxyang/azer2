@@ -6,11 +6,11 @@
 
 #include "base/strings/utf_string_conversions.h"
 #include "ui/gfx/image/image_skia.h"
-// #include "azer/ui/views/bubble/bubble_delegate.h"
+#include "azer/ui/views/bubble/bubble_delegate.h"
 #include "azer/ui/views/view.h"
 #include "azer/ui/views/views_delegate.h"
 #include "azer/ui/views/widget/widget.h"
-// #include "azer/ui/views/window/client_view.h"
+#include "azer/ui/views/window/client_view.h"
 
 namespace views {
 
@@ -84,14 +84,11 @@ bool WidgetDelegate::ShouldShowCloseButton() const {
 }
 
 bool WidgetDelegate::ShouldHandleSystemCommands() const {
-  /*
   const Widget* widget = GetWidget();
   if (!widget)
     return false;
 
   return widget->non_client_view() != NULL;
-  */
-  return false;
 }
 
 gfx::ImageSkia WidgetDelegate::GetWindowAppIcon() {
@@ -149,8 +146,7 @@ View* WidgetDelegate::GetContentsView() {
 }
 
 ClientView* WidgetDelegate::CreateClientView(Widget* widget) {
-  // return new ClientView(widget, GetContentsView());
-  return NULL;
+  return new ClientView(widget, GetContentsView());
 }
 
 NonClientFrameView* WidgetDelegate::CreateNonClientFrameView(Widget* widget) {
@@ -181,6 +177,29 @@ bool WidgetDelegate::ShouldDescendIntoChildForEventHandling(
     gfx::NativeView child,
     const gfx::Point& location) {
   return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// WidgetDelegateView:
+
+WidgetDelegateView::WidgetDelegateView() {
+  // A WidgetDelegate should be deleted on DeleteDelegate.
+  set_owned_by_client();
+}
+
+WidgetDelegateView::~WidgetDelegateView() {
+}
+
+void WidgetDelegateView::DeleteDelegate() {
+  delete this;
+}
+
+Widget* WidgetDelegateView::GetWidget() {
+  return View::GetWidget();
+}
+
+const Widget* WidgetDelegateView::GetWidget() const {
+  return View::GetWidget();
 }
 
 }  // namespace views

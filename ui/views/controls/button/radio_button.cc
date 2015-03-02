@@ -9,7 +9,6 @@
 #include "ui/base/resource/resource_bundle.h"
 #include "ui/resources/grit/ui_resources.h"
 #include "azer/ui/views/widget/widget.h"
-#include "azer/ui/views/widget/root_view.h"
 
 namespace views {
 
@@ -112,7 +111,6 @@ View* RadioButton::GetSelectedViewForGroup(int group) {
     if (radio_button->checked())
       return radio_button;
   }
-  
   return NULL;
 }
 

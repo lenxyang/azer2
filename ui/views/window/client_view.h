@@ -67,6 +67,8 @@ class VIEWS_EXPORT ClientView : public View {
   // Overridden from View:
   void GetAccessibleState(ui::AXViewState* state) override;
   void OnBoundsChanged(const gfx::Rect& previous_bounds) override;
+  void ViewHierarchyChanged(
+      const ViewHierarchyChangedDetails& details) override;
 
   // Accessors for private data members.
   View* contents_view() const { return contents_view_; }

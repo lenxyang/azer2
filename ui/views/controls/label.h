@@ -1,3 +1,4 @@
+// Copyright (c) 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -14,15 +15,16 @@
 #include "ui/gfx/font_list.h"
 #include "ui/gfx/shadow_value.h"
 #include "ui/gfx/text_constants.h"
-#include "azer/ui/views/controls/control.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
 
 // A view subclass that can display a string.
-class VIEWS_EXPORT Label : public Control {
+class VIEWS_EXPORT Label : public View {
  public:
   // Internal class name.
   static const char kViewClassName[];
+
   // The padding for the focus border when rendering focused text.
   static const int kFocusBorderPadding;
 
@@ -91,6 +93,18 @@ class VIEWS_EXPORT Label : public Control {
   // to elide at the end. Eliding is not well supported for multi-line labels.
   void SetElideBehavior(gfx::ElideBehavior elide_behavior);
 
+  // Sets the tooltip text.  Default behavior for a label (single-line) is to
+  // show the full text if it is wider than its bounds.  Calling this overrides
+  // the default behavior and lets you set a custom tooltip.  To revert to
+  // default behavior, call this with an empty string.
+  void SetTooltipText(const base::string16& tooltip_text);
+
+  // Get or set whether this label can act as a tooltip handler; the default is
+  // true.  Set to false whenever an ancestor view should handle tooltips
+  // instead.
+  bool handles_tooltips() const { return handles_tooltips_; }
+  void SetHandlesTooltips(bool enabled);
+
   // Resizes the label so its width is set to the width of the longest line and
   // its height deduced accordingly.
   // This is only intended for multi-line labels and is useful when the label's
@@ -112,7 +126,12 @@ class VIEWS_EXPORT Label : public Control {
   gfx::Size GetMinimumSize() const override;
   int GetHeightForWidth(int w) const override;
   const char* GetClassName() const override;
+  View* GetTooltipHandlerForPoint(const gfx::Point& point) override;
   bool CanProcessEventsWithinSubtree() const override;
+  void GetAccessibleState(ui::AXViewState* state) override;
+  bool GetTooltipText(const gfx::Point& p,
+                      base::string16* tooltip) const override;
+
  protected:
   // Called by Paint to paint the text.
   void PaintText(gfx::Canvas* canvas,
@@ -128,6 +147,7 @@ class VIEWS_EXPORT Label : public Control {
   void OnBoundsChanged(const gfx::Rect& previous_bounds) override;
   void OnPaint(gfx::Canvas* canvas) override;
   void OnNativeThemeChanged(const ui::NativeTheme* theme) override;
+
  private:
   // These tests call CalculateDrawStringParams in order to verify the
   // calculations done for drawing text.
@@ -157,7 +177,7 @@ class VIEWS_EXPORT Label : public Control {
   void CalculateDrawStringParams(base::string16* paint_text,
                                  gfx::Rect* text_bounds,
                                  int* flags) const;
-  
+
   // Updates any colors that have not been explicitly set from the theme.
   void UpdateColorsFromTheme(const ui::NativeTheme* theme);
 

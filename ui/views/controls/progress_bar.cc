@@ -167,6 +167,22 @@ void ProgressBar::SetValue(double value) {
   }
 }
 
+void ProgressBar::SetTooltipText(const base::string16& tooltip_text) {
+  tooltip_text_ = tooltip_text;
+}
+
+bool ProgressBar::GetTooltipText(const gfx::Point& p,
+                                 base::string16* tooltip) const {
+  DCHECK(tooltip);
+  *tooltip = tooltip_text_;
+  return !tooltip_text_.empty();
+}
+
+void ProgressBar::GetAccessibleState(ui::AXViewState* state) {
+  state->role = ui::AX_ROLE_PROGRESS_INDICATOR;
+  state->AddStateFlag(ui::AX_STATE_READ_ONLY);
+}
+
 gfx::Size ProgressBar::GetPreferredSize() const {
   gfx::Size pref_size(100, 11);
   gfx::Insets insets = GetInsets();

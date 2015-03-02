@@ -181,6 +181,15 @@ void Label::SetElideBehavior(gfx::ElideBehavior elide_behavior) {
   }
 }
 
+void Label::SetTooltipText(const base::string16& tooltip_text) {
+  DCHECK(handles_tooltips_);
+  tooltip_text_ = tooltip_text;
+}
+
+void Label::SetHandlesTooltips(bool enabled) {
+  handles_tooltips_ = enabled;
+}
+
 void Label::SizeToFit(int max_width) {
   DCHECK(multi_line_);
 
@@ -275,8 +284,39 @@ const char* Label::GetClassName() const {
   return kViewClassName;
 }
 
+View* Label::GetTooltipHandlerForPoint(const gfx::Point& point) {
+  if (!handles_tooltips_ ||
+      (tooltip_text_.empty() && !ShouldShowDefaultTooltip()))
+    return NULL;
+
+  return HitTestPoint(point) ? this : NULL;
+}
+
 bool Label::CanProcessEventsWithinSubtree() const {
   // Send events to the parent view for handling.
+  return false;
+}
+
+void Label::GetAccessibleState(ui::AXViewState* state) {
+  state->role = ui::AX_ROLE_STATIC_TEXT;
+  state->AddStateFlag(ui::AX_STATE_READ_ONLY);
+  state->name = layout_text_;
+}
+
+bool Label::GetTooltipText(const gfx::Point& p, base::string16* tooltip) const {
+  if (!handles_tooltips_)
+    return false;
+
+  if (!tooltip_text_.empty()) {
+    tooltip->assign(tooltip_text_);
+    return true;
+  }
+
+  if (ShouldShowDefaultTooltip()) {
+    *tooltip = layout_text_;
+    return true;
+  }
+
   return false;
 }
 
@@ -329,7 +369,6 @@ void Label::OnBoundsChanged(const gfx::Rect& previous_bounds) {
 }
 
 void Label::OnPaint(gfx::Canvas* canvas) {
-  set_background(Background::CreateSolidBackground(0xffcdcdcd));
   OnPaintBackground(canvas);
   // We skip painting the focus border because it is being handled seperately by
   // some subclasses of Label. We do not want View's focus border painting to

@@ -7,12 +7,12 @@
 
 #include "base/basictypes.h"
 #include "base/compiler_specific.h"
-#include "azer/ui/views/controls/control.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
 
 // Progress bar is a control that indicates progress visually.
-class VIEWS_EXPORT ProgressBar : public Control {
+class VIEWS_EXPORT ProgressBar : public View {
  public:
   // The value range defaults to [0.0, 1.0].
   ProgressBar();
@@ -31,6 +31,17 @@ class VIEWS_EXPORT ProgressBar : public Control {
   // Sets the current value.  Values outside of the range [min_display_value_,
   // max_display_value_] will be stored unmodified and capped for display.
   void SetValue(double value);
+
+  // Sets the tooltip text.  Default behavior for a progress bar is to show no
+  // tooltip on mouse hover. Calling this lets you set a custom tooltip.  To
+  // revert to default behavior, call this with an empty string.
+  void SetTooltipText(const base::string16& tooltip_text);
+
+  // Overridden from View:
+  bool GetTooltipText(const gfx::Point& p,
+                      base::string16* tooltip) const override;
+  void GetAccessibleState(ui::AXViewState* state) override;
+
  private:
   static const char kViewClassName[];
 

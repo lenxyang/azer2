@@ -13,7 +13,7 @@
 #include "ui/base/dragdrop/drag_drop_types.h"
 #include "ui/base/dragdrop/drag_utils.h"
 #include "ui/base/ui_base_switches_util.h"
-#include "ui/compositor/scoped_animation_duration_scale_mode.h"
+#include "azer/ui/compositor/scoped_animation_duration_scale_mode.h"
 #include "ui/events/event.h"
 #include "ui/events/keycodes/keyboard_codes.h"
 #include "ui/gfx/canvas.h"

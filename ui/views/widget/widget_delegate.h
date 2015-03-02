@@ -194,6 +194,24 @@ class VIEWS_EXPORT WidgetDelegate {
   DISALLOW_COPY_AND_ASSIGN(WidgetDelegate);
 };
 
+// A WidgetDelegate implementation that is-a View. Used to override GetWidget()
+// to call View's GetWidget() for the common case where a WidgetDelegate
+// implementation is-a View. Note that WidgetDelegateView is not owned by
+// view's hierarchy and is expected to be deleted on DeleteDelegate call.
+class VIEWS_EXPORT WidgetDelegateView : public WidgetDelegate, public View {
+ public:
+  WidgetDelegateView();
+  ~WidgetDelegateView() override;
+
+  // Overridden from WidgetDelegate:
+  void DeleteDelegate() override;
+  Widget* GetWidget() override;
+  const Widget* GetWidget() const override;
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(WidgetDelegateView);
+};
+
 }  // namespace views
 
 #endif  // UI_VIEWS_WIDGET_WIDGET_DELEGATE_H_

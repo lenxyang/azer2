@@ -5,12 +5,8 @@
 #include "azer/ui/views/controls/resize_area.h"
 
 #include "base/logging.h"
-#include "base/i18n/rtl.h"
 #include "ui/accessibility/ax_view_state.h"
 #include "ui/base/cursor/cursor.h"
-
-#include "azer/ui/aura/window.h"
-#include "azer/ui/views/widget/root_view.h"
 #include "azer/ui/views/controls/resize_area_delegate.h"
 #include "azer/ui/views/native_cursor.h"
 
@@ -46,7 +42,7 @@ bool ResizeArea::OnMousePressed(const ui::MouseEvent& event) {
   // convert coordinates to screen coordinates so that we don't lose our
   // bearings.
   gfx::Point point(event.x(), 0);
-  window()->ConvertPointToTarget(window(), root_->window(), &point);
+  View::ConvertPointToScreen(this, &point);
   initial_position_ = point.x();
 
   return true;
@@ -68,9 +64,13 @@ void ResizeArea::OnMouseCaptureLost() {
   ReportResizeAmount(initial_position_, true);
 }
 
+void ResizeArea::GetAccessibleState(ui::AXViewState* state) {
+  state->role = ui::AX_ROLE_SPLITTER;
+}
+
 void ResizeArea::ReportResizeAmount(int resize_amount, bool last_update) {
   gfx::Point point(resize_amount, 0);
-  window()->ConvertPointToTarget(window(), GetRootView()->window(), &point);
+  View::ConvertPointToScreen(this, &point);
   resize_amount = point.x() - initial_position_;
   delegate_->OnResize(base::i18n::IsRTL() ? -resize_amount : resize_amount,
                       last_update);

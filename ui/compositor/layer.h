@@ -27,6 +27,7 @@ class CCLayerDelegate;
 class COMPOSITOR_EXPORT Layer {
  public:
   explicit Layer(LayerType type);
+  Layer();
   ~Layer();
 
   // Retrieves the Layer's compositor. The Layer will walk up its parent chain
@@ -116,6 +117,18 @@ class COMPOSITOR_EXPORT Layer {
   // otherwise.
   float GetTargetOpacity() const;
 
+  // Set the shape of this layer.
+  SkRegion* alpha_shape() const { return alpha_shape_.get(); }
+  void SetAlphaShape(scoped_ptr<SkRegion> region);
+
+  // Set a layer mask for a layer.
+  // Note the provided layer mask can neither have a layer mask itself nor can
+  // it have any children. The ownership of |layer_mask| will not be
+  // transferred with this call.
+  // Furthermore: A mask layer can only be set to one layer.
+  void SetMaskLayer(Layer* layer_mask);
+  Layer* layer_mask_layer() { return layer_mask_; }
+
   // Sets the visibility of the Layer. A Layer may be visible but not
   // drawn. This happens if any ancestor of a Layer is not visible.
   void SetVisible(bool visible);
@@ -183,6 +196,8 @@ class COMPOSITOR_EXPORT Layer {
   // Returns the layer's animator. Creates a default animator of one has not
   // been set. Will not return NULL.
   LayerAnimator* GetAnimator();
+
+  bool has_external_content();
  private:
   bool ConvertPointForAncestor(const Layer* ancestor, gfx::Point* point) const;
   bool ConvertPointFromAncestor(const Layer* ancestor, gfx::Point* point) const;
@@ -193,6 +208,13 @@ class COMPOSITOR_EXPORT Layer {
   std::vector<Layer*> children_;
 
   Layer* parent_;
+
+  // The associated mask layer with this layer.
+  Layer* layer_mask_;
+
+  // Shape of the window.
+  scoped_ptr<SkRegion> alpha_shape_;
+
   LayerDelegate* delegate_;
   LayerType type_;
   int background_blur_radius_;

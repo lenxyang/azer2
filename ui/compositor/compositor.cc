@@ -60,6 +60,9 @@ void Compositor::ScheduleFullRedraw() {
   host_->SetNeedsRedraw();
 }
 
+void Compositor::FinishAllRendering() {
+}
+
 void Compositor::ScheduleRedrawRect(const gfx::Rect& damage_rect) {
   host_->SetNeedsRedrawRect(damage_rect);
 }
@@ -68,4 +71,6 @@ void Compositor::ScheduleLayerRedraw(Layer* layer) {
   host_->SetLayerNeedsRedraw(layer->layer());
 }
 
+void Compositor::SetHostHasTransparentBackground(bool host_has_transparent_background) {
+}
 }  // namespace ui

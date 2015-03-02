@@ -6,7 +6,7 @@
 #define UI_VIEWS_CONTROLS_SLIDER_H_
 
 #include "ui/gfx/animation/animation_delegate.h"
-#include "azer/ui/views/controls/control.h"
+#include "azer/ui/views/view.h"
 #include "azer/ui/views/views_export.h"
 
 typedef unsigned int SkColor;
@@ -45,7 +45,7 @@ class VIEWS_EXPORT SliderListener {
   virtual ~SliderListener() {}
 };
 
-class VIEWS_EXPORT Slider : public Control, public gfx::AnimationDelegate {
+class VIEWS_EXPORT Slider : public View, public gfx::AnimationDelegate {
  public:
   enum Orientation {
     HORIZONTAL,
@@ -100,7 +100,7 @@ class VIEWS_EXPORT Slider : public Control, public gfx::AnimationDelegate {
   bool OnMouseDragged(const ui::MouseEvent& event) override;
   void OnMouseReleased(const ui::MouseEvent& event) override;
   bool OnKeyPressed(const ui::KeyEvent& event) override;
-  // void GetAccessibleState(ui::AXViewState* state) override;
+  void GetAccessibleState(ui::AXViewState* state) override;
   void OnFocus() override;
   void OnBlur() override;
 

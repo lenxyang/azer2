@@ -115,8 +115,8 @@ bool MenuButton::Activate() {
     // matter where the user pressed. To force RootView to recalculate the
     // mouse target during the mouse press we explicitly set the mouse handler
     // to NULL.
-    // static_cast<internal::RootView*>(GetWidget()->GetRootView())->
-    // SetMouseHandler(NULL);
+    static_cast<internal::RootView*>(GetWidget()->GetRootView())->
+        SetMouseHandler(NULL);
 
     bool destroyed = false;
     destroyed_flag_ = &destroyed;

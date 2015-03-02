@@ -70,6 +70,11 @@ class COMPOSITOR_EXPORT Compositor {
   // Returns the widget for this compositor.
   gfx::AcceleratedWidget widget() const { return widget_; }
 
+  // Called when we need the compositor to preserve the alpha channel in the
+  // output for situations when we want to render transparently atop something
+  // else, e.g. Aero glass.
+  void SetHostHasTransparentBackground(bool host_has_transparent_background);
+
   // Where possible, draws are scissored to a damage region calculated from
   // changes to layer properties.  This bypasses that and indicates that
   // the whole frame needs to be drawn.
@@ -89,6 +94,8 @@ class COMPOSITOR_EXPORT Compositor {
 
   azer::TexturePtr& GetCompositedTexture();
   void DoComposite();
+
+  void FinishAllRendering();
  private:
   gfx::AcceleratedWidget widget_;
 

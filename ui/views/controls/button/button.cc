@@ -30,8 +30,33 @@ Button::ButtonState Button::GetButtonStateFrom(ui::NativeTheme::State state) {
 Button::~Button() {
 }
 
+void Button::SetTooltipText(const base::string16& tooltip_text) {
+  tooltip_text_ = tooltip_text;
+  if (accessible_name_.empty())
+    accessible_name_ = tooltip_text_;
+  TooltipTextChanged();
+}
+
+void Button::SetAccessibleName(const base::string16& name) {
+  accessible_name_ = name;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Button, View overrides:
+
+bool Button::GetTooltipText(const gfx::Point& p,
+                            base::string16* tooltip) const {
+  if (tooltip_text_.empty())
+    return false;
+
+  *tooltip = tooltip_text_;
+  return true;
+}
+
+void Button::GetAccessibleState(ui::AXViewState* state) {
+  state->role = ui::AX_ROLE_BUTTON;
+  state->name = accessible_name_;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Button, protected:
@@ -39,7 +64,7 @@ Button::~Button() {
 Button::Button(ButtonListener* listener)
     : listener_(listener),
       tag_(-1) {
-  // SetAccessibilityFocusable(true);
+  SetAccessibilityFocusable(true);
 }
 
 void Button::NotifyClick(const ui::Event& event) {
@@ -49,6 +74,4 @@ void Button::NotifyClick(const ui::Event& event) {
     listener_->ButtonPressed(this, event);
 }
 
-void Button::SetAccessibleName(const base::string16& name) {
-}
 }  // namespace views

@@ -43,7 +43,7 @@ class VIEWS_EXPORT Link : public Label {
   void OnMouseCaptureLost() override;
   bool OnKeyPressed(const ui::KeyEvent& event) override;
   void OnGestureEvent(ui::GestureEvent* event) override;
-  // bool SkipDefaultKeyEventProcessing(const ui::KeyEvent& event) override;
+  bool SkipDefaultKeyEventProcessing(const ui::KeyEvent& event) override;
   void GetAccessibleState(ui::AXViewState* state) override;
   void OnEnabledChanged() override;
   void OnFocus() override;

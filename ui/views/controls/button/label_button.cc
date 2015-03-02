@@ -14,6 +14,7 @@
 #include "azer/ui/views/background.h"
 #include "azer/ui/views/controls/button/label_button_border.h"
 #include "azer/ui/views/painter.h"
+#include "azer/ui/views/window/dialog_delegate.h"
 
 #if defined(OS_LINUX) && !defined(OS_CHROMEOS)
 #include "azer/ui/views/linux_ui/linux_ui.h"
@@ -176,10 +177,8 @@ void LabelButton::SetIsDefault(bool is_default) {
   if (is_default == is_default_)
     return;
   is_default_ = is_default;
-  /*
   ui::Accelerator accel(ui::VKEY_RETURN, ui::EF_NONE);
   is_default_ ? AddAccelerator(accel) : RemoveAccelerator(accel);
-  */
 
   // STYLE_BUTTON uses bold text to indicate default buttons.
   if (style_ == STYLE_BUTTON) {
@@ -370,6 +369,7 @@ void LabelButton::GetExtraParams(ui::NativeTheme::ExtraParams* params) const {
   params->button.checked = false;
   params->button.indeterminate = false;
   params->button.is_default = is_default_;
+  params->button.is_focused = HasFocus() && IsAccessibilityFocusable();
   params->button.has_border = false;
   params->button.classic_state = 0;
   params->button.background_color = label_->background_color();

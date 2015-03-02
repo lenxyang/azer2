@@ -11,10 +11,11 @@
 #include "ui/gfx/screen.h"
 #include "azer/ui/views/controls/button/blue_button.h"
 #include "azer/ui/views/controls/button/checkbox.h"
-// #include "azer/ui/views/controls/button/image_button.h"
+#include "azer/ui/views/controls/button/image_button.h"
 #include "azer/ui/views/controls/button/label_button.h"
-// #include "azer/ui/views/controls/button/menu_button.h"
+#include "azer/ui/views/controls/button/menu_button.h"
 #include "azer/ui/views/controls/button/radio_button.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace views {
 
@@ -33,7 +34,6 @@ const CustomButton* CustomButton::AsCustomButton(const views::View* view) {
 }
 
 CustomButton* CustomButton::AsCustomButton(views::View* view) {
-  /*
   if (view) {
     const char* classname = view->GetClassName();
     if (!strcmp(classname, Checkbox::kViewClassName) ||
@@ -45,7 +45,6 @@ CustomButton* CustomButton::AsCustomButton(views::View* view) {
       return static_cast<CustomButton*>(view);
     }
   }
-  */
   return NULL;
 }
 
@@ -98,6 +97,9 @@ void CustomButton::SetAnimationDuration(int duration) {
 void CustomButton::SetHotTracked(bool is_hot_tracked) {
   if (state_ != STATE_DISABLED)
     SetState(is_hot_tracked ? STATE_HOVERED : STATE_NORMAL);
+
+  if (is_hot_tracked)
+    NotifyAccessibilityEvent(ui::AX_EVENT_FOCUS, true);
 }
 
 bool CustomButton::IsHotTracked() const {
@@ -248,8 +250,55 @@ void CustomButton::OnGestureEvent(ui::GestureEvent* event) {
     Button::OnGestureEvent(event);
 }
 
+bool CustomButton::AcceleratorPressed(const ui::Accelerator& accelerator) {
+  SetState(STATE_NORMAL);
+  /*
+  ui::KeyEvent key_event(ui::ET_KEY_RELEASED, accelerator.key_code(),
+                         accelerator.modifiers());
+                         */
+  // TODO(beng): remove once NotifyClick takes ui::Event.
+  ui::MouseEvent synthetic_event(ui::ET_MOUSE_RELEASED,
+                                 gfx::Point(),
+                                 gfx::Point(),
+                                 ui::EF_LEFT_MOUSE_BUTTON,
+                                 ui::EF_LEFT_MOUSE_BUTTON);
+  NotifyClick(synthetic_event);
+  return true;
+}
+
+void CustomButton::ShowContextMenu(const gfx::Point& p,
+                                   ui::MenuSourceType source_type) {
+  if (!context_menu_controller())
+    return;
+
+  // We're about to show the context menu. Showing the context menu likely means
+  // we won't get a mouse exited and reset state. Reset it now to be sure.
+  if (state_ != STATE_DISABLED)
+    SetState(STATE_NORMAL);
+  View::ShowContextMenu(p, source_type);
+}
+
 void CustomButton::OnDragDone() {
   SetState(STATE_NORMAL);
+}
+
+void CustomButton::GetAccessibleState(ui::AXViewState* state) {
+  Button::GetAccessibleState(state);
+  switch (state_) {
+    case STATE_HOVERED:
+      state->AddStateFlag(ui::AX_STATE_HOVERED);
+      break;
+    case STATE_PRESSED:
+      state->AddStateFlag(ui::AX_STATE_PRESSED);
+      break;
+    case STATE_DISABLED:
+      state->AddStateFlag(ui::AX_STATE_DISABLED);
+      break;
+    case STATE_NORMAL:
+    case STATE_COUNT:
+      // No additional accessibility state set for this button state.
+      break;
+  }
 }
 
 void CustomButton::VisibilityChanged(View* starting_from, bool visible) {
@@ -295,6 +344,12 @@ bool CustomButton::ShouldEnterPushedState(const ui::Event& event) {
 
 ////////////////////////////////////////////////////////////////////////////////
 // CustomButton, View overrides (protected):
+
+void CustomButton::ViewHierarchyChanged(
+    const ViewHierarchyChangedDetails& details) {
+  if (!details.is_add && state_ != STATE_DISABLED)
+    SetState(STATE_NORMAL);
+}
 
 void CustomButton::OnBlur() {
   if (IsHotTracked())

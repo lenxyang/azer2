@@ -6,7 +6,7 @@
 #define UI_VIEWS_CONTROLS_BUTTON_BUTTON_H_
 
 #include "ui/native_theme/native_theme.h"
-#include "azer/ui/views/controls/control.h"
+#include "azer/ui/views/view.h"
 
 namespace views {
 
@@ -25,7 +25,7 @@ class VIEWS_EXPORT ButtonListener {
 
 // A View representing a button. Depending on the specific type, the button
 // could be implemented by a native control or custom rendered.
-class VIEWS_EXPORT Button : public Control {
+class VIEWS_EXPORT Button : public View {
  public:
   ~Button() override;
 
@@ -48,10 +48,18 @@ class VIEWS_EXPORT Button : public Control {
 
   static ButtonState GetButtonStateFrom(ui::NativeTheme::State state);
 
+  void SetTooltipText(const base::string16& tooltip_text);
+
   int tag() const { return tag_; }
   void set_tag(int tag) { tag_ = tag; }
 
   void SetAccessibleName(const base::string16& name);
+
+  // Overridden from View:
+  bool GetTooltipText(const gfx::Point& p,
+                      base::string16* tooltip) const override;
+  void GetAccessibleState(ui::AXViewState* state) override;
+
  protected:
   // Construct the Button with a Listener. The listener can be NULL. This can be
   // true of buttons that don't have a listener - e.g. menubuttons where there's

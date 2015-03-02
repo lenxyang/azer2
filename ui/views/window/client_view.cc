@@ -8,6 +8,7 @@
 #include "ui/accessibility/ax_view_state.h"
 #include "ui/base/hit_test.h"
 #include "azer/ui/views/widget/widget.h"
+#include "azer/ui/views/widget/widget_delegate.h"
 
 namespace views {
 
@@ -81,6 +82,17 @@ void ClientView::OnBoundsChanged(const gfx::Rect& previous_bounds) {
   // Overridden to do nothing. The NonClientView manually calls Layout on the
   // ClientView when it is itself laid out, see comment in
   // NonClientView::Layout.
+}
+
+void ClientView::ViewHierarchyChanged(
+    const ViewHierarchyChangedDetails& details) {
+  if (details.is_add && details.child == this) {
+    DCHECK(GetWidget());
+    DCHECK(contents_view_); // |contents_view_| must be valid now!
+    // Insert |contents_view_| at index 0 so it is first in the focus chain.
+    // (the OK/Cancel buttons are inserted before contents_view_)
+    AddChildViewAt(contents_view_, 0);
+  }
 }
 
 }  // namespace views

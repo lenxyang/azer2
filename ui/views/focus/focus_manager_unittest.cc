@@ -9,8 +9,8 @@
 
 #include "base/command_line.h"
 #include "base/strings/utf_string_conversions.h"
-#include "ui/aura/client/focus_client.h"
-#include "ui/aura/window.h"
+#include "azer/ui/aura/client/focus_client.h"
+#include "azer/ui/aura/window.h"
 #include "ui/base/accelerators/accelerator.h"
 #include "ui/base/ime/dummy_text_input_client.h"
 #include "ui/base/ime/text_input_focus_manager.h"

@@ -79,7 +79,11 @@ class VIEWS_EXPORT CustomButton : public Button,
   bool OnKeyPressed(const ui::KeyEvent& event) override;
   bool OnKeyReleased(const ui::KeyEvent& event) override;
   void OnGestureEvent(ui::GestureEvent* event) override;
+  bool AcceleratorPressed(const ui::Accelerator& accelerator) override;
+  void ShowContextMenu(const gfx::Point& p,
+                       ui::MenuSourceType source_type) override;
   void OnDragDone() override;
+  void GetAccessibleState(ui::AXViewState* state) override;
   void VisibilityChanged(View* starting_from, bool is_visible) override;
 
   // Overridden from gfx::AnimationDelegate:
@@ -110,6 +114,8 @@ class VIEWS_EXPORT CustomButton : public Button,
   virtual bool ShouldEnterPushedState(const ui::Event& event);
 
   // Overridden from View:
+  void ViewHierarchyChanged(
+      const ViewHierarchyChangedDetails& details) override;
   void OnBlur() override;
 
   // The button state (defined in implementation)

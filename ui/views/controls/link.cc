@@ -125,13 +125,11 @@ void Link::OnGestureEvent(ui::GestureEvent* event) {
   event->SetHandled();
 }
 
-/*
 bool Link::SkipDefaultKeyEventProcessing(const ui::KeyEvent& event) {
   // Make sure we don't process space or enter as accelerators.
   return (event.key_code() == ui::VKEY_SPACE) ||
       (event.key_code() == ui::VKEY_RETURN);
 }
-*/
 
 void Link::GetAccessibleState(ui::AXViewState* state) {
   Label::GetAccessibleState(state);

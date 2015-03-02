@@ -8,6 +8,7 @@
 #include "ui/base/hit_test.h"
 #include "ui/gfx/rect_conversions.h"
 #include "azer/ui/views/rect_based_targeting_utils.h"
+#include "azer/ui/views/view_targeter.h"
 #include "azer/ui/views/widget/root_view.h"
 #include "azer/ui/views/widget/widget.h"
 #include "azer/ui/views/window/client_view.h"

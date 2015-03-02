@@ -21,6 +21,7 @@
 #include "ui/gfx/point.h"
 #include "ui/gfx/rect.h"
 #include "ui/resources/grit/ui_resources.h"
+#include "azer/ui/views/widget/widget.h"
 
 namespace {
 const int kSlideValueChangeDurationMS = 150;
@@ -61,7 +62,7 @@ Slider::Slider(SliderListener* listener, Orientation orientation)
       focus_border_color_(0),
       bar_active_images_(kBarImagesActive),
       bar_disabled_images_(kBarImagesDisabled) {
-  // EnableCanvasFlippingForRTLUI(true);
+  EnableCanvasFlippingForRTLUI(true);
   SetFocusable(true);
   UpdateState(true);
 }
@@ -102,6 +103,10 @@ void Slider::SetValueInternal(float value, SliderChangeReason reason) {
     AnimationProgressed(move_animation_.get());
   } else {
     SchedulePaint();
+  }
+  if (accessibility_events_enabled_ && GetWidget()) {
+    NotifyAccessibilityEvent(
+        ui::AX_EVENT_VALUE_CHANGED, true);
   }
 }
 
@@ -337,6 +342,13 @@ void Slider::OnGestureEvent(ui::GestureEvent* event) {
 void Slider::AnimationProgressed(const gfx::Animation* animation) {
   animating_value_ = animation->CurrentValueBetween(animating_value_, value_);
   SchedulePaint();
+}
+
+void Slider::GetAccessibleState(ui::AXViewState* state) {
+  state->role = ui::AX_ROLE_SLIDER;
+  state->name = accessible_name_;
+  state->value = base::UTF8ToUTF16(
+      base::StringPrintf("%d%%", static_cast<int>(value_ * 100 + 0.5)));
 }
 
 void Slider::OnSliderDragStarted() {

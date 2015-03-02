@@ -42,6 +42,7 @@ const Layer* GetRoot(const Layer* layer) {
 
 Layer::Layer(LayerType type)
     : parent_(NULL)
+    , layer_mask_(NULL)
     , delegate_(NULL)
     , type_(type)
     , background_blur_radius_(0)
@@ -49,6 +50,19 @@ Layer::Layer(LayerType type)
     , owner_(NULL)
     , layer_(NULL)  {
   layer_ = CreateCCLayer(type);
+  CHECK(layer_);
+}
+
+Layer::Layer()
+    : parent_(NULL)
+    , layer_mask_(NULL)
+    , delegate_(NULL)
+    , type_(LAYER_TEXTURED)
+    , background_blur_radius_(0)
+    , compositor_(NULL)
+    , owner_(NULL)
+    , layer_(NULL)  {
+  layer_ = CreateCCLayer(type_);
   CHECK(layer_);
 }
 
@@ -313,4 +327,15 @@ bool Layer::Contains(Layer* layer) {
   return layer_->HasAncestor(layer->layer());
 }
 
+bool Layer::has_external_content() {
+  return true;
+}
+
+void Layer::SetMaskLayer(Layer* layer_mask) {
+  layer_mask_ = layer_mask;
+}
+
+void Layer::SetAlphaShape(scoped_ptr<SkRegion> region) {
+  alpha_shape_ = region.Pass();
+}
 }  // namespace ui
