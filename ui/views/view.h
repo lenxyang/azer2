@@ -220,10 +220,6 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   // indirect child of this view will always use this FocusTraversable
   // rather than the one from the widget.
   virtual FocusTraversable* GetPaneFocusTraversable();
-
-  void SetEnabled(bool enabled);
-  bool enabled() const { return enabled_;}
-
   
   // Get the theme provider from the parent widget.
   ui::ThemeProvider* GetThemeProvider() const;
@@ -343,7 +339,19 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   virtual void Show();
   virtual void Hide();
 
+  // Return whether a view is visible
   bool visible() const { return visible_;}
+
+  // Returns true if this view is drawn on screen.
+  virtual bool IsDrawn() const;
+
+  // Set whether this view is enabled. A disabled view does not receive keyboard
+  // or mouse inputs. If |enabled| differs from the current value, SchedulePaint
+  // is invoked. Also, clears focus if the focused view is disabled.
+  void SetEnabled(bool enabled);
+
+  // Returns whether the view is enabled.
+  bool enabled() const { return enabled_; }
  
   aura::Window* window() { return window_.get();}
   const aura::Window* window() const { return window_.get();}
@@ -417,6 +425,12 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   const Border* border() const { return border_.get(); }
   Border* border() { return border_.get(); }
 
+
+  // Returns last value passed to SetFocusable(). Use IsFocusable() to determine
+  // if a view can take focus right now.
+  bool focusable() const { return focusable_; }
+
+  // Override to be notified when focus has changed either to or from this View.
   virtual void OnFocus();
   virtual void OnBlur();
 

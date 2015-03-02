@@ -256,7 +256,8 @@ bool View::CanFocus() {
   return window()->CanFocus();
 }
 
-void View::RequestFocus() {
+bool View::IsDrawn() const {
+  return visible_ && parent_ ? parent_->IsDrawn() : false;
 }
 
 void View::SetEnabled(bool enabled) {
@@ -408,6 +409,76 @@ void View::OnPaintBorder(gfx::Canvas* canvas) {
 bool View::HasFocus() const {
   DCHECK(window());
   return window()->HasFocus();
+}
+
+View* View::GetNextFocusableView() {
+  return next_focusable_view_;
+}
+
+const View* View::GetNextFocusableView() const {
+  return next_focusable_view_;
+}
+
+View* View::GetPreviousFocusableView() {
+  return previous_focusable_view_;
+}
+
+void View::SetNextFocusableView(View* view) {
+  if (view)
+    view->previous_focusable_view_ = this;
+  next_focusable_view_ = view;
+}
+
+void View::SetFocusable(bool focusable) {
+  if (focusable_ == focusable)
+    return;
+
+  focusable_ = focusable;
+  AdvanceFocusIfNecessary();
+}
+
+bool View::IsFocusable() const {
+  return focusable_ && enabled_ && IsDrawn();
+}
+
+bool View::IsAccessibilityFocusable() const {
+  return (focusable_ || accessibility_focusable_) && enabled_ && IsDrawn();
+}
+
+void View::SetAccessibilityFocusable(bool accessibility_focusable) {
+  if (accessibility_focusable_ == accessibility_focusable)
+    return;
+
+  accessibility_focusable_ = accessibility_focusable;
+  AdvanceFocusIfNecessary();
+}
+
+FocusManager* View::GetFocusManager() {
+  Widget* widget = GetWidget();
+  return widget ? widget->GetFocusManager() : NULL;
+}
+
+const FocusManager* View::GetFocusManager() const {
+  const Widget* widget = GetWidget();
+  return widget ? widget->GetFocusManager() : NULL;
+}
+
+void View::RequestFocus() {
+  FocusManager* focus_manager = GetFocusManager();
+  if (focus_manager && IsFocusable())
+    focus_manager->SetFocusedView(this);
+}
+
+bool View::SkipDefaultKeyEventProcessing(const ui::KeyEvent& event) {
+  return false;
+}
+
+FocusTraversable* View::GetFocusTraversable() {
+  return NULL;
+}
+
+FocusTraversable* View::GetPaneFocusTraversable() {
+  return NULL;
 }
 
 gfx::Rect View::GetContentsBounds() const {

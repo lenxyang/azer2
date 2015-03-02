@@ -35,6 +35,8 @@ class FocusClient;
 namespace views {
 
 class EventClient;
+class FocusManager;
+class FocusTraversable;
 class InputMethod;
 class View;
 
