@@ -40,6 +40,8 @@ namespace views {
 
 class Background;
 class Border;
+class FocusManager;
+class FocusTraversable;
 class InputMethod;
 class Widget;
 
@@ -685,25 +687,88 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
   virtual void InitAuraWindow(aura::WindowLayerType layer_type);
 
   scoped_ptr<aura::Window> window_;
-  Views children_;
+
+  // Attributes ----------------------------------------------------------------
+
+  // The id of this View. Used to find this View.
+  // int id_;
+
+  // The group of this view. Some view subclasses use this id to find other
+  // views of the same group. For example radio button uses this information
+  // to find other radio buttons.
+  int group_;
+
+  // Tree operations -----------------------------------------------------------
+
+  // This view's parent.
   View* parent_;
+
+  // This view's children.
+  Views children_;
+
   internal::RootView* root_;
 
-  gfx::Rect bounds_;
+  // Focus ---------------------------------------------------------------------
+
+  // Next view to be focused when the Tab key is pressed.
+  View* next_focusable_view_;
+
+  // Next view to be focused when the Shift-Tab key combination is pressed.
+  View* previous_focusable_view_;
+
+  // Whether this view can be focused.
   bool focusable_;
+
+  // Whether this view is focusable if the user requires full keyboard access,
+  // even though it may not be normally focusable.
+  bool accessibility_focusable_;
+
+  // This View's bounds in the parent coordinate system.
+  gfx::Rect bounds_;
+
+  // Whether this view is visible.
   bool visible_;
+
+  // Whether this view is enabled.
   bool enabled_;
 
+  // When this flag is on, a View receives a mouse-enter and mouse-leave event
+  // even if a descendant View is the event-recipient for the real mouse
+  // events. When this flag is turned on, and mouse moves from outside of the
+  // view into a child view, both the child view and this view receives
+  // mouse-enter event. Similarly, if the mouse moves from inside a child view
+  // and out of this view, then both views receive a mouse-leave event.
+  // When this flag is turned off, if the mouse moves from inside this view into
+  // a child view, then this view receives a mouse-leave event. When this flag
+  // is turned on, it does not receive the mouse-leave event in this case.
+  // When the mouse moves from inside the child view out of the child view but
+  // still into this view, this view receives a mouse-enter event if this flag
+  // is turned off, but doesn't if this flag is turned on.
+  // This flag is initialized to false.
+  bool notify_enter_exit_on_child_;
+
   bool needs_layout_;
+
+  // Painting ------------------------------------------------------------------
+
+  // Background
+  scoped_ptr<Background> background_;
+
+  // Border.
+  scoped_ptr<Border> border_;
+
+  // RTL painting --------------------------------------------------------------
+
+  // Indicates whether or not the gfx::Canvas object passed to View::Paint()
+  // is going to be flipped horizontally (using the appropriate transform) on
+  // right-to-left locales for this View.
+  bool flip_canvas_on_paint_for_rtl_ui_;
 
   // The list of accelerators. List elements in the range
   // [0, registered_accelerator_count_) are already registered to FocusManager,
   // and the rest are not yet.
   scoped_ptr<std::vector<ui::Accelerator> > accelerators_;
   size_t registered_accelerator_count_;
-
-  // notify parent if child receive mouse level(enter) event.
-  bool notify_enter_exit_on_child_;
 
   // Whether or not RegisterViewForVisibleBoundsNotification on the RootView
   // has been invoked.
@@ -714,16 +779,6 @@ class VIEWS_EXPORT View : public aura::WindowDelegate,
 
   bool mouse_in_;
 
-  scoped_ptr<Background> background_;
-  scoped_ptr<Border> border_;
-
-
-  // RTL painting --------------------------------------------------------------
-
-  // Indicates whether or not the gfx::Canvas object passed to View::Paint()
-  // is going to be flipped horizontally (using the appropriate transform) on
-  // right-to-left locales for this View.
-  bool flip_canvas_on_paint_for_rtl_ui_;
   friend class Widget;
   DISALLOW_COPY_AND_ASSIGN(View);
 };

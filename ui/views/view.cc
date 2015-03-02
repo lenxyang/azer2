@@ -26,17 +26,21 @@ namespace views {
 const char View::kViewClassName[] = "View";
 
 View::View()
-    : parent_(NULL)
+    : group_(-1)
+    , parent_(NULL)
     , root_(NULL)
+    , next_focusable_view_(NULL),
+    , previous_focusable_view_(NULL),
     , focusable_(false)
+    , accessibility_focusable_(false),
     , visible_(true)
     , enabled_(true)
+    , notify_enter_exit_on_child_(false) 
+    , flip_canvas_on_paint_for_rtl_ui_(false)
     , needs_layout_(false)
     , registered_accelerator_count_(0)
-    , notify_enter_exit_on_child_(false) 
     , registered_for_visible_bounds_notification_(false)
-    , mouse_in_(false)
-    , flip_canvas_on_paint_for_rtl_ui_(false) {
+    , mouse_in_(false) {
   InitAuraWindow(aura::WINDOW_LAYER_TEXTURED);
 }
 
@@ -78,10 +82,11 @@ void View::set_id(int id) {
 
 // focus and group
 void View::SetGroup(int gid) {
+  group_ = gid;
 }
 
 int View::GetGroup() const {
-  return 0;
+  return group_;
 }
 
 bool View::IsGroupFocusTraversable() const {
