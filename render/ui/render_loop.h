@@ -24,7 +24,7 @@ class WidgetRendererContext;
 
 class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
  public:
-  class Delegate {
+  class AZER_EXPORT Delegate {
    public:
     Delegate() {}
     virtual ~Delegate() {}
