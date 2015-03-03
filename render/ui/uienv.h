@@ -31,7 +31,7 @@ class RenderLoop;
 class DesktopTestViewsDelegate;
 class UIContextFactory;
 
-class UIEnvironment {
+class AZER_EXPORT UIEnvironment {
 public:
   UIEnvironment();
   ~UIEnvironment();
