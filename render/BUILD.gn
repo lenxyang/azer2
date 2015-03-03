@@ -94,6 +94,7 @@ shared_library("render") {
     "//ui/events:events_base",
     "//ui/gfx",
     "//ui/gfx/geometry",
+    "//ui/views",
   ]
 
   configs += ["//azer/build/config:utf8src"]
