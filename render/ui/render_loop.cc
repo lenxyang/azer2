@@ -1,20 +1,32 @@
-#include "azer/base/render_loop.h"
+#include "azer/uisbox/adapter/base/render_loop.h"
 
 #include "base/logging.h"
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/run_loop.h"
 #include "azer/render/render_system.h"
+#include "azer/uisbox/adapter/base/widget_renderer_context.h"
 
-namespace azer {
+views::Widget* RenderLoop::Delegate::widget() {
+  return widget_context_->widget();
+}
 
-RenderLoop::RenderLoop(Delegate* delegate)
+azer::SwapChainPtr& RenderLoop::Delegate::GetSwapChain() {
+  return widget_context_->GetSwapChain();
+}
+
+azer::RendererPtr& RenderLoop::Delegate::GetRenderer() {
+  return widget_context_->GetRenderer();
+}
+
+RenderLoop::RenderLoop(Delegate* delegate, views::Widget* widget)
     : delegate_(delegate)
     , render_system_(NULL)
     , message_loop_(NULL)
     , which_(0)
     , frame_count_(0) 
     , stopping_(false) {
+  widget_context_.reset(new WidgetRendererContext(widget));
 }
 
 RenderLoop::~RenderLoop() {
@@ -25,12 +37,12 @@ bool RenderLoop::Init() {
   message_loop_ = ::base::MessageLoop::current();
   DCHECK(message_loop_->type() == ::base::MessageLoop::TYPE_UI);
 
-  render_system_ = RenderSystem::Current();
+  render_system_ = azer::RenderSystem::Current();
   if (NULL == render_system_) {
     LOG(ERROR) << "RenderSystem not initialized.";
     return false;
   }
-
+  
   int cur = which_;
   time_[which_] = ::base::Time::Now();
   if (!delegate_->Initialize(this)) {
@@ -70,6 +82,9 @@ void RenderLoop::RenderTask() {
   time_[cur] = ::base::Time::Now();
   ::base::TimeDelta delta = time_[cur] - time_[prev];
   delegate_->OnRender(time_[cur], delta);
+
+  widget_context_->RenderUI();
+  widget_context_->Present();
   frame_count_++;
   delegate_->OnUpdate(time_[cur], delta);
 
@@ -83,6 +98,7 @@ bool RenderLoop::Run() {
     return false;
   }
 
+  delegate_->widget_context_ = widget_context_.get();
   DCHECK(cur == message_loop_);
   PostTask();
   base::RunLoop().Run();
@@ -94,4 +110,3 @@ void RenderLoop::Quit() {
   stopping_ = true;
 }
 
-}  // namespace azer

@@ -4,32 +4,52 @@
 
 #include "base/time/time.h"
 #include "base/basictypes.h"
-#include "azer/base/export.h"
 #include "base/memory/ref_counted.h"
+
+#include "azer/render/render_system.h"
+#include "azer/render/renderer.h"
+#include "azer/render/swap_chain.h"
 
 namespace base {
 class MessageLoop;
 }
 
+namespace views {
+class Widget;
+}  // namespace views
+
 namespace azer {
-
 class RenderSystem;
+}  // namespace azer
 
-class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
+class WidgetRendererContext;
+
+class RenderLoop : public ::base::RefCounted<RenderLoop> {
  public:
   class Delegate {
    public:
+    Delegate() {}
+    virtual ~Delegate() {}
     virtual bool Initialize(RenderLoop* renderer) = 0;
     virtual void OnUpdate(const ::base::Time& Time,
                           const ::base::TimeDelta& delta) = 0;
     virtual void OnRender(const ::base::Time& Time,
                           const ::base::TimeDelta& delta) = 0;
+
+    views::Widget* widget();
+    azer::SwapChainPtr& GetSwapChain();
+    azer::RendererPtr& GetRenderer();
+   private:
+    WidgetRendererContext* widget_context_;
+
+    friend class RenderLoop;
+    DISALLOW_COPY_AND_ASSIGN(Delegate);
   };
 
-  explicit RenderLoop(Delegate* delegate);
+  explicit RenderLoop(Delegate* delegate, views::Widget* widget);
   virtual ~RenderLoop();
 
-  RenderSystem* GetRenderSystem() { return render_system_;}
+  azer::RenderSystem* GetRenderSystem() { return render_system_;}
   int64 GetFrameCount() const { return frame_count_;}
 
   // run renderloop
@@ -43,8 +63,9 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
   void RenderTask();
   void PostTask();
 
+  scoped_ptr<WidgetRendererContext> widget_context_;
   Delegate* delegate_;
-  RenderSystem* render_system_;
+  azer::RenderSystem* render_system_;
   ::base::MessageLoop* message_loop_;
   uint32 which_;
   ::base::Time time_[2];
@@ -52,4 +73,4 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
   std::atomic<bool> stopping_;
   DISALLOW_COPY_AND_ASSIGN(RenderLoop);
 };
-}  // namespace azer
+
