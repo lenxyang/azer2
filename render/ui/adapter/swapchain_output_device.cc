@@ -74,7 +74,9 @@ SkCanvas* SwapchainOutputDevice::BeginPaint(const gfx::Rect& damage_rect) {
 
 void SwapchainOutputDevice::EndPaint(cc::SoftwareFrameData* frame_data) {
   TextureOutputDevice::EndPaint(frame_data);
-  render_util_->PostTask();
+  // render_util_->PostTask();
+  widget_context_->RenderUI();
+  widget_context_->Present();
 }
 
 
