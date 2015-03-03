@@ -27,6 +27,7 @@ RenderLoop::RenderLoop(Delegate* delegate, views::Widget* widget)
     , which_(0)
     , frame_count_(0) 
     , stopping_(false) {
+  average_frame_consumed_ = ::base::TimeDelta::FromMilliseconds(10);
   widget_context_.reset(new WidgetRendererContext(widget));
 }
 
@@ -54,7 +55,7 @@ bool RenderLoop::Init() {
   return true;
 }
 
-void RenderLoop::PostTask() {
+void RenderLoop::PostTask(const ::base::TimeDelta& delta) {
   DCHECK(NULL != delegate_);
   DCHECK(NULL != message_loop_);
   DCHECK(message_loop_ == ::base::MessageLoop::current());
@@ -65,9 +66,14 @@ void RenderLoop::PostTask() {
   ::base::Closure closure = ::base::Bind(&RenderLoop::RenderTask, this);
   ::base::MessageLoop* cur = ::base::MessageLoop::current();
 
+  ::base::TimeDelta delay(average_frame_consumed_ - delta);
   ::base::MessageLoop::ScopedNestableTaskAllower
         allow(::base::MessageLoop::current());
-  message_loop_->PostTask(FROM_HERE, closure);
+  if (delay.InSecondsF() > 0) {
+    message_loop_->PostDelayedTask(FROM_HERE, closure, delay);
+  } else {
+    message_loop_->PostTask(FROM_HERE, closure);
+  }
 }
 
 void RenderLoop::RenderTask() {
@@ -89,7 +95,7 @@ void RenderLoop::RenderTask() {
   frame_count_++;
   delegate_->OnUpdate(time_[cur], delta);
 
-  PostTask();
+  PostTask(delta);
 }
 
 bool RenderLoop::Run() {
@@ -101,7 +107,7 @@ bool RenderLoop::Run() {
 
   delegate_->widget_context_ = widget_context_.get();
   DCHECK(cur == message_loop_);
-  PostTask();
+  PostTask(average_frame_consumed_);
   base::RunLoop().Run();
   return true;
 }

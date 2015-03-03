@@ -59,13 +59,14 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
  private:
   bool Init();
   void RenderTask();
-  void PostTask();
+  void PostTask(const ::base::TimeDelta& delta);
 
   scoped_ptr<WidgetRendererContext> widget_context_;
   Delegate* delegate_;
   azer::RenderSystem* render_system_;
   ::base::MessageLoop* message_loop_;
   uint32 which_;
+  ::base::TimeDelta average_frame_consumed_;
   ::base::Time time_[2];
   int64 frame_count_;
   std::atomic<bool> stopping_;
