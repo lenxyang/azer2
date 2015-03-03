@@ -1,7 +1,9 @@
 #pragma once
 
 
-#include "azer/uisbox/adapter/base/views_delegate.h"
+#include "azer/render/ui/adapter/views_delegate.h"
+
+namespace azer {
 
 // Most aura test code is written assuming a single RootWindow view, however,
 // at higher levels like content_browsertests and
@@ -19,3 +21,5 @@ class DesktopTestViewsDelegate : public TestViewsDelegate {
   DISALLOW_COPY_AND_ASSIGN(DesktopTestViewsDelegate);
 };
 
+
+}  // namespace azer

@@ -1,12 +1,13 @@
-#include "azer/uisbox/adapter/base/render_loop.h"
+#include "azer/render/ui/render_loop.h"
 
 #include "base/logging.h"
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/run_loop.h"
 #include "azer/render/render_system.h"
-#include "azer/uisbox/adapter/base/widget_renderer_context.h"
+#include "azer/render/ui/widget_renderer_context.h"
 
+namespace azer {
 views::Widget* RenderLoop::Delegate::widget() {
   return widget_context_->widget();
 }
@@ -109,4 +110,4 @@ void RenderLoop::Quit() {
   DCHECK_EQ(stopping_, false);
   stopping_ = true;
 }
-
+}  // namespace azer

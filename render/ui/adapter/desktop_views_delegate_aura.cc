@@ -1,9 +1,11 @@
-#include "azer/uisbox/adapter/base/desktop_views_delegate.h"
+#include "azer/render/ui/adapter/desktop_views_delegate.h"
 
 #include "ui/views/widget/native_widget_aura.h"
 #include "ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
 
 using namespace views;
+
+namespace azer {
 
 DesktopTestViewsDelegate::DesktopTestViewsDelegate() {}
 
@@ -26,3 +28,4 @@ void DesktopTestViewsDelegate::OnBeforeWidgetInit(
   }
 }
 
+}  // namespace azer

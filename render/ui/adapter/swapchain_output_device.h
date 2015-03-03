@@ -17,7 +17,7 @@
 #include "azer/render/context2d.h"
 #include "azer/render/canvas2d.h"
 #include "azer/render/swap_chain.h"
-#include "azer/uisbox/adapter/base/output_device.h"
+#include "azer/render/ui/adapter/output_device.h"
 
 class SkBitmap;
 class SkCanvas;
@@ -30,6 +30,7 @@ namespace cc {
 class SoftwareFrameData;
 }  // namespace cc
 
+namespace azer {
 class WidgetRendererContext;
 
 class SwapchainOutputDevice : public TextureOutputDevice {
@@ -67,3 +68,5 @@ class SwapchainOutputDevice : public TextureOutputDevice {
   DISALLOW_COPY_AND_ASSIGN(SwapchainOutputDevice);
 };
 
+
+}  // namespace azer

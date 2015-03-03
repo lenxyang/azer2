@@ -8,13 +8,14 @@
 
 #include "azer/base/export.h"
 #include "azer/render/render.h"
-#include "azer/uisbox/adapter/base/output_device.h"
+#include "azer/render/ui/adapter/output_device.h"
 
 namespace cc {
 class SoftwareOutputDevice;
 }
 
-class Azer2DOutputSurface : public cc::OutputSurface {
+namespace azer {
+class AZER_EXPORT Azer2DOutputSurface : public cc::OutputSurface {
  public:
   Azer2DOutputSurface(scoped_ptr<cc::SoftwareOutputDevice> device);
   ~Azer2DOutputSurface() override;
@@ -37,3 +38,5 @@ class Azer2DOutputSurface : public cc::OutputSurface {
   DISALLOW_COPY_AND_ASSIGN(Azer2DOutputSurface);
 };
 
+
+}  // namespace azer

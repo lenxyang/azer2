@@ -1,9 +1,9 @@
-#include "azer/uisbox/adapter/base/views_delegate.h"
+#include "azer/render/ui/adapter/views_delegate.h"
 
 #include "ui/wm/core/wm_state.h"
 #include "ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
 
-
+namespace azer {
 using namespace views;
 
 TestViewsDelegate::TestViewsDelegate()
@@ -30,3 +30,5 @@ void TestViewsDelegate::OnBeforeWidgetInit(
   if (!params->native_widget && use_desktop_native_widgets_)
     params->native_widget = new DesktopNativeWidgetAura(delegate);
 }
+
+}  // namespace azer

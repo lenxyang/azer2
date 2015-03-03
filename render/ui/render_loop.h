@@ -20,11 +20,9 @@ class Widget;
 
 namespace azer {
 class RenderSystem;
-}  // namespace azer
-
 class WidgetRendererContext;
 
-class RenderLoop : public ::base::RefCounted<RenderLoop> {
+class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
  public:
   class Delegate {
    public:
@@ -74,3 +72,4 @@ class RenderLoop : public ::base::RefCounted<RenderLoop> {
   DISALLOW_COPY_AND_ASSIGN(RenderLoop);
 };
 
+}  // namespace azer

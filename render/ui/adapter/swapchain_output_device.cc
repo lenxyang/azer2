@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "azer/uisbox/adapter/base/swapchain_output_device.h"
+#include "azer/render/ui/adapter/swapchain_output_device.h"
 
 #include "base/logging.h"
 #include "base/bind.h"
@@ -13,7 +13,9 @@
 #include "ui/views/widget/widget.h"
 #include "azer/render/context2d.h"
 #include "azer/render/canvas2d.h"
-#include "azer/uisbox/adapter/base/widget_renderer_context.h"
+#include "azer/render/ui/widget_renderer_context.h"
+
+namespace azer {
 
 SwapchainOutputDevice::SwapChainDeviceRenderer::
       SwapChainDeviceRenderer(WidgetRendererContext* context) 
@@ -75,3 +77,5 @@ void SwapchainOutputDevice::EndPaint(cc::SoftwareFrameData* frame_data) {
   render_util_->PostTask();
 }
 
+
+}  // namespace azer

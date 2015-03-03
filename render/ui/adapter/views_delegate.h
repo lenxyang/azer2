@@ -2,12 +2,15 @@
 
 #include "base/memory/scoped_ptr.h"
 #include "ui/views/views_delegate.h"
+#include "azer/base/export.h"
 
 namespace wm {
 class WMState;
 }
 
-class TestViewsDelegate : public views::ViewsDelegate {
+namespace azer {
+
+class AZER_EXPORT TestViewsDelegate : public views::ViewsDelegate {
  public:
   TestViewsDelegate();
   ~TestViewsDelegate() override;
@@ -39,3 +42,4 @@ class TestViewsDelegate : public views::ViewsDelegate {
   DISALLOW_COPY_AND_ASSIGN(TestViewsDelegate);
 };
 
+}  // namespace azer

@@ -1,11 +1,14 @@
-#include "azer/uisbox/adapter/base/widget_util.h"
+#include "azer/render/ui/widget_util.h"
 
 #include "ui/aura/window.h"
 #include "ui/aura/window_tree_host.h"
 #include "ui/views/widget/widget.h"
 
+namespace azer {
+namespace {
 const char* kAzerRenderWindow = "kAzerRenderWindow";
 const char* kAzerTextureOutputDevice = "kAzerTextureOutputDevice";
+}  // namespace
 
 bool IsWidgetRendererWindow(views::Widget* widget) {
   return NULL != widget->GetNativeWindowProperty(kAzerRenderWindow);
@@ -49,3 +52,5 @@ views::Widget* GetWidgetForWindowTreeHost(aura::WindowTreeHost* host) {
   }
   return NULL;
 }
+
+}  // namespace azer

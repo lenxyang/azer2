@@ -1,16 +1,17 @@
-#include "azer/uisbox/adapter/base/output_surface.h"
+#include "azer/render/ui/adapter/output_surface.h"
 
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/logging.h"
 #include "azer/base/image.h"
 #include "azer/render/render_system.h"
-#include "azer/uisbox/adapter/base/output_device.h"
+#include "azer/render/ui/adapter/output_device.h"
 
 #include "SkCanvas.h"
 #include "SkImageInfo.h"
 #include "SkString.h"
 
+namespace azer {
 class OutputDeviceProxy:  public ::base::RefCounted<OutputDeviceProxy> {
  public:
   OutputDeviceProxy(TextureOutputDevice* device, Azer2DOutputSurface* surface)
@@ -32,6 +33,7 @@ class OutputDeviceProxy:  public ::base::RefCounted<OutputDeviceProxy> {
   Azer2DOutputSurface* surface_;
   DISALLOW_COPY_AND_ASSIGN(OutputDeviceProxy);
 };
+
 
 Azer2DOutputSurface::Azer2DOutputSurface(
     scoped_ptr<cc::SoftwareOutputDevice> device)
@@ -63,3 +65,5 @@ TextureOutputDevice* Azer2DOutputSurface::GetOutputDevice() {
   TextureOutputDevice* device = (TextureOutputDevice*)(this->software_device());
   return device;
 }
+
+}  // namespace azer

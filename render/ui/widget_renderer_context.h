@@ -7,36 +7,37 @@
 #include "azer/render/overlay.h"
 #include "azer/render/surface.h"
 
-namespace azer {
-class RenderSystem;
-}  // namespace aze
-
 namespace views {
 class Widget;
 }
 
-class WidgetRendererContext {
+namespace azer {
+class RenderSystem;
+
+class AZER_EXPORT WidgetRendererContext {
  public:
   WidgetRendererContext(views::Widget* widget);
   virtual ~WidgetRendererContext();
 
   views::Widget* widget() { return widget_;}
 
-  azer::SwapChainPtr& GetSwapChain() { return swapchain_;}
-  azer::RendererPtr& GetRenderer() { return renderer_;}
-  azer::SurfacePtr& GetSurface() { return surface_;}
+  SwapChainPtr& GetSwapChain() { return swapchain_;}
+  RendererPtr& GetRenderer() { return renderer_;}
+  SurfacePtr& GetSurface() { return surface_;}
 
   void RenderUI();
   void Present();
  protected:
   // The root of the Layer tree drawn by this compositor.
-  azer::SurfacePtr surface_;
-  azer::SwapChainPtr swapchain_;
-  azer::RendererPtr renderer_;
-  azer::OverlayPtr overlay_;
+  SurfacePtr surface_;
+  SwapChainPtr swapchain_;
+  RendererPtr renderer_;
+  OverlayPtr overlay_;
   
-  azer::RenderSystem* render_system_;
+  RenderSystem* render_system_;
   views::Widget* widget_;
 
   DISALLOW_COPY_AND_ASSIGN(WidgetRendererContext);
 };
+
+}  // namespace aze

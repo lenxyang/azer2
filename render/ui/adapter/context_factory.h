@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ui/compositor/compositor.h"
-#include "azer/uisbox/adapter/base/output_device.h"
-#include "azer/uisbox/adapter/base/output_surface.h"
+#include "azer/render/ui/adapter/output_device.h"
+#include "azer/render/ui/adapter/output_surface.h"
 
 namespace base {
 class Thread;
@@ -12,9 +12,8 @@ namespace azer {
 
 class RenderSystem;
 class Renderer;
-}
 
-class UIContextFactory : public ui::ContextFactory {
+class AZER_EXPORT UIContextFactory : public ui::ContextFactory {
  public:
   UIContextFactory();
   ~UIContextFactory() override;
@@ -36,3 +35,5 @@ class UIContextFactory : public ui::ContextFactory {
   DISALLOW_COPY_AND_ASSIGN(UIContextFactory);
 };
 
+
+}  // namespace azer

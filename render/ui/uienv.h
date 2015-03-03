@@ -3,8 +3,8 @@
 #include <memory>
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
-#include "azer/uisbox/adapter/base/render_loop.h"
-#include "azer/uisbox/adapter/base/output_surface.h"
+#include "azer/render/ui/render_loop.h"
+#include "azer/render/ui/adapter/output_surface.h"
 #include "ui/base/win/scoped_ole_initializer.h"
 
 namespace wm {
@@ -26,6 +26,7 @@ class Widget;
 class WidgetDelegate;
 }
 
+namespace azer {
 class RenderLoop;
 class DesktopTestViewsDelegate;
 class UIContextFactory;
@@ -67,3 +68,5 @@ public:
   scoped_refptr<RenderLoop> render_loop_;
   DISALLOW_COPY_AND_ASSIGN(UIEnvironment);
 };
+
+}  // namespace azer

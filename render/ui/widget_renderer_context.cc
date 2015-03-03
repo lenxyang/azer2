@@ -1,4 +1,4 @@
-#include "azer/uisbox/adapter/base/widget_renderer_context.h"
+#include "azer/render/ui/widget_renderer_context.h"
 
 #include "base/logging.h"
 #include "ui/views/widget/widget.h"
@@ -7,10 +7,10 @@
 #include "ui/compositor/compositor.h"
 #include "azer/render/render_system.h"
 #include "azer/render/canvas2d.h"
-#include "azer/uisbox/adapter/base/widget_util.h"
-#include "azer/uisbox/adapter/base/output_device.h"
+#include "azer/render/ui/widget_util.h"
+#include "azer/render/ui/adapter/output_device.h"
 
-
+namespace azer {
 WidgetRendererContext::WidgetRendererContext(views::Widget* widget) 
     : render_system_(NULL)
     , widget_(widget) {
@@ -51,3 +51,5 @@ void WidgetRendererContext::RenderUI() {
 void WidgetRendererContext::Present() {
   swapchain_->Present();
 }
+
+}  // namespace azer

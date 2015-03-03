@@ -1,4 +1,4 @@
-#include "azer/uisbox/adapter/base/context_factory.h"
+#include "azer/render/ui//adapter/context_factory.h"
 
 #include "base/bind.h"
 #include "base/command_line.h"
@@ -14,8 +14,10 @@
 #include "ui/views/widget/widget.h"
 #include "azer/render/render.h"
 #include "azer/render/app_context.h"
-#include "azer/uisbox/adapter/base/widget_util.h"
-#include "azer/uisbox/adapter/base/swapchain_output_device.h"
+#include "azer/render/ui/widget_util.h"
+#include "azer/render/ui/adapter/swapchain_output_device.h"
+
+namespace azer {
 
 UIContextFactory::UIContextFactory()
     : next_surface_id_namespace_(1u) {
@@ -82,3 +84,4 @@ UIContextFactory::CreateSurfaceIdAllocator() {
       new cc::SurfaceIdAllocator(next_surface_id_namespace_++));
 }
 
+}  // namespace azer

@@ -12,7 +12,7 @@ namespace views {
 class Widget;
 }  // namespace views
 
-
+namespace azer {
 class TextureOutputDevice;
 
 bool IsWidgetRendererWindow(views::Widget* widget);
@@ -25,3 +25,4 @@ void SetTextureOutputDeviceForWidget(views::Widget* widget,
 
 views::Widget* GetWidgetForWindowTreeHost(gfx::AcceleratedWidget widget);
 views::Widget* GetWidgetForWindowTreeHost(aura::WindowTreeHost* host);
+}  // namespace azer

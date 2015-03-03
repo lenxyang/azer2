@@ -28,9 +28,10 @@ namespace views {
 class Widget;
 }  // namespace views
 
+namespace azer {
 // This is a "tear-off" class providing software drawing support to
 // OutputSurface, such as to a platform-provided window framebuffer.
-class TextureOutputDevice : public cc::SoftwareOutputDevice {
+class AZER_EXPORT TextureOutputDevice : public cc::SoftwareOutputDevice {
  public:
   TextureOutputDevice(azer::RenderSystem* render_system,
                       views::Widget* widget);
@@ -93,3 +94,4 @@ class TextureOutputDevice : public cc::SoftwareOutputDevice {
   DISALLOW_COPY_AND_ASSIGN(TextureOutputDevice);
 };
 
+}  // namespace azer

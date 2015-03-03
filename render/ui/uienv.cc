@@ -1,4 +1,4 @@
-#include "azer/uisbox/adapter/base/uienv.h"
+#include "azer/render/ui/uienv.h"
 
 #include "base/at_exit.h"
 #include "base/command_line.h"
@@ -16,10 +16,12 @@
 #include "ui/views/widget/desktop_aura/desktop_screen.h"
 
 #include "azer/render/util/render_system_loader.h"
-#include "azer/uisbox/adapter/base/widget_util.h"
-#include "azer/uisbox/adapter/base/render_loop.h"
-#include "azer/uisbox/adapter/base/context_factory.h"
-#include "azer/uisbox/adapter/base/desktop_views_delegate.h"
+#include "azer/render/ui/widget_util.h"
+#include "azer/render/ui/render_loop.h"
+#include "azer/render/ui/adapter/context_factory.h"
+#include "azer/render/ui/adapter/desktop_views_delegate.h"
+
+namespace azer {
 
 UIEnvironment::UIEnvironment() {
 }
@@ -79,3 +81,6 @@ RenderLoop* UIEnvironment::GetRenderLoop() {
   DCHECK(NULL != render_loop_);
   return render_loop_.get();
 }
+
+}  // namespace azer
+
