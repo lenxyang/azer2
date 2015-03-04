@@ -12,7 +12,7 @@ namespace azer {
 class Renderer;
 
 class AZER_EXPORT HardwareBufferData 
-    : public ::base::RefCounter<HardwareBufferData> {
+    : public ::base::RefCounted<HardwareBufferData> {
  public:
   HardwareBufferData() : data_(0), row_size_(-1), size_(-1) {
   }

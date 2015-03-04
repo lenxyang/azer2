@@ -3,7 +3,6 @@
 #include <limits>
 
 #include "azer/render/render_system.h"
-#include "azer/render/mesh.h"
 #include "azer/render/frustrum.h"
 #include "azer/render/camera.h"
 #include "azer/render/util/axis_aligned_box_mesh.h"
@@ -107,7 +106,8 @@ VisibleState AxisAlignedBox::IsVisible(const Frustrum& frustrum,
 }
 
 void AxisAlignedBox::Render(Renderer* renderer, const Matrix4& world,
-                                    const Camera& camera) {
+                            const Camera& camera) {
+  /*
   Vector3 scale = maximum() - minimum();
   azer::Matrix4 new_world = std::move(world * azer::Scale(scale));
   azer::Matrix4 wvp = std::move(camera.GetProjViewMatrix() * new_world);
@@ -116,6 +116,7 @@ void AxisAlignedBox::Render(Renderer* renderer, const Matrix4& world,
   mesh->effect()->SetDiffuse(azer::Vector4(0.0f, 0.6f, 0.0f, 1.0f));
   mesh->effect()->Use(renderer);
   mesh->Render(renderer);
+  */
 }
 
 std::ostream& operator << (std::ostream& o, const AxisAlignedBox& v) {

@@ -12,7 +12,6 @@ namespace azer {
 class Camera;
 class RenderSystem;
 class VertexData;
-class Mesh;
 
 class AZER_EXPORT AxisAlignedBox : public BoundingVolumn {
  public:
