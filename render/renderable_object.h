@@ -19,8 +19,8 @@ class FrameData;
  */
 class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject> {
  public:
-  RenderableObject();
-  virtual ~RenderableObject();
+  RenderableObject() {}
+  virtual ~RenderableObject() {}
 
   virtual void Render(FrameData* frame, Renderer* renderer) = 0;
 
