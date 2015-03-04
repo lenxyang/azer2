@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"
 #include "azer/render/render_system_enum.h"
@@ -45,7 +46,7 @@ class GpuConstantsType {
 
 AZER_EXPORT int32 GpuTableItemTypeSize(const GpuConstantsType::Type type);
 
-class AZER_EXPORT GpuConstantsTable {
+class AZER_EXPORT GpuConstantsTable : public ::base::RefCounted<GpuConstantsTable> {
  public:
   struct Desc {
     char name[64];
@@ -130,7 +131,7 @@ inline void GpuConstantsTable::SetData(int offset, const void* value, int32 size
   memcpy(data_.get() + offset, value, size);
 }
 
-typedef std::shared_ptr<GpuConstantsTable> GpuConstantsTablePtr;
+typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
 
 inline int32 GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
   if (desc.type == GpuConstantsType::kSelfDefined) {

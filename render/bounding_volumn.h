@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/render_system_enum.h"
 
@@ -13,7 +14,7 @@ class Renderer;
 class Matrix4;
 
 class Frustrum;
-class AZER_EXPORT BoundingVolumn {
+class AZER_EXPORT BoundingVolumn : public ::base::RefCounted<BoundingVolumn> {
  public:
   enum Type {
     kNoBoundingVolumn,
@@ -27,5 +28,5 @@ class AZER_EXPORT BoundingVolumn {
                       const Camera& camera) = 0;
 };
 
-typedef std::shared_ptr<BoundingVolumn> BoundingVolumnPtr;
+typedef scoped_refptr<BoundingVolumn> BoundingVolumnPtr;
 }  // namespace azer

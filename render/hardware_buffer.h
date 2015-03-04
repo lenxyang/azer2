@@ -30,9 +30,9 @@ class AZER_EXPORT HardwareBufferData
   DISALLOW_COPY_AND_ASSIGN(HardwareBufferData);
 };
 
-typedef std::shared_ptr<HardwareBufferData> HardwareBufferDataPtr;
+typedef scoped_refptr<HardwareBufferData> HardwareBufferDataPtr;
 
-class AZER_EXPORT HardwareBuffer {
+class AZER_EXPORT HardwareBuffer : public ::base::RefCounted<HardwareBuffer> {
  public:
   HardwareBuffer() {}
   virtual ~HardwareBuffer() {}

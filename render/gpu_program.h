@@ -66,6 +66,6 @@ inline CharType* ShaderSuffix(ShaderType type) {
   }
 }
 
-typedef std::shared_ptr<GpuProgram> GpuProgramPtr;
-typedef std::shared_ptr<VertexGpuProgram> VertexGpuProgramPtr;
+typedef scoped_refptr<GpuProgram> GpuProgramPtr;
+typedef scoped_refptr<VertexGpuProgram> VertexGpuProgramPtr;
 }  // namespace azer

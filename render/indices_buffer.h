@@ -43,7 +43,7 @@ class AZER_EXPORT IndicesData : public Resource {
   DISALLOW_COPY_AND_ASSIGN(IndicesData);
 };
 
-typedef std::shared_ptr<IndicesData> IndicesDataPtr;
+typedef scoped_refptr<IndicesData> IndicesDataPtr;
 
 class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
  public:

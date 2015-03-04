@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/render_system_enum.h"
 
@@ -10,7 +11,7 @@ namespace azer {
 
 class Renderer;
 
-class AZER_EXPORT LockData {
+class AZER_EXPORT LockData : public ::base::RefCounted<LockData> {
  public:
   LockData() : data_(0), row_size_(-1), size_(-1) {
   }
@@ -28,9 +29,9 @@ class AZER_EXPORT LockData {
   DISALLOW_COPY_AND_ASSIGN(LockData);
 };
 
-typedef std::shared_ptr<LockData> LockDataPtr;
+typedef scoped_refptr<LockData> LockDataPtr;
 
-class AZER_EXPORT HardwareBuffer {
+class AZER_EXPORT HardwareBuffer : public ::base::RefCounted<HardwareBuffer> {
  public:
   HardwareBuffer() {}
   virtual ~HardwareBuffer() {}

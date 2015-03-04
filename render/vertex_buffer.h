@@ -45,7 +45,7 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   DISALLOW_COPY_AND_ASSIGN(VertexBuffer);
 };
 
-typedef std::shared_ptr<VertexBuffer> VertexBufferPtr;
+typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
 
 inline VertexBuffer::VertexBuffer(const Options &opt)
     : options_(opt)

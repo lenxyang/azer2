@@ -140,7 +140,7 @@ protected:
   DISALLOW_COPY_AND_ASSIGN(Texture);
 };
 
-typedef std::shared_ptr<Texture> TexturePtr;
+typedef scoped_refptr<Texture> TexturePtr;
 
 inline Texture::Texture(const Options& opt) 
     : Resource(kTexture)

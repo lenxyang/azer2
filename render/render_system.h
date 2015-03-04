@@ -27,7 +27,7 @@ class RenderTarget;
 class Technique;
 class VertexBuffer;
 
-typedef std::shared_ptr<IndicesData> IndicesDataPtr;
+typedef scoped_refptr<IndicesData> IndicesDataPtr;
 
 class AZER_EXPORT RenderSystem {
  public:

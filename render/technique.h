@@ -12,7 +12,7 @@ namespace azer {
 
 class Renderer;
 
-class AZER_EXPORT Technique {
+class AZER_EXPORT Technique : public ::base::RefCounted<Technique> {
  public:
   virtual ~Technique() {}
   void AddGpuProgram(GpuProgramPtr& gpu) {
@@ -36,7 +36,7 @@ class AZER_EXPORT Technique {
   DISALLOW_COPY_AND_ASSIGN(Technique);
 };
 
-typedef std::shared_ptr<Technique> TechniquePtr;
+typedef scoped_refptr<Technique> TechniquePtr;
 
 inline VertexDescPtr Technique::GetVertexDesc() {
   GpuProgramPtr& ptr = pline_[kVertexStage];
