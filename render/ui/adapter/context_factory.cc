@@ -13,7 +13,6 @@
 #include "ui/compositor/reflector.h"
 #include "ui/views/widget/widget.h"
 #include "azer/render/render.h"
-#include "azer/render/app_context.h"
 #include "azer/render/ui/widget_util.h"
 #include "azer/render/ui/adapter/swapchain_output_device.h"
 

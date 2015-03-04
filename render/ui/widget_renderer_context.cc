@@ -18,20 +18,20 @@ WidgetRendererContext::WidgetRendererContext(views::Widget* widget)
   aura::WindowTreeHost* aura_host = ((aura::Window*)native_view)->GetHost();
   gfx::AcceleratedWidget acc_widget = aura_host->GetAcceleratedWidget();
 
-  surface_.reset(new azer::Surface(acc_widget));
+  surface_ = new azer::Surface(acc_widget);
   render_system_ = azer::RenderSystem::Current();
   CHECK(render_system_);
-  swapchain_.reset(render_system_->CreateSwapChainForSurface(surface_.get()));
+  swapchain_ = render_system_->CreateSwapChainForSurface(surface_.get());
   renderer_ = swapchain_->GetRenderer();
-  overlay_.reset(render_system_->CreateOverlay());
+  overlay_ = render_system_->CreateOverlay();
   ui::Compositor* compositor = widget->GetCompositor();
   renderer_->SetViewport(azer::Renderer::Viewport(gfx::Rect(compositor->size())));
 }
 
 WidgetRendererContext::~WidgetRendererContext() {
-  overlay_.reset();
-  renderer_.reset();
-  swapchain_.reset();
+  overlay_ = NULL;
+  renderer_ = NULL;
+  swapchain_ = NULL;
 }
 
 void WidgetRendererContext::RenderUI() {
