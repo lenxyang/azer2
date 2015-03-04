@@ -11,7 +11,7 @@ namespace azer {
 class RenderSystem;
 class Canvas2D;
 
-class AZER_EXPORT Context2D : public ::base::RefCounted<Resource> {
+class AZER_EXPORT Context2D : public ::base::RefCounted<Context2D> {
  public:
   Context2D();
   virtual ~Context2D();

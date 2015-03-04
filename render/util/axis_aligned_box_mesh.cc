@@ -67,7 +67,7 @@ void AABBMesh::InitVertexBuffer(RenderSystem* rs) {
   *vptr++ = azer::Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   *vptr++ = azer::Vector4( 0.5f, -0.5f, -0.5f, 1.0f);
   *vptr++ = azer::Vector4( 0.5f, -0.5f,  0.5f, 1.0f);
-  vb_.reset(rs->CreateVertexBuffer(azer::VertexBuffer::Options(), &data));
+  vb_ = rs->CreateVertexBuffer(azer::VertexBuffer::Options(), &data);
 }
 
 void AABBMesh::InitIndicesBuffer(RenderSystem* rs) {
@@ -85,7 +85,7 @@ void AABBMesh::InitIndicesBuffer(RenderSystem* rs) {
     };
     int32* cur = (int32*)idata.pointer();
     memcpy(cur, indices, sizeof(int32) * kTriangleNum * 3);
-    ib_.reset(rs->CreateIndicesBuffer(azer::IndicesBuffer::Options(), &idata));
+    ib_ = rs->CreateIndicesBuffer(azer::IndicesBuffer::Options(), &idata);
   }
 
   // create for line
@@ -99,8 +99,8 @@ void AABBMesh::InitIndicesBuffer(RenderSystem* rs) {
     };
     int32* cur = (int32*)edge_idata.pointer();
     memcpy(cur, edge_data, sizeof(int32) * kEdgeNum * 2);
-    edge_ib_.reset(rs->CreateIndicesBuffer(azer::IndicesBuffer::Options(),
-                                           &edge_idata));
+    edge_ib_ = rs->CreateIndicesBuffer(azer::IndicesBuffer::Options(),
+                                       &edge_idata);
   }
 }
 

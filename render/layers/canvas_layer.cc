@@ -25,8 +25,7 @@ void CanvasLayer::OnBoundsChanged() {
   if (!bounds_.IsEmpty()) {
     RenderSystem* rs = RenderSystem::Current();
     DCHECK(rs);
-    canvas_.reset(rs->GetContext2D()->CreateCanvas(bounds_.width(), 
-                                                   bounds_.height()));
+    canvas_ = rs->GetContext2D()->CreateCanvas(bounds_.width(), bounds_.height());
   }
 
   TextureLayer::OnBoundsChanged();

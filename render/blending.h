@@ -9,7 +9,7 @@
 
 namespace azer {
 
-class Blending : public ::base::RefCounted<Resource> {
+class Blending : public ::base::RefCounted<Blending> {
  public:
   enum Oper {
     kAdd = 1,

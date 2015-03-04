@@ -27,7 +27,7 @@ bool Overlay::Init(RenderSystem* rs) {
   blend_desc.dest_alpha = Blending::kZero;
   blend_desc.alpha_oper = Blending::kAdd;
   blend_desc.mask = Blending::kWriteColor;
-  blending_.reset(rs->CreateBlending(blend_desc));
+  blending_ = rs->CreateBlending(blend_desc);
   if (!blending_.get()) {
     LOG(ERROR) << "Failed to create blending.";
     return false;

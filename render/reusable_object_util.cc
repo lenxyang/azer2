@@ -12,7 +12,7 @@ GpuProgramPtr GetVertexProgramMayCreate(const std::string& name,
   ReusableObject* objs = rs->GetReusableObject();
   GpuProgramPtr vs(objs->GetGpuProgram(name));
   if (!vs.get()) {
-    vs.reset(rs->CreateVertexGpuProgram(vdesc, program.c_str()));
+    vs = rs->CreateVertexGpuProgram(vdesc, program.c_str());
     if (vs.get() == NULL) {
       LOG(ERROR) << "Overlay VertexStage Program compiled failed";  
       return GpuProgramPtr();
@@ -29,7 +29,7 @@ GpuProgramPtr GetPixelProgramMayCreate(const std::string& name,
   ReusableObject* objs = rs->GetReusableObject();
   GpuProgramPtr ps(objs->GetGpuProgram(name));
   if (!ps.get()) {
-    ps.reset(rs->CreateGpuProgram(kPixelStage, program.c_str()));
+    ps = rs->CreateGpuProgram(kPixelStage, program.c_str());
     if (ps.get() == NULL) {
       LOG(ERROR) << "Overlay PiexlStage Program compiled failed";  
       return GpuProgramPtr();

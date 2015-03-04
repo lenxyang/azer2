@@ -39,9 +39,9 @@ void LayerTreeHost::SetScaleAndSize(float scale, const gfx::Size& size_in_pixel)
   rdopt.size = size_in_pixel;
   rdopt.target = (azer::Texture::BindTarget)
       (azer::Texture::kRenderTarget | azer::Texture::kShaderResource);
-  renderer_.reset(rs->CreateRenderer(rdopt));
+  renderer_ = rs->CreateRenderer(rdopt);
   if (!overlay_.get()) {
-    overlay_.reset(rs->CreateOverlay());
+    overlay_ = rs->CreateOverlay();
   }
 
   size_ = size_in_pixel;
