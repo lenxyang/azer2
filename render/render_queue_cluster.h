@@ -11,10 +11,10 @@ namespace azer {
 class Renderer;
 class RenderQueue;
 
-class AZER_EXPORT QueueRenderer {
+class AZER_EXPORT RenderQueueCluster {
  public:
-  QueueRenderer();
-  ~QueueRenderer();
+  RenderQueueCluster();
+  ~RenderQueueCluster();
   void Render(Renderer* renderer);
 
   void AddRenderQueue(int32 level, RenderQueuePtr& queue);
@@ -31,6 +31,6 @@ class AZER_EXPORT QueueRenderer {
   typedef std::map<std::string, RenderQueuePtr> LevelQueueMap;
   std::vector<LevelQueue> levels_;
   
-  DISALLOW_COPY_AND_ASSIGN(QueueRenderer);
+  DISALLOW_COPY_AND_ASSIGN(RenderQueueCluster);
 };
 }  // namespace azer

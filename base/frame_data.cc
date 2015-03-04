@@ -22,7 +22,7 @@ void FrameData::UpdateFrameData() {
   recent_seconds += time_delta.InSecondsF();
   total_seconds += time_delta.InSecondsF();
   if (recent_frames_time_consumed.size() > max_frame_stored) {
-    recent_seconds - recent_frames_time_consumed.front().InSecondsF();
+    recent_seconds -= recent_frames_time_consumed.front().InSecondsF();
     recent_frames_time_consumed.pop_front();
   }
 }

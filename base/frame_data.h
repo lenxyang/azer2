@@ -6,6 +6,7 @@
 
 #include "base/basictypes.h"
 #include "base/time/time.h"
+#include "azer/base/export.h"
 
 namespace azer {
 struct AZER_EXPORT FrameData {
@@ -14,7 +15,7 @@ struct AZER_EXPORT FrameData {
 
   ::base::Time prev_frame;
   ::base::Time current_frame;
-  ::base::Time time_delta;
+  ::base::TimeDelta time_delta;
   int64 frame_cnt;
   void *extra;
 

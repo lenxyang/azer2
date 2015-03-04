@@ -1,8 +1,8 @@
-#include "azer/render_queue/queue_renderer.h"
+#include "azer/render_queue/render_queue_cluster.h"
 
 namespace azer {
 
-void QueueRenderer::Clear() {
+void RenderQueueCluster::Clear() {
   for (uint32 index = 0; index < levels_.size(); ++index) { 
     for (auto iter = levels_[index]->begin();
          iter != levels_[index]->end();
@@ -12,11 +12,11 @@ void QueueRenderer::Clear() {
   }
 }
 
-void QueueRenderer::Reset() {
+void RenderQueueCluster::Reset() {
   levels_.clear();
 }
 
-void QueueRenderer::Render(Renderer* renderer) {
+void RenderQueueCluster::Render(Renderer* renderer) {
   for (uint32 index = 0; index < levels_.size(); ++index) { 
     for (auto iter = levels_[index]->begin();
          iter != levels_[index]->end();
@@ -26,10 +26,10 @@ void QueueRenderer::Render(Renderer* renderer) {
   }
 }
 
-void QueueRenderer::AddRenderQueue(int32 level, RenderQueuePtr& queue) {
+void RenderQueueCluster::AddRenderQueue(int32 level, RenderQueuePtr& queue) {
 }
 
-bool QueueRenderer::RemoveQueue(int32 level, RenderQueuePtr& queue) {
+bool RenderQueueCluster::RemoveQueue(int32 level, RenderQueuePtr& queue) {
   return true;
 }
 
