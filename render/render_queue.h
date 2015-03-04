@@ -1,26 +1,38 @@
 #pragma once
 
 #include <deque>
+#include <string>
+#include <vector>
 
-#include "azer/render/export.h"
-#include "azer/render/mesh.h"
+#include "azer/base/export.h"
+#include "base/basictypes.h"
+#include "azer/render_queue/renderable_object.h"
+#include "azer/render_queue/effect_params_provider.h"
 
 namespace azer {
 
 /**
- * render queue 是按照 VertexDesc 排序的一组 Renderable 队列
- * RenderQueue 一般在线下生成对应的操位
- * 即： 有那些可能存在的 VertexDesc 类型，同时还会生成一部分通用的 Shader
- * 包括镜面效果， shader map 等第一阶段运算的 shader
- * defer shading 的部分运算也可以以类似的方法完成
- * 真正渲染是 RendererObject 再身带有描述自己的 shader
+ * RenderQueue 将所有具有相同 Effect 的类型放在一个队列当中进行渲染
  */
-class AZER_EXPORT RenderQueue {
+class RenderQueue : public ::base::RefCounted<RenderQueue>
+                  , public EffectParamsProvider {
  public:
-  void PreRender(RenderSystem* render_system, EffectGroup* group);
-  void Render(RenderSystem* render_system);
+  RenderQueue() {}
+
+  EffectPtr& GetEffect();
+  void SetEffect(EffectPtr effect);
+
+  void AddObject(const RenderableObjectPtr& object);
+  bool RemoveObject(const RenderableObjectPtr& object);
+  bool Exists(const RenderableObjectPtr& object);
+  void Clear() { queue_.clear();}
+
+  // override from EffectParamsProvider
+  // void Render(FrameData* frame, Renderer* renderer) override;
+  // EffectParamsProvider* GetEffectParamsProvider() override;
  private:
-  std::deque<RendererObject> queue_;
+  EffectPtr effect_;
+  std::vector<RenderableObjectPtr> queue_;
   DISALLOW_COPY_AND_ASSIGN(RenderQueue);
 };
 }  // namespace azer
