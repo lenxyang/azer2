@@ -31,11 +31,4 @@ class AZER_EXPORT RenderableObject : ::base::RefCounted<RenderableObject> {
 };
 
 typedef ::base::scoped_refptr<RenderableObject> RenderableObjectPtr;
-
-class RenderableObjectGroup {
- public:
- private:
-  std::vector<RenderableObjectPtr> objects_;
-  DISALLOW_COPY_AND_ASSIGN(RenderableObjectGroup);
-};
 }  // namespace azer

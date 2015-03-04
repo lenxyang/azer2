@@ -1,0 +1,19 @@
+
+
+source_set("render_queue") {
+  sources = [
+    "effect_params_provider.h",
+    "renderable_object.h",
+    "render_queue.cc",
+    "render_queue.h",
+    "queue_renderer.cc",
+    "queue_renderer.h",
+  ]
+
+  deps = [
+    "//base",
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+}
