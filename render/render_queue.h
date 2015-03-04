@@ -4,20 +4,21 @@
 #include <string>
 #include <vector>
 
-#include "azer/base/export.h"
+
 #include "base/basictypes.h"
-#include "azer/render_queue/renderable_object.h"
-#include "azer/render_queue/effect_params_provider.h"
+#include "base/memory/ref_counted.h"
+#include "azer/base/export.h"
+#include "azer/render/renderable_object.h"
 
 namespace azer {
 
 /**
  * RenderQueue 将所有具有相同 Effect 的类型放在一个队列当中进行渲染
  */
-class RenderQueue : public ::base::RefCounted<RenderQueue>
-                  , public EffectParamsProvider {
+class RenderQueue : public RenderableObject {
  public:
-  RenderQueue() {}
+  RenderQueue();
+  virtual ~RenderQueue();
 
   EffectPtr& GetEffect();
   void SetEffect(EffectPtr effect);
@@ -27,7 +28,7 @@ class RenderQueue : public ::base::RefCounted<RenderQueue>
   bool Exists(const RenderableObjectPtr& object);
   void Clear() { queue_.clear();}
 
-  // override from EffectParamsProvider
+  // override from Rendererable
   // void Render(FrameData* frame, Renderer* renderer) override;
   // EffectParamsProvider* GetEffectParamsProvider() override;
  private:
@@ -35,4 +36,6 @@ class RenderQueue : public ::base::RefCounted<RenderQueue>
   std::vector<RenderableObjectPtr> queue_;
   DISALLOW_COPY_AND_ASSIGN(RenderQueue);
 };
+
+typedef scoped_refptr<RenderQueue> RenderQueuePtr;
 }  // namespace azer

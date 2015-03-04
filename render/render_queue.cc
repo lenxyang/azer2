@@ -1,4 +1,4 @@
-#include "azer/render_queue/render_queue.h"
+#include "azer/render/render_queue.h"
 
 #include "base/logging.h"
 
@@ -15,8 +15,8 @@ void RenderQueue::AddObject(const RenderableObjectPtr& object) {
 }
 
 bool RenderQueue::RemoveObject(const RenderableObjectPtr& object) {
-  auto iter = std::find(children_.begin(), children_.end(), object);
-  if (iter != children_.end()) {
+  auto iter = std::find(queue_.begin(), queue_.end(), object);
+  if (iter != queue_.end()) {
     queue_.erase(iter);
     return true;
   } else {
@@ -25,7 +25,7 @@ bool RenderQueue::RemoveObject(const RenderableObjectPtr& object) {
 }
 
 bool RenderQueue::Exists(const RenderableObjectPtr& object) {
-  return queue_.end() != std::find(children_.begin(), children_.end(), object);
+  return queue_.end() != std::find(queue_.begin(), queue_.end(), object);
 }
 
 

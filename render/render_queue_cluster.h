@@ -6,6 +6,7 @@
 #include "azer/base/export.h"
 #include "base/basictypes.h"
 #include "azer/render/renderable_object.h"
+#include "azer/render/render_queue.h"
 
 namespace azer {
 class Renderer;
@@ -15,7 +16,8 @@ class AZER_EXPORT RenderQueueCluster {
  public:
   RenderQueueCluster();
   ~RenderQueueCluster();
-  void Render(Renderer* renderer);
+
+  virtual void Render(FrameData* frame, Renderer* renderer);
 
   void AddRenderQueue(int32 level, RenderQueuePtr& queue);
   bool RemoveQueue(int32 level, RenderQueuePtr& queue);
@@ -29,7 +31,7 @@ class AZER_EXPORT RenderQueueCluster {
   void Clear();
  private:
   typedef std::map<std::string, RenderQueuePtr> LevelQueueMap;
-  std::vector<LevelQueue> levels_;
+  std::vector<LevelQueueMap> levels_;
   
   DISALLOW_COPY_AND_ASSIGN(RenderQueueCluster);
 };

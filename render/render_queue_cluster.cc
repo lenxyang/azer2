@@ -1,13 +1,13 @@
-#include "azer/render_queue/render_queue_cluster.h"
+#include "azer/render/render_queue_cluster.h"
 
 namespace azer {
 
 void RenderQueueCluster::Clear() {
   for (uint32 index = 0; index < levels_.size(); ++index) { 
-    for (auto iter = levels_[index]->begin();
-         iter != levels_[index]->end();
+    for (auto iter = levels_[index].begin();
+         iter != levels_[index].end();
          ++iter) {
-      (*iter)->Clear();
+      iter->second->Clear();
     }
   }
 }
@@ -16,12 +16,12 @@ void RenderQueueCluster::Reset() {
   levels_.clear();
 }
 
-void RenderQueueCluster::Render(Renderer* renderer) {
+void RenderQueueCluster::Render(FrameData* frame, Renderer* renderer) {
   for (uint32 index = 0; index < levels_.size(); ++index) { 
-    for (auto iter = levels_[index]->begin();
-         iter != levels_[index]->end();
+    for (auto iter = levels_[index].begin();
+         iter != levels_[index].end();
          ++iter) {
-      (*iter)->Render(renderer);
+      iter->second->Render(frame, renderer);
     }
   }
 }

@@ -3,6 +3,7 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/render/effect.h"
 
 namespace azer {
 
@@ -15,7 +16,7 @@ class AZER_EXPORT EffectParamsProvider {
   virtual ~EffectParamsProvider();
 
   // apply the parameters on effect
-  virtual ApplyParametersForEffect(Effect* effect) = 0;
+  virtual void ApplyParametersForEffect(Effect* effect) = 0;
 
   // GetEffect
   virtual EffectPtr& GetEffect() = 0;

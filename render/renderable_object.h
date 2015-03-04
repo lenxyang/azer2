@@ -3,7 +3,7 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
-#include "azer/render_queue/effect_params_provider.h"
+#include "azer/render/effect_params_provider.h"
 
 namespace azer {
 
@@ -17,10 +17,10 @@ class FrameData;
  * 每一个阶段对应一个 RenderableObject, 不过他们使用相同的 VertexBuffer 及
  * IndexBuffer
  */
-class AZER_EXPORT RenderableObject : ::base::RefCounted<RenderableObject> {
+class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject> {
  public:
   RenderableObject();
-  virtual ~RenderableObject() {}
+  virtual ~RenderableObject();
 
   virtual void Render(FrameData* frame, Renderer* renderer) = 0;
 
@@ -30,5 +30,5 @@ class AZER_EXPORT RenderableObject : ::base::RefCounted<RenderableObject> {
   DISALLOW_COPY_AND_ASSIGN(RenderableObject);
 };
 
-typedef ::base::scoped_refptr<RenderableObject> RenderableObjectPtr;
+typedef scoped_refptr<RenderableObject> RenderableObjectPtr;
 }  // namespace azer
