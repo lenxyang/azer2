@@ -21,8 +21,6 @@ source_set("render2d") {
 
 shared_library("render") {
   sources = [
-    "app_context.cc",
-    "app_context.h",
     "axis_aligned_box.cc",
     "axis_aligned_box.h",
     "blending.h",
