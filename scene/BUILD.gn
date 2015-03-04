@@ -1,0 +1,13 @@
+
+source_set("scene") {
+  sources = [
+    "node.cc",
+    "node.h"
+  ]
+
+  deps = [
+    "//base",
+  ]
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+}
