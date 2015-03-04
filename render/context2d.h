@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 
 namespace azer {
@@ -10,7 +11,7 @@ namespace azer {
 class RenderSystem;
 class Canvas2D;
 
-class AZER_EXPORT Context2D {
+class AZER_EXPORT Context2D : public ::base::RefCounted<Resource> {
  public:
   Context2D();
   virtual ~Context2D();
@@ -22,6 +23,6 @@ class AZER_EXPORT Context2D {
   DISALLOW_COPY_AND_ASSIGN(Context2D);
 };
 
-typedef std::shared_ptr<Context2D> Context2DPtr;
+typedef scoped_refptr<Context2D> Context2DPtr;
 
 }  // namespace azer

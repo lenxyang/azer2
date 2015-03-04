@@ -4,6 +4,7 @@
 #include <string>
 #include "base/basictypes.h"
 #include "base/logging.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/render/vertex_data.h"
@@ -18,7 +19,7 @@ enum ShaderType {
   kBinaryShader,
 };
 
-class AZER_EXPORT GpuProgram {
+class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
  public:
   virtual ~GpuProgram() {}
 

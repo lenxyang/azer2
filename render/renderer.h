@@ -22,7 +22,7 @@ namespace azer {
 
 class RenderSystem;
 
-class AZER_EXPORT Renderer {
+class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
  public:
   Renderer(int num_of_rt, RenderSystem* rs)
       : render_system_(rs)
@@ -123,5 +123,5 @@ class AZER_EXPORT Renderer {
   DISALLOW_COPY_AND_ASSIGN(Renderer);
 };
 
-typedef std::shared_ptr<Renderer> RendererPtr;
+typedef scoped_refptr<Renderer> RendererPtr;
 }  // namespace azer

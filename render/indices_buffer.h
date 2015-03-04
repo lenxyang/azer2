@@ -94,5 +94,5 @@ inline int32 IndicesData::unit_size() const {
   }
 }
 
-typedef std::shared_ptr<IndicesBuffer> IndicesBufferPtr;
+typedef scoped_refptr<IndicesBuffer> IndicesBufferPtr;
 }  // namespace azer

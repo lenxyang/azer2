@@ -15,8 +15,8 @@ namespace azer {
 
 class VertexData;
 class VertexDesc;
-typedef std::shared_ptr<VertexData> VertexDataPtr;
-typedef std::shared_ptr<VertexDesc> VertexDescPtr;
+typedef scoped_refptr<VertexData> VertexDataPtr;
+typedef scoped_refptr<VertexDesc> VertexDescPtr;
 
 class AZER_EXPORT VertexDesc : public Resource {
  public:

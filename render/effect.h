@@ -3,7 +3,6 @@
 #include <vector>
 #include <memory>
 
-
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
 #include "azer/render/gpu_constants_table.h"
@@ -41,5 +40,5 @@ class AZER_EXPORT Effect : public Resource {
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };
 
-typedef std::shared_ptr<Effect> EffectPtr;
+typedef scoped_refptr<Effect> EffectPtr;
 }  // namespace azer

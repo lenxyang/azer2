@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/effect.h"
 #include "azer/render/texture.h"
@@ -12,7 +13,7 @@
 namespace azer {
 class Renderer;
 
-class AZER_EXPORT Overlay {
+class AZER_EXPORT Overlay : public ::base::RefCounted<Resource> {
  public:
   /**
    * overlay 的坐标与 3D 坐标系一致
@@ -55,5 +56,5 @@ class AZER_EXPORT Overlay {
   DISALLOW_COPY_AND_ASSIGN(Overlay);
 };
 
-typedef std::shared_ptr<Overlay> OverlayPtr;
+typedef scoped_refptr<Overlay> OverlayPtr;
 }  // namespace azer

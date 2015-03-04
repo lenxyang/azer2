@@ -13,7 +13,7 @@ namespace azer {
 
 class Surface;
 
-class AZER_EXPORT SwapChain {
+class AZER_EXPORT SwapChain : public ::base::RefCounted<SwapChain> {
  public:
   SwapChain() {}
   virtual ~SwapChain() {}
@@ -28,6 +28,6 @@ class AZER_EXPORT SwapChain {
   DISALLOW_COPY_AND_ASSIGN(SwapChain);
 };
 
-typedef std::shared_ptr<SwapChain> SwapChainPtr;
+typedef scoped_refptr<SwapChain> SwapChainPtr;
 }  // namespace azer
 

@@ -20,6 +20,7 @@
 #include <memory>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "base/values.h"
 #include "azer/base/export.h"
 
@@ -32,7 +33,7 @@ class ResourceLoaderCreator;
  * all resource can be load from resource manger should 
  * from this class
  */
-class AZER_EXPORT Resource {
+class AZER_EXPORT Resource : public ::base::RefCounted<Resource> {
  public:
   enum Type {
     kTexture,
@@ -52,4 +53,6 @@ class AZER_EXPORT Resource {
   const Type type_;
   DISALLOW_COPY_AND_ASSIGN(Resource);
 };
+
+typedef scoped_refptr<Resource> ResourcePtr;
 }  // namespace azer

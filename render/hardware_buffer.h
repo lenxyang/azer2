@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/render_system_enum.h"
 
@@ -10,7 +11,8 @@ namespace azer {
 
 class Renderer;
 
-class AZER_EXPORT HardwareBufferData {
+class AZER_EXPORT HardwareBufferData 
+    : public ::base::RefCounter<HardwareBufferData> {
  public:
   HardwareBufferData() : data_(0), row_size_(-1), size_(-1) {
   }

@@ -1,13 +1,14 @@
 #pragma once
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
 #include "azer/math/math.h"
 
 namespace azer {
 
-class AZER_EXPORT RenderTarget {
+class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
  public:
   RenderTarget(const Texture::Options& opt, bool default_rt = false)
       : default_render_target_(default_rt)
@@ -30,5 +31,5 @@ class AZER_EXPORT RenderTarget {
   DISALLOW_COPY_AND_ASSIGN(RenderTarget);
 };
 
-typedef std::shared_ptr<RenderTarget> RenderTargetPtr;
+typedef scoped_refptr<RenderTarget> RenderTargetPtr;
 }  // namespace azer

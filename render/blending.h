@@ -4,11 +4,12 @@
 #include <memory>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "base/logging.h"
 
 namespace azer {
 
-class Blending {
+class Blending : public ::base::RefCounted<Resource> {
  public:
   enum Oper {
     kAdd = 1,
@@ -76,5 +77,5 @@ class Blending {
   Desc desc_;
 };
 
-typedef std::shared_ptr<Blending> BlendingPtr;
+typedef scoped_refptr<Blending> BlendingPtr;
 }  // namespace azer

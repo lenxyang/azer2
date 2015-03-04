@@ -2,12 +2,13 @@
 
 #include <memory>
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
 
 namespace azer {
 
-class AZER_EXPORT DepthBuffer {
+class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
  public:
   virtual ~DepthBuffer() {};
 
@@ -38,7 +39,7 @@ protected:
   DISALLOW_COPY_AND_ASSIGN(DepthBuffer);
 };
 
-typedef std::shared_ptr<DepthBuffer> DepthBufferPtr;
+typedef scoped_refptr<DepthBuffer> DepthBufferPtr;
 
 class ScopedDepthBufferState {
  public:

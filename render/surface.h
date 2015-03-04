@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/native_widget_types.h"
@@ -13,7 +14,7 @@ class SwapChain;
 /**
  * Surface 类似于 egl Surface， 在 SwapBuffer 之后最终结果展示与此
  */
-class AZER_EXPORT Surface {
+class AZER_EXPORT Surface : public ::base::RefCounted<Surface> {
  public:
   enum Type {
     kViewSurface,
@@ -57,5 +58,5 @@ class AZER_EXPORT Surface {
   DISALLOW_COPY_AND_ASSIGN(Surface);
 };
 
-typedef std::shared_ptr<Surface> SurfacePtr;
+typedef scoped_refptr<Surface> SurfacePtr;
 }  // namespace azer

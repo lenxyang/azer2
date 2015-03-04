@@ -36,8 +36,6 @@ shared_library("render") {
     "gpu_constants_table.cc",
     "gpu_constants_table.h",
     "hardware_buffer.h",
-    "mesh.cc",
-    "mesh.h",
     "overlay.cc",
     "overlay.h",
     "render_queue.cc",

@@ -3,9 +3,10 @@
 #include <memory>
 
 #include "base/basictypes.h"
+#include "base/memory/ref_counted.h"
+#include "base/logging.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
-#include "base/logging.h"
 
 class SkCanvas;
 class SkBitmap;
@@ -15,7 +16,7 @@ namespace azer {
 class Context2D;
 class Device2D;
 
-class AZER_EXPORT Canvas2D {
+class AZER_EXPORT Canvas2D : public ::base::RefCounted<Resource> {
  public:
   virtual ~Canvas2D();
 
@@ -56,7 +57,7 @@ class AZER_EXPORT Canvas2D {
   DISALLOW_COPY_AND_ASSIGN(Canvas2D);
 };
 
-typedef std::shared_ptr<Canvas2D> Canvas2DPtr;
+typedef scoped_refptr<Canvas2D> Canvas2DPtr;
 
 bool AZER_EXPORT SaveSkCanvas(SkCanvas* canvas, const ::base::FilePath& path);
 bool AZER_EXPORT SaveSkBitmap(const SkBitmap& bitmap, const ::base::FilePath& path);
