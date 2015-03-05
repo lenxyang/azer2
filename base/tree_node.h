@@ -87,7 +87,7 @@ class TreeNode {
   T* last_child_;
   T* next_sibling_;
   T* prev_sibling_;
-  Delegate delegate_;
+  Delegate* delegate_;
  private:
   DISALLOW_COPY_AND_ASSIGN(TreeNode);
 };
@@ -108,8 +108,8 @@ void TreeNode<T>::AddChild(T* node) {
 
   node->parent_ = (T*)this;
   last_child_ = node;
-  if (delegate_) {
-    delegate_->OnChildAdded(node);
+  if (TreeNode<T>::delegate_) {
+    TreeNode<T>::delegate_->OnChildAdded(node);
   }
 }
 
@@ -133,8 +133,8 @@ void TreeNode<T>::RemoveChild(T* node) {
     node->next_sibling_->prev_sibling_ = node->prev_sibling_;
   }
 
-  if (delegate_) {
-    delegate_->OnChildAdded(node);
+  if (TreeNode<T>::delegate_) {
+    TreeNode<T>::delegate_->OnChildAdded(node);
   }
   node->reset();
 }
@@ -180,8 +180,8 @@ void TreeNode<T>::InsertBefore(T *before) {
     before->parent_->first_child_ = (T*)this;
   }
 
-  if (parent_->delegate_) {
-    parent_->delegate_->OnChildAdded(this);
+  if (parent_->TreeNode<T>::delegate_) {
+    parent_->TreeNode<T>::delegate_->OnChildAdded((T*)this);
   }
 }
 
@@ -199,8 +199,8 @@ void TreeNode<T>::InsertAfter(T *after) {
     this->parent_->last_child_ = (T*)this;
   }
 
-  if (parent_->delegate_) {
-    parent_->delegate_->OnChildAdded(this);
+  if (parent_->TreeNode<T>::delegate_) {
+    parent_->TreeNode<T>::delegate_->OnChildAdded((T*)this);
   }
 }
 

@@ -19,8 +19,8 @@ class AZER_EXPORT MovableObject {
   MovableObject(const Vector3& pos, const Quaternion& orient);
   MovableObject(const MovableObject& obj);
 
-  void set_delegate(Delegate* delegate);
-  Delegate* delegate() { return delegate_;}
+  void set_delegate(Delegate* delegate) { MovableObject::delegate_ = delegate;}
+  Delegate* delegate() { return MovableObject::delegate_;}
 
   MovableObject& operator = (const MovableObject& obj);
   

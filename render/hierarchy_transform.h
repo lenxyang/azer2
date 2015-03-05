@@ -19,6 +19,10 @@ class HierarchyTransform : public TreeNode<T>
       , scale_(scale) {
   }
 
+  HierarchyTransform()
+      : scale_(azer::Vector3(1.0f, 1.0f, 1.0f)) {
+  }
+
   void reset();
   // void Scale(const Vector3& scale);
   void Translate(const Vector3& pos);

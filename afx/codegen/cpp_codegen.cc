@@ -164,18 +164,18 @@ std::string CppCodeGen::GenStageGpuTable(RenderPipelineStage stage,
   ss << "  // generate GpuTable init for stage " << StageName(stage) << "\n";
   ss << std::move(GenStageGpuTableDesc(stage, uniforms));
   ss << "  gpu_table_[" << StageName(stage) << "]"
-     << ".reset(render_system_->CreateGpuConstantsTable(\n"
+     << " = render_system_->CreateGpuConstantsTable(\n"
      << "      arraysize(" << GpuTableDescVarName(stage) << "), "
-     << GpuTableDescVarName(stage) << "));\n";
+     << GpuTableDescVarName(stage) << ");\n";
   return ss.str();
 }
 
 std::string CppCodeGen::GenTechnique(const Technique& tech) {
   std::stringstream ss;
   ss << "void " << GetClassName(tech) << "::InitTechnique() {\n"
-     << "  technique_.reset(render_system_->CreateTechnique());\n"
-     << "  vertex_desc_ptr_.reset(new azer::VertexDesc(kVertexDesc, "
-     << "kVertexDescNum));\n"
+     << "  technique_ = render_system_->CreateTechnique();\n"
+     << "  vertex_desc_ptr_ = new azer::VertexDesc(kVertexDesc, "
+     << "kVertexDescNum);\n"
      << "  const std::string& vs_shader_source = sources_[azer::kVertexStage];\n"
      << "  DCHECK(!vs_shader_source.empty());\n"
      << "  azer::GpuProgramPtr vs_gpup_ptr(render_system_->CreateVertexGpuProgram(\n"
