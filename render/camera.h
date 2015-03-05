@@ -2,9 +2,9 @@
 
 
 #include "azer/base/export.h"
-#include "azer/base/movable.h"
 #include "azer/math/math.h"
 #include "azer/render/frustrum.h"
+#include "azer/render/movable.h"
 
 namespace azer {
 

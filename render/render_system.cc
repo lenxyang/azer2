@@ -7,9 +7,9 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "base/lazy_instance.h"
+#include "azer/base/dynlib.h"
 #include "azer/math/math.h"
 #include "azer/render/surface.h"
-#include "azer/render/util/dynlib.h"
 #include "azer/render/context2d.h"
 
 

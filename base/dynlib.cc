@@ -1,4 +1,4 @@
-#include "azer/render/util/dynlib.h"
+#include "azer/base/dynlib.h"
 #include "azer/base/string.h"
 #include "base/logging.h"
 
