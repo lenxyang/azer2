@@ -11,16 +11,7 @@ template <class T>
 class HierarchyTransform : public TreeNode<T>
                          , public MovableObject {
  public:
-  HierarchyTransform(const typename StringType& name, T* parent,
-                     const Vector3& pos, const Vector3& scale,
-                     const Quaternion& orient)
-      : MovableObject(pos, orient)
-      , TreeNode(name, parent)
-      , scale_(scale) {
-  }
-
-  HierarchyTransform()
-      : scale_(azer::Vector3(1.0f, 1.0f, 1.0f)) {
+  HierarchyTransform() : scale_(azer::Vector3(1.0f, 1.0f, 1.0f)) {
   }
 
   void reset();
