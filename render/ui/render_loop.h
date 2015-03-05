@@ -9,6 +9,7 @@
 #include "azer/render/render_system.h"
 #include "azer/render/renderer.h"
 #include "azer/render/swap_chain.h"
+#include "azer/render/frame_data.h"
 
 namespace base {
 class MessageLoop;
@@ -19,6 +20,7 @@ class Widget;
 }  // namespace views
 
 namespace azer {
+class FrameData;
 class RenderSystem;
 class WidgetRendererContext;
 
@@ -29,10 +31,8 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
     Delegate() {}
     virtual ~Delegate() {}
     virtual bool Initialize(RenderLoop* renderer) = 0;
-    virtual void OnUpdate(const ::base::Time& Time,
-                          const ::base::TimeDelta& delta) = 0;
-    virtual void OnRender(const ::base::Time& Time,
-                          const ::base::TimeDelta& delta) = 0;
+    virtual void OnUpdate(FrameData* frame_data) = 0;
+    virtual void OnRender(FrameData* frame_data) = 0;
 
     views::Widget* widget();
     azer::SwapChainPtr& GetSwapChain();
@@ -48,7 +48,7 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
   virtual ~RenderLoop();
 
   azer::RenderSystem* GetRenderSystem() { return render_system_;}
-  int64 GetFrameCount() const { return frame_count_;}
+  int64 GetFrameCount() const;
 
   // run renderloop
   // must has a MessageLoopForUI in current thread
@@ -65,10 +65,8 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
   Delegate* delegate_;
   azer::RenderSystem* render_system_;
   ::base::MessageLoop* message_loop_;
-  uint32 which_;
   ::base::TimeDelta average_frame_consumed_;
-  ::base::Time time_[2];
-  int64 frame_count_;
+  FrameData frame_data_;
   std::atomic<bool> stopping_;
   DISALLOW_COPY_AND_ASSIGN(RenderLoop);
 };

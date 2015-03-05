@@ -5,33 +5,37 @@
 namespace azer {
 
 FrameData::FrameData() 
-    : frame_cnt(0)
-    , extra(NULL)
-    , total_seconds(0.0)
-    , recent_seconds(0.0)
-    , max_frame_stored(30) {
-  prev_frame = ::base::Time::Now();
+    : which_(0)
+    , frame_cnt_(0)
+    , extra_(NULL)
+    , total_seconds_(0.0)
+    , recent_seconds_(0.0)
+    , max_frame_stored_(30) {
+  int cur = which_;
+  time_[which_] = ::base::Time::Now();
 }
 
 void FrameData::UpdateFrameData() {
-  prev_frame = current_frame;
-  current_frame = ::base::Time::Now();
-  time_delta = current_frame - prev_frame;
-  frame_cnt++;
-  recent_frames_time_consumed.push_back(time_delta);
-  recent_seconds += time_delta.InSecondsF();
-  total_seconds += time_delta.InSecondsF();
-  if (recent_frames_time_consumed.size() > max_frame_stored) {
-    recent_seconds -= recent_frames_time_consumed.front().InSecondsF();
-    recent_frames_time_consumed.pop_front();
+  which_ ^= 1;
+  int cur = which_;
+  int prev = which_ ^ 1;
+  time_[cur] = ::base::Time::Now();
+  delta_ = time_[cur] - time_[prev];
+  frame_cnt_++;
+  recent_frames_time_consumed_.push_back(delta_);
+  recent_seconds_ += delta_.InSecondsF();
+  total_seconds_ += delta_.InSecondsF();
+  if (recent_frames_time_consumed_.size() > max_frame_stored_) {
+    recent_seconds_ -= recent_frames_time_consumed_.front().InSecondsF();
+    recent_frames_time_consumed_.pop_front();
   }
 }
 
 float FrameData::recent_average_fps() const {
-  return recent_frames_time_consumed.size() / recent_seconds;
+  return recent_frames_time_consumed_.size() / recent_seconds_;
 }
 
 float FrameData::total_average_fps() const {
-  return frame_cnt / total_seconds;
+  return frame_cnt_ / total_seconds_;
 }
 }  // namespace azer

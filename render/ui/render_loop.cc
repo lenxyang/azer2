@@ -24,8 +24,6 @@ RenderLoop::RenderLoop(Delegate* delegate, views::Widget* widget)
     : delegate_(delegate)
     , render_system_(NULL)
     , message_loop_(NULL)
-    , which_(0)
-    , frame_count_(0) 
     , stopping_(false) {
   average_frame_consumed_ = ::base::TimeDelta::FromMilliseconds(10);
   widget_context_.reset(new WidgetRendererContext(widget));
@@ -38,20 +36,17 @@ bool RenderLoop::Init() {
   DCHECK(NULL != delegate_);
   message_loop_ = ::base::MessageLoop::current();
   DCHECK(message_loop_->type() == ::base::MessageLoop::TYPE_UI);
-
   render_system_ = azer::RenderSystem::Current();
   if (NULL == render_system_) {
     LOG(ERROR) << "RenderSystem not initialized.";
     return false;
   }
   
-  int cur = which_;
-  time_[which_] = ::base::Time::Now();
   if (!delegate_->Initialize(this)) {
     return false;
   }
 
-  delegate_->OnUpdate(time_[cur], ::base::TimeDelta());
+  delegate_->OnUpdate(&frame_data_);
   return true;
 }
 
@@ -82,20 +77,15 @@ void RenderLoop::RenderTask() {
   }
 
   DCHECK(NULL != delegate_);
-  which_ ^= 1;
-    
-  int cur = which_;
-  int prev = which_ ^ 1;
-  time_[cur] = ::base::Time::Now();
-  ::base::TimeDelta delta = time_[cur] - time_[prev];
-  delegate_->OnRender(time_[cur], delta);
+  
+  frame_data_.UpdateFrameData();
+  delegate_->OnRender(&frame_data_);
 
   widget_context_->RenderUI();
-  widget_context_->Present();
-  frame_count_++;
-  delegate_->OnUpdate(time_[cur], delta);
+  delegate_->OnUpdate(&frame_data_);
 
-  PostTask(delta);
+  widget_context_->Present();
+  PostTask(frame_data_.delta());
 }
 
 bool RenderLoop::Run() {

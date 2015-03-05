@@ -9,24 +9,27 @@
 #include "azer/base/export.h"
 
 namespace azer {
-struct AZER_EXPORT FrameData {
+class AZER_EXPORT FrameData {
  public:
   FrameData();
 
-  ::base::Time prev_frame;
-  ::base::Time current_frame;
-  ::base::TimeDelta time_delta;
-  int64 frame_cnt;
-  void *extra;
-
   void UpdateFrameData();
+
   float recent_average_fps() const; 
   float total_average_fps() const; 
+
+  const ::base::Time& time() const { return time_[which_];}
+  const ::base::TimeDelta& delta() const { return delta_;}
  private:
-  double total_seconds; 
-  double recent_seconds;
-  std::deque<::base::TimeDelta> recent_frames_time_consumed;
-  const int32 max_frame_stored;
+  uint32 which_;
+  ::base::Time time_[2];
+  ::base::TimeDelta delta_;
+  int64 frame_cnt_;
+  void *extra_;
+  double total_seconds_; 
+  double recent_seconds_;
+  std::deque<::base::TimeDelta> recent_frames_time_consumed_;
+  const int32 max_frame_stored_;
   DISALLOW_COPY_AND_ASSIGN(FrameData);
 };
 
