@@ -6,7 +6,4 @@
 #include "azer/math/math.h"
 
 namespace azer {
-bool SceneNode::IsVisible(const Frustrum& frustrum) {
-  return true;
-}
 }  // namespace azer

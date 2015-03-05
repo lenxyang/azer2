@@ -12,10 +12,9 @@
 #include "azer/base/movable.h"
 #include "azer/base/hierarchy_transform.h"
 #include "azer/base/export.h"
-#include "azer/render/cullable.h"
+#include "azer/render/renderable_object.h"
 
 namespace azer {
-
 class MovableObject;
 class RenderSystem;
 class Scene;
@@ -23,8 +22,7 @@ class SceneNode;
 typedef scoped_refptr<SceneNode> SceneNodePtr;
 
 class AZER_EXPORT SceneNode : public HierarchyTransform<SceneNode>
-                            , public ::base::RefCounted<SceneNode>
-                            , public Cullable {
+    , public ::base::RefCounted<SceneNode> {
  public:
   struct NodeInfo {
     StringType name;
@@ -44,13 +42,14 @@ class AZER_EXPORT SceneNode : public HierarchyTransform<SceneNode>
   void set_visible(bool visible) { visible_ = visible;}
   bool is_visible() const { return visible_;}
 
-  // Cullable
-  bool IsVisible(const Frustrum& frustrum) override;
+  void Attach(const RenderableObjectPtr& object);
+  void Detach();
  protected:
   SceneNode(SceneNode* parent);
 
   bool visible_;
   SceneNode* root_;
+  RenderableObjectPtr renderable_;
 
   friend class Scene;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
