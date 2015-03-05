@@ -12,13 +12,21 @@ namespace azer {
 template<class T>
 class TreeNode {
  public:
+
+  class Delegate {
+   public:
+    virtual void OnChildAdded(T* child) = 0;
+    virtual void OnChildRemoved(T* child) = 0;
+  };
+
   TreeNode(const StringType& name, T* parent)
       : node_name_(name)
       , parent_(parent)
       , first_child_(NULL)
       , last_child_(NULL)
       , next_sibling_(NULL)
-      , prev_sibling_(NULL) {
+      , prev_sibling_(NULL)
+      , delegate_(NULL) {
   }
 
   TreeNode()
@@ -26,8 +34,12 @@ class TreeNode {
       , first_child_(NULL)
       , last_child_(NULL)
       , next_sibling_(NULL)
-      , prev_sibling_(NULL) {
+      , prev_sibling_(NULL)
+      , delegate_(NULL) {
   }
+
+  void set_delegate(Delegate* delegate) { delegate_ = delegate; }
+  Delegate* delegate() { return delegate_; }
 
   /**
    * 遍历 TreeNode 组成的树，此遍历接口可以同时支持先序遍历和后序遍历两种方式
@@ -75,6 +87,7 @@ class TreeNode {
   T* last_child_;
   T* next_sibling_;
   T* prev_sibling_;
+  Delegate delegate_;
  private:
   DISALLOW_COPY_AND_ASSIGN(TreeNode);
 };
@@ -95,6 +108,9 @@ void TreeNode<T>::AddChild(T* node) {
 
   node->parent_ = (T*)this;
   last_child_ = node;
+  if (delegate_) {
+    delegate_->OnChildAdded(node);
+  }
 }
 
 template<class T>
@@ -117,6 +133,9 @@ void TreeNode<T>::RemoveChild(T* node) {
     node->next_sibling_->prev_sibling_ = node->prev_sibling_;
   }
 
+  if (delegate_) {
+    delegate_->OnChildAdded(node);
+  }
   node->reset();
 }
 
@@ -160,6 +179,10 @@ void TreeNode<T>::InsertBefore(T *before) {
     before->prev_sibling_ = (T*)this;
     before->parent_->first_child_ = (T*)this;
   }
+
+  if (parent_->delegate_) {
+    parent_->delegate_->OnChildAdded(this);
+  }
 }
 
 template<class T>
@@ -174,6 +197,10 @@ void TreeNode<T>::InsertAfter(T *after) {
     after->next_sibling_ = (T*)this;
     this->next_sibling_ = NULL;
     this->parent_->last_child_ = (T*)this;
+  }
+
+  if (parent_->delegate_) {
+    parent_->delegate_->OnChildAdded(this);
   }
 }
 
