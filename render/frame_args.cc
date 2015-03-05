@@ -1,10 +1,10 @@
-#include "azer/render/frame_data.h"
+#include "azer/render/frame_args.h"
 
 #include "base/time/time.h"
 
 namespace azer {
 
-FrameData::FrameData() 
+FrameArgs::FrameArgs() 
     : which_(0)
     , frame_cnt_(0)
     , extra_(NULL)
@@ -15,7 +15,7 @@ FrameData::FrameData()
   time_[which_] = ::base::Time::Now();
 }
 
-void FrameData::UpdateFrameData() {
+void FrameArgs::Update() {
   which_ ^= 1;
   int cur = which_;
   int prev = which_ ^ 1;
@@ -31,11 +31,11 @@ void FrameData::UpdateFrameData() {
   }
 }
 
-float FrameData::recent_average_fps() const {
+float FrameArgs::recent_average_fps() const {
   return recent_frames_time_consumed_.size() / recent_seconds_;
 }
 
-float FrameData::total_average_fps() const {
+float FrameArgs::total_average_fps() const {
   return frame_cnt_ / total_seconds_;
 }
 }  // namespace azer

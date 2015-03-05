@@ -6,10 +6,10 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 
+#include "azer/render/frame_args.h"
 #include "azer/render/render_system.h"
 #include "azer/render/renderer.h"
 #include "azer/render/swap_chain.h"
-#include "azer/render/frame_data.h"
 
 namespace base {
 class MessageLoop;
@@ -20,7 +20,7 @@ class Widget;
 }  // namespace views
 
 namespace azer {
-class FrameData;
+class FrameArgs;
 class RenderSystem;
 class WidgetRendererContext;
 
@@ -31,8 +31,8 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
     Delegate() {}
     virtual ~Delegate() {}
     virtual bool Initialize(RenderLoop* renderer) = 0;
-    virtual void OnUpdate(FrameData* frame_data) = 0;
-    virtual void OnRender(FrameData* frame_data) = 0;
+    virtual void OnUpdate(FrameArgs* frame_data) = 0;
+    virtual void OnRender(FrameArgs* frame_data) = 0;
 
     views::Widget* widget();
     azer::SwapChainPtr& GetSwapChain();
@@ -66,7 +66,7 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
   azer::RenderSystem* render_system_;
   ::base::MessageLoop* message_loop_;
   ::base::TimeDelta average_frame_consumed_;
-  FrameData frame_data_;
+  FrameArgs frame_data_;
   std::atomic<bool> stopping_;
   DISALLOW_COPY_AND_ASSIGN(RenderLoop);
 };

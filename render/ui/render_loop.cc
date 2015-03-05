@@ -78,7 +78,7 @@ void RenderLoop::RenderTask() {
 
   DCHECK(NULL != delegate_);
   
-  frame_data_.UpdateFrameData();
+  frame_data_.Update();
   delegate_->OnRender(&frame_data_);
 
   widget_context_->RenderUI();
