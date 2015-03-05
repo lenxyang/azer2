@@ -19,7 +19,7 @@ test("util_unittest") {
     "tile_test.cc",
   ]
   deps = [
-    "//azer/render",
+    "//azer",
     "//testing/gtest",
     "//base/test:run_all_unittests",
     ":util",
