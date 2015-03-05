@@ -46,12 +46,12 @@ bool AngleSwapChain::Init(Surface* surface) {
 
 bool AngleSwapChain::reset(Surface* surface) {
   D3DEnvironmentPtr& ptr = render_system_->GetD3DEnv();
-  renderer_.reset(CreateSurfaceRenderer(surface));
+  renderer_ = CreateSurfaceRenderer(surface);
   if (renderer_.get() == NULL) {
     return false;
   }
 
-  combined_renderer_.reset(CreateSurfaceRenderer(surface));
+  combined_renderer_ = CreateSurfaceRenderer(surface);
   if (combined_renderer_.get() == NULL) {
     return false;
   }

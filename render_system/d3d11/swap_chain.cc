@@ -64,7 +64,7 @@ bool D3DSwapChain::Present() {
 bool D3DSwapChain::reset(Surface* surface) {
   D3DEnvironmentPtr ptr = render_system_->GetD3DEnv();
   d3d_swapchain_.reset(ptr->CreateSwapChain(surface));
-  renderer_.reset(CreateSurfaceRenderer(surface));
+  renderer_ = CreateSurfaceRenderer(surface);
   if (renderer_.get() == NULL) {
     return false;
   }

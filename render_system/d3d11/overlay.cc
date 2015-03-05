@@ -88,7 +88,7 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
   gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
       arraysize(vs_table_desc), vs_table_desc));
 
-  technique_.reset(rs->CreateTechnique());
+  technique_ = rs->CreateTechnique();
   VertexDescPtr& desc = overlay->GetVertexDesc();
   ReusableObject* object = rs->GetReusableObject();
   
@@ -137,11 +137,11 @@ const int D3DOverlay::kVertexDescNum = arraysize(D3DOverlay::kVertexDesc);
 bool D3DOverlay::InitVertex(RenderSystem* rs) {
   // create vertex buffer
   const int32 indices[] = {2, 1, 0, 2, 0, 3}; 
-  vertex_desc_ptr_.reset(new VertexDesc(kVertexDesc, kVertexDescNum));
+  vertex_desc_ptr_ = new VertexDesc(kVertexDesc, kVertexDescNum);
   VertexData data(vertex_desc_ptr_, kVertexNum);
   int32* ptr = (int32*)data.pointer();
   memcpy(ptr, indices, sizeof(indices));
-  vb_ptr_.reset(rs->CreateVertexBuffer(VertexBuffer::Options(), &data));
+  vb_ptr_ = rs->CreateVertexBuffer(VertexBuffer::Options(), &data);
   if (!vb_ptr_.get()) {
     return false;
   }

@@ -26,7 +26,7 @@ bool D3DRenderTarget::Init() {
   HRESULT hr;
   DCHECK(texture_.get() == NULL);
   D3DTexture2D* tex = new D3DTexture2D(options_, render_system_);
-  texture_.reset(tex);
+  texture_ = tex;
   if (!tex->Init(NULL, 1)) {
     return false;
   }
@@ -52,7 +52,7 @@ bool D3DSurfaceRenderTarget::Init() {
   ptr->Attach(buffer);
   hr = d3d_device->CreateRenderTargetView(ptr->resource_, NULL, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateRenderTargetView failed ");
-  texture_.reset(ptr.release());
+  texture_ = ptr.release();
   return true;
 }
 
