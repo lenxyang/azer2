@@ -40,7 +40,6 @@ source_set("base") {
     "appinit.cc",
     "appinit.h",
     "hierarchy_transform.h",
-    "movable.h",
     "resource.h",
     "string.cc",
     "string.h",
