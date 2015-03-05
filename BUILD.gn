@@ -24,5 +24,12 @@ shared_library("azer") {
   ]
 }
 
-
-
+test("unittests") {
+  output_name = "azer_unittests"
+  deps = [
+    "base:unittests",
+    "render:unittests",
+    "render/layers:unittests",
+    "//base/test:run_all_unittests",
+  ]
+}

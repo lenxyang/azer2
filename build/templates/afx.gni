@@ -59,7 +59,7 @@ template("afx") {
     ]
     direct_dependent_configs = [":$target_name" + "_config"]
     deps = [
-      "//azer/render",
+      "//azer",
       "//azer/math",
       "//base",
       ":$target_name" + "_afx_cppcode",

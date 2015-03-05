@@ -20,7 +20,7 @@ source_set("canvas") {
  deps = [
     "//third_party/angle:libGLESv2",
     "//third_party/angle:libEGL",
-    "//azer/render",
+    "//azer",
     "//skia",
   ]
 
@@ -83,7 +83,7 @@ shared_library("d3d11") {
   ]
   deps = [
     "//base:base",
-    "//azer/render:render",
+    "//azer",
     "//ui/gfx",
     "//ui/gl",
     "//skia",

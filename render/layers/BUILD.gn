@@ -22,7 +22,7 @@ source_set("layers") {
   ]
   configs += ["//azer/build/config:utf8src"]
   configs += ["//azer/base:build_render_config"]
-  visibility = ["//azer/render"]
+  visibility = ["//azer"]
 }
 
 source_set("unittests") {
@@ -42,7 +42,7 @@ source_set("unittests") {
     "//ui/gfx/geometry",
   ]
   configs += ["//azer/build/config:utf8src"]
-  visibility = ["//azer/render:unittests"]
+  visibility = ["//azer:unittests"]
 }
 
 executable("demo") {

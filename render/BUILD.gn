@@ -97,16 +97,12 @@ source_set("render") {
   visibility = ["//azer"]
 }
 
-test("unittests") {
-  output_name="azer_render_unittests"
+source_set("unittests") {
   sources = [
     "../base/tree_node_unittest.cc",
-#   "../resources/file_system_unittest.cc",
-#   "../resources/resource_manager_unittest.cc",
     "test/camera_unittest.cc",
     "test/frustrum_unittest.cc",
     "test/gpu_constants_table_unittest.cc",
-#    "test/light_unittest.cc",
     "test/vertex_data_unittest.cc",
     "test/util.cc",
     "test/util.h",
@@ -114,15 +110,14 @@ test("unittests") {
 
   defines = ["AZER_UNITTEST"]
   deps = [
-    "layers:unittests",
-    "//azer/math:math",
+    "//azer/math",
     "//azer/third_party/glm:glm",
-    "//base/test:run_all_unittests",
     "//testing/gtest",
     "//azer/sandbox/base",
-    ":render",
+    "//azer",
   ]
 
   if (is_win) {deps += ["//azer/render_system/d3d11"]}
   configs += ["//azer/build/config:utf8src"]
+  visibility = ["//azer:unittests"]
 }
