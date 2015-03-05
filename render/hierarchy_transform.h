@@ -3,8 +3,8 @@
 #include "azer/base/tree_node.h"
 #include "base/basictypes.h"
 #include "azer/math/math.h"
-#include "azer/base/movable.h"
 #include "azer/base/export.h"
+#include "azer/render/movable.h"
 
 namespace azer {
 template <class T>
