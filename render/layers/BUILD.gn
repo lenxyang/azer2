@@ -36,7 +36,7 @@ source_set("unittests") {
     "//base/test:test_support",
     "//testing/gtest",
     "//skia",
-    "//azer/render",
+    "//azer",
     "//ui/events",
     "//ui/gfx",
     "//ui/gfx/geometry",
@@ -50,7 +50,7 @@ executable("demo") {
   sources = ["demo/main.cc"]
   deps = [
        "//base",
-       "//azer/render",
+       "//azer",
        "//skia",
        "//ui/gfx",
        "//ui/gfx/geometry",

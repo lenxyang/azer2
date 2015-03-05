@@ -8,7 +8,7 @@ static_library("util") {
     "util.h",
   ]
   deps = [
-    "//azer/render",
+    "//azer",
     "//azer/math",
     "//ui/gfx",
   ]

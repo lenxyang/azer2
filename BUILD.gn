@@ -1,7 +1,7 @@
 
 shared_library("azer") {
   deps = [
-    "afxlib",
+    "afx:afxlib",
     "base",
     "render",
     "render/ui",

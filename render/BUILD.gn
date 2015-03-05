@@ -81,13 +81,11 @@ source_set("render") {
 
   deps = [
     "//azer/math",
-    "//ui/gl",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
     "//base",
     "//ui/events",
     "//ui/events/platform",
     "//ui/events:events_base",
+    "//ui/gl",
     "//ui/gfx",
     "//ui/gfx/geometry",
     "//ui/views",    
