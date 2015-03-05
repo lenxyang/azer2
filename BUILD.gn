@@ -1,16 +1,28 @@
 
-group("azer") {
+shared_library("azer") {
   deps = [
-    "//azer/math",
-    "//azer/render",
-    "//azer/afx:afxlib",
-    "//azer/afx:afxc",
-    "//azer/render_system/d3d11",
-    "//samples",
+    "afxlib",
+    "base",
+    "render",
+    "render/ui",
+    "render/layers",
+    "render:render2d",
+    "scene",
+    "math",
+  ]
+
+  public_deps = [
+    "math",
+    "//base",
+    "//skia",
+    "//ui/events",
+    "//ui/events/platform",
+    "//ui/events:events_base",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//ui/views",
   ]
 }
-
-
 
 
 

@@ -16,10 +16,10 @@ source_set("render2d") {
 
   configs += ["//azer/build/config:utf8src"]
   configs += ["//azer/base:build_render_config"]
-  visibility = ["//azer/render"]
+  visibility = ["//azer"]
 }
 
-shared_library("render") {
+source_set("render") {
   sources = [
     "axis_aligned_box.cc",
     "axis_aligned_box.h",
@@ -29,11 +29,14 @@ shared_library("render") {
     "effect.cc",
     "effect.h",
     "effect_params_provider.h",
+    "frame_data.cc",
+    "frame_data.h",
     "frustrum.cc",
     "frustrum.h",
     "gpu_constants_table.cc",
     "gpu_constants_table.h",
     "hardware_buffer.h",
+    "hierarchy_transform.h",
     "movable.cc",
     "movable.h",
     "overlay.cc",
@@ -64,8 +67,6 @@ shared_library("render") {
     "util/axis_aligned_box_mesh.h",
     "util/coordinate_grid.cc",
     "util/coordinate_grid.h",
-    "util/dynlib.cc",
-    "util/dynlib.h",
     "util/render_system_loader.cc",
     "util/render_system_loader.h",
     "util/shader_array.cc",
@@ -80,31 +81,22 @@ shared_library("render") {
 
   deps = [
     "//azer/math",
-    "//azer/base",
-    "//azer/scene",
-    #"//azer/resources",
     "//ui/gl",
     "//ui/gfx",
     "//ui/gfx/geometry",
-    "//base",
-    "layers",
-    "ui",
-    ":render2d",
-  ]
-
-  public_deps = [
     "//base",
     "//ui/events",
     "//ui/events/platform",
     "//ui/events:events_base",
     "//ui/gfx",
     "//ui/gfx/geometry",
-    "//ui/views",
+    "//ui/views",    
   ]
 
   configs += ["//azer/build/config:utf8src"]
   configs += ["//azer/base:build_render_config"]
   forward_dependent_configs_from = deps
+  visibility = ["//azer"]
 }
 
 test("unittests") {
