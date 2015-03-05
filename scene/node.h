@@ -9,9 +9,9 @@
 #include "azer/math/math.h"
 #include "azer/base/tree_node.h"
 #include "azer/base/string.h"
-#include "azer/base/movable.h"
 #include "azer/base/hierarchy_transform.h"
 #include "azer/base/export.h"
+#include "azer/render/movable.h"
 #include "azer/render/renderable_object.h"
 
 namespace azer {
@@ -21,9 +21,12 @@ class Scene;
 class SceneNode;
 typedef scoped_refptr<SceneNode> SceneNodePtr;
 
-class AZER_EXPORT SceneNode : public HierarchyTransform<SceneNode>
-    , public ::base::RefCounted<SceneNode> {
+class AZER_EXPORT SceneNode : public HierarchyTransform<SceneNode>,
+                              public MovableObject::Delegate,
+                              public TreeNode<SceneNode>::Delegate,
+                              public ::base::RefCounted<SceneNode> {
  public:
+  ~SceneNode() override;
   struct NodeInfo {
     StringType name;
     StringType attach_object;
@@ -46,6 +49,14 @@ class AZER_EXPORT SceneNode : public HierarchyTransform<SceneNode>
   void Detach();
  protected:
   SceneNode(SceneNode* parent);
+
+  // override from MovableObject::Delegate
+  void OnObjectPositionChanged(const Vector3& origin_position) override;
+  void OnObjectOrientationChanged(const Quaternion& origin_orientation) override;
+
+  // override from TreeNode<T>::Delegate
+  void OnChildAdded(SceneNode* child) override;
+  void OnChildRemoved(SceneNode* child) override;
 
   bool visible_;
   SceneNode* root_;
