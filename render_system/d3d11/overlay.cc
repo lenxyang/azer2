@@ -138,10 +138,10 @@ bool D3DOverlay::InitVertex(RenderSystem* rs) {
   // create vertex buffer
   const int32 indices[] = {2, 1, 0, 2, 0, 3}; 
   vertex_desc_ptr_ = new VertexDesc(kVertexDesc, kVertexDescNum);
-  VertexData data(vertex_desc_ptr_, kVertexNum);
-  int32* ptr = (int32*)data.pointer();
+  scoped_refptr<VertexData> data(new VertexData(vertex_desc_ptr_, kVertexNum));
+  int32* ptr = (int32*)data->pointer();
   memcpy(ptr, indices, sizeof(indices));
-  vb_ptr_ = rs->CreateVertexBuffer(VertexBuffer::Options(), &data);
+  vb_ptr_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data.get());
   if (!vb_ptr_.get()) {
     return false;
   }
