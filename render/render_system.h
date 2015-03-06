@@ -19,15 +19,22 @@ namespace azer {
 
 class Canvas2D;
 class Context2D;
-class DepthRenderTarget;
-class GpuConstantsTpable;
+class GpuConstantsTable;
 class Image;
 class Overlay;
 class RenderTarget;
 class Technique;
 class VertexBuffer;
 
+typedef scoped_refptr<Blending> BlendingPtr;
+typedef scoped_refptr<GpuConstantsTable> GpuConstantsTpablePtr;;
 typedef scoped_refptr<IndicesData> IndicesDataPtr;
+typedef scoped_refptr<Overlay> OverlayPtr;
+typedef scoped_refptr<Renderer> RendererPtr;
+typedef scoped_refptr<RenderTarget> RenderTargetPtr;
+typedef scoped_refptr<SwapChain> SwapChainPtr;
+typedef scoped_refptr<Technique> TechniquePtr;
+typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
 
 class AZER_EXPORT RenderSystem {
  public:
@@ -39,32 +46,32 @@ class AZER_EXPORT RenderSystem {
   static void SetRenderSystem(RenderSystem* rs);
   static RenderSystem* Current();
 
-  virtual SwapChain* CreateSwapChainForSurface(Surface* surface) = 0;
+  virtual SwapChainPtr CreateSwapChainForSurface(Surface* surface) = 0;
 
-  virtual Renderer* CreateRenderer(const Texture::Options& opt) = 0;
-  virtual Renderer* CreateDeferredRenderer(const Texture::Options& opt) = 0;
-  virtual Blending* CreateBlending(const Blending::Desc& desc) = 0;
-  virtual Technique* CreateTechnique() = 0;
+  virtual RendererPtr CreateRenderer(const Texture::Options& opt) = 0;
+  virtual RendererPtr CreateDeferredRenderer(const Texture::Options& opt) = 0;
+  virtual BlendingPtr CreateBlending(const Blending::Desc& desc) = 0;
+  virtual TechniquePtr CreateTechnique() = 0;
 
   // create gpu buffers
-  virtual VertexBuffer* CreateVertexBuffer(const VertexBuffer::Options& opt,
-                                           VertexData*) = 0;
-  virtual IndicesBuffer* CreateIndicesBuffer(const IndicesBuffer::Options& opt,
-                                             IndicesData*) = 0;
-  virtual GpuConstantsTable* CreateGpuConstantsTable(
+  virtual VertexBufferPtr CreateVertexBuffer(const VertexBuffer::Options& opt,
+                                             VertexData*) = 0;
+  virtual IndicesBufferPtr CreateIndicesBuffer(const IndicesBuffer::Options& opt,
+                                               IndicesData*) = 0;
+  virtual GpuConstantsTablePtr CreateGpuConstantsTable(
       int32 num, const GpuConstantsTable::Desc* desc) = 0;
 
   // textures functions
-  virtual Texture* CreateTexture(const Texture::Options& opt) = 0;
-  virtual Texture* CreateTexture(const Texture::Options& opt, const Image* image) = 0;
+  virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;
+  virtual TexturePtr CreateTexture(const Texture::Options& opt, const Image* image) = 0;
   // create GpuProgram
   // Vertex Gpu Program need to help check "Vertex Layout"
   //
-  virtual VertexGpuProgram* CreateVertexGpuProgram(VertexDescPtr desc,
-                                                   const std::string& program) = 0;
-  virtual GpuProgram* CreateGpuProgram(RenderPipelineStage stage,
-                                       const std::string& program) = 0;
-  virtual Overlay* CreateOverlay() = 0;
+  virtual VertexGpuProgramPtr CreateVertexGpuProgram(
+      VertexDescPtr desc,const std::string& program) = 0;
+  virtual GpuProgramPtr CreateGpuProgram(RenderPipelineStage stage,
+                                         const std::string& program) = 0;
+  virtual OverlayPtr CreateOverlay() = 0;
 
   virtual bool reset() = 0;
 

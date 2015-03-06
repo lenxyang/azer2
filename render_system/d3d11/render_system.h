@@ -34,30 +34,30 @@ class D3DRenderSystem : public RenderSystem {
   const StringType& name() const override;
   const StringType& short_name() const override;
 
-  SwapChain* CreateSwapChainForSurface(Surface* surface) override;
+  SwapChainPtr CreateSwapChainForSurface(Surface* surface) override;
 
-  Renderer* CreateRenderer(const Texture::Options& opt) override;
-  Renderer* CreateDeferredRenderer(const Texture::Options& opt) override;
-  Blending* CreateBlending(const Blending::Desc& desc) override;
-  VertexBuffer* CreateVertexBuffer(const VertexBuffer::Options& opt,
-                                           VertexData*) override;
-  IndicesBuffer* CreateIndicesBuffer(const IndicesBuffer::Options& opt,
-                                             IndicesData*) override;
-  GpuConstantsTable* CreateGpuConstantsTable(
+  RendererPtr CreateRenderer(const Texture::Options& opt) override;
+  RendererPtr CreateDeferredRenderer(const Texture::Options& opt) override;
+  BlendingPtr CreateBlending(const Blending::Desc& desc) override;
+  VertexBufferPtr CreateVertexBuffer(const VertexBuffer::Options& opt,
+                                     VertexData*) override;
+  IndicesBufferPtr CreateIndicesBuffer(const IndicesBuffer::Options& opt,
+                                       IndicesData*) override;
+  GpuConstantsTablePtr CreateGpuConstantsTable(
       int32 num, const GpuConstantsTable::Desc* desc) override;
 
   // texutre functions
-  Texture* CreateTexture(const Texture::Options& opt) override;
-  Texture* CreateTexture(const Texture::Options& opt, const Image* image) override;
+  TexturePtr CreateTexture(const Texture::Options& opt) override;
+  TexturePtr CreateTexture(const Texture::Options& opt, const Image* image) override;
   // RenderTarget* CreateRenderTarget(const Texture::Options& opt);
   // DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
 
-  VertexGpuProgram* CreateVertexGpuProgram(VertexDescPtr desc,
-                                                   const std::string& str) override;
-  GpuProgram* CreateGpuProgram(RenderPipelineStage stage,
-                                       const std::string& program) override;
-  Overlay* CreateOverlay() override;
-  Technique* CreateTechnique() override;
+  VertexGpuProgramPtr CreateVertexGpuProgram(VertexDescPtr desc,
+                                             const std::string& str) override;
+  GpuProgramPtr CreateGpuProgram(RenderPipelineStage stage,
+                                 const std::string& program) override;
+  OverlayPtr CreateOverlay() override;
+  TechniquePtr CreateTechnique() override;
 
   bool reset() override;
 

@@ -38,12 +38,12 @@ D3DRenderSystem::D3DRenderSystem(D3DEnvironmentPtr envptr)
 D3DRenderSystem::~D3DRenderSystem() {
 }
 
-SwapChain* D3DRenderSystem::CreateSwapChainForSurface(Surface* surface) {
-  std::unique_ptr<D3DSwapChain> swapchain(new D3DSwapChain(this));
+SwapChainPtr D3DRenderSystem::CreateSwapChainForSurface(Surface* surface) {
+  scoped_refptr<D3DSwapChain> swapchain(new D3DSwapChain(this));
   if (swapchain->Init(surface)) {
-    return swapchain.release();
+    return swapchain;
   } else {
-    return NULL;
+    return SwapChainPtr();
   }
 }
 
@@ -74,38 +74,38 @@ const StringType& D3DRenderSystem::short_name() const {
   return short_name_;
 }
 
-VertexBuffer* D3DRenderSystem::CreateVertexBuffer(
+VertexBufferPtr D3DRenderSystem::CreateVertexBuffer(
     const VertexBuffer::Options& opt, VertexData* dataptr) {
-  std::unique_ptr<D3DVertexBuffer> vertex_buffer(
+  scoped_refptr<D3DVertexBuffer> vertex_buffer(
       new D3DVertexBuffer(opt, this));
   if (vertex_buffer->Init(dataptr)) {
-    return vertex_buffer.release();
+    return vertex_buffer;
   } else {
-    return NULL;
+    return VertexBufferPtr();
   }
 }
 
 
-IndicesBuffer* D3DRenderSystem::CreateIndicesBuffer(
+IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
     const IndicesBuffer::Options& opt, IndicesData* dataptr) {
-  std::unique_ptr<D3DIndicesBuffer> indices_buffer(
+  scoped_refptr<D3DIndicesBuffer> indices_buffer(
       new D3DIndicesBuffer(opt, this));
   if (indices_buffer->Init(dataptr)) {
-    return indices_buffer.release();
+    return indices_buffer;
   } else {
-    return NULL;
+    return IndicesBufferPtr();
   }
 }
 
-GpuProgram* D3DRenderSystem::CreateGpuProgram(RenderPipelineStage stage,
+GpuProgramPtr D3DRenderSystem::CreateGpuProgram(RenderPipelineStage stage,
                                               const std::string& program) {
-  std::unique_ptr<GpuProgram> gpu_program;
+  GpuProgramPtr gpu_program;
   switch (stage) {
     case kPixelStage:
-      gpu_program.reset(new D3DPixelGpuProgram(program));
+      gpu_program = (new D3DPixelGpuProgram(program));
       break;
     case kGeometryStage:
-      gpu_program.reset(new D3DGeometryGpuProgram(program));
+      gpu_program = (new D3DGeometryGpuProgram(program));
       break;
     case kVertexStage:
       CHECK(false) << "Vertex GpuProgram has its own ";
@@ -114,127 +114,104 @@ GpuProgram* D3DRenderSystem::CreateGpuProgram(RenderPipelineStage stage,
       return NULL;
   }
   if (gpu_program->Init(this)) {
-    return gpu_program.release();
+    return gpu_program;
   } else {
-    return NULL;
+    return GpuProgramPtr();
   }
 }
 
-VertexGpuProgram* D3DRenderSystem::CreateVertexGpuProgram(
+VertexGpuProgramPtr D3DRenderSystem::CreateVertexGpuProgram(
     VertexDescPtr desc, const std::string& program) {
-  std::unique_ptr<VertexGpuProgram> gpu_program(
-      new D3DVertexGpuProgram(desc, program));
+  VertexGpuProgramPtr gpu_program(new D3DVertexGpuProgram(desc, program));
   if (gpu_program->Init(this)) {
-    return gpu_program.release();
+    return gpu_program;
   } else {
-    return NULL;
+    return VertexGpuProgramPtr();
   }
 }
 
-Technique* D3DRenderSystem::CreateTechnique() {
-  return new D3DTechnique(this);
+TechniquePtr D3DRenderSystem::CreateTechnique() {
+  TechniquePtr ptr (new D3DTechnique(this));
+  return ptr;
 }
 
-GpuConstantsTable* D3DRenderSystem::CreateGpuConstantsTable(
+GpuConstantsTablePtr D3DRenderSystem::CreateGpuConstantsTable(
     int32 num, const GpuConstantsTable::Desc* desc) {
-  std::unique_ptr<D3DGpuConstantsTable> tableptr(
-      new D3DGpuConstantsTable(num, desc));
+  scoped_refptr<D3DGpuConstantsTable> tableptr = new D3DGpuConstantsTable(num, desc);
   if (tableptr->Init(this)) {
-    return tableptr.release();
+    return tableptr;
   } else {
-    return NULL;
+    return GpuConstantsTablePtr();
   }
 }
 
-Texture* D3DRenderSystem::CreateTexture(const Texture::Options& opt,
+TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
                                         const Image* img) {
   const ImageDataPtr& image = img->data(0);
   Texture::Options texopt = opt;
   texopt.size = gfx::Size(image->width(), image->height());
   texopt.format = image->format();
   texopt.type = (Texture::Type)img->type();
-  std::unique_ptr<D3DTexture> tex;
+  scoped_refptr<D3DTexture> tex;
   if (texopt.type == Texture::k2D) {
-    tex.reset(new D3DTexture2D(texopt, this));
+    tex = new D3DTexture2D(texopt, this);
   } else if (texopt.type == Texture::kCubemap) {
-    tex.reset(new D3DTextureCubeMap(texopt, this));
+    tex = new D3DTextureCubeMap(texopt, this);
   } else {
     NOTREACHED();
-    return NULL;
+    return TexturePtr();
   }
   if (tex->InitFromImage(img)) {
-    return tex.release();
+    return tex;
   } else {
-    return NULL;
+    return TexturePtr();
   }
 }
 
-Texture* D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
+TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   if (opt.type == Texture::k2D) {
-    std::unique_ptr<D3DTexture2D> ptr(new D3DTexture2D(opt, this));
+    scoped_refptr<D3DTexture2D> ptr(new D3DTexture2D(opt, this));
     if (ptr->Init(NULL, 1)) {
-      return ptr.release();
+      return ptr;
     } else {
-      return NULL;
+      return TexturePtr();
     }
   } else {
-    return NULL;
+    return TexturePtr();
   }
 }
 
-/*
-  RenderTarget* D3DRenderSystem::CreateRenderTarget(const Texture::Options& opt) {
-  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, this));
-  if (target->Init(this)) {
-  return target.release();
-  } else {
-  return NULL;
-  }
-  }
-
-  DepthBuffer* D3DRenderSystem::CreateDepthBuffer(const Texture::Options& opt) {
-  DCHECK(opt.format == kDepth24Stencil8);
-  DCHECK(opt.target & Texture::kDepthStencil);
-  std::unique_ptr<D3DDepthBuffer> depthbuffer(new D3DDepthBuffer(opt, this));
-  if (depthbuffer->Init()) {
-  return depthbuffer.release();
-  } else {
-  return false;
-  }
-  }
-*/
-
-Overlay* D3DRenderSystem::CreateOverlay() {
-  std::unique_ptr<D3DOverlay> surface_ptr(new D3DOverlay(this));
+OverlayPtr D3DRenderSystem::CreateOverlay() {
+  scoped_refptr<D3DOverlay> surface_ptr(new D3DOverlay(this));
   if (surface_ptr->Init(this)) {
-    return surface_ptr.release();
+    return surface_ptr;
   } else {
-    return NULL;
+    return OverlayPtr();
   }
 }
 
-Blending* D3DRenderSystem::CreateBlending(const Blending::Desc& desc) {
-  std::unique_ptr<D3DBlending> blending(new D3DBlending(desc, this));
+BlendingPtr D3DRenderSystem::CreateBlending(const Blending::Desc& desc) {
+  scoped_refptr<D3DBlending> blending(new D3DBlending(desc, this));
   if (blending->Init()) {
-    return blending.release();
+    return blending;
   } else {
-    return NULL;
+    return BlendingPtr();
   }
 }
 
-Renderer* D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
+RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
   DCHECK(envptr_.get() != NULL);
   DCHECK(envptr_->GetContext() != NULL);
   ID3D11DeviceContext* context = envptr_->GetContext();
-  std::unique_ptr<D3DRenderer> renderer(new D3DRenderer(context, this));
+  scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(opt)) {
-    return renderer.release();
+    return renderer;
   } else {
-    return NULL;
+    return RendererPtr();
   }
 }
 
-Renderer* D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
+RendererPtr D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
   DCHECK(GetDevice() != NULL);
   ID3D11DeviceContext* context = NULL;
   HRESULT hr = GetDevice()->CreateDeferredContext(0, &context);
@@ -243,11 +220,11 @@ Renderer* D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
     return NULL;
   }
 
-  std::unique_ptr<D3DRenderer> renderer(new D3DRenderer(context, this));
+  scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(opt)) {
-    return renderer.release();
+    return renderer;
   } else {
-    return NULL;
+    return RendererPtr();
   }
 }
 
