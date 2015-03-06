@@ -1,18 +1,20 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
-#include "azer/render/gpu_constants_table.h"
-#include "azer/render/renderer.h"
-#include "azer/render/technique.h"
 
 namespace azer {
 
+class GpuConstantsTable;
 class Renderer;
 class RenderSystem;
+class Technique;
+typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
+typedef scoped_refptr<Technique> TechniquePtr;
 
 /**
  * class Effect
@@ -24,8 +26,9 @@ class RenderSystem;
 class AZER_EXPORT Effect : public Resource {
  public:
   explicit Effect(RenderSystem* rs);
-  virtual ~Effect() {}
+  virtual ~Effect();
 
+  const std::string& name() const { return name_;}
   virtual void Use(Renderer* renderer);
 
   // 刷新所有的 GpuConstantTable
@@ -34,8 +37,11 @@ class AZER_EXPORT Effect : public Resource {
   virtual void UseTexture(Renderer* renderer) = 0;
   void UseConstantsTable(Renderer* renderer);
   void UseTechnique(Renderer* renderer);
+  void set_name(const std::string& name) { name_ = name;}
+
+  std::string name_;
   TechniquePtr technique_;
-  std::vector<std::unique_ptr<GpuConstantsTable> > gpu_table_;
+  std::vector<scoped_refptr<GpuConstantsTable> > gpu_table_;
   RenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };

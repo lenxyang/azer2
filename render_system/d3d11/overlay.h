@@ -2,13 +2,14 @@
 
 #include "base/basictypes.h"
 #include "azer/render/overlay.h"
+#include "azer/render/effect.h"
 
 namespace azer {
 namespace d3d11 {
 
 class D3DRenderSystem;
 
-class D3DOverlayEffect : Effect {
+class D3DOverlayEffect : public Effect {
  public:
   D3DOverlayEffect(D3DRenderSystem* rs)
       : Effect((RenderSystem*)rs) {
@@ -46,7 +47,7 @@ class D3DOverlay : public Overlay {
   bool InitEffect();
   bool InitVertex(RenderSystem* rs);
   D3DRenderSystem* render_system_;
-  std::unique_ptr<D3DOverlayEffect> effect_;
+  scoped_refptr<D3DOverlayEffect> effect_;
   friend class D3DRenderSystem;
   DISALLOW_COPY_AND_ASSIGN(D3DOverlay);
 };

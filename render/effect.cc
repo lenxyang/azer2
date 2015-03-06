@@ -1,8 +1,12 @@
 #include "azer/render/effect.h"
 
 #include "base/logging.h"
+#include "azer/render/gpu_constants_table.h"
 #include "azer/render/render_system.h"
 #include "azer/render/render_system_enum.h"
+#include "azer/render/renderer.h"
+#include "azer/render/technique.h"
+
 
 namespace azer {
 Effect::Effect(RenderSystem* rs)
@@ -10,6 +14,9 @@ Effect::Effect(RenderSystem* rs)
     , render_system_(rs) {
   DCHECK(NULL != render_system_);
   gpu_table_.resize(kRenderPipelineStageNum);
+}
+
+Effect::~Effect() {
 }
 
 void Effect::Use(Renderer* renderer) {

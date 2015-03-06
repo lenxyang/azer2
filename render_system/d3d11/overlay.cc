@@ -85,8 +85,8 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
     azer::GpuConstantsTable::Desc("texcoord", azer::GpuConstantsType::kVector4,
                                   offsetof(vs_cbuffer, texcoord), 4),
   };
-  gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc));
+  gpu_table_[azer::kVertexStage] = render_system_->CreateGpuConstantsTable(
+      arraysize(vs_table_desc), vs_table_desc);
 
   technique_ = rs->CreateTechnique();
   VertexDescPtr& desc = overlay->GetVertexDesc();
@@ -107,11 +107,11 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
 
 bool D3DOverlay::InitEffect() {
   DCHECK(render_system_ != NULL);
-  effect_.reset(new D3DOverlayEffect(render_system_));
+  effect_ = new D3DOverlayEffect(render_system_);
   if (effect_->Init(this, render_system_)) {
     return true;
   } else {
-    effect_.reset(NULL);
+    effect_ = NULL;
     return false;
   }
 }

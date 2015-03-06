@@ -31,13 +31,13 @@ void CoordinateGridEffect::Init(RenderSystem* rs) {
     GpuConstantsTable::Desc("vp", azer::GpuConstantsType::kMatrix4,
                             offsetof(CoordinateGridEffect::vs_cbuffer, vp), 1), 
   };
-  gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc));
+  gpu_table_[azer::kVertexStage] = render_system_->CreateGpuConstantsTable(
+      arraysize(vs_table_desc), vs_table_desc);
   GpuConstantsTable::Desc ps_table_desc[] = {
     GpuConstantsTable::Desc("diffuse", azer::GpuConstantsType::kVector4,
                             offsetof(CoordinateGridEffect::ps_cbuffer, diffuse), 1), 
   };
-  gpu_table_[azer::kPixelStage].reset(render_system_->CreateGpuConstantsTable(
+  gpu_table_[azer::kPixelStage] = (render_system_->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc));
 }
 
