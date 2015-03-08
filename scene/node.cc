@@ -1,29 +1,40 @@
 #include "azer/scene/node.h"
 
+#include "base/logging.h"
 #include "azer/render/render.h"
 #include "azer/render/frustrum.h"
 #include "azer/math/math.h"
 
 namespace azer {
-SceneNode::SceneNode() {
-  MovableObject::set_delegate(this);
-  TreeNode<SceneNode>::set_delegate(this);
+SceneNode::SceneNode() 
+    : visible_(false) {
 }
 
 SceneNode::~SceneNode() {
-  MovableObject::set_delegate(NULL);
-  TreeNode<SceneNode>::set_delegate(NULL);
 }
 
-void SceneNode::OnObjectPositionChanged(const Vector3& origin_position) {
+void SceneNode::AddChild(SceneNodePtr child) {
+  DCHECK(child->parent() == NULL);
+  children_.push_back(child);
 }
 
-void SceneNode::OnObjectOrientationChanged(const Quaternion& origin_orientation) {
+void SceneNode::RemoveChild(SceneNodePtr child) {
+  child->parent = NULL;
 }
 
-void SceneNode::OnChildAdded(SceneNode* child) {
+bool SceneNode::HasAncestor(SceneNode* node) const {
+  const SceneNode* cur = node->parent;
+  while (cur) {
+    if (cur == this) {
+      return true;
+    }
+
+    cur = cur->parent();
+  }
+
+  return false;
 }
 
-void SceneNode::OnChildRemoved(SceneNode* child) {
+void SceneNode::OnAttachedToScene() {
 }
 }  // namespace azer
