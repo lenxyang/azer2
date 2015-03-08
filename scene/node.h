@@ -18,10 +18,12 @@ class Scene;
 class SceneNode;
 typedef scoped_refptr<SceneNode> SceneNodePtr;
 
-class AZER_EXPORT SceneNode: ublic ::base::RefCounted<SceneNode> {
+class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
+                             public MovableObject,
+                             public MovableObject::Delegate {
  public:
   SceneNode();
-  ~SceneNode();
+  ~SceneNode() override;
 
   typedef std::vector<SceneNodePtr> SceneNodes;
 
@@ -42,7 +44,12 @@ class AZER_EXPORT SceneNode: ublic ::base::RefCounted<SceneNode> {
   const SceneNode* parent() const { return parent_;}
   const SceneNodes& children() const { return children_;}
  protected:
+  // override from MovableObject::Delegate
+  void OnObjectPositionChanged(const Vector3& origin_position) override;
+  void OnObjectOrientationChanged(const Quaternion& origin_orientation) override;
+
   virtual void OnAttachedToScene();
+  void OnPositionChanged();
   bool visible_;
 
   SceneNode* root_;

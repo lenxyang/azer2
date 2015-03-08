@@ -8,6 +8,7 @@
 namespace azer {
 SceneNode::SceneNode() 
     : visible_(false) {
+  MovableObject::set_delegate(this);
 }
 
 SceneNode::~SceneNode() {
