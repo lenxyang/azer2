@@ -66,6 +66,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   SceneNodes children_;
   RenderableObjectPtr renderable_;
   Matrix4 world_;
+  Vector3 scale_;
   friend class Scene;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };

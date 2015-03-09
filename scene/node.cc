@@ -10,7 +10,8 @@ namespace azer {
 SceneNode::SceneNode() 
     : visible_(false)
     , root_(NULL)
-    , parent_(NULL) {
+    , parent_(NULL)
+    , scale_(Vector3(1.0f, 1.0f, 1.0f)) {
   MovableObject::set_delegate(this);
 }
 
@@ -23,7 +24,7 @@ void SceneNode::AddChild(SceneNodePtr child) {
 }
 
 void SceneNode::RemoveChild(SceneNodePtr child) {
-  DCHECK(child->parent_.get() == this);
+  DCHECK(child->parent_ == this);
   child->parent_ = NULL;
   child->root_ = NULL;
 
