@@ -29,7 +29,6 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   ~SceneNode() override;
 
   typedef std::vector<SceneNodePtr> SceneNodes;
-
   
   void set_visible(bool visible) { visible_ = visible;}
   bool is_visible() const { return visible_;}
@@ -46,10 +45,17 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   SceneNode* parent() { return parent_;}
   const SceneNode* parent() const { return parent_;}
   const SceneNodes& children() const { return children_;}
+
+  const Matrix4& GetWorldMatrix() const { return world_;}
+  void UpdateWorldMatrixRecusive();
  protected:
   // override from MovableObject::Delegate
   void OnObjectPositionChanged(const Vector3& origin_position) override;
   void OnObjectOrientationChanged(const Quaternion& origin_orientation) override;
+
+  void OnParentNodePositionChanged();
+  void OnParentOrientationChanged();
+  void UpdateWorldMatrix();
 
   virtual void OnAttachedToScene();
   void OnPositionChanged();
@@ -59,6 +65,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   SceneNode* parent_;
   SceneNodes children_;
   RenderableObjectPtr renderable_;
+  Matrix4 world_;
   friend class Scene;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };

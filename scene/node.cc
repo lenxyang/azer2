@@ -52,8 +52,32 @@ void SceneNode::OnAttachedToScene() {
 }
 
 void SceneNode::OnObjectPositionChanged(const Vector3& origin_position) {
+  OnParentNodePositionChanged();
 }
 
 void SceneNode::OnObjectOrientationChanged(const Quaternion& origin_orientation) {
+  OnParentOrientationChanged();
+}
+
+void SceneNode::OnParentNodePositionChanged() {
+  UpdateWorldMatrix();
+}
+void SceneNode::OnParentOrientationChanged() {
+  UpdateWorldMatrix();
+}
+
+void SceneNode::UpdateWorldMatrix() {
+  world_ = std::move(orientation().ToMatrix() * azer::Scale(scale_));
+  world_ = std::move(azer::Translate(position()) * world_);
+  if (parent()) {
+    world_ = std::move(parent()->GetWorldMatrix() * world_);
+  }
+}
+
+void SceneNode::UpdateWorldMatrixRecusive() {
+  UpdateWorldMatrix();
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    (*iter)->UpdateWorldMatrixRecusive();
+  }
 }
 }  // namespace azer
