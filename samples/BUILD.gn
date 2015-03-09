@@ -1,6 +1,0 @@
-
-group("samples") {
-  deps = [
-    "window",
-  ]
-}
