@@ -23,8 +23,16 @@ void SceneNode::AddChild(SceneNodePtr child) {
 }
 
 void SceneNode::RemoveChild(SceneNodePtr child) {
+  DCHECK(child->parent_.get() == this);
   child->parent_ = NULL;
   child->root_ = NULL;
+
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    if (iter->get() == child.get()) {
+      children_.erase(iter);
+      break;
+    }
+  }
 }
 
 bool SceneNode::HasAncestor(SceneNode* node) const {

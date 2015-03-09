@@ -59,6 +59,7 @@ class AZER_EXPORT MovableObject {
   Vector3 position_;
   Quaternion orientation_;
   Delegate* delegate_;
+  DISALLOW_COPY_AND_ASSIGN(MovableObject);
 };
 
 }  // namespace azer
