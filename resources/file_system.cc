@@ -1,50 +1,13 @@
 #include "azer/resources/file_system.h"
 
 #include "base/logging.h"
-#include "base/files/file_util.h"
-#include "base/files/file_path.h"
-#include "base/strings/utf_string_conversions.h"
+
+#include "azer/resources/native_file_system.h"
 
 namespace azer {
 
-const CharType ResFilePath::kSeperator = FILE_PATH_LITERAL('/');
-
-class NativeFileSystem : public FileSystem {
- public:
-  NativeFileSystem(const ::base::FilePath& root)
-      : FileSystem(FileSystem::kNativeFS, root) {
-  }
-
-  virtual FileContentPtr LoadFile(const ResFilePath& path) override {
-    DCHECK(!path.empty());
-    ::base::FilePath real_path = fs_root_.Append(path.value());
-    int64 size = 0;
-    if (!::base::GetFileSize(real_path, &size)) {
-      return NULL;
-    }
-
-    std::unique_ptr<char[]> content(new char[size - 1 + sizeof(FileContent)]);
-    if (size != ::base::ReadFile(real_path,
-                                 content.get() + offsetof(FileContent, data),
-                                 size)) {
-      return NULL;
-    }
-
-    FileContentPtr cptr((FileContent*)content.release());
-    cptr->length = size;
-    return cptr;
-  }
-
-  virtual bool IsPathExists(const ResFilePath& path) override {
-    DCHECK(!path.empty());
-    ::base::FilePath real_path = fs_root_.Append(path.value());
-    return base::PathExists(real_path);
-  }
- private:
-  DISALLOW_COPY_AND_ASSIGN(NativeFileSystem);
-};
-
-FileSystem* FileSystem::create(FileSystem::Type type, const ::base::FilePath& root) {
+FileSystem* FileSystem::create(FileSystem::Type type, 
+                               const ::base::FilePath& root) {
   switch(type) {
     case kNativeFS:
       return new NativeFileSystem(root); 
@@ -71,4 +34,9 @@ FileSystem* FileSystem::GetDefaultFileSystem() {
   CHECK(comm_res_fs_ != NULL);
   return comm_res_fs_;
 }
+
+void FileSystem::InitDefaultFileSystem(const StringType& root, Type type) {
+  InitDefaultFileSystem(::base::FilePath(root), type);
+}
+
 }  // namespace azer

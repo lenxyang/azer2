@@ -2,12 +2,17 @@
 
 source_set("resources") {
   sources = [
-    "content.h",
+    "context.cc",
+    "context.h",
+    "file_path.cc",
+    "file_path.h",
     "file_system.cc",
     "file_system.h",
+    "native_file_system.cc",
+    "native_file_system.h",
   ]
 
   deps = ["//base"]
-  visibility = ["//azer/render"]
+  visibility = ["//azer"]
   configs += ["//azer/base:build_render_config"]
 }

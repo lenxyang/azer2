@@ -7,6 +7,7 @@
 #include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/resources/content.h"
+#include "azer/resources/file_path.h"
 #include "base/lazy_instance.h"
 
 namespace azer {
@@ -15,26 +16,6 @@ class FileSystem;
 struct AZER_EXPORT FileContent {
   int64 length;
   char* data;
-};
-
-class ResFilePath {
- public:
-  ResFilePath(const char* path);
-  ResFilePath(const StringType& path) : path_(path) {}
-  ResFilePath(const ResFilePath& path) : path_(path.value()) {}
-
-  ResFilePath& operator = (const ResFilePath& path) {
-    path_ = path.value();
-    return *this;
-  }
-
-  const StringType& value() const { return path_;}
-  ResFilePath AppendCopy(const StringType& path) const;
-  void Append(const StringType& str);
-  bool empty() const { return path_.empty();}
- protected:
-  StringType path_;
-  static const CharType kSeperator;
 };
 
 class AZER_EXPORT FileSystem {
@@ -55,8 +36,11 @@ class AZER_EXPORT FileSystem {
   static FileSystem* create(Type type, const ::base::FilePath& root);
   const ::base::FilePath& root() { return fs_root_;}
 
-  virtual FileContentPtr LoadFile(const ResFilePath& path) = 0;
+  virtual FileContent* LoadFile(const ResFilePath& path) = 0;
   virtual bool IsPathExists(const ResFilePath& path) = 0;
+
+  // Load content async
+  // virtual ResLoadFileAsync(const ResFilePath& path, FileContent* filecontent) = 0;
  protected:
   FileSystem(Type type, const ::base::FilePath& root)
       : type_(type)
@@ -70,33 +54,4 @@ class AZER_EXPORT FileSystem {
 };
 
 typedef std::shared_ptr<FileSystem> FileSystemPtr;
-
-inline ResFilePath ResFilePath::AppendCopy(const StringType& path) const {
-  ResFilePath new_path(path_);
-  new_path.Append(path);
-  return new_path;
-}
-
-inline void ResFilePath::Append(const StringType& str) {
-  if (path_.back() == kSeperator) {
-    path_.append(str);
-  } else {
-    path_.push_back(kSeperator);
-    path_.append(str);
-  }
-}
-
-inline void FileSystem::InitDefaultFileSystem(const StringType& root, Type type) {
-  InitDefaultFileSystem(::base::FilePath(root), type);
-}
-
-inline bool SplitPackage(const StringType& full, StringType* path,
-                         StringType* package) {
-  size_t pos = full.find_last_of(':');
-  if (pos < 0) return false;
-  path->assign(full.substr(0, pos));
-  package->assign(full.substr(pos + 1));
-  return true;
-}
-
 }  // namespace azer
