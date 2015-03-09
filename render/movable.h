@@ -18,6 +18,7 @@ class AZER_EXPORT MovableObject {
   MovableObject(const Vector3& pos);
   MovableObject(const Vector3& pos, const Quaternion& orient);
   MovableObject(const MovableObject& obj);
+  virtual ~MovableObject() {}
 
   void set_delegate(Delegate* delegate) { MovableObject::delegate_ = delegate;}
   Delegate* delegate() { return MovableObject::delegate_;}

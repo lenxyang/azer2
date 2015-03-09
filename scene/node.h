@@ -14,9 +14,12 @@
 namespace azer {
 class MovableObject;
 class RenderSystem;
+class RenderableObject;
 class Scene;
 class SceneNode;
+
 typedef scoped_refptr<SceneNode> SceneNodePtr;
+typedef scoped_refptr<RenderableObject> RenderableObjectPtr;
 
 class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
                              public MovableObject,
@@ -31,7 +34,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   void set_visible(bool visible) { visible_ = visible;}
   bool is_visible() const { return visible_;}
 
-  void Attach(const RenderableObjectPtr& object);
+  void Attach(RenderableObjectPtr object);
   void Detach();
 
   void AddChild(SceneNodePtr child);
