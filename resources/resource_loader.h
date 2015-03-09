@@ -10,12 +10,14 @@
 namespace azer {
 class AZER_EXPORT ResourceLoader {
  public:
-  ResourceLoader() {}
+  ResourceLoader(Resource::Type type) : type_(type){}
   virtual ~ResourceLoader() {}
   virtual ResourcePtr LoadResource(const ResFilePath& path,
                                    const FileContent* content) = 0;
+
+  Resource::Type type() const { return type_; }
  protected:
-  Resource::Type type_;
+  const Resource::Type type_;
   DISALLOW_COPY_AND_ASSIGN(ResourceLoader);
 };
 
