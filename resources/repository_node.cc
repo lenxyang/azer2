@@ -1,19 +1,22 @@
 #include "azer/resources/repository_node.h"
 
+#include <sstream>
 #include "base/logging.h"
-#include "base/strings/string_util.h"
+
 #include "base/strings/string_split.h"
+#include "base/strings/string_util.h"
+#include "base/strings/stringprintf.h"
 
 namespace azer {
-RepositoryNode::RepositoryNode(const std::string& relative_path) 
-    : relative_path_(relative_path)
+RepositoryNode::RepositoryNode(const StringType& name) 
+    : name_(name)
     , parent_(NULL) {
 }
 
 RepositoryNode::~RepositoryNode() {
 }
 
-RepositoryNode* root() {
+RepositoryNode* RepositoryNode::root() {
   auto cur = this;
   while (cur) {
     if (cur->parent_) {
@@ -24,7 +27,7 @@ RepositoryNode* root() {
   return cur;
 }
 
-const RepositoryNode* root() const {
+const RepositoryNode* RepositoryNode::root() const {
   auto cur = this;
   while (cur) {
     if (cur->parent_) {
@@ -37,21 +40,21 @@ const RepositoryNode* root() const {
 
 void RepositoryNode::AddChild(RepositoryNodePtr child) {
   DCHECK(child->parent_ == NULL);
-  DCHECK(children_.end() == children_.find(child->relative_path));
+  DCHECK(children_.end() == children_.find(child->name()));
   child->parent_ = this;
-  children_.insert(std::make_pair(child->relative_path, child));
+  children_.insert(std::make_pair(child->name(), child));
 }
 
 void RepositoryNode::RemoveChild(RepositoryNodePtr child) {
   DCHECK(child->parent_ == this);
-  auto iter = children_.find(child->relative_path());
+  auto iter = children_.find(child->name());
   DCHECK(iter != children_.end());
   children_.erase(iter);
   child->parent_ = NULL;
 }
 
-RepositoryNodePtr RepositoryNode::GetChild(const std::string& relative) {
-  auto iter = children_.find(child->relative_path());
+RepositoryNodePtr RepositoryNode::GetChild(const StringType& name) {
+  auto iter = children_.find(name);
   if (iter != children_.end()) {
     return iter->second;
   } else {
@@ -83,7 +86,7 @@ ResourcePtr RepositoryNode::GetLocalResource(const StringType& path) {
 
 ResourcePtr RepositoryNode::GetResource(const StringType& path) {
   std::vector<StringType> vec;
-  SplitString(path, ':', &vec);
+  ::base::SplitString(path, FILE_PATH_LITERAL(':'), &vec);
   if (vec.size() == 2u) { 
     RepositoryNodePtr node = GetNodeFromPath(vec[0]);
     if (node.get()) {
@@ -96,17 +99,17 @@ ResourcePtr RepositoryNode::GetResource(const StringType& path) {
 
 RepositoryNodePtr RepositoryNode::GetResourceParent(const StringType& path) {
   std::vector<StringType> vec;
-  SplitString(path, ':', &vec);
+  ::base::SplitString(path, FILE_PATH_LITERAL(':'), &vec);
   if (vec.size() == 2u) { 
-    return GetNodeFromPath(vec[0]);
+    return GetRelativeNode(vec[0]);
   } else {
-    return ResourcePtr();
+    return RepositoryNodePtr();
   }
 }
 
 RepositoryNodePtr RepositoryNode::GetNodeFromPath(const StringType& path) {
-  if (::base::StartsWith(path, ResFilePath::kRootPath, true)) {
-    return root->GetRelativeNode(path.substr(2));
+  if (StartsWith(path, ResFilePath::kRootPath, true)) {
+    return root()->GetRelativeNode(path.substr(2));
   } else {
     return GetRelativeNode(path);
   }
@@ -114,26 +117,26 @@ RepositoryNodePtr RepositoryNode::GetNodeFromPath(const StringType& path) {
 
 RepositoryNodePtr RepositoryNode::GetRelativeNode(const StringType& path) {
   std::vector<StringType> vec;
-  ::base::SplitString(path, '/', &vec);
+  ::base::SplitString(path, FILE_PATH_LITERAL('/'), &vec);
   return RepositoryNode::GetNodeFromDirVec(vec);
 }
 
 RepositoryNodePtr RepositoryNode::GetNodeParent(const StringType& path) {
-  if (::base::StartsWith(path, ResFilePath::kRootPath, true)) {
-    return GetRelativePathParent(path.substr(2));
+  if (StartsWith(path, ResFilePath::kRootPath, true)) {
+    return GetRelativeNodeParent(path.substr(2));
   } else {
-    return GetRelativePathParent(path);
+    return GetRelativeNodeParent(path);
   }
 }
 
-RepositoryNodePtr GetRelativeNodeParent(const StringType& path) {
+RepositoryNodePtr RepositoryNode::GetRelativeNodeParent(const StringType& path) {
   std::vector<StringType> vec;
   ::base::SplitString(path, '/', &vec);
-  vec.erase(vec.begin() + vec.length() - 1);
-  return RepositoryNode::GetNodeFromDirVec(vec);
+  vec.erase(vec.begin() + vec.size() - 1);
+  return GetNodeFromDirVec(vec);
 }
 
-RepositoryNodePtr RepositoryNode::GetNodesFromDirVec(
+RepositoryNodePtr RepositoryNode::GetNodeFromDirVec(
     const std::vector<StringType>& path) {
   RepositoryNodePtr ptr(this);
   for (auto iter = path.begin(); iter != path.end(); ++iter) {
@@ -143,7 +146,26 @@ RepositoryNodePtr RepositoryNode::GetNodesFromDirVec(
     }
   }
 
-  return true;
+  return ptr;
 }
 
+StringType RepositoryNode::fullpath() const {
+  if (!parent()) {
+    return FILE_PATH_LITERAL("/");
+  } else {
+    return ::base::StringPrintf(FILE_PATH_LITERAL("%s/%s"),
+                                parent()->fullpath().c_str(),
+                                name().c_str());
+  }
+}
+
+std::string RepositoryNode::PrintHierarchy(int ident) {
+  std::stringstream ss;
+  std::string ident_str(' ', ident * 2);
+  ss << ident_str << fullpath() << std::endl;
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    ss << iter->second->PrintHierarchy(ident);
+  }
+  return ss.str();
+}
 }  // namespace azer
