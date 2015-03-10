@@ -1,4 +1,4 @@
-#include "testing/gtest/gtest.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "azer/resources/repository_node.h"
 
 namespace azer {

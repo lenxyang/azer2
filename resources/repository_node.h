@@ -43,7 +43,6 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   RepositoryNodePtr GetNodeFromDirVec(const std::vector<StringType>& path);
   std::string relative_path_;
   RepositoryNode* parent_;
-  RepositoryNodes children_;
   std::map<std::string, RepositoryNodePtr> children_;
   std::map<std::string, ResourcePtr> resource_dict_;
   DISALLOW_COPY_AND_ASSIGN(RepositoryNode);

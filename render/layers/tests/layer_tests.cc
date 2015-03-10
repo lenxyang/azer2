@@ -1,19 +1,19 @@
-#include "azer/render/compositor/tests/test_base.h"
+#include "azer/render/layers/tests/test_base.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 
-class LayerTest : public CompositorTestBase {
+class LayerTest : public LayersTestBase {
  public:
   LayerTest() : max_separation_(0) {
   }
 
   void SetUp() override {
-    CompositorTestBase::SetUp();
+    LayersTestBase::SetUp();
   }
 
   void TearDown() override {
-    CompositorTestBase::TearDown();
+    LayersTestBase::TearDown();
   }
 
  private:
@@ -25,5 +25,5 @@ class LayerTest : public CompositorTestBase {
 TEST_F(LayerTest, Base) {
 }
 
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

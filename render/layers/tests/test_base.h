@@ -5,26 +5,25 @@
 #include "base/message_loop/message_loop.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-#include "azer/render/compositor/layer.h"
-#include "azer/render/compositor/layer_tree_host.h"
-#include "azer/render/compositor/compositor.h"
+#include "azer/render/layers/layer.h"
+#include "azer/render/layers/layer_tree_host.h"
 
 namespace azer {
-namespace compositor {
+namespace layers {
 
 class Compositor;
 
-class CompositorTestBase : public testing::Test {
+class LayersTestBase : public testing::Test {
  public:
-  CompositorTestBase();
-  ~CompositorTestBase() override;
+  LayersTestBase();
+  ~LayersTestBase() override;
 
   void SetUp() override;
   void TearDown() override;
  protected:
-  scoped_ptr<Compositor> compositor_;
+  scoped_ptr<LayerTreeHost> tree_host_;
   base::MessageLoopForUI message_loop_;
-  DISALLOW_COPY_AND_ASSIGN(CompositorTestBase);
+  DISALLOW_COPY_AND_ASSIGN(LayersTestBase);
 };
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer

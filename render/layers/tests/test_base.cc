@@ -1,19 +1,19 @@
-#include "azer/render/compositor/tests/test_base.h"
+#include "azer/render/layers/tests/test_base.h"
 
 namespace azer {
-namespace compositor {
-CompositorTestBase::CompositorTestBase() {
+namespace layers {
+LayersTestBase::LayersTestBase() {
 }
 
-CompositorTestBase::~CompositorTestBase() {
+LayersTestBase::~LayersTestBase() {
 }
 
-void CompositorTestBase::SetUp() {
-  compositor_.reset(new Compositor);
+void LayersTestBase::SetUp() {
+  tree_host_.reset(new LayerTreeHost);
 }
 
-void CompositorTestBase::TearDown() {
+void LayersTestBase::TearDown() {
 }
 
-}  // namespace compositor
+}  // namespace layers
 }  // namespace azer
