@@ -5,16 +5,16 @@
 namespace azer {
 
 TEST(RepositoryNode, AddChildAndRemove) {
-  RepositoryNodePtr root(new RepositoryNode("/"));
-  RepositoryNodePtr group1(new RepositoryNode("group1"));
-  RepositoryNodePtr group2(new RepositoryNode("group2"));
-  RepositoryNodePtr leaf1(new RepositoryNode("leaf1"));
-  RepositoryNodePtr leaf2(new RepositoryNode("leaf2"));
+  RepositoryNodePtr root(new RepositoryNode(FILE_PATH_LITERAL("/")));
+  RepositoryNodePtr group1(new RepositoryNode(FILE_PATH_LITERAL("group1")));
+  RepositoryNodePtr group2(new RepositoryNode(FILE_PATH_LITERAL("group2")));
+  RepositoryNodePtr leaf1(new RepositoryNode(FILE_PATH_LITERAL("leaf1")));
+  RepositoryNodePtr leaf2(new RepositoryNode(FILE_PATH_LITERAL("leaf2")));
   root->AddChild(group1);
   group1->AddChild(group2);
   group1->AddChild(leaf1);
   group2->AddChild(leaf2);
-  std::cout << root->PrintHierarchy(0) << std::endl;
+  std::cout << root->PrintHierarchy() << std::endl;
 }
 
 TEST(RepositoryNode, Path) {

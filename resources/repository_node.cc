@@ -153,9 +153,10 @@ StringType RepositoryNode::fullpath() const {
   if (!parent()) {
     return FILE_PATH_LITERAL("/");
   } else {
-    return ::base::StringPrintf(FILE_PATH_LITERAL("%s/%s"),
-                                parent()->fullpath().c_str(),
-                                name().c_str());
+    StringType path = parent()->fullpath();
+    path.append(FILE_PATH_LITERAL("/"));
+    path.append(name());
+    return path;
   }
 }
 
