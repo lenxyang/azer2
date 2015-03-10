@@ -21,22 +21,13 @@ RepositoryNode::RepositoryNode()
 RepositoryNode::~RepositoryNode() {
 }
 
-RepositoryNode* RepositoryNode::root() {
-  auto cur = this;
-  while (cur) {
-    if (cur->parent_) {
-      cur = cur->parent_;
-    }
-  }
-
-  return cur;
-}
-
 const RepositoryNode* RepositoryNode::root() const {
   auto cur = this;
   while (cur) {
     if (cur->parent_) {
       cur = cur->parent_;
+    } else {
+      return cur;
     }
   }
 

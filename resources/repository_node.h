@@ -28,8 +28,13 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   const StringType& name() const { return name_;}
   StringType fullpath() const;
 
-  RepositoryNode* root();
   const RepositoryNode* root() const;
+  RepositoryNode* root() {
+    return const_cast<RepositoryNode*>(
+        const_cast<const RepositoryNode*>(this)->root());
+  }
+
+
   RepositoryNode* parent() { return parent_;}
   const RepositoryNode* parent() const { return parent_;}
   
