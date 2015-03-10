@@ -10,6 +10,8 @@ source_set("resources") {
     "file_system.h",
     "native_file_system.cc",
     "native_file_system.h",
+    "repository_node.cc",
+    "repository_node.h",
   ]
 
   deps = ["//base"]

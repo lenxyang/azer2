@@ -20,6 +20,8 @@ class AZER_EXPORT ResFilePath {
   ResFilePath AppendCopy(const StringType& path) const;
   void Append(const StringType& str);
   bool empty() const { return path_.empty();}
+
+  static const StringType kRootPath;
  protected:
   StringType path_;
   static const CharType kSeperator;

@@ -4,13 +4,17 @@
 #include "azer/resources/resource_loader.h"
 
 namespace azer {
+
+class RepositoryNode;
+
 class AZER_EXPORT VertexDescLoader : public ResourceLoader {
  public:
   VertexDescLoader();
   ~VertexDescLoader() override;
 
-  ResourcePtr LoadResource(const ResFilePath& path,
-                           const FileContent* content) override;
+  bool LoadResource(const ResFilePath& path,
+                    RepositoryNodePtr parent,
+                    const FileContent* content) override;
  private:
   DISALLOW_COPY_AND_ASSIGN(VertexDescLoader);
 };

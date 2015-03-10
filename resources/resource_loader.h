@@ -8,12 +8,18 @@
 #include "azer/resources/file_system.h"
 
 namespace azer {
+
+class RepositoryNode;
+typedef scoped_refptr<RepositoryNode> RepositoryNodePtr;
+
 class AZER_EXPORT ResourceLoader {
  public:
   ResourceLoader(Resource::Type type) : type_(type){}
   virtual ~ResourceLoader() {}
-  virtual ResourcePtr LoadResource(const ResFilePath& path,
-                                   const FileContent* content) = 0;
+
+  // load resource into RepositoryNode   
+  virtual bool LoadResource(const ResFilePath& path, RepositoryNodePtr parent,
+                            const FileContent* content) = 0;
 
   Resource::Type type() const { return type_; }
  protected:

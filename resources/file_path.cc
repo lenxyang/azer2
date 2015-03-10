@@ -7,6 +7,8 @@
 namespace azer {
 const CharType ResFilePath::kSeperator = FILE_PATH_LITERAL('/');
 
+const StringType ResFilePath::kRootPath = FILE_PATH_LITERAL("//");
+
 ResFilePath ResFilePath::AppendCopy(const StringType& path) const {
   ResFilePath new_path(path_);
   new_path.Append(path);
