@@ -55,4 +55,29 @@ TEST(RepositoryNode, Parent) {
   ASSERT_TRUE(leaf3.get() == leaf3_2.get());
 }
 
+TEST(RepositoryNode, RemoveChild) {
+  const char* hierarchy_tree = ""
+      "//group1"
+      "//group1/group2"
+      "//group1/group2/leaf2"
+      "//group1/leaf1"
+      "//group4"
+      "//group4/group5"
+      "//group4/group5/group6"
+      "//group4/group5/group6/leaf3"
+      ;
+  RepositoryNodePtr root = test::GenerateRepositoryTreeFromString(hierarchy_tree);
+  RepositoryNodePtr group4  = root->GetNodeFromPath(AZER_LITERAL("//group4"));
+  RepositoryNodePtr leaf3  = root->GetNodeFromPath(
+      AZER_LITERAL("//group4/group5/group6/leaf3"));
+  ASSERT_TRUE(group4->HasAncestor(leaf3.get()));
+  RepositoryNodePtr group6  = root->GetNodeFromPath(
+      AZER_LITERAL("//group4/group5/group6"));
+  group6->RemoveChild(leaf3);
+  ASSERT_FALSE(group4->HasAncestor(leaf3.get()));
+  leaf3  = root->GetNodeFromPath(
+      AZER_LITERAL("//group4/group5/group6/leaf3"));
+  ASSERT_TRUE(leaf3.get() == NULL);
+}
+
 }  // namespace azer
