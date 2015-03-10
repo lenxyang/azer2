@@ -15,7 +15,6 @@
 
 namespace azer {
 
-class WindowHost;
 class VertexBuffer;
 
 namespace d3d11 {

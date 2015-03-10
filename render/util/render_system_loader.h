@@ -7,7 +7,6 @@
 
 namespace azer {
 
-class WindowHost;
 class RenderSystem;
 
 class AZER_EXPORT AutoRenderSystemInit {
