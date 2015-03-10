@@ -18,3 +18,10 @@ source_set("resources") {
   visibility = ["//azer"]
   configs += ["//azer/base:build_render_config"]
 }
+
+source_set("unittests") {
+  sources = [
+    "repository_node_tests.cc",
+  ]
+  visibility = ["//azer:unittests"]
+}

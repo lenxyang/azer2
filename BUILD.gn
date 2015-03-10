@@ -30,6 +30,7 @@ test("unittests") {
     "base:unittests",
     "render:unittests",
     "render/layers:unittests",
+    "resources:unittests",
     "//base/test:run_all_unittests",
   ]
 }
