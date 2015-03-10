@@ -16,7 +16,8 @@ typedef scoped_refptr<RepositoryNode> RepositoryNodePtr;
 // add StaticRepositoryNode which use dawg build the tree without any resources
 class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
  public:
-  RepositoryNode(const StringType& name);
+  RepositoryNode();
+  explicit RepositoryNode(const StringType& name);
   ~RepositoryNode();
 
   void AddChild(RepositoryNodePtr child);

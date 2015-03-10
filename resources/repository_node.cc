@@ -13,6 +13,11 @@ RepositoryNode::RepositoryNode(const StringType& name)
     , parent_(NULL) {
 }
 
+RepositoryNode::RepositoryNode()
+    : name_(FILE_PATH_LITERAL("/"))
+    , parent_(NULL) {
+}
+
 RepositoryNode::~RepositoryNode() {
 }
 
@@ -150,20 +155,23 @@ RepositoryNodePtr RepositoryNode::GetNodeFromDirVec(
 }
 
 StringType RepositoryNode::fullpath() const {
-  if (!parent()) {
-    return FILE_PATH_LITERAL("/");
-  } else {
-    StringType path = parent()->fullpath();
+  StringType path;
+  if (parent()) {
+    path.append(parent()->fullpath());
     path.append(FILE_PATH_LITERAL("/"));
-    path.append(name());
-    return path;
   }
+  
+  path.append(name());
+  return path;
 }
 
 std::string RepositoryNode::PrintHierarchy(int ident) {
   std::stringstream ss;
   std::string ident_str(' ', ident * 2);
-  ss << ident_str << fullpath() << std::endl;
+  if (parent()) {
+    ss << ident_str << fullpath() << std::endl;
+  }
+
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     ss << iter->second->PrintHierarchy(ident);
   }
