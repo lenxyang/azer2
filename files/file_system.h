@@ -23,8 +23,8 @@ class AZER_EXPORT FileSystem {
   static FileSystem* create(Type type, const ::base::FilePath& root);
   const ::base::FilePath& root() { return fs_root_;}
 
-  virtual FileContentPtr LoadFile(const FilePath& path) = 0;
-  virtual bool IsPathExists(const FilePath& path) = 0;
+  virtual FileContentPtr LoadFile(const ResPath& path) = 0;
+  virtual bool IsPathExists(const ResPath& path) = 0;
 
   // Load content async
   // virtual ResLoadFileAsync(const ResFilePath& path, FileContent* filecontent) = 0;
@@ -32,7 +32,7 @@ class AZER_EXPORT FileSystem {
   FileSystem(Type type, const ::base::FilePath& root);
 
   // convert the FilePath to FileSystem path;
-  virtual void ConvertFileSystem(const FilePath& path, ::base::FilePath*) = 0;
+  virtual void ConvertFileSystem(const ResPath& path, ::base::FilePath*) = 0;
 
   const Type type_;
   const ::base::FilePath fs_root_;

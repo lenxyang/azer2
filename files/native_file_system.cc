@@ -7,7 +7,7 @@
 
 namespace azer {
 namespace files {
-FileContentPtr NativeFileSystem::LoadFile(const FilePath& path) {
+FileContentPtr NativeFileSystem::LoadFile(const ResPath& path) {
   DCHECK(!path.empty());
   ::base::FilePath real_path = fs_root_.Append(path.value());
   int64 size = 0;
@@ -25,19 +25,19 @@ FileContentPtr NativeFileSystem::LoadFile(const FilePath& path) {
   return content;
 }
 
-bool NativeFileSystem::IsPathExists(const azer::FilePath& path) {
+bool NativeFileSystem::IsPathExists(const azer::ResPath& path) {
   DCHECK(!path.empty());
   ::base::FilePath real_path;
   this->ConvertFileSystem(path, &real_path);
   return base::PathExists(real_path);
 }
 
-void NativeFileSystem::ConvertFileSystem(const azer::FilePath& path,
+void NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
                                          ::base::FilePath* realpath) {
   CHECK(StartsWith(path.value(), FILE_PATH_LITERAL("//"), true));
   StringType realpathstr = root().value();
   realpathstr.append(FILE_PATH_LITERAL("/"));
-  realpathstr.append(path.path().substr(2));
+  realpathstr.append(path.filepath().substr(2));
   *realpath = ::base::FilePath(realpathstr);
 }
 }  // namespace files

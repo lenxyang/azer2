@@ -106,7 +106,7 @@ RepositoryNodePtr RepositoryNode::GetResourceParent(const StringType& path) {
 }
 
 RepositoryNodePtr RepositoryNode::GetNodeFromPath(const StringType& path) {
-  if (StartsWith(path, FilePath::kRootPath, true)) {
+  if (StartsWith(path, ResPath::kRootPath, true)) {
     return root()->GetRelativeNode(path.substr(2));
   } else {
     return GetRelativeNode(path);
@@ -120,7 +120,7 @@ RepositoryNodePtr RepositoryNode::GetRelativeNode(const StringType& path) {
 }
 
 RepositoryNodePtr RepositoryNode::GetNodeParent(const StringType& path) {
-  if (StartsWith(path, FilePath::kRootPath, true)) {
+  if (StartsWith(path, ResPath::kRootPath, true)) {
     return GetRelativeNodeParent(path.substr(2));
   } else {
     return GetRelativeNodeParent(path);

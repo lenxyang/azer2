@@ -13,10 +13,10 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
 
   ~NativeFileSystem() override {}
 
-  FileContentPtr LoadFile(const azer::FilePath& path) override;
-  bool IsPathExists(const azer::FilePath& path) override;
+  FileContentPtr LoadFile(const azer::ResPath& path) override;
+  bool IsPathExists(const azer::ResPath& path) override;
  private:
-  void ConvertFileSystem(const azer::FilePath& path, ::base::FilePath*) override;
+  void ConvertFileSystem(const azer::ResPath& path, ::base::FilePath*) override;
   DISALLOW_COPY_AND_ASSIGN(NativeFileSystem);
 };
 }  // namespace files
