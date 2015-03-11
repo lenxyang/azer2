@@ -15,6 +15,9 @@ const CharType ResPath::kComponentSeperator = FILE_PATH_LITERAL(':');
 const StringType ResPath::kComponentSeperatorStr = FILE_PATH_LITERAL(":");
 const StringType ResPath::kRootPath = FILE_PATH_LITERAL("//");
 
+CharType ResPath::kValidCharInPath[] = FILE_PATH_LITERAL("_:/.");
+);
+
 bool ResPath::ValidPath(const StringType& str) {
   return true;
 }

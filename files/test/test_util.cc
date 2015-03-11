@@ -1,6 +1,6 @@
 #include "azer/files/test/test_util.h"
 
-#include "azer/base/strings.h"
+#include "azer/base/string.h"
 
 namespace azer {
 namespace test {
