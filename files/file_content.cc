@@ -3,7 +3,6 @@
 #include "base/logging.h"
 
 namespace azer {
-namespace resources {
 FileContent::FileContent() 
     : length_(0)
     , capability_(0) {
@@ -24,5 +23,4 @@ FileContent::FileContent(const uint8* data, int64 size)
 
 FileContent::~FileContent() {
 }
-}  // namespace resources
 }  // namespace azer

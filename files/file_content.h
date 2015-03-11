@@ -8,7 +8,6 @@
 #include "azer/base/export.h"
 
 namespace azer {
-namespace resources {
 class AZER_EXPORT FileContent : public ::base::RefCounted<FileContent> {
  public:
   FileContent();
@@ -29,5 +28,4 @@ class AZER_EXPORT FileContent : public ::base::RefCounted<FileContent> {
 };
 
 typedef scoped_refptr<FileContent> FileContentPtr;
-}  // namespace resources
 }  // namespace azer

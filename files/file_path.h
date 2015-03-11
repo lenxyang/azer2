@@ -5,20 +5,20 @@
 #include "azer/base/string.h"
 
 namespace azer {
-namespace resources {
-class AZER_EXPORT ResFilePath {
+namespace files {
+class AZER_EXPORT FilePath {
  public:
-  ResFilePath(const char* path);
-  ResFilePath(const StringType& path) : path_(path) {}
-  ResFilePath(const ResFilePath& path) : path_(path.value()) {}
+  FilePath(const char* path);
+  FilePath(const StringType& path) : path_(path) {}
+  FilePath(const FilePath& path) : path_(path.value()) {}
 
-  ResFilePath& operator = (const ResFilePath& path) {
+  FilePath& operator = (const FilePath& path) {
     path_ = path.value();
     return *this;
   }
 
   const StringType& value() const { return path_;}
-  ResFilePath AppendCopy(const StringType& path) const;
+  FilePath AppendCopy(const StringType& path) const;
   void Append(const StringType& str);
   bool empty() const { return path_.empty();}
 
@@ -30,5 +30,5 @@ class AZER_EXPORT ResFilePath {
 
 AZER_EXPORT bool SplitPackage(const StringType& full, StringType* path,
                                 StringType* package);
-}  // namespace resources
+}  // namespace files
 }  // namespace azer

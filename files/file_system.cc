@@ -1,11 +1,11 @@
-#include "azer/resources/file_system.h"
+#include "azer/files/file_system.h"
 
 #include "base/logging.h"
 
-#include "azer/resources/native_file_system.h"
+#include "azer/files/native_file_system.h"
 
 namespace azer {
-namespace resources {
+namespace files {
 
 FileSystem* FileSystem::create(FileSystem::Type type, 
                                const ::base::FilePath& root) {
@@ -21,5 +21,5 @@ FileSystem* FileSystem::create(FileSystem::Type type,
 ResFilePath::ResFilePath(const char* path) {
   ConvertPath<StringType>(path, &path_);
 }
-}  // namespace resources
+}  // namespace files
 }  // namespace azer

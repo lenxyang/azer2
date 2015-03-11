@@ -1,9 +1,9 @@
 #pragma once
 
-#include "azer/resources/file_system.h"
+#include "azer/files/file_system.h"
 
 namespace azer {
-namespace resources {
+namespace files {
 class AZER_EXPORT NativeFileSystem : public FileSystem {
  public:
   NativeFileSystem(const ::base::FilePath& root)
@@ -17,5 +17,5 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
  private:
   DISALLOW_COPY_AND_ASSIGN(NativeFileSystem);
 };
-}  // namespace resources
+}  // namespace files
 }  // namespace azer

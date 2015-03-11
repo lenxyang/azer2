@@ -6,13 +6,10 @@
 #include "base/files/file_path.h"
 #include "azer/base/export.h"
 #include "azer/base/string.h"
-#include "azer/resources/content.h"
-#include "azer/resources/file_path.h"
-#include "azer/resources/file_content.h"
+#include "azer/files/file_path.h"
+#include "azer/files/file_content.h"
 
 namespace azer {
-namespace resources {
-
 class AZER_EXPORT FileSystem {
  public:
   virtual ~FileSystem() {}
@@ -26,8 +23,8 @@ class AZER_EXPORT FileSystem {
   static FileSystem* create(Type type, const ::base::FilePath& root);
   const ::base::FilePath& root() { return fs_root_;}
 
-  virtual FileContentPtr LoadFile(const ResFilePath& path) = 0;
-  virtual bool IsPathExists(const ResFilePath& path) = 0;
+  virtual FileContentPtr LoadFile(const FilePath& path) = 0;
+  virtual bool IsPathExists(const FilePath& path) = 0;
 
   // Load content async
   // virtual ResLoadFileAsync(const ResFilePath& path, FileContent* filecontent) = 0;
@@ -43,5 +40,5 @@ class AZER_EXPORT FileSystem {
 };
 
 typedef std::shared_ptr<FileSystem> FileSystemPtr;
-}  // namespace resources
+}  // namespace files
 }  // namespace azer
