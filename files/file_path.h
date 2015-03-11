@@ -24,9 +24,12 @@ class AZER_EXPORT FilePath {
   void Append(const StringType& str);
   bool empty() const { return path_.empty();}
 
+  const StringType& path() const { return path_;}
+
   static const StringType kRootPath;
  protected:
   StringType path_;
+  StringType component_;
   static const CharType kSeperator;
 };
 

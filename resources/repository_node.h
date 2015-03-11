@@ -4,7 +4,7 @@
 #include <map>
 
 #include "base/memory/ref_counted.h"
-#include "azer/resources/file_system.h"
+#include "azer/files/file_system.h"
 #include "azer/base/resource.h"
 
 namespace azer {

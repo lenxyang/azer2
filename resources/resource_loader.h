@@ -4,8 +4,8 @@
 
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
-#include "azer/resources/file_path.h"
-#include "azer/resources/file_system.h"
+#include "azer/files/file_path.h"
+#include "azer/files/file_system.h"
 
 namespace azer {
 namespace resources {
@@ -19,7 +19,7 @@ class AZER_EXPORT ResourceLoader {
   virtual ~ResourceLoader() {}
 
   // load resource into RepositoryNode   
-  virtual bool LoadResource(const ResFilePath& path, RepositoryNodePtr parent,
+  virtual bool LoadResource(const FilePath& path, RepositoryNodePtr parent,
                             const FileContent* content) = 0;
 
   Resource::Type type() const { return type_; }
@@ -33,7 +33,7 @@ class AZER_EXPORT ResourceLoaderManager {
  public:
   ResourceLoaderManager() {}
   virtual ~ResourceLoaderManager() {}
-  virtual ResourceLoader* GetResourceLoader(const ResFilePath& path,
+  virtual ResourceLoader* GetResourceLoader(const FilePath& path,
                                             const FileContent* content) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(ResourceLoaderManager);
