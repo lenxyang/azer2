@@ -44,13 +44,12 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   RepositoryNodePtr GetLocalNode(const StringType& name);
   RepositoryNodePtr GetNode(const ResPath& path);
   RepositoryNodePtr GetNodeParent(const ResPath& path);
+  RepositoryNodePtr GetRelativeNode(const StringType& path);
 
   std::string PrintHierarchy(int ident = 0);
  private:
   // get relative path's parent
   ResourcePtr GetLocalResource(const StringType& path);
-  RepositoryNodePtr GetRelativeNode(const StringType& path);
-  RepositoryNodePtr GetRelativeNodeParent(const StringType& path);
   RepositoryNodePtr GetNodeFromDirVec(const std::vector<StringType>& path);
   StringType name_;
   RepositoryNode* parent_;

@@ -33,6 +33,8 @@ class AZER_EXPORT ResPath {
   const StringType& filepath() const { return path_;}
   const StringType& component() const { return component_;}
 
+  ResPath parent() const;
+
   static const StringType kRootPath;
   static const StringType kSeperatorStr;
   static const CharType kSeperator;

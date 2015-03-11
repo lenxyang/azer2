@@ -75,6 +75,18 @@ void ResPath::Append(const StringType& str) {
   OnFullpathChanged(this->fullpath());
 }
 
+ResPath ResPath::parent() const {
+  CHECK(StartsWith(filepath(), kRootPath, true));
+  CHECK(!EndsWith(filepath(), kSeperatorStr, true));
+  StringType pathstr = filepath();
+  std::size_t pos = pathstr.rfind(kSeperator);
+  if (pos != StringType::npos) {
+    return ResPath(pathstr.substr(0, pathstr.length() - pos));
+  } else {
+    return ResPath("//");
+  }
+}
+
 bool SplitPackage(const StringType& full, StringType* path,
                   StringType* package) {
   size_t pos = full.find_last_of(':');
