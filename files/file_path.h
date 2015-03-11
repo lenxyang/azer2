@@ -5,6 +5,9 @@
 #include "azer/base/string.h"
 
 namespace azer {
+// FilePath's root is setting in FileSystem
+// for example, if the filesystem root is c:/mydir,
+// the azer::FileSystem "//a", for native files is c:/mydir/a
 class AZER_EXPORT FilePath {
  public:
   FilePath(const char* path);
