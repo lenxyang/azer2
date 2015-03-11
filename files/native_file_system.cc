@@ -7,7 +7,7 @@
 
 namespace azer {
 namespace files {
-FileContentPtr NativeFileSystem::LoadFile(const ResFilePath& path) {
+FileContentPtr NativeFileSystem::LoadFile(const FilePath& path) {
   DCHECK(!path.empty());
   ::base::FilePath real_path = fs_root_.Append(path.value());
   int64 size = 0;
@@ -25,7 +25,7 @@ FileContentPtr NativeFileSystem::LoadFile(const ResFilePath& path) {
   return content;
 }
 
-bool NativeFileSystem::IsPathExists(const ResFilePath& path) {
+bool NativeFileSystem::IsPathExists(const FilePath& path) {
   DCHECK(!path.empty());
   ::base::FilePath real_path = fs_root_.Append(path.value());
   return base::PathExists(real_path);

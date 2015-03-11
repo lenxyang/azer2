@@ -10,6 +10,10 @@ const CharType FilePath::kSeperator = FILE_PATH_LITERAL('/');
 
 const StringType FilePath::kRootPath = FILE_PATH_LITERAL("//");
 
+FilePath::FilePath(const char* path) {
+  ConvertPath<StringType>(path, &path_);
+}
+
 FilePath FilePath::AppendCopy(const StringType& path) const {
   FilePath new_path(path_);
   new_path.Append(path);

@@ -40,5 +40,4 @@ class AZER_EXPORT FileSystem {
 };
 
 typedef std::shared_ptr<FileSystem> FileSystemPtr;
-}  // namespace files
 }  // namespace azer

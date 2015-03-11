@@ -1,4 +1,4 @@
-#include "azer/resources/file_content.h"
+#include "azer/files/file_content.h"
 
 #include "base/logging.h"
 

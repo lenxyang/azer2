@@ -12,8 +12,8 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
 
   ~NativeFileSystem() override {}
 
-  FileContentPtr LoadFile(const ResFilePath& path) override;
-  bool IsPathExists(const ResFilePath& path) override;
+  FileContentPtr LoadFile(const FilePath& path) override;
+  bool IsPathExists(const FilePath& path) override;
  private:
   DISALLOW_COPY_AND_ASSIGN(NativeFileSystem);
 };
