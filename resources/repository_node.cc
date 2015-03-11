@@ -82,35 +82,25 @@ ResourcePtr RepositoryNode::GetLocalResource(const StringType& path) {
   }
 }
 
-ResourcePtr RepositoryNode::GetResource(const StringType& path) {
-  std::vector<StringType> vec;
-  ::base::SplitString(path, FILE_PATH_LITERAL(':'), &vec);
-  if (vec.size() == 2u) { 
-    RepositoryNodePtr node = GetNodeFromPath(vec[0]);
-    if (node.get()) {
-      return node->GetLocalResource(vec[1]);
-    }
+ResourcePtr RepositoryNode::GetResource(const ResPath& path) {
+  RepositoryNodePtr node = GetNodeFromPath(path.file_path());
+  if (node.get()) {
+    return node->GetLocalResource(vec[1]);
   }
 
   return ResourcePtr();
 }
 
-RepositoryNodePtr RepositoryNode::GetResourceParent(const StringType& path) {
-  std::vector<StringType> vec;
-  ::base::SplitString(path, FILE_PATH_LITERAL(':'), &vec);
-  if (vec.size() == 2u) { 
-    return GetRelativeNode(vec[0]);
-  } else {
-    return RepositoryNodePtr();
-  }
+RepositoryNodePtr RepositoryNode::GetResourceParent(const ResPath& path) {
+  return GetRelativeNode(path.file_path());
 }
 
-RepositoryNodePtr RepositoryNode::GetNodeFromPath(const StringType& path) {
-  if (StartsWith(path, ResPath::kRootPath, true)) {
-    return root()->GetRelativeNode(path.substr(2));
-  } else {
-    return GetRelativeNode(path);
-  }
+RepositoryNodePtr RepositoryNode::GetLocalNode(const StringType& name) {
+  CHECK(path.component().empty());
+  return GetRelativeNode(name);
+}
+
+RepositoryNodePtr RepositoryNode::GetNode(const ResPath& path) {
 }
 
 RepositoryNodePtr RepositoryNode::GetRelativeNode(const StringType& path) {

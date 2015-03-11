@@ -4,7 +4,7 @@
 
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
-#include "azer/files/file_path.h"
+#include "azer/files/res_path.h"
 #include "azer/files/file_system.h"
 
 namespace azer {
