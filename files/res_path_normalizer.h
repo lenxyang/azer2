@@ -34,6 +34,10 @@ class AZER_EXPORT ResPathNormalizer {
   };
   State state() const { return state_;}
   void set_state(State state) { state_ = state;}
+
+  const StringType& component() const { return component_;}
+  const StringType& proto() const { return proto_;}
+  const std::vector<StringType>& dirs() const { return dirs_;}
  private:
   void SetErrorMsg(const std::string& msg);
   std::vector<StringType> dirs_;

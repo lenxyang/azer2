@@ -44,6 +44,7 @@ bool NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
   realpathstr.append(FILE_PATH_LITERAL("/"));
   realpathstr.append(path.filepath().substr(2));
   *realpath = ::base::FilePath(realpathstr);
+  return true;
 }
 
 FileSystem::FileType NativeFileSystem::GetFileType(const ResPath& path) {

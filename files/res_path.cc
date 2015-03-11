@@ -24,11 +24,7 @@ ResPath::PathType ResPath::CalcPathType(const StringType& str) {
     return kInvalidPath;
   }
 
-  if (StartsWith(str, kRootPath, true)) {
-    return kAbsolutePath;
-  } else {
-    std::size_t proto_pos = str.find(FILE_PATH_LITERAL("://"));
-  }
+  return kAbsolutePath;
 }
 
 ResPath::ResPath(const CharType* path)
