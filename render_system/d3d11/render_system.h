@@ -15,11 +15,8 @@
 
 namespace azer {
 
-
-class WindowHost;
 class VertexBuffer;
 class Canvas2D;
-
 
 namespace d3d11 {
 class D3DRenderTarget;

@@ -19,9 +19,23 @@ source_set("resources") {
   configs += ["//azer/base:build_render_config"]
 }
 
+static_library("test_support") {
+  sources = [
+    "test/test_util.cc",
+    "test/test_util.h",
+  ]
+  deps = ["//azer"]
+}
+
 source_set("unittests") {
   sources = [
     "repository_node_tests.cc",
   ]
   visibility = ["//azer:unittests"]
+  deps = [
+    "//azer",
+    "//base",
+    ":test_support",
+    "//testing/gtest"
+  ]
 }

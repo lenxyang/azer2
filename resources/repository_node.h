@@ -16,18 +16,25 @@ typedef scoped_refptr<RepositoryNode> RepositoryNodePtr;
 // add StaticRepositoryNode which use dawg build the tree without any resources
 class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
  public:
-  RepositoryNode(const std::string& relative_path);
+  RepositoryNode();
+  explicit RepositoryNode(const StringType& name);
   ~RepositoryNode();
 
   void AddChild(RepositoryNodePtr child);
   void RemoveChild(RepositoryNodePtr child);
   bool HasAncestor(RepositoryNode* node) const;
-  RepositoryNodePtr GetChild(const std::string& relative);
+  RepositoryNodePtr GetChild(const StringType& relative);
 
-  const std::string& relative_path() const { return relative_path_;}
+  const StringType& name() const { return name_;}
+  StringType fullpath() const;
 
-  RepositoryNode* root();
   const RepositoryNode* root() const;
+  RepositoryNode* root() {
+    return const_cast<RepositoryNode*>(
+        const_cast<const RepositoryNode*>(this)->root());
+  }
+
+
   RepositoryNode* parent() { return parent_;}
   const RepositoryNode* parent() const { return parent_;}
   
@@ -35,18 +42,18 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   RepositoryNodePtr GetResourceParent(const StringType& path);
   RepositoryNodePtr GetNodeFromPath(const StringType& path);
   RepositoryNodePtr GetNodeParent(const StringType& path);
+
+  std::string PrintHierarchy(int ident = 0);
  private:
   // get relative path's parent
   ResourcePtr GetLocalResource(const StringType& path);
   RepositoryNodePtr GetRelativeNode(const StringType& path);
   RepositoryNodePtr GetRelativeNodeParent(const StringType& path);
   RepositoryNodePtr GetNodeFromDirVec(const std::vector<StringType>& path);
-  std::string relative_path_;
+  StringType name_;
   RepositoryNode* parent_;
-  RepositoryNodes children_;
-  std::map<std::string, RepositoryNodePtr> children_;
-  std::map<std::string, ResourcePtr> resource_dict_;
+  std::map<StringType, RepositoryNodePtr> children_;
+  std::map<StringType, ResourcePtr> resource_dict_;
   DISALLOW_COPY_AND_ASSIGN(RepositoryNode);
 };
-
 }  // namespace azer

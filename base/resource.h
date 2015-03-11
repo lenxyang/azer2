@@ -11,7 +11,6 @@
 namespace azer {
 
 class RenderSystem;
-class ResourceLoaderCreator;
 
 /**
  * all resource can be load from resource manger should 
@@ -23,6 +22,7 @@ class AZER_EXPORT Resource : public ::base::RefCounted<Resource> {
     kTexture,
     kEffect,
     kScript,
+    kScene,
     kVertexDesc,
     kVertexData,
     kIndicesData,
