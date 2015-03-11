@@ -12,7 +12,7 @@ ResPath Utf8ResPath(const char* str) {
 
 ResPath Utf8ResPath(const std::string& str) {
   StringType pathstr;
-  ConvertPath(str, &pathstr);
+  ConvertPath(str.c_str(), &pathstr);
   return ResPath(pathstr);
 }
 }  // namespace test

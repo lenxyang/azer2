@@ -9,6 +9,8 @@ source_set("files") {
     "native_file_system.h",
     "res_path.cc",
     "res_path.h",
+    "res_path_normalizer.cc",
+    "res_path_normalizer.h",
   ]
 
   deps = ["//base"]
