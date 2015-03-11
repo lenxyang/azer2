@@ -8,28 +8,28 @@
 
 namespace azer {
 
-const CharType FilePath::kSeperator = FILE_PATH_LITERAL('/');
-const StringType FilePath::kSeperatorStr = FILE_PATH_LITERAL("/");
-const CharType FilePath::kComponentSeperator = FILE_PATH_LITERAL(':');
-const StringType FilePath::kComponentSeperatorStr = FILE_PATH_LITERAL(":");
-const StringType FilePath::kRootPath = FILE_PATH_LITERAL("//");
+const CharType ResPath::kSeperator = FILE_PATH_LITERAL('/');
+const StringType ResPath::kSeperatorStr = FILE_PATH_LITERAL("/");
+const CharType ResPath::kComponentSeperator = FILE_PATH_LITERAL(':');
+const StringType ResPath::kComponentSeperatorStr = FILE_PATH_LITERAL(":");
+const StringType ResPath::kRootPath = FILE_PATH_LITERAL("//");
 
-FilePath::FilePath(const char* path) {
+ResPath::ResPath(const char* path) {
   ConvertPath<StringType>(path, &fullpath_);
   OnFullpathChanged(this->fullpath());
 }
 
-FilePath::FilePath(const StringType& fullpath)
+ResPath::ResPath(const StringType& fullpath)
     : fullpath_(fullpath) {
   OnFullpathChanged(this->fullpath());
 }
 
-FilePath::FilePath(const FilePath& fullpath)
+ResPath::ResPath(const ResPath& fullpath)
     : fullpath_(fullpath.value()){
   OnFullpathChanged(this->fullpath());
 }
 
-FilePath::FilePath(const StringType& path, const StringType& component) {
+ResPath::ResPath(const StringType& path, const StringType& component) {
   StringType str = path;
   CHECK(!EndsWith(str, kSeperatorStr, true));
   str.append(kComponentSeperatorStr);
@@ -37,7 +37,7 @@ FilePath::FilePath(const StringType& path, const StringType& component) {
   OnFullpathChanged(this->fullpath());
 }
 
-FilePath::FilePath(const FilePath& path, const StringType& component) {
+ResPath::ResPath(const ResPath& path, const StringType& component) {
   StringType str = path.value();
   CHECK(!EndsWith(str, kSeperatorStr, true));
   str.append(kComponentSeperatorStr);
@@ -45,7 +45,7 @@ FilePath::FilePath(const FilePath& path, const StringType& component) {
   OnFullpathChanged(this->fullpath());
 }
 
-void FilePath::OnFullpathChanged(const StringType& fullpath) {
+void ResPath::OnFullpathChanged(const StringType& fullpath) {
   std::vector<StringType> vec;
   ::base::SplitString(fullpath, kComponentSeperator, &vec);
   if (vec.size() > 0u) {
@@ -58,13 +58,13 @@ void FilePath::OnFullpathChanged(const StringType& fullpath) {
   CHECK_LE(vec.size(), 2u);
 }
 
-FilePath FilePath::AppendCopy(const StringType& path) const {
-  FilePath new_path(path_);
+ResPath ResPath::AppendCopy(const StringType& path) const {
+  ResPath new_path(path_);
   new_path.Append(path);
   return new_path;
 }
 
-void FilePath::Append(const StringType& str) {
+void ResPath::Append(const StringType& str) {
   if (fullpath_.back() == kSeperator) {
     fullpath_.append(str);
   } else {

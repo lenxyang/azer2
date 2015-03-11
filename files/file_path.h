@@ -5,32 +5,32 @@
 #include "azer/base/string.h"
 
 namespace azer {
-// FilePath's format 
+// ResPath's format 
 // '//.../.../../filename:component
-// FilePath's root is setting in FileSystem
+// ResPath's root is setting in FileSystem
 // for example, if the filesystem root is c:/mydir,
 // the azer::FileSystem "//a", for native files is c:/mydir/a
-class AZER_EXPORT FilePath {
+class AZER_EXPORT ResPath {
  public:
-  FilePath(const char* path);
-  FilePath(const StringType& fullpath);
-  FilePath(const FilePath& fullpath);
-  FilePath(const StringType& path, const StringType& component);
-  FilePath(const FilePath& path, const StringType& component);
+  ResPath(const char* path);
+  ResPath(const StringType& fullpath);
+  ResPath(const ResPath& fullpath);
+  ResPath(const StringType& path, const StringType& component);
+  ResPath(const ResPath& path, const StringType& component);
 
-  FilePath& operator = (const FilePath& path) {
+  ResPath& operator = (const ResPath& path) {
     path_ = path.value();
     return *this;
   }
 
   const StringType& value() const { return path_;}
 
-  FilePath AppendCopy(const StringType& path) const;
+  ResPath AppendCopy(const StringType& path) const;
   void Append(const StringType& str);
   bool empty() const { return path_.empty();}
 
   const StringType& fullpath() const { return fullpath_;}
-  const StringType& path() const { return path_;}
+  const StringType& filepath() const { return path_;}
   const StringType& component() const { return component_;}
 
   static const StringType kRootPath;
