@@ -16,4 +16,10 @@ FileSystem* FileSystem::create(FileSystem::Type type,
       return NULL;
   }
 }
+
+FileSystem::FileSystem(Type type, const ::base::FilePath& root)
+    : type_(type)
+    , fs_root_(root) {
+}
+
 }  // namespace azer

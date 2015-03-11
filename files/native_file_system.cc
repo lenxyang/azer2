@@ -27,8 +27,17 @@ FileContentPtr NativeFileSystem::LoadFile(const FilePath& path) {
 
 bool NativeFileSystem::IsPathExists(const FilePath& path) {
   DCHECK(!path.empty());
-  ::base::FilePath real_path = fs_root_.Append(path.value());
+  ::base::FilePath real_path;
+  ConvertFileSystem(path, &realpath);
   return base::PathExists(real_path);
+}
+
+void FileSystem::ConvertFileSystem(FilePath path, ::base::FilePath* realpath) {
+  CHECK(StartsWith(path.value(), FILE_PATH_LITERAL("//"), true));
+  StringType realpathstr = root().value();
+  realpathstr.append(FILE_PATH_LITERAL("/"));
+  realpathstr.append(path.substr(2));
+  *realpath = realpathstr;
 }
 }  // namespace files
 }  // namespace azer
