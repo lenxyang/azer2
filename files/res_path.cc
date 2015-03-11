@@ -14,19 +14,22 @@ const CharType ResPath::kComponentSeperator = FILE_PATH_LITERAL(':');
 const StringType ResPath::kComponentSeperatorStr = FILE_PATH_LITERAL(":");
 const StringType ResPath::kRootPath = FILE_PATH_LITERAL("//");
 
+PathType ResPath::CalcPathType(StringType str) {
+}
+
 ResPath::ResPath(const char* path) {
   ConvertPath<StringType>(path, &fullpath_);
-  OnFullpathChanged(this->fullpath());
+  OnPathChanged(this->fullpath());
 }
 
 ResPath::ResPath(const StringType& fullpath)
     : fullpath_(fullpath) {
-  OnFullpathChanged(this->fullpath());
+  OnPathChanged(this->fullpath());
 }
 
 ResPath::ResPath(const ResPath& fullpath)
     : fullpath_(fullpath.value()){
-  OnFullpathChanged(this->fullpath());
+  OnPathChanged(this->fullpath());
 }
 
 ResPath::ResPath(const StringType& path, const StringType& component) {
@@ -34,7 +37,7 @@ ResPath::ResPath(const StringType& path, const StringType& component) {
   CHECK(!EndsWith(str, kSeperatorStr, true));
   str.append(kComponentSeperatorStr);
   str.append(component);
-  OnFullpathChanged(this->fullpath());
+  OnPathChanged(this->fullpath());
 }
 
 ResPath::ResPath(const ResPath& path, const StringType& component) {
@@ -42,10 +45,10 @@ ResPath::ResPath(const ResPath& path, const StringType& component) {
   CHECK(!EndsWith(str, kSeperatorStr, true));
   str.append(kComponentSeperatorStr);
   str.append(component);
-  OnFullpathChanged(this->fullpath());
+  OnPathChanged(this->fullpath());
 }
 
-void ResPath::OnFullpathChanged(const StringType& fullpath) {
+void ResPath::OnPathChanged(const StringType& fullpath) {
   std::vector<StringType> vec;
   ::base::SplitString(fullpath, kComponentSeperator, &vec);
   if (vec.size() > 0u) {
@@ -56,6 +59,7 @@ void ResPath::OnFullpathChanged(const StringType& fullpath) {
   }
 
   CHECK_LE(vec.size(), 2u);
+  path_type_ = CalcPathType(fullpath);
 }
 
 ResPath ResPath::AppendCopy(const StringType& path) const {
@@ -72,7 +76,7 @@ void ResPath::Append(const StringType& str) {
     fullpath_.append(str);
   }
 
-  OnFullpathChanged(this->fullpath());
+  OnPathChanged(this->fullpath());
 }
 
 ResPath ResPath::parent() const {
@@ -88,5 +92,6 @@ ResPath ResPath::parent() const {
 
 void ResPath::Normalize() {
 }
+
 }  // namespace azer
 
