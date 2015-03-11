@@ -12,6 +12,12 @@ namespace azer {
 // the azer::FileSystem "//a", for native files is c:/mydir/a
 class AZER_EXPORT ResPath {
  public:
+  enum PathType {
+    kRelativePath,
+    kAbsolutePath,
+    kProtoPath,
+  };
+
   ResPath(const char* path);
   ResPath(const StringType& fullpath);
   ResPath(const ResPath& fullpath);
@@ -44,9 +50,10 @@ class AZER_EXPORT ResPath {
   static const CharType kSeperator;
   static const StringType kComponentSeperatorStr;
   static const CharType kComponentSeperator;
+
+  void Normalize();
  protected:
   void OnFullpathChanged(const StringType& type);
-  void NormalizePath();
   StringType fullpath_;
   StringType path_;
   StringType component_;

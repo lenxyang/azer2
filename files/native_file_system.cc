@@ -40,5 +40,8 @@ void NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
   realpathstr.append(path.filepath().substr(2));
   *realpath = ::base::FilePath(realpathstr);
 }
+
+FileType NativeFileSystem::GetFileType(const ResPath& path) {
+}
 }  // namespace files
 }  // namespace azer

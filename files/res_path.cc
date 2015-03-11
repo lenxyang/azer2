@@ -86,7 +86,7 @@ ResPath ResPath::parent() const {
   }
 }
 
-void ResPath::NormalizePath() {
+void ResPath::Normalize() {
 }
 }  // namespace azer
 

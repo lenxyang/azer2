@@ -26,6 +26,12 @@ class AZER_EXPORT FileSystem {
   virtual FileContentPtr LoadFile(const ResPath& path) = 0;
   virtual bool IsPathExists(const ResPath& path) = 0;
 
+  enum FileType {
+    kDirectory,
+    kFile,
+  };
+  virtual FileType GetFileType(const ResPath& path) = 0;
+
   // Load content async
   // virtual ResLoadFileAsync(const ResFilePath& path, FileContent* filecontent) = 0;
  protected:
