@@ -16,6 +16,7 @@ class AZER_EXPORT ResPath {
     kRelativePath,
     kAbsolutePath,
     kProtoPath,
+    kInvalidPath,
   };
 
   ResPath(const char* path);
@@ -24,15 +25,11 @@ class AZER_EXPORT ResPath {
   ResPath(const StringType& path, const StringType& component);
   ResPath(const ResPath& path, const StringType& component);
 
-  ResPath& operator = (const ResPath& path) {
-    path_ = path.value();
-    return *this;
-  }
+  ResPath& operator = (const ResPath& path);
 
-  const StringType& value() const { return path_;}
-
-  ResPath AppendCopy(const StringType& path) const;
-  void Append(const StringType& str);
+  ResPath AppendCopyOrDie(const ResPath& path) const;
+  bool AppendCopy(const ResPath& path, ResPath* output) const;
+  bool Append(const ResPath& str);
   void Normalize();
   bool empty() const { return path_.empty();}
 
@@ -48,6 +45,7 @@ class AZER_EXPORT ResPath {
   bool IsRelativePath() const { return path_type_ == kRelativePath;}
 
   static PathType CalcPathType(StringType str);
+  static bool ValidPath(const StringType& str);
   static const StringType kRootPath;
   static const StringType kSeperatorStr;
   static const CharType kSeperator;

@@ -2,8 +2,9 @@
 
 #include "base/logging.h"
 #include "base/files/file_util.h"
-#include "base/strings/string_util.h"
 #include "base/strings/string_split.h"
+#include "base/strings/string_tokenizer.h"
+#include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
 
 namespace azer {
@@ -14,7 +15,20 @@ const CharType ResPath::kComponentSeperator = FILE_PATH_LITERAL(':');
 const StringType ResPath::kComponentSeperatorStr = FILE_PATH_LITERAL(":");
 const StringType ResPath::kRootPath = FILE_PATH_LITERAL("//");
 
+bool ResPath::ValidPath(const StringType& str) {
+  
+}
+
 PathType ResPath::CalcPathType(StringType str) {
+  if (!ValidPath(str)) {
+    return InvalidPath;
+  }
+
+  if (StartsWith(str, kRootPath, true)) {
+    return kAbsolutePath;
+  } else {
+    std::size_t proto_pos = str.find(FILE_PATH_LITERAL("://"));
+  }
 }
 
 ResPath::ResPath(const char* path) {
@@ -48,6 +62,13 @@ ResPath::ResPath(const ResPath& path, const StringType& component) {
   OnPathChanged(this->fullpath());
 }
 
+ResPath& ResPath::operator = (const ResPath& path) {
+  fullpath_ = path->fullpath();
+  OnPathChanged(this->fullpath());
+  return *this;
+}
+   
+
 void ResPath::OnPathChanged(const StringType& fullpath) {
   std::vector<StringType> vec;
   ::base::SplitString(fullpath, kComponentSeperator, &vec);
@@ -62,21 +83,33 @@ void ResPath::OnPathChanged(const StringType& fullpath) {
   path_type_ = CalcPathType(fullpath);
 }
 
-ResPath ResPath::AppendCopy(const StringType& path) const {
-  ResPath new_path(path_);
-  new_path.Append(path);
+bool ResPath::AppendCopy(const ResPath& path, ResPath* output) const {
+  ResPath new_path(*this);
+  if (new_path.Append(path)) {
+    *output = new_path;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+ResPath ResPath::AppendCopyOrDie(const Respath& path) const {
+  ResPath new_path(*this);
+  CHECK(new_path.Append(path));
   return new_path;
 }
 
-void ResPath::Append(const StringType& str) {
-  if (fullpath_.back() == kSeperator) {
-    fullpath_.append(str);
-  } else {
+bool ResPath::Append(const ResPath& str) {
+  if (has_component()) { return false;}
+  if (str.type() != kRelativePath) { return false;}
+
+  if (fullpath_.back() != kSeperator) {
     fullpath_.push_back(kSeperator);
-    fullpath_.append(str);
   }
 
+  fullpath_.append(str);
   OnPathChanged(this->fullpath());
+  return true;
 }
 
 ResPath ResPath::parent() const {

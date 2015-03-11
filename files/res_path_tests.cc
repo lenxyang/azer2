@@ -8,6 +8,12 @@ TEST(ResPath, Base) {
   ResPath path2("//root/group1/group2:test");
 }
 
+TEST(ResPath, InvalidPath) {
+}
+
+TEST(ResPath, PathType) {
+}
+
 TEST(ResPath, Normalize) {
   ResPath path("//");
   path.Append("a/");
