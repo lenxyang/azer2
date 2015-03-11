@@ -1,6 +1,6 @@
 #pragma once
 
-#include "azer/files/file_path.h"
+#include "azer/files/res_path.h"
 #include "azer/files/file_system.h"
 
 namespace azer {
