@@ -42,17 +42,15 @@ TEST(RepositoryNode, Parent) {
       "//group4/group5/group6/leaf3"
       ;
   RepositoryNodePtr root = test::GenerateRepositoryTreeFromString(hierarchy_tree);
-  RepositoryNodePtr group4  = root->GetNodeFromPath(AZER_LITERAL("//group4"));
-  RepositoryNodePtr leaf3  = root->GetNodeFromPath(
-      AZER_LITERAL("//group4/group5/group6/leaf3"));
+  RepositoryNodePtr group4  = root->GetNode(ResPath("//group4"));
+  RepositoryNodePtr leaf3  = root->GetNode(ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(group4->HasAncestor(leaf3.get()));
-  RepositoryNodePtr group6  = root->GetNodeFromPath(
-      AZER_LITERAL("//group4/group5/group6"));
+  RepositoryNodePtr group6  = root->GetNode(ResPath("//group4/group5/group6"));
   RepositoryNodePtr group6_2  = root->GetNodeParent(
-      AZER_LITERAL("//group4/group5/group6/leaf3"));
+      ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(leaf3->parent() == group6_2.get());
   ASSERT_TRUE(leaf3->parent() == group6.get());
-  RepositoryNodePtr leaf3_2 = group6->GetNodeFromPath(AZER_LITERAL("leaf3"));
+  RepositoryNodePtr leaf3_2 = group6->GetNode(ResPath("leaf3"));
   ASSERT_TRUE(leaf3.get() == leaf3_2.get());
 }
 
@@ -68,16 +66,13 @@ TEST(RepositoryNode, RemoveChild) {
       "//group4/group5/group6/leaf3"
       ;
   RepositoryNodePtr root = test::GenerateRepositoryTreeFromString(hierarchy_tree);
-  RepositoryNodePtr group4  = root->GetNodeFromPath(AZER_LITERAL("//group4"));
-  RepositoryNodePtr leaf3  = root->GetNodeFromPath(
-      AZER_LITERAL("//group4/group5/group6/leaf3"));
+  RepositoryNodePtr group4  = root->GetNode(ResPath("//group4"));
+  RepositoryNodePtr leaf3  = root->GetNode(ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(group4->HasAncestor(leaf3.get()));
-  RepositoryNodePtr group6  = root->GetNodeFromPath(
-      AZER_LITERAL("//group4/group5/group6"));
+  RepositoryNodePtr group6  = root->GetNode(ResPath("//group4/group5/group6"));
   group6->RemoveChild(leaf3);
   ASSERT_FALSE(group4->HasAncestor(leaf3.get()));
-  leaf3  = root->GetNodeFromPath(
-      AZER_LITERAL("//group4/group5/group6/leaf3"));
+  leaf3  = root->GetNode(ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(leaf3.get() == NULL);
 }
 }  // namespace resources {
