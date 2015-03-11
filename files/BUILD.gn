@@ -7,6 +7,8 @@ source_set("files") {
     "file_path.h",
     "file_system.cc",
     "file_system.h",
+    "native_file_system.cc",
+    "native_file_system.h",
   ]
 
   deps = ["//base"]
@@ -24,6 +26,7 @@ static_library("test_support") {
 
 source_set("unittests") {
   sources = [
+    "file_path_tests.cc",
     "file_system_tests.cc",
   ]
   visibility = ["//azer:unittests"]
