@@ -38,7 +38,7 @@ class AZER_EXPORT FileSystem {
   FileSystem(Type type, const ::base::FilePath& root);
 
   // convert the FilePath to FileSystem path;
-  virtual void ConvertFileSystem(const ResPath& path, ::base::FilePath*) = 0;
+  virtual bool ConvertFileSystem(const ResPath& path, ::base::FilePath*) = 0;
 
   const Type type_;
   const ::base::FilePath fs_root_;

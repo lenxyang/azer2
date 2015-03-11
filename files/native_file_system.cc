@@ -9,17 +9,21 @@ namespace azer {
 namespace files {
 FileContentPtr NativeFileSystem::LoadFile(const ResPath& path) {
   DCHECK(!path.empty());
-  ::base::FilePath real_path = fs_root_.Append(path.value());
+  if (!path.IsAbsolutePath()) {
+    return FileContentPtr();
+  }
+
+  ::base::FilePath real_path = fs_root_.Append(path.filepath());
   int64 size = 0;
   if (!::base::GetFileSize(real_path, &size)) {
-    return NULL;
+    return FileContentPtr();
   }
 
   FileContentPtr content(new FileContent(size));
   int read = ::base::ReadFile(real_path, (char*)content->data(),
-                                content->capability());
+                              content->capability());
   if (size != read) {
-    return NULL;
+    return FileContentPtr();
   }
 
   return content;
@@ -32,17 +36,18 @@ bool NativeFileSystem::IsPathExists(const azer::ResPath& path) {
   return base::PathExists(real_path);
 }
 
-void NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
+bool NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
                                          ::base::FilePath* realpath) {
-  CHECK(StartsWith(path.value(), FILE_PATH_LITERAL("//"), true));
+  if (!path.IsAbsolutePath()) { return false;}
+
   StringType realpathstr = root().value();
   realpathstr.append(FILE_PATH_LITERAL("/"));
   realpathstr.append(path.filepath().substr(2));
   *realpath = ::base::FilePath(realpathstr);
 }
 
-FileType NativeFileSystem::GetFileType(const ResPath& path) {
-  return kArchiveFile
+FileSystem::FileType NativeFileSystem::GetFileType(const ResPath& path) {
+  return kArchiveFile;
 }
 }  // namespace files
 }  // namespace azer

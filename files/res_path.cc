@@ -16,12 +16,12 @@ const StringType ResPath::kComponentSeperatorStr = FILE_PATH_LITERAL(":");
 const StringType ResPath::kRootPath = FILE_PATH_LITERAL("//");
 
 bool ResPath::ValidPath(const StringType& str) {
-  
+  return true;
 }
 
-PathType ResPath::CalcPathType(StringType str) {
+ResPath::PathType ResPath::CalcPathType(const StringType& str) {
   if (!ValidPath(str)) {
-    return InvalidPath;
+    return kInvalidPath;
   }
 
   if (StartsWith(str, kRootPath, true)) {
@@ -31,8 +31,8 @@ PathType ResPath::CalcPathType(StringType str) {
   }
 }
 
-ResPath::ResPath(const char* path) {
-  ConvertPath<StringType>(path, &fullpath_);
+ResPath::ResPath(const CharType* path)
+    : fullpath_(StringType(path)) {
   OnPathChanged(this->fullpath());
 }
 
@@ -41,46 +41,41 @@ ResPath::ResPath(const StringType& fullpath)
   OnPathChanged(this->fullpath());
 }
 
-ResPath::ResPath(const ResPath& fullpath)
-    : fullpath_(fullpath.value()){
+ResPath::ResPath(const ResPath& path)
+    : fullpath_(path.fullpath()){
   OnPathChanged(this->fullpath());
 }
 
 ResPath::ResPath(const StringType& path, const StringType& component) {
   StringType str = path;
-  CHECK(!EndsWith(str, kSeperatorStr, true));
   str.append(kComponentSeperatorStr);
   str.append(component);
   OnPathChanged(this->fullpath());
 }
 
 ResPath::ResPath(const ResPath& path, const StringType& component) {
-  StringType str = path.value();
-  CHECK(!EndsWith(str, kSeperatorStr, true));
+  StringType str = path.fullpath();
   str.append(kComponentSeperatorStr);
   str.append(component);
   OnPathChanged(this->fullpath());
 }
 
 ResPath& ResPath::operator = (const ResPath& path) {
-  fullpath_ = path->fullpath();
+  fullpath_ = path.fullpath();
   OnPathChanged(this->fullpath());
   return *this;
 }
-   
 
 void ResPath::OnPathChanged(const StringType& fullpath) {
+  type_ = CalcPathType(fullpath);
   std::vector<StringType> vec;
   ::base::SplitString(fullpath, kComponentSeperator, &vec);
   if (vec.size() > 0u) {
-    path_ = vec[0];
+    file_path_ = vec[0];
   }
   if (vec.size() > 1u) {
     component_ = vec[1];
   }
-
-  CHECK_LE(vec.size(), 2u);
-  path_type_ = CalcPathType(fullpath);
 }
 
 bool ResPath::AppendCopy(const ResPath& path, ResPath* output) const {
@@ -93,7 +88,7 @@ bool ResPath::AppendCopy(const ResPath& path, ResPath* output) const {
   }
 }
 
-ResPath ResPath::AppendCopyOrDie(const Respath& path) const {
+ResPath ResPath::AppendCopyOrDie(const ResPath& path) const {
   ResPath new_path(*this);
   CHECK(new_path.Append(path));
   return new_path;
@@ -107,7 +102,7 @@ bool ResPath::Append(const ResPath& str) {
     fullpath_.push_back(kSeperator);
   }
 
-  fullpath_.append(str);
+  fullpath_.append(str.fullpath());
   OnPathChanged(this->fullpath());
   return true;
 }
@@ -119,7 +114,7 @@ ResPath ResPath::parent() const {
   if (pos != StringType::npos) {
     return ResPath(filepath().substr(0, pathstr.length() - pos));
   } else {
-    return ResPath("//");
+    return ResPath(AZER_LITERAL("//"));
   }
 }
 

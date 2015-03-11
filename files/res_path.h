@@ -19,9 +19,9 @@ class AZER_EXPORT ResPath {
     kInvalidPath,
   };
 
-  ResPath(const char* path);
-  ResPath(const StringType& fullpath);
-  ResPath(const ResPath& fullpath);
+  explicit ResPath(const CharType* path);
+  explicit ResPath(const StringType& path);
+  ResPath(const ResPath& path);
   ResPath(const StringType& path, const StringType& component);
   ResPath(const ResPath& path, const StringType& component);
 
@@ -31,20 +31,20 @@ class AZER_EXPORT ResPath {
   bool AppendCopy(const ResPath& path, ResPath* output) const;
   bool Append(const ResPath& str);
   void Normalize();
-  bool empty() const { return path_.empty();}
+  bool empty() const { return fullpath_.empty();}
 
   const StringType& fullpath() const { return fullpath_;}
-  const StringType& filepath() const { return path_;}
+  const StringType& filepath() const { return file_path_;}
   const StringType& component() const { return component_;}
   bool has_component() const { return !component_.empty();}
 
   ResPath parent() const;
-  PathType type() const { return path_type_;}
+  PathType type() const { return type_;}
   bool IsRoot() const { return fullpath_ == kRootPath;}
-  bool IsAbsolutePath() const { return path_type_ == kAbsolutePath;}
-  bool IsRelativePath() const { return path_type_ == kRelativePath;}
+  bool IsAbsolutePath() const { return type_ == kAbsolutePath;}
+  bool IsRelativePath() const { return type_ == kRelativePath;}
 
-  static PathType CalcPathType(StringType str);
+  static PathType CalcPathType(const StringType& str);
   static bool ValidPath(const StringType& str);
   static const StringType kRootPath;
   static const StringType kSeperatorStr;
@@ -54,7 +54,7 @@ class AZER_EXPORT ResPath {
  protected:
   void OnPathChanged(const StringType& type);
   StringType fullpath_;
-  StringType path_type_;
+  StringType file_path_;
   StringType component_;
   PathType type_;
 };

@@ -3,9 +3,9 @@
 
 namespace azer {
 TEST(ResPath, Base) {
-  ResPath path1("//");
-  ResPath path2("//root/group1");
-  ResPath path2("//root/group1/group2:test");
+  ResPath path1(AZER_LITERAL("//"));
+  ResPath path2(AZER_LITERAL("//root/group1"));
+  ResPath path3(AZER_LITERAL("//root/group1/group2:test"));
 }
 
 TEST(ResPath, InvalidPath) {
@@ -15,9 +15,9 @@ TEST(ResPath, PathType) {
 }
 
 TEST(ResPath, Normalize) {
-  ResPath path("//");
-  path.Append("a/");
-  path.Append("./");
-  path.Append("..");
+  ResPath path(AZER_LITERAL("//"));
+  path.Append(ResPath(AZER_LITERAL("a/")));
+  path.Append(ResPath(AZER_LITERAL("./")));
+  path.Append(ResPath(AZER_LITERAL("..")));
 }
 }  // namespace azer
