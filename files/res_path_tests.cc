@@ -1,4 +1,4 @@
-#include "azer/files/file_path.h"
+#include "azer/files/res_path.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace azer {
