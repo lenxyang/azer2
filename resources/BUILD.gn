@@ -4,8 +4,8 @@ source_set("resources") {
   sources = [
     "context.cc",
     "context.h",
-    "file_content.cc"
-    "file_content.h"
+    "file_content.cc",
+    "file_content.h",
     "file_path.cc",
     "file_path.h",
     "file_system.cc",
