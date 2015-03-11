@@ -33,6 +33,7 @@ class AZER_EXPORT ResPath {
 
   ResPath AppendCopy(const StringType& path) const;
   void Append(const StringType& str);
+  void Normalize();
   bool empty() const { return path_.empty();}
 
   const StringType& fullpath() const { return fullpath_;}
@@ -50,8 +51,6 @@ class AZER_EXPORT ResPath {
   static const CharType kSeperator;
   static const StringType kComponentSeperatorStr;
   static const CharType kComponentSeperator;
-
-  void Normalize();
  protected:
   void OnFullpathChanged(const StringType& type);
   StringType fullpath_;

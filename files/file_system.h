@@ -28,7 +28,7 @@ class AZER_EXPORT FileSystem {
 
   enum FileType {
     kDirectory,
-    kFile,
+    kArchiveFile,
   };
   virtual FileType GetFileType(const ResPath& path) = 0;
 

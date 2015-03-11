@@ -42,6 +42,7 @@ void NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
 }
 
 FileType NativeFileSystem::GetFileType(const ResPath& path) {
+  return kArchiveFile
 }
 }  // namespace files
 }  // namespace azer
