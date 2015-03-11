@@ -83,7 +83,7 @@ ResourcePtr RepositoryNode::GetLocalResource(const StringType& path) {
 }
 
 ResourcePtr RepositoryNode::GetResource(const ResPath& path) {
-  RepositoryNodePtr node = GetNode(path.filepath());
+  RepositoryNodePtr node = GetNode(ResPath(path.filepath()));
   if (node.get()) {
     return node->GetLocalResource(path.component());
   }

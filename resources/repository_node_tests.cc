@@ -1,10 +1,13 @@
 #include <iostream>
 #include "testing/gtest/include/gtest/gtest.h"
+#include "azer/files/test/test_util.h"
 #include "azer/resources/repository_node.h"
 #include "azer/resources/test/test_util.h"
 
 namespace azer {
 namespace resources {
+
+using ::azer::test::Utf8ResPath;
 
 TEST(RepositoryNode, AddChildAndRemove) {
   RepositoryNodePtr root(new RepositoryNode(FILE_PATH_LITERAL("/")));
@@ -42,15 +45,15 @@ TEST(RepositoryNode, Parent) {
       "//group4/group5/group6/leaf3"
       ;
   RepositoryNodePtr root = test::GenerateRepositoryTreeFromString(hierarchy_tree);
-  RepositoryNodePtr group4  = root->GetNode(ResPath("//group4"));
-  RepositoryNodePtr leaf3  = root->GetNode(ResPath("//group4/group5/group6/leaf3"));
+  RepositoryNodePtr group4  = root->GetNode(Utf8ResPath("//group4"));
+  RepositoryNodePtr leaf3  = root->GetNode(Utf8ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(group4->HasAncestor(leaf3.get()));
-  RepositoryNodePtr group6  = root->GetNode(ResPath("//group4/group5/group6"));
+  RepositoryNodePtr group6  = root->GetNode(Utf8ResPath("//group4/group5/group6"));
   RepositoryNodePtr group6_2  = root->GetNodeParent(
-      ResPath("//group4/group5/group6/leaf3"));
+      Utf8ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(leaf3->parent() == group6_2.get());
   ASSERT_TRUE(leaf3->parent() == group6.get());
-  RepositoryNodePtr leaf3_2 = group6->GetNode(ResPath("leaf3"));
+  RepositoryNodePtr leaf3_2 = group6->GetNode(Utf8ResPath("leaf3"));
   ASSERT_TRUE(leaf3.get() == leaf3_2.get());
 }
 
@@ -66,13 +69,13 @@ TEST(RepositoryNode, RemoveChild) {
       "//group4/group5/group6/leaf3"
       ;
   RepositoryNodePtr root = test::GenerateRepositoryTreeFromString(hierarchy_tree);
-  RepositoryNodePtr group4  = root->GetNode(ResPath("//group4"));
-  RepositoryNodePtr leaf3  = root->GetNode(ResPath("//group4/group5/group6/leaf3"));
+  RepositoryNodePtr group4 = root->GetNode(Utf8ResPath("//group4"));
+  RepositoryNodePtr leaf3 = root->GetNode(Utf8ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(group4->HasAncestor(leaf3.get()));
-  RepositoryNodePtr group6  = root->GetNode(ResPath("//group4/group5/group6"));
+  RepositoryNodePtr group6 = root->GetNode(Utf8ResPath("//group4/group5/group6"));
   group6->RemoveChild(leaf3);
   ASSERT_FALSE(group4->HasAncestor(leaf3.get()));
-  leaf3  = root->GetNode(ResPath("//group4/group5/group6/leaf3"));
+  leaf3  = root->GetNode(Utf8ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(leaf3.get() == NULL);
 }
 }  // namespace resources {

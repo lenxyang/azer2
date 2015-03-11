@@ -20,7 +20,7 @@ RepositoryNodePtr GenerateRepositoryTreeFromString(const std::string& str) {
     path.insert(0, "//");
     StringType fullpath;
     ConvertPath(path.c_str(), &fullpath);
-    RepositoryNodePtr parent = root->GetNodeParent(fullpath);
+    RepositoryNodePtr parent = root->GetNodeParent(ResPath(fullpath));
     CHECK(parent.get());
     ::base::FilePath filepath(fullpath.substr(2));
     RepositoryNodePtr node(new RepositoryNode(filepath.BaseName().value()));

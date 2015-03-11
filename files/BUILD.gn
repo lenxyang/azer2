@@ -20,6 +20,8 @@ static_library("test_support") {
   sources = [
     "test/test_file_system.cc",
     "test/test_file_system.h",
+    "test/test_util.cc",
+    "test/test_util.h",
   ]
   deps = ["//azer"]
 }
