@@ -2,6 +2,6 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace azer {
-TEST(FilePath, Base) {
+TEST(ResPath, Base) {
 }
 }  // namespace azer
