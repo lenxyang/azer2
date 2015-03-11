@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "base/basictypes.h"
 #include "azer/base/string.h"
 #include "azer/files/res_path.h"
@@ -13,18 +15,35 @@ class AZER_EXPORT ResPathNormalizer {
 
   const StringType& normalized() const;
   bool success() const;
- private:
+
   enum State {
     kStart,
+    kRootSlashBegin,
+    kRootSlashEnd,
+    kComma,
+    kProtoSlahBegin,
+    kProtoSlahEnd,
+    kNameDot,
+    kDot1,
+    kDot2,
+    kSlash1,
+    kSlash2,
+    kString,
     kFailed,
     kFinished,
   };
-
-  std::vector<StringType> tokens_;
+  State state() const { return state_;}
+  void set_state(State state) { state_ = state;}
+ private:
+  void SetErrorMsg(const std::string& msg);
+  std::vector<StringType> dirs_;
   StringType raw_;
   StringType normalized_;
-  State state_;
+  StringType proto_;
+  StringType component_;
 
+  State state_;
+  std::string error_msg_;
   static CharType kValidCharInPath[];
   DISALLOW_COPY_AND_ASSIGN(ResPathNormalizer);
 };
