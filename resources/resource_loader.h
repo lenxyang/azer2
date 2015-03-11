@@ -8,6 +8,7 @@
 #include "azer/resources/file_system.h"
 
 namespace azer {
+namespace resources {
 
 class RepositoryNode;
 typedef scoped_refptr<RepositoryNode> RepositoryNodePtr;
@@ -37,4 +38,5 @@ class AZER_EXPORT ResourceLoaderManager {
  private:
   DISALLOW_COPY_AND_ASSIGN(ResourceLoaderManager);
 };
+}  // namespace resource
 }  // namespace azer

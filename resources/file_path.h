@@ -5,6 +5,7 @@
 #include "azer/base/string.h"
 
 namespace azer {
+namespace resources {
 class AZER_EXPORT ResFilePath {
  public:
   ResFilePath(const char* path);
@@ -29,4 +30,5 @@ class AZER_EXPORT ResFilePath {
 
 AZER_EXPORT bool SplitPackage(const StringType& full, StringType* path,
                                 StringType* package);
+}  // namespace resources
 }  // namespace azer

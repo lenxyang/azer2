@@ -5,6 +5,7 @@
 #include "base/strings/utf_string_conversions.h"
 
 namespace azer {
+namespace resources {
 const CharType ResFilePath::kSeperator = FILE_PATH_LITERAL('/');
 
 const StringType ResFilePath::kRootPath = FILE_PATH_LITERAL("//");
@@ -32,4 +33,6 @@ bool SplitPackage(const StringType& full, StringType* path,
   package->assign(full.substr(pos + 1));
   return true;
 }
+}  // namespace resources
 }  // namespace azer
+

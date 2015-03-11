@@ -1,9 +1,13 @@
 #include "azer/resources/native_file_system.h"
 
 #include "base/files/file_util.h"
+#include "base/files/file_path.h"
+
+#include "azer/resources/file_content.h"
 
 namespace azer {
-FileContent* NativeFileSystem::LoadFile(const ResFilePath& path) {
+namespace resources {
+FileContentPtr NativeFileSystem::LoadFile(const ResFilePath& path) {
   DCHECK(!path.empty());
   ::base::FilePath real_path = fs_root_.Append(path.value());
   int64 size = 0;
@@ -11,16 +15,14 @@ FileContent* NativeFileSystem::LoadFile(const ResFilePath& path) {
     return NULL;
   }
 
-  std::unique_ptr<char[]> content(new char[size - 1 + sizeof(FileContent)]);
-  if (size != ::base::ReadFile(real_path,
-                               content.get() + offsetof(FileContent, data),
-                               size)) {
+  FileContentPtr content(new FileContent(size));
+  int read = ::base::ReadFile(real_path, (char*)content->data(),
+                                content->capability());
+  if (size != read) {
     return NULL;
   }
 
-  FileContent* cptr = ((FileContent*)content.release());
-  cptr->length = size;
-  return cptr;
+  return content;
 }
 
 bool NativeFileSystem::IsPathExists(const ResFilePath& path) {
@@ -28,4 +30,5 @@ bool NativeFileSystem::IsPathExists(const ResFilePath& path) {
   ::base::FilePath real_path = fs_root_.Append(path.value());
   return base::PathExists(real_path);
 }
+}  // namespace resources
 }  // namespace azer

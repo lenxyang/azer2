@@ -1,26 +1,33 @@
-#pramga once
+#pragma once
 
 #include <memory>
 
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
+#include "base/memory/scoped_ptr.h"
+#include "azer/base/export.h"
 
 namespace azer {
 namespace resources {
 class AZER_EXPORT FileContent : public ::base::RefCounted<FileContent> {
  public:
   FileContent();
-  FileContent(const uint8* data, int32 size);
+  explicit FileContent(int64 capability);
+  FileContent(const uint8* data, int64 size);
+
+  ~FileContent();
 
   int64 length() const { return length_;}
+  int64 capability() const { return capability_;}
   uint8* data() { return data_.get();}
   const uint8* data() const { return data_.get();}
  private:
   int64 length_;
-  std::unique_ptr<uint8*> data_;
+  int64 capability_;
+  scoped_ptr<uint8[]> data_;
   DISALLOW_COPY_AND_ASSIGN(FileContent);
 };
 
-typedef scoped_ptr<FileContent> FileContentPtr;
+typedef scoped_refptr<FileContent> FileContentPtr;
 }  // namespace resources
 }  // namespace azer
