@@ -32,7 +32,8 @@ bool NativeFileSystem::IsPathExists(const FilePath& path) {
   return base::PathExists(real_path);
 }
 
-void FileSystem::ConvertFileSystem(FilePath path, ::base::FilePath* realpath) {
+void FileSystem::ConvertFileSystem(const FilePath& path,
+                                   ::base::FilePath* realpath) {
   CHECK(StartsWith(path.value(), FILE_PATH_LITERAL("//"), true));
   StringType realpathstr = root().value();
   realpathstr.append(FILE_PATH_LITERAL("/"));
