@@ -47,7 +47,4 @@ class AZER_EXPORT ResPath {
   StringType component_;
   
 };
-
-AZER_EXPORT bool SplitPackage(const StringType& full, StringType* path,
-                              StringType* package);
 }  // namespace azer

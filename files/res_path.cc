@@ -86,14 +86,5 @@ ResPath ResPath::parent() const {
     return ResPath("//");
   }
 }
-
-bool SplitPackage(const StringType& full, StringType* path,
-                  StringType* package) {
-  size_t pos = full.find_last_of(':');
-  if (pos < 0) return false;
-  path->assign(full.substr(0, pos));
-  package->assign(full.substr(pos + 1));
-  return true;
-}
 }  // namespace azer
 
