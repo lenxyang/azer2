@@ -76,15 +76,17 @@ void ResPath::Append(const StringType& str) {
 }
 
 ResPath ResPath::parent() const {
-  CHECK(StartsWith(filepath(), kRootPath, true));
-  CHECK(!EndsWith(filepath(), kSeperatorStr, true));
-  StringType pathstr = filepath();
+  CHECK(!IsRoot());
+  StringType pathstr = filepath().substr();
   std::size_t pos = pathstr.rfind(kSeperator);
   if (pos != StringType::npos) {
-    return ResPath(pathstr.substr(0, pathstr.length() - pos));
+    return ResPath(filepath().substr(0, pathstr.length() - pos));
   } else {
     return ResPath("//");
   }
+}
+
+void ResPath::NormalizePath() {
 }
 }  // namespace azer
 
