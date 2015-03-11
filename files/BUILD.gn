@@ -32,6 +32,7 @@ source_set("unittests") {
   sources = [
     "file_system_tests.cc",
     "res_path_tests.cc",
+    "res_path_normalizer_tests.cc",
   ]
   visibility = ["//azer:unittests"]
   deps = [
