@@ -2,7 +2,7 @@
 
 #include "base/files/file_util.h"
 #include "base/files/file_path.h"
-
+#include "base/strings/string_util.h"
 #include "azer/files/file_content.h"
 
 namespace azer {
@@ -25,20 +25,20 @@ FileContentPtr NativeFileSystem::LoadFile(const FilePath& path) {
   return content;
 }
 
-bool NativeFileSystem::IsPathExists(const FilePath& path) {
+bool NativeFileSystem::IsPathExists(const azer::FilePath& path) {
   DCHECK(!path.empty());
   ::base::FilePath real_path;
-  ConvertFileSystem(path, &realpath);
+  this->ConvertFileSystem(path, &real_path);
   return base::PathExists(real_path);
 }
 
-void FileSystem::ConvertFileSystem(const FilePath& path,
-                                   ::base::FilePath* realpath) {
+void NativeFileSystem::ConvertFileSystem(const azer::FilePath& path,
+                                         ::base::FilePath* realpath) {
   CHECK(StartsWith(path.value(), FILE_PATH_LITERAL("//"), true));
   StringType realpathstr = root().value();
   realpathstr.append(FILE_PATH_LITERAL("/"));
-  realpathstr.append(path.substr(2));
-  *realpath = realpathstr;
+  realpathstr.append(path.path().substr(2));
+  *realpath = ::base::FilePath(realpathstr);
 }
 }  // namespace files
 }  // namespace azer

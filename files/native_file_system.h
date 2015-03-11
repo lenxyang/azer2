@@ -1,5 +1,6 @@
 #pragma once
 
+#include "azer/files/file_path.h"
 #include "azer/files/file_system.h"
 
 namespace azer {
@@ -12,10 +13,10 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
 
   ~NativeFileSystem() override {}
 
-  FileContentPtr LoadFile(const FilePath& path) override;
-  bool IsPathExists(const FilePath& path) override;
+  FileContentPtr LoadFile(const azer::FilePath& path) override;
+  bool IsPathExists(const azer::FilePath& path) override;
  private:
-  void ConvertFileSystem(const FilePath& path, ::base::FilePath) override;
+  void ConvertFileSystem(const azer::FilePath& path, ::base::FilePath) override;
   DISALLOW_COPY_AND_ASSIGN(NativeFileSystem);
 };
 }  // namespace files
