@@ -40,6 +40,7 @@ class AZER_EXPORT ResPathNormalizer {
   const std::vector<StringType>& dirs() const { return dirs_;}
  private:
   void SetErrorMsg(const std::string& msg);
+  bool HandleToken(const StringType& token);
   std::vector<StringType> dirs_;
   StringType raw_;
   StringType normalized_;
