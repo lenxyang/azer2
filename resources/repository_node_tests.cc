@@ -4,6 +4,7 @@
 #include "azer/resources/test/test_util.h"
 
 namespace azer {
+namespace resources {
 
 TEST(RepositoryNode, AddChildAndRemove) {
   RepositoryNodePtr root(new RepositoryNode(FILE_PATH_LITERAL("/")));
@@ -79,5 +80,5 @@ TEST(RepositoryNode, RemoveChild) {
       AZER_LITERAL("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(leaf3.get() == NULL);
 }
-
+}  // namespace resources {
 }  // namespace azer

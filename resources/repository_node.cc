@@ -8,6 +8,8 @@
 #include "base/strings/stringprintf.h"
 
 namespace azer {
+namespace resources {
+
 RepositoryNode::RepositoryNode(const StringType& name) 
     : name_(name)
     , parent_(NULL) {
@@ -168,4 +170,5 @@ std::string RepositoryNode::PrintHierarchy(int ident) {
   }
   return ss.str();
 }
+}  // namespace resources
 }  // namespace azer

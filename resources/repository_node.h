@@ -8,6 +8,7 @@
 #include "azer/base/resource.h"
 
 namespace azer {
+namespace resources {
 
 class RepositoryNode;
 typedef scoped_refptr<RepositoryNode> RepositoryNodePtr;
@@ -56,4 +57,5 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   std::map<StringType, ResourcePtr> resource_dict_;
   DISALLOW_COPY_AND_ASSIGN(RepositoryNode);
 };
+}  // namespace resources
 }  // namespace azer
