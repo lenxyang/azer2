@@ -32,6 +32,7 @@ class AZER_EXPORT ResPath {
   bool Append(const ResPath& str);
   void Normalize();
   bool empty() const { return fullpath_.empty();}
+  void clear();
 
   const StringType& fullpath() const { return fullpath_;}
   const StringType& filepath() const { return file_path_;}

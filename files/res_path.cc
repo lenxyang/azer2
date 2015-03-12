@@ -55,6 +55,14 @@ ResPath::ResPath(const ResPath& path, const StringType& component) {
   OnPathChanged(this->fullpath());
 }
 
+void ResPath::clear() {
+  fullpath_ = AZER_LITERAL("");
+  file_path_ = AZER_LITERAL("");
+  component_ = AZER_LITERAL("");
+  type_ = kRelativePath;
+  return *this;
+}
+
 ResPath& ResPath::operator = (const ResPath& path) {
   fullpath_ = path.fullpath();
   file_path_ = path.filepath();

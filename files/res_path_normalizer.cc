@@ -185,4 +185,7 @@ void ResPathNormalizer::SetErrorMsg(const std::string& msg) {
   error_msg_ = msg;
   set_state(kFailed);
 }
+
+void ResPathNormalizer::Apply(ResPath* respath) {
+}
 }  // namespace azer
