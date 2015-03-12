@@ -14,14 +14,12 @@ class AZER_EXPORT ResPathTokenizer {
     kSuccess = 0,
     kError = 1,
     kNoTokens,
+    kContainInvalidChar,
   };
   int GetNext();
   const StringType& token() const { return current_;}
-
-  static CharType kValidCharInPath[];
  private:
-  bool ValidStringBeginChar(CharType cb) const;
-  bool ValidStringFollowingChar(CharType cb) const;
+  bool ValidStringChar(CharType cb) const;
   const CharType* index_;
   StringType current_;
   StringType raw_;

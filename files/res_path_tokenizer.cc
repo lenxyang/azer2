@@ -2,8 +2,6 @@
 
 
 namespace azer {
-CharType ResPathTokenizer::kValidCharInPath[] = FILE_PATH_LITERAL("_.");
-
 ResPathTokenizer::ResPathTokenizer(const StringType& string) 
     : raw_(string) {
   index_ = raw_.c_str();
@@ -19,12 +17,14 @@ int ResPathTokenizer::GetNext() {
     return kNoTokens;
   }
 
+  bool demils = false;
   current_.clear();
   while (c) {
     switch (c) {
       case FILE_PATH_LITERAL(':'): 
       case FILE_PATH_LITERAL('/'): 
       case FILE_PATH_LITERAL('.'): 
+		demils = true;
         if (!current_.empty() && prev != c) {
           return kSuccess;
         } else {
@@ -32,7 +32,11 @@ int ResPathTokenizer::GetNext() {
         }
         break;
       default:
+        if (demils) return kSuccess;
         current_.push_back(c);
+        if (!ValidStringChar(c)) {
+          return kContainInvalidChar;
+        }
         break;
     }
     prev = c;
@@ -42,7 +46,7 @@ int ResPathTokenizer::GetNext() {
   return kSuccess;
 }
 
-bool ResPathTokenizer::ValidStringBeginChar(CharType cb) const {
+bool ResPathTokenizer::ValidStringChar(CharType cb) const {
   if (cb >= FILE_PATH_LITERAL('a') && cb <= FILE_PATH_LITERAL('z')) {
     return true;
   }
@@ -51,18 +55,12 @@ bool ResPathTokenizer::ValidStringBeginChar(CharType cb) const {
     return true;
   }
 
-  for (size_t i = 0; i < arraysize(kValidCharInPath); ++i) {
-    if (kValidCharInPath[i] == cb) { return true;}
-  }
-
-  return false;
-}
-
-
-bool ResPathTokenizer::ValidStringFollowingChar(CharType cb) const {
   if (cb >= FILE_PATH_LITERAL('0') && cb <= FILE_PATH_LITERAL('9')) {
     return true;
   }
-  return ValidStringBeginChar(cb);
+
+  if (cb == '_') { return true;}
+  return false;
 }
+
 }  // namespace azer
