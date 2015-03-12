@@ -14,8 +14,8 @@ ResPathTokenizer::~ResPathTokenizer() {
 
 int ResPathTokenizer::GetNext() {
   CharType prev = FILE_PATH_LITERAL('\0');
-  const CharType c = *index_;
-  if (*t == FILE_PATH_LITERAL('\0')) {
+  CharType c = *index_;
+  if (c == FILE_PATH_LITERAL('\0')) {
     return kNoTokens;
   }
 
@@ -25,7 +25,7 @@ int ResPathTokenizer::GetNext() {
       case FILE_PATH_LITERAL(':'): 
       case FILE_PATH_LITERAL('/'): 
       case FILE_PATH_LITERAL('.'): 
-        if (!current_.empty()) {
+        if (!current_.empty() && prev != c) {
           return kSuccess;
         } else {
           current_.push_back(c);
@@ -33,17 +33,17 @@ int ResPathTokenizer::GetNext() {
         }
         break;
       default:
-        current_.push_back(FILE_PATH_LITERAL(*t));
+        current_.push_back(c);
         break;
     }
     prev = c;
-    c = *index++;
+    c = *index_++;
   }
 
   return kSuccess;
 }
 
-bool ResPathTokenizer::ValidStringBeginChar(CharType cb) {
+bool ResPathTokenizer::ValidStringBeginChar(CharType cb) const {
   if (cb >= FILE_PATH_LITERAL('a') && cb <= FILE_PATH_LITERAL('z')) {
     return true;
   }
@@ -60,7 +60,7 @@ bool ResPathTokenizer::ValidStringBeginChar(CharType cb) {
 }
 
 
-bool ResPathTokenizer::ValidStringFollowingChar(CharType cb) {
+bool ResPathTokenizer::ValidStringFollowingChar(CharType cb) const {
   if (cb >= FILE_PATH_LITERAL('0') && cb <= FILE_PATH_LITERAL('9')) {
     return true;
   }
