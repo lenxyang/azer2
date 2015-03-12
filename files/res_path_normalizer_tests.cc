@@ -11,9 +11,6 @@ TEST(ResPathNormalizer, Base) {
     AZER_LITERAL("//"),
     AZER_LITERAL("//a/b/c"),
     AZER_LITERAL("//a/b/c:efg"),
-    AZER_LITERAL("//a/./c:efg"),
-    AZER_LITERAL("//a/..//c:efg"),
-    AZER_LITERAL("//a/../c:efg"),
     AZER_LITERAL("rpc://ccc"),
   };
 
@@ -24,7 +21,35 @@ TEST(ResPathNormalizer, Base) {
   }
 }
 
-TEST(ResPathNormalizer, Dot) {
+TEST(ResPathNormalizer, FileNameWithDot) {
+  StringType cases[] = {
+    AZER_LITERAL("/B/.c/d"),
+    AZER_LITERAL("/B/..c/d"),
+    AZER_LITERAL("/B/...c/d"),
+    AZER_LITERAL("/B/....c/d"),
+    AZER_LITERAL("/B/.c.exe/d"),
+    AZER_LITERAL("/B/a.b.c.d.e.f.exe/d"),
+  };
+
+  for (size_t i = 0; i < arraysize(cases); ++i) {
+    ResPathNormalizer normalizer(cases[i]);
+    normalizer.Normalize();
+    ASSERT_TRUE(normalizer.success());
+  }
+}
+
+TEST(ResPathNormalizer, DirDot) {
+  StringType cases[] = {
+    AZER_LITERAL("//a/./c:efg"),
+    AZER_LITERAL("//a/..//c:efg"),
+    AZER_LITERAL("//a/../c:efg"),
+  };
+
+  for (size_t i = 0; i < arraysize(cases); ++i) {
+    ResPathNormalizer normalizer(cases[i]);
+    normalizer.Normalize();
+    ASSERT_TRUE(normalizer.success());
+  }
 }
 
 TEST(ResPathNormalizer, ProtoPath) {
@@ -39,10 +64,8 @@ TEST(ResPathNormalizer, ProtoPath) {
 TEST(ResPathNormalizer, Failed) {
   StringType cases[] = {
     AZER_LITERAL("//a:b:c"),
-    AZER_LITERAL("//a/b:c"),
     AZER_LITERAL("//a/b/:c"),
     AZER_LITERAL("//a:http://"),
-    AZER_LITERAL("/B/..c/d"),
     AZER_LITERAL("/B/.../d"),
     AZER_LITERAL("/B/c/d"),
     AZER_LITERAL("/B/c/d&"),

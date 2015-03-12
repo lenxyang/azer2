@@ -22,6 +22,8 @@ bool ValidStringBeginChar(CharType cb) {
   for (size_t i = 0; i < arraysize(ResPathNormalizer::kValidCharInPath); ++i) {
     if (ResPathNormalizer::kValidCharInPath[i] == cb) { return true;}
   }
+
+  return false;
 }
 
 bool ValidStringFollowingChar(CharType cb) {
@@ -90,8 +92,15 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
         break;
     }
   } else if (token == AZER_LITERAL(":")) {
-    set_state(kComma);
-    return true;
+    switch (cur_state) {
+      case kStart:
+      case kString:
+        set_state(kComma);
+        return true;
+      default:
+        SetErrorMsg("invalid component.");
+        return false;
+    }
   } else if (token == AZER_LITERAL(".")) {
     switch (cur_state) {
       case kComma:
