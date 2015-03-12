@@ -60,7 +60,6 @@ void ResPath::clear() {
   file_path_ = AZER_LITERAL("");
   component_ = AZER_LITERAL("");
   type_ = kRelativePath;
-  return *this;
 }
 
 ResPath& ResPath::operator = (const ResPath& path) {
