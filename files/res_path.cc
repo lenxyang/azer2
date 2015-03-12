@@ -37,9 +37,8 @@ ResPath::ResPath(const StringType& fullpath)
   OnPathChanged(this->fullpath());
 }
 
-ResPath::ResPath(const ResPath& path)
-    : fullpath_(path.fullpath()){
-  OnPathChanged(this->fullpath());
+ResPath::ResPath(const ResPath& path) {
+  *this = path;
 }
 
 ResPath::ResPath(const StringType& path, const StringType& component) {
@@ -58,7 +57,9 @@ ResPath::ResPath(const ResPath& path, const StringType& component) {
 
 ResPath& ResPath::operator = (const ResPath& path) {
   fullpath_ = path.fullpath();
-  OnPathChanged(this->fullpath());
+  file_path_ = path.filepath();
+  component_ = path.component();
+  type_ = path.type();
   return *this;
 }
 

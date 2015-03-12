@@ -14,6 +14,7 @@ class AZER_EXPORT ResPathNormalizer {
   void Normalize();
 
   const StringType& normalized() const;
+  void Apply(ResPath* respath);
   bool success() const;
 
   enum State {
@@ -38,6 +39,9 @@ class AZER_EXPORT ResPathNormalizer {
   const StringType& component() const { return component_;}
   const StringType& proto() const { return proto_;}
   const std::vector<StringType>& dirs() const { return dirs_;}
+
+  static CharType kValidCharInPath[];
+  static CharType kValidDelimsInPath[];
  private:
   void SetErrorMsg(const std::string& msg);
   bool HandleToken(const StringType& token);
@@ -49,7 +53,6 @@ class AZER_EXPORT ResPathNormalizer {
 
   State state_;
   std::string error_msg_;
-  static CharType kValidCharInPath[];
   DISALLOW_COPY_AND_ASSIGN(ResPathNormalizer);
 };
 }  // namespace azer

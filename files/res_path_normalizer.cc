@@ -5,9 +5,41 @@
 #include "base/strings/string_tokenizer.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
+#include "azer/base/string.h"
 
 namespace azer {
-CharType ResPathNormalizer::kValidCharInPath[] = FILE_PATH_LITERAL("_:/.");
+CharType ResPathNormalizer::kValidCharInPath[] = FILE_PATH_LITERAL("_.");
+CharType ResPathNormalizer::kValidDelimsInPath[] = FILE_PATH_LITERAL(":/");
+
+namespace {
+bool ValidStringBeginChar(CharType cb) {
+  if (cb >= FILE_PATH_LITERAL('a') && cb <= FILE_PATH_LITERAL('z')) {
+    return true;
+  }
+  if (cb >= FILE_PATH_LITERAL('A') && cb <= FILE_PATH_LITERAL('Z')) {
+    return true;
+  }
+  for (size_t i = 0; i < arrarysize(ResPathNormalizer::kValidCharInPath); ++i) {
+    if (ResPathNormalizer::kValidCharInPath[i] == cb) { return true;}
+  }
+}
+
+bool ValidStringFollowingChar(CharType cb) {
+  if (cb >= FILE_PATH_LITERAL('0') && cb <= FILE_PATH_LITERAL('9')) {
+    return true;
+  }
+  return ValidStringBeginChar(cb);
+}
+
+bool ValidString(const StringType& str) {
+  auto iter = str.begin();
+  if (!ValidStringBeginChar(*iter++)) { return false; }
+  for (; iter != str.end(); ++iter) {
+    if (!ValidStringFollowingChar(*iter)) { return false; }
+  }
+  return true;
+}
+}  // namespace
 
 ResPathNormalizer::ResPathNormalizer(const StringType& path)
     : raw_(path)
@@ -87,6 +119,11 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
         return false;
     }
   } else {
+    if (!ValidString(token)) {
+      SetErrorMsg("invalid format string token.");
+      return false;
+    }
+    set_state(kString);
     switch (cur_state) {
       case kStart:
       case kProtoSlahEnd:
@@ -94,18 +131,15 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
       case kSlash1:
       case kSlash2:
         dirs_.push_back(token);
-        set_state(kString);
         break;
       case kDot1:
       case kDot2:
         dirs_.back().append(token);
-        set_state(kString);
         break;
       case kNameDot:
         component_.append(token);
         break;
       case kComma:
-        set_state(kString);
         if (component_.empty()) {
           state_ = kSlash1;
           component_ = token;
@@ -126,7 +160,7 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
 void ResPathNormalizer::Normalize() {
   typedef ::base::StringTokenizerT<StringType, StringType::const_iterator>
       StringTokenizer;
-  StringTokenizer t(raw_, AZER_LITERAL("/:"));
+  StringTokenizer t(raw_, kValidDelimsInPath);
   t.set_options(StringTokenizer::RETURN_DELIMS);
   while (t.GetNext()) {
     const StringType& token = t.token();

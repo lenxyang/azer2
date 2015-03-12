@@ -57,5 +57,7 @@ class AZER_EXPORT ResPath {
   StringType file_path_;
   StringType component_;
   PathType type_;
+
+  friend class ResPathNormalizer;
 };
 }  // namespace azer
