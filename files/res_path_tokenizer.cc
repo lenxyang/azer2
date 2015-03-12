@@ -13,9 +13,9 @@ ResPathTokenizer::~ResPathTokenizer() {
 }
 
 int ResPathTokenizer::GetNext() {
-  CharType prev = '\0';
+  CharType prev = FILE_PATH_LITERAL('\0');
   const CharType c = *index_;
-  if (*t == '\0') {
+  if (*t == FILE_PATH_LITERAL('\0')) {
     return kNoTokens;
   }
 

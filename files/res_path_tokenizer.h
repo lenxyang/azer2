@@ -24,7 +24,7 @@ class AZER_EXPORT ResPathTokenizer {
   bool ValidStringFollowingChar(CharType cb) const;
   const CharType* index_;
   StringType current_;
-  ResPathTokenizer raw_;
+  StringType raw_;
   DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
 };
 }  // namespace azer
