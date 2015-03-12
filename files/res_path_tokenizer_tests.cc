@@ -37,4 +37,32 @@ TEST(ResPathTokenizer, Base) {
     ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kNoTokens);
   }
 }
+
+TEST(ResPathTokenizer, InvalidChar) {
+  StringType cases[] = {
+    RESL("-"),
+  };
+
+  const int kMaxTokens = 100;
+  int expect_states[][kMaxTokens] = {
+    {ResPathTokenizer::kContainInvalidChar, ResPathTokenizer::kNoTokens,},
+  };
+
+  StringType expect_tokens[][kMaxTokens] = {
+    {RESL("-"),  RESL("\0"), }
+  };
+
+  for (size_t i = 0; i < arraysize(cases); ++i) {
+    ResPathTokenizer tokenizer(cases[i]);
+    int* expect_state = expect_states[i];
+    StringType* expect_token = expect_tokens[i];
+    while (*expect_token != RESL("\0")) {
+      ASSERT_EQ(tokenizer.GetNext(), *expect_state);
+      ASSERT_EQ(tokenizer.token(), *expect_token);
+      expect_token++;
+      expect_state++;
+    }
+    ASSERT_EQ(tokenizer.GetNext(), *expect_state);
+  }
+}
 }  // namespace azer

@@ -35,6 +35,7 @@ int ResPathTokenizer::GetNext() {
         if (demils) return kSuccess;
         current_.push_back(c);
         if (!ValidStringChar(c)) {
+          ++index_;
           return kContainInvalidChar;
         }
         break;
