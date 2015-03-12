@@ -5,8 +5,8 @@ namespace azer {
 CharType ResPathTokenizer::kValidCharInPath[] = FILE_PATH_LITERAL("_.");
 
 ResPathTokenizer::ResPathTokenizer(const StringType& string) 
-    : raw_(string)
-    , index_(raw_.c_str()) {
+    : raw_(string) {
+  index_ = raw_.c_str();
 }
 
 ResPathTokenizer::~ResPathTokenizer() {
@@ -37,7 +37,7 @@ int ResPathTokenizer::GetNext() {
         break;
     }
     prev = c;
-    c = *index_++;
+    c = *++index_;
   }
 
   return kSuccess;

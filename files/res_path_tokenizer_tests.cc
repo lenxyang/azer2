@@ -3,7 +3,7 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace azer {
-TEST(ResPathNormalizer, Base) {
+TEST(ResPathTokenizer, Base) {
   StringType cases[] = {
     AZER_LITERAL("c////cc"),
     AZER_LITERAL("//c////cc"),
