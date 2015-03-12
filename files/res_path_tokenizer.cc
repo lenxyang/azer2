@@ -14,6 +14,7 @@ int ResPathTokenizer::GetNext() {
   CharType prev = FILE_PATH_LITERAL('\0');
   CharType c = *index_;
   if (c == FILE_PATH_LITERAL('\0')) {
+    token_type_ = kUnkownToken;
     return kNoTokens;
   }
 
@@ -24,7 +25,8 @@ int ResPathTokenizer::GetNext() {
       case FILE_PATH_LITERAL(':'): 
       case FILE_PATH_LITERAL('/'): 
       case FILE_PATH_LITERAL('.'): 
-		demils = true;
+        demils = true;
+        token_type_ = static_cast<TokenType>(c);
         if (!current_.empty() && prev != c) {
           return kSuccess;
         } else {
@@ -33,6 +35,7 @@ int ResPathTokenizer::GetNext() {
         break;
       default:
         if (demils) return kSuccess;
+        token_type_ = kStringToken;
         current_.push_back(c);
         if (!ValidStringChar(c)) {
           ++index_;
