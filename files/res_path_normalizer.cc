@@ -57,6 +57,13 @@ bool ResPathNormalizer::success() const {
   return (state_ == kFinished);
 }
 
+bool ResPathNormalizer::HandleStartState(const StringType& token) {
+  DCHECK_EQ(state(), kStart);
+  if (token == AZER_LITERAL("/")) {
+  } else if (token == AZER_LITERAL("/")) {
+  } else if (token == 
+}
+
 bool ResPathNormalizer::HandleToken(const StringType& token) {
   State cur_state = state();
   if (token == AZER_LITERAL("/")) {
@@ -88,6 +95,8 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
           dirs_.clear();
         }
         break;
+      case kDot:
+        break;
       default:
         break;
     }
@@ -95,7 +104,7 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
     switch (cur_state) {
       case kStart:
       case kString:
-        set_state(kComma);
+        set_state(kComponent);
         return true;
       default:
         SetErrorMsg("invalid component.");
@@ -103,28 +112,26 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
     }
   } else if (token == AZER_LITERAL(".")) {
     switch (cur_state) {
-      case kComma:
-        set_state(kNameDot);
-        component_.append(AZER_LITERAL("."));
-        break;
-      case kNameDot:
-        component_.append(AZER_LITERAL("."));
-        break;
       case kProtoSlahEnd:
       case kSlash1:
       case kSlash2:
+        dir_.push_back(AZER_LITERAL(""));
         break;
       case kStart:
-        set_state(kDot1);
+        set_state(kDot);
+        set_state(kDot);
+        dir_.push_back(AZER_LITERAL(""));
         break;
-      case kDot1:
-        set_state(kDot2);
+      case kComponent:
+        set_state(kComponent);
+        component_.push_back(FILE_PATH_LITERAL("."));
         break;
-      case kDot2:
-        set_state(kDot2);
+      case kString:
+        set_state(kString);
+        dirs_.back().push_back(FILE_PATH_LITERAL("."));
         break;
       default:
-        CHECK(false);
+        SetErrorMsg("multiple component specified.");
         return false;
     }
   } else {
@@ -143,9 +150,10 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
         break;
       case kDot1:
       case kDot2:
+      case kDotMore:
         dirs_.back().append(token);
         break;
-      case kNameDot:
+      case kComponent:
         component_.append(token);
         break;
       case kComma:
@@ -158,7 +166,7 @@ bool ResPathNormalizer::HandleToken(const StringType& token) {
           return false;
         }
       default:
-        CHECK(false);
+        SetErrorMsg("invalid path.");
         return false;
     }
   }

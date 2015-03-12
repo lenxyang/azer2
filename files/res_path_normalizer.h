@@ -21,15 +21,13 @@ class AZER_EXPORT ResPathNormalizer {
     kStart,
     kRootSlashBegin,
     kRootSlashEnd,
-    kComma,
     kProtoSlahBegin,
     kProtoSlahEnd,
-    kNameDot,
-    kDot1,
-    kDot2,
+    kDot,
     kSlash1,
     kSlash2,
     kString,
+    kComponent,
     kFailed,
     kFinished,
   };
@@ -45,6 +43,8 @@ class AZER_EXPORT ResPathNormalizer {
  private:
   void SetErrorMsg(const std::string& msg);
   bool HandleToken(const StringType& token);
+
+  bool HandleStartState(const StringType& token);
   std::vector<StringType> dirs_;
   StringType raw_;
   StringType normalized_;
