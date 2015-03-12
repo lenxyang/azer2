@@ -52,7 +52,7 @@ TEST(ResPathNormalizer, Failed) {
   for (size_t i = 0; i < arraysize(cases); ++i) {
     ResPathNormalizer normalizer(cases[i]);
     normalizer.Normalize();
-    ASSERT_FALSE(normalizer.success());
+    ASSERT_FALSE(normalizer.success()) << cases[i];
   }
 }
 }  // namespace azer

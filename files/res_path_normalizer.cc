@@ -19,7 +19,7 @@ bool ValidStringBeginChar(CharType cb) {
   if (cb >= FILE_PATH_LITERAL('A') && cb <= FILE_PATH_LITERAL('Z')) {
     return true;
   }
-  for (size_t i = 0; i < arrarysize(ResPathNormalizer::kValidCharInPath); ++i) {
+  for (size_t i = 0; i < arraysize(ResPathNormalizer::kValidCharInPath); ++i) {
     if (ResPathNormalizer::kValidCharInPath[i] == cb) { return true;}
   }
 }
