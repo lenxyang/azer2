@@ -19,15 +19,6 @@ class AZER_EXPORT ResPathNormalizer {
 
   enum State {
     kStart,
-    kRootSlashBegin,
-    kRootSlashEnd,
-    kProtoSlahBegin,
-    kProtoSlahEnd,
-    kDot,
-    kSlash1,
-    kSlash2,
-    kString,
-    kComponent,
     kFailed,
     kFinished,
   };
@@ -44,7 +35,6 @@ class AZER_EXPORT ResPathNormalizer {
   void SetErrorMsg(const std::string& msg);
   bool HandleToken(const StringType& token);
 
-  bool HandleStartState(const StringType& token);
   std::vector<StringType> dirs_;
   StringType raw_;
   StringType normalized_;

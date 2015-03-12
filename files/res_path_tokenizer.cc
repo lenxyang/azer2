@@ -1,4 +1,4 @@
-#include "azer/files/path_tokenizer.h"
+#include "azer/files/res_path_tokenizer.h"
 
 
 namespace azer {
