@@ -29,7 +29,6 @@ int ResPathTokenizer::GetNext() {
           return kSuccess;
         } else {
           current_.push_back(c);
-          return kSuccess;
         }
         break;
       default:
