@@ -18,20 +18,21 @@ TEST(ResPathTokenizer, Base) {
   };
 
   const int kMaxTokens = 100;
-  int expect_tokens_num[] = {3, 4};
   StringType expect_tokens[][kMaxTokens] = {
-    {RESL("."), RESL(":"), RESL("//"), RESL(":"), RESL(".")},
-    {RESL("c"), RESL("////"), RESL("cc")},
-    {RESL("c"), RESL("/"), RESL("b"), RESL("."), RESL(":"), RESL("ef"), RESL("...")},
-    {RESL("//"), RESL("c"), RESL("////"), RESL("cc")},
+    {RESL("."), RESL(":"), RESL("//"), RESL(":"), RESL("."), RESL("\0")},
+    {RESL("c"), RESL("////"), RESL("cc"), RESL("\0")},
+    {RESL("c"), RESL("/"), RESL("b"), RESL("."), RESL(":"), RESL("ef"), 
+     RESL("..."), RESL("\0")},
+    {RESL("//"), RESL("c"), RESL("////"), RESL("cc"), RESL("\0")},
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
     ResPathTokenizer tokenizer(cases[i]);
-    int expect_token_num = expect_tokens_num[i];
-    for (size_t token_index = 0; token_index < expect_token_num; ++token_index) {
+    StringType* expect_token = expect_tokens[i];
+    while (*expect_token != RESL("\0")) {
       ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kSuccess);
-      ASSERT_EQ(tokenizer.token(), expect_tokens[i][token_index]);
+      ASSERT_EQ(tokenizer.token(), *expect_token);
+      expect_token++;
     }
     ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kNoTokens);
   }
