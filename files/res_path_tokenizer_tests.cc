@@ -67,5 +67,36 @@ TEST(ResPathSplitter, InvalidChar) {
   }
 }
 
+TEST(ResPathTokenizer, Base) {
+  StringType cases[] = {
+    RESL("//:."),
+    RESL("c////cc"),
+    RESL("/b:ef..."),
+    RESL("/b:...ef..."),
+    RESL("/b:.a.ef...b.c"),
+    RESL("//c////cc"),
+  };
+
+  const int kMaxTokens = 100;
+  StringType expect_tokens[][kMaxTokens] = {
+    {RESL("//"), RESL(":."), RESL("\0")},
+    {RESL("c"), RESL("////"), RESL("cc"), RESL("\0")},
+    {RESL("/"), RESL("b"), RESL(":"), RESL("ef..."), RESL("\0")},
+    {RESL("/"), RESL("b"), RESL(":"), RESL("...ef..."), RESL("\0")},
+    {RESL("/"), RESL("b"), RESL(":"), RESL(".a.ef...b.c"), RESL("\0")},
+    {RESL("//"), RESL("c"), RESL("////"), RESL("cc"), RESL("\0")},
+  };
+
+  for (size_t i = 0; i < arraysize(cases); ++i) {
+    ResPathTokenizer splitter(cases[i]);
+    StringType* expect_token = expect_tokens[i];
+    while (*expect_token != RESL("\0")) {
+      ASSERT_EQ(splitter.GetNext(), ResPathTokenizer::kSuccess);
+      ASSERT_EQ(splitter.token(), *expect_token);
+      expect_token++;
+    }
+    ASSERT_EQ(splitter.GetNext(), ResPathTokenizer::kNoTokens);
+  }
+}
 }  // namespace files
 }  // namespace azer

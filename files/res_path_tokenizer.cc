@@ -94,6 +94,9 @@ int ResPathTokenizer::GetNext() {
     if (token_.empty()) {
       token_ = splitter_.token();
       type_ = splitter_.token_type();
+      if (type_ == ResPathSplitter::kSlashToken) {
+        return kSuccess;
+      }
     } else {
       next_token_ = splitter_.token();
       next_type_ = splitter_.token_type();
