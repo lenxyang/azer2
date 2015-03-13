@@ -48,6 +48,9 @@ class AZER_EXPORT ResPathTokenizer {
  private:
   ResPathSplitter splitter_;
   StringType token_;
+
+  // restore the next result of ResPathSplitter
+  int next_result_;
   ResPathSplitter::Type type_;
   StringType next_token_;
   ResPathSplitter::Type next_type_;

@@ -69,49 +69,56 @@ bool ResPathSplitter::ValidStringChar(CharType cb) const {
 }
 
 ResPathTokenizer::ResPathTokenizer(const StringType& string) 
-    : splitter_(string) {
+    : splitter_(string)
+    , next_result_(kSuccess) {
 }
 
 ResPathTokenizer::~ResPathTokenizer() {
 }
 
 int ResPathTokenizer::GetNext() {
+  if (next_result_ != kSuccess) { return next_result_;}
   token_.clear();
-  while (true) {
-    if (!next_token_.empty()) {
-      token_ = next_token_;
-      type_ = next_type_;
-      next_token_.clear();
-    } else {
-      int ret = splitter_.GetNext();
-      if (ret == ResPathTokenizer::kNoTokens && !token_.empty()) { 
-        return kSuccess;
-      } else if (ret != ResPathTokenizer::kSuccess) {
-        return ret;
-      }
+  if (!next_token_.empty()) {
+    token_ = next_token_;
+    type_ = next_type_;
+    next_token_.clear();
+  } else {
+    int ret = splitter_.GetNext();
+    if (ret == ResPathTokenizer::kNoTokens && !token_.empty()) { 
+      return kSuccess;
+    } else if (ret != ResPathTokenizer::kSuccess) {
+      return ret;
     }
 
-    if (token_.empty()) {
-      token_ = splitter_.token();
-      type_ = splitter_.token_type();
-      if (type_ == ResPathSplitter::kSlashToken) {
-        return kSuccess;
-      }
-    } else {
+    token_ = splitter_.token();
+    type_ = splitter_.token_type();
+    if (type_ == ResPathSplitter::kSlashToken) {
+      return kSuccess;
+    }
+  }
+
+  while (true) {
+    int ret = splitter_.GetNext();
+    if (ret == ResPathTokenizer::kSuccess) {
       next_token_ = splitter_.token();
       next_type_ = splitter_.token_type();
-      if (type_ == ResPathSplitter::kCommaToken
-          && next_type_ == ResPathSplitter::kSlashToken) {
-        return kInvalidComponent;
-      } else if (next_type_ == ResPathSplitter::kSlashToken) {
-        return kSuccess;
-      } else if (next_type_ == ResPathSplitter::kCommaToken) {
-        return kSuccess;
-      } else {
-        token_.append(next_token_);
-		next_token_.clear();
-        type_ = next_type_;
-      }
+    } else {
+      next_result_ = ret;
+      return kSuccess;
+    }
+
+    if (type_ == ResPathSplitter::kCommaToken
+        && next_type_ == ResPathSplitter::kSlashToken) {
+      return kInvalidComponent;
+    } else if (next_type_ == ResPathSplitter::kSlashToken) {
+      return kSuccess;
+    } else if (next_type_ == ResPathSplitter::kCommaToken) {
+      return kSuccess;
+    } else {
+      token_.append(next_token_);
+      next_token_.clear();
+      type_ = next_type_;
     }
   }
   
