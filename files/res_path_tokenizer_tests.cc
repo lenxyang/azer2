@@ -9,6 +9,7 @@
 #define RESL AZER_LITERAL 
 
 namespace azer {
+namespace files {
 TEST(ResPathSplitter, Base) {
   StringType cases[] = {
     RESL(".://:."),
@@ -27,14 +28,14 @@ TEST(ResPathSplitter, Base) {
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathSplitter tokenizer(cases[i]);
+    ResPathSplitter splitter(cases[i]);
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {
-      ASSERT_EQ(tokenizer.GetNext(), ResPathSplitter::kSuccess);
-      ASSERT_EQ(tokenizer.token(), *expect_token);
+      ASSERT_EQ(splitter.GetNext(), ResPathTokenizer::kSuccess);
+      ASSERT_EQ(splitter.token(), *expect_token);
       expect_token++;
     }
-    ASSERT_EQ(tokenizer.GetNext(), ResPathSplitter::kNoTokens);
+    ASSERT_EQ(splitter.GetNext(), ResPathTokenizer::kNoTokens);
   }
 }
 
@@ -45,7 +46,7 @@ TEST(ResPathSplitter, InvalidChar) {
 
   const int kMaxTokens = 100;
   int expect_states[][kMaxTokens] = {
-    {ResPathSplitter::kContainInvalidChar, ResPathSplitter::kNoTokens,},
+    {ResPathTokenizer::kContainInvalidChar, ResPathTokenizer::kNoTokens,},
   };
 
   StringType expect_tokens[][kMaxTokens] = {
@@ -53,16 +54,18 @@ TEST(ResPathSplitter, InvalidChar) {
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathSplitter tokenizer(cases[i]);
+    ResPathSplitter splitter(cases[i]);
     int* expect_state = expect_states[i];
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {
-      ASSERT_EQ(tokenizer.GetNext(), *expect_state);
-      ASSERT_EQ(tokenizer.token(), *expect_token);
+      ASSERT_EQ(splitter.GetNext(), *expect_state);
+      ASSERT_EQ(splitter.token(), *expect_token);
       expect_token++;
       expect_state++;
     }
-    ASSERT_EQ(tokenizer.GetNext(), *expect_state);
+    ASSERT_EQ(splitter.GetNext(), *expect_state);
   }
 }
+
+}  // namespace files
 }  // namespace azer

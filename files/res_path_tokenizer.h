@@ -5,6 +5,7 @@
 #include "azer/base/string.h"
 
 namespace azer {
+namespace files {
 class AZER_EXPORT ResPathSplitter {
  public:
   explicit ResPathSplitter(const StringType& string);
@@ -18,12 +19,6 @@ class AZER_EXPORT ResPathSplitter {
     kStringToken,
   };
 
-  enum {
-    kSuccess = 0,
-    kError = 1,
-    kNoTokens,
-    kContainInvalidChar,
-  };
   int GetNext();
   const StringType& token() const { return current_;}
   Type token_type() const { return token_type_;}
@@ -40,10 +35,23 @@ class AZER_EXPORT ResPathTokenizer {
  public:
   explicit ResPathTokenizer(const StringType& string);
   ~ResPathTokenizer();
+
+  enum {
+    kSuccess = 0,
+    kError = 1,
+    kNoTokens,
+    kContainInvalidChar,
+    kInvalidComponent,
+  };
+  int GetNext();
+  const StringType& token() const { return token_;}
  private:
   ResPathSplitter splitter_;
   StringType token_;
   ResPathSplitter::Type type_;
+  StringType next_token_;
+  ResPathSplitter::Type next_type_;
   DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
 };
+}  // namespace files
 }  // namespace azer
