@@ -13,10 +13,10 @@ class AZER_EXPORT ResPathSplitter {
 
   enum Type {
     kUnkownToken = -1,
+    kStringToken = 1,
     kCommaToken = FILE_PATH_LITERAL(':'),
     kSlashToken = FILE_PATH_LITERAL('/'),
     kDotToken = FILE_PATH_LITERAL('.'),
-    kStringToken,
   };
 
   int GetNext();

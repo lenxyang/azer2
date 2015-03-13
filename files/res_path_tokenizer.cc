@@ -27,16 +27,16 @@ int ResPathSplitter::GetNext() {
       case FILE_PATH_LITERAL('/'): 
       case FILE_PATH_LITERAL('.'): 
         demils = true;
-        token_type_ = static_cast<Type>(c);
         if (!current_.empty() && prev != c) {
           return ResPathTokenizer::kSuccess;
         } else {
+		  token_type_ = static_cast<Type>(c);
           current_.push_back(c);
         }
         break;
       default:
         if (demils) return ResPathTokenizer::kSuccess;
-        token_type_ = kStringToken;
+		token_type_ = kStringToken;
         current_.push_back(c);
         if (!ValidStringChar(c)) {
           ++index_;
@@ -76,19 +76,19 @@ ResPathTokenizer::~ResPathTokenizer() {
 }
 
 int ResPathTokenizer::GetNext() {
-  if (!next_token_.empty()) {
-    token_ = next_token_;
-    next_token_.clear();
-    return kSuccess;
-  }
-
   token_.clear();
   while (true) {
-    int ret = splitter_.GetNext();
-    if (ret == ResPathTokenizer::kNoTokens && !token_.empty()) { 
-      return kSuccess;
-    } else if (ret != ResPathTokenizer::kSuccess) {
-      return ret;
+    if (!next_token_.empty()) {
+      token_ = next_token_;
+      type_ = next_type_;
+      next_token_.clear();
+    } else {
+      int ret = splitter_.GetNext();
+      if (ret == ResPathTokenizer::kNoTokens && !token_.empty()) { 
+        return kSuccess;
+      } else if (ret != ResPathTokenizer::kSuccess) {
+        return ret;
+      }
     }
 
     if (token_.empty()) {
@@ -109,6 +109,7 @@ int ResPathTokenizer::GetNext() {
         return kSuccess;
       } else {
         token_.append(next_token_);
+		next_token_.clear();
         type_ = next_type_;
       }
     }
