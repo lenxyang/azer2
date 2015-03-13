@@ -5,12 +5,12 @@
 #include "azer/base/string.h"
 
 namespace azer {
-class AZER_EXPORT ResPathTokenizer {
+class AZER_EXPORT ResPathSplitter {
  public:
-  explicit ResPathTokenizer(const StringType& string);
-  ~ResPathTokenizer();
+  explicit ResPathSplitter(const StringType& string);
+  ~ResPathSplitter();
 
-  enum TokenType {
+  enum Type {
     kUnkownToken = -1,
     kCommaToken = FILE_PATH_LITERAL(':'),
     kSlashToken = FILE_PATH_LITERAL('/'),
@@ -26,13 +26,24 @@ class AZER_EXPORT ResPathTokenizer {
   };
   int GetNext();
   const StringType& token() const { return current_;}
-  TokenType token_type() const { return token_type_;}
+  Type token_type() const { return token_type_;}
  private:
   bool ValidStringChar(CharType cb) const;
   const CharType* index_;
   StringType current_;
   StringType raw_;
-  TokenType token_type_;
+  Type token_type_;
+  DISALLOW_COPY_AND_ASSIGN(ResPathSplitter);
+};
+
+class AZER_EXPORT ResPathTokenizer {
+ public:
+  explicit ResPathTokenizer(const StringType& string);
+  ~ResPathTokenizer();
+ private:
+  ResPathSplitter splitter_;
+  StringType token_;
+  ResPathSplitter::Type type_;
   DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
 };
 }  // namespace azer

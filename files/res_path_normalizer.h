@@ -5,13 +5,14 @@
 #include "base/basictypes.h"
 #include "azer/base/string.h"
 #include "azer/files/res_path.h"
+#include "azer/files/res_path_tokenizer.h"
 
 namespace azer {
 class AZER_EXPORT ResPathNormalizer {
  public:
   explicit ResPathNormalizer(const StringType& path);
 
-  void Normalize();
+  bool Normalize();
 
   const StringType& normalized() const;
   void Apply(ResPath* respath);
@@ -20,6 +21,7 @@ class AZER_EXPORT ResPathNormalizer {
   enum State {
     kStart,
     kFailed,
+    kComponentState,
     kFinished,
   };
   State state() const { return state_;}

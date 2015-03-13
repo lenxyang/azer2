@@ -9,7 +9,7 @@
 #define RESL AZER_LITERAL 
 
 namespace azer {
-TEST(ResPathTokenizer, Base) {
+TEST(ResPathSplitter, Base) {
   StringType cases[] = {
     RESL(".://:."),
     RESL("c////cc"),
@@ -27,25 +27,25 @@ TEST(ResPathTokenizer, Base) {
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathTokenizer tokenizer(cases[i]);
+    ResPathSplitter tokenizer(cases[i]);
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {
-      ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kSuccess);
+      ASSERT_EQ(tokenizer.GetNext(), ResPathSplitter::kSuccess);
       ASSERT_EQ(tokenizer.token(), *expect_token);
       expect_token++;
     }
-    ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kNoTokens);
+    ASSERT_EQ(tokenizer.GetNext(), ResPathSplitter::kNoTokens);
   }
 }
 
-TEST(ResPathTokenizer, InvalidChar) {
+TEST(ResPathSplitter, InvalidChar) {
   StringType cases[] = {
     RESL("-"),
   };
 
   const int kMaxTokens = 100;
   int expect_states[][kMaxTokens] = {
-    {ResPathTokenizer::kContainInvalidChar, ResPathTokenizer::kNoTokens,},
+    {ResPathSplitter::kContainInvalidChar, ResPathSplitter::kNoTokens,},
   };
 
   StringType expect_tokens[][kMaxTokens] = {
@@ -53,7 +53,7 @@ TEST(ResPathTokenizer, InvalidChar) {
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathTokenizer tokenizer(cases[i]);
+    ResPathSplitter tokenizer(cases[i]);
     int* expect_state = expect_states[i];
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {

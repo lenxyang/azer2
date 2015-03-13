@@ -22,10 +22,41 @@ const StringType& ResPathNormalizer::normalized() const {
 bool ResPathNormalizer::success() const {
   return (state_ == kFinished);
 }
-void ResPathNormalizer::Normalize() {
+
+bool ResPathNormalizer::Normalize() {
+  /*
   ResPathTokenizer tokenizer(raw_);
-  while (tokenizer.GetNext()) {
+  ResPathTokenizer::TokenType prev_token_type = ResPathTokenizer::kUnknownToken;
+  int ret = ResPathTokenizer::kSuccess;
+  StringType token
+  StringType prev_token;
+  while ((ret = tokenizer.GetNext()) != kSuccess) {
+    prev_token_type = token_type;
+    ResPathTokenizer::TokenType token_type = tokenizer.token_type();
+    prev_token = token;
+    token = tokenizer.token();
+    switch (token_type) {
+      case ResPathTokenizer::kCommaToken:
+        if (prev == kStringToken) 
+          set_state(kComponentState);
+        else
+          return false;
+        break;
+      case ResPathTokenizer::kSlashToken:
+        break;
+      case ResPathTokenizer::kDotToken:
+        break;
+      case ResPathTokenizer::kStringToken:
+        current_.append(token);
+        if (state() == kComponentState) {
+        }
+        break;
+    }
   }
+
+  return ret == ResPathNormalizer::kNoTokens;
+  */
+  return true;
 }
 
 void ResPathNormalizer::SetErrorMsg(const std::string& msg) {

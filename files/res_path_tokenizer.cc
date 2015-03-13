@@ -2,15 +2,15 @@
 
 
 namespace azer {
-ResPathTokenizer::ResPathTokenizer(const StringType& string) 
+ResPathSplitter::ResPathSplitter(const StringType& string) 
     : raw_(string) {
   index_ = raw_.c_str();
 }
 
-ResPathTokenizer::~ResPathTokenizer() {
+ResPathSplitter::~ResPathSplitter() {
 }
 
-int ResPathTokenizer::GetNext() {
+int ResPathSplitter::GetNext() {
   CharType prev = FILE_PATH_LITERAL('\0');
   CharType c = *index_;
   if (c == FILE_PATH_LITERAL('\0')) {
@@ -26,7 +26,7 @@ int ResPathTokenizer::GetNext() {
       case FILE_PATH_LITERAL('/'): 
       case FILE_PATH_LITERAL('.'): 
         demils = true;
-        token_type_ = static_cast<TokenType>(c);
+        token_type_ = static_cast<Type>(c);
         if (!current_.empty() && prev != c) {
           return kSuccess;
         } else {
@@ -50,7 +50,7 @@ int ResPathTokenizer::GetNext() {
   return kSuccess;
 }
 
-bool ResPathTokenizer::ValidStringChar(CharType cb) const {
+bool ResPathSplitter::ValidStringChar(CharType cb) const {
   if (cb >= FILE_PATH_LITERAL('a') && cb <= FILE_PATH_LITERAL('z')) {
     return true;
   }
