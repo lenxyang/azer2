@@ -76,6 +76,19 @@ ResPathTokenizer::ResPathTokenizer(const StringType& string)
 ResPathTokenizer::~ResPathTokenizer() {
 }
 
+bool ResPathTokenizer::Init() {
+  ResPathSplitter splitter;
+  int ret = kSuccess;
+  Token token;
+  while ((ret = splitter.GetNext()) == kSuccess) {
+    token.token = splitter.token();
+    token.type = splitter.token_type();
+    token_list_.push_back(token);
+  }
+
+  return ret == kNoTokens;
+}
+
 int ResPathTokenizer::GetNext() {
   if (next_result_ != kSuccess) { return next_result_;}
   token_.clear();
@@ -111,10 +124,13 @@ int ResPathTokenizer::GetNext() {
     if (type_ == ResPathSplitter::kCommaToken
         && next_type_ == ResPathSplitter::kSlashToken) {
       // perhaps proto specifier
-      if (next_token_ != "//") {
+      if (next_token_ == "//") {
+        token_type_ = kProtoSpcecifier;
+      } else {
         return kInvalidComponent;
       }
     } else if (type_ == ResPathSplitter::kSlashToken) {
+      token_type_ = kDirSplitter;
       return kSuccess;
     } else if (next_type_ == ResPathSplitter::kSlashToken) {
       return kSuccess;

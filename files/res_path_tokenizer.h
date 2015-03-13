@@ -54,17 +54,18 @@ class AZER_EXPORT ResPathTokenizer {
   };
   int GetNext();
   const StringType& token() const { return token_;}
-  TokenType type() const { return type_;}
+  TokenType type() const { return token_type_;}
  private:
+  bool Init();
   ResPathSplitter splitter_;
   StringType token_;
 
-  // restore the next result of ResPathSplitter
-  int next_result_;
-  ResPathSplitter::Type type_;
-  StringType next_token_;
-  ResPathSplitter::Type next_type_;
-  TokenType token_type_;
+  struct Token {
+    ResPathSplitter::Type type;
+    StringType token;
+  };
+  std::vector<Token> token_list_;
+  int index_;
   DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
 };
 }  // namespace files

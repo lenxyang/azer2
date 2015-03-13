@@ -9,23 +9,13 @@
 #include "azer/files/res_path_tokenizer.h"
 
 namespace azer {
-ResPathNormalizer::ResPathNormalizer(const StringType& path)
-    : raw_(path)
-    , state_(kStart) {
+ResPathNormalizer::ResPathNormalizer() {
 }
 
-const StringType& ResPathNormalizer::normalized() const {
-  DCHECK(success());
-  return normalized_;
-}
-
-bool ResPathNormalizer::success() const {
-  return (state_ == kFinished);
-}
-
-bool ResPathNormalizer::Normalize() {
-  files::ResPathTokenizer tokenizer(raw_);
-  while (tokenizer.GetNext() != kSuccess) {
+bool ResPathNormalizer::Normalize(ResPath* path) {
+  using files::ResPathTokenizer;
+  ResPathTokenizer tokenizer(path->fullpath());
+  while (tokenizer.GetNext() != ResPathTokenizer::kSuccess) {
     const StringType& token = tokenizer.token();
     CharType first = token[0];
     if (first == FILE_PATH_LITERAL(':')) {
@@ -37,11 +27,4 @@ bool ResPathNormalizer::Normalize() {
   return true;
 }
 
-void ResPathNormalizer::SetErrorMsg(const std::string& msg) {
-  error_msg_ = msg;
-  set_state(kFailed);
-}
-
-void ResPathNormalizer::Apply(ResPath* respath) {
-}
 }  // namespace azer
