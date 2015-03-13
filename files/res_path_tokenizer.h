@@ -43,8 +43,18 @@ class AZER_EXPORT ResPathTokenizer {
     kContainInvalidChar,
     kInvalidComponent,
   };
+
+  enum TokenType {
+    kProtoSpcecifier,
+    kComponent,
+    kRoot,
+    kDots,
+    kDirSplitter,
+    kName,
+  };
   int GetNext();
   const StringType& token() const { return token_;}
+  TokenType type() const { return type_;}
  private:
   ResPathSplitter splitter_;
   StringType token_;
@@ -54,6 +64,7 @@ class AZER_EXPORT ResPathTokenizer {
   ResPathSplitter::Type type_;
   StringType next_token_;
   ResPathSplitter::Type next_type_;
+  TokenType token_type_;
   DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
 };
 }  // namespace files

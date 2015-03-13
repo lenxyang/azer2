@@ -110,7 +110,10 @@ int ResPathTokenizer::GetNext() {
 
     if (type_ == ResPathSplitter::kCommaToken
         && next_type_ == ResPathSplitter::kSlashToken) {
-      return kInvalidComponent;
+      // perhaps proto specifier
+      if (next_token_ != "//") {
+        return kInvalidComponent;
+      }
     } else if (type_ == ResPathSplitter::kSlashToken) {
       return kSuccess;
     } else if (next_type_ == ResPathSplitter::kSlashToken) {

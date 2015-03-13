@@ -14,10 +14,10 @@ TEST(ResPathNormalizer, Base) {
     AZER_LITERAL("rpc://ccc"),
   };
 
+  ResPathNormalizer normalizer;
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathNormalizer normalizer(cases[i]);
-    normalizer.Normalize();
-    ASSERT_TRUE(normalizer.success());
+    ResPath path(cases[i]);
+    ASSERT_TRUE(normalizer.Normalize(&path));
   }
 }
 
@@ -37,10 +37,10 @@ TEST(ResPathNormalizer, FileNameWithDot) {
     AZER_LITERAL("//B/a.b.c.d.e.f.exe/d"),
   };
 
+  ResPathNormalizer normalizer;
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathNormalizer normalizer(cases[i]);
-    normalizer.Normalize();
-    ASSERT_TRUE(normalizer.success());
+    ResPath path(cases[i]);
+    ASSERT_TRUE(normalizer.Normalize(&path));
   }
 }
 
@@ -51,19 +51,18 @@ TEST(ResPathNormalizer, DirDot) {
     AZER_LITERAL("//a/../c:efg"),
   };
 
+  ResPathNormalizer normalizer;
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathNormalizer normalizer(cases[i]);
-    normalizer.Normalize();
-    ASSERT_TRUE(normalizer.success());
+    ResPath path(cases[i]);
+    ASSERT_TRUE(normalizer.Normalize(&path));
   }
 }
 
 TEST(ResPathNormalizer, ProtoPath) {
   {
-    ResPathNormalizer normalizer(AZER_LITERAL("rpc://www:d"));
-    normalizer.Normalize();
+    ResPath path(AZER_LITERAL("rpc://www:d"));
+    ASSERT_TRUE(normalizer.Normalize(&path));
     ASSERT_TRUE(normalizer.success());
-    ASSERT_EQ(normalizer.component(), AZER_LITERAL("d"));
   }
 }
 
@@ -79,10 +78,10 @@ TEST(ResPathNormalizer, Failed) {
     AZER_LITERAL("//B/c/123d&"),
   };
 
+  ResPathNormalizer normalizer;
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathNormalizer normalizer(cases[i]);
-    normalizer.Normalize();
-    ASSERT_FALSE(normalizer.success()) << cases[i];
+    ResPath path(cases[i]);
+    ASSERT_TRUE(normalizer.Normalize(&path));
   }
 }
 }  // namespace azer

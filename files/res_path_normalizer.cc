@@ -24,38 +24,16 @@ bool ResPathNormalizer::success() const {
 }
 
 bool ResPathNormalizer::Normalize() {
-  /*
-  ResPathTokenizer tokenizer(raw_);
-  ResPathTokenizer::TokenType prev_token_type = ResPathTokenizer::kUnknownToken;
-  int ret = ResPathTokenizer::kSuccess;
-  StringType token
-  StringType prev_token;
-  while ((ret = tokenizer.GetNext()) != kSuccess) {
-    prev_token_type = token_type;
-    ResPathTokenizer::TokenType token_type = tokenizer.token_type();
-    prev_token = token;
-    token = tokenizer.token();
-    switch (token_type) {
-      case ResPathTokenizer::kCommaToken:
-        if (prev == kStringToken) 
-          set_state(kComponentState);
-        else
-          return false;
-        break;
-      case ResPathTokenizer::kSlashToken:
-        break;
-      case ResPathTokenizer::kDotToken:
-        break;
-      case ResPathTokenizer::kStringToken:
-        current_.append(token);
-        if (state() == kComponentState) {
-        }
-        break;
+  files::ResPathTokenizer tokenizer(raw_);
+  while (tokenizer.GetNext() != kSuccess) {
+    const StringType& token = tokenizer.token();
+    CharType first = token[0];
+    if (first == FILE_PATH_LITERAL(':')) {
+    } else if (first == FILE_PATH_LITERAL('/')) {
+    } else {
     }
   }
 
-  return ret == ResPathNormalizer::kNoTokens;
-  */
   return true;
 }
 
