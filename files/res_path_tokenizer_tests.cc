@@ -117,8 +117,8 @@ TEST(ResPathTokenizer, Base) {
     {RESL("//"), RESL(":."), RESL("\0")},
     {RESL("c"), RESL("////"), RESL("cc"), RESL("\0")},
     {RESL("/"), RESL("b"), RESL(":ef..."), RESL("\0")},
-    {RESL("/"), RESL("b"), RESL(":"), RESL("...ef..."), RESL("\0")},
-    {RESL("/"), RESL("b"), RESL(":"), RESL(".a.ef...b.c"), RESL("\0")},
+    {RESL("/"), RESL("b"), RESL(":...ef..."), RESL("\0")},
+    {RESL("/"), RESL("b"), RESL(":.a.ef...b.c"), RESL("\0")},
     {RESL("//"), RESL("c"), RESL("////"), RESL("cc"), RESL("\0")},
   };
 

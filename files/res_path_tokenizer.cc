@@ -111,6 +111,8 @@ int ResPathTokenizer::GetNext() {
     if (type_ == ResPathSplitter::kCommaToken
         && next_type_ == ResPathSplitter::kSlashToken) {
       return kInvalidComponent;
+    } else if (type_ == ResPathSplitter::kSlashToken) {
+      return kSuccess;
     } else if (next_type_ == ResPathSplitter::kSlashToken) {
       return kSuccess;
     } else if (next_type_ == ResPathSplitter::kCommaToken) {
