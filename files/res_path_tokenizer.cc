@@ -69,15 +69,14 @@ bool ResPathSplitter::ValidStringChar(CharType cb) const {
 }
 
 ResPathTokenizer::ResPathTokenizer(const StringType& string) 
-    : splitter_(string)
-    , next_result_(kSuccess) {
+    : string_(string) {
 }
 
 ResPathTokenizer::~ResPathTokenizer() {
 }
 
 bool ResPathTokenizer::Init() {
-  ResPathSplitter splitter;
+  ResPathSplitter splitter(string_);
   int ret = kSuccess;
   Token token;
   while ((ret = splitter.GetNext()) == kSuccess) {
@@ -89,62 +88,63 @@ bool ResPathTokenizer::Init() {
   return ret == kNoTokens;
 }
 
-int ResPathTokenizer::GetNext() {
-  if (next_result_ != kSuccess) { return next_result_;}
-  token_.clear();
-  if (!next_token_.empty()) {
-    token_ = next_token_;
-    type_ = next_type_;
-    next_token_.clear();
+int ResPathTokenizer::HandleCommaToken(const Token& token) {
+  token_.append(token.token);
+  const Token& next_token = GetSplitterToken(index_++);
+  if (next_token.type == ResPathSplitter::kStringToken) {
+    return HandleStringToken(next_token);
+  } else if (next_token.type == ResPathSplitter::kDotToken) {
+    return HandleStringToken(next_token);
   } else {
-    int ret = splitter_.GetNext();
-    if (ret == ResPathTokenizer::kNoTokens && !token_.empty()) { 
-      return kSuccess;
-    } else if (ret != ResPathTokenizer::kSuccess) {
-      return ret;
-    }
-
-    token_ = splitter_.token();
-    type_ = splitter_.token_type();
-    if (type_ == ResPathSplitter::kSlashToken) {
-      return kSuccess;
-    }
   }
+}
 
-  while (true) {
-    int ret = splitter_.GetNext();
-    if (ret == ResPathTokenizer::kSuccess) {
-      next_token_ = splitter_.token();
-      next_type_ = splitter_.token_type();
-    } else {
-      next_result_ = ret;
-      return kSuccess;
-    }
-
-    if (type_ == ResPathSplitter::kCommaToken
-        && next_type_ == ResPathSplitter::kSlashToken) {
-      // perhaps proto specifier
-      if (next_token_ == "//") {
-        token_type_ = kProtoSpcecifier;
-      } else {
-        return kInvalidComponent;
-      }
-    } else if (type_ == ResPathSplitter::kSlashToken) {
-      token_type_ = kDirSplitter;
-      return kSuccess;
-    } else if (next_type_ == ResPathSplitter::kSlashToken) {
-      return kSuccess;
-    } else if (next_type_ == ResPathSplitter::kCommaToken) {
-      return kSuccess;
-    } else {
-      token_.append(next_token_);
-      next_token_.clear();
-      type_ = next_type_;
-    }
-  }
-  
-  DCHECK(false);
+int ResPathTokenizer::HandleSlashToken(const Token& token) {
+  token_.append(token.token);
   return kSuccess;
+}
+
+int ResPathTokenizer::HandleDotToken(const Token& token) {
+  token_.append(token.token);
+  const Token& next_token = GetSplitterToken(++index_);
+  if (next_token == ResPathSplitter::kStringToken) {
+    return HandleStringToken(next_token);
+  } else {
+    return ;
+  }
+}
+
+int ResPathTokenizer::HandleStringToken(const Token& token) {
+  token_.append(token.token);
+  const Token& next_token = GetSplitterToken(++index_);
+  if (next_token == ResPathSplitter::kDotToken) {
+    return HandleDotToken(next_token);
+  } else {
+    return ;
+  }
+}
+
+int ResPathTokenizer::HandleStringTokenWithProtoProbility(const Token& token) {
+}
+
+int ResPathTokenizer::GetNext() {
+  token_.clear();
+  const Token& token = GetSplitterToken(index_);
+  if (token.type == ResPathSplitter::kCommaToken) {
+    return HandleCommaToken(token);
+  } else if (token.type == ResPathSplitter::kSlashToken) {
+    return HandleSlashToken(token);
+  } else if (token.type == ResPathSplitter::kDotToken) {
+    return HandleDotToken(token);
+  } else if (token.type == ResPathSplitter::kStringToken) {
+    return HandleStringTokenWithProtoProbility(token);
+  } else {
+    return kSuccess;
+  }
+}
+
+const Token& ResPathTokenizer::GetSplitterToken(int index) const {
+  return token_list_[index];
 }
 }  // namespace files
 }  // namespace azer

@@ -57,15 +57,25 @@ class AZER_EXPORT ResPathTokenizer {
   TokenType type() const { return token_type_;}
  private:
   bool Init();
-  ResPathSplitter splitter_;
-  StringType token_;
 
   struct Token {
     ResPathSplitter::Type type;
     StringType token;
   };
+  int HandleCommaToken(const Token& token);
+  int HandleSlashToken(const Token& token);
+  int HandleDotToken(const Token& token);
+  int HandleStringToken(const Token& token);
+  int HandleStringTokenWithProtoProbility(const Token& token);
+
+  const Token& GetSplitterToken(int index) const;
+  
+  StringType string_;
+  StringType token_;
+  
   std::vector<Token> token_list_;
   int index_;
+  TokenType token_type_;
   DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
 };
 }  // namespace files
