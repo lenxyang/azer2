@@ -144,7 +144,7 @@ TEST(ResPathTokenizer, Error) {
 
   const int kMaxTokens = 100;
   StringType expect_tokens[][kMaxTokens] = {
-    {RESL("//"), RESL(":."), RESL("\0")},
+    {RESL("//"), RESL(":"), RESL("\0")},
   };
 
   int expect_types[][kMaxTokens] = {
@@ -164,6 +164,8 @@ TEST(ResPathTokenizer, Error) {
       ASSERT_EQ(tokenizer.GetNext(), *expect_ret);
       ASSERT_EQ(tokenizer.token(), *expect_token);
       ASSERT_EQ(tokenizer.type(), *expect_type);
+      expect_ret++;
+      expect_type++;
       expect_token++;
     }
   }
