@@ -21,9 +21,10 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
   path->rawpath_ = pathstr;
   ResPathParser tokenizer(pathstr);
   std::vector<StringType> vec;
-  while (tokenizer.GetNext() != ResPathParser::kSuccess) {
+  while (tokenizer.GetNext() == ResPathParser::kSuccess) {
     const StringType& token = tokenizer.token();
     ResPathParser::Type type = tokenizer.type();
+	if (type == ResPathParser::kEnd) break;
     switch (type) {
       case ResPathParser::kProtoSpecifier:
         path->proto_ = token;
@@ -50,24 +51,26 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
       case ResPathParser::kErrorToken:
         path->type_ = ResPath::kInvalidPath;
         return false;
+      case ResPathParser::kEnd:
+        break;
       default:
         CHECK(false);
         return false;
     }
   }
 
-  path->fullpath_.append(path->proto());
   for (size_t i = 0; i < vec.size(); ++i) {
     if (i > 1) {
-      path->fullpath_.append(FILE_PATH_LITERAL("/"));
+      path->file_path_.append(FILE_PATH_LITERAL("/"));
     } else if (i == 1 && path->type() != ResPath::kAbsolutePath) {
-      path->fullpath_.append(FILE_PATH_LITERAL("/"));
+      path->file_path_.append(FILE_PATH_LITERAL("/"));
     }
 
-    path->fullpath_.append(vec[i]);
+    path->file_path_.append(vec[i]);
   }
 
-  path->file_path_ = path->fullpath_;
+  path->fullpath_.append(path->proto());
+  path->fullpath_.append(path->filepath());
   path->fullpath_.append(path->component());
   return true;
 }
