@@ -13,7 +13,8 @@ class AZER_EXPORT ResPathSplitter {
 
   enum Type {
     kUnkownToken = -1,
-    kStringToken = 1,
+    kEndToken = 1,
+    kStringToken = 2,
     kCommaToken = FILE_PATH_LITERAL(':'),
     kSlashToken = FILE_PATH_LITERAL('/'),
     kDotToken = FILE_PATH_LITERAL('.'),
@@ -37,20 +38,25 @@ class AZER_EXPORT ResPathTokenizer {
   ~ResPathTokenizer();
 
   enum {
+    kEnd = -1,
     kSuccess = 0,
     kError = 1,
     kNoTokens,
     kContainInvalidChar,
     kInvalidComponent,
+    kUnknownFormat,
+    kInvalidRoot,
   };
 
   enum TokenType {
-    kProtoSpcecifier,
+    kNotSpecified = 0,
+    kProtoSpcecifier = 1,
     kComponent,
     kRoot,
     kDots,
     kDirSplitter,
     kName,
+    
   };
   int GetNext();
   const StringType& token() const { return token_;}
@@ -72,10 +78,12 @@ class AZER_EXPORT ResPathTokenizer {
   
   StringType string_;
   StringType token_;
-  
+
+  void SetTokenTypeIfNotSpecified(TokenType type);
   std::vector<Token> token_list_;
   int index_;
   TokenType token_type_;
+  bool following_token_;  // not first_token
   DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
 };
 }  // namespace files
