@@ -49,7 +49,6 @@ class AZER_EXPORT ResPathTokenizer {
   };
 
   enum TokenType {
-    kErrorToken,
     kEnd = -1,
     kNotSpecified = 0,
     kProtoSpcecifier = 1,
@@ -59,6 +58,7 @@ class AZER_EXPORT ResPathTokenizer {
     kPrevDir,
     kDirSplitter,
     kName,
+    kErrorToken,
   };
   int GetNext();
   const StringType& token() const { return token_;}
