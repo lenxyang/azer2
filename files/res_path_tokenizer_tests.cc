@@ -148,7 +148,7 @@ TEST(ResPathTokenizer, Error) {
   };
 
   int expect_types[][kMaxTokens] = {
-    {ResPathTokenizer::kRoot}, {ResPathTokenizer::kErrorToken}, 
+    {ResPathTokenizer::kRoot, ResPathTokenizer::kErrorToken}, 
   };
   
   for (size_t i = 0; i < arraysize(cases); ++i) {
