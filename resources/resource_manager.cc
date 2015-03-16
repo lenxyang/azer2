@@ -1,8 +1,12 @@
 #include "azer/resources/resource_manager.h"
 #include "azer/resources/context.h"
 #include "azer/resources/resource_loader.h"
+#include "azer/resources/resource_manager.h"
 
 namespace azer {
+
+using resources::RepositoryNodePtr;
+
 ResourceManager::ResourceManager(ResourceContext* context)
     : context_(context) {
 }
@@ -15,11 +19,11 @@ ResourcePtr ResourceManager::GetResource(const ResPath& path) {
   ResourcePtr resptr = root_->GetResource(path);
   if (resptr.get()) { return resptr;}
 
-  if (LoadResourceSync(path, &respth)) {
-    GenerateTreeHierarchy(path, root);
+  if (LoadResourceSync(path, &resptr)) {
+    GenerateTreeHierarchy(path, root_);
     RepositoryNodePtr node = root_->GetNode(path);
-    node->AddResource(path.component());
-    return node;
+    node->AddLocalResource(path.component(), resptr);
+    return resptr;
   } else {
     return ResourcePtr();
   }
@@ -29,8 +33,8 @@ bool ResourceManager::LoadResourceSync(const ResPath& path, ResourcePtr* ptr) {
   FileSystem* fs = context_->GetFileSystem();
   FileContentPtr content = fs->LoadFile(path);
   if (content.get()) {
-    ResourceLoaderManager* mgr = context_->GetResourceLoaderManager();
-    ResourceLoader* loader = mgr->GetResourceLoader(path, content.get());
+    resources::ResourceLoaderManager* mgr = context_->GetResourceLoaderManager();
+    resources::ResourceLoader* loader = mgr->GetResourceLoader(path, content.get());
     *ptr = loader->LoadResource(path, content.get());
     return ptr->get() != NULL;
   } else {

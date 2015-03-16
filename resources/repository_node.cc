@@ -66,7 +66,7 @@ RepositoryNodePtr RepositoryNode::FindOrCreate(const StringType& name) {
     return iter->second;
   } else {
     RepositoryNodePtr ptr(new RepositoryNode(name));
-    children_.insert(std::pair(name, ptr));
+    children_.insert(std::make_pair(name, ptr));
     return ptr;
   }
 }
@@ -84,14 +84,15 @@ bool RepositoryNode::HasAncestor(RepositoryNode* node) const {
   return false;
 }
 
-bool AddResource(const ResPath& path, ResourcePtr resource) {
-  DCHECK(!path.component().empty());
-  auto iter = resource_dict_.find(path.component());
+
+bool RepositoryNode::AddLocalResource(const StringType& name, ResourcePtr resource) {
+  DCHECK(!name.empty());
+  auto iter = resource_dict_.find(name);
   if (iter != resource_dict_.end()) {
     return false;
   }
 
-  resource_dict_.insert(std::make_pair(path.component(), resource));
+  resource_dict_.insert(std::make_pair(name, resource));
   return true;
 }
 

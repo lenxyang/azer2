@@ -1,10 +1,16 @@
 #pragma once
 
 #include "azer/files/res_path.h"
-#include "azer/base/resources.h"
-#include "azer/resources/resource_loader.h"
+#include "azer/base/resource.h"
+#include "azer/resources/repository_node.h"
 
 namespace azer {
+
+namespace resources {
+class ResourceLoader;
+class ResourceLoaderManager;
+}  // namespace resources
+
 class ResourceContext;
 class SceneNode;
 
@@ -19,9 +25,9 @@ class AZER_EXPORT ResourceManager {
   void ReleaseSceneResource(SceneNode* node);
  private:
   // load resource into repositor node
-  bool LoadResource(const ResPath& path, ResourcePtr* ptr); 
+  bool LoadResourceSync(const ResPath& path, ResourcePtr* ptr); 
   ResourceContext* context_;
-  RepositoryNodePtr root_;
+  resources::RepositoryNodePtr root_;
   DISALLOW_COPY_AND_ASSIGN(ResourceManager);
 };
 }  // namespace azer

@@ -5,7 +5,10 @@
 
 namespace azer {
 class FileSystem;
+
+namespace resources {
 class ResourceLoaderManager;
+}  // namespace resources
 
 class AZER_EXPORT ResourceContext {
  public:
@@ -13,7 +16,7 @@ class AZER_EXPORT ResourceContext {
   virtual ~ResourceContext() {}
 
   // Get Resource Loader manager
-  virtual ResourceLoaderManager* GetResourceLoaderManager() = 0;
+  virtual resources::ResourceLoaderManager* GetResourceLoaderManager() = 0;
 
   virtual FileSystem* GetFileSystem() = 0;
  protected:

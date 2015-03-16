@@ -41,6 +41,7 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   const RepositoryNode* parent() const { return parent_;}
 
   // get resource
+  bool AddLocalResource(const StringType& name, ResourcePtr resource);
   bool AddResource(const ResPath& path, ResourcePtr resource);
   ResourcePtr GetLocalResource(const StringType& path);
   ResourcePtr GetResource(const ResPath& path);
