@@ -125,9 +125,38 @@ int ResPathTokenizer::HandleCommaToken(const Token& token) {
 }
 
 int ResPathTokenizer::HandleSlashToken(const Token& token) {
-  SetTokenTypeIfNotSpecified(kDirSplitter);
   token_.append(token.token);
-  return kSuccess;
+  if (!following_token_) {
+    if (token_.size() == 2u) {
+      token_type_ = kRoot;
+      return kSuccess;
+    } else {
+      SetTokenTypeIfNotSpecified(kErrorToken);
+      return kInvalidRoot;
+    }
+  } else {
+    SetTokenTypeIfNotSpecified(kDirSplitter);
+    return kSuccess;
+  }
+}
+
+int ResPathTokenizer::HandleDotTokenWithNameProbility(const Token& token) {
+  const Token& next_token = GetSplitterToken(index_);
+  if (next_token == ResPathSplitter::kSlashToken
+      || next_token == ResPathSplitter::kCommaToken) {
+    if (token.token.length() == 1u) {
+      SetTokenTypeIfNotSpecified(kCurrentDir);
+      return kSuccess;
+    } else if (token.token.length() == 2u) {
+      SetTokenTypeIfNotSpecified(kPrevtDir);
+      return kSuccess;
+    } else {
+      SetTokenTypeIfNotSpecified(kTooManyDots);
+      return kError;
+    }
+  } else {
+    return HandleDotToken(token);
+  }
 }
 
 int ResPathTokenizer::HandleDotToken(const Token& token) {
@@ -184,16 +213,8 @@ int ResPathTokenizer::GetNext() {
     ret = HandleCommaToken(token);
   } else if (token.type == ResPathSplitter::kSlashToken) {
     ret = HandleSlashToken(token);
-    if (!following_token_) {
-      if (token_.size() == 2u) {
-        token_type_ = kRoot;
-      } else {
-        SetTokenTypeIfNotSpecified(kErrorToken);
-        ret = kInvalidRoot;
-      }
-    }
   } else if (token.type == ResPathSplitter::kDotToken) {
-    ret = HandleDotToken(token);
+    ret = HandleDotTokenWithNameProbility(token);
   } else if (token.type == ResPathSplitter::kStringToken) {
     if (following_token_) {
       ret = HandleStringToken(token);

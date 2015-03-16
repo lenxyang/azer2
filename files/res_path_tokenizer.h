@@ -44,6 +44,7 @@ class AZER_EXPORT ResPathTokenizer {
     kContainInvalidChar,
     kInvalidComponent,
     kUnknownFormat,
+    kTooManyDots,
     kInvalidRoot,
   };
 
@@ -54,7 +55,8 @@ class AZER_EXPORT ResPathTokenizer {
     kProtoSpcecifier = 1,
     kComponent,
     kRoot,
-    kDots,
+    kCurrentDir,
+    kPrevDir,
     kDirSplitter,
     kName,
   };
@@ -71,6 +73,7 @@ class AZER_EXPORT ResPathTokenizer {
   int HandleCommaToken(const Token& token);
   int HandleSlashToken(const Token& token);
   int HandleDotToken(const Token& token);
+  int HandleDotTokenWithNameProbility(const Token& token);
   int HandleStringToken(const Token& token);
   int HandleStringTokenWithProtoProbility(const Token& token);
 

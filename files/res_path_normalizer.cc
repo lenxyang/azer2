@@ -14,13 +14,28 @@ ResPathNormalizer::ResPathNormalizer() {
 
 bool ResPathNormalizer::Normalize(ResPath* path) {
   using files::ResPathTokenizer;
-  ResPathTokenizer tokenizer(path->fullpath());
+  StringType pathstr = path->fullpath();
+  path->clear();
+  ResPathTokenizer tokenizer(pathstr);
   while (tokenizer.GetNext() != ResPathTokenizer::kSuccess) {
     const StringType& token = tokenizer.token();
-    CharType first = token[0];
-    if (first == FILE_PATH_LITERAL(':')) {
-    } else if (first == FILE_PATH_LITERAL('/')) {
-    } else {
+    ResPathTokenizer::TokenType type = tokenizer.type();
+    switch (type) {
+      case ResPathTokenizer::kComponent:
+        if (path->component_.empty()) {
+          path->compoennt_ = token;
+          path->fullpath_->append(token);
+        } else {
+        }
+        break;
+      case ResPathTokenizer::kDirSplitter:
+        path->fullpath_.append(FILE_PATH_LITERAL("/"));
+        break;
+      case ResPathTokenizer::kRoot:
+      case ResPathTokenizer::kDots:
+      case ResPathTokenizer::kName:
+        path->fullpath_.append(token);
+        break;
     }
   }
 
