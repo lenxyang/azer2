@@ -6,6 +6,7 @@
 #include "base/strings/string_tokenizer.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
+#include "azer/files/res_path_normalizer.h"
 
 namespace azer {
 
@@ -74,6 +75,8 @@ ResPath& ResPath::operator = (const ResPath& path) {
 }
 
 void ResPath::OnPathChanged(const StringType& fullpath) {
+  ResPathNormalizer normalizer;
+  normalizer.Normalize(this);
 }
 
 bool ResPath::AppendCopy(const ResPath& path, ResPath* output) const {

@@ -80,7 +80,7 @@ ResPathParser::~ResPathParser() {
 
 void ResPathParser::SetTypeIfNotSpecified(Type type) {
   DCHECK_NE(type, kNotSpecified);
-  if (token_type_ != kNotSpecified) {
+  if (token_type_ == kNotSpecified) {
     token_type_ = type;
   }
 }
@@ -129,7 +129,7 @@ int ResPathParser::HandleSlashToken(const Token& token) {
   token_.append(token.token);
   if (!following_token_) {
     if (token_.size() == 2u) {
-      token_type_ = kRoot;
+      SetTypeIfNotSpecified(kRoot);
       return kSuccess;
     } else {
       SetTypeIfNotSpecified(kErrorToken);
@@ -192,7 +192,7 @@ int ResPathParser::HandleStringTokenWithProtoProbility(const Token& token) {
     token_.append(token.token);
     index_ += 2;
     token_.append(FILE_PATH_LITERAL("://"));
-    SetTypeIfNotSpecified(kProtoSpcecifier);
+    SetTypeIfNotSpecified(kProtoSpecifier);
     return kSuccess;
   } else {
     return HandleStringToken(token);
