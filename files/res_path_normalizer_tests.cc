@@ -59,10 +59,10 @@ TEST(ResPathNormalizer, DirDot) {
 }
 
 TEST(ResPathNormalizer, ProtoPath) {
+  ResPathNormalizer normalizer;
   {
     ResPath path(AZER_LITERAL("rpc://www:d"));
     ASSERT_TRUE(normalizer.Normalize(&path));
-    ASSERT_TRUE(normalizer.success());
   }
 }
 

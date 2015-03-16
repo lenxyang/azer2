@@ -104,22 +104,24 @@ TEST(ResPathSplitter, InvalidChar) {
 
 TEST(ResPathTokenizer, Base) {
   StringType cases[] = {
-    RESL("//:."),
+    RESL("//:.a"),
     RESL("c////cc"),
-    RESL("/b:ef..."),
-    RESL("/b:...ef..."),
-    RESL("/b:.a.ef...b.c"),
+    RESL("//b:ef..."),
+    RESL("//b:...ef..."),
+    RESL("//b:.a.ef...b.c"),
     RESL("//c////cc"),
+    RESL("content://hello"),
   };
 
   const int kMaxTokens = 100;
   StringType expect_tokens[][kMaxTokens] = {
-    {RESL("//"), RESL(":."), RESL("\0")},
+    {RESL("//"), RESL(":.a"), RESL("\0")},
     {RESL("c"), RESL("////"), RESL("cc"), RESL("\0")},
-    {RESL("/"), RESL("b"), RESL(":ef..."), RESL("\0")},
-    {RESL("/"), RESL("b"), RESL(":...ef..."), RESL("\0")},
-    {RESL("/"), RESL("b"), RESL(":.a.ef...b.c"), RESL("\0")},
+    {RESL("//"), RESL("b"), RESL(":ef..."), RESL("\0")},
+    {RESL("//"), RESL("b"), RESL(":...ef..."), RESL("\0")},
+    {RESL("//"), RESL("b"), RESL(":.a.ef...b.c"), RESL("\0")},
     {RESL("//"), RESL("c"), RESL("////"), RESL("cc"), RESL("\0")},
+    {RESL("content://"), RESL("hello"), RESL("\0")},
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
@@ -130,7 +132,35 @@ TEST(ResPathTokenizer, Base) {
       ASSERT_EQ(tokenizer.token(), *expect_token);
       expect_token++;
     }
-    ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kNoTokens);
+    ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kSuccess);
+    ASSERT_EQ(tokenizer.type(), ResPathTokenizer::kEnd);
+  }
+}
+
+TEST(ResPathTokenizer, Error) {
+  StringType cases[] = {
+    RESL("//:."),
+  };
+
+  const int kMaxTokens = 100;
+  StringType expect_tokens[][kMaxTokens] = {
+    {RESL("//"), RESL(":."), RESL("\0")},
+  };
+
+  int expect_types[][kMaxTokens] = {
+    {ResPathTokenizer::kRoot}, {ResPathTokenizer::kErrorToken}, 
+  };
+  
+  for (size_t i = 0; i < arraysize(cases); ++i) {
+    ResPathTokenizer tokenizer(cases[i]);
+    StringType* expect_token = expect_tokens[i];
+    int expect_type = expect_types[i];
+    while (*expect_token != RESL("\0")) {
+      ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kSuccess);
+      ASSERT_EQ(tokenizer.token(), *expect_token);
+      ASSERT_EQ(tokenizer.type(), *expect_type);
+      expect_token++;
+    }
   }
 }
 }  // namespace files

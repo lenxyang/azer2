@@ -48,6 +48,7 @@ class AZER_EXPORT ResPathTokenizer {
   };
 
   enum TokenType {
+    kErrorToken,
     kEnd = -1,
     kNotSpecified = 0,
     kProtoSpcecifier = 1,
