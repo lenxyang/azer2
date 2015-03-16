@@ -6,6 +6,7 @@ source_set("resources") {
     "context.h",
     "repository_node.cc",
     "repository_node.h",
+    "resource_manager.cc",
   ]
 
   deps = ["//base"]

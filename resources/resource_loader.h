@@ -19,8 +19,8 @@ class AZER_EXPORT ResourceLoader {
   virtual ~ResourceLoader() {}
 
   // load resource into RepositoryNode   
-  virtual bool LoadResource(const ResPath& path, RepositoryNodePtr parent,
-                            const FileContent* content) = 0;
+  virtual ResourcePtr LoadResource(const ResPath& path, 
+                                   const FileContent* content) = 0;
 
   Resource::Type type() const { return type_; }
  protected:
