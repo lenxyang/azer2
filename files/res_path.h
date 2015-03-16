@@ -19,6 +19,7 @@ class AZER_EXPORT ResPath {
     kInvalidPath,
   };
 
+  ResPath();
   explicit ResPath(const CharType* path);
   explicit ResPath(const StringType& path);
   ResPath(const ResPath& path);

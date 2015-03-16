@@ -28,6 +28,10 @@ ResPath::PathType ResPath::CalcPathType(const StringType& str) {
   return kAbsolutePath;
 }
 
+ResPath::ResPath() 
+    : type_(kRelativePath) {
+}
+
 ResPath::ResPath(const CharType* path)
     : fullpath_(StringType(path)) {
   OnPathChanged(this->rawpath());
@@ -110,14 +114,28 @@ bool ResPath::Append(const ResPath& str) {
 }
 
 ResPath ResPath::parent() const {
-  CHECK(!IsRoot());
-  StringType pathstr = filepath().substr();
-  std::size_t pos = pathstr.rfind(kSeperator);
-  if (pos != StringType::npos) {
-    return ResPath(filepath().substr(0, pathstr.length() - pos));
-  } else {
-    return ResPath(AZER_LITERAL("//"));
+  std::size_t pos = file_path_.rfind(kSeperator);
+  ResPath parent;
+  if (type() == kProtoPath && proto_.length() == fullpath_.length()) {
+    parent.type_ = kInvalidPath;
+    return parent;
+  } else if (type() == kAbsolutePath && fullpath_.length() == 2u) {
+    parent.type_ = kInvalidPath;
+    return parent;
+  } else if (type() == kInvalidPath) {
+    parent.type_ = kInvalidPath;
+    return parent;
+  } else if (type() == kRelativePath && pos == StringType::npos) {
+    parent.type_ = kInvalidPath;
+    return parent;
   }
+  
+  parent.type_ = type_;
+  parent.component_ = FILE_PATH_LITERAL("");
+  parent.file_path_ = filepath().substr(0, pos);
+  parent.fullpath_.append(proto_);
+  parent.fullpath_.append(parent.file_path_);
+  return parent;
 }
 
 void ResPath::Normalize() {
