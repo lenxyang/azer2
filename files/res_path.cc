@@ -29,12 +29,12 @@ ResPath::PathType ResPath::CalcPathType(const StringType& str) {
 
 ResPath::ResPath(const CharType* path)
     : fullpath_(StringType(path)) {
-  OnPathChanged(this->fullpath());
+  OnPathChanged(this->rawpath());
 }
 
-ResPath::ResPath(const StringType& fullpath)
-    : fullpath_(fullpath) {
-  OnPathChanged(this->fullpath());
+ResPath::ResPath(const StringType& rawpath)
+    : rawpath_(rawpath) {
+  OnPathChanged(this->rawpath());
 }
 
 ResPath::ResPath(const ResPath& path) {
@@ -45,17 +45,18 @@ ResPath::ResPath(const StringType& path, const StringType& component) {
   StringType str = path;
   str.append(kComponentSeperatorStr);
   str.append(component);
-  OnPathChanged(this->fullpath());
+  OnPathChanged(this->rawpath());
 }
 
 ResPath::ResPath(const ResPath& path, const StringType& component) {
-  StringType str = path.fullpath();
+  StringType str = path.rawpath();
   str.append(kComponentSeperatorStr);
   str.append(component);
-  OnPathChanged(this->fullpath());
+  OnPathChanged(this->rawpath());
 }
 
 void ResPath::clear() {
+  rawpath_ = AZER_LITERAL("");
   fullpath_ = AZER_LITERAL("");
   file_path_ = AZER_LITERAL("");
   component_ = AZER_LITERAL("");
@@ -63,23 +64,16 @@ void ResPath::clear() {
 }
 
 ResPath& ResPath::operator = (const ResPath& path) {
+  rawpath_ = path.rawpath();
   fullpath_ = path.fullpath();
   file_path_ = path.filepath();
+  proto_ = path.proto();
   component_ = path.component();
   type_ = path.type();
   return *this;
 }
 
 void ResPath::OnPathChanged(const StringType& fullpath) {
-  type_ = CalcPathType(fullpath);
-  std::vector<StringType> vec;
-  ::base::SplitString(fullpath, kComponentSeperator, &vec);
-  if (vec.size() > 0u) {
-    file_path_ = vec[0];
-  }
-  if (vec.size() > 1u) {
-    component_ = vec[1];
-  }
 }
 
 bool ResPath::AppendCopy(const ResPath& path, ResPath* output) const {
@@ -99,14 +93,11 @@ ResPath ResPath::AppendCopyOrDie(const ResPath& path) const {
 }
 
 bool ResPath::Append(const ResPath& str) {
-  if (has_component()) { return false;}
-  if (str.type() != kRelativePath) { return false;}
-
-  if (fullpath_.back() != kSeperator) {
-    fullpath_.push_back(kSeperator);
+  if (rawpath_.back() != kSeperator) {
+    rawpath_.push_back(kSeperator);
   }
-
-  fullpath_.append(str.fullpath());
+  
+  rawpath_.append(str.fullpath());
   OnPathChanged(this->fullpath());
   return true;
 }

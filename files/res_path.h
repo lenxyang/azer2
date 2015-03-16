@@ -34,9 +34,12 @@ class AZER_EXPORT ResPath {
   bool empty() const { return fullpath_.empty();}
   void clear();
 
+  const StringType& rawpath() const { return rawpath_;}
   const StringType& fullpath() const { return fullpath_;}
   const StringType& filepath() const { return file_path_;}
+  const StringType& proto() const { return proto_;}
   const StringType& component() const { return component_;}
+  bool has_proto() const { return !proto_.empty();}
   bool has_component() const { return !component_.empty();}
 
   ResPath parent() const;
@@ -54,8 +57,10 @@ class AZER_EXPORT ResPath {
   static const CharType kComponentSeperator;
  protected:
   void OnPathChanged(const StringType& type);
+  StringType rawpath_;
   StringType fullpath_;
   StringType file_path_;
+  StringType proto_;
   StringType component_;
   PathType type_;
 

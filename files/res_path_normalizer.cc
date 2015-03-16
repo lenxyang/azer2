@@ -15,39 +15,60 @@ ResPathNormalizer::ResPathNormalizer() {
 
 bool ResPathNormalizer::Normalize(ResPath* path) {
   using files::ResPathParser;
-  StringType pathstr = path->fullpath();
+  StringType pathstr = path->rawpath();
   path->clear();
+  path->type_ = ResPath::kRelativePath;
+  path->rawpath_ = pathstr;
   ResPathParser tokenizer(pathstr);
-  StringType component;
   std::vector<StringType> vec;
   while (tokenizer.GetNext() != ResPathParser::kSuccess) {
     const StringType& token = tokenizer.token();
     ResPathParser::Type type = tokenizer.type();
     switch (type) {
+      case ResPathParser::kProtoSpecifier:
+        path->proto_ = token;
+        path->type_ = ResPath::kProtoPath;
+        break;
       case ResPathParser::kComponent:
-        component = token;
+        path->component_ = token;
         break;
       case ResPathParser::kPrevDir:
-        if (!component.empty()) return false;
         if (vec.empty()) return false;
         if (vec.back() == FILE_PATH_LITERAL("//")) return false;
         vec.resize(vec.size() - 1);
         break;
       case ResPathParser::kDirSplitter:
       case ResPathParser::kCurrentDir:
-        if (!component.empty()) return false;
         break;
       case ResPathParser::kRoot:
-        if (!component.empty()) return false;
         vec.push_back(FILE_PATH_LITERAL("//"));
+        path->type_ = ResPath::kAbsolutePath;
         break;
       case ResPathParser::kName:
-        if (!component.empty()) return false;
         vec.push_back(token);
         break;
+      case ResPathParser::kErrorToken:
+        path->type_ = ResPath::kInvalidPath;
+        return false;
+      default:
+        CHECK(false);
+        return false;
     }
   }
 
+  path->fullpath_.append(path->proto());
+  for (size_t i = 0; i < vec.size(); ++i) {
+    if (i > 1) {
+      path->fullpath_.append(FILE_PATH_LITERAL("/"));
+    } else if (i == 1 && path->type() != ResPath::kAbsolutePath) {
+      path->fullpath_.append(FILE_PATH_LITERAL("/"));
+    }
+
+    path->fullpath_.append(vec[i]);
+  }
+
+  path->file_path_ = path->fullpath_;
+  path->fullpath_.append(path->component());
   return true;
 }
 

@@ -52,7 +52,7 @@ class AZER_EXPORT ResPathParser {
   enum Type {
     kEnd = -1,
     kNotSpecified = 0,
-    kProtoSpcecifier = 1,
+    kProtoSpecifier = 1,
     kComponent,
     kRoot,
     kCurrentDir,
