@@ -16,7 +16,7 @@ int ResPathSplitter::GetNext() {
   CharType c = *index_;
   if (c == FILE_PATH_LITERAL('\0')) {
     token_type_ = kUnkownToken;
-    return ResPathTokenizer::kNoTokens;
+    return ResPathParser::kNoTokens;
   }
 
   bool demils = false;
@@ -28,19 +28,19 @@ int ResPathSplitter::GetNext() {
       case FILE_PATH_LITERAL('.'): 
         demils = true;
         if (!current_.empty() && prev != c) {
-          return ResPathTokenizer::kSuccess;
+          return ResPathParser::kSuccess;
         } else {
 		  token_type_ = static_cast<Type>(c);
           current_.push_back(c);
         }
         break;
       default:
-        if (demils) return ResPathTokenizer::kSuccess;
+        if (demils) return ResPathParser::kSuccess;
 		token_type_ = kStringToken;
         current_.push_back(c);
         if (!ValidStringChar(c)) {
           ++index_;
-          return ResPathTokenizer::kContainInvalidChar;
+          return ResPathParser::kContainInvalidChar;
         }
         break;
     }
@@ -48,7 +48,7 @@ int ResPathSplitter::GetNext() {
     c = *++index_;
   }
 
-  return ResPathTokenizer::kSuccess;
+  return ResPathParser::kSuccess;
 }
 
 bool ResPathSplitter::ValidStringChar(CharType cb) const {
@@ -68,23 +68,23 @@ bool ResPathSplitter::ValidStringChar(CharType cb) const {
   return false;
 }
 
-ResPathTokenizer::ResPathTokenizer(const StringType& string) 
+ResPathParser::ResPathParser(const StringType& string) 
     : string_(string)
     , index_(0)
     , following_token_(false) {
 }
 
-ResPathTokenizer::~ResPathTokenizer() {
+ResPathParser::~ResPathParser() {
 }
 
-void ResPathTokenizer::SetTokenTypeIfNotSpecified(TokenType type) {
+void ResPathParser::SetTokenTypeIfNotSpecified(TokenType type) {
   DCHECK_NE(type, kNotSpecified);
   if (token_type_ != kNotSpecified) {
     token_type_ = type;
   }
 }
 
-bool ResPathTokenizer::Init() {
+bool ResPathParser::Init() {
   ResPathSplitter splitter(string_);
   int ret = kSuccess;
   Token token;
@@ -100,7 +100,7 @@ bool ResPathTokenizer::Init() {
   return ret == kNoTokens;
 }
 
-int ResPathTokenizer::HandleCommaToken(const Token& token) {
+int ResPathParser::HandleCommaToken(const Token& token) {
   token_.append(token.token);
   if (token_.size() > 1u) {
     return kUnknownFormat;
@@ -124,7 +124,7 @@ int ResPathTokenizer::HandleCommaToken(const Token& token) {
   }
 }
 
-int ResPathTokenizer::HandleSlashToken(const Token& token) {
+int ResPathParser::HandleSlashToken(const Token& token) {
   token_.append(token.token);
   if (!following_token_) {
     if (token_.size() == 2u) {
@@ -140,7 +140,7 @@ int ResPathTokenizer::HandleSlashToken(const Token& token) {
   }
 }
 
-int ResPathTokenizer::HandleDotTokenWithNameProbility(const Token& token) {
+int ResPathParser::HandleDotTokenWithNameProbility(const Token& token) {
   const Token& next_token = GetSplitterToken(index_);
   if (next_token.type == ResPathSplitter::kSlashToken
       || next_token.type == ResPathSplitter::kCommaToken) {
@@ -159,7 +159,7 @@ int ResPathTokenizer::HandleDotTokenWithNameProbility(const Token& token) {
   }
 }
 
-int ResPathTokenizer::HandleDotToken(const Token& token) {
+int ResPathParser::HandleDotToken(const Token& token) {
   SetTokenTypeIfNotSpecified(kName);
   token_.append(token.token);
   const Token& next_token = GetSplitterToken(index_);
@@ -171,7 +171,7 @@ int ResPathTokenizer::HandleDotToken(const Token& token) {
   }
 }
 
-int ResPathTokenizer::HandleStringToken(const Token& token) {
+int ResPathParser::HandleStringToken(const Token& token) {
   SetTokenTypeIfNotSpecified(kName);
   token_.append(token.token);
   const Token& next_token = GetSplitterToken(index_);
@@ -183,7 +183,7 @@ int ResPathTokenizer::HandleStringToken(const Token& token) {
   }
 }
 
-int ResPathTokenizer::HandleStringTokenWithProtoProbility(const Token& token) {
+int ResPathParser::HandleStringTokenWithProtoProbility(const Token& token) {
   if (GetSplitterToken(index_).type == ResPathSplitter::kCommaToken
       && GetSplitterToken(index_).token.length() == 1u
       && GetSplitterToken(index_ + 1).type == ResPathSplitter::kSlashToken
@@ -198,7 +198,7 @@ int ResPathTokenizer::HandleStringTokenWithProtoProbility(const Token& token) {
   }
 }
 
-int ResPathTokenizer::GetNext() {
+int ResPathParser::GetNext() {
   if (!following_token_) {
     if (!Init()) {
       return kError;
@@ -234,7 +234,7 @@ int ResPathTokenizer::GetNext() {
   return ret;
 }
 
-const ResPathTokenizer::Token& ResPathTokenizer::GetSplitterToken(int index) const {
+const ResPathParser::Token& ResPathParser::GetSplitterToken(int index) const {
   return token_list_[index];
 }
 }  // namespace files

@@ -31,11 +31,11 @@ TEST(ResPathSplitter, Base) {
     ResPathSplitter splitter(cases[i]);
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {
-      ASSERT_EQ(splitter.GetNext(), ResPathTokenizer::kSuccess);
+      ASSERT_EQ(splitter.GetNext(), ResPathParser::kSuccess);
       ASSERT_EQ(splitter.token(), *expect_token);
       expect_token++;
     }
-    ASSERT_EQ(splitter.GetNext(), ResPathTokenizer::kNoTokens);
+    ASSERT_EQ(splitter.GetNext(), ResPathParser::kNoTokens);
   }
 }
 
@@ -66,11 +66,11 @@ TEST(ResPathSplitter, TokenType) {
     ResPathSplitter splitter(cases[i]);
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {
-      ASSERT_EQ(splitter.GetNext(), ResPathTokenizer::kSuccess);
+      ASSERT_EQ(splitter.GetNext(), ResPathParser::kSuccess);
       ASSERT_EQ(splitter.token(), *expect_token);
       expect_token++;
     }
-    ASSERT_EQ(splitter.GetNext(), ResPathTokenizer::kNoTokens);
+    ASSERT_EQ(splitter.GetNext(), ResPathParser::kNoTokens);
   }
 }
 
@@ -81,7 +81,7 @@ TEST(ResPathSplitter, InvalidChar) {
 
   const int kMaxTokens = 100;
   int expect_states[][kMaxTokens] = {
-    {ResPathTokenizer::kContainInvalidChar, ResPathTokenizer::kNoTokens,},
+    {ResPathParser::kContainInvalidChar, ResPathParser::kNoTokens,},
   };
 
   StringType expect_tokens[][kMaxTokens] = {
@@ -102,7 +102,7 @@ TEST(ResPathSplitter, InvalidChar) {
   }
 }
 
-TEST(ResPathTokenizer, Base) {
+TEST(ResPathParser, Base) {
   StringType cases[] = {
     RESL("//:.a"),
     RESL("c////cc"),
@@ -125,19 +125,19 @@ TEST(ResPathTokenizer, Base) {
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathTokenizer tokenizer(cases[i]);
+    ResPathParser tokenizer(cases[i]);
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {
-      ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kSuccess);
+      ASSERT_EQ(tokenizer.GetNext(), ResPathParser::kSuccess);
       ASSERT_EQ(tokenizer.token(), *expect_token);
       expect_token++;
     }
-    ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kSuccess);
-    ASSERT_EQ(tokenizer.type(), ResPathTokenizer::kEnd);
+    ASSERT_EQ(tokenizer.GetNext(), ResPathParser::kSuccess);
+    ASSERT_EQ(tokenizer.type(), ResPathParser::kEnd);
   }
 }
 
-TEST(ResPathTokenizer, Error) {
+TEST(ResPathParser, Error) {
   StringType cases[] = {
     RESL("//:."),
   };
@@ -148,15 +148,15 @@ TEST(ResPathTokenizer, Error) {
   };
 
   int expect_types[][kMaxTokens] = {
-    {ResPathTokenizer::kRoot, ResPathTokenizer::kErrorToken}, 
+    {ResPathParser::kRoot, ResPathParser::kErrorToken}, 
   };
 
   int expect_rets[][kMaxTokens] = {
-    {ResPathTokenizer::kSuccess, ResPathTokenizer::kInvalidComponent},
+    {ResPathParser::kSuccess, ResPathParser::kInvalidComponent},
   };
   
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathTokenizer tokenizer(cases[i]);
+    ResPathParser tokenizer(cases[i]);
     StringType* expect_token = expect_tokens[i];
     int* expect_type = expect_types[i];
     int* expect_ret = expect_rets[i];
