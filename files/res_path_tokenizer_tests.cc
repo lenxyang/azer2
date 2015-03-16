@@ -150,13 +150,18 @@ TEST(ResPathTokenizer, Error) {
   int expect_types[][kMaxTokens] = {
     {ResPathTokenizer::kRoot, ResPathTokenizer::kErrorToken}, 
   };
+
+  int expect_rets[][kMaxTokens] = {
+    {ResPathTokenizer::kSuccess, ResPathTokenizer::kInvalidComponent},
+  };
   
   for (size_t i = 0; i < arraysize(cases); ++i) {
     ResPathTokenizer tokenizer(cases[i]);
     StringType* expect_token = expect_tokens[i];
     int* expect_type = expect_types[i];
+    int* expect_ret = expect_rets[i];
     while (*expect_token != RESL("\0")) {
-      ASSERT_EQ(tokenizer.GetNext(), ResPathTokenizer::kSuccess);
+      ASSERT_EQ(tokenizer.GetNext(), *expect_ret);
       ASSERT_EQ(tokenizer.token(), *expect_token);
       ASSERT_EQ(tokenizer.type(), *expect_type);
       expect_token++;
