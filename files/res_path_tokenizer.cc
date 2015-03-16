@@ -142,16 +142,16 @@ int ResPathTokenizer::HandleSlashToken(const Token& token) {
 
 int ResPathTokenizer::HandleDotTokenWithNameProbility(const Token& token) {
   const Token& next_token = GetSplitterToken(index_);
-  if (next_token == ResPathSplitter::kSlashToken
-      || next_token == ResPathSplitter::kCommaToken) {
+  if (next_token.type == ResPathSplitter::kSlashToken
+      || next_token.type == ResPathSplitter::kCommaToken) {
     if (token.token.length() == 1u) {
       SetTokenTypeIfNotSpecified(kCurrentDir);
       return kSuccess;
     } else if (token.token.length() == 2u) {
-      SetTokenTypeIfNotSpecified(kPrevtDir);
+      SetTokenTypeIfNotSpecified(kPrevDir);
       return kSuccess;
     } else {
-      SetTokenTypeIfNotSpecified(kTooManyDots);
+      SetTokenTypeIfNotSpecified(kErrorToken);
       return kError;
     }
   } else {
@@ -160,7 +160,7 @@ int ResPathTokenizer::HandleDotTokenWithNameProbility(const Token& token) {
 }
 
 int ResPathTokenizer::HandleDotToken(const Token& token) {
-  SetTokenTypeIfNotSpecified(kDots);
+  SetTokenTypeIfNotSpecified(kName);
   token_.append(token.token);
   const Token& next_token = GetSplitterToken(index_);
   if (next_token.type == ResPathSplitter::kStringToken) {

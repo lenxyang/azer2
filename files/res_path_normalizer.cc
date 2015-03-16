@@ -23,16 +23,17 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
     switch (type) {
       case ResPathTokenizer::kComponent:
         if (path->component_.empty()) {
-          path->compoennt_ = token;
-          path->fullpath_->append(token);
+          path->component_ = token;
+          path->fullpath_.append(token);
         } else {
         }
         break;
       case ResPathTokenizer::kDirSplitter:
         path->fullpath_.append(FILE_PATH_LITERAL("/"));
         break;
+      case ResPathTokenizer::kCurrentDir:
+      case ResPathTokenizer::kPrevDir:
       case ResPathTokenizer::kRoot:
-      case ResPathTokenizer::kDots:
       case ResPathTokenizer::kName:
         path->fullpath_.append(token);
         break;
