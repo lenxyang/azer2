@@ -84,6 +84,7 @@ class AZER_EXPORT ResPathParser {
   StringType token_;
 
   void SetTypeIfNotSpecified(Type type);
+  void SetType(Type type) { token_type_ = type;}
   std::vector<Token> token_list_;
   bool has_component_;
   int index_;

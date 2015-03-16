@@ -117,7 +117,7 @@ int ResPathParser::HandleCommaToken(const Token& token) {
       index_++;
       return HandleDotToken(next_token);
     } else {
-      SetTypeIfNotSpecified(kErrorToken);
+      SetType(kErrorToken);
       return kInvalidComponent;
     }
   } else {
@@ -132,7 +132,7 @@ int ResPathParser::HandleSlashToken(const Token& token) {
       SetTypeIfNotSpecified(kRoot);
       return kSuccess;
     } else {
-      SetTypeIfNotSpecified(kErrorToken);
+      SetType(kErrorToken);
       return kInvalidRoot;
     }
   } else {
@@ -152,7 +152,7 @@ int ResPathParser::HandleDotTokenWithNameProbility(const Token& token) {
       SetTypeIfNotSpecified(kPrevDir);
       return kSuccess;
     } else {
-      SetTypeIfNotSpecified(kErrorToken);
+      SetType(kErrorToken);
       return kError;
     }
   } else {
@@ -231,10 +231,12 @@ int ResPathParser::GetNext() {
     ret = kUnknownFormat;
   }
 
-  if (type() == kComponent) {
-    has_component_ = true;
-  } else if (has_component_) {
-    ret = kTokenFollowingComponent;
+  if (ret == kSuccess) {
+    if (type() == kComponent) {
+      has_component_ = true;
+    } else if (has_component_ && type() != kEnd) {
+      ret = kTokenFollowingComponent;
+    }
   }
 
   following_token_ = true;
