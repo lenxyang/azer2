@@ -6,11 +6,8 @@
 
 namespace azer {
 
-namespace resources {
 class ResourceLoader;
 class ResourceLoaderManager;
-}  // namespace resources
-
 class ResourceContext;
 class SceneNode;
 
@@ -27,7 +24,7 @@ class AZER_EXPORT ResourceManager {
   // load resource into repositor node
   bool LoadResourceSync(const ResPath& path, ResourcePtr* ptr); 
   ResourceContext* context_;
-  resources::RepositoryNodePtr root_;
+  RepositoryNodePtr root_;
   DISALLOW_COPY_AND_ASSIGN(ResourceManager);
 };
 }  // namespace azer

@@ -8,8 +8,6 @@
 #include "azer/base/resource.h"
 
 namespace azer {
-namespace resources {
-
 class RepositoryNode;
 typedef scoped_refptr<RepositoryNode> RepositoryNodePtr;
 
@@ -66,5 +64,4 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
 
 // generate tree hierarchy if the node in path not exits
 void GenerateTreeHierarchy(const ResPath& path, RepositoryNodePtr root);
-}  // namespace resources
 }  // namespace azer

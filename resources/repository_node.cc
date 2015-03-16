@@ -8,8 +8,6 @@
 #include "base/strings/stringprintf.h"
 
 namespace azer {
-namespace resources {
-
 RepositoryNode::RepositoryNode(const StringType& name) 
     : name_(name)
     , parent_(NULL) {
@@ -197,5 +195,4 @@ void GenerateTreeHierarchy(const ResPath& path, RepositoryNodePtr root) {
     DCHECK(ptr.get());
   }
 }
-}  // namespace resources
 }  // namespace azer

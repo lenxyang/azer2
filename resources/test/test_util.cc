@@ -8,7 +8,6 @@
 #include "azer/base/string.h"
 
 namespace azer {
-namespace resources {
 namespace test {
 
 RepositoryNodePtr GenerateRepositoryTreeFromString(const std::string& str) {
@@ -30,5 +29,4 @@ RepositoryNodePtr GenerateRepositoryTreeFromString(const std::string& str) {
   return root;
 }
 }  // namespace test
-}  // namespace resources
 }  // namespace azer

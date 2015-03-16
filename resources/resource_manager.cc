@@ -5,8 +5,6 @@
 
 namespace azer {
 
-using resources::RepositoryNodePtr;
-
 ResourceManager::ResourceManager(ResourceContext* context)
     : context_(context) {
 }
@@ -33,8 +31,8 @@ bool ResourceManager::LoadResourceSync(const ResPath& path, ResourcePtr* ptr) {
   FileSystem* fs = context_->GetFileSystem();
   FileContentPtr content = fs->LoadFile(path);
   if (content.get()) {
-    resources::ResourceLoaderManager* mgr = context_->GetResourceLoaderManager();
-    resources::ResourceLoader* loader = mgr->GetResourceLoader(path, content.get());
+    ResourceLoaderManager* mgr = context_->GetResourceLoaderManager();
+    ResourceLoader* loader = mgr->GetResourceLoader(path, content.get());
     *ptr = loader->LoadResource(path, content.get());
     return ptr->get() != NULL;
   } else {

@@ -5,8 +5,6 @@
 #include "azer/resources/test/test_util.h"
 
 namespace azer {
-namespace resources {
-
 using ::azer::test::Utf8ResPath;
 
 TEST(RepositoryNode, AddChildAndRemove) {
@@ -80,13 +78,12 @@ TEST(RepositoryNode, RemoveChild) {
 }
 
 TEST(RepositoryNode, GenerateTreeHierarchy) {
-  ResPath path("//group4/group5/group6/leaf3");
-  RepositoryNodePtr root(new RepositoryNodePtr("//"));
+  ResPath path(AZER_LITERAL("//group4/group5/group6/leaf3"));
+  RepositoryNodePtr root(new RepositoryNode(AZER_LITERAL("//")));
   GenerateTreeHierarchy(path, root);
-  RepositoryNodePtr leaf3 = root->GetNode(path.fullpath());
+  RepositoryNodePtr leaf3 = root->GetNode(ResPath(path.fullpath()));
   ASSERT_TRUE(leaf3.get());
-  ASSERT_TRUE(root->HasAncestor(leaf3.get());
+  ASSERT_TRUE(root->HasAncestor(leaf3.get()));
 }
 
-}  // namespace resources {
 }  // namespace azer
