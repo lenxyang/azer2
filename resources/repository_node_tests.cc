@@ -78,5 +78,15 @@ TEST(RepositoryNode, RemoveChild) {
   leaf3  = root->GetNode(Utf8ResPath("//group4/group5/group6/leaf3"));
   ASSERT_TRUE(leaf3.get() == NULL);
 }
+
+TEST(RepositoryNode, GenerateTreeHierarchy) {
+  ResPath path("//group4/group5/group6/leaf3");
+  RepositoryNodePtr root(new RepositoryNodePtr("//"));
+  GenerateTreeHierarchy(path, root);
+  RepositoryNodePtr leaf3 = root->GetNode(path.fullpath());
+  ASSERT_TRUE(leaf3.get());
+  ASSERT_TRUE(root->HasAncestor(leaf3.get());
+}
+
 }  // namespace resources {
 }  // namespace azer

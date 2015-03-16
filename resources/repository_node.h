@@ -25,6 +25,7 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   void RemoveChild(RepositoryNodePtr child);
   bool HasAncestor(RepositoryNode* node) const;
   RepositoryNodePtr GetChild(const StringType& relative);
+  RepositoryNodePtr FindOrCreate(const StringType& name);
 
   const StringType& name() const { return name_;}
   StringType fullpath() const;
@@ -38,9 +39,14 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
 
   RepositoryNode* parent() { return parent_;}
   const RepositoryNode* parent() const { return parent_;}
-  
+
+  // get resource
+  bool AddResource(const ResPath& path, ResourcePtr resource);
+  ResourcePtr GetLocalResource(const StringType& path);
   ResourcePtr GetResource(const ResPath& path);
   RepositoryNodePtr GetResourceParent(const ResPath& path);
+
+  // get nodes
   RepositoryNodePtr GetLocalNode(const StringType& name);
   RepositoryNodePtr GetNode(const ResPath& path);
   RepositoryNodePtr GetNodeParent(const ResPath& path);
@@ -49,7 +55,6 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   std::string PrintHierarchy(int ident = 0);
  private:
   // get relative path's parent
-  ResourcePtr GetLocalResource(const StringType& path);
   RepositoryNodePtr GetNodeFromDirVec(const std::vector<StringType>& path);
   StringType name_;
   RepositoryNode* parent_;
@@ -57,5 +62,8 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   std::map<StringType, ResourcePtr> resource_dict_;
   DISALLOW_COPY_AND_ASSIGN(RepositoryNode);
 };
+
+// generate tree hierarchy if the node in path not exits
+void GenerateTreeHierarchy(const ResPath& path, RepositoryNodePtr root);
 }  // namespace resources
 }  // namespace azer

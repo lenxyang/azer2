@@ -60,6 +60,17 @@ RepositoryNodePtr RepositoryNode::GetChild(const StringType& name) {
   }
 }
 
+RepositoryNodePtr RepositoryNode::FindOrCreate(const StringType& name) {
+  auto iter = children_.find(name);
+  if (iter != children_.end()) {
+    return iter->second;
+  } else {
+    RepositoryNodePtr ptr(new RepositoryNode(name));
+    children_.insert(std::pair(name, ptr));
+    return ptr;
+  }
+}
+
 bool RepositoryNode::HasAncestor(RepositoryNode* node) const {
   auto cur = node->parent();
   while (cur) {
@@ -71,6 +82,17 @@ bool RepositoryNode::HasAncestor(RepositoryNode* node) const {
   }
 
   return false;
+}
+
+bool AddResource(const ResPath& path, ResourcePtr resource) {
+  DCHECK(!path.component().empty());
+  auto iter = resource_dict_.find(path.component());
+  if (iter != resource_dict_.end()) {
+    return false;
+  }
+
+  resource_dict_.insert(std::make_pair(path.component(), resource));
+  return true;
 }
 
 ResourcePtr RepositoryNode::GetLocalResource(const StringType& path) {
@@ -161,6 +183,18 @@ std::string RepositoryNode::PrintHierarchy(int ident) {
     ss << iter->second->PrintHierarchy(ident);
   }
   return ss.str();
+}
+
+void GenerateTreeHierarchy(const ResPath& path, RepositoryNodePtr root) {
+  DCHECK_EQ(path.type(), ResPath::kAbsolutePath);
+  std::vector<StringType> vec;
+  ::base::SplitString(path.filepath().substr(2), FILE_PATH_LITERAL('/'), &vec);
+  RepositoryNodePtr ptr = root;
+  for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
+    if (iter->empty()) continue;
+    ptr = ptr->FindOrCreate(*iter);
+    DCHECK(ptr.get());
+  }
 }
 }  // namespace resources
 }  // namespace azer

@@ -4,6 +4,7 @@
 #include "azer/base/export.h"
 
 namespace azer {
+class FileSystem;
 class ResourceLoaderManager;
 
 class AZER_EXPORT ResourceContext {
@@ -13,8 +14,9 @@ class AZER_EXPORT ResourceContext {
 
   // Get Resource Loader manager
   virtual ResourceLoaderManager* GetResourceLoaderManager() = 0;
+
+  virtual FileSystem* GetFileSystem() = 0;
  protected:
- private:
   DISALLOW_COPY_AND_ASSIGN(ResourceContext);
 };
 }  // namespace azer
