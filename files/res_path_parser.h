@@ -46,6 +46,7 @@ class AZER_EXPORT ResPathParser {
     kUnknownFormat,
     kTooManyDots,
     kInvalidRoot,
+    kTokenFollowingComponent,
   };
 
   enum Type {
@@ -84,6 +85,7 @@ class AZER_EXPORT ResPathParser {
 
   void SetTypeIfNotSpecified(Type type);
   std::vector<Token> token_list_;
+  bool has_component_;
   int index_;
   Type token_type_;
   bool following_token_;  // not first_token

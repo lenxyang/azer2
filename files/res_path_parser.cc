@@ -70,6 +70,7 @@ bool ResPathTokenizer::ValidStringChar(CharType cb) const {
 
 ResPathParser::ResPathParser(const StringType& string) 
     : string_(string)
+    , has_component_(false)
     , index_(0)
     , following_token_(false) {
 }
@@ -228,6 +229,12 @@ int ResPathParser::GetNext() {
     index_--;
   } else {
     ret = kUnknownFormat;
+  }
+
+  if (type() == kComponent) {
+    has_component_ = true;
+  } else if (has_component_) {
+    ret = kTokenFollowingComponent;
   }
 
   following_token_ = true;

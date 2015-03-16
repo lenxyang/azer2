@@ -5,7 +5,6 @@
 #include "base/basictypes.h"
 #include "azer/base/string.h"
 #include "azer/files/res_path.h"
-#include "azer/files/res_path_tokenizer.h"
 
 namespace azer {
 class AZER_EXPORT ResPathNormalizer {
