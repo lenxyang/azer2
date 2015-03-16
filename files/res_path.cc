@@ -132,7 +132,11 @@ ResPath ResPath::parent() const {
   
   parent.type_ = type_;
   parent.component_ = FILE_PATH_LITERAL("");
-  parent.file_path_ = filepath().substr(0, pos);
+  if (pos == 1 && type_ == kAbsolutePath) {
+    parent.file_path_ = filepath().substr(0, pos + 1);
+  } else {
+    parent.file_path_ = filepath().substr(0, pos);
+  }
   parent.fullpath_.append(proto_);
   parent.fullpath_.append(parent.file_path_);
   return parent;

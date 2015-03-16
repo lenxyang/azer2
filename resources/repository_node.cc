@@ -83,6 +83,7 @@ ResourcePtr RepositoryNode::GetLocalResource(const StringType& path) {
 }
 
 ResourcePtr RepositoryNode::GetResource(const ResPath& path) {
+  DCHECK_NE(path.type(), ResPath::kInvalidPath);
   RepositoryNodePtr node = GetNode(ResPath(path.filepath()));
   if (node.get()) {
     return node->GetLocalResource(path.component());
@@ -92,6 +93,7 @@ ResourcePtr RepositoryNode::GetResource(const ResPath& path) {
 }
 
 RepositoryNodePtr RepositoryNode::GetResourceParent(const ResPath& path) {
+  DCHECK_NE(path.type(), ResPath::kInvalidPath);
   return GetNode(path.parent());
 }
 
@@ -100,9 +102,17 @@ RepositoryNodePtr RepositoryNode::GetLocalNode(const StringType& name) {
 }
 
 RepositoryNodePtr RepositoryNode::GetNode(const ResPath& path) {
-  std::vector<StringType> vec;
-  ::base::SplitString(path.filepath().substr(2), FILE_PATH_LITERAL('/'), &vec);
-  return root()->RepositoryNode::GetNodeFromDirVec(vec);
+  DCHECK_NE(path.type(), ResPath::kInvalidPath);
+  if (path.type() ==  ResPath::kAbsolutePath) {
+    std::vector<StringType> vec;
+    ::base::SplitString(path.filepath().substr(2), FILE_PATH_LITERAL('/'), &vec);
+    return root()->RepositoryNode::GetNodeFromDirVec(vec);
+  } else if (path.type() == ResPath::kRelativePath) {
+    return GetLocalNode(path.filepath());
+  } else {
+    CHECK(false) << "not support";
+    return RepositoryNodePtr();
+  }
 }
 
 RepositoryNodePtr RepositoryNode::GetRelativeNode(const StringType& path) {
@@ -112,6 +122,7 @@ RepositoryNodePtr RepositoryNode::GetRelativeNode(const StringType& path) {
 }
 
 RepositoryNodePtr RepositoryNode::GetNodeParent(const ResPath& path) {
+  DCHECK_NE(path.type(), ResPath::kInvalidPath);
   return GetNode(path.parent());
 }
 

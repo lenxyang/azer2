@@ -52,6 +52,7 @@ TEST(ResPath, InvalidPath) {
 TEST(ResPath, Parent) {
   StringType cases[] = {
     RESL("root/group1"),
+    RESL("//root"),
     RESL("//root/group1"),
     RESL("//root/group1/group2:test"),
     RESL("content://root/group1/group2:test"),
@@ -60,13 +61,15 @@ TEST(ResPath, Parent) {
   const int kMaxTokens = 100;
   StringType expect_path[][kMaxTokens] = {
     {RESL("root"), RESL("root"),},
+    {RESL("//"), RESL("//"),},
     {RESL("//root"), RESL("//root"),},
     {RESL("//root/group1"), RESL("//root/group1"),},
     {RESL("content://root/group1"), RESL("root/group1"),},
   };
 
   ResPath::PathType expect_type[] = {
-    ResPath::kRelativePath, 
+    ResPath::kRelativePath,
+    ResPath::kAbsolutePath,
     ResPath::kAbsolutePath, 
     ResPath::kAbsolutePath, 
     ResPath::kProtoPath, 
