@@ -1,5 +1,5 @@
 #include "base/basictypes.h"
-#include "azer/files/res_path_tokenizer.h"
+#include "azer/files/res_path_parser.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 #if defined(RESL) 
@@ -10,7 +10,7 @@
 
 namespace azer {
 namespace files {
-TEST(ResPathSplitter, Base) {
+TEST(ResPathTokenizer, Base) {
   StringType cases[] = {
     RESL(".://:."),
     RESL("c////cc"),
@@ -28,7 +28,7 @@ TEST(ResPathSplitter, Base) {
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathSplitter splitter(cases[i]);
+    ResPathTokenizer splitter(cases[i]);
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {
       ASSERT_EQ(splitter.GetNext(), ResPathParser::kSuccess);
@@ -39,7 +39,7 @@ TEST(ResPathSplitter, Base) {
   }
 }
 
-TEST(ResPathSplitter, TokenType) {
+TEST(ResPathTokenizer, TokenType) {
   StringType cases[] = {
     RESL(".://:."),
     RESL("c////cc"),
@@ -53,7 +53,7 @@ TEST(ResPathSplitter, TokenType) {
     {RESL("."), RESL(":"), RESL("ef"), RESL("..."), RESL("\0")},
   };
 
-  typedef ResPathSplitter Splitter;
+  typedef ResPathTokenizer Splitter;
   const int expect_types[][kMaxTokens] = {
     {Splitter::kDotToken, Splitter::kCommaToken, Splitter::kSlashToken,
      Splitter::kCommaToken, Splitter::kDotToken},
@@ -63,7 +63,7 @@ TEST(ResPathSplitter, TokenType) {
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathSplitter splitter(cases[i]);
+    ResPathTokenizer splitter(cases[i]);
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {
       ASSERT_EQ(splitter.GetNext(), ResPathParser::kSuccess);
@@ -74,7 +74,7 @@ TEST(ResPathSplitter, TokenType) {
   }
 }
 
-TEST(ResPathSplitter, InvalidChar) {
+TEST(ResPathTokenizer, InvalidChar) {
   StringType cases[] = {
     RESL("-"),
   };
@@ -89,7 +89,7 @@ TEST(ResPathSplitter, InvalidChar) {
   };
 
   for (size_t i = 0; i < arraysize(cases); ++i) {
-    ResPathSplitter splitter(cases[i]);
+    ResPathTokenizer splitter(cases[i]);
     int* expect_state = expect_states[i];
     StringType* expect_token = expect_tokens[i];
     while (*expect_token != RESL("\0")) {

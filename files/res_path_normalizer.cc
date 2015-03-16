@@ -6,7 +6,7 @@
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
 #include "azer/base/string.h"
-#include "azer/files/res_path_tokenizer.h"
+#include "azer/files/res_path_parser.h"
 
 namespace azer {
 
@@ -22,7 +22,7 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
   std::vector<StringType> vec;
   while (tokenizer.GetNext() != ResPathParser::kSuccess) {
     const StringType& token = tokenizer.token();
-    ResPathParser::TokenType type = tokenizer.type();
+    ResPathParser::Type type = tokenizer.type();
     switch (type) {
       case ResPathParser::kComponent:
         component = token;

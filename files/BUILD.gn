@@ -11,8 +11,8 @@ source_set("files") {
     "res_path.h",
     "res_path_normalizer.cc",
     "res_path_normalizer.h",
-    "res_path_tokenizer.cc",
-    "res_path_tokenizer.h",
+    "res_path_parser.cc",
+    "res_path_parser.h",
   ]
 
   deps = ["//base"]
@@ -35,7 +35,7 @@ source_set("unittests") {
     "file_system_tests.cc",
     "res_path_tests.cc",
     "res_path_normalizer_tests.cc",
-    "res_path_tokenizer_tests.cc",
+    "res_path_parser_tests.cc",
   ]
   visibility = ["//azer:unittests"]
   deps = [
