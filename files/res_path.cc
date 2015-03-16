@@ -83,7 +83,7 @@ bool ResPath::AppendCopy(const ResPath& path, ResPath* output) const {
   ResPath new_path(*this);
   if (new_path.Append(path)) {
     *output = new_path;
-    return true;
+    return type() != kInvalidPath;
   } else {
     return false;
   }
@@ -96,13 +96,17 @@ ResPath ResPath::AppendCopyOrDie(const ResPath& path) const {
 }
 
 bool ResPath::Append(const ResPath& str) {
-  if (rawpath_.back() != kSeperator) {
-    rawpath_.push_back(kSeperator);
+  if (!rawpath_.empty()) {
+    if (rawpath_.back() != kSeperator) {
+      rawpath_.push_back(kSeperator);
+    }
+  } else {
+    rawpath_ = str.rawpath();
   }
   
   rawpath_.append(str.fullpath());
   OnPathChanged(this->fullpath());
-  return true;
+  return type() != kInvalidPath;
 }
 
 ResPath ResPath::parent() const {
