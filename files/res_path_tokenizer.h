@@ -6,10 +6,10 @@
 
 namespace azer {
 namespace files {
-class AZER_EXPORT ResPathSplitter {
+class AZER_EXPORT ResPathTokenizer {
  public:
-  explicit ResPathSplitter(const StringType& string);
-  ~ResPathSplitter();
+  explicit ResPathTokenizer(const StringType& string);
+  ~ResPathTokenizer();
 
   enum Type {
     kUnkownToken = -1,
@@ -29,13 +29,13 @@ class AZER_EXPORT ResPathSplitter {
   StringType current_;
   StringType raw_;
   Type token_type_;
-  DISALLOW_COPY_AND_ASSIGN(ResPathSplitter);
+  DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
 };
 
-class AZER_EXPORT ResPathTokenizer {
+class AZER_EXPORT ResPathParser {
  public:
-  explicit ResPathTokenizer(const StringType& string);
-  ~ResPathTokenizer();
+  explicit ResPathParser(const StringType& string);
+  ~ResPathParser();
 
   enum {
     kSuccess = 0,
@@ -48,7 +48,7 @@ class AZER_EXPORT ResPathTokenizer {
     kInvalidRoot,
   };
 
-  enum TokenType {
+  enum Type {
     kEnd = -1,
     kNotSpecified = 0,
     kProtoSpcecifier = 1,
@@ -62,12 +62,12 @@ class AZER_EXPORT ResPathTokenizer {
   };
   int GetNext();
   const StringType& token() const { return token_;}
-  TokenType type() const { return token_type_;}
+  Type type() const { return token_type_;}
  private:
   bool Init();
 
   struct Token {
-    ResPathSplitter::Type type;
+    ResPathTokenizer::Type type;
     StringType token;
   };
   int HandleCommaToken(const Token& token);
@@ -82,12 +82,12 @@ class AZER_EXPORT ResPathTokenizer {
   StringType string_;
   StringType token_;
 
-  void SetTokenTypeIfNotSpecified(TokenType type);
+  void SetTypeIfNotSpecified(Type type);
   std::vector<Token> token_list_;
   int index_;
-  TokenType token_type_;
+  Type token_type_;
   bool following_token_;  // not first_token
-  DISALLOW_COPY_AND_ASSIGN(ResPathTokenizer);
+  DISALLOW_COPY_AND_ASSIGN(ResPathParser);
 };
 }  // namespace files
 }  // namespace azer
