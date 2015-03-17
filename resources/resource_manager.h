@@ -20,6 +20,8 @@ class AZER_EXPORT ResourceManager {
 
   // release all resource binding with scene node
   void ReleaseSceneResource(SceneNode* node);
+
+  ResourceContext* GetResContext() { return context_;}
  private:
   // load resource into repositor node
   bool LoadResourceSync(const ResPath& path, ResourcePtr* ptr); 
