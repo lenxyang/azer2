@@ -126,14 +126,6 @@ class AZER_EXPORT VertexData : public Resource {
   VertexDescPtr desc_ptr_;
 };
 
-// class VertexData
-inline VertexData::VertexData(const VertexDescPtr& desc, int vertex_num)
-    : Resource(kVertexData)
-    , desc_ptr_(desc)
-    , vertex_num_(vertex_num) {
-  data_.reset(new uint8[vertex_num_ * stride()]);
-}
-
 inline uint8* VertexData::next(uint8* current) const {
   DCHECK(current != NULL);
   DCHECK_EQ((current - pointer()) % stride(), 0);
@@ -141,12 +133,6 @@ inline uint8* VertexData::next(uint8* current) const {
   return (next_ptr < pointer() + buffer_size()) ? next_ptr : NULL;
 }
 
-inline void VertexData::CopyFrom(uint8* dataptr, uint32 datasize) {
-  DCHECK(dataptr != NULL);
-  DCHECK(pointer() != NULL);
-  DCHECK_LE(datasize, buffer_size());
-  memcpy(pointer(), dataptr, datasize);
-}
 }  // namespace azer
 
 

@@ -74,5 +74,20 @@ std::ostream& operator << (std::ostream& os, const azer::VertexDesc& vertex_data
   return os;
 }
 
+// class VertexData
+VertexData::VertexData(const VertexDescPtr& desc, int vertex_num)
+    : Resource(kVertexData)
+    , desc_ptr_(desc)
+    , vertex_num_(vertex_num) {
+  int capability = vertex_num_ * stride();
+  data_.reset(new uint8[capability]);
+}
+
+void VertexData::CopyFrom(uint8* dataptr, uint32 datasize) {
+  DCHECK(dataptr != NULL);
+  DCHECK(pointer() != NULL);
+  DCHECK_LE(datasize, buffer_size());
+  memcpy(pointer(), dataptr, datasize);
+}
 }  // namespace azer
 
