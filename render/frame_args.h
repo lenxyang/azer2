@@ -18,10 +18,12 @@ class AZER_EXPORT FrameArgs {
   float recent_average_fps() const; 
   float total_average_fps() const; 
 
-  const ::base::Time& time() const { return time_[which_];}
+  double time() const { return timef_;}
   const ::base::TimeDelta& delta() const { return delta_;}
  private:
   uint32 which_;
+  double timef_;
+  ::base::Time started_;
   ::base::Time time_[2];
   ::base::TimeDelta delta_;
   int64 frame_cnt_;

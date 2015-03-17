@@ -13,6 +13,7 @@ FrameArgs::FrameArgs()
     , max_frame_stored_(30) {
   int cur = which_;
   time_[which_] = ::base::Time::Now();
+  started_ = time_[which_];
 }
 
 void FrameArgs::Update() {
@@ -21,6 +22,8 @@ void FrameArgs::Update() {
   int prev = which_ ^ 1;
   time_[cur] = ::base::Time::Now();
   delta_ = time_[cur] - time_[prev];
+  ::base::TimeDelta total_delta = time_[cur] - started_;
+  timef_ = total_delta.InSeconds();
   frame_cnt_++;
   recent_frames_time_consumed_.push_back(delta_);
   recent_seconds_ += delta_.InSecondsF();
