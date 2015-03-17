@@ -14,8 +14,8 @@ typedef scoped_refptr<RepositoryNode> RepositoryNodePtr;
 
 class AZER_EXPORT ResourceLoader {
  public:
-  ResourceLoader() {}
-  virtual ~ResourceLoader() {}
+  ResourceLoader();
+  virtual ~ResourceLoader();
 
   // load resource into RepositoryNode   
   virtual ResourcePtr LoadResource(const ResPath& path, const FileContent* content,

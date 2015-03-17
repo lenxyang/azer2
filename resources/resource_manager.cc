@@ -33,7 +33,7 @@ bool ResourceManager::LoadResourceSync(const ResPath& path, ResourcePtr* ptr) {
   if (content.get()) {
     ResourceLoaderManager* mgr = context_->GetResourceLoaderManager();
     ResourceLoader* loader = mgr->GetResourceLoader(path, content.get());
-    *ptr = loader->LoadResource(path, content.get());
+    *ptr = loader->LoadResource(path, content.get(), this);
     return ptr->get() != NULL;
   } else {
     return false;
