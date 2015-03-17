@@ -13,6 +13,7 @@ class AZER_EXPORT FileContent : public ::base::RefCounted<FileContent> {
   FileContent();
   explicit FileContent(int64 capability);
   FileContent(const uint8* data, int64 size);
+  FileContent(scoped_ptr<uint8[]> data, int64 size);
 
   ~FileContent();
 

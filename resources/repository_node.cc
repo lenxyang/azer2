@@ -84,7 +84,6 @@ bool RepositoryNode::HasAncestor(RepositoryNode* node) const {
 
 
 bool RepositoryNode::AddLocalResource(const StringType& name, ResourcePtr resource) {
-  DCHECK(!name.empty());
   auto iter = resource_dict_.find(name);
   if (iter != resource_dict_.end()) {
     return false;

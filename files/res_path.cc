@@ -33,7 +33,7 @@ ResPath::ResPath()
 }
 
 ResPath::ResPath(const CharType* path)
-    : fullpath_(StringType(path)) {
+    : rawpath_(StringType(path)) {
   OnPathChanged(this->rawpath());
 }
 

@@ -21,6 +21,12 @@ FileContent::FileContent(const uint8* data, int64 size)
   memcpy(data_.get(), data, size);
 }
 
+FileContent::FileContent(scoped_ptr<uint8[]> data, int64 size)
+    : length_(size)
+    , capability_(size)
+    , data_(data.Pass()) {
+}
+
 FileContent::~FileContent() {
 }
 }  // namespace azer

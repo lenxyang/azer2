@@ -7,13 +7,13 @@ namespace azer {
 
 ResourceManager::ResourceManager(ResourceContext* context)
     : context_(context) {
+  root_ = new RepositoryNode(AZER_LITERAL("//"));
 }
 
 ResourceManager::~ResourceManager() {
 }
 
 ResourcePtr ResourceManager::GetResource(const ResPath& path) {
-  DCHECK(!path.component().empty());
   ResourcePtr resptr = root_->GetResource(path);
   if (resptr.get()) { return resptr;}
 

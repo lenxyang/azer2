@@ -13,20 +13,20 @@ FileContentPtr NativeFileSystem::LoadFile(const ResPath& path) {
     return FileContentPtr();
   }
 
-  ::base::FilePath real_path = fs_root_.Append(path.filepath());
+  ::base::FilePath real_path = fs_root_.Append(path.filepath().substr(2));
   int64 size = 0;
   if (!::base::GetFileSize(real_path, &size)) {
     return FileContentPtr();
   }
 
-  FileContentPtr content(new FileContent(size));
-  int read = ::base::ReadFile(real_path, (char*)content->data(),
-                              content->capability());
+  scoped_ptr<uint8[]> data(new uint8[size]);
+  int read = ::base::ReadFile(real_path, (char*)data.get(), size);
   if (size != read) {
     return FileContentPtr();
   }
 
-  return content;
+  FileContentPtr ptr(new FileContent(data.Pass(), size));
+  return ptr;
 }
 
 bool NativeFileSystem::IsPathExists(const azer::ResPath& path) {
