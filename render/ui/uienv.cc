@@ -63,8 +63,9 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
 
 bool UIEnvironment::MainLoop(const Params& params) {
   using views::Widget;
-  Widget* widget = (params.widget ? params.widget : new Widget);
+  Widget* widget = new Widget;
   Widget::InitParams wparams;
+  wparams.native_widget = params.native_widget;
   wparams.delegate = params.view_delegate;
   wparams.context  = NULL;
   wparams.bounds   = gfx::Rect(0, 0, params.width, params.height);
