@@ -24,9 +24,9 @@ class AZER_EXPORT VertexDesc : public Resource {
    * 参考 D3D11_INPUT_ELEMENT_DESC(Direct3D 11)
    * 参考 Opengl glAttributePointer()
    */
-  struct Desc {
+  struct AZER_EXPORT Desc {
     char name[64];          // semantic_name
-    int semantic_index;   // semantic_index
+    int semantic_index;     // semantic_index
     DataFormat type;        // type
     bool aligned;           // aligned
   };
@@ -128,7 +128,7 @@ class AZER_EXPORT VertexData : public Resource {
 
 class AZER_EXPORT VertexBuffer : public HardwareBuffer {
  public:
-  struct Options {
+  struct AZER_EXPORT Options {
     char name[128];
     GraphicBuffer::Usage usage;
     CPUAccess cpu_access;  // defined render_system

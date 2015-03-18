@@ -49,7 +49,7 @@ public:
     kCubemapArray,
   };
 
-  struct SamplerState {
+  struct AZER_EXPORT SamplerState {
     Texture::WrapMode wrap_u;
     Texture::WrapMode wrap_v;
     Texture::WrapMode wrap_w;
@@ -63,23 +63,10 @@ public:
     int sample_level;
     int sample_qualifiy;
 
-    SamplerState()
-        : wrap_u(Texture::kWrap)
-        , wrap_v(Texture::kWrap)
-        , wrap_w(Texture::kWrap)
-        , mag_filter(Texture::kLinear)
-        , min_filter(Texture::kLinear)
-        , mip_filter(Texture::kLinear)
-        , compare_func(CompareFunc::kNever)
-        , border_color(0.0f, 0.0f, 0.0f, 0.0f)
-        , mip_level(1)
-        , max_anisotropy(1)
-        , sample_level(1)
-        , sample_qualifiy(0) {
-    }
+    SamplerState();
   };
 
-  struct Options {
+  struct AZER_EXPORT Options {
     gfx::Size size;
     SamplerState sampler;
     DataFormat format;
@@ -88,13 +75,7 @@ public:
     Texture::BindTarget target;
     Type type;
 
-    Options()
-        : format(kRGBAn8)
-        , usage(GraphicBuffer::kDefault)
-        , cpu_access(kCPUNoAccess)
-        , target(Texture::kUnknown)
-        , type(k2D) {
-    }
+    Options();
   };
 
   explicit Texture(const Options& opt);

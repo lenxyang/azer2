@@ -35,6 +35,8 @@ source_set("render") {
     "frustrum.h",
     "gpu_constants_table.cc",
     "gpu_constants_table.h",
+    "gpu_program.cc",
+    "gpu_program.h",
     "hardware_buffer.h",
     "hierarchy_transform.h",
     "indices_buffer.cc",

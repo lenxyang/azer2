@@ -22,7 +22,7 @@ enum ShaderType {
 
 class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
  public:
-  virtual ~GpuProgram() {}
+  virtual ~GpuProgram();
 
   std::string error_msg() const { return error_msg_;}
   RenderPipelineStage stage() const { return stage_;}
@@ -36,9 +36,7 @@ class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
   virtual VertexDescPtr GetInputDesc() { return NULL;}
   virtual VertexDescPtr GetOutputDesc() { return NULL;}
  protected:
-  GpuProgram(RenderPipelineStage stage, const std::string& program)
-      : stage_(stage)
-      , program_(program) {}
+  GpuProgram(RenderPipelineStage stage, const std::string& program);
 
   RenderPipelineStage stage_;
   std::string program_;
@@ -50,22 +48,14 @@ class AZER_EXPORT VertexGpuProgram : public GpuProgram {
  public:
   virtual VertexDescPtr GetInputDesc() { return desc_ptr_;}
  protected:
-  VertexGpuProgram(VertexDescPtr& desc, const std::string& program)
-      : GpuProgram(kVertexStage, program)
-      , desc_ptr_(desc) {
-  }
+  VertexGpuProgram(VertexDescPtr& desc, const std::string& program);
 
   VertexDescPtr desc_ptr_;
   DISALLOW_COPY_AND_ASSIGN(VertexGpuProgram);
 };
 
-inline CharType* ShaderSuffix(ShaderType type) {
-  switch (type) {
-    case kBinaryShader: return AZER_LITERAL("bin");
-    case kStringShader: return AZER_LITERAL("str");
-    default: NOTREACHED(); return AZER_LITERAL("");
-  }
-}
+CharType* ShaderSuffix(ShaderType type);
+
 
 typedef scoped_refptr<GpuProgram> GpuProgramPtr;
 typedef scoped_refptr<VertexGpuProgram> VertexGpuProgramPtr;

@@ -8,6 +8,29 @@
 #include "azer/render/canvas2d.h"
 
 namespace azer {
+Texture::SamplerState::SamplerState()
+    : wrap_u(Texture::kWrap)
+    , wrap_v(Texture::kWrap)
+    , wrap_w(Texture::kWrap)
+    , mag_filter(Texture::kLinear)
+    , min_filter(Texture::kLinear)
+    , mip_filter(Texture::kLinear)
+    , compare_func(CompareFunc::kNever)
+    , border_color(0.0f, 0.0f, 0.0f, 0.0f)
+    , mip_level(1)
+    , max_anisotropy(1)
+    , sample_level(1)
+    , sample_qualifiy(0) {
+}
+
+Texture::Options::Options()
+    : format(kRGBAn8)
+    , usage(GraphicBuffer::kDefault)
+    , cpu_access(kCPUNoAccess)
+    , target(Texture::kUnknown)
+    , type(k2D) {
+}
+
 Texture* Texture::Load(Type type, const ::base::FilePath& path, RenderSystem* rs) {
   Texture::Options opt;
   opt.target = Texture::kShaderResource;

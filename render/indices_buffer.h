@@ -48,7 +48,7 @@ typedef scoped_refptr<IndicesData> IndicesDataPtr;
 
 class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
 public:
-  struct Options {
+  struct AZER_EXPORT Options {
     GraphicBuffer::Usage usage;
     CPUAccess cpu_access;  // defined render_system
     Options();
