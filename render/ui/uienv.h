@@ -23,6 +23,7 @@ class AtExitManager;
 
 namespace views {
 class Widget;
+class NativeWidget;
 class WidgetDelegate;
 }
 
@@ -46,7 +47,7 @@ public:
     bool fullscreen;
     views::WidgetDelegate* view_delegate;
     RenderLoop::Delegate* render_delegate;
-    views::Widget* native_widget;
+    views::NativeWidget* native_widget;
     Params()
         : width(800)
         , height(600)
