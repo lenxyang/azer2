@@ -19,6 +19,7 @@ class AZER_EXPORT IndicesData : public Resource {
   };
 
   IndicesData(int num, IndexType type);
+  ~IndicesData() override {}
 
   int32 size() const { return size_;}
   const uint8* pointer() const {
@@ -46,23 +47,16 @@ class AZER_EXPORT IndicesData : public Resource {
 typedef scoped_refptr<IndicesData> IndicesDataPtr;
 
 class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
- public:
+public:
   struct Options {
     GraphicBuffer::Usage usage;
     CPUAccess cpu_access;  // defined render_system
-    Options()
-        : usage(GraphicBuffer::kDefault)
-        , cpu_access(kCPUNoAccess) {
-    }
+    Options();
   };
 
-  IndicesBuffer(const Options& opt)
-      : options_(opt)
-      , indices_num_(-1)
-      , type_(IndicesData::kUndefined) {
-  }
+  IndicesBuffer(const Options& opt);
 
-  virtual ~IndicesBuffer() {}
+  virtual ~IndicesBuffer();
 
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
@@ -76,23 +70,6 @@ class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
   IndicesData::IndexType type_;
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);
 };
-
-inline IndicesData::IndicesData(int num, IndexType type)
-    : Resource(kIndicesData)
-    , type_(type), size_(0) {
-  size_ = num * unit_size();
-  num_ = num;
-  data_.reset(new uint8[size_]);
-}
-
-inline int32 IndicesData::unit_size() const {
-  switch (type()) {
-    case kUint8: return (int32)sizeof(uint8);
-    case kUint16: return (int32)sizeof(uint16);
-    case kUint32: return (int32)sizeof(uint32);
-    default: CHECK(false); return 0;
-  }
-}
 
 typedef scoped_refptr<IndicesBuffer> IndicesBufferPtr;
 }  // namespace azer
