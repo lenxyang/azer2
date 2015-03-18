@@ -14,7 +14,7 @@ FrameArgs::FrameArgs()
   int cur = which_;
   time_[which_] = ::base::Time::Now();
   started_ = time_[which_];
-  recent_frames_time_consumed_(::base::TimeDelta());
+  recent_frames_time_consumed_.push_back(::base::TimeDelta());
 }
 
 void FrameArgs::Update() {
