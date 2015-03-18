@@ -46,13 +46,14 @@ public:
     bool fullscreen;
     views::WidgetDelegate* view_delegate;
     RenderLoop::Delegate* render_delegate;
-    
+    views::Widget* widget;
     Params()
         : width(800)
         , height(600)
         , fullscreen(false) 
         , view_delegate(NULL)
-        , render_delegate(NULL) {
+        , render_delegate(NULL)
+        , widget(NULL) {
     }
   };
   bool MainLoop(const Params& params);

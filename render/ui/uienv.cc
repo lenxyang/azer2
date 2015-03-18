@@ -63,7 +63,7 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
 
 bool UIEnvironment::MainLoop(const Params& params) {
   using views::Widget;
-  Widget* widget = new Widget;
+  Widget* widget = (params.widget ? params.widget : new Widget);
   Widget::InitParams wparams;
   wparams.delegate = params.view_delegate;
   wparams.context  = NULL;

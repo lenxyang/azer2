@@ -14,6 +14,7 @@ FrameArgs::FrameArgs()
   int cur = which_;
   time_[which_] = ::base::Time::Now();
   started_ = time_[which_];
+  recent_frames_time_consumed_(::base::TimeDelta());
 }
 
 void FrameArgs::Update() {
@@ -35,10 +36,10 @@ void FrameArgs::Update() {
 }
 
 float FrameArgs::recent_average_fps() const {
-  return recent_frames_time_consumed_.size() / recent_seconds_;
+  return recent_seconds_ / recent_frames_time_consumed_.size();
 }
 
 float FrameArgs::total_average_fps() const {
-  return frame_cnt_ / total_seconds_;
+  return total_seconds_ / frame_cnt_;
 }
 }  // namespace azer
