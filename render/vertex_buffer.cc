@@ -1,4 +1,5 @@
 #include "azer/render/vertex_buffer.h"
+#include "azer/math/math.h"
 
 namespace azer {
 
@@ -106,5 +107,8 @@ VertexBuffer::VertexBuffer(const Options &opt)
     , element_size_(-1)
     , buffer_size_(-1)
     , vertex_num_(-1) {
+}
+
+VertexBuffer::~VertexBuffer() {
 }
 }  // namespace azer

@@ -60,6 +60,8 @@ source_set("render") {
     "reusable_object_util.cc",
     "reusable_object_util.h",
     "swap_chain.h",
+    "technique.cc",
+    "technique.h",
     "texture.cc",
     "texture.h",
     "vertex_buffer.cc",

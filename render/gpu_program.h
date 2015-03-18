@@ -7,12 +7,13 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/base/string.h"
-#include "azer/render/vertex_data.h"
 #include "azer/render/render_system_enum.h"
 
 namespace azer {
 
 class RenderSystem;
+class VertexDesc;
+typedef scoped_refptr<VertexDesc> VertexDescPtr;
 
 enum ShaderType {
   kStringShader,

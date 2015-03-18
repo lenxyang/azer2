@@ -8,7 +8,7 @@
 #include "azer/base/export.h"
 #include "azer/render/technique.h"
 #include "azer/render/render_system.h"
-#include "azer/render/vertex_data.h"
+#include "azer/render/vertex_buffer.h"
 
 namespace azer {
 class AZER_EXPORT ShaderArray {

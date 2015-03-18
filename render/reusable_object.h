@@ -8,13 +8,17 @@
 #include "base/lazy_instance.h"
 
 #include "azer/base/export.h"
-#include "azer/render/blending.h"
 #include "azer/render/gpu_program.h"
-#include "azer/render/vertex_data.h"
 
 namespace azer {
-
+class Blending;
+class GpuProgram;
+class VertexDesc;
 class RenderSystem;
+
+typedef scoped_refptr<VertexDesc> VertexDescPtr;
+typedef scoped_refptr<Blending> BlendingPtr;
+typedef scoped_refptr<GpuProgram> GpuProgramPtr;
 
 // very common used objects
 // Notes: please dont't call it every time, just call GetXXX Method

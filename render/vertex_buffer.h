@@ -5,7 +5,7 @@
 
 #include "base/basictypes.h"
 #include "azer/base/export.h"
-#include "azer/render/vertex_data.h"
+#include "azer/base/resource.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render/hardware_buffer.h"
 
@@ -132,15 +132,11 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
     char name[128];
     GraphicBuffer::Usage usage;
     CPUAccess cpu_access;  // defined render_system
-    Options()
-        : usage(GraphicBuffer::kDefault)
-        , cpu_access(kCPUNoAccess) {
-      memset(name, 0, sizeof(name));
-    }
+    Options();
   };
 
   explicit VertexBuffer(const Options &opt);
-  virtual ~VertexBuffer() {}
+  virtual ~VertexBuffer();
 
   /**
    * 从 Lockable 继承的借口

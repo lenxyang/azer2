@@ -5,7 +5,7 @@
 #include "base/basictypes.h"
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
-#include "azer/render/vertex_data.h"
+#include "azer/render/vertex_buffer.h"
 #include "azer/render/hardware_buffer.h"
 
 namespace azer {
