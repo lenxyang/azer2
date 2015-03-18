@@ -36,10 +36,10 @@ void FrameArgs::Update() {
 }
 
 float FrameArgs::recent_average_fps() const {
-  return recent_seconds_ / recent_frames_time_consumed_.size();
+  return (float)recent_frames_time_consumed_.size() / recent_seconds_;
 }
 
 float FrameArgs::total_average_fps() const {
-  return total_seconds_ / frame_cnt_;
+  return (float)frame_cnt_ / total_seconds_;
 }
 }  // namespace azer
