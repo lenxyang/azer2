@@ -44,7 +44,8 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
     DISALLOW_COPY_AND_ASSIGN(Delegate);
   };
 
-  explicit RenderLoop(Delegate* delegate, views::Widget* widget);
+  explicit RenderLoop(Delegate* delegate, views::Widget* widget, 
+                      int32 max_fps = -1);
   virtual ~RenderLoop();
 
   azer::RenderSystem* GetRenderSystem() { return render_system_;}
@@ -59,15 +60,16 @@ class AZER_EXPORT RenderLoop : public ::base::RefCounted<RenderLoop> {
  private:
   bool Init();
   void RenderTask();
-  void PostTask(const ::base::TimeDelta& delta);
+  void PostTask(const ::base::TimeDelta& prev_frame_delta);
 
   scoped_ptr<WidgetRendererContext> widget_context_;
   Delegate* delegate_;
   azer::RenderSystem* render_system_;
   ::base::MessageLoop* message_loop_;
-  ::base::TimeDelta average_frame_consumed_;
+  ::base::TimeDelta expect_frame_consumed_;
   FrameArgs frame_data_;
   std::atomic<bool> stopping_;
+  const int kMaxFPS;
   DISALLOW_COPY_AND_ASSIGN(RenderLoop);
 };
 

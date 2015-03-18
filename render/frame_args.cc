@@ -23,7 +23,7 @@ void FrameArgs::Update() {
   time_[cur] = ::base::Time::Now();
   delta_ = time_[cur] - time_[prev];
   ::base::TimeDelta total_delta = time_[cur] - started_;
-  timef_ = total_delta.InSeconds();
+  timef_ = total_delta.InSecondsF();
   frame_cnt_++;
   recent_frames_time_consumed_.push_back(delta_);
   recent_seconds_ += delta_.InSecondsF();

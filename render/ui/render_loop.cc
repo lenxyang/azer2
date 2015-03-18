@@ -20,12 +20,16 @@ azer::RendererPtr& RenderLoop::Delegate::GetRenderer() {
   return widget_context_->GetRenderer();
 }
 
-RenderLoop::RenderLoop(Delegate* delegate, views::Widget* widget)
+RenderLoop::RenderLoop(Delegate* delegate, views::Widget* widget, int32 max_fps)
     : delegate_(delegate)
     , render_system_(NULL)
     , message_loop_(NULL)
-    , stopping_(false) {
-  average_frame_consumed_ = ::base::TimeDelta::FromMilliseconds(10);
+    , stopping_(false)
+    , kMaxFPS(max_fps) {
+  if (kMaxFPS > 0) {
+    double time = 1.0 / (double)kMaxFPS;
+    expect_frame_consumed_ = ::base::TimeDelta::FromSecondsD(time);
+  }
   widget_context_.reset(new WidgetRendererContext(widget));
 }
 
@@ -50,7 +54,7 @@ bool RenderLoop::Init() {
   return true;
 }
 
-void RenderLoop::PostTask(const ::base::TimeDelta& delta) {
+void RenderLoop::PostTask(const ::base::TimeDelta& prev_frame_delta) {
   DCHECK(NULL != delegate_);
   DCHECK(NULL != message_loop_);
   DCHECK(message_loop_ == ::base::MessageLoop::current());
@@ -60,14 +64,19 @@ void RenderLoop::PostTask(const ::base::TimeDelta& delta) {
 
   ::base::Closure closure = ::base::Bind(&RenderLoop::RenderTask, this);
   ::base::MessageLoop* cur = ::base::MessageLoop::current();
-
-  ::base::TimeDelta delay(average_frame_consumed_ - delta);
-  ::base::MessageLoop::ScopedNestableTaskAllower
-        allow(::base::MessageLoop::current());
-  if (delay.InSecondsF() > 0) {
-    message_loop_->PostDelayedTask(FROM_HERE, closure, delay);
+  
+  if (kMaxFPS > 0) {
+    ::base::TimeDelta delay(expect_frame_consumed_ - prev_frame_delta);
+    ::base::MessageLoop::ScopedNestableTaskAllower
+          allow(::base::MessageLoop::current());
+    if (delay.InSecondsF() > 0) {
+      message_loop_->PostDelayedTask(FROM_HERE, closure, delay);
+    } else {
+      message_loop_->PostTask(FROM_HERE, closure);
+    }
   } else {
-    message_loop_->PostTask(FROM_HERE, closure);
+    ::base::TimeDelta delay(::base::TimeDelta::FromSecondsD(0.0002));
+    message_loop_->PostDelayedTask(FROM_HERE, closure, delay);
   }
 }
 
@@ -97,7 +106,7 @@ bool RenderLoop::Run() {
 
   delegate_->widget_context_ = widget_context_.get();
   DCHECK(cur == message_loop_);
-  PostTask(average_frame_consumed_);
+  PostTask(expect_frame_consumed_);
   base::RunLoop().Run();
   return true;
 }
