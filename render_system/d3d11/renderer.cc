@@ -20,7 +20,7 @@
 namespace azer {
 namespace d3d11 {
 
-#define GET_D3D_RENDER_STATE()                        \
+#define GET_D3D_RENDER_STATE()                          \
   DCHECK(d3d_context_ != NULL);                         \
   ID3D11RasterizerState* obj = NULL;                    \
   d3d_context_->RSGetState(&obj);                       \
@@ -29,13 +29,13 @@ namespace d3d11 {
   ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));     \
   obj->GetDesc(&desc);
 
-#define SET_D3D_RENDER_STATE()  {                                     \
-  ID3D11RasterizerState* newobj = NULL;                                 \
-  HRESULT hr = GetDevice()->CreateRasterizerState(&desc, &newobj);      \
-  HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");     \
-  D3DObjPtr auto_ptr(newobj);                                           \
-  d3d_context_->RSSetState(newobj);                                     \
-}
+#define SET_D3D_RENDER_STATE()  {                                       \
+    ID3D11RasterizerState* newobj = NULL;                               \
+    HRESULT hr = GetDevice()->CreateRasterizerState(&desc, &newobj);    \
+    HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");   \
+    D3DObjPtr auto_ptr(newobj);                                         \
+    d3d_context_->RSSetState(newobj);                                   \
+  }
 
 const std::string& D3DRenderer::name_ = "Direct3D11Renderer";
 
@@ -167,7 +167,7 @@ void D3DRenderer::Clear(const azer::Vector4& color) {
 }
 
 void D3DRenderer::ClearDepthAndStencil(DepthBuffer::ClearFlag flag,
-                                         float depth_val, int stencil_val) {
+                                       float depth_val, int stencil_val) {
   DCHECK(NULL != depth_.get());
   ((D3DDepthBuffer*)depth_.get())->Clear(this, flag, depth_val, stencil_val);
 }
@@ -189,7 +189,7 @@ void D3DRenderer::ResetShader(RenderPipelineStage stage) {
 }
 
 void D3DRenderer::Draw(VertexBuffer* vvb, PrimitiveTopology primitive,
-                         int vertices_num, int32 start_vertex) {
+                       int vertices_num, int32 start_vertex) {
   const int num_of_vertices =
       (vertices_num != -1) ? vertices_num : vvb->vertex_num();
   CHECK(num_of_vertices > 0);
@@ -198,14 +198,13 @@ void D3DRenderer::Draw(VertexBuffer* vvb, PrimitiveTopology primitive,
   UINT stride = vvb->element_size();
   UINT offset = 0;
   d3d_context_->IASetVertexBuffers(0, 1, &vb->buffer_, &stride, &offset);
-  d3d_context_->IASetPrimitiveTopology(
-      TranslatePrimitiveTopology(primitive));
+  d3d_context_->IASetPrimitiveTopology(TranslatePrimitiveTopology(primitive));
   d3d_context_->Draw(num_of_vertices, start_vertex);
 }
 
 void D3DRenderer::DrawIndex(VertexBuffer* vvb, IndicesBuffer* vib,
-                              PrimitiveTopology primitive, int indices_num,
-                              int32 first_indices, int32 index_base) {
+                            PrimitiveTopology primitive, int indices_num,
+                            int32 first_indices, int32 index_base) {
   const int num_of_indices =
       (indices_num != -1) ? indices_num : vib->indices_num();
   UINT stride = vvb->element_size();
@@ -223,9 +222,9 @@ void D3DRenderer::DrawIndex(VertexBuffer* vvb, IndicesBuffer* vib,
 }
 
 void D3DRenderer::DrawInstanced(int32 instance_num, VertexBuffer* vvb,
-                                  PrimitiveTopology primitive,
-                                  int32 vertices_num, int32 first_vertex,
-                                  int32 instance_start_index) {
+                                PrimitiveTopology primitive,
+                                int32 vertices_num, int32 first_vertex,
+                                int32 instance_start_index) {
   D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
   DCHECK(NULL != vb && vb->Initialized()) << "VertexBuffer not initialized.";
   const int num_of_vertices =
@@ -239,11 +238,11 @@ void D3DRenderer::DrawInstanced(int32 instance_num, VertexBuffer* vvb,
 }
 
 void D3DRenderer::DrawIndexInstanced(int32 instance_num, VertexBuffer* vvb,
-                                       IndicesBuffer* vib,
-                                       PrimitiveTopology primitive,
-                                       int32 indices_num, int32 first_indices,
-                                       int32 index_base,
-                                       int32 instance_start_index) {
+                                     IndicesBuffer* vib,
+                                     PrimitiveTopology primitive,
+                                     int32 indices_num, int32 first_indices,
+                                     int32 index_base,
+                                     int32 instance_start_index) {
   const int num_of_indices =
       (indices_num != -1) ? indices_num : vib->indices_num();
   UINT stride = vvb->element_size();
@@ -263,7 +262,7 @@ void D3DRenderer::DrawIndexInstanced(int32 instance_num, VertexBuffer* vvb,
 }
 
 void D3DRenderer::UseConstantsTable(RenderPipelineStage stage,
-                                          GpuConstantsTable* table) {
+                                    GpuConstantsTable* table) {
   D3DGpuConstantsTable* constants = (D3DGpuConstantsTable*)table;
   if (stage == kVertexStage) {
     d3d_context_->VSSetConstantBuffers(0, 1, &(constants->buffer_));
@@ -288,7 +287,7 @@ inline void D3DRenderer::ResetTexture(RenderPipelineStage stage, int index) {
 }
 
 void D3DRenderer::UseTexture(RenderPipelineStage stage, int index,
-                               Texture* texture) {
+                             Texture* texture) {
   D3DTexture2D* tex = (D3DTexture2D*)texture;
   if (tex) {
     tex->UseForStage(stage, index, this);
