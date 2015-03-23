@@ -13,7 +13,7 @@ class Camera;
 class AxisAlignedBoundingBox;
 
 class AZER_EXPORT Frustrum {
- public:
+public:
   Frustrum(Camera* camera);
 
   Frustrum(Camera* camera, Radians fovy, float apsect,
@@ -70,33 +70,4 @@ class AZER_EXPORT Frustrum {
 
   std::vector<Plane> planes_;
 };
-
-inline Frustrum::Frustrum(Camera* camera)
-    : fovY_(Radians((float)(kPI / 3.0f)))
-    , aspect_(4.0f / 3.0f)
-    , near_(1.0f)
-    , far_(1000.0f)
-    , camera_(camera) {
-  planes_.resize(6);
-  GenProjMatrix();
-}
-
-inline Frustrum::Frustrum(Camera* camera, Radians fovy, float apsect, float z_near,
-                          float z_far)
-    : fovY_(fovy)
-    , aspect_(apsect)
-    , near_(z_near)
-    , far_(z_far)
-    , camera_(camera) {
-  planes_.resize(6);
-  GenProjMatrix();
-}
-
-inline void Frustrum::GenProjMatrix() {
-  projection_ = PerspectiveRHD3D(fovY_, aspect_, near_, far_);
-}
-
-inline VisibleState Frustrum::IsVisible(const Vector3& point) const {
-  return IsVisible(point, kCheckAll);
-}
 }  // namespace azer
