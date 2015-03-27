@@ -1,11 +1,11 @@
-#include "azer/render/ui/render_loop.h"
+#include "azer/ui/render_loop.h"
 
 #include "base/logging.h"
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/run_loop.h"
 #include "azer/render/render_system.h"
-#include "azer/render/ui/widget_renderer_context.h"
+#include "azer/ui/widget_renderer_context.h"
 
 namespace azer {
 views::Widget* RenderLoop::Delegate::widget() {

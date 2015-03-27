@@ -1,4 +1,4 @@
-#include "azer/render/ui/uienv.h"
+#include "azer/ui/uienv.h"
 
 #include "base/at_exit.h"
 #include "base/command_line.h"
@@ -16,10 +16,10 @@
 #include "azer/ui/views/widget/desktop_aura/desktop_screen.h"
 
 #include "azer/render/util/render_system_loader.h"
-#include "azer/render/ui/widget_util.h"
-#include "azer/render/ui/render_loop.h"
-#include "azer/render/ui/adapter/context_factory.h"
-#include "azer/render/ui/adapter/desktop_views_delegate.h"
+#include "azer/ui/widget_util.h"
+#include "azer/ui/render_loop.h"
+#include "azer/ui/adapter/context_factory.h"
+#include "azer/ui/adapter/desktop_views_delegate.h"
 
 namespace azer {
 
@@ -63,9 +63,10 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
 
 bool UIEnvironment::MainLoop(views::Widget* widget, 
                              RenderLoop::Delegate* delegate) {
+  CHECK(NULL != delegate);
+  CHECK(NULL != widget);
   SetWidgetRendererWindow(widget);
   widget->Show();
-  CHECK(NULL != params.render_delegate);
   render_loop_ = new RenderLoop(delegate, widget);
   return render_loop_->Run();
 }

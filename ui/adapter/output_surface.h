@@ -8,7 +8,7 @@
 
 #include "azer/base/export.h"
 #include "azer/render/render.h"
-#include "azer/render/ui/adapter/output_device.h"
+#include "azer/ui/adapter/output_device.h"
 
 namespace cc {
 class SoftwareOutputDevice;

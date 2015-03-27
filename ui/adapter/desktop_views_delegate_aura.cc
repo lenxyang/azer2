@@ -1,7 +1,7 @@
-#include "azer/render/ui/adapter/desktop_views_delegate.h"
+#include "azer/ui/adapter/desktop_views_delegate.h"
 
-#include "ui/views/widget/native_widget_aura.h"
-#include "ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
+#include "azer/ui/views/widget/native_widget_aura.h"
+#include "azer/ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
 
 using namespace views;
 

@@ -5,12 +5,12 @@ shared_library("azer") {
     "base",
     "files",
     "render",
-    "render/ui",
     "render/layers",
     "render:render2d",
     "resources",
     "scene",
     "math",
+    "ui",
   ]
 
   public_deps = [
@@ -22,7 +22,7 @@ shared_library("azer") {
     "//ui/events:events_base",
     "//ui/gfx",
     "//ui/gfx/geometry",
-    "//ui/views",
+    "//azer/ui/views",
   ]
 }
 

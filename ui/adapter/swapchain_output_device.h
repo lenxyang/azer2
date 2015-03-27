@@ -17,7 +17,7 @@
 #include "azer/render/context2d.h"
 #include "azer/render/canvas2d.h"
 #include "azer/render/swap_chain.h"
-#include "azer/render/ui/adapter/output_device.h"
+#include "azer/ui/adapter/output_device.h"
 
 class SkBitmap;
 class SkCanvas;

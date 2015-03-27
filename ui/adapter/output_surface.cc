@@ -1,11 +1,11 @@
-#include "azer/render/ui/adapter/output_surface.h"
+#include "azer/ui/adapter/output_surface.h"
 
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/logging.h"
 #include "azer/base/image.h"
 #include "azer/render/render_system.h"
-#include "azer/render/ui/adapter/output_device.h"
+#include "azer/ui/adapter/output_device.h"
 
 #include "SkCanvas.h"
 #include "SkImageInfo.h"

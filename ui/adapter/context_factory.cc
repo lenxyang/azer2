@@ -1,4 +1,4 @@
-#include "azer/render/ui//adapter/context_factory.h"
+#include "azer/ui/adapter/context_factory.h"
 
 #include "base/bind.h"
 #include "base/command_line.h"
@@ -13,8 +13,8 @@
 #include "ui/compositor/reflector.h"
 #include "ui/views/widget/widget.h"
 #include "azer/render/render.h"
-#include "azer/render/ui/widget_util.h"
-#include "azer/render/ui/adapter/swapchain_output_device.h"
+#include "azer/ui/widget_util.h"
+#include "azer/ui/adapter/swapchain_output_device.h"
 
 namespace azer {
 

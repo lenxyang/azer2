@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "azer/render/ui/adapter/output_device.h"
+#include "azer/ui/adapter/output_device.h"
 
 #include "base/logging.h"
 #include "cc/output/software_frame_data.h"
@@ -12,7 +12,7 @@
 #include "azer/render/context2d.h"
 #include "azer/render/canvas2d.h"
 #include "azer/render/render_system.h"
-#include "azer/render/ui/widget_util.h"
+#include "azer/ui/widget_util.h"
 
 namespace azer {
 

@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "azer/render/ui/adapter/views_delegate.h"
+#include "azer/ui/adapter/views_delegate.h"
 
 namespace azer {
 

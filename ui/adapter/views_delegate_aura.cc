@@ -1,7 +1,7 @@
-#include "azer/render/ui/adapter/views_delegate.h"
+#include "azer/ui/adapter/views_delegate.h"
 
 #include "ui/wm/core/wm_state.h"
-#include "ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
+#include "azer/ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
 
 namespace azer {
 using namespace views;

@@ -3,8 +3,8 @@
 #include <memory>
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
-#include "azer/render/ui/render_loop.h"
-#include "azer/render/ui/adapter/output_surface.h"
+#include "azer/ui/render_loop.h"
+#include "azer/ui/adapter/output_surface.h"
 #include "ui/base/win/scoped_ole_initializer.h"
 
 namespace wm {

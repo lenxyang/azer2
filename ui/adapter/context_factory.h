@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ui/compositor/compositor.h"
-#include "azer/render/ui/adapter/output_device.h"
-#include "azer/render/ui/adapter/output_surface.h"
+#include "azer/ui/adapter/output_device.h"
+#include "azer/ui/adapter/output_surface.h"
 
 namespace base {
 class Thread;

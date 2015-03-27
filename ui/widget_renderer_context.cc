@@ -1,4 +1,4 @@
-#include "azer/render/ui/widget_renderer_context.h"
+#include "azer/ui/widget_renderer_context.h"
 
 #include "base/logging.h"
 #include "ui/aura/window_tree_host.h"
@@ -7,8 +7,8 @@
 #include "azer/ui/views/widget/widget.h"
 #include "azer/render/render_system.h"
 #include "azer/render/canvas2d.h"
-#include "azer/render/ui/widget_util.h"
-#include "azer/render/ui/adapter/output_device.h"
+#include "azer/ui/widget_util.h"
+#include "azer/ui/adapter/output_device.h"
 
 namespace azer {
 WidgetRendererContext::WidgetRendererContext(views::Widget* widget) 
