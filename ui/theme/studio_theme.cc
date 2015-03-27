@@ -129,7 +129,7 @@ RECT InsetRect(const RECT* rect, int size) {
 
 }  // namespace
 
-namespace ui {
+namespace azer {
 
 bool StudioTheme::IsThemingActive() const {
   return is_theme_active_ && is_theme_active_();
@@ -2065,4 +2065,4 @@ HANDLE StudioTheme::GetThemeHandle(ThemeName theme_name) const {
   return handle;
 }
 
-}  // namespace ui
+}  // namespace azer

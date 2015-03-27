@@ -14,7 +14,7 @@
 
 class SkCanvas;
 
-namespace ui {
+namespace azer {
 
 // Windows implementation of native theme class.
 //
@@ -356,4 +356,4 @@ class AZER_THEME_EXPORT StudioTheme : public azer::Theme,
   DISALLOW_COPY_AND_ASSIGN(StudioTheme);
 };
 
-}  // namespace ui
+}  // namespace azer
