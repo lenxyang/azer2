@@ -17,7 +17,7 @@ Theme* Theme::GetInstance() {
   return instance_;
 }
 
-void* Theme::SetInstance(Theme* theme) {
+void Theme::SetInstance(Theme* theme) {
   instance_ = theme;
 }
 

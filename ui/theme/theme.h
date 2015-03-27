@@ -9,7 +9,7 @@ class AZER_THEME_EXPORT Theme : public ui::NativeTheme {
  public:
   ~Theme() override;
   static Theme* GetInstance();
-  static Theme* SetInstance(Theme* theme);
+  static void SetInstance(Theme* theme);
  protected:
   Theme();
  private:

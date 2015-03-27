@@ -148,10 +148,10 @@ bool StudioTheme::IsUsingHighContrastTheme() const {
 }
 
 HRESULT StudioTheme::GetThemeColor(ThemeName theme,
-                                      int part_id,
-                                      int state_id,
-                                      int prop_id,
-                                      SkColor* color) const {
+                                   int part_id,
+                                   int state_id,
+                                   int prop_id,
+                                   SkColor* color) const {
   HANDLE handle = GetThemeHandle(theme);
   if (!handle || !get_theme_color_)
     return E_NOTIMPL;
@@ -163,10 +163,10 @@ HRESULT StudioTheme::GetThemeColor(ThemeName theme,
 }
 
 SkColor StudioTheme::GetThemeColorWithDefault(ThemeName theme,
-                                                 int part_id,
-                                                 int state_id,
-                                                 int prop_id,
-                                                 int default_sys_color) const {
+                                              int part_id,
+                                              int state_id,
+                                              int prop_id,
+                                              int default_sys_color) const {
   SkColor color;
   return (GetThemeColor(theme, part_id, state_id, prop_id, &color) == S_OK) ?
       color : color_utils::GetSysSkColor(default_sys_color);
@@ -209,8 +209,8 @@ StudioTheme* StudioTheme::instance() {
 }
 
 gfx::Size StudioTheme::GetPartSize(Part part,
-                                      State state,
-                                      const ExtraParams& extra) const {
+                                   State state,
+                                   const ExtraParams& extra) const {
   gfx::Size part_size = CommonThemeGetPartSize(part, state, extra);
   if (!part_size.IsEmpty())
     return part_size;
@@ -252,28 +252,28 @@ gfx::Size StudioTheme::GetPartSize(Part part,
 }
 
 void StudioTheme::Paint(SkCanvas* canvas,
-                           Part part,
-                           State state,
-                           const gfx::Rect& rect,
-                           const ExtraParams& extra) const {
+                        Part part,
+                        State state,
+                        const gfx::Rect& rect,
+                        const ExtraParams& extra) const {
   if (rect.IsEmpty())
     return;
 
   switch (part) {
     case kComboboxArrow:
-      CommonThemePaintComboboxArrow(canvas, rect);
+      ui::CommonThemePaintComboboxArrow(canvas, rect);
       return;
     case kMenuPopupGutter:
-      CommonThemePaintMenuGutter(canvas, rect);
+      ui::CommonThemePaintMenuGutter(canvas, rect);
       return;
     case kMenuPopupSeparator:
-      CommonThemePaintMenuSeparator(canvas, rect);
+      ui::CommonThemePaintMenuSeparator(canvas, rect);
       return;
     case kMenuPopupBackground:
-      CommonThemePaintMenuBackground(canvas, rect);
+      ui::CommonThemePaintMenuBackground(canvas, rect);
       return;
     case kMenuItemBackground:
-      CommonThemePaintMenuItemBackground(canvas, state, rect);
+      ui::CommonThemePaintMenuItemBackground(canvas, state, rect);
       return;
     default:
       break;
@@ -380,10 +380,10 @@ void StudioTheme::UpdateSystemColors() {
 }
 
 void StudioTheme::PaintDirect(SkCanvas* canvas,
-                                 Part part,
-                                 State state,
-                                 const gfx::Rect& rect,
-                                 const ExtraParams& extra) const {
+                              Part part,
+                              State state,
+                              const gfx::Rect& rect,
+                              const ExtraParams& extra) const {
   skia::ScopedPlatformPaint scoped_platform_paint(canvas);
   HDC hdc = scoped_platform_paint.GetPlatformSurface();
 
@@ -478,19 +478,19 @@ SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
     case kColorId_WindowBackground:
       return system_colors_[COLOR_WINDOW];
 
-    // Dialogs
+      // Dialogs
     case kColorId_DialogBackground:
       return gfx::IsInvertedColorScheme() ?
           color_utils::InvertColor(kDialogBackgroundColor) :
           kDialogBackgroundColor;
 
-    // FocusableBorder
+      // FocusableBorder
     case kColorId_FocusedBorderColor:
       return kFocusedBorderColor;
     case kColorId_UnfocusedBorderColor:
       return kUnfocusedBorderColor;
 
-    // Button
+      // Button
     case kColorId_ButtonBackgroundColor:
       return kButtonBackgroundColor;
     case kColorId_ButtonEnabledColor:
@@ -510,7 +510,7 @@ SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
       NOTREACHED();
       return kInvalidColorIdColor;
 
-    // MenuItem
+      // MenuItem
     case kColorId_EnabledMenuItemForegroundColor:
       return kEnabledMenuItemForegroundColor;
     case kColorId_DisabledMenuItemForegroundColor:
@@ -528,14 +528,14 @@ SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
       NOTREACHED();
       return kInvalidColorIdColor;
 
-    // MenuButton
+      // MenuButton
     case kColorId_EnabledMenuButtonBorderColor:
     case kColorId_FocusedMenuButtonBorderColor:
     case kColorId_HoverMenuButtonBorderColor:
       NOTREACHED();
       return kInvalidColorIdColor;
 
-    // Label
+      // Label
     case kColorId_LabelEnabledColor:
       return system_colors_[COLOR_BTNTEXT];
     case kColorId_LabelDisabledColor:
@@ -543,7 +543,7 @@ SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
     case kColorId_LabelBackgroundColor:
       return system_colors_[COLOR_WINDOW];
 
-    // Textfield
+      // Textfield
     case kColorId_TextfieldDefaultColor:
       return system_colors_[COLOR_WINDOWTEXT];
     case kColorId_TextfieldDefaultBackground:
@@ -557,14 +557,14 @@ SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
     case kColorId_TextfieldSelectionBackgroundFocused:
       return system_colors_[COLOR_HIGHLIGHT];
 
-    // Tooltip
+      // Tooltip
     case kColorId_TooltipBackground:
     case kColorId_TooltipText:
       NOTREACHED();
       return kInvalidColorIdColor;
 
-    // Tree
-    // NOTE: these aren't right for all themes, but as close as I could get.
+      // Tree
+      // NOTE: these aren't right for all themes, but as close as I could get.
     case kColorId_TreeBackground:
       return system_colors_[COLOR_WINDOW];
     case kColorId_TreeText:
@@ -577,11 +577,11 @@ SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
       return system_colors_[COLOR_HIGHLIGHT];
     case kColorId_TreeSelectionBackgroundUnfocused:
       return system_colors_[IsUsingHighContrastTheme() ?
-                              COLOR_MENUHIGHLIGHT : COLOR_BTNFACE];
+                            COLOR_MENUHIGHLIGHT : COLOR_BTNFACE];
     case kColorId_TreeArrow:
       return system_colors_[COLOR_WINDOWTEXT];
 
-    // Table
+      // Table
     case kColorId_TableBackground:
       return system_colors_[COLOR_WINDOW];
     case kColorId_TableText:
@@ -594,11 +594,11 @@ SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
       return system_colors_[COLOR_HIGHLIGHT];
     case kColorId_TableSelectionBackgroundUnfocused:
       return system_colors_[IsUsingHighContrastTheme() ?
-                              COLOR_MENUHIGHLIGHT : COLOR_BTNFACE];
+                            COLOR_MENUHIGHLIGHT : COLOR_BTNFACE];
     case kColorId_TableGroupingIndicatorColor:
       return system_colors_[COLOR_GRAYTEXT];
 
-    // Results Tables
+      // Results Tables
     case kColorId_ResultsTableNormalBackground:
       return system_colors_[COLOR_WINDOW];
     case kColorId_ResultsTableHoveredBackground:
@@ -647,10 +647,10 @@ SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
 }
 
 void StudioTheme::PaintIndirect(SkCanvas* canvas,
-                                   Part part,
-                                   State state,
-                                   const gfx::Rect& rect,
-                                   const ExtraParams& extra) const {
+                                Part part,
+                                State state,
+                                const gfx::Rect& rect,
+                                const ExtraParams& extra) const {
   // TODO(asvitkine): This path is pretty inefficient - for each paint operation
   //                  it creates a new offscreen bitmap Skia canvas. This can
   //                  be sped up by doing it only once per part/state and
@@ -722,12 +722,12 @@ void StudioTheme::PaintIndirect(SkCanvas* canvas,
 }
 
 HRESULT StudioTheme::GetThemePartSize(ThemeName theme_name,
-                                         HDC hdc,
-                                         int part_id,
-                                         int state_id,
-                                         RECT* rect,
-                                         int ts,
-                                         SIZE* size) const {
+                                      HDC hdc,
+                                      int part_id,
+                                      int state_id,
+                                      RECT* rect,
+                                      int ts,
+                                      SIZE* size) const {
   HANDLE handle = GetThemeHandle(theme_name);
   return (handle && get_theme_part_size_) ?
       get_theme_part_size_(handle, hdc, part_id, state_id, rect, ts, size) :
@@ -735,11 +735,11 @@ HRESULT StudioTheme::GetThemePartSize(ThemeName theme_name,
 }
 
 HRESULT StudioTheme::PaintButton(HDC hdc,
-                                    State state,
-                                    const ButtonExtraParams& extra,
-                                    int part_id,
-                                    int state_id,
-                                    RECT* rect) const {
+                                 State state,
+                                 const ButtonExtraParams& extra,
+                                 int part_id,
+                                 int state_id,
+                                 RECT* rect) const {
   HANDLE handle = GetThemeHandle(BUTTON);
   if (handle && draw_theme_)
     return draw_theme_(handle, hdc, part_id, state_id, rect, NULL);
@@ -841,7 +841,7 @@ HRESULT StudioTheme::PaintMenuSeparator(
 }
 
 HRESULT StudioTheme::PaintMenuGutter(HDC hdc,
-                                        const gfx::Rect& rect) const {
+                                     const gfx::Rect& rect) const {
   RECT rect_win = rect.ToRECT();
   HANDLE handle = GetThemeHandle(MENU);
   return (handle && draw_theme_) ?
@@ -881,7 +881,7 @@ HRESULT StudioTheme::PaintMenuArrow(
     // Draw the arrow.
     RECT theme_rect = {0, 0, r.width(), r.height()};
     HRESULT result = draw_theme_(handle, mem_dc.Get(), MENU_POPUPSUBMENU,
-                                  state_id, &theme_rect, NULL);
+                                 state_id, &theme_rect, NULL);
     // Copy and mirror the result back into mem_dc.
     StretchBlt(hdc, r.x(), r.y(), r.width(), r.height(),
                mem_dc.Get(), r.width()-1, 0, -r.width(), r.height(), SRCCOPY);
@@ -896,7 +896,7 @@ HRESULT StudioTheme::PaintMenuArrow(
 }
 
 HRESULT StudioTheme::PaintMenuBackground(HDC hdc,
-                                            const gfx::Rect& rect) const {
+                                         const gfx::Rect& rect) const {
   HANDLE handle = GetThemeHandle(MENU);
   RECT rect_win = rect.ToRECT();
   if (handle && draw_theme_) {
@@ -931,8 +931,8 @@ HRESULT StudioTheme::PaintMenuCheck(
 }
 
 HRESULT StudioTheme::PaintMenuCheckBackground(HDC hdc,
-                                                 State state,
-                                                 const gfx::Rect& rect) const {
+                                              State state,
+                                              const gfx::Rect& rect) const {
   HANDLE handle = GetThemeHandle(MENU);
   if (!handle || !draw_theme_)
     return S_OK;  // Nothing to do for background.
@@ -975,10 +975,10 @@ HRESULT StudioTheme::PaintMenuItemBackground(
 }
 
 HRESULT StudioTheme::PaintPushButton(HDC hdc,
-                                        Part part,
-                                        State state,
-                                        const gfx::Rect& rect,
-                                        const ButtonExtraParams& extra) const {
+                                     Part part,
+                                     State state,
+                                     const gfx::Rect& rect,
+                                     const ButtonExtraParams& extra) const {
   int state_id = extra.is_default ? PBS_DEFAULTED : PBS_NORMAL;
   switch (state) {
     case kDisabled:
@@ -1002,10 +1002,10 @@ HRESULT StudioTheme::PaintPushButton(HDC hdc,
 }
 
 HRESULT StudioTheme::PaintRadioButton(HDC hdc,
-                                         Part part,
-                                         State state,
-                                         const gfx::Rect& rect,
-                                         const ButtonExtraParams& extra) const {
+                                      Part part,
+                                      State state,
+                                      const gfx::Rect& rect,
+                                      const ButtonExtraParams& extra) const {
   int state_id = extra.checked ? RBS_CHECKEDNORMAL : RBS_UNCHECKEDNORMAL;
   switch (state) {
     case kDisabled:
@@ -1029,10 +1029,10 @@ HRESULT StudioTheme::PaintRadioButton(HDC hdc,
 }
 
 HRESULT StudioTheme::PaintCheckbox(HDC hdc,
-                                      Part part,
-                                      State state,
-                                      const gfx::Rect& rect,
-                                      const ButtonExtraParams& extra) const {
+                                   Part part,
+                                   State state,
+                                   const gfx::Rect& rect,
+                                   const ButtonExtraParams& extra) const {
   int state_id = extra.checked ?
       CBS_CHECKEDNORMAL :
       (extra.indeterminate ? CBS_MIXEDNORMAL : CBS_UNCHECKEDNORMAL);
@@ -1040,19 +1040,19 @@ HRESULT StudioTheme::PaintCheckbox(HDC hdc,
     case kDisabled:
       state_id = extra.checked ?
           CBS_CHECKEDDISABLED :
-          (extra.indeterminate ? CBS_MIXEDDISABLED : CBS_UNCHECKEDDISABLED);
+      (extra.indeterminate ? CBS_MIXEDDISABLED : CBS_UNCHECKEDDISABLED);
       break;
     case kHovered:
       state_id = extra.checked ?
           CBS_CHECKEDHOT :
-          (extra.indeterminate ? CBS_MIXEDHOT : CBS_UNCHECKEDHOT);
+      (extra.indeterminate ? CBS_MIXEDHOT : CBS_UNCHECKEDHOT);
       break;
     case kNormal:
       break;
     case kPressed:
       state_id = extra.checked ?
           CBS_CHECKEDPRESSED :
-          (extra.indeterminate ? CBS_MIXEDPRESSED : CBS_UNCHECKEDPRESSED);
+      (extra.indeterminate ? CBS_MIXEDPRESSED : CBS_UNCHECKEDPRESSED);
       break;
     case kNumStates:
       NOTREACHED();
@@ -1064,9 +1064,9 @@ HRESULT StudioTheme::PaintCheckbox(HDC hdc,
 }
 
 HRESULT StudioTheme::PaintMenuList(HDC hdc,
-                                      State state,
-                                      const gfx::Rect& rect,
-                                      const MenuListExtraParams& extra) const {
+                                   State state,
+                                   const gfx::Rect& rect,
+                                   const MenuListExtraParams& extra) const {
   HANDLE handle = GetThemeHandle(MENULIST);
   RECT rect_win = rect.ToRECT();
   int state_id = CBXS_NORMAL;
@@ -1104,10 +1104,10 @@ HRESULT StudioTheme::PaintScrollbarArrow(
     const gfx::Rect& rect,
     const ScrollbarArrowExtraParams& extra) const {
   static const int state_id_matrix[4][kNumStates] = {
-      ABS_DOWNDISABLED, ABS_DOWNHOT, ABS_DOWNNORMAL, ABS_DOWNPRESSED,
-      ABS_LEFTDISABLED, ABS_LEFTHOT, ABS_LEFTNORMAL, ABS_LEFTPRESSED,
-      ABS_RIGHTDISABLED, ABS_RIGHTHOT, ABS_RIGHTNORMAL, ABS_RIGHTPRESSED,
-      ABS_UPDISABLED, ABS_UPHOT, ABS_UPNORMAL, ABS_UPPRESSED
+    ABS_DOWNDISABLED, ABS_DOWNHOT, ABS_DOWNNORMAL, ABS_DOWNPRESSED,
+    ABS_LEFTDISABLED, ABS_LEFTHOT, ABS_LEFTNORMAL, ABS_LEFTPRESSED,
+    ABS_RIGHTDISABLED, ABS_RIGHTHOT, ABS_RIGHTNORMAL, ABS_RIGHTPRESSED,
+    ABS_UPDISABLED, ABS_UPHOT, ABS_UPNORMAL, ABS_UPPRESSED
   };
   HANDLE handle = GetThemeHandle(SCROLLBAR);
   RECT rect_win = rect.ToRECT();
@@ -1246,9 +1246,9 @@ HRESULT StudioTheme::PaintScrollbarTrack(
 
   const int part_id = extra.is_upper ?
       ((part == kScrollbarHorizontalTrack) ?
-          SBP_UPPERTRACKHORZ : SBP_UPPERTRACKVERT) :
+       SBP_UPPERTRACKHORZ : SBP_UPPERTRACKVERT) :
       ((part == kScrollbarHorizontalTrack) ?
-          SBP_LOWERTRACKHORZ : SBP_LOWERTRACKVERT);
+       SBP_LOWERTRACKHORZ : SBP_LOWERTRACKVERT);
 
   int state_id = SCRBS_NORMAL;
   switch (state) {
@@ -1487,7 +1487,7 @@ HRESULT StudioTheme::PaintProgressBar(
   const DTBGOPTS value_draw_options = {
     sizeof(DTBGOPTS),
     (bar_rect.right == value_rect.right && bar_rect.left != value_rect.left) ?
-        DTBG_MIRRORDC : 0,
+    DTBG_MIRRORDC : 0,
     bar_rect
   };
   if (pre_vista) {
@@ -1514,7 +1514,7 @@ HRESULT StudioTheme::PaintProgressBar(
 }
 
 HRESULT StudioTheme::PaintWindowResizeGripper(HDC hdc,
-                                                 const gfx::Rect& rect) const {
+                                              const gfx::Rect& rect) const {
   HANDLE handle = GetThemeHandle(STATUS);
   RECT rect_win = rect.ToRECT();
   if (handle && draw_theme_) {
@@ -1530,7 +1530,7 @@ HRESULT StudioTheme::PaintWindowResizeGripper(HDC hdc,
 }
 
 HRESULT StudioTheme::PaintTabPanelBackground(HDC hdc,
-                                                const gfx::Rect& rect) const {
+                                             const gfx::Rect& rect) const {
   HANDLE handle = GetThemeHandle(TAB);
   RECT rect_win = rect.ToRECT();
   if (handle && draw_theme_)
@@ -1577,13 +1577,13 @@ HRESULT StudioTheme::PaintTextField(
 }
 
 HRESULT StudioTheme::PaintTextField(HDC hdc,
-                                       int part_id,
-                                       int state_id,
-                                       int classic_state,
-                                       RECT* rect,
-                                       COLORREF color,
-                                       bool fill_content_area,
-                                       bool draw_edges) const {
+                                    int part_id,
+                                    int state_id,
+                                    int classic_state,
+                                    RECT* rect,
+                                    COLORREF color,
+                                    bool fill_content_area,
+                                    bool draw_edges) const {
   // TODO(ojan): http://b/1210017 Figure out how to give the ability to
   // exclude individual edges from being drawn.
 
@@ -1601,7 +1601,7 @@ HRESULT StudioTheme::PaintTextField(HDC hdc,
 
     if (fill_content_area) {
       FillRect(hdc, rect, (classic_state & DFCS_INACTIVE) ?
-                   reinterpret_cast<HBRUSH>(COLOR_BTNFACE + 1) : bg_brush);
+               reinterpret_cast<HBRUSH>(COLOR_BTNFACE + 1) : bg_brush);
     }
     return S_OK;
   }
@@ -1612,25 +1612,25 @@ HRESULT StudioTheme::PaintTextField(HDC hdc,
     { 0, 0, 0, 0 }
   };
   HRESULT hr = draw_theme_ex_ ?
-    draw_theme_ex_(handle, hdc, part_id, state_id, rect,
-                   draw_edges ? NULL : &omit_border_options) :
-    draw_theme_(handle, hdc, part_id, state_id, rect, NULL);
+      draw_theme_ex_(handle, hdc, part_id, state_id, rect,
+                     draw_edges ? NULL : &omit_border_options) :
+      draw_theme_(handle, hdc, part_id, state_id, rect, NULL);
 
   // TODO(maruel): Need to be fixed if get_theme_content_rect_ is NULL.
   if (fill_content_area && get_theme_content_rect_) {
     RECT content_rect;
     hr = get_theme_content_rect_(handle, hdc, part_id, state_id, rect,
-                                  &content_rect);
+                                 &content_rect);
     FillRect(hdc, &content_rect, bg_brush);
   }
   return hr;
 }
 
 HRESULT StudioTheme::PaintScaledTheme(HANDLE theme,
-                                         HDC hdc,
-                                         int part_id,
-                                         int state_id,
-                                         const gfx::Rect& rect) const {
+                                      HDC hdc,
+                                      int part_id,
+                                      int state_id,
+                                      const gfx::Rect& rect) const {
   // Correct the scaling and positioning of sub-components such as scrollbar
   // arrows and thumb grippers in the event that the world transform applies
   // scaling (e.g. in high-DPI mode).
@@ -1703,8 +1703,8 @@ StudioTheme::ThemeName StudioTheme::GetThemeName(Part part) {
 
 // static
 int StudioTheme::GetWindowsPart(Part part,
-                                   State state,
-                                   const ExtraParams& extra) {
+                                State state,
+                                const ExtraParams& extra) {
   switch (part) {
     case kCheckbox:
       return BP_CHECKBOX;
@@ -1756,8 +1756,8 @@ int StudioTheme::GetWindowsPart(Part part,
 }
 
 int StudioTheme::GetWindowsState(Part part,
-                                    State state,
-                                    const ExtraParams& extra) {
+                                 State state,
+                                 const ExtraParams& extra) {
   switch (part) {
     case kCheckbox:
       switch (state) {
@@ -1838,7 +1838,7 @@ int StudioTheme::GetWindowsState(Part part,
         case kHovered:
           // Mimic ScrollbarThemeChromiumWin.cpp in WebKit.
           return base::win::GetVersion() < base::win::VERSION_VISTA ?
-              ABS_DOWNHOT : ABS_DOWNHOVER;
+                                           ABS_DOWNHOT : ABS_DOWNHOVER;
         case kNormal:
           return ABS_DOWNNORMAL;
         case kPressed:
@@ -1854,7 +1854,7 @@ int StudioTheme::GetWindowsState(Part part,
         case kHovered:
           // Mimic ScrollbarThemeChromiumWin.cpp in WebKit.
           return base::win::GetVersion() < base::win::VERSION_VISTA ?
-              ABS_LEFTHOT : ABS_LEFTHOVER;
+                                           ABS_LEFTHOT : ABS_LEFTHOVER;
         case kNormal:
           return ABS_LEFTNORMAL;
         case kPressed:
@@ -1870,7 +1870,7 @@ int StudioTheme::GetWindowsState(Part part,
         case kHovered:
           // Mimic ScrollbarThemeChromiumWin.cpp in WebKit.
           return base::win::GetVersion() < base::win::VERSION_VISTA ?
-              ABS_RIGHTHOT : ABS_RIGHTHOVER;
+                                           ABS_RIGHTHOT : ABS_RIGHTHOVER;
         case kNormal:
           return ABS_RIGHTNORMAL;
         case kPressed:
@@ -1887,7 +1887,7 @@ int StudioTheme::GetWindowsState(Part part,
         case kHovered:
           // Mimic ScrollbarThemeChromiumWin.cpp in WebKit.
           return base::win::GetVersion() < base::win::VERSION_VISTA ?
-              ABS_UPHOT : ABS_UPHOVER;
+                                           ABS_UPHOT : ABS_UPHOVER;
         case kNormal:
           return ABS_UPNORMAL;
         case kPressed:
@@ -1905,7 +1905,7 @@ int StudioTheme::GetWindowsState(Part part,
         case kHovered:
           // Mimic WebKit's behaviour in ScrollbarThemeChromiumWin.cpp.
           return base::win::GetVersion() < base::win::VERSION_VISTA ?
-              SCRBS_HOT : SCRBS_HOVER;
+                                           SCRBS_HOT : SCRBS_HOVER;
         case kNormal:
           return SCRBS_NORMAL;
         case kPressed:
@@ -1950,21 +1950,21 @@ int StudioTheme::GetWindowsState(Part part,
 }
 
 HRESULT StudioTheme::GetThemeInt(ThemeName theme,
-                                    int part_id,
-                                    int state_id,
-                                    int prop_id,
-                                    int *value) const {
+                                 int part_id,
+                                 int state_id,
+                                 int prop_id,
+                                 int *value) const {
   HANDLE handle = GetThemeHandle(theme);
   return (handle && get_theme_int_) ?
       get_theme_int_(handle, part_id, state_id, prop_id, value) : E_NOTIMPL;
 }
 
 HRESULT StudioTheme::PaintFrameControl(HDC hdc,
-                                          const gfx::Rect& rect,
-                                          UINT type,
-                                          UINT state,
-                                          bool is_selected,
-                                          State control_state) const {
+                                       const gfx::Rect& rect,
+                                       UINT type,
+                                       UINT state,
+                                       bool is_selected,
+                                       State control_state) const {
   const int width = rect.width();
   const int height = rect.height();
 
@@ -2021,45 +2021,45 @@ HANDLE StudioTheme::GetThemeHandle(ThemeName theme_name) const {
   // Not found, try to load it.
   HANDLE handle = 0;
   switch (theme_name) {
-  case BUTTON:
-    handle = open_theme_(NULL, L"Button");
-    break;
-  case LIST:
-    handle = open_theme_(NULL, L"Listview");
-    break;
-  case MENU:
-    handle = open_theme_(NULL, L"Menu");
-    break;
-  case MENULIST:
-    handle = open_theme_(NULL, L"Combobox");
-    break;
-  case SCROLLBAR:
-    handle = open_theme_(NULL, L"Scrollbar");
-    break;
-  case STATUS:
-    handle = open_theme_(NULL, L"Status");
-    break;
-  case TAB:
-    handle = open_theme_(NULL, L"Tab");
-    break;
-  case TEXTFIELD:
-    handle = open_theme_(NULL, L"Edit");
-    break;
-  case TRACKBAR:
-    handle = open_theme_(NULL, L"Trackbar");
-    break;
-  case WINDOW:
-    handle = open_theme_(NULL, L"Window");
-    break;
-  case PROGRESS:
-    handle = open_theme_(NULL, L"Progress");
-    break;
-  case SPIN:
-    handle = open_theme_(NULL, L"Spin");
-    break;
-  case LAST:
-    NOTREACHED();
-    break;
+    case BUTTON:
+      handle = open_theme_(NULL, L"Button");
+      break;
+    case LIST:
+      handle = open_theme_(NULL, L"Listview");
+      break;
+    case MENU:
+      handle = open_theme_(NULL, L"Menu");
+      break;
+    case MENULIST:
+      handle = open_theme_(NULL, L"Combobox");
+      break;
+    case SCROLLBAR:
+      handle = open_theme_(NULL, L"Scrollbar");
+      break;
+    case STATUS:
+      handle = open_theme_(NULL, L"Status");
+      break;
+    case TAB:
+      handle = open_theme_(NULL, L"Tab");
+      break;
+    case TEXTFIELD:
+      handle = open_theme_(NULL, L"Edit");
+      break;
+    case TRACKBAR:
+      handle = open_theme_(NULL, L"Trackbar");
+      break;
+    case WINDOW:
+      handle = open_theme_(NULL, L"Window");
+      break;
+    case PROGRESS:
+      handle = open_theme_(NULL, L"Progress");
+      break;
+    case SPIN:
+      handle = open_theme_(NULL, L"Spin");
+      break;
+    case LAST:
+      NOTREACHED();
+      break;
   }
   theme_handles_[theme_name] = handle;
   return handle;
