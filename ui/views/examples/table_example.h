@@ -10,10 +10,10 @@
 #include "base/macros.h"
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "ui/base/models/table_model.h"
-#include "ui/views/controls/button/button.h"
-#include "ui/views/controls/table/table_grouper.h"
-#include "ui/views/controls/table/table_view.h"
-#include "ui/views/controls/table/table_view_observer.h"
+#include "azer/ui/views/controls/button/button.h"
+#include "azer/ui/views/controls/table/table_grouper.h"
+#include "azer/ui/views/controls/table/table_view.h"
+#include "azer/ui/views/controls/table/table_view_observer.h"
 #include "ui/views/examples/example_base.h"
 
 namespace gfx {

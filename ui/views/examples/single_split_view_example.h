@@ -6,7 +6,7 @@
 #define UI_VIEWS_EXAMPLES_SINGLE_SPLIT_VIEW_EXAMPLE_H_
 
 #include "base/macros.h"
-#include "ui/views/controls/single_split_view_listener.h"
+#include "azer/ui/views/controls/single_split_view_listener.h"
 #include "ui/views/examples/example_base.h"
 
 namespace views {

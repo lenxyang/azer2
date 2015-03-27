@@ -6,8 +6,8 @@
 
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
-#include "ui/views/controls/button/checkbox.h"
-#include "ui/views/controls/button/radio_button.h"
+#include "azer/ui/views/controls/button/checkbox.h"
+#include "azer/ui/views/controls/button/radio_button.h"
 #include "ui/views/layout/fill_layout.h"
 
 namespace views {

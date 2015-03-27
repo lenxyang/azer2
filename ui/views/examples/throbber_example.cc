@@ -4,7 +4,7 @@
 
 #include "ui/views/examples/throbber_example.h"
 
-#include "ui/views/controls/throbber.h"
+#include "azer/ui/views/controls/throbber.h"
 #include "ui/views/layout/fill_layout.h"
 #include "ui/views/view.h"
 

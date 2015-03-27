@@ -11,9 +11,9 @@
 #include "third_party/skia/include/core/SkColor.h"
 #include "ui/gfx/font_list.h"
 #include "ui/views/border.h"
-#include "ui/views/controls/link.h"
-#include "ui/views/controls/styled_label.h"
-#include "ui/views/controls/styled_label_listener.h"
+#include "azer/ui/views/controls/link.h"
+#include "azer/ui/views/controls/styled_label.h"
+#include "azer/ui/views/controls/styled_label_listener.h"
 #include "ui/views/test/views_test_base.h"
 #include "ui/views/widget/widget.h"
 

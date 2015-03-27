@@ -5,10 +5,10 @@
 #include "ui/views/examples/tree_view_example.h"
 
 #include "base/strings/utf_string_conversions.h"
-#include "ui/views/controls/button/label_button.h"
-#include "ui/views/controls/menu/menu_model_adapter.h"
-#include "ui/views/controls/menu/menu_runner.h"
-#include "ui/views/controls/tree/tree_view.h"
+#include "azer/ui/views/controls/button/label_button.h"
+#include "azer/ui/views/controls/menu/menu_model_adapter.h"
+#include "azer/ui/views/controls/menu/menu_runner.h"
+#include "azer/ui/views/controls/tree/tree_view.h"
 #include "ui/views/layout/grid_layout.h"
 
 using base::ASCIIToUTF16;

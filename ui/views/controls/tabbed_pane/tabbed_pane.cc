@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/tabbed_pane/tabbed_pane.h"
+#include "azer/ui/views/controls/tabbed_pane/tabbed_pane.h"
 
 #include "base/logging.h"
 #include "ui/accessibility/ax_view_state.h"
@@ -10,8 +10,8 @@
 #include "ui/events/keycodes/keyboard_codes.h"
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/font_list.h"
-#include "ui/views/controls/label.h"
-#include "ui/views/controls/tabbed_pane/tabbed_pane_listener.h"
+#include "azer/ui/views/controls/label.h"
+#include "azer/ui/views/controls/tabbed_pane/tabbed_pane_listener.h"
 #include "ui/views/layout/layout_manager.h"
 #include "ui/views/widget/widget.h"
 

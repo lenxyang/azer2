@@ -11,7 +11,7 @@
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "ui/gfx/image/image_skia.h"
-#include "ui/views/controls/button/checkbox.h"
+#include "azer/ui/views/controls/button/checkbox.h"
 #include "ui/views/layout/grid_layout.h"
 
 using base::ASCIIToUTF16;

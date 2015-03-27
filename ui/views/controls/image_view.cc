@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/image_view.h"
+#include "azer/ui/views/controls/image_view.h"
 
 #include "base/logging.h"
 #include "base/strings/utf_string_conversions.h"

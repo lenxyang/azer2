@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/throbber.h"
+#include "azer/ui/views/controls/throbber.h"
 
 #include "base/time/time.h"
 #include "ui/base/resource/resource_bundle.h"

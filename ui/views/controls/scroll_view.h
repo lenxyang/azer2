@@ -8,7 +8,7 @@
 #include <string>
 
 #include "base/compiler_specific.h"
-#include "ui/views/controls/scrollbar/scroll_bar.h"
+#include "azer/ui/views/controls/scrollbar/scroll_bar.h"
 
 namespace views {
 

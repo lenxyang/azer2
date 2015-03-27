@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/scrollbar/scroll_bar.h"
+#include "azer/ui/views/controls/scrollbar/scroll_bar.h"
 
 #include "ui/accessibility/ax_view_state.h"
 

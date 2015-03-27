@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/table/table_view.h"
+#include "azer/ui/views/controls/table/table_view.h"
 
 #include <map>
 
@@ -15,12 +15,12 @@
 #include "ui/gfx/skia_util.h"
 #include "ui/gfx/text_utils.h"
 #include "ui/native_theme/native_theme.h"
-#include "ui/views/controls/scroll_view.h"
-#include "ui/views/controls/table/table_grouper.h"
-#include "ui/views/controls/table/table_header.h"
-#include "ui/views/controls/table/table_utils.h"
-#include "ui/views/controls/table/table_view_observer.h"
-#include "ui/views/controls/table/table_view_row_background_painter.h"
+#include "azer/ui/views/controls/scroll_view.h"
+#include "azer/ui/views/controls/table/table_grouper.h"
+#include "azer/ui/views/controls/table/table_header.h"
+#include "azer/ui/views/controls/table/table_utils.h"
+#include "azer/ui/views/controls/table/table_view_observer.h"
+#include "azer/ui/views/controls/table/table_view_row_background_painter.h"
 
 // Padding around the text (on each side).
 static const int kTextVerticalPadding = 3;

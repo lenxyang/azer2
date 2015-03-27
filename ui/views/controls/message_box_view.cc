@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/message_box_view.h"
+#include "azer/ui/views/controls/message_box_view.h"
 
 #include "base/i18n/rtl.h"
 #include "base/message_loop/message_loop.h"
@@ -11,11 +11,11 @@
 #include "ui/accessibility/ax_view_state.h"
 #include "ui/base/clipboard/clipboard.h"
 #include "ui/base/clipboard/scoped_clipboard_writer.h"
-#include "ui/views/controls/button/checkbox.h"
-#include "ui/views/controls/label.h"
-#include "ui/views/controls/link.h"
-#include "ui/views/controls/scroll_view.h"
-#include "ui/views/controls/textfield/textfield.h"
+#include "azer/ui/views/controls/button/checkbox.h"
+#include "azer/ui/views/controls/label.h"
+#include "azer/ui/views/controls/link.h"
+#include "azer/ui/views/controls/scroll_view.h"
+#include "azer/ui/views/controls/textfield/textfield.h"
 #include "ui/views/layout/box_layout.h"
 #include "ui/views/layout/grid_layout.h"
 #include "ui/views/layout/layout_constants.h"

@@ -9,9 +9,9 @@
 #include "base/memory/scoped_ptr.h"
 #include "third_party/skia/include/core/SkColor.h"
 #include "ui/gfx/image/image_skia.h"
-#include "ui/views/controls/button/custom_button.h"
-#include "ui/views/controls/image_view.h"
-#include "ui/views/controls/label.h"
+#include "azer/ui/views/controls/button/custom_button.h"
+#include "azer/ui/views/controls/image_view.h"
+#include "azer/ui/views/controls/label.h"
 #include "ui/views/native_theme_delegate.h"
 
 namespace views {

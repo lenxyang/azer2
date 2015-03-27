@@ -6,7 +6,7 @@
 #define UI_VIEWS_CONTROLS_BUTTON_BLUE_BUTTON_H_
 
 #include "base/compiler_specific.h"
-#include "ui/views/controls/button/label_button.h"
+#include "azer/ui/views/controls/button/label_button.h"
 
 namespace views {
 

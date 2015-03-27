@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/link.h"
+#include "azer/ui/views/controls/link.h"
 
 #include "build/build_config.h"
 
@@ -15,7 +15,7 @@
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/font_list.h"
-#include "ui/views/controls/link_listener.h"
+#include "azer/ui/views/controls/link_listener.h"
 #include "ui/views/native_cursor.h"
 
 namespace views {

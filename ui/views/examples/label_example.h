@@ -6,9 +6,9 @@
 #define UI_VIEWS_EXAMPLES_LABEL_EXAMPLE_H_
 
 #include "base/macros.h"
-#include "ui/views/controls/button/button.h"
-#include "ui/views/controls/combobox/combobox_listener.h"
-#include "ui/views/controls/textfield/textfield_controller.h"
+#include "azer/ui/views/controls/button/button.h"
+#include "azer/ui/views/controls/combobox/combobox_listener.h"
+#include "azer/ui/views/controls/textfield/textfield_controller.h"
 #include "ui/views/examples/example_base.h"
 
 namespace views {

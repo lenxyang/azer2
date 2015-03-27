@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/scrollbar/kennedy_scroll_bar.h"
+#include "azer/ui/views/controls/scrollbar/kennedy_scroll_bar.h"
 
 #include "third_party/skia/include/core/SkColor.h"
 #include "third_party/skia/include/core/SkXfermode.h"
 #include "ui/gfx/canvas.h"
 #include "ui/views/background.h"
 #include "ui/views/border.h"
-#include "ui/views/controls/scrollbar/base_scroll_bar_thumb.h"
+#include "azer/ui/views/controls/scrollbar/base_scroll_bar_thumb.h"
 
 namespace views {
 namespace {

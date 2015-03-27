@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/table/table_view.h"
+#include "azer/ui/views/controls/table/table_view.h"
 
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "ui/views/controls/table/table_grouper.h"
-#include "ui/views/controls/table/table_header.h"
-#include "ui/views/controls/table/table_view_observer.h"
+#include "azer/ui/views/controls/table/table_grouper.h"
+#include "azer/ui/views/controls/table/table_header.h"
+#include "azer/ui/views/controls/table/table_view_observer.h"
 
 // Put the tests in the views namespace to make it easier to declare them as
 // friend classes.

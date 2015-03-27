@@ -14,8 +14,8 @@
 #include "build/build_config.h"
 #include "ui/base/models/menu_separator_types.h"
 #include "ui/gfx/image/image_skia.h"
-#include "ui/views/controls/menu/menu_config.h"
-#include "ui/views/controls/menu/menu_types.h"
+#include "azer/ui/views/controls/menu/menu_config.h"
+#include "azer/ui/views/controls/menu/menu_types.h"
 #include "ui/views/view.h"
 
 #if defined(OS_WIN)

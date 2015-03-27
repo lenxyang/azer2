@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/menu/menu_message_loop_aura.h"
+#include "azer/ui/views/controls/menu/menu_message_loop_aura.h"
 
 #if defined(OS_WIN)
 #include <windowsx.h>
@@ -17,7 +17,7 @@
 #include "ui/events/event.h"
 #include "ui/events/platform/platform_event_source.h"
 #include "ui/events/platform/scoped_event_dispatcher.h"
-#include "ui/views/controls/menu/menu_controller.h"
+#include "azer/ui/views/controls/menu/menu_controller.h"
 #include "ui/views/widget/widget.h"
 #include "ui/wm/public/activation_change_observer.h"
 #include "ui/wm/public/activation_client.h"
@@ -26,10 +26,10 @@
 
 #if defined(OS_WIN)
 #include "ui/base/win/internal_constants.h"
-#include "ui/views/controls/menu/menu_message_pump_dispatcher_win.h"
+#include "azer/ui/views/controls/menu/menu_message_pump_dispatcher_win.h"
 #include "ui/views/win/hwnd_util.h"
 #else
-#include "ui/views/controls/menu/menu_event_dispatcher_linux.h"
+#include "azer/ui/views/controls/menu/menu_event_dispatcher_linux.h"
 #endif
 
 using aura::client::ScreenPositionClient;

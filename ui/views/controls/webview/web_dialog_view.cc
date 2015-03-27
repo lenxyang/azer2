@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/webview/web_dialog_view.h"
+#include "azer/ui/views/controls/webview/web_dialog_view.h"
 
 #include <vector>
 
@@ -16,7 +16,7 @@
 #include "content/public/browser/web_contents.h"
 #include "ui/events/event.h"
 #include "ui/events/keycodes/keyboard_codes.h"
-#include "ui/views/controls/webview/webview.h"
+#include "azer/ui/views/controls/webview/webview.h"
 #include "ui/views/layout/fill_layout.h"
 #include "ui/views/widget/native_widget_private.h"
 #include "ui/views/widget/root_view.h"

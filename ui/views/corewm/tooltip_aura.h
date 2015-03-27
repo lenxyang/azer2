@@ -6,7 +6,7 @@
 #define UI_VIEWS_COREWM_TOOLTIP_AURA_H_
 
 #include "ui/gfx/screen_type_delegate.h"
-#include "ui/views/controls/label.h"
+#include "azer/ui/views/controls/label.h"
 #include "ui/views/corewm/tooltip.h"
 #include "ui/views/widget/widget_observer.h"
 

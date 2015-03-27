@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/resize_area.h"
+#include "azer/ui/views/controls/resize_area.h"
 
 #include "base/logging.h"
 #include "ui/accessibility/ax_view_state.h"
 #include "ui/base/cursor/cursor.h"
-#include "ui/views/controls/resize_area_delegate.h"
+#include "azer/ui/views/controls/resize_area_delegate.h"
 #include "ui/views/native_cursor.h"
 
 namespace views {

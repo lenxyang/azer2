@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/scrollbar/base_scroll_bar_thumb.h"
+#include "azer/ui/views/controls/scrollbar/base_scroll_bar_thumb.h"
 
 #include "ui/gfx/canvas.h"
 #include "ui/gfx/rect.h"
-#include "ui/views/controls/scrollbar/base_scroll_bar.h"
+#include "azer/ui/views/controls/scrollbar/base_scroll_bar.h"
 
 namespace {
 // The distance the mouse can be dragged outside the bounds of the thumb during

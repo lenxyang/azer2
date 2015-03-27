@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/styled_label.h"
+#include "azer/ui/views/controls/styled_label.h"
 
 #include <vector>
 
@@ -10,9 +10,9 @@
 #include "ui/gfx/font_list.h"
 #include "ui/gfx/text_elider.h"
 #include "ui/native_theme/native_theme.h"
-#include "ui/views/controls/label.h"
-#include "ui/views/controls/link.h"
-#include "ui/views/controls/styled_label_listener.h"
+#include "azer/ui/views/controls/label.h"
+#include "azer/ui/views/controls/link.h"
+#include "azer/ui/views/controls/styled_label_listener.h"
 
 namespace views {
 

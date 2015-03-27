@@ -13,6 +13,7 @@ gypi_values = exec_script(
 
 component("views") {
   sources = gypi_values.views_sources
+  output_name = "aviews"
 
   defines = [ "VIEWS_IMPLEMENTATION" ]
 
@@ -153,6 +154,7 @@ static_library("test_support") {
 
 test("views_unittests") {
   sources = gypi_values.views_unittests_sources
+  output_name = "aviews_unittests"
 
   deps = [
     ":test_support",

@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/single_split_view.h"
+#include "azer/ui/views/controls/single_split_view.h"
 
 #include "base/logging.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "ui/views/controls/single_split_view_listener.h"
+#include "azer/ui/views/controls/single_split_view_listener.h"
 
 namespace {
 

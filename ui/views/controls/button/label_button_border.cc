@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/views/controls/button/label_button_border.h"
+#include "azer/ui/views/controls/button/label_button_border.h"
 
 #include "base/logging.h"
 #include "third_party/skia/include/core/SkPaint.h"
@@ -16,7 +16,7 @@
 #include "ui/native_theme/native_theme.h"
 #include "ui/resources/grit/ui_resources.h"
 #include "ui/views/border.h"
-#include "ui/views/controls/button/label_button.h"
+#include "azer/ui/views/controls/button/label_button.h"
 #include "ui/views/native_theme_delegate.h"
 
 namespace views {

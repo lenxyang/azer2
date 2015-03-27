@@ -6,7 +6,7 @@
 #define UI_VIEWS_EXAMPLES_SLIDER_EXAMPLE_H_
 
 #include "base/macros.h"
-#include "ui/views/controls/slider.h"
+#include "azer/ui/views/controls/slider.h"
 #include "ui/views/examples/example_base.h"
 
 namespace views {

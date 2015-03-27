@@ -5,7 +5,7 @@
 #ifndef UI_VIEWS_CONTROLS_SCROLLBAR_KENNEDY_SCROLL_BAR_H_
 #define UI_VIEWS_CONTROLS_SCROLLBAR_KENNEDY_SCROLL_BAR_H_
 
-#include "ui/views/controls/scrollbar/base_scroll_bar.h"
+#include "azer/ui/views/controls/scrollbar/base_scroll_bar.h"
 
 namespace views {
 
