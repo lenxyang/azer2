@@ -39,6 +39,7 @@
 #include "ui/wm/core/input_method_event_filter.h"
 #include "ui/wm/core/window_animations.h"
 #include "ui/wm/public/scoped_tooltip_disabler.h"
+#include "azer/ui/theme/theme.h"
 
 namespace views {
 
@@ -110,7 +111,8 @@ ui::NativeTheme* DesktopWindowTreeHost::GetNativeTheme(aura::Window* window) {
     HWND host_hwnd = host->GetAcceleratedWidget();
     if (host_hwnd &&
         DesktopWindowTreeHostWin::GetContentWindowForHWND(host_hwnd)) {
-      return ui::NativeThemeWin::instance();
+      // return ui::NativeThemeWin::instance();
+      azer::Theme::GetInstance();
     }
   }
   return ui::NativeThemeAura::instance();

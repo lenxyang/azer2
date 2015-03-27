@@ -41,6 +41,7 @@ component("views") {
     "//ui/events/platform",
     "//ui/gfx",
     "//ui/gfx/geometry",
+    "//azer/ui/theme",
   ]
 
   if (use_x11 && !is_chromeos) {
