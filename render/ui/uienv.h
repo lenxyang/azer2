@@ -57,7 +57,7 @@ public:
         , native_widget(NULL) {
     }
   };
-  bool MainLoop(const Params& params);
+  bool MainLoop(views::Widget* widget, RenderLoop::Delegate* delegate);
  private:
   ui::ScopedOleInitializer ole_initializer_;
   std::unique_ptr< ::base::AtExitManager> exit_manager_;

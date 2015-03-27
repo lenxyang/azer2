@@ -13,7 +13,7 @@
 #include "ui/base/ui_base_paths.h"
 #include "ui/gfx/screen.h"
 #include "ui/wm/core/wm_state.h"
-#include "ui/views/widget/desktop_aura/desktop_screen.h"
+#include "azer/ui/views/widget/desktop_aura/desktop_screen.h"
 
 #include "azer/render/util/render_system_loader.h"
 #include "azer/render/ui/widget_util.h"
@@ -61,20 +61,12 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
   return true;
 }
 
-bool UIEnvironment::MainLoop(const Params& params) {
-  using views::Widget;
-  Widget* widget = new Widget;
-  Widget::InitParams wparams;
-  wparams.native_widget = params.native_widget;
-  wparams.delegate = params.view_delegate;
-  wparams.context  = NULL;
-  wparams.bounds   = gfx::Rect(0, 0, params.width, params.height);
-  widget->Init(wparams);
-
+bool UIEnvironment::MainLoop(views::Widget* widget, 
+                             RenderLoop::Delegate* delegate) {
   SetWidgetRendererWindow(widget);
   widget->Show();
   CHECK(NULL != params.render_delegate);
-  render_loop_ = new RenderLoop(params.render_delegate, widget);
+  render_loop_ = new RenderLoop(delegate, widget);
   return render_loop_->Run();
 }
 
