@@ -28,5 +28,5 @@
 #include "azer/ui/views/widget/widget.h"
 #include "azer/ui/views/widget/widget_delegate.h"
 
-#include "azer/render/ui/render_loop.h"
-#include "azer/render/ui/uienv.h"
+#include "azer/ui/render_loop.h"
+#include "azer/ui/uienv.h"
