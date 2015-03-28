@@ -22,7 +22,7 @@ shared_library("azer") {
     "//ui/events:events_base",
     "//ui/gfx",
     "//ui/gfx/geometry",
-    "//azer/ui/views",
+    "//ui/views",
   ]
 }
 

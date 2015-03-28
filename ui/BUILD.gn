@@ -36,7 +36,7 @@ source_set("ui") {
     "//ui/gfx",
     "//ui/gfx/geometry",
     "//ui/wm",
-    "//azer/ui/views",
+    "//ui/views",
     "//azer/ui/theme",
   ]
 
