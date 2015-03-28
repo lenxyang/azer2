@@ -1,7 +1,6 @@
 #include "azer/ui/adapter/desktop_views_delegate.h"
 
-#include "azer/ui/views/widget/native_widget_aura.h"
-#include "azer/ui/views/widget/desktop_aura/desktop_native_widget_aura.h"
+#include "azer/ui/adapter/native_widget.h"
 
 using namespace views;
 
@@ -22,9 +21,9 @@ void DesktopTestViewsDelegate::OnBeforeWidgetInit(
   if (params->parent &&
       params->type != views::Widget::InitParams::TYPE_MENU &&
       params->type != views::Widget::InitParams::TYPE_TOOLTIP) {
-    params->native_widget = new views::NativeWidgetAura(delegate);
+    params->native_widget = new NativeWidget(delegate);
   } else {
-    params->native_widget = new views::DesktopNativeWidgetAura(delegate);
+    params->native_widget = new DesktopNativeWidget(delegate);
   }
 }
 
