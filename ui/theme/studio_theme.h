@@ -17,6 +17,7 @@ class AZER_THEME_EXPORT StudioTheme : public Theme {
   ~StudioTheme() override;
  protected:
   // Overridden from NativeThemeBase:
+  SkColor GetSystemColor(ColorId color_id) const override;
   void PaintMenuPopupBackground(
       SkCanvas* canvas,
       const gfx::Size& size,

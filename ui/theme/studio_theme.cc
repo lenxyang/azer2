@@ -96,6 +96,36 @@ StudioTheme::StudioTheme() {
 StudioTheme::~StudioTheme() {
 }
 
+SkColor StudioTheme::GetSystemColor(ColorId color_id) const {
+  switch (color_id) {
+    case kColorId_WindowBackground: return 0xFF727272;
+      
+      // button
+    case kColorId_ButtonBackgroundColor: return 0xFF989898;
+    case kColorId_ButtonEnabledColor: return 0xFF121212;
+    case kColorId_ButtonDisabledColor: return 0xFF484848;
+    case kColorId_ButtonHighlightColor: return 0xFF242424;
+    case kColorId_ButtonHoverColor:return 0xFF242424;
+    case kColorId_ButtonHoverBackgroundColor: return 0xFF9d9d9d;
+      // MenuItem
+    case kColorId_HoverMenuItemBackgroundColor: return 0xFF6D97D9;
+    case kColorId_EnabledMenuItemForegroundColor: return 0xFFFFFFFF;
+    case kColorId_DisabledMenuItemForegroundColor: return 0xFF656565;
+    case kColorId_MenuSeparatorColor: return 0xFF323232;
+    case kColorId_MenuBackgroundColor: return 0xFF1C1C1C;
+    case kColorId_MenuBorderColor: return 0xFF121212;
+      // Label
+    case kColorId_LabelEnabledColor: return 0xFFFFFFFF;
+    case kColorId_LabelDisabledColor: return 0xFF656565;
+    case kColorId_LabelBackgroundColor: return 0xFF727272;
+      // Tooltip
+    case kColorId_TooltipBackground: return 0xFF1C1C1C;
+    case kColorId_TooltipText: return 0xFFFFFFFF;
+    default: 
+      return ui::FallbackTheme::GetSystemColor(color_id);
+  }
+}
+
 void StudioTheme::PaintMenuPopupBackground(
     SkCanvas* canvas,
     const gfx::Size& size,
