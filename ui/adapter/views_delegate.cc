@@ -6,9 +6,7 @@
 namespace azer {
 using namespace views;
 
-DefaultViewsDelegate::DefaultViewsDelegate()
-    : use_desktop_native_widgets_(false),
-      use_transparent_windows_(false) {
+DefaultViewsDelegate::DefaultViewsDelegate() {
   DCHECK(!ViewsDelegate::views_delegate);
   ViewsDelegate::views_delegate = this;
   wm_state_.reset(new wm::WMState);

@@ -66,7 +66,7 @@ public:
   std::unique_ptr<gfx::Screen> desktop_screen_;
   std::unique_ptr<wm::WMState> wm_state_;
   std::unique_ptr<UIContextFactory> context_factory_;
-  std::unique_ptr<ViewsDelegate> views_delegate_;
+  std::unique_ptr<views::ViewsDelegate> views_delegate_;
   scoped_refptr<RenderLoop> render_loop_;
   DISALLOW_COPY_AND_ASSIGN(UIEnvironment);
 };

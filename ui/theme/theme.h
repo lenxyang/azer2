@@ -3,6 +3,7 @@
 #include "base/basictypes.h"
 #include "ui/native_theme/native_theme.h"
 #include "ui/native_theme/fallback_theme.h"
+#include "azer/base/export.h"
 
 namespace azer {
 class AZER_EXPORT Theme : public ui::FallbackTheme {

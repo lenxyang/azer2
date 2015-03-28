@@ -24,7 +24,7 @@ class AZER_EXPORT DefaultViewsDelegate : public views::ViewsDelegate {
   scoped_ptr<wm::WMState> wm_state_;
 
   ui::ContextFactory* context_factory_;
-  DISALLOW_COPY_AND_ASSIGN(ViewsDelegate);
+  DISALLOW_COPY_AND_ASSIGN(DefaultViewsDelegate);
 };
 
 }  // namespace azer

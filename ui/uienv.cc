@@ -32,7 +32,7 @@ UIEnvironment::~UIEnvironment() {
   aura::Env::DeleteInstance();
 
   wm_state_.reset(NULL);
-  desktop_views_delegate_.reset(NULL);
+  views_delegate_.reset(NULL);
 }
 
 bool UIEnvironment::Init(int argc, char* argv[]) {
@@ -50,7 +50,7 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
   ui::InitializeInputMethodForTesting();
 
   context_factory_.reset(new UIContextFactory);
-  desktop_views_delegate_.reset(new DefaultViewsDelegate);
+  views_delegate_.reset(new DefaultViewsDelegate);
   aura::Env::CreateInstance(true);
   aura::Env::GetInstance()->set_context_factory(context_factory_.get());
   
