@@ -1,16 +1,25 @@
-#include "azer/ui/adapter/desktop_views_delegate.h"
+#include "azer/ui/adapter/views_delegate.h"
 
+#include "ui/wm/core/wm_state.h"
 #include "azer/ui/adapter/native_widget.h"
 
+namespace azer {
 using namespace views;
 
-namespace azer {
+DefaultViewsDelegate::DefaultViewsDelegate()
+    : use_desktop_native_widgets_(false),
+      use_transparent_windows_(false) {
+  DCHECK(!ViewsDelegate::views_delegate);
+  ViewsDelegate::views_delegate = this;
+  wm_state_.reset(new wm::WMState);
+}
 
-DesktopTestViewsDelegate::DesktopTestViewsDelegate() {}
+DefaultViewsDelegate::~DefaultViewsDelegate() {
+  if (ViewsDelegate::views_delegate == this)
+    ViewsDelegate::views_delegate = NULL;
+}
 
-DesktopTestViewsDelegate::~DesktopTestViewsDelegate() {}
-
-void DesktopTestViewsDelegate::OnBeforeWidgetInit(
+void DefaultViewsDelegate::OnBeforeWidgetInit(
     Widget::InitParams* params,
     internal::NativeWidgetDelegate* delegate) {
   // If we already have a native_widget, we don't have to try to come

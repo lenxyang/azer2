@@ -13,13 +13,13 @@
 #include "ui/base/ui_base_paths.h"
 #include "ui/gfx/screen.h"
 #include "ui/wm/core/wm_state.h"
-#include "azer/ui/views/widget/desktop_aura/desktop_screen.h"
+#include "ui/views/widget/desktop_aura/desktop_screen.h"
 
 #include "azer/render/util/render_system_loader.h"
 #include "azer/ui/widget_util.h"
 #include "azer/ui/render_loop.h"
 #include "azer/ui/adapter/context_factory.h"
-#include "azer/ui/adapter/desktop_views_delegate.h"
+#include "azer/ui/adapter/views_delegate.h"
 
 namespace azer {
 
@@ -50,7 +50,7 @@ bool UIEnvironment::Init(int argc, char* argv[]) {
   ui::InitializeInputMethodForTesting();
 
   context_factory_.reset(new UIContextFactory);
-  desktop_views_delegate_.reset(new DesktopTestViewsDelegate);
+  desktop_views_delegate_.reset(new DefaultViewsDelegate);
   aura::Env::CreateInstance(true);
   aura::Env::GetInstance()->set_context_factory(context_factory_.get());
   

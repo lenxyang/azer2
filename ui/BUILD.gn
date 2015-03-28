@@ -10,9 +10,7 @@ source_set("ui") {
     "adapter/output_surface.h",
     "adapter/swapchain_output_device.cc",
     "adapter/swapchain_output_device.h",
-    "adapter/desktop_views_delegate_aura.cc",
-    "adapter/desktop_views_delegate.h",
-    "adapter/views_delegate_aura.cc",
+    "adapter/views_delegate.cc",
     "adapter/views_delegate.h",
     "render_loop.cc",
     "render_loop.h",
@@ -22,6 +20,10 @@ source_set("ui") {
     "widget_util.h",
     "widget_renderer_context.cc",
     "widget_renderer_context.h",
+    "theme/theme.cc",
+    "theme/theme.h",
+    "theme/studio_theme.cc",
+    "theme/studio_theme.h",
   ]
 
   deps = [
@@ -37,7 +39,6 @@ source_set("ui") {
     "//ui/gfx/geometry",
     "//ui/wm",
     "//ui/views",
-    "//azer/ui/theme",
   ]
 
   configs += ["//azer/build/config:utf8src"]

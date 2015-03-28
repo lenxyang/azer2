@@ -25,11 +25,11 @@ namespace views {
 class Widget;
 class NativeWidget;
 class WidgetDelegate;
+class ViewsDelegate;
 }
 
 namespace azer {
 class RenderLoop;
-class DesktopTestViewsDelegate;
 class UIContextFactory;
 
 class AZER_EXPORT UIEnvironment {
@@ -66,7 +66,7 @@ public:
   std::unique_ptr<gfx::Screen> desktop_screen_;
   std::unique_ptr<wm::WMState> wm_state_;
   std::unique_ptr<UIContextFactory> context_factory_;
-  std::unique_ptr<DesktopTestViewsDelegate> desktop_views_delegate_;
+  std::unique_ptr<ViewsDelegate> views_delegate_;
   scoped_refptr<RenderLoop> render_loop_;
   DISALLOW_COPY_AND_ASSIGN(UIEnvironment);
 };

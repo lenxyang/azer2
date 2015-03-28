@@ -10,7 +10,7 @@
 #include "cc/output/software_frame_data.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "ui/gfx/vsync_provider.h"
-#include "azer/ui/views/widget/widget.h"
+#include "ui/views/widget/widget.h"
 #include "azer/render/context2d.h"
 #include "azer/render/canvas2d.h"
 #include "azer/ui/widget_renderer_context.h"
