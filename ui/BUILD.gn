@@ -37,8 +37,10 @@ source_set("ui") {
     "//ui/events",
     "//ui/gfx",
     "//ui/gfx/geometry",
+    "//ui/native_theme",
     "//ui/wm",
     "//ui/views",
+    
   ]
 
   configs += ["//azer/build/config:utf8src"]
