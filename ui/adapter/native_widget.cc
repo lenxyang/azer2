@@ -3,7 +3,7 @@
 #include "azer/ui/theme/theme.h"
 
 namespace azer {
-DesktopNativeWidgetAura::DesktopNativeWidgetAura(
+DesktopNativeWidget::DesktopNativeWidget(
     views::internal::NativeWidgetDelegate* delegate)
     : DesktopNativeWidgetAura(delegate) {
 }

@@ -2,6 +2,8 @@ source_set("ui") {
   sources = [
     "adapter/context_factory.cc",
     "adapter/context_factory.h",
+    "adapter/native_widget.cc",
+    "adapter/native_widget.h",
     "adapter/output_device.cc",
     "adapter/output_device.h",
     "adapter/output_surface.cc",
@@ -35,6 +37,7 @@ source_set("ui") {
     "//ui/gfx/geometry",
     "//ui/wm",
     "//azer/ui/views",
+    "//azer/ui/theme",
   ]
 
   configs += ["//azer/build/config:utf8src"]
