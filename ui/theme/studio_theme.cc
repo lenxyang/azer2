@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "azer/ui/theme/studio_theme.h"
+#include "azer/studio/ui/theme/studio_theme.h"
 
 #include <limits>
 

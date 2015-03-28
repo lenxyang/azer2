@@ -2,7 +2,7 @@
 
 #include "base/basictypes.h"
 #include "base/compiler_specific.h"
-#include "azer/ui/theme/theme.h"
+#include "azer/studio/ui/theme/theme.h"
 
 namespace gfx {
 class NineImagePainter;
@@ -11,7 +11,7 @@ class NineImagePainter;
 namespace azer {
 
 // Aura implementation of native theme support.
-class AZER_THEME_EXPORT StudioTheme : public Theme {
+class StudioTheme : public Theme {
  public:
   StudioTheme();
   ~StudioTheme() override;

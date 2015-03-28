@@ -6,11 +6,23 @@
 #include "azer/ui/theme/theme_export.h"
 
 namespace azer {
-class AZER_THEME_EXPORT Theme : public ui::FallbackTheme {
+class Theme : public ui::FallbackTheme {
  public:
   ~Theme() override;
   static Theme* GetInstance();
   static void SetInstance(Theme* theme);
+
+  enum ExtColorId {
+    kExtColorId_PanelBackgroundColor,
+    kExtColorId_PanelCaptionbarBackground,
+    kExtColorId_PanelCaptionbarFocusBackground,
+    kExtColorId_CaptionbarText,
+    kExtColorId_SubpanelSeperator1,
+    kExtColorId_SubpanelSeperator2,
+    kExtColorId_MenubarBackground,
+    kExtColorId_ButtonGrounpBorder,
+    kExtColorId_kDockPanelBackground,
+  };
  protected:
   Theme();
  private:
