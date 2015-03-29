@@ -22,8 +22,6 @@ source_set("ui") {
     "widget_renderer_context.h",
     "theme/theme.cc",
     "theme/theme.h",
-    "theme/studio_theme.cc",
-    "theme/studio_theme.h",
   ]
 
   deps = [
