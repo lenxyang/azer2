@@ -14,24 +14,55 @@ namespace azer {
 WidgetRendererContext::WidgetRendererContext(views::Widget* widget) 
     : render_system_(NULL)
     , widget_(widget) {
+  widget_->AddObserver(this);
+}
+
+WidgetRendererContext::~WidgetRendererContext() {
+}
+
+void WidgetRendererContext::ResetSwapchain() {
+  renderer_ = swapchain_->GetRenderer();
+  overlay_ = render_system_->CreateOverlay();
+  renderer_->SetViewport(azer::Renderer::Viewport(
+      gfx::Rect(surface_->GetBounds().size())));
+}
+
+Surface* WidgetRendererContext::CreateSurfaceForWidget(views::Widget* widget) {
   gfx::NativeView native_view = widget->GetNativeView();
   aura::WindowTreeHost* aura_host = ((aura::Window*)native_view)->GetHost();
   gfx::AcceleratedWidget acc_widget = aura_host->GetAcceleratedWidget();
 
-  surface_ = new azer::Surface(acc_widget);
+  return new azer::Surface(acc_widget);
+}
+
+void WidgetRendererContext::OnWidgetBoundsChanged(views::Widget* widget, 
+                                                  const gfx::Rect& new_bounds) {
+  if (surface_->GetBounds().size() != new_bounds.size()) {
+    surface_ = CreateSurfaceForWidget(widget);
+    swapchain_->reset(surface_.get());
+    ResetSwapchain();
+  }
+}
+
+void WidgetRendererContext::OnWidgetClosing(views::Widget* widget) {
+}
+
+void WidgetRendererContext::OnWidgetCreated(views::Widget* widget) {
+  surface_ = CreateSurfaceForWidget(widget);
   render_system_ = azer::RenderSystem::Current();
   CHECK(render_system_);
   swapchain_ = render_system_->CreateSwapChainForSurface(surface_.get());
-  renderer_ = swapchain_->GetRenderer();
-  overlay_ = render_system_->CreateOverlay();
-  ui::Compositor* compositor = widget->GetCompositor();
-  renderer_->SetViewport(azer::Renderer::Viewport(gfx::Rect(compositor->size())));
+  ResetSwapchain();
 }
 
-WidgetRendererContext::~WidgetRendererContext() {
+void WidgetRendererContext::OnWidgetDestroying(views::Widget* widget) {
+}
+
+void WidgetRendererContext::OnWidgetDestroyed(views::Widget* widget) {
   overlay_ = NULL;
   renderer_ = NULL;
   swapchain_ = NULL;
+  widget_->RemoveObserver(this);
 }
 
 void WidgetRendererContext::RenderUI() {
