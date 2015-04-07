@@ -14,10 +14,18 @@ namespace azer {
 WidgetRendererContext::WidgetRendererContext(views::Widget* widget) 
     : render_system_(NULL)
     , widget_(widget) {
+  surface_ = CreateSurfaceForWidget(widget);
+  render_system_ = azer::RenderSystem::Current();
+  CHECK(render_system_);
+  swapchain_ = render_system_->CreateSwapChainForSurface(surface_.get());
+  ResetSwapchain();
   widget_->AddObserver(this);
 }
 
 WidgetRendererContext::~WidgetRendererContext() {
+  overlay_ = NULL;
+  renderer_ = NULL;
+  swapchain_ = NULL;
 }
 
 void WidgetRendererContext::ResetSwapchain() {
@@ -48,21 +56,16 @@ void WidgetRendererContext::OnWidgetClosing(views::Widget* widget) {
 }
 
 void WidgetRendererContext::OnWidgetCreated(views::Widget* widget) {
-  surface_ = CreateSurfaceForWidget(widget);
-  render_system_ = azer::RenderSystem::Current();
-  CHECK(render_system_);
-  swapchain_ = render_system_->CreateSwapChainForSurface(surface_.get());
-  ResetSwapchain();
 }
 
 void WidgetRendererContext::OnWidgetDestroying(views::Widget* widget) {
 }
 
 void WidgetRendererContext::OnWidgetDestroyed(views::Widget* widget) {
+  widget_->RemoveObserver(this);
   overlay_ = NULL;
   renderer_ = NULL;
   swapchain_ = NULL;
-  widget_->RemoveObserver(this);
 }
 
 void WidgetRendererContext::RenderUI() {
