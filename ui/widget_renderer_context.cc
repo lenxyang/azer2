@@ -59,10 +59,10 @@ void WidgetRendererContext::OnWidgetCreated(views::Widget* widget) {
 }
 
 void WidgetRendererContext::OnWidgetDestroying(views::Widget* widget) {
+  widget_->RemoveObserver(this);
 }
 
 void WidgetRendererContext::OnWidgetDestroyed(views::Widget* widget) {
-  widget_->RemoveObserver(this);
   overlay_ = NULL;
   renderer_ = NULL;
   swapchain_ = NULL;
