@@ -8,12 +8,15 @@
 #include "azer/render/render_system.h"
 #include "azer/render/canvas2d.h"
 #include "azer/ui/widget_util.h"
+#include "azer/ui/render_loop.h"
 #include "azer/ui/adapter/output_device.h"
 
 namespace azer {
-WidgetRendererContext::WidgetRendererContext(views::Widget* widget) 
-    : render_system_(NULL)
-    , widget_(widget) {
+WidgetRendererContext::WidgetRendererContext(views::Widget* widget,
+                                             RenderLoop* render_loop) 
+    : render_system_(NULL),
+      render_loop_(render_loop),
+      widget_(widget) {
   surface_ = CreateSurfaceForWidget(widget);
   render_system_ = azer::RenderSystem::Current();
   CHECK(render_system_);
@@ -53,6 +56,9 @@ void WidgetRendererContext::OnWidgetBoundsChanged(views::Widget* widget,
 }
 
 void WidgetRendererContext::OnWidgetClosing(views::Widget* widget) {
+  if (render_loop_) {
+    render_loop_->Quit();
+  }
 }
 
 void WidgetRendererContext::OnWidgetCreated(views::Widget* widget) {

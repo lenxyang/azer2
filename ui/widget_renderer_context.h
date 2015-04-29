@@ -14,10 +14,11 @@ class Widget;
 
 namespace azer {
 class RenderSystem;
+class RenderLoop;
 
 class AZER_EXPORT WidgetRendererContext : public views::WidgetObserver {
  public:
-  WidgetRendererContext(views::Widget* widget);
+  WidgetRendererContext(views::Widget* widget, RenderLoop* render_loop);
   virtual ~WidgetRendererContext();
 
   views::Widget* widget() { return widget_;}
@@ -47,6 +48,7 @@ class AZER_EXPORT WidgetRendererContext : public views::WidgetObserver {
   OverlayPtr overlay_;
   
   RenderSystem* render_system_;
+  RenderLoop* render_loop_;
   views::Widget* widget_;
 
   DISALLOW_COPY_AND_ASSIGN(WidgetRendererContext);

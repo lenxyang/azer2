@@ -54,7 +54,7 @@ void SwapchainOutputDevice::SwapChainDeviceRenderer::PostProc() {
 SwapchainOutputDevice::SwapchainOutputDevice(azer::RenderSystem* render_system,
                                              views::Widget* widget)
     : TextureOutputDevice(render_system, widget) {
-  widget_context_.reset(new WidgetRendererContext(widget));
+  widget_context_.reset(new WidgetRendererContext(widget, NULL));
   render_util_ = new SwapChainDeviceRenderer(widget_context_.get());
 }
 

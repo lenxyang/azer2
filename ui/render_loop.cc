@@ -30,7 +30,7 @@ RenderLoop::RenderLoop(Delegate* delegate, views::Widget* widget, int32 max_fps)
     double time = 1.0 / (double)kMaxFPS;
     expect_frame_consumed_ = ::base::TimeDelta::FromSecondsD(time);
   }
-  widget_context_.reset(new WidgetRendererContext(widget));
+  widget_context_.reset(new WidgetRendererContext(widget, this));
 }
 
 RenderLoop::~RenderLoop() {
