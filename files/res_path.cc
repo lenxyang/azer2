@@ -129,7 +129,7 @@ ResPath ResPath::parent() const {
     parent.type_ = kInvalidPath;
     return parent;
   }
-  
+
   parent.type_ = type_;
   parent.component_ = FILE_PATH_LITERAL("");
   if (pos == 1 && type_ == kAbsolutePath) {
@@ -145,5 +145,19 @@ ResPath ResPath::parent() const {
 void ResPath::Normalize() {
 }
 
+std::vector<StringType> ResPath::dirs() const {
+  std::vector<StringType> components, vec;
+  if (IsAbsolutePath()) 
+    components.push_back(kRootPath);
+
+  ::base::SplitString(parent().fullpath(), kSeperator, &vec);
+  for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
+    if (*iter == kSeperatorStr)
+      continue;
+    components.push_back(*iter);
+  }
+
+  return components;
+}
 }  // namespace azer
 

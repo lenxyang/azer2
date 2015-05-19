@@ -35,6 +35,7 @@ class AZER_EXPORT ResPath {
   bool empty() const { return fullpath_.empty();}
   void clear();
 
+  std::vector<StringType> dirs() const;
   const StringType& rawpath() const { return rawpath_;}
   const StringType& fullpath() const { return fullpath_;}
   const StringType& filepath() const { return file_path_;}
@@ -63,6 +64,7 @@ class AZER_EXPORT ResPath {
   StringType file_path_;
   StringType proto_;
   StringType component_;
+  std::vector<StringType> dirs_;
   PathType type_;
 
   friend class ResPathNormalizer;
