@@ -8,6 +8,7 @@ namespace azer {
 namespace {
 const char* kAzerRenderWindow = "kAzerRenderWindow";
 const char* kAzerTextureOutputDevice = "kAzerTextureOutputDevice";
+const char* kAzerWidgetRendererContext = "kAzerWidgetRendererContext";
 }  // namespace
 
 bool IsWidgetRendererWindow(views::Widget* widget) {
@@ -16,6 +17,15 @@ bool IsWidgetRendererWindow(views::Widget* widget) {
 
 void SetWidgetRendererWindow(views::Widget* widget) {
   widget->SetNativeWindowProperty(kAzerRenderWindow, (void*)1);
+}
+
+WidgetRendererContext* GetWidgetRendererContext(views::Widget* widget) {
+  return (WidgetRendererContext*)
+      widget->GetNativeWindowProperty(kAzerWidgetRendererContext);
+}
+
+void SetWidgetRendererContext(views::Widget* widget, WidgetRendererContext* context) {
+  widget->SetNativeWindowProperty(kAzerWidgetRendererContext, context);
 }
 
 TextureOutputDevice* GetTextureOutputDeviceForWidget(views::Widget* widget) {

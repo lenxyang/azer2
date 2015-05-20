@@ -61,7 +61,6 @@ class SwapchainOutputDevice : public TextureOutputDevice {
     DISALLOW_COPY_AND_ASSIGN(SwapChainDeviceRenderer);
   };
 
-  azer::SwapChainPtr swapchain_;
   scoped_refptr<SwapChainDeviceRenderer> render_util_;
   scoped_ptr<WidgetRendererContext> widget_context_;
  private:

@@ -13,14 +13,18 @@ class Widget;
 }  // namespace views
 
 namespace azer {
+class WidgetRendererContext;
 class TextureOutputDevice;
 
-bool IsWidgetRendererWindow(views::Widget* widget);
+AZER_EXPORT bool IsWidgetRendererWindow(views::Widget* widget);
 void SetWidgetRendererWindow(views::Widget* widget);
 
 TextureOutputDevice* GetTextureOutputDeviceForWidget(views::Widget* widget);
 void SetTextureOutputDeviceForWidget(views::Widget* widget,
                                      TextureOutputDevice* device);
+
+AZER_EXPORT WidgetRendererContext* GetWidgetRendererContext(views::Widget* widget);
+AZER_EXPORT void SetWidgetRendererContext(views::Widget* widget, WidgetRendererContext* context);
 
 
 views::Widget* GetWidgetForWindowTreeHost(gfx::AcceleratedWidget widget);
