@@ -23,6 +23,7 @@ WidgetRendererContext::WidgetRendererContext(views::Widget* widget,
   swapchain_ = render_system_->CreateSwapChainForSurface(surface_.get());
   ResetSwapchain();
   widget_->AddObserver(this);
+  SetWidgetRendererContext(widget, this);
 }
 
 WidgetRendererContext::~WidgetRendererContext() {
