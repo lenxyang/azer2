@@ -1,0 +1,37 @@
+
+static_library("xml") {
+  sources = [
+    "node.cc",
+    "node.h",
+    "tree_node.h",
+    "xml.h",
+    "xml_context.cc",
+    "xml_context.h",
+    "xml_parser.cc",
+    "xml_parser.h",
+    "xpath.cc",
+    "xpath.h",
+  ]
+
+  deps = [
+    "//base",
+    "//third_party/libxml",
+  ]
+}
+
+test("xml_tests") {
+  sources = [
+    "xml_parser_unittest.cc",
+  ]
+
+  deps = [
+    "//base",
+    "//base/test:run_all_unittests",
+    "//base/test:test_support",
+    "//base/third_party/dynamic_annotations",
+    "//testing/gmock",
+    "//testing/gtest",
+    "//third_party/icu",
+    ":xml",
+  ]
+}
