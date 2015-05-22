@@ -2,7 +2,7 @@
 
 #include "azer/util/xml/xml_parser.h"
 #include "azer/util/xml/xpath.h"
-#include "testing/gtest/include/gtest/gtest.h"
+#include "testing/gtest/include/gtest/gtest.h"2
 
 using util::xml::Node;
 using util::xml::TextNode;
