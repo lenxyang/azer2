@@ -26,6 +26,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
                              public MovableObject::Delegate {
  public:
   SceneNode();
+  explicit SceneNode(const base::string16& name);
   ~SceneNode() override;
 
   typedef std::vector<SceneNodePtr> SceneNodes;
@@ -40,6 +41,9 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   void RemoveChild(SceneNodePtr child);
   bool has_child() const { return !children_.empty();} 
   bool HasAncestor(SceneNode* node) const;
+
+  void set_name(const base::string16& name);
+  const base::string16& name() const { return name_;}
 
   SceneNode* root() { return root_;}
   SceneNode* parent() { return parent_;}
@@ -68,6 +72,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   RenderableObjectPtr renderable_;
   Matrix4 world_;
   Vector3 scale_;
+  base::string16 name_;
   friend class Scene;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };

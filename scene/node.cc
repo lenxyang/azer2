@@ -15,6 +15,15 @@ SceneNode::SceneNode()
   MovableObject::set_delegate(this);
 }
 
+SceneNode::SceneNode(const base::string16& name)
+    : visible_(false)
+    , root_(NULL)
+    , parent_(NULL)
+    , scale_(Vector3(1.0f, 1.0f, 1.0f))
+    , name_(name) {
+  MovableObject::set_delegate(this);
+}
+
 SceneNode::~SceneNode() {
 }
 
@@ -80,5 +89,9 @@ void SceneNode::UpdateWorldMatrixRecusive() {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     (*iter)->UpdateWorldMatrixRecusive();
   }
+}
+
+void SceneNode::set_name(const base::string16& name) {
+  name_ = name;
 }
 }  // namespace azer

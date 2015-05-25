@@ -19,7 +19,7 @@ class TextureOutputDevice;
 AZER_EXPORT bool IsWidgetRendererWindow(views::Widget* widget);
 void SetWidgetRendererWindow(views::Widget* widget);
 
-TextureOutputDevice* GetTextureOutputDeviceForWidget(views::Widget* widget);
+AZER_EXPORT TextureOutputDevice* GetTextureOutputDeviceForWidget(views::Widget* widget);
 void SetTextureOutputDeviceForWidget(views::Widget* widget,
                                      TextureOutputDevice* device);
 
