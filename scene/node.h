@@ -45,6 +45,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   SceneNode* parent() { return parent_;}
   const SceneNode* parent() const { return parent_;}
   const SceneNodes& children() const { return children_;}
+  SceneNodes& children() { return children_;}
 
   const Matrix4& GetWorldMatrix() const { return world_;}
   void UpdateWorldMatrixRecusive();
