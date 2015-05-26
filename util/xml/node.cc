@@ -11,6 +11,16 @@
 namespace util {
 namespace xml {
 
+Node::Node(Type type, _xmlNode* node)
+    : type_(type),
+      node_(node),
+      extra_(NULL),
+      context_(NULL){
+}
+
+Node::~Node() {
+}
+
 const std::string& Element::GetAttr(const std::string& name) const {
   auto iter = attributes_.find(name);
   if (iter != attributes_.end()) {

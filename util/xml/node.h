@@ -18,6 +18,7 @@ class OtherNode;
 class CDataTextNode;
 class XPath;
 class XPathContext;
+class XMLContext;
 
 class Node: public TreeNode<Node> {
  public:
@@ -44,9 +45,8 @@ class Node: public TreeNode<Node> {
     kXIncludeStartNode,
     kXIncludeEndNode,
   };
-  explicit Node(Type type, _xmlNode* node)
-      : type_(type), node_(node), extra_(NULL) {}
-  virtual ~Node() {}
+  Node(Type type, _xmlNode* node);
+  virtual ~Node();
 
   Type type() const { return type_;}
 
@@ -64,11 +64,15 @@ class Node: public TreeNode<Node> {
     CHECK(false);
     return false;
   }
-  
+
+  XMLContext* context() { return context_;}
  private:
   Type type_;
   _xmlNode* node_;
   void* extra_;
+  XMLContext* context_;
+
+  friend class XMLContext;
   DISALLOW_COPY_AND_ASSIGN(Node);
 };
 Node::Type GetNodeType(int t);

@@ -105,6 +105,7 @@ Node* XMLContext::CreateNode(int type, void* extra) {
       break;
   }
 
+  node->context_ = this;
   xmlnode->_private = node;  // NOLINT
   node->set_extra(extra);
   allocated_.push_back(node);
