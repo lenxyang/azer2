@@ -8,6 +8,10 @@
 #include "base/strings/stringprintf.h"
 
 namespace azer {
+namespace {
+ResourcePtr empty_resource_ptr_;
+}
+
 RepositoryNode::RepositoryNode(const StringType& name) 
     : name_(name)
     , parent_(NULL) {
@@ -83,7 +87,7 @@ bool RepositoryNode::HasAncestor(RepositoryNode* node) const {
 }
 
 
-bool RepositoryNode::AddLocalResource(const StringType& name, ResourcePtr resource) {
+bool RepositoryNode::AddLocalResource(const StringType& name, ResourcePtr& resource) {
   auto iter = resource_dict_.find(name);
   if (iter != resource_dict_.end()) {
     return false;
@@ -93,23 +97,23 @@ bool RepositoryNode::AddLocalResource(const StringType& name, ResourcePtr resour
   return true;
 }
 
-ResourcePtr RepositoryNode::GetLocalResource(const StringType& path) {
+ResourcePtr& RepositoryNode::GetLocalResource(const StringType& path) {
   auto iter = resource_dict_.find(path);
   if (iter != resource_dict_.end()) {
     return iter->second;
   } else {
-    return ResourcePtr();
+    return empty_resource_ptr_;
   }
 }
 
-ResourcePtr RepositoryNode::GetResource(const ResPath& path) {
+ResourcePtr& RepositoryNode::GetResource(const ResPath& path) {
   DCHECK_NE(path.type(), ResPath::kInvalidPath);
   RepositoryNodePtr node = GetNode(ResPath(path.filepath()));
   if (node.get()) {
     return node->GetLocalResource(path.component());
   }
 
-  return ResourcePtr();
+  return empty_resource_ptr_;
 }
 
 RepositoryNodePtr RepositoryNode::GetResourceParent(const ResPath& path) {

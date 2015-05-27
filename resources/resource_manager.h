@@ -11,17 +11,18 @@ class ResourceLoaderManager;
 class ResourceContext;
 class SceneNode;
 
+// Notes: you should always use ResourcePtr&  but not (ResourcePtr)
 class AZER_EXPORT ResourceManager {
  public:
   ResourceManager(ResourceContext* context);
   virtual ~ResourceManager();
 
-  ResourcePtr GetResource(const ResPath& path); 
-
-  // release all resource binding with scene node
-  void ReleaseSceneResource(SceneNode* node);
+  ResourcePtr& GetResource(const ResPath& path); 
 
   ResourceContext* GetResContext() { return context_;}
+  void RegisterResource(const ResPath& path, ResourcePtr& resource);
+  // release the capture of the resource
+  bool ReleaseResource(const ResPath& path);
  private:
   // load resource into repositor node
   bool LoadResourceSync(const ResPath& path, ResourcePtr* ptr); 

@@ -1,4 +1,7 @@
 #include "azer/resources/resource_manager.h"
+
+#include "base/logging.h"
+
 #include "azer/resources/context.h"
 #include "azer/resources/resource_loader.h"
 #include "azer/resources/resource_manager.h"
@@ -13,7 +16,7 @@ ResourceManager::ResourceManager(ResourceContext* context)
 ResourceManager::~ResourceManager() {
 }
 
-ResourcePtr ResourceManager::GetResource(const ResPath& path) {
+ResourcePtr& ResourceManager::GetResource(const ResPath& path) {
   ResourcePtr resptr = root_->GetResource(path);
   if (resptr.get()) { return resptr;}
 
@@ -25,6 +28,11 @@ ResourcePtr ResourceManager::GetResource(const ResPath& path) {
   } else {
     return ResourcePtr();
   }
+}
+
+void ResourceManager::RegisterResource(const ResPath& path, ResourcePtr& resource) {
+  DCHECK(resource.get());
+  root_->AddResource(path, resource);
 }
 
 bool ResourceManager::LoadResourceSync(const ResPath& path, ResourcePtr* ptr) {
@@ -40,6 +48,6 @@ bool ResourceManager::LoadResourceSync(const ResPath& path, ResourcePtr* ptr) {
   }
 }
 
-void ResourceManager::ReleaseSceneResource(SceneNode* node) {
+bool ResouceManager::ReleaseResource(const ResPath& path) {
 }
 }  // namespace azer
