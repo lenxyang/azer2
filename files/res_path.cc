@@ -145,6 +145,27 @@ ResPath ResPath::parent() const {
 void ResPath::Normalize() {
 }
 
+StringType ResPath::filename() const {
+  if (!dirs_.empty()) {
+    return dirs_.back();
+  } else {
+    return StringType(FILE_PATH_LITERAL(""));
+  }
+}
+
+StringType ResPath::component_name() const {
+  if (!component_.empty()) {
+    DCHECK(StartsWith(component_, FILE_PATH_LITERAL(":"), true));
+    return component_.substr(1);
+  } else {
+    StringType name = std::move(filename());
+    uint32 pos = name.rfind(FILE_PATH_LITERAL("."));
+    if (pos != StringType::npos)
+      name = name.substr(0, pos);
+    return name;
+  }
+}
+
 std::vector<StringType> ResPath::dirs() const {
   std::vector<StringType> components, vec;
   if (IsAbsolutePath()) 

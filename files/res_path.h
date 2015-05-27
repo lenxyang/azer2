@@ -36,16 +36,34 @@ class AZER_EXPORT ResPath {
   void clear();
 
   std::vector<StringType> dirs() const;
+  // raw path ( which has no normalized )
   const StringType& rawpath() const { return rawpath_;}
+
+  // full path (raw path with normalized)
   const StringType& fullpath() const { return fullpath_;}
+
+  // file path (full path without proto header)
   const StringType& filepath() const { return file_path_;}
+
+  // file name: the last part of dirs
+  StringType filename() const;
+
+  // proto: the proto header, like "http://"
   const StringType& proto() const { return proto_;}
+
+  // component_: component party
+  // for example: net://www.sina.com/a:bcom, :bcom is the component party
   const StringType& component() const { return component_;}
-  bool has_proto() const { return !proto_.empty();}
-  bool has_component() const { return !component_.empty();}
+
+  // component name
+  // if has component party, the name is component part without comma
+  // if has no component part, the name will be same as file name with out suppfix
+  StringType component_name() const;
 
   ResPath parent() const;
   PathType type() const { return type_;}
+  bool has_proto() const { return !proto_.empty();}
+  bool has_component() const { return !component_.empty();}
   bool IsRoot() const { return fullpath_ == kRootPath;}
   bool IsAbsolutePath() const { return type_ == kAbsolutePath;}
   bool IsRelativePath() const { return type_ == kRelativePath;}
