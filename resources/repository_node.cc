@@ -101,11 +101,12 @@ bool RepositoryNode::AddResource(const ResPath& path, ResourcePtr& resource) {
   RepositoryNodePtr node = GetNode(ResPath(path.filepath()));
   if (node.get()) {
     if (path.IsAbsolutePath()) {
-      GenerateTreeHierarchy(path, root);
+      GenerateTreeHierarchy(path, root());
     } else {
       GenerateTreeHierarchy(path, this);
     }
     node = GetNode(ResPath(path.filepath()));
+    DCHECK(node.get());
   }
 
   node->AddLocalResource(path.component(), resource);
