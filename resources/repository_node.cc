@@ -97,6 +97,21 @@ bool RepositoryNode::AddLocalResource(const StringType& name, ResourcePtr& resou
   return true;
 }
 
+bool RepositoryNode::AddResource(const ResPath& path, ResourcePtr& resource) {
+  RepositoryNodePtr node = GetNode(ResPath(path.filepath()));
+  if (node.get()) {
+    if (path.IsAbsolutePath()) {
+      GenerateTreeHierarchy(path, root);
+    } else {
+      GenerateTreeHierarchy(path, this);
+    }
+    node = GetNode(ResPath(path.filepath()));
+  }
+
+  node->AddLocalResource(path.component(), resource);
+  return true;
+}
+
 ResourcePtr& RepositoryNode::GetLocalResource(const StringType& path) {
   auto iter = resource_dict_.find(path);
   if (iter != resource_dict_.end()) {

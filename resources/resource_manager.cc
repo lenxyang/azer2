@@ -8,6 +8,10 @@
 
 namespace azer {
 
+namespace {
+ResourcePtr empty_resource_ptr;
+}
+
 ResourceManager::ResourceManager(ResourceContext* context)
     : context_(context) {
   root_ = new RepositoryNode(AZER_LITERAL("//"));
@@ -17,7 +21,7 @@ ResourceManager::~ResourceManager() {
 }
 
 ResourcePtr& ResourceManager::GetResource(const ResPath& path) {
-  ResourcePtr resptr = root_->GetResource(path);
+  ResourcePtr& resptr = root_->GetResource(path);
   if (resptr.get()) { return resptr;}
 
   if (LoadResourceSync(path, &resptr)) {
@@ -26,7 +30,7 @@ ResourcePtr& ResourceManager::GetResource(const ResPath& path) {
     node->AddLocalResource(path.component(), resptr);
     return resptr;
   } else {
-    return ResourcePtr();
+    return empty_resource_ptr;
   }
 }
 
@@ -48,6 +52,7 @@ bool ResourceManager::LoadResourceSync(const ResPath& path, ResourcePtr* ptr) {
   }
 }
 
-bool ResouceManager::ReleaseResource(const ResPath& path) {
+bool ResourceManager::ReleaseResource(const ResPath& path) {
+  return true;
 }
 }  // namespace azer

@@ -18,10 +18,10 @@ class AZER_EXPORT ResourceManager {
   virtual ~ResourceManager();
 
   ResourcePtr& GetResource(const ResPath& path); 
-
   ResourceContext* GetResContext() { return context_;}
-  void RegisterResource(const ResPath& path, ResourcePtr& resource);
+  
   // release the capture of the resource
+  void RegisterResource(const ResPath& path, ResourcePtr& resource);
   bool ReleaseResource(const ResPath& path);
  private:
   // load resource into repositor node
