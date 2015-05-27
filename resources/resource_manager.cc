@@ -8,10 +8,6 @@
 
 namespace azer {
 
-namespace {
-ResourcePtr empty_resource_ptr;
-}
-
 ResourceManager::ResourceManager(ResourceContext* context)
     : context_(context) {
   root_ = new RepositoryNode(AZER_LITERAL("//"));
@@ -20,7 +16,7 @@ ResourceManager::ResourceManager(ResourceContext* context)
 ResourceManager::~ResourceManager() {
 }
 
-ResourcePtr& ResourceManager::GetResource(const ResPath& path) {
+ResourcePtr ResourceManager::GetResource(const ResPath& path) {
   ResourcePtr& resptr = root_->GetResource(path);
   if (resptr.get()) { return resptr;}
 
@@ -30,7 +26,7 @@ ResourcePtr& ResourceManager::GetResource(const ResPath& path) {
     node->AddLocalResource(path.component(), resptr);
     return resptr;
   } else {
-    return empty_resource_ptr;
+    return ResourcePtr();
   }
 }
 
