@@ -17,7 +17,7 @@ class AZER_EXPORT ResourceManager {
   ResourceManager(ResourceContext* context);
   virtual ~ResourceManager();
 
-  ResourcePtr& GetResource(const ResPath& path); 
+  ResourcePtr GetResource(const ResPath& path); 
   ResourceContext* GetResContext() { return context_;}
   
   // release the capture of the resource

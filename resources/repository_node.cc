@@ -8,10 +8,6 @@
 #include "base/strings/stringprintf.h"
 
 namespace azer {
-namespace {
-ResourcePtr empty_resource_ptr_;
-}
-
 RepositoryNode::RepositoryNode(const StringType& name) 
     : name_(name)
     , parent_(NULL) {
@@ -113,23 +109,23 @@ bool RepositoryNode::AddResource(const ResPath& path, ResourcePtr& resource) {
   return true;
 }
 
-ResourcePtr& RepositoryNode::GetLocalResource(const StringType& path) {
+ResourcePtr RepositoryNode::GetLocalResource(const StringType& path) {
   auto iter = resource_dict_.find(path);
   if (iter != resource_dict_.end()) {
     return iter->second;
   } else {
-    return empty_resource_ptr_;
+    return ResourcePtr();
   }
 }
 
-ResourcePtr& RepositoryNode::GetResource(const ResPath& path) {
+ResourcePtr RepositoryNode::GetResource(const ResPath& path) {
   DCHECK_NE(path.type(), ResPath::kInvalidPath);
   RepositoryNodePtr node = GetNode(ResPath(path.filepath()));
   if (node.get()) {
     return node->GetLocalResource(path.component());
+  } else {
+    return ResourcePtr();
   }
-
-  return empty_resource_ptr_;
 }
 
 RepositoryNodePtr RepositoryNode::GetResourceParent(const ResPath& path) {
