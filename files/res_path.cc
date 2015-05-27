@@ -146,10 +146,19 @@ void ResPath::Normalize() {
 }
 
 StringType ResPath::filename() const {
-  if (!dirs_.empty()) {
-    return dirs_.back();
-  } else {
+  StringType path;
+  int32 component_pos = fullpath_.find(kComponentSeperatorStr);
+  if (component_pos == -1) {
+    path = fullpath_.substr(0, component_pos);
+  }
+  
+  int32 last_dir = path.find_last_of(kSeperatorStr);
+  if (last_dir == static_cast<int32>(path.length()) - 1) {
     return StringType(FILE_PATH_LITERAL(""));
+  } else if (last_dir != -1) {
+    return path.substr(last_dir + 1);
+  } else {
+    return path;
   }
 }
 
@@ -173,7 +182,7 @@ std::vector<StringType> ResPath::dirs() const {
 
   ::base::SplitString(parent().fullpath(), kSeperator, &vec);
   for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
-    if (*iter == kSeperatorStr)
+    if (*iter == kSeperatorStr || iter->empty())
       continue;
     components.push_back(*iter);
   }
