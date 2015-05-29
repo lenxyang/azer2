@@ -38,6 +38,7 @@ void SceneNode::Detach() {
 
 void SceneNode::AddChild(SceneNodePtr child) {
   DCHECK(child->parent() == NULL);
+  child->parent_ = this;
   children_.push_back(child);
 }
 
