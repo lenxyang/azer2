@@ -116,7 +116,7 @@ void SceneNode::print_info(std::string* str, int depth, SceneNode* node) {
                                   ::base::UTF16ToUTF8(name()).c_str()));
   str->append("\n");
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    print_info(str, depth + 1, iter->get());
+    (*iter)->print_info(str, depth + 1, iter->get());
   }
 }
 }  // namespace azer
