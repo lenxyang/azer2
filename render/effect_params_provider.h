@@ -7,7 +7,7 @@
 
 namespace azer {
 
-class FrameData;
+class FrameArgs;
 
 // provider information for effect
 class AZER_EXPORT EffectParamsProvider {

@@ -17,7 +17,7 @@ class AZER_EXPORT RenderQueueCluster {
   RenderQueueCluster();
   ~RenderQueueCluster();
 
-  virtual void Render(FrameData* frame, Renderer* renderer);
+  virtual void Render(const FrameArgs& frame, Renderer* renderer);
 
   void AddRenderQueue(int32 level, RenderQueuePtr& queue);
   bool RemoveQueue(int32 level, RenderQueuePtr& queue);

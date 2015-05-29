@@ -10,11 +10,11 @@
 #include "azer/base/string.h"
 #include "azer/base/export.h"
 #include "azer/render/movable.h"
+#include "azer/render/renderable_object.h"
 
 namespace azer {
 class MovableObject;
 class RenderSystem;
-class RenderableObject;
 class Scene;
 class SceneNode;
 
@@ -36,6 +36,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
 
   void Attach(RenderableObjectPtr object);
   void Detach();
+  RenderableObjectPtr GetRenderableObject() { return renderable_;} 
 
   void AddChild(SceneNodePtr child);
   void RemoveChild(SceneNodePtr child);

@@ -16,7 +16,7 @@ void RenderQueueCluster::Reset() {
   levels_.clear();
 }
 
-void RenderQueueCluster::Render(FrameData* frame, Renderer* renderer) {
+void RenderQueueCluster::Render(const FrameArgs& frame, Renderer* renderer) {
   for (uint32 index = 0; index < levels_.size(); ++index) { 
     for (auto iter = levels_[index].begin();
          iter != levels_[index].end();
