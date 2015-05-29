@@ -16,7 +16,7 @@ SceneNode::SceneNode()
   MovableObject::set_delegate(this);
 }
 
-SceneNode::SceneNode(const base::string16& name)
+SceneNode::SceneNode(const std::string& name)
     : visible_(false)
     , root_(NULL)
     , parent_(NULL)
@@ -100,7 +100,7 @@ void SceneNode::UpdateWorldMatrixRecusive() {
   }
 }
 
-void SceneNode::set_name(const base::string16& name) {
+void SceneNode::set_name(const std::string& name) {
   name_ = name;
 }
 
@@ -112,9 +112,11 @@ std::string SceneNode::print_info() {
 
 void SceneNode::print_info(std::string* str, int depth, SceneNode* node) {
   str->append(std::string(depth, ' '));
-  str->append(::base::StringPrintf("node[name=%s]", 
-                                  ::base::UTF16ToUTF8(name()).c_str()));
-  str->append("\n");
+  str->append("node[");
+  str->append(::base::StringPrintf("name=%s,",name().c_str()));
+  str->append(::base::StringPrintf(" pos={%f, %f, %f}", position().x,
+                                   position().y, position().z));
+  str->append("]\n");
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     (*iter)->print_info(str, depth + 1, iter->get());
   }

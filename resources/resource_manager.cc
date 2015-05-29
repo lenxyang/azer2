@@ -17,7 +17,7 @@ ResourceManager::~ResourceManager() {
 }
 
 ResourcePtr ResourceManager::GetResource(const ResPath& path) {
-  ResourcePtr& resptr = root_->GetResource(path);
+  ResourcePtr resptr = root_->GetResource(path);
   if (resptr.get()) { return resptr;}
 
   if (LoadResourceSync(path, &resptr)) {
