@@ -29,7 +29,7 @@ class RenderQueue : public RenderableObject {
   void Clear() { queue_.clear();}
 
   // override from Rendererable
-  // void Render(FrameData* frame, Renderer* renderer) override;
+  // void Render(const FrameData& frame, Renderer* renderer) override;
   // EffectParamsProvider* GetEffectParamsProvider() override;
  private:
   EffectPtr effect_;

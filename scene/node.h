@@ -10,11 +10,11 @@
 #include "azer/base/string.h"
 #include "azer/base/export.h"
 #include "azer/render/movable.h"
+#include "azer/render/renderable_object.h"
 
 namespace azer {
 class MovableObject;
 class RenderSystem;
-class RenderableObject;
 class Scene;
 class SceneNode;
 
@@ -26,7 +26,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
                              public MovableObject::Delegate {
  public:
   SceneNode();
-  explicit SceneNode(const base::string16& name);
+  explicit SceneNode(const std::string& name);
   ~SceneNode() override;
 
   typedef std::vector<SceneNodePtr> SceneNodes;
@@ -36,14 +36,15 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
 
   void Attach(RenderableObjectPtr object);
   void Detach();
+  RenderableObjectPtr GetRenderableObject() { return renderable_;} 
 
   void AddChild(SceneNodePtr child);
   void RemoveChild(SceneNodePtr child);
   bool has_child() const { return !children_.empty();} 
   bool HasAncestor(SceneNode* node) const;
 
-  void set_name(const base::string16& name);
-  const base::string16& name() const { return name_;}
+  void set_name(const std::string& name);
+  const std::string& name() const { return name_;}
 
   SceneNode* root() { return root_;}
   SceneNode* parent() { return parent_;}
@@ -53,6 +54,8 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
 
   const Matrix4& GetWorldMatrix() const { return world_;}
   void UpdateWorldMatrixRecusive();
+
+  std::string print_info();
  protected:
   // override from MovableObject::Delegate
   void OnObjectPositionChanged(const Vector3& origin_position) override;
@@ -64,6 +67,8 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
 
   virtual void OnAttachedToScene();
   void OnPositionChanged();
+
+  void print_info(std::string* str, int depth, SceneNode* node);
   bool visible_;
 
   SceneNode* root_;
@@ -72,7 +77,7 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
   RenderableObjectPtr renderable_;
   Matrix4 world_;
   Vector3 scale_;
-  base::string16 name_;
+  std::string name_;
   friend class Scene;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };

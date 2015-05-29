@@ -28,6 +28,7 @@ source_set("render") {
     "camera.h",
     "effect.cc",
     "effect.h",
+    "effect_params_provider.cc",
     "effect_params_provider.h",
     "frame_args.cc",
     "frame_args.h",

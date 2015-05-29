@@ -7,7 +7,7 @@
 
 namespace azer {
 
-class FrameData;
+class FrameArgs;
 
 /**
  * RenderableObject 
@@ -22,7 +22,7 @@ class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject>
   RenderableObject() {}
   virtual ~RenderableObject() {}
 
-  virtual void Render(FrameData* frame, Renderer* renderer) = 0;
+  virtual void Render(const FrameArgs& frame, Renderer* renderer) = 0;
 
   // provide information for effect
   virtual EffectParamsProvider* GetEffectParamsProvider() = 0;
