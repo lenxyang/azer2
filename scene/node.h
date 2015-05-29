@@ -53,6 +53,8 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
 
   const Matrix4& GetWorldMatrix() const { return world_;}
   void UpdateWorldMatrixRecusive();
+
+  std::string print_info();
  protected:
   // override from MovableObject::Delegate
   void OnObjectPositionChanged(const Vector3& origin_position) override;
@@ -64,6 +66,8 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode>,
 
   virtual void OnAttachedToScene();
   void OnPositionChanged();
+
+  void print_info(std::string* str, int depth, SceneNode* node);
   bool visible_;
 
   SceneNode* root_;

@@ -80,11 +80,13 @@ std::string NodeTypeName(Node::Type type);
 
 class Element : public Node {
  public:
+  typedef std::map<std::string, std::string> Attributes;
   Element(_xmlNode* node)
       : Node(kElementNode, node) {}
   const std::string& tag_name() const { return tag_name_;}
   void set_tag(const std::string& name) { tag_name_ = name;}
   const std::string& GetAttr(const std::string& name) const;
+  const  Attributes& attributes() const { return attributes_;}
   virtual Element* ToElement() { return this;}
 
   virtual bool execute(const XPath& path, XPathContext* context);
@@ -100,7 +102,7 @@ class Element : public Node {
  private:
   const std::string empty_;
   std::string tag_name_;
-  std::map<std::string, std::string> attributes_;
+  Attributes attributes_;
   DISALLOW_COPY_AND_ASSIGN(Element);
 };
 

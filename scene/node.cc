@@ -1,6 +1,7 @@
 #include "azer/scene/node.h"
 
 #include "base/logging.h"
+#include "base/strings/stringprintf.h"
 #include "azer/render/render.h"
 #include "azer/render/renderable_object.h"
 #include "azer/render/frustrum.h"
@@ -25,6 +26,14 @@ SceneNode::SceneNode(const base::string16& name)
 }
 
 SceneNode::~SceneNode() {
+}
+
+void SceneNode::Attach(RenderableObjectPtr object) {
+  renderable_ = object;
+}
+
+void SceneNode::Detach() {
+  renderable_ = NULL;
 }
 
 void SceneNode::AddChild(SceneNodePtr child) {
@@ -93,5 +102,21 @@ void SceneNode::UpdateWorldMatrixRecusive() {
 
 void SceneNode::set_name(const base::string16& name) {
   name_ = name;
+}
+
+std::string SceneNode::print_info() {
+  std::string str;
+  print_info(&str, 0, this);
+  return str;
+}
+
+void SceneNode::print_info(std::string* str, int depth, SceneNode* node) {
+  str->append(std::string(depth, ' '));
+  str->append(::base::StringPrintf("node[name=%s]", 
+                                  ::base::UTF16ToUTF8(name()).c_str()));
+  str->append("\n");
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    print_info(str, depth + 1, iter->get());
+  }
 }
 }  // namespace azer
