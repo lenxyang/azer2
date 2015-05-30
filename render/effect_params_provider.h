@@ -15,11 +15,14 @@ class AZER_EXPORT EffectParamsProvider {
   EffectParamsProvider();
   virtual ~EffectParamsProvider();
 
+  // initialize
+  virtual bool Init() = 0;
+
   // apply the parameters on effect
-  virtual void ApplyParametersForEffect(Effect* effect) = 0;
+  virtual void ApplyParametersForEffect() = 0;
 
   // GetEffect
-  virtual EffectPtr& GetEffect() = 0;
+  virtual EffectPtr GetEffect() = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(EffectParamsProvider);
 };
