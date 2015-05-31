@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "base/basictypes.h"
+#include "base/logging.h"
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
 #include "azer/render/render_system_enum.h"
