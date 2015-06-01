@@ -6,6 +6,8 @@
 
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
+#include "azer/render/light.h"
+#include "azer/render/material.h"
 
 namespace azer {
 
@@ -30,6 +32,11 @@ class AZER_EXPORT Effect : public Resource {
 
   const std::string& name() const { return name_;}
   virtual void Use(Renderer* renderer);
+
+  // light and material didn't have a fixed structure
+  // all will be dependent its implementation.
+  virtual void SetLight(int light_index, Light* light) {}
+  virtual void SetMatrial(Material* material) {}
 
   // 刷新所有的 GpuConstantTable
   void flush(Renderer* renderer);
