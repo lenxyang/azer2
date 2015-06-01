@@ -8,7 +8,7 @@ shared_library("azer") {
     "render/layers",
     "render:render2d",
     "resources",
-    "scene",
+    # "scene",
     "math",
     "ui",
   ]
