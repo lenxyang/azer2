@@ -7,6 +7,7 @@ namespace azer {
 class Material : public ::base::RefCounted<Material> {
  public:
   explicit Material(int32 id);
+  virtual ~Material() {}
 
   int32 id() const { return id_;}
  private:

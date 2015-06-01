@@ -14,6 +14,7 @@ namespace azer {
 class Light : public ::base::RefCounted<Light> {
  public:
   explicit Light(int32 id);
+  virtual ~Light() {}
 
   int32 id() const { return id_;}
  private:
