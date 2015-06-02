@@ -9,6 +9,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/renderable_object.h"
+#include "azer/render/effect.h"
 
 namespace azer {
 

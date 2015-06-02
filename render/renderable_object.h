@@ -8,6 +8,7 @@
 namespace azer {
 
 class FrameArgs;
+class Renderer;
 
 class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject> {
  public:
