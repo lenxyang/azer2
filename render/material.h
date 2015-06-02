@@ -2,9 +2,10 @@
 
 #include <string>
 #include "base/memory/ref_counted.h"
+#include "azer/base/export.h"
 
 namespace azer {
-class Material : public ::base::RefCounted<Material> {
+class AZER_EXPORT Material : public ::base::RefCounted<Material> {
  public:
   explicit Material(int32 id);
   virtual ~Material() {}

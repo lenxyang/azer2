@@ -9,9 +9,10 @@
 
 #include <string>
 #include "base/memory/ref_counted.h"
+#include "azer/base/export.h"
 
 namespace azer {
-class Light : public ::base::RefCounted<Light> {
+class AZER_EXPORT Light : public ::base::RefCounted<Light> {
  public:
   explicit Light(int32 id);
   virtual ~Light() {}
