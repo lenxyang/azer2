@@ -416,6 +416,8 @@ void CppCodeGen::GenCppCode(const Technique& tech) {
      << "#include \"base/basictypes.h\"\n"
      << "#include \"base/logging.h\"\n\n"
      << "#include \"azer/render/render.h\"\n\n"
+     << "const char " << classname << "::kEffectName[] = \"" 
+     << GetEffectName(tech) << "\";\n"
      << GenVertexDesc(tech) << "\n"
      << "const int " << classname << "::kVertexDescNum = arraysize("
      << classname << "::kVertexDesc);\n\n"
@@ -431,6 +433,7 @@ void CppCodeGen::GenCppCode(const Technique& tech) {
      << "}\n\n"
      << classname << "::~" << classname << "() {\n"
      << "}\n\n"
+     << "const char* " << classname << "::name() const { return kEffectName;}\n"
      << std::move(GenInit(tech))
      << std::move(GenTechnique(tech))
      << GenUseTexture(tech) << "\n";
@@ -441,6 +444,14 @@ void CppCodeGen::GenCppCode(const Technique& tech) {
 void CppCodeGen::GenCode(const Technique& tech) {
   GenHeadCode(tech);
   GenCppCode(tech);
+}
+
+std::string CppCodeGen::GetEffectName(const Technique& tech) const {
+  if (tech.attributes &&  tech.attributes->HasAttr("name")) {
+    return tech.attributes->GetAttrValue("name");
+  } else {
+    return GetClassName(tech);
+  }
 }
 
 std::string CppCodeGen::GetClassName(const Technique& tech) const {
@@ -517,9 +528,11 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
   std::string classname = std::move(GetClassName(tech));
   ss << "class " << classname << ": public azer::Effect {\n"
      << " public:\n"
+     << "  static const char kEffectName[];\n"
      << "  " << classname << "(const std::vector<std::string>& sources, "
      << "azer::RenderSystem* rs);\n"
-     << "  ~" << classname << "();\n"
+     << "  ~" << classname << "();\n\n"
+     << "  const char* name() const override;\n"
      << std::move(GenExchangeBuffer(tech)) << "\n"
      << std::move(GenUniformFuncs(tech)) << "\n"
      << std::move(GenVertexStruct(tech)) << "\n"

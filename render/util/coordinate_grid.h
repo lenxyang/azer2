@@ -11,6 +11,7 @@
 namespace azer {
 class AZER_EXPORT CoordinateGridEffect : public azer::Effect {
  public:
+  static const char kEffectName[];
   CoordinateGridEffect(azer::RenderSystem* rs); 
 #pragma pack(push, 4)
   struct vs_cbuffer {
@@ -20,7 +21,7 @@ class AZER_EXPORT CoordinateGridEffect : public azer::Effect {
     azer::Vector4 diffuse;
   };
 #pragma pack(pop)
-
+  const char* name() const override;
   struct Vertex {
     azer::Vector4 position;
     Vertex(const azer::Vector4& in_position)

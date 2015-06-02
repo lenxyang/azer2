@@ -11,10 +11,12 @@ class D3DRenderSystem;
 
 class D3DOverlayEffect : public Effect {
  public:
+  static const char kEffectName[];
   D3DOverlayEffect(D3DRenderSystem* rs)
       : Effect((RenderSystem*)rs) {
   }
-  
+
+  const char* name() const override;
   void SetTexture(TexturePtr texture) { texture_ = texture;}
   void SetTransform(const Matrix4& matrx);
   void SetTexcoord(const Vector4 texcoord[4]);

@@ -7,6 +7,7 @@
 #include "azer/render/render_system.h"
 
 namespace azer {
+const char CoordinateGridEffect::kEffectName[] = "CoordinateGridEffect";
 // class CoordinateGridEffect
 const VertexDesc::Desc CoordinateGridEffect::kVertexDesc[] = {
   {"POSITION", 0, kVec4},
@@ -17,6 +18,10 @@ const int CoordinateGridEffect::kVertexDescNum =
 CoordinateGridEffect::CoordinateGridEffect(RenderSystem* rs)
     : Effect(rs) {
   Init(rs);
+}
+
+const char* CoordinateGridEffect::name() const {
+  return kEffectName;
 }
 
 void CoordinateGridEffect::Init(RenderSystem* rs) {

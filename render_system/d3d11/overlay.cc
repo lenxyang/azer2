@@ -18,6 +18,8 @@ struct vs_cbuffer {
 #pragma pack(pop)
 }  // namespace
 
+const char D3DOverlayEffect::kEffectName[] = "D3DOverlayEffect";
+
 const char* D3DOverlayEffect::kVertexShaderProg = ""
     "struct VS_OUTPUT {                                  \n"
     "  float4 pos      : SV_POSITION;                    \n"
@@ -49,6 +51,10 @@ const char* D3DOverlayEffect::kPixelShaderProg = ""
     "  return diffuse;                                                  \n"
     "}";
 
+
+const char* D3DOverlayEffect::name() const {
+  return kEffectName;
+}
 
 void D3DOverlayEffect::Use(Renderer* renderer) {
   DCHECK(texture_.get() != NULL);

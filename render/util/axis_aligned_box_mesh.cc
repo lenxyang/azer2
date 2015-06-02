@@ -6,9 +6,15 @@
 
 namespace azer {
 
+const char AABBEffect::kEffectName[] = "AABBEffect";
+
 AABBEffect::AABBEffect(RenderSystem* rs)
     : Effect(rs) {
   Init(rs);
+}
+
+const char* AABBEffect::name() const {
+  return kEffectName;
 }
 
 void AABBEffect::Init(RenderSystem* rs) {

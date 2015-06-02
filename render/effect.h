@@ -30,7 +30,7 @@ class AZER_EXPORT Effect : public Resource {
   explicit Effect(RenderSystem* rs);
   virtual ~Effect();
 
-  const std::string& name() const { return name_;}
+  virtual const char* name() const = 0;
   virtual void Use(Renderer* renderer);
 
   // light and material didn't have a fixed structure
@@ -44,9 +44,7 @@ class AZER_EXPORT Effect : public Resource {
   virtual void UseTexture(Renderer* renderer) = 0;
   void UseConstantsTable(Renderer* renderer);
   void UseTechnique(Renderer* renderer);
-  void set_name(const std::string& name) { name_ = name;}
 
-  std::string name_;
   TechniquePtr technique_;
   std::vector<scoped_refptr<GpuConstantsTable> > gpu_table_;
   RenderSystem* render_system_;

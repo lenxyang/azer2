@@ -14,6 +14,7 @@ namespace azer {
 
 class AZER_EXPORT AABBEffect : public Effect {
  public:
+  static const char kEffectName[];
   AABBEffect(RenderSystem* rs);
 #pragma pack(push, 4)
   struct vs_cbuffer {
@@ -23,6 +24,8 @@ class AZER_EXPORT AABBEffect : public Effect {
     azer::Vector4 diffuse;
   };
 #pragma pack(pop)
+
+  const char* name() const override;
   void SetWVP(const Matrix4& wvp) {
     azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
     DCHECK(tb != NULL);

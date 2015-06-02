@@ -39,6 +39,7 @@ void RenderableObject::Render(int target, Renderer* renderer) {
   EffectPtr effect = effects_[target];
   if (effect.get()) {
     provider_->Apply(effect.get());
+    effect->Use(renderer);
     RenderObj(target, renderer);
   }
 }

@@ -24,6 +24,7 @@ class CppCodeGen {
  private:
   std::string GenStructDecl(const std::string& name, StructDeclNode* decl) const;
   std::string GetClassName(const Technique& tech) const;
+  std::string GetEffectName(const Technique& tech) const;
 
   /**
    * 生成制定 technique 的相关 c++ 代码
