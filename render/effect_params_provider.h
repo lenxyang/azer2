@@ -10,7 +10,7 @@ namespace azer {
 class FrameArgs;
 
 // provider information for effect
-class AZER_EXPORT EffectParamsProvider {
+class AZER_EXPORT EffectParamsProvider : public base::RefCounted<EffectParamsProvider> {
  public:
   EffectParamsProvider();
   virtual ~EffectParamsProvider();
