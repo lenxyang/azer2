@@ -9,8 +9,7 @@ namespace azer {
 class Effect;
 
 // provider information for effect
-class AZER_EXPORT EffectParamsProvider
-    : public base::RefCounted<EffectParamsProvider> {
+class AZER_EXPORT EffectParamsProvider {
  public:
   EffectParamsProvider();
   virtual ~EffectParamsProvider();
