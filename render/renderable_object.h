@@ -6,7 +6,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/blending.h"
-
+#include "azer/render/effect.h"
 
 namespace azer {
 
@@ -24,10 +24,10 @@ enum {
 
 class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject> {
  public:
-  RenderableObject() {}
-  virtual ~RenderableObject() {}
+  RenderableObject();
+  virtual ~RenderableObject();
 
-  EffectPtr& effect(int target);
+  EffectPtr& GetEffect(int target);
   void SetEffect(int target, EffectPtr effect);
   void SetEffectParamsProvider(scoped_ptr<EffectParamsProvider> provider);
 
@@ -36,7 +36,7 @@ class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject>
   void SetBlending(BlendingPtr blending);
   EffectParamsProvider* provider() { return provider_.get();}
  protected:
-  void RenderObj(int target, Renderer* renderer);
+  virtual void RenderObj(int target, Renderer* renderer) = 0;
  private:
   std::vector<EffectPtr> effects_;
   BlendingPtr blending_;

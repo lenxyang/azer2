@@ -5,9 +5,11 @@
 #include "azer/render/effect_params_provider.h"
 
 namespace azer {
-RenderableObject::RenderableObject()
-    : use_blending_(false) {
-  effect_.resize(kObjRTNum);
+RenderableObject::RenderableObject() {
+  effects_.resize(kObjRTNum);
+}
+
+RenderableObject::~RenderableObject() {
 }
 
 bool RenderableObject::HasBlending() const {
@@ -25,12 +27,12 @@ void RenderableObject::SetEffectParamsProvider(
 
 void RenderableObject::SetEffect(int target, EffectPtr effect) {
   DCHECK_LT(target, kObjRTNum);
-  effect_[target] = effect;
+  effects_[target] = effect;
 }
 
-EffectPtr& RenderableObject::effect(int target) {
+EffectPtr& RenderableObject::GetEffect(int target) {
   DCHECK_LT(target, kObjRTNum);
-  return effect_[target];
+  return effects_[target];
 }
 
 void RenderableObject::Render(int target, Renderer* renderer) {
