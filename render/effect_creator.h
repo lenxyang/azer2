@@ -16,6 +16,9 @@ class EffectAutoReg {
   }
 };
 
+// attention: the function must be a inline function
+// because the ClassCreator<Effect>::instance() may be belong to another
+// library(static library or dynamic library)
 inline EffectPtr CreateEffectByName(const std::string& name) {
   return EffectPtr(ClassCreator<Effect>::instance()->create(name));
 }
