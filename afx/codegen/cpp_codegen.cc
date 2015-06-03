@@ -543,7 +543,7 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << std::move(GenUniformFuncs(tech)) << "\n"
      << std::move(GenVertexStruct(tech)) << "\n"
      << "  azer::VertexDescPtr GetVertexDesc() { return vertex_desc_ptr_;}\n"
-     << "  static " << classname << " CreateObject() {\n"
+     << "  static " << classname << "* CreateObject() {\n"
      << "    return new " << classname << ";\n"
      << "  }\n"
      << "  static const int kVertexDescNum;\n"
@@ -554,7 +554,7 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << "  virtual void UseTexture(azer::Renderer* renderer) override;\n"
      << GenAllTextureMember(tech) << "\n"
      << "  azer::VertexDescPtr vertex_desc_ptr_;\n"
-     << "  DECLARE_EFFECT_DYNAMIC(" << classname << ");\n"
+     << "  DECLARE_EFFECT_DYNCREATE(" << classname << ");\n"
      << "  DISALLOW_COPY_AND_ASSIGN(" << classname << ");\n"
      << "};\n";
   head_code_ = std::move(ss.str());

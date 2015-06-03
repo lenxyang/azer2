@@ -8,13 +8,14 @@ template<class T>
 class EffectAutoReg {
  public:
   EffectAutoReg() {
-    ClassCreator<Effect>::instance()->Register(T::kEffectName, T::CreateObject);
+    ClassCreator::CreatorFunc func = base::Bind(T::CreateObject);
+    ClassCreator<Effect>::instance()->Register(T::kEffectName, func);
   }
 };
 }
 
-DECLARE_EFFECT_DYNCREATE(EFFECT_CLASS_NAME)            \
-static azer::EffectAutoReg<EFFECT_CLASS_NAME> effect_auto_reg_
+#define DECLARE_EFFECT_DYNCREATE(EFFECT_CLASS_NAME)             \
+  static azer::EffectAutoReg<EFFECT_CLASS_NAME> effect_auto_reg_
 
-IMPLEMENT_EFFECT_DYNCREATE(EFFECT_CLASS_NAME)                           \
-azer::EffectAutoReg<EFFECT_CLASS_NAME> EFFECT_CLASS_NAME::effect_auto_reg_
+#define IMPLEMENT_EFFECT_DYNCREATE(EFFECT_CLASS_NAME)                   \
+  azer::EffectAutoReg<EFFECT_CLASS_NAME> EFFECT_CLASS_NAME::effect_auto_reg_
