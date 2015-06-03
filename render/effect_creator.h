@@ -1,5 +1,6 @@
 #pragma once
 
+#include "base/logging.h"
 #include "azer/base/class_creator.h"
 #include "azer/render/effect.h"
 
@@ -9,10 +10,14 @@ class EffectAutoReg {
  public:
   EffectAutoReg() {
     ClassCreator::CreatorFunc func = base::Bind(T::CreateObject);
-    ClassCreator<Effect>::instance()->Register(T::kEffectName, func);
+    CHECK(ClassCreator<Effect>::instance()->Register(T::kEffectName, func));
   }
 };
+
+EffectPtr CreateEffectByName(const std::string& name) {
+  return EffectPtr(ClassCreator<Effect>::instance()->create(name));
 }
+}  // namespace azer
 
 #define DECLARE_EFFECT_DYNCREATE(EFFECT_CLASS_NAME)             \
   static azer::EffectAutoReg<EFFECT_CLASS_NAME> effect_auto_reg_

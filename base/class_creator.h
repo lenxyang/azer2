@@ -10,8 +10,16 @@ class ClassCreator {
   typedef ::base::Callback<T*()> CreatorFunc;
   typedef std::map<std::string, CreatorFunc> Creators;
 
-  void Register(const std::string& classname, const CreatorFunc& creator) {
-    creators_.insert(std::make_pair(classname, creator));
+  ClassCreator() {}
+
+  bool Register(const std::string& classname, const CreatorFunc& creator) {
+    auto iter = creators_.find(classname);
+    if (iter == creators_.end()) {
+      creators_.insert(std::make_pair(classname, creator));
+      return true;
+    } else {
+      return false;
+    }
   }
   static T* create(const std::string& classname) {
     return instance()->create_object(classname);
@@ -20,6 +28,17 @@ class ClassCreator {
   static ClassCreator<T>* instance() {
     static ClassCreator<T> creator;
     return &creator;
+  }
+
+  std::string print_info() const {
+    std::string str;
+    str.append("ClassCreator\n");
+    for (auto iter = creators_.begin(); iter != creators_.end(); ++iter) {
+      str.append("  ");
+      str.append(iter->first);
+      str.append("\n");
+    }
+    return str;
   }
  private:
   T* create_object(const std::string& classname) {
