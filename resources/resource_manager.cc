@@ -36,8 +36,7 @@ void ResourceManager::RegisterResource(const ResPath& path, ResourcePtr& resourc
 }
 
 bool ResourceManager::LoadResourceSync(const ResPath& path, ResourcePtr* ptr) {
-  FileSystem* fs = context_->GetFileSystem();
-  FileContentPtr content = fs->LoadFile(path);
+  FileContentPtr content = context_->LoadFile(path);
   if (content.get()) {
     ResourceLoaderManager* mgr = context_->GetResourceLoaderManager();
     ResourceLoader* loader = mgr->GetResourceLoader(path, content.get());

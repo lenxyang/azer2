@@ -2,6 +2,8 @@
 
 #include "base/basictypes.h"
 #include "azer/base/export.h"
+#include "azer/files/res_path.h"
+#include "azer/files/file_content.h"
 
 namespace azer {
 class FileSystem;
