@@ -1,6 +1,8 @@
 #pragma once
 
 #include "base/logging.h"
+#include "base/bind.h"
+#include "base/callback.h"
 #include "azer/base/class_creator.h"
 #include "azer/render/effect.h"
 
@@ -9,7 +11,7 @@ template<class T>
 class EffectAutoReg {
  public:
   EffectAutoReg() {
-    ClassCreator::CreatorFunc func = base::Bind(T::CreateObject);
+    ClassCreator<Effect>::CreatorFunc func = base::Bind(&T::CreateObject);
     CHECK(ClassCreator<Effect>::instance()->Register(T::kEffectName, func));
   }
 };

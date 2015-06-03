@@ -543,7 +543,7 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << std::move(GenUniformFuncs(tech)) << "\n"
      << std::move(GenVertexStruct(tech)) << "\n"
      << "  azer::VertexDescPtr GetVertexDesc() { return vertex_desc_ptr_;}\n"
-     << "  static " << classname << "* CreateObject() {\n"
+     << "  static Effect* CreateObject() {\n"
      << "    return new " << classname << ";\n"
      << "  }\n"
      << "  static const int kVertexDescNum;\n"

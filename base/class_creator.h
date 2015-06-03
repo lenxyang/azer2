@@ -46,7 +46,7 @@ class ClassCreator {
     if (iter == creators_.end())
       return NULL;
 
-    return iter->second->Run();
+    return iter->second.Run();
   }
   Creators creators_;
   DISALLOW_COPY_AND_ASSIGN(ClassCreator);
