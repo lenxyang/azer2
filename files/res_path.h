@@ -68,6 +68,8 @@ class AZER_EXPORT ResPath {
   bool IsAbsolutePath() const { return type_ == kAbsolutePath;}
   bool IsRelativePath() const { return type_ == kRelativePath;}
 
+  friend AZER_EXPORT bool operator < (const ResPath& path1, const ResPath& path2);
+
   static PathType CalcPathType(const StringType& str);
   static bool ValidPath(const StringType& str);
   static const StringType kRootPath;

@@ -189,5 +189,9 @@ std::vector<StringType> ResPath::dirs() const {
 
   return components;
 }
+
+bool operator < (const ResPath& path1, const ResPath& path2) {
+  return path1.fullpath() < path2.fullpath();
+}
 }  // namespace azer
 
