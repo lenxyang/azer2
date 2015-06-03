@@ -16,7 +16,7 @@ class EffectAutoReg {
   }
 };
 
-EffectPtr CreateEffectByName(const std::string& name) {
+inline EffectPtr CreateEffectByName(const std::string& name) {
   return EffectPtr(ClassCreator<Effect>::instance()->create(name));
 }
 }  // namespace azer
