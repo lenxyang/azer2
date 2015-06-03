@@ -33,6 +33,7 @@ class ClassCreator {
   DISALLOW_COPY_AND_ASSIGN(ClassCreator);
 };
 
+
 #define OBJECT_ENTRY_AUTO(CLASSNAME, NAME, FUNC)                \
   ClassCreator<CLASSNAME>::instance()->Register(NAME, &FUNC);
   

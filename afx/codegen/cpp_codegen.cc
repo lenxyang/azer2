@@ -425,6 +425,7 @@ void CppCodeGen::GenCppCode(const Technique& tech) {
      << "#include \"base/basictypes.h\"\n"
      << "#include \"base/logging.h\"\n\n"
      << "#include \"azer/render/render.h\"\n\n"
+     << "IMPLEMENT_EFFECT_DYNCREATE(" << classname << ");\n"
      << "const char " << classname << "::kEffectName[] = \"" 
      << GetEffectName(tech) << "\";\n"
      << GenVertexDesc(tech) << "\n"
@@ -525,6 +526,7 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << " */" << std::endl
      << "#pragma once\n" << std::endl
      << "#include \"azer/render/render.h\"" << std::endl
+     << "#include \"azer/render/effect_creator.h\"" << std::endl
      << "#include \"azer/math/math.h\"" << std::endl
      << GenStructDepIncludeCode(tech) << std::endl
      << std::endl << std::endl;
@@ -549,6 +551,7 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << "  virtual void UseTexture(azer::Renderer* renderer) override;\n"
      << GenAllTextureMember(tech) << "\n"
      << "  azer::VertexDescPtr vertex_desc_ptr_;\n"
+     << "  DECLARE_EFFECT_DYNAMIC(" << classname << ");\n"
      << "  DISALLOW_COPY_AND_ASSIGN(" << classname << ");\n"
      << "};\n";
   head_code_ = std::move(ss.str());
