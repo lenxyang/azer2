@@ -15,7 +15,7 @@ class AZER_EXPORT ResourceContext {
   // Get Resource Loader manager
   virtual ResourceLoaderManager* GetResourceLoaderManager() = 0;
 
-  virtual FileSystem* GetFileSystem() = 0;
+  virtual FileContentPtr LoadFile(const ResPath& path) = 0;
  protected:
   DISALLOW_COPY_AND_ASSIGN(ResourceContext);
 };
