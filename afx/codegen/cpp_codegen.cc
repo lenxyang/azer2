@@ -172,11 +172,12 @@ std::string CppCodeGen::GenStageGpuTable(RenderPipelineStage stage,
 
 std::string CppCodeGen::GenTechnique(const Technique& tech) {
   std::stringstream ss;
-  ss << "void " << GetClassName(tech) << "::InitTechnique() {\n"
+  ss << "void " << GetClassName(tech) 
+     << "::InitTechnique(const ShaderPrograms& sources) {\n"
      << "  technique_ = render_system_->CreateTechnique();\n"
      << "  vertex_desc_ptr_ = new azer::VertexDesc(kVertexDesc, "
      << "kVertexDescNum);\n"
-     << "  const std::string& vs_shader_source = sources_[azer::kVertexStage];\n"
+     << "  const std::string& vs_shader_source = sources[azer::kVertexStage];\n"
      << "  DCHECK(!vs_shader_source.empty());\n"
      << "  azer::GpuProgramPtr vs_gpup_ptr(render_system_->CreateVertexGpuProgram(\n"
      << "      vertex_desc_ptr_, vs_shader_source));\n"
@@ -188,7 +189,7 @@ std::string CppCodeGen::GenTechnique(const Technique& tech) {
     const Technique::StageInfo& shader = tech.shader[i];
     if (shader.entry == NULL) { continue; }
     ss << "  {\n"
-       << "    const std::string& source = sources_[" << StageName(stage) << "];\n"
+       << "    const std::string& source = sources[" << StageName(stage) << "];\n"
        << "    DCHECK(!source.empty());\n"
        << "    azer::GpuProgramPtr gpup_ptr(render_system_->CreateGpuProgram(\n"
        << "        " << StageName(stage) << ", source));\n"
@@ -320,10 +321,17 @@ std::string CppCodeGen::GenGpuTableInit(const Technique& tech) {
 
 std::string CppCodeGen::GenInit(const Technique& tech) {
   std::stringstream ss;
-  ss << "void " << GetClassName(tech) << "::Init() {\n"
-     << "  InitTechnique();\n"
+  ss << "void " << GetClassName(tech) 
+     << "::Init(const ShaderPrograms& sources) {\n"
+     << "  DCHECK(sources.size() == azer::kRenderPipelineStageNum);\n"
+     << "  DCHECK(!sources[azer::kVertexStage].empty());\n"
+     << "  DCHECK(!sources[azer::kPixelStage].empty());\n"
+     << "  InitTechnique(sources);\n"
+     << "  InitGpuConstantTable();\n"
+     << "}\n\n"
+     << "void " << GetClassName(tech) << "::InitGpuConstantTable() {\n"
      << std::move(GenGpuTableInit(tech))
-     << "}\n\n";
+     << "}\n";
   return ss.str();
 }
 
@@ -421,19 +429,14 @@ void CppCodeGen::GenCppCode(const Technique& tech) {
      << GenVertexDesc(tech) << "\n"
      << "const int " << classname << "::kVertexDescNum = arraysize("
      << classname << "::kVertexDesc);\n\n"
-     << classname << "::" << classname
-     << "(const std::vector<std::string>& sources, "
-     << "azer::RenderSystem* rs) \n"
-     << "  : azer::Effect(rs) \n"
-     << "  , sources_(sources) {\n"
-     << "  DCHECK(sources.size() == azer::kRenderPipelineStageNum);\n"
-     << "  DCHECK(!sources[azer::kVertexStage].empty());\n"
-     << "  DCHECK(!sources[azer::kPixelStage].empty());\n"
-     << "  Init();\n"
+     << classname << "::" << classname << "() \n"
+     << "  : azer::Effect(azer::RenderSystem::Current()) {\n"
      << "}\n\n"
      << classname << "::~" << classname << "() {\n"
      << "}\n\n"
-     << "const char* " << classname << "::name() const { return kEffectName;}\n"
+     << "const char* " << classname << "::name() const {\n"
+     << "   return kEffectName;\n"
+     << "}\n"
      << std::move(GenInit(tech))
      << std::move(GenTechnique(tech))
      << GenUseTexture(tech) << "\n";
@@ -529,10 +532,10 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
   ss << "class " << classname << ": public azer::Effect {\n"
      << " public:\n"
      << "  static const char kEffectName[];\n"
-     << "  " << classname << "(const std::vector<std::string>& sources, "
-     << "azer::RenderSystem* rs);\n"
+     << "  " << classname << "();\n"
      << "  ~" << classname << "();\n\n"
      << "  const char* name() const override;\n"
+     << "  void Init(const ShaderPrograms& source);\n"
      << std::move(GenExchangeBuffer(tech)) << "\n"
      << std::move(GenUniformFuncs(tech)) << "\n"
      << std::move(GenVertexStruct(tech)) << "\n"
@@ -540,10 +543,9 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << "  static const int kVertexDescNum;\n"
      << "  static const azer::VertexDesc::Desc kVertexDesc[];\n"
      << " protected:\n"
-     << "  void Init();\n"
-     << "  void InitTechnique();\n"
+     << "  void InitTechnique(const ShaderPrograms& source);\n"
+     << "  void InitGpuConstantTable();\n"
      << "  virtual void UseTexture(azer::Renderer* renderer) override;\n"
-     << "  const std::vector<std::string>& sources_;\n\n"
      << GenAllTextureMember(tech) << "\n"
      << "  azer::VertexDescPtr vertex_desc_ptr_;\n"
      << "  DISALLOW_COPY_AND_ASSIGN(" << classname << ");\n"

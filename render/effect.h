@@ -27,6 +27,7 @@ typedef scoped_refptr<Technique> TechniquePtr;
  */
 class AZER_EXPORT Effect : public Resource {
  public:
+  typedef std::vector<std::string> ShaderPrograms;
   explicit Effect(RenderSystem* rs);
   virtual ~Effect();
 
