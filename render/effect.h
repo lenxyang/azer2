@@ -32,6 +32,7 @@ class AZER_EXPORT Effect : public Resource {
   virtual ~Effect();
 
   virtual const char* name() const = 0;
+  virtual bool Init(const ShaderPrograms& programs) = 0;
   virtual void Use(Renderer* renderer);
 
   // light and material didn't have a fixed structure

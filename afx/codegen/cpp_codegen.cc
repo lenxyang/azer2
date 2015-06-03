@@ -321,13 +321,14 @@ std::string CppCodeGen::GenGpuTableInit(const Technique& tech) {
 
 std::string CppCodeGen::GenInit(const Technique& tech) {
   std::stringstream ss;
-  ss << "void " << GetClassName(tech) 
+  ss << "bool " << GetClassName(tech) 
      << "::Init(const ShaderPrograms& sources) {\n"
      << "  DCHECK(sources.size() == azer::kRenderPipelineStageNum);\n"
      << "  DCHECK(!sources[azer::kVertexStage].empty());\n"
      << "  DCHECK(!sources[azer::kPixelStage].empty());\n"
      << "  InitTechnique(sources);\n"
      << "  InitGpuConstantTable();\n"
+     << "  return true;\n"
      << "}\n\n"
      << "void " << GetClassName(tech) << "::InitGpuConstantTable() {\n"
      << std::move(GenGpuTableInit(tech))
@@ -535,7 +536,7 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << "  " << classname << "();\n"
      << "  ~" << classname << "();\n\n"
      << "  const char* name() const override;\n"
-     << "  void Init(const ShaderPrograms& source);\n"
+     << "  bool Init(const ShaderPrograms& source) override;\n"
      << std::move(GenExchangeBuffer(tech)) << "\n"
      << std::move(GenUniformFuncs(tech)) << "\n"
      << std::move(GenVertexStruct(tech)) << "\n"
