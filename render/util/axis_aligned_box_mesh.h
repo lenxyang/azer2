@@ -16,6 +16,7 @@ class AZER_EXPORT AABBEffect : public Effect {
  public:
   static const char kEffectName[];
   AABBEffect(RenderSystem* rs);
+  bool Init(const ShaderPrograms& programs) override{ return true;}
 #pragma pack(push, 4)
   struct vs_cbuffer {
     azer::Matrix4 vp;

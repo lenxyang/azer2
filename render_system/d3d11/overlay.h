@@ -17,6 +17,7 @@ class D3DOverlayEffect : public Effect {
   }
 
   const char* name() const override;
+  bool Init(const ShaderPrograms&) override { return true;}
   void SetTexture(TexturePtr texture) { texture_ = texture;}
   void SetTransform(const Matrix4& matrx);
   void SetTexcoord(const Vector4 texcoord[4]);

@@ -12,7 +12,9 @@ namespace azer {
 class AZER_EXPORT CoordinateGridEffect : public azer::Effect {
  public:
   static const char kEffectName[];
-  CoordinateGridEffect(azer::RenderSystem* rs); 
+  CoordinateGridEffect(azer::RenderSystem* rs);
+
+  bool Init(const ShaderPrograms& prog) override {return true;}
 #pragma pack(push, 4)
   struct vs_cbuffer {
     azer::Matrix4 vp;
