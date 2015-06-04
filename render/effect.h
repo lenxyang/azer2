@@ -29,7 +29,7 @@ class AZER_EXPORT Effect : public Resource {
  public:
   typedef std::vector<std::string> ShaderPrograms;
   explicit Effect(RenderSystem* rs);
-  virtual ~Effect();
+  ~Effect() override;
 
   virtual const char* name() const = 0;
   virtual bool Init(const ShaderPrograms& programs) = 0;

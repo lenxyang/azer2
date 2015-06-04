@@ -5,6 +5,7 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/base/resource.h"
 #include "azer/render/blending.h"
 #include "azer/render/effect.h"
 
@@ -25,7 +26,7 @@ enum {
 class AZER_EXPORT RenderableObject : public Resource {
  public:
   RenderableObject();
-  virtual ~RenderableObject();
+  ~RenderableObject() override;
 
   EffectPtr& GetEffect(int target);
   void SetEffect(int target, EffectPtr effect);
