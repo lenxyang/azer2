@@ -34,7 +34,7 @@ class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject>
   void Render(int target, Renderer* renderer);
   bool HasBlending() const;
   void SetBlending(BlendingPtr blending);
-  EffectParamsProvider* provider() { return provider_.get();}
+  EffectParamsProvider* provider() { return provider_;}
  protected:
   virtual void RenderObj(int target, Renderer* renderer) = 0;
  private:
