@@ -90,12 +90,13 @@ void GenCppCode(const AfxWrapper::AfxResult& result) {
 }
 
 void GenHLSLTechniques(const AfxWrapper::AfxResult& result) {
+  std::string pattern = GetTechniqueFilePattern(*result.technique);
   for (int i = 0; i < azer::kRenderPipelineStageNum; ++i) {
     std::string code = result.hlsl[i];
     if (code.empty()) { continue; }
     azer::RenderPipelineStage stage = (azer::RenderPipelineStage)i;
     std::stringstream ss;
-    ss << FLAGS_output_dir << "/" << result.technique->name << ".afx."
+    ss << FLAGS_output_dir << "/" << pattern << ".afx."
        << stage_supfix((azer::RenderPipelineStage)stage) << "";
     std::string path = ss.str();
     WriteContent(path, code);
