@@ -5,11 +5,15 @@
 #include "azer/render/effect_params_provider.h"
 
 namespace azer {
-RenderableObject::RenderableObject() {
+RenderableObject::RenderableObject()
+    : provider_(NULL),
+      hold_provider_(true) {
   effects_.resize(kObjRTNum);
 }
 
 RenderableObject::~RenderableObject() {
+  if (hold_provider_)
+    delete provider_;
 }
 
 bool RenderableObject::HasBlending() const {
@@ -21,8 +25,9 @@ void RenderableObject::SetBlending(BlendingPtr blending) {
 }
 
 void RenderableObject::SetEffectParamsProvider(
-    scoped_ptr<EffectParamsProvider> provider) {
-  provider_ = provider.Pass();
+    EffectParamsProvider* provider, bool hold) {
+  provider_ = provider;
+  hold_provider_ = hold;
 }
 
 void RenderableObject::SetEffect(int target, EffectPtr effect) {

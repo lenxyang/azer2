@@ -29,7 +29,7 @@ class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject>
 
   EffectPtr& GetEffect(int target);
   void SetEffect(int target, EffectPtr effect);
-  void SetEffectParamsProvider(scoped_ptr<EffectParamsProvider> provider);
+  void SetEffectParamsProvider(EffectParamsProvider* provider, bool hold = true);
 
   void Render(int target, Renderer* renderer);
   bool HasBlending() const;
@@ -40,7 +40,8 @@ class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject>
  private:
   std::vector<EffectPtr> effects_;
   BlendingPtr blending_;
-  scoped_ptr<EffectParamsProvider> provider_;
+  EffectParamsProvider* provider_;
+  bool hold_provider_;
   DISALLOW_COPY_AND_ASSIGN(RenderableObject);
 };
 
