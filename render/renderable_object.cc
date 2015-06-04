@@ -1,12 +1,14 @@
 #include "azer/render/renderable_object.h"
 
 #include "base/logging.h"
+#include "azer/base/resource.h"
 #include "azer/render/blending.h"
 #include "azer/render/effect_params_provider.h"
 
 namespace azer {
 RenderableObject::RenderableObject()
-    : provider_(NULL),
+    : Resource(kRenderableObject),
+      provider_(NULL),
       hold_provider_(true) {
   effects_.resize(kObjRTNum);
 }

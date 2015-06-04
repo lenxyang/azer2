@@ -26,7 +26,7 @@ class AZER_EXPORT Resource : public ::base::RefCounted<Resource> {
     kVertexDesc,
     kVertexData,
     kIndicesData,
-    kMeshObject,
+    kRenderableObject,
     kConfig,
   };
 

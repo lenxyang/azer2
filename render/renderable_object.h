@@ -22,7 +22,7 @@ enum {
   kObjRTNum,
 };
 
-class AZER_EXPORT RenderableObject : public ::base::RefCounted<RenderableObject> {
+class AZER_EXPORT RenderableObject : public Resource {
  public:
   RenderableObject();
   virtual ~RenderableObject();
