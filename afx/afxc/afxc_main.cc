@@ -25,6 +25,8 @@ void GenCppCode(const AfxWrapper::AfxResult& result);
 void GenHLSLTechniques(const AfxWrapper::AfxResult& result);
 std::string stage_supfix(azer::RenderPipelineStage stage);
 void WriteContent(const std::string& path, const std::string& content);
+void TideAfxList(const base::FilePath::StringType& str, 
+                 std::vector<base::FilePath::StringType>* vec);
 
 bool GenerateTechnique(const AfxWrapper::AfxResult& result) {
   const std::string& name = result.technique->name;
@@ -53,11 +55,17 @@ int main(int argc, char* argv[]) {
   std::vector<azer::afx::AfxWrapper*> afx;
   azer::afx::AfxWrapperResultVec resvec;
   std::vector< ::base::FilePath::StringType> files;
-  ::base::SplitString(FLAGS_afxpath, AZER_LITERAL(','), &files);
+  TideAfxList(FLAGS_afx, &files);
   for (auto iter = files.begin(); iter != files.end(); ++iter) {
     std::string errmsg;
+    ::base::FilePath path;
+    if (!FLAGS_afx_dir.empty()) {
+      path = path.Append(FLAGS_afx_dir);
+      path = path.Append(FILE_PATH_LITERAL("/"));
+    }
+    path = path.Append(*iter);
     azer::afx::AfxWrapper* wrapper = new azer::afx::AfxWrapper(FLAGS_includes);
-    if (!wrapper->Parse(FilePath(*iter), &errmsg, &resvec)) {
+    if (!wrapper->Parse(path, &errmsg, &resvec)) {
       std::cerr << errmsg << std::endl;
       return -1;
     }
@@ -67,7 +75,7 @@ int main(int argc, char* argv[]) {
   // list all files generated
   std::string allfiles = ListFiles(resvec);
   if (!allfiles.empty()) {
-    std::cout << allfiles << std::endl;
+    std::cout << allfiles;
     return 0;
   }
 
@@ -77,8 +85,7 @@ int main(int argc, char* argv[]) {
 }
 
 void GenCppCode(const AfxWrapper::AfxResult& result) {
-  // std::string pattern = GetTechniqueFilePattern(*result.technique);
-  std::string pattern = FLAGS_cpp_filename;
+  std::string pattern = GetTechniqueFilePattern(*result.technique);
   std::string hpppath = ::base::StringPrintf("%s/%s.afx.h",
                                              FLAGS_output_dir.c_str(),
                                              pattern.c_str());
@@ -147,11 +154,11 @@ std::string ListFiles(const std::vector<AfxWrapper::AfxResult>& result) {
     const AfxWrapper::AfxResult& res = *iter;
     if (FLAGS_list_cpp) {
       generated = true;
-      ss << GetTechniqueFilePattern(*res.technique) << ".afx.cpp" << std::endl;
-    } else if (FLAGS_list_hpp) {
+      ss << GetTechniqueFilePattern(*res.technique) << ".afx.cc" << std::endl;
+    } if (FLAGS_list_hpp) {
       generated = true;
-      ss << GetTechniqueFilePattern(*res.technique) << ".afx.hpp" << std::endl;
-    } else if (FLAGS_list_afx) {
+      ss << GetTechniqueFilePattern(*res.technique) << ".afx.h" << std::endl;
+    } if (FLAGS_list_afx) {
       generated = true;
       ss << GetTechniqueFilePattern(*res.technique) << ".afx" << std::endl;
     }
@@ -180,4 +187,16 @@ std::string GetTechniqueFilePattern(const Technique& tech) {
     pattern = tech.name;
   }
   return pattern;
+}
+
+void TideAfxList(const base::FilePath::StringType& raw, 
+                 std::vector<base::FilePath::StringType>* ret) {
+  ::base::FilePath::StringType str;;
+  ::base::TrimString(raw, FILE_PATH_LITERAL("\"[]"), &str);
+  std::vector<base::FilePath::StringType> vec;
+  ::base::SplitString(FLAGS_afx, AZER_LITERAL(','), &vec);
+  for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
+    ::base::TrimString(*iter, FILE_PATH_LITERAL("\"[]"), &str);
+    ret->push_back(str);
+  }
 }

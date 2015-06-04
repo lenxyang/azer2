@@ -12,60 +12,56 @@
 #
 
 template("afx") {
-  assert(defined(invoker.source))
   afxc_path = "afxc.exe"
-  if (!defined(invoker.filename)) {
-    filename = target_name
-  } else {
-    filename = invoker.filename
-  }
-
-  hpp = "$filename" + ".afx.h"
-  cpp = "$filename" + ".afx.cc"
+  afx_sources = invoker.sources
   
-  gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")
-  afx_file_path = rebase_path(invoker.source, root_build_dir)
-  afxlib_path = rebase_path("//azer/azer/afx", root_build_dir)
-  azer_root_path = rebase_path("//", root_build_dir)
-  afx_args = [
-    "$afxc_path",
-    "--output_dir=" + rebase_path(target_gen_dir, root_build_dir),
-    "--afx=$afx_file_path",
-    "--hlslang",
-    "--includes=$afxlib_path,$azer_root_path",
-    "--cpp_filename=$filename",
-  ]
-
-  action(target_name+"_afx_cppcode") {
-    exec_script("//azer/build/tools/shell/mkdir.py", [gen_dir])
-    script = "//build/gn_run_binary.py"
-    outputs = [
-      "$target_gen_dir/$hpp",
-      "$target_gen_dir/$cpp",
+  action("$target_name" + "_afx_cppcode") {
+    # afx_sources_str = ""
+    # foreach(i, afx_sources) {
+    #  afx_sources_str += "$i,"
+    # }
+    # print(afx_sources_str)
+    afx_file_dir = rebase_path(".", root_build_dir)
+    afxlib_path = rebase_path("//azer/azer/afx", root_build_dir)
+    azer_root_path = rebase_path("//", root_build_dir)
+    afxc_args = [
+      "$afxc_path",
+      "--output_dir=" + rebase_path(target_gen_dir, root_build_dir),
+      "--afx=$afx_sources",
+      "--afx_dir=${afx_file_dir}",
+      "--hlslang",
+      "--includes=$afxlib_path,$azer_root_path",
     ]
 
-    args = afx_args  
-    deps = ["//azer/afx:afxc"]
-  }
+    afxc_listfile_args = afxc_args + ["--list_cpp", "--list_hpp"]
+    afxc_output_filelist = exec_script("//build/gn_run_binary.py",
+                                       afxc_listfile_args, "list lines")
+    outputs = []
+    foreach(i, afxc_output_filelist) {
+      outputs += ["$target_gen_dir/$i"]
+    }
+    args = afxc_args
+    script = "//build/gn_run_binary.py"
+  }  
 
   config("$target_name"+ "_config") {
     include_dirs = [target_gen_dir]
   }
   source_set(target_name) {
     # exec_script("//azer/build/tools/shell/mkdir.py", afx_args)
-    sources = [
-      "$target_gen_dir/$cpp",
-      "$target_gen_dir/$hpp",
-    ]
+    sources = []
+    codegen_target_name = "$target_name" + "_afx_cppcode"
+    afxc_gen_srcs = get_target_outputs(":$codegen_target_name")
+    foreach(i, afxc_gen_srcs) {
+      sources += [rebase_path("$i", ".")]
+    }
+    print(sources)
     direct_dependent_configs = [":$target_name" + "_config"]
     deps = [
       "//azer",
       "//azer/math",
       "//base",
-      ":$target_name" + "_afx_cppcode",
+      ":$codegen_target_name",
     ]
-    if (is_win) {
-      cflags = ["/FI$hpp"]
-    }
   }
 }
