@@ -5,7 +5,7 @@
 #include "azer/render/renderer.h"
 #include "azer/render/renderable_object.h"
 
-#include "azer/scene/scene_environment.h"
+#include "azer/scene/scene_surroundings.h"
 #include "azer/scene/scene_node_data.h"
 
 namespace azer {
@@ -13,7 +13,7 @@ namespace azer {
 // SceneRender
 SceneRender::SceneRender(SceneNodePtr node) 
     : node_(node) {
-  env_.reset(new SceneEnvironment);
+  surroundings_.reset(new SceneSurroundings);
 }
 
 SceneRender::~SceneRender() {
@@ -33,42 +33,43 @@ bool SceneRender::HasObserver(SceneRenderObserver* observer) {
 
 void SceneRender::Update(const FrameArgs& frame) {
   frame_ = &frame;
-  env_->reset();
+  surroundings_->reset();
   OnUpdateBegin();
   FOR_EACH_OBSERVER(SceneRenderObserver,
                     observers_,
                     OnSceneUpdateBegin(this));
-  UpdateSceneRecusive(env_.get(), node_);
+  UpdateSceneRecusive(surroundings_.get(), node_);
   FOR_EACH_OBSERVER(SceneRenderObserver,
                     observers_,
                     OnSceneUpdateEnd(this));
   OnUpdateEnd();
 }
 
-void SceneRender::UpdateScene(SceneEnvironment* env, SceneNode* node) {
+void SceneRender::UpdateScene(SceneSurroundings* surroundings, SceneNode* node) {
   RenderableObjectPtr obj = node->mutable_data()->GetRenderableObject();
   DCHECK(obj.get());
   SceneEffectParamsProvider* provider = (SceneEffectParamsProvider*)obj->provider();
   provider->SetSceneNode(node);
-  provider->SetSceneEnvironment(env);
+  provider->SetSceneSurroundings(surroundings);
   provider->CalcParams();
   PrepareRender(node);
 }
 
-void SceneRender::UpdateSceneRecusive(SceneEnvironment* env, SceneNode* node) {
+void SceneRender::UpdateSceneRecusive(SceneSurroundings* surroundings,
+                                      SceneNode* node) {
   if (node->data().type() == SceneNodeData::kRenderableObject) {
-    UpdateScene(env, node);
+    UpdateScene(surroundings, node);
   } else if (node->data().type() == SceneNodeData::kLight) {
-    env->PushLight(node->mutable_data()->GetLight());
+    surroundings->PushLight(node->mutable_data()->GetLight());
   }
 
   for (auto iter = node->children().begin(); 
        iter != node->children().end(); ++iter) {
-    UpdateSceneRecusive(env, *iter);
+    UpdateSceneRecusive(surroundings, *iter);
   }
 
   if (node->data().type() == SceneNodeData::kLight) {
-    env->PopLight();
+    surroundings->PopLight();
   }
 }
 

@@ -11,7 +11,7 @@
 namespace azer {
 
 class SceneRender;
-class SceneEnvironment;
+class SceneSurroundings;
 
 class SceneRenderObserver {
  public:
@@ -27,7 +27,7 @@ class SceneRender {
   void Render(const FrameArgs& frame, Renderer* renderer);
 
   const FrameArgs* frame() { return frame_;}
-  SceneEnvironment* mutable_environment() { return env_.get();}
+  SceneSurroundings* mutable_surroundings() { return surroundings_.get();}
 
   void AddObserver(SceneRenderObserver* observer);
   void RemoveObserver(SceneRenderObserver* observer);
@@ -40,11 +40,11 @@ class SceneRender {
  protected:
   virtual void OnUpdateBegin() {}
   virtual void OnUpdateEnd() {}
-  void UpdateScene(SceneEnvironment* env, SceneNode* node);
-  void UpdateSceneRecusive(SceneEnvironment* env, SceneNode* node);
+  void UpdateScene(SceneSurroundings* env, SceneNode* node);
+  void UpdateSceneRecusive(SceneSurroundings* env, SceneNode* node);
   SceneNodePtr node_;
   const FrameArgs* frame_;
-  scoped_ptr<SceneEnvironment> env_;
+  scoped_ptr<SceneSurroundings> surroundings_;
   ObserverList<SceneRenderObserver> observers_;
   DISALLOW_COPY_AND_ASSIGN(SceneRender);
 };
