@@ -1,5 +1,7 @@
 #include "azer/scene/scene_creator.h"
 
+#include "base/logging.h"
+
 namespace azer {
 SceneCreator::SceneCreator() {
 }
@@ -10,8 +12,15 @@ SceneNodePtr SceneCreator::Create(ConfigNodePtr root) {
 
 SceneNodePtr SceneCreator::InitSceneNodeRecusive(ConfigNodePtr config_node) {
   azer::SceneNodePtr node = CreateSceneNode(config_node);
-  std::vector<ConfigNodePtr> children = config_node->GetNamedChildren("node");
-  for (auto iter = children.begin(); iter != children.end(); ++iter) {
+  std::vector<ConfigNodePtr> children = config_node->GetNamedChildren("children");
+  if (children.size() == 0u)
+    return node;
+  if (children.size() > 1u) {
+    return SceneNodePtr();
+  }
+
+  std::vector<ConfigNodePtr> subnodes = children->GetNamedChildren("children");
+  for (auto iter = subnodes.begin(); iter != subnodes.end(); ++iter) {
     azer::ConfigNodePtr child_node = *iter;
     azer::SceneNodePtr child_scene = InitSceneNodeRecusive(child_node);
     if (child_scene.get()) {
