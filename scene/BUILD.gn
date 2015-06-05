@@ -1,12 +1,22 @@
 
-source_set("scene") {
+static_library("scene") {
   sources = [
     "scene_manager.h",
+    "node_observer.h",
+    "scene_node.cc",
+    "scene_node.h",
+    "scene_node_data.cc",
+    "scene_node_data.h",
+    "scene_render.cc",
+    "scene_render.h",
+    "scene_environment.cc",
+    "scene_environment.h",
   ]
 
   deps = [
     "//base",
+    "//azer",
   ]
-  configs += ["//azer/build/config:utf8src"]
-  configs += ["//azer/base:build_render_config"]
+  # configs += ["//azer/build/config:utf8src"]
+  # configs += ["//azer/base:build_render_config"]
 }

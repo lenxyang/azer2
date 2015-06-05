@@ -1,0 +1,29 @@
+#include "studio/scene/scene_node_data.h"
+
+#include "studio/scene/scene_node.h"
+
+
+namespace azer {
+SceneNodeData::SceneNodeData() 
+    : type_(kNotSpecified) {
+}
+
+void SceneNodeData::Attach(RenderableObjectPtr object) {
+  DCHECK_EQ(type(), kNotSpecified);
+  renderable_ = object;
+  type_ = kRenderableObject;
+}
+
+void SceneNodeData::Attach(LightPtr object) {
+  DCHECK_EQ(type(), kNotSpecified);
+  light_ = object;
+  type_ = kLight;
+}
+
+void SceneNodeData::Detach() {
+  DCHECK_NE(type(), kNotSpecified);
+  type_ = kNotSpecified;
+  renderable_ = RenderableObjectPtr();
+  light_ = LightPtr();
+}
+}  // namespace azer

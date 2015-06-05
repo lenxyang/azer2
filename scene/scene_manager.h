@@ -4,7 +4,7 @@
 #include "azer/scene/node.h"
 
 namespace azer {
-class AZER_EXPORT SceneManager {
+class SceneManager {
  public:
   SceneManager();
   ~SceneManager();
