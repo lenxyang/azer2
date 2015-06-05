@@ -97,11 +97,8 @@ FrontFace D3DRenderer::GetFrontFace(void) {
 }
 
 void D3DRenderer::SetFrontFace(FrontFace mode) {
-  // attention: in direct3d, the front face is determinate by left-handle
-  // but all coordinate use right-handle in azer.
-  // of the kCounterClockWise if  ClockWise in Direct3d
   GET_D3D_RENDER_STATE();
-  desc.FrontCounterClockwise = (mode != kCounterClockwise);
+  desc.FrontCounterClockwise = (mode == kCounterClockwise);
   SET_D3D_RENDER_STATE();
 }
 
