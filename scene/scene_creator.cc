@@ -10,15 +10,8 @@ SceneNodePtr SceneCreator::Create(ConfigNodePtr root) {
 
 SceneNodePtr SceneCreator::InitSceneNodeRecusive(ConfigNodePtr config_node) {
   azer::SceneNodePtr node = CreateSceneNode(config_node);
-  std::vector<ConfigNodePtr> children = config_node->GetNamedChildren("children");
-  if (children.size() == 0u)
-    return node;
-
-  if (children.size() != 1u)
-    return SceneNodePtr();
-
-  std::vector<ConfigNodePtr> nodes = children[0]->GetNamedChildren("node");
-  for (auto iter = nodes.begin(); iter != nodes.end(); ++iter) {
+  std::vector<ConfigNodePtr> children = config_node->GetNamedChildren("node");
+  for (auto iter = children.begin(); iter != children.end(); ++iter) {
     azer::ConfigNodePtr child_node = *iter;
     azer::SceneNodePtr child_scene = InitSceneNodeRecusive(child_node);
     if (child_scene.get()) {
