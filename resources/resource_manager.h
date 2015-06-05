@@ -23,9 +23,6 @@ class AZER_EXPORT ResourceManager {
   // release the capture of the resource
   void RegisterResource(const ResPath& path, ResourcePtr& resource);
   bool ReleaseResource(const ResPath& path);
-
-  virtual FileContentPtr LoadFile(const ResPath& path) = 0;
-  virtual ResourceLoaderManager* GetResourceLoaderManager() = 0;
  private:
   // load resource into repositor node
   bool LoadResourceSync(const ResPath& path, ResourcePtr* ptr); 

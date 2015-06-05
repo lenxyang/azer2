@@ -24,14 +24,4 @@ class AZER_EXPORT ResourceLoader {
   DISALLOW_COPY_AND_ASSIGN(ResourceLoader);
 };
 
-// get the resource loader
-class AZER_EXPORT ResourceLoaderManager {
- public:
-  ResourceLoaderManager() {}
-  virtual ~ResourceLoaderManager() {}
-  virtual ResourceLoader* GetResourceLoader(const ResPath& path,
-                                            const FileContent* content) = 0;
- private:
-  DISALLOW_COPY_AND_ASSIGN(ResourceLoaderManager);
-};
 }  // namespace azer
