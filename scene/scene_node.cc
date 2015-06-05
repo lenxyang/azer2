@@ -97,6 +97,10 @@ void SceneNode::set_name(const std::string& name) {
   name_ = name;
 }
 
+void SceneNode::AppendConfigNode(ConfigNodePtr confignode) {
+  config_nodes_.push_back(confignode);
+}
+
 std::string SceneNode::print_info() {
   std::string str;
   print_info(&str, 0, this);

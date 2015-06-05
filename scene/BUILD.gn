@@ -4,8 +4,6 @@ static_library("scene") {
     "node_observer.h",
     "scene_creator.cc",
     "scene_creator.h",
-    "scene_environment.cc",
-    "scene_environment.h",
     "scene_manager.h",
     "scene_node.cc",
     "scene_node.h",
@@ -13,6 +11,8 @@ static_library("scene") {
     "scene_node_data.h",
     "scene_render.cc",
     "scene_render.h",
+    "scene_surroundings.cc",
+    "scene_surroundings.h",
   ]
 
   deps = [

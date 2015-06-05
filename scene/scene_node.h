@@ -7,6 +7,7 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/math/math.h"
+#include "azer/base/config_node.h"
 #include "azer/base/string.h"
 #include "azer/base/export.h"
 #include "azer/render/movable.h"
@@ -54,6 +55,11 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   SceneNodeData* mutable_data() { return &data_;}
   const SceneNodeData& data() const { return data_;}
 
+  // one scene node may attached with multiple config node
+  // when config_node used templates nodes.
+  void AppendConfigNode(ConfigNodePtr confignode);
+  const std::vector<ConfigNodePtr>& config_nodes() const { return config_nodes_;}
+  std::vector<ConfigNodePtr>* mutable_config_nodes() { return &config_nodes_;}
   std::string print_info();
  protected:
   // override from MovableObject::Delegate
@@ -77,6 +83,7 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   Vector3 scale_;
   std::string name_;
   SceneNodeData data_;
+  std::vector<ConfigNodePtr> config_nodes_;
   friend class Scene;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };
