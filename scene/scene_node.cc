@@ -1,4 +1,4 @@
-#include "studio/scene/scene_node.h"
+#include "azer/scene/scene_node.h"
 
 #include "base/logging.h"
 #include "base/strings/stringprintf.h"

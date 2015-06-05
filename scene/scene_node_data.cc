@@ -1,6 +1,6 @@
-#include "studio/scene/scene_node_data.h"
+#include "azer/scene/scene_node_data.h"
 
-#include "studio/scene/scene_node.h"
+#include "azer/scene/scene_node.h"
 
 
 namespace azer {

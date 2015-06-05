@@ -1,4 +1,4 @@
-#include "studio/scene/scene_environment.h"
+#include "azer/scene/scene_environment.h"
 
 namespace azer {
 SceneEnvironment::SceneEnvironment() {

@@ -6,7 +6,7 @@
 #include "azer/render/renderer.h"
 #include "azer/render/renderable_object.h"
 
-#include "studio/scene/scene_node.h"
+#include "azer/scene/scene_node.h"
 
 namespace azer {
 

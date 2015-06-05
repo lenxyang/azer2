@@ -4,7 +4,7 @@
 #include "azer/render/renderable_object.h"
 #include "azer/render/light.h"
 
-#include "studio/scene/scene_effect_params_provider.h"
+#include "azer/scene/scene_effect_params_provider.h"
 
 namespace azer {
 class SceneNodeData {

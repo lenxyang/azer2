@@ -10,7 +10,7 @@
 #include "azer/base/string.h"
 #include "azer/base/export.h"
 #include "azer/render/movable.h"
-#include "studio/scene/scene_node_data.h"
+#include "azer/scene/scene_node_data.h"
 
 namespace azer {
 class MovableObject;

@@ -1,12 +1,12 @@
-#include "studio/scene/scene_render.h"
+#include "azer/scene/scene_render.h"
 
 #include "azer/render/effect_params_provider.h"
 #include "azer/render/effect.h"
 #include "azer/render/renderer.h"
 #include "azer/render/renderable_object.h"
 
-#include "studio/scene/scene_environment.h"
-#include "studio/scene/scene_node_data.h"
+#include "azer/scene/scene_environment.h"
+#include "azer/scene/scene_node_data.h"
 
 namespace azer {
 
