@@ -57,9 +57,9 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
 
   // one scene node may attached with multiple config node
   // when config_node used templates nodes.
-  void AppendConfigNode(ConfigNodePtr confignode);
-  const std::vector<ConfigNodePtr>& config_nodes() const { return config_nodes_;}
-  std::vector<ConfigNodePtr>* mutable_config_nodes() { return &config_nodes_;}
+  void AppendSurroundings(ConfigNodePtr confignode);
+  const std::vector<ConfigNodePtr>& surroundings() const { return surroundings_;}
+  std::vector<ConfigNodePtr>* mutable_surroundings() { return &surroundings_;}
   std::string print_info();
  protected:
   // override from MovableObject::Delegate
@@ -83,7 +83,7 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   Vector3 scale_;
   std::string name_;
   SceneNodeData data_;
-  std::vector<ConfigNodePtr> config_nodes_;
+  std::vector<ConfigNodePtr> surroundings_;
   friend class Scene;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };
