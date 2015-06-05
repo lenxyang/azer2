@@ -338,8 +338,8 @@ std::string ConfigNode::print_node_info(int depth) {
     for (auto iter = attrs_.begin(); iter != attrs_.end(); ++iter) {
       if (iter != attrs_.begin())
         str.append(" ");
-      str.append(
-          ::base::StringPrintf("%s:%s", iter->first.c_str(), iter->second.c_str()));
+      str.append(::base::StringPrintf("%s=\"%s\"",
+                                      iter->first.c_str(), iter->second.c_str()));
     }
     str.append("}");
   }
