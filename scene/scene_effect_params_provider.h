@@ -9,10 +9,12 @@ class SceneEffectParamsProvider : public EffectParamsProvider {
  public:
   SceneEffectParamsProvider() {}
   void SetSceneNode(SceneNode* node) { node_ = node;}
-  void SetSceneSurroundings(SceneSurroundings* env) { env_ = env;}
+  void SetSceneSurroundings(SceneSurroundings* surroundings) { 
+    surroundings_ = surroundings;
+  }
  protected:
   SceneNode* node_;
-  SceneSurroundings* env_;
+  SceneSurroundings* surroundings_;
   DISALLOW_COPY_AND_ASSIGN(SceneEffectParamsProvider);
 };
 }  // namespace azer
