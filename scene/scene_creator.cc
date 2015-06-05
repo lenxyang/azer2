@@ -19,7 +19,7 @@ SceneNodePtr SceneCreator::InitSceneNodeRecusive(ConfigNodePtr config_node) {
     return SceneNodePtr();
   }
 
-  std::vector<ConfigNodePtr> subnodes = children->GetNamedChildren("children");
+  std::vector<ConfigNodePtr> subnodes = children[0]->GetNamedChildren("node");
   for (auto iter = subnodes.begin(); iter != subnodes.end(); ++iter) {
     azer::ConfigNodePtr child_node = *iter;
     azer::SceneNodePtr child_scene = InitSceneNodeRecusive(child_node);
