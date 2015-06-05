@@ -5,9 +5,8 @@ SceneSurroundings::SceneSurroundings() {
 }
 
 void SceneSurroundings::reset() {
-  while (!lights_.empty()) {
-    lights_.pop();
-  }
+  lights_.clear();
+  configs_.clear();
 }
 
 void SceneSurroundings::SetCamera(const Camera* camera) {
@@ -15,17 +14,18 @@ void SceneSurroundings::SetCamera(const Camera* camera) {
 }
 
 void SceneSurroundings::PushLight(LightPtr light) {
-  lights_.push(light);
+  lights_.push_back(light);
 }
 
 void SceneSurroundings::PopLight() {
-  lights_.pop();
+  lights_.pop_back();
 }
 
 void SceneSurroundings::PushConfig(ConfigNodePtr node) {
-  
+  configs_.push_back(node);
 }
 
 void SceneSurroundings::PopConfig() {
+  configs_.pop_back();
 }
 }

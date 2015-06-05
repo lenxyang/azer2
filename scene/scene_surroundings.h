@@ -1,8 +1,8 @@
 #pragma once
 
-#include <stack>
+#include <deque>
 
-#include "azer/base/config.h"
+#include "azer/base/config_node.h"
 #include "azer/render/light.h"
 #include "azer/render/camera.h"
 
@@ -29,11 +29,11 @@ class SceneSurroundings {
   void reset();
   
   const Camera* camera() const { return camera_;}
-  const std::stack<LightPtr>& lights() const { return lights_;};
-  const std::stack<ConfigNodePtr>& configs() const { return configs_;}
+  const std::deque<LightPtr>& lights() const { return lights_;};
+  const std::deque<ConfigNodePtr>& configs() const { return configs_;}
  private:
-  std::stack<LightPtr> lights_;
-  std::stack<ConfigNodePtr> configs_;
+  std::deque<LightPtr> lights_;
+  std::deque<ConfigNodePtr> configs_;
   const Camera* camera_;
   DISALLOW_COPY_AND_ASSIGN(SceneSurroundings);
 };
