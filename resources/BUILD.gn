@@ -2,8 +2,6 @@
 
 source_set("resources") {
   sources = [
-    "context.cc",
-    "context.h",
     "repository_node.cc",
     "repository_node.h",
     "resource_loader.cc",

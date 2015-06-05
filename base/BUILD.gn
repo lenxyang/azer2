@@ -39,6 +39,8 @@ source_set("base") {
     "align.h",
     "appinit.cc",
     "appinit.h",
+    "config_node.cc",
+    "config_node.h",
     "dynlib.cc",
     "dynlib.h",
     "file_util.cc",
@@ -53,6 +55,7 @@ source_set("base") {
   deps = [
     "//base",
     "//base:i18n",
+    "//azer/util/xml",
     ":image_load",
   ]
 
