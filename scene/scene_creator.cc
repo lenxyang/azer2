@@ -1,4 +1,4 @@
-#include "azer/scene/scene_config.h"
+#include "azer/scene/scene_creator.h"
 
 namespace azer {
 SceneCreator::SceneCreator() {
