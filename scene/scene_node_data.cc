@@ -20,10 +20,17 @@ void SceneNodeData::Attach(LightPtr object) {
   type_ = kLight;
 }
 
+void SceneNodeData::Attach(ConfigNodePtr surroundings) {
+  DCHECK_EQ(type(), kNotSpecified);
+  surroundings_ = surroundings;
+  type_ = kSurroundings;
+}
+
 void SceneNodeData::Detach() {
   DCHECK_NE(type(), kNotSpecified);
   type_ = kNotSpecified;
   renderable_ = RenderableObjectPtr();
   light_ = LightPtr();
+  surroundings_ = ConfigNodePtr();
 }
 }  // namespace azer

@@ -59,6 +59,8 @@ void SceneRender::UpdateSceneRecusive(SceneSurroundings* surroundings,
                                       SceneNode* node) {
   if (node->data().type() == SceneNodeData::kRenderableObject) {
     UpdateScene(surroundings, node);
+  } else if (node->data().type() == SceneNodeData::kSurroundings) {
+    surroundings->PushConfig(node->mutable_data()->GetSurroundings());
   } else if (node->data().type() == SceneNodeData::kLight) {
     surroundings->PushLight(node->mutable_data()->GetLight());
   }
@@ -70,6 +72,8 @@ void SceneRender::UpdateSceneRecusive(SceneSurroundings* surroundings,
 
   if (node->data().type() == SceneNodeData::kLight) {
     surroundings->PopLight();
+  } else if (node->data().type() == SceneNodeData::kSurroundings) {
+    surroundings->PopConfig();
   }
 }
 

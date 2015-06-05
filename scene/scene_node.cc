@@ -97,10 +97,6 @@ void SceneNode::set_name(const std::string& name) {
   name_ = name;
 }
 
-void SceneNode::AppendSurroundings(ConfigNodePtr confignode) {
-  surroundings_.push_back(confignode);
-}
-
 std::string SceneNode::print_info() {
   std::string str;
   print_info(&str, 0, this);
