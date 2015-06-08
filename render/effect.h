@@ -8,6 +8,7 @@
 #include "azer/base/resource.h"
 #include "azer/render/light.h"
 #include "azer/render/material.h"
+#include "azer/render/vertex_buffer.h"
 
 namespace azer {
 
