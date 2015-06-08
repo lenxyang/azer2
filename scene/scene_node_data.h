@@ -15,7 +15,7 @@ class SceneNodeData {
   void Attach(LightPtr light);
   void Attach(RenderableObjectPtr object);
   void Attach(ConfigNodePtr surrounding);
-  void Detach();
+  void DetachAll();
   
   RenderableObjectPtr& GetRenderableObject() { return renderable_;}
   const RenderableObjectPtr& GetRenderableObject() const { return renderable_;}

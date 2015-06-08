@@ -57,13 +57,13 @@ void SceneRender::UpdateScene(SceneSurroundings* surroundings, SceneNode* node) 
 
 void SceneRender::UpdateSceneRecusive(SceneSurroundings* surroundings,
                                       SceneNode* node) {
-  if (!node->data().GetRenderableObject().empty()) {
+  if (node->data().GetRenderableObject().get()) {
     UpdateScene(surroundings, node);
   } 
-  if (!node->data().GetSurroundings().empty()) {
+  if (node->data().GetSurroundings().get()) {
     surroundings->PushConfig(node->mutable_data()->GetSurroundings());
   } 
-  if (!node->data().GetLight().empty()) {
+  if (node->data().GetLight().get()) {
     surroundings->PushLight(node->mutable_data()->GetLight());
   }
 
@@ -72,10 +72,10 @@ void SceneRender::UpdateSceneRecusive(SceneSurroundings* surroundings,
     UpdateSceneRecusive(surroundings, *iter);
   }
 
-  if (!node->data().GetSurroundings().empty()) {
+  if (node->data().GetSurroundings().get()) {
     surroundings->PopConfig();
   } 
-  if (!node->data().GetLight().empty()) {
+  if (node->data().GetLight().get()) {
     surroundings->PopLight();
   }
 }
@@ -86,7 +86,7 @@ SimpleSceneRender::SimpleSceneRender(SceneNodePtr node)
 }
 
 void SimpleSceneRender::PrepareRender(SceneNode* node) {
-  DCHECK(node->data().type() == SceneNodeData::kRenderableObject);
+  DCHECK(node->data().GetRenderableObject().get());
   vec_.push_back(node->mutable_data()->GetRenderableObject());
 }
 
