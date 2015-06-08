@@ -79,6 +79,15 @@ void MovableObject::rotate(const Quaternion& q) {
   }
 }
 
+void set_rotate(const Quaternion& q) {
+  Quaternion origin = orientation_;
+  orientation_ = q;
+  orientation_.Normalize();
+  if (q != origin) {
+    delegate_->OnObjectOrientationChanged(origin);
+  }
+}
+
 void MovableObject::walk(float step) {
   Vector3 position = position_;
   position_ +=  direction() * step;

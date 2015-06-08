@@ -36,6 +36,7 @@ class AZER_EXPORT MovableObject {
   void rotate(const Vector3& axis, const Degree angle);
   void rotate(const Vector3& axis, const Radians angle);
   void rotate(const Quaternion& q);
+  void set_rotate(const Quaternion& q);
 
   // walk along with z axis
   // 很多设计当中, 提供了两种模式：
