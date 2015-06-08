@@ -51,6 +51,7 @@ bool D3DRenderSystem::Init() {
   std::unique_ptr<D3DReusableObject> ptr(new D3DReusableObject());
   if (ptr->Init(this)) {
     reusable_object_ = ptr.release();
+	GetDriverCapability();
     return true;
   } else {
     return false;
