@@ -58,7 +58,7 @@ void D3DEnvironment::GetD3DMultisampleSupported(
     RenderSystemCapability::SampleDesc desc;
     for (int j = 0; j < count; ++j) {
       desc.count = i;
-      desc.quality = j;
+      desc.quality = j + 1;
       supported->push_back(desc);
     }
   }
@@ -104,8 +104,8 @@ bool D3DEnvSwapChain::ResetSwapChain() {
   DXGI_SWAP_CHAIN_DESC swapChainDesc; 
   ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
   swapChainDesc.BufferDesc = bufferDesc;
-  swapChainDesc.SampleDesc.Count = 1;
-  swapChainDesc.SampleDesc.Quality = 0;
+  swapChainDesc.SampleDesc.Count = surface_->sample_count();
+  swapChainDesc.SampleDesc.Quality = surface_->sample_quality();
   swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
   swapChainDesc.BufferCount = 1;
   swapChainDesc.OutputWindow = (HWND)surface_->GetWindow();

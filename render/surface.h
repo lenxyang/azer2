@@ -7,6 +7,7 @@
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/native_widget_types.h"
 
+
 namespace azer {
 
 class SwapChain;
@@ -25,7 +26,9 @@ class AZER_EXPORT Surface : public ::base::RefCounted<Surface> {
       : type_(kViewSurface)
       , fullscreen_(false)
       , swapchain_(NULL)
-      , window_(window)  {
+      , window_(window) 
+      , sample_count_(0)
+      , sample_quality_(0) {
     UpdateBounds();
   }
 
@@ -34,7 +37,16 @@ class AZER_EXPORT Surface : public ::base::RefCounted<Surface> {
       , fullscreen_(false)
       , swapchain_(NULL)
       , bounds_(rect)
-      , window_(0)  {
+      , window_(0) 
+      , sample_count_(0)
+      , sample_quality_(0) {
+  }
+
+  int32 sample_count() const { return sample_count_;}
+  int32 sample_quality() const { return sample_quality_;}
+  void SetExpectedSampleDesc(int count, int quality) {
+    sample_count_ = count;
+    sample_quality_ = quality;
   }
 
   const gfx::Rect& GetBounds() { return bounds_;}
@@ -55,6 +67,8 @@ class AZER_EXPORT Surface : public ::base::RefCounted<Surface> {
   SwapChain* swapchain_;
   gfx::Rect bounds_;
   gfx::AcceleratedWidget window_;
+  int32 sample_count_;
+  int32 sample_quality_;
   DISALLOW_COPY_AND_ASSIGN(Surface);
 };
 
