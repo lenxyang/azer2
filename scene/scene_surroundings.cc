@@ -1,7 +1,8 @@
 #include "azer/scene/scene_surroundings.h"
 
 namespace azer {
-SceneSurroundings::SceneSurroundings() {
+SceneSurroundings::SceneSurroundings() 
+    : camera_(NULL) {
 }
 
 void SceneSurroundings::reset() {

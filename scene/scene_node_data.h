@@ -10,17 +10,8 @@
 namespace azer {
 class SceneNodeData {
  public:
-  enum {
-    kNotSpecified,
-    kLight,
-    kSurroundings,
-    kRenderableObject,
-  };
-
   SceneNodeData();
   
-  int type() const { return type_;}
-
   void Attach(LightPtr light);
   void Attach(RenderableObjectPtr object);
   void Attach(ConfigNodePtr surrounding);
@@ -34,10 +25,7 @@ class SceneNodeData {
 
   LightPtr& GetLight() { return light_;}
   const LightPtr& GetLight() const { return light_;}
-
-  bool attached() const { return type() != kNotSpecified;}
  private:
-  int type_;
   RenderableObjectPtr renderable_;
   LightPtr light_;
   ConfigNodePtr surroundings_;
