@@ -68,6 +68,7 @@ class Quaternion {
   const float* ptr() const;
 
   friend bool operator == (const Quaternion& q1, const Quaternion& q2);
+  friend bool operator != (const Quaternion& q1, const Quaternion& q2);
   bool isnan() const;
 
   float length() const;

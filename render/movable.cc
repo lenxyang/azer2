@@ -69,21 +69,21 @@ void MovableObject::rotate(const Vector3& axis, const Degree angle) {
   rotate(q);
 }
 
+void MovableObject::set_orientation(const Quaternion& q) {
+  Quaternion origin = orientation_;
+  orientation_ = q;
+  orientation_.Normalize();
+  if (orientation_ != origin) {
+    delegate_->OnObjectOrientationChanged(origin);
+  }
+}
+
 void MovableObject::rotate(const Quaternion& q) {
   DCHECK_FLOAT_EQ(q.length(), 1.0f);
   Quaternion origin = orientation_;
   orientation_ = q * orientation_;
   orientation_.Normalize();
   if (delegate_) {
-    delegate_->OnObjectOrientationChanged(origin);
-  }
-}
-
-void set_rotate(const Quaternion& q) {
-  Quaternion origin = orientation_;
-  orientation_ = q;
-  orientation_.Normalize();
-  if (q != origin) {
     delegate_->OnObjectOrientationChanged(origin);
   }
 }

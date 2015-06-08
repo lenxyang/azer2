@@ -227,6 +227,10 @@ inline bool operator == (const Quaternion& q1, const Quaternion& q2) {
       && (std::abs(q1.w - q2.w) < kFloatMargin);
 }
 
+inline bool operator != (const Quaternion& q1, const Quaternion& q2) {
+  return !(q1 == q2);
+}
+
 inline bool Quaternion::isnan() const {
   return azer::isnan(w) && azer::isnan(x) && azer::isnan(y) && azer::isnan(z);
 }
