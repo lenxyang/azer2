@@ -40,6 +40,8 @@ class AZER_EXPORT Effect : public Resource {
   virtual void SetLight(int light_index, Light* light) {}
   virtual void SetMatrial(Material* material) {}
 
+  VertexDescPtr GetVertexDesc() { return vertex_desc_ptr_;}
+  
   // 刷新所有的 GpuConstantTable
   void flush(Renderer* renderer);
  protected:
@@ -50,6 +52,7 @@ class AZER_EXPORT Effect : public Resource {
   TechniquePtr technique_;
   std::vector<scoped_refptr<GpuConstantsTable> > gpu_table_;
   RenderSystem* render_system_;
+  VertexDescPtr vertex_desc_ptr_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };
 

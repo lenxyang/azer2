@@ -544,7 +544,6 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << std::move(GenExchangeBuffer(tech)) << "\n"
      << std::move(GenUniformFuncs(tech)) << "\n"
      << std::move(GenVertexStruct(tech)) << "\n"
-     << "  azer::VertexDescPtr GetVertexDesc() { return vertex_desc_ptr_;}\n"
      << "  static Effect* CreateObject() {\n"
      << "    return new " << classname << ";\n"
      << "  }\n"
@@ -555,7 +554,6 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << "  void InitGpuConstantTable();\n"
      << "  virtual void UseTexture(azer::Renderer* renderer) override;\n"
      << GenAllTextureMember(tech) << "\n"
-     << "  azer::VertexDescPtr vertex_desc_ptr_;\n"
      << "  DECLARE_EFFECT_DYNCREATE(" << classname << ");\n"
      << "  DISALLOW_COPY_AND_ASSIGN(" << classname << ");\n"
      << "};\n";
