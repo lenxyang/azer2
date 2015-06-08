@@ -62,7 +62,7 @@ inline Vector4& Vector4::operator += (const Vector4& vec) {
   this->x += vec.x;
   this->y += vec.y;
   this->z += vec.z;
-  this->w += vec.z;
+  this->w += vec.w;
   return *this;
 }
 
