@@ -28,6 +28,8 @@ D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o,
 D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
   Texture::Options o;
   o.size = surface->GetBounds().size();
+  o.sampler.sample_level = surface->sample_count();
+  o.sampler.sample_quality = surface->sample_quality();
   return Create(o, rs);
 }
 

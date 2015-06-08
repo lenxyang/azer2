@@ -20,7 +20,7 @@ Texture::SamplerState::SamplerState()
     , mip_level(1)
     , max_anisotropy(1)
     , sample_level(1)
-    , sample_qualifiy(0) {
+    , sample_quality(0) {
 }
 
 Texture::Options::Options()

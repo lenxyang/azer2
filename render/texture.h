@@ -61,7 +61,7 @@ public:
     int mip_level;
     int max_anisotropy;
     int sample_level;
-    int sample_qualifiy;
+    int sample_quality;
 
     SamplerState();
   };
