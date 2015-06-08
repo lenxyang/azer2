@@ -107,10 +107,8 @@ class AZER_EXPORT VertexData : public Resource {
     return desc_ptr_->stride();
   }
 
-  const VertexDescPtr& desc() const {
-    DCHECK(desc_ptr_.get() != NULL);
-    return desc_ptr_;
-  }
+  const VertexDescPtr& desc() const;
+  VertexDescPtr& desc();
 
   /**
    * whole buffer sizef of vertex data

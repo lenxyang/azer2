@@ -56,6 +56,16 @@ VertexData::VertexData(const VertexDescPtr& desc, int vertex_num)
   data_.reset(new uint8[capability]);
 }
 
+const VertexDescPtr& VertexData::desc() const {
+  DCHECK(desc_ptr_.get() != NULL);
+  return desc_ptr_;
+}
+
+VertexDescPtr& VertexData::desc() {
+  DCHECK(desc_ptr_.get() != NULL);
+  return desc_ptr_;
+}
+
 void VertexData::CopyFrom(uint8* dataptr, uint32 datasize) {
   DCHECK(dataptr != NULL);
   DCHECK(pointer() != NULL);
