@@ -46,6 +46,25 @@ bool D3DEnvironment::InitDXGI() {
   return true;
 }
 
+void D3DEnvironment::GetD3DMultisampleSupported(
+    std::vector<RenderSystemCapability::SampleDesc>* supported) {
+  
+  HRESULT hr = 0;
+  for (int i = 1; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; i <<= 2) {
+    UINT count = -1;
+    hr = d3d_device_->CheckMultisampleQualityLevels(
+        DXGI_FORMAT_R8G8B8A8_UNORM, i, &count);
+
+    RenderSystemCapability::SampleDesc desc;
+    for (int j = 0; j < count; ++j) {
+      desc.count = i;
+      desc.quality = j;
+      supported->push_back(desc);
+    }
+  }
+}
+
+
 D3DEnvSwapChain::D3DEnvSwapChain(D3DEnvironment* env, Surface* surface) 
     : swap_chain_(NULL)
     , d3denv_(env)
@@ -65,7 +84,6 @@ ID3D11Texture2D* D3DEnvSwapChain::GetSwapTexture() {
   }
   return texture_buffer;
 }
-
 
 bool D3DEnvSwapChain::ResetSwapChain() {
   HRESULT hr = 0;

@@ -63,6 +63,9 @@ bool D3DRenderSystem::reset() {
 
 void D3DRenderSystem::GetDriverCapability() {
   capability_.hw_transform_light_ = true;
+
+  // get sample desc
+  envptr_->GetD3DMultisampleSupported(&capability_.sample_desc_);
 }
 
 const StringType& D3DRenderSystem::name() const {

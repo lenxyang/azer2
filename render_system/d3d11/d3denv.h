@@ -11,6 +11,7 @@
 #include "azer/render/surface.h"
 #include "azer/render/swap_chain.h"
 #include "ui/gfx/native_widget_types.h"
+#include "azer/render/render_capability.h"
 
 namespace azer {
 namespace d3d11 {
@@ -59,6 +60,9 @@ class D3DEnvironment {
   IDXGIFactory* GetDxgiFactory() { return dxgi_factory_;}
   ID3D11DeviceContext* GetContext() { return d3d_context_;}
   const D3D_FEATURE_LEVEL&  feature_level() const { return feature_level_;}
+
+  void GetD3DMultisampleSupported(
+      std::vector<RenderSystemCapability::SampleDesc>* supported);
  protected:
   D3DEnvironment();
 
