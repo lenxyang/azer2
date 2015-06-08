@@ -13,31 +13,6 @@ VertexDesc::~VertexDesc() {
 }
 
 namespace {
-inline int32 VertexTypeSize(DataFormat type) {
-  switch (type) {
-    case kScalar: return sizeof(float);
-    case kVec2: return sizeof(azer::Vector2);
-    case kVec3: return sizeof(azer::Vector3);
-    case kVec4: return sizeof(azer::Vector4);
-    case kInt: return sizeof(int);
-    case kIntVec2: return sizeof(int) * 2;
-    case kIntVec3: return sizeof(int) * 3;
-    case kIntVec4: return sizeof(int) * 4;
-    case kUint: return sizeof(uint32);
-    case kUintVec2: return sizeof(uint32) * 2;
-    case kUintVec3: return sizeof(uint32) * 3;
-    case kUintVec4: return sizeof(uint32) * 4;
-    case kBool: return sizeof(bool);
-    case kBoolVec2: return sizeof(bool) * 2;
-    case kBoolVec3: return sizeof(bool) * 3;
-    case kBoolVec4: return sizeof(bool) * 4;
-    case kRGBA: return sizeof(azer::Vector4);
-    default:
-      DCHECK(false) <<" No VertexDesc::Type: " << type;
-      return 0;
-  }
-}
-
 int32 calc_vertex_desc_size(const VertexDesc::Desc* desc) {
   // TODO(yanglei), align not support
   return VertexTypeSize(desc->type);
@@ -111,4 +86,30 @@ VertexBuffer::VertexBuffer(const Options &opt)
 
 VertexBuffer::~VertexBuffer() {
 }
+
+int32 VertexTypeSize(DataFormat type) {
+  switch (type) {
+    case kScalar: return sizeof(float);
+    case kVec2: return sizeof(azer::Vector2);
+    case kVec3: return sizeof(azer::Vector3);
+    case kVec4: return sizeof(azer::Vector4);
+    case kInt: return sizeof(int);
+    case kIntVec2: return sizeof(int) * 2;
+    case kIntVec3: return sizeof(int) * 3;
+    case kIntVec4: return sizeof(int) * 4;
+    case kUint: return sizeof(uint32);
+    case kUintVec2: return sizeof(uint32) * 2;
+    case kUintVec3: return sizeof(uint32) * 3;
+    case kUintVec4: return sizeof(uint32) * 4;
+    case kBool: return sizeof(bool);
+    case kBoolVec2: return sizeof(bool) * 2;
+    case kBoolVec3: return sizeof(bool) * 3;
+    case kBoolVec4: return sizeof(bool) * 4;
+    case kRGBA: return sizeof(azer::Vector4);
+    default:
+      DCHECK(false) <<" No VertexDesc::Type: " << type;
+      return 0;
+  }
+}
+
 }  // namespace azer

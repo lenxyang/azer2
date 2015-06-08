@@ -158,5 +158,5 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
 
 typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
 
-
+int32 AZER_EXPORT VertexTypeSize(DataFormat type);
 }  // namespace azer
