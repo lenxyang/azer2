@@ -105,6 +105,8 @@ public:
   // save the texture into file
   // for debug
   bool Save(const ::base::FilePath& path);
+
+  const Options& options() const { return options_;}
 protected:
   Options options_;
   DISALLOW_COPY_AND_ASSIGN(Texture);
