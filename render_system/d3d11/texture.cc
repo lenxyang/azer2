@@ -195,12 +195,12 @@ void D3DTexture::unmap() {
 
 bool D3DTexture::CopyTo(Texture* texture) {
   D3DTexture* tex = (D3DTexture*)texture;
-  if (tex->option().type != option().type) {
+  if (tex->options().type != options().type) {
     DLOG(INFO) << "cannot Copy Texture to diffuse type texture.";
     return false;
   }
 
-  if (tex->option().size != option().size) {
+  if (tex->options().size != options().size) {
     DLOG(INFO) << "cannot Copy Texture to the one with diffuse dimension.";
     return false;
   }
