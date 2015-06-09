@@ -42,6 +42,7 @@ class AZER_EXPORT ConfigNode : public Resource {
   bool GetAttrAsVec2(const std::string& name, Vector2* v) const;
   bool GetAttrAsVec3(const std::string& name, Vector3* v) const;
   bool GetAttrAsVec4(const std::string& name, Vector4* v) const;
+  bool GetAttrAsQuaternion(const std::string& name, Quaternion* v) const;
 
   const std::string& GetText() const;
   bool GetTextAsDouble(double* v) const;

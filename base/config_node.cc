@@ -168,7 +168,8 @@ bool ConfigNode::GetAttrAsInt(const std::string& name, int32* v) const {
 
 bool ConfigNode::GetAttrAsVec2(const std::string& name, Vector2* v) const {
   std::string str = std::move(GetAttr(name));
-  bool ret = StringToDoubleVec(text_, &vec);
+  std::vector<double> vec;
+  bool ret = StringToDoubleVec(str, &vec);
   if (!ret || vec.size() != 2u)
     return false;
   v->x = (float)vec[0];
@@ -178,7 +179,8 @@ bool ConfigNode::GetAttrAsVec2(const std::string& name, Vector2* v) const {
 
 bool ConfigNode::GetAttrAsVec3(const std::string& name, Vector3* v) const {
   std::string str = std::move(GetAttr(name));
-  bool ret = StringToDoubleVec(text_, &vec);
+  std::vector<double> vec;
+  bool ret = StringToDoubleVec(str, &vec);
   if (!ret || vec.size() != 3u)
     return false;
   v->x = (float)vec[0];
@@ -189,7 +191,8 @@ bool ConfigNode::GetAttrAsVec3(const std::string& name, Vector3* v) const {
 
 bool ConfigNode::GetAttrAsVec4(const std::string& name, Vector4* v) const {
   std::string str = std::move(GetAttr(name));
-  bool ret = StringToDoubleVec(text_, &vec);
+  std::vector<double> vec;
+  bool ret = StringToDoubleVec(str, &vec);
   if (!ret || vec.size() != 4u)
     return false;
   v->x = (float)vec[0];
@@ -199,6 +202,16 @@ bool ConfigNode::GetAttrAsVec4(const std::string& name, Vector4* v) const {
   return true;
 }
 
+bool ConfigNode::GetAttrAsQuaternion(const std::string& name, Quaternion* v) const {
+  std::string str = std::move(GetAttr(name));
+  std::vector<double> vec;
+  bool ret = StringToDoubleVec(str, &vec);
+  if (!ret || vec.size() != 4u)
+    return false;
+
+  *v = Quaternion((float)vec[0], (float)vec[1], (float)vec[2], (float)vec[3]);
+  return true;
+}
 
 const std::string& ConfigNode::GetText() const {
   return text_;
