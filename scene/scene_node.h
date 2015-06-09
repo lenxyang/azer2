@@ -49,6 +49,9 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   const SceneNodes& children() const { return children_;}
   SceneNodes& children() { return children_;}
 
+  void set_scale(const Vector3& scale) { scale_ = scale;}
+  const Vector3& get_scale() const { return scale_;}
+
   const Matrix4& GetWorldMatrix() const { return world_;}
   void UpdateWorldMatrixRecusive();
 
