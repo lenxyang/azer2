@@ -166,6 +166,40 @@ bool ConfigNode::GetAttrAsInt(const std::string& name, int32* v) const {
   return ::base::StringToInt(str, v);
 }
 
+bool ConfigNode::GetAttrAsVec2(const std::string& name, Vector2* v) const {
+  std::string str = std::move(GetAttr(name));
+  bool ret = StringToDoubleVec(text_, &vec);
+  if (!ret || vec.size() != 2u)
+    return false;
+  v->x = (float)vec[0];
+  v->y = (float)vec[1];
+  return true;
+}
+
+bool ConfigNode::GetAttrAsVec3(const std::string& name, Vector3* v) const {
+  std::string str = std::move(GetAttr(name));
+  bool ret = StringToDoubleVec(text_, &vec);
+  if (!ret || vec.size() != 3u)
+    return false;
+  v->x = (float)vec[0];
+  v->y = (float)vec[1];
+  v->z = (float)vec[2];
+  return true;
+}
+
+bool ConfigNode::GetAttrAsVec4(const std::string& name, Vector4* v) const {
+  std::string str = std::move(GetAttr(name));
+  bool ret = StringToDoubleVec(text_, &vec);
+  if (!ret || vec.size() != 4u)
+    return false;
+  v->x = (float)vec[0];
+  v->y = (float)vec[1];
+  v->z = (float)vec[2];
+  v->w = (float)vec[3];
+  return true;
+}
+
+
 const std::string& ConfigNode::GetText() const {
   return text_;
 }
