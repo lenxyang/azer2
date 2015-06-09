@@ -19,7 +19,7 @@ Texture::SamplerState::SamplerState()
     , border_color(0.0f, 0.0f, 0.0f, 0.0f)
     , mip_level(1)
     , max_anisotropy(1)
-    , sample_level(1)
+    , sample_level(2)
     , sample_quality(0) {
 }
 
