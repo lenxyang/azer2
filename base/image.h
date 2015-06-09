@@ -34,6 +34,7 @@ class AZER_EXPORT Image {
 
   static Image* Load(const ::base::FilePath& path, Type type);
   static Image* Load(const StringType& path, Type type);
+  static Image* Load(const char* data, int length, Type type);
  private:
   ImageDataPtrVec data_;
   Type type_;

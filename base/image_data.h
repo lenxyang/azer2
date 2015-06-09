@@ -36,12 +36,8 @@ class AZER_EXPORT ImageData {
   Vector4 BoxSample(float tu, float tv) const;
 
   
-  static ImageDataPtr Load2D(const ::base::FilePath& path);
-  static ImageDataPtr Load2D(const ::base::FilePath::StringType& path);
-
-  // cubemap's order
-  static ImageDataPtrVec LoadCubemap(const ::base::FilePath& path);
-  static ImageDataPtrVec LoadCubemap(const ::base::FilePath::StringType& path);
+  static ImageDataPtr Load2D(const char* data, int32 length);
+  static ImageDataPtrVec LoadCubemap(const char* data, int32 length);
  private:
   int32 sizeof_dataformat(DataFormat format) const;
   std::unique_ptr<uint8> data_;
