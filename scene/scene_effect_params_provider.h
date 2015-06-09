@@ -12,6 +12,8 @@ class SceneEffectParamsProvider : public EffectParamsProvider {
   void SetSceneSurroundings(SceneSurroundings* surroundings) { 
     surroundings_ = surroundings;
   }
+
+  virtual bool Init(ConfigNodePtr node) { return true;}
  protected:
   SceneNode* node_;
   SceneSurroundings* surroundings_;

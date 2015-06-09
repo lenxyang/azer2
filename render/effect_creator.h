@@ -39,7 +39,7 @@ inline scoped_ptr<EffectParamsProvider> CreateEffectProviderByName(
     const std::string& name) {
   scoped_ptr<EffectParamsProvider> ptr(
       ClassCreator<EffectParamsProvider>::instance()->create(name));
-  return ptr.Pass()
+  return ptr.Pass();
 }
 }  // namespace azer
 
@@ -50,9 +50,9 @@ inline scoped_ptr<EffectParamsProvider> CreateEffectProviderByName(
   azer::EffectAutoReg<EFFECT_CLASS_NAME> EFFECT_CLASS_NAME::effect_auto_reg_
 
 #define DECLARE_EFFECT_PROVIDER_DYNCREATE(EFFECT_PROVIDER_CLASS_NAME)   \
-  static azer::EffectAutoReg<EFFECT_PROVIDER_CLASS_NAME>                \
+  static azer::EffectProviderAutoReg<EFFECT_PROVIDER_CLASS_NAME>                \
   effect_provider_auto_reg_
 
 #define IMPLEMENT_EFFECT_PROVIDER_DYNCREATE(EFFECT_PROVIDER_CLASS_NAME) \
-  azer::EffectAutoReg<EFFECT_PROVIDER_CLASS_NAME> \
+  azer::EffectProviderAutoReg<EFFECT_PROVIDER_CLASS_NAME> \
   EFFECT_PROVIDER_CLASS_NAME::effect_provider_auto_reg_
