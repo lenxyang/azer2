@@ -14,11 +14,11 @@
 namespace azer {
 class ConfigNode;
 typedef scoped_refptr<ConfigNode> ConfigNodePtr;
+typedef std::vector<ConfigNodePtr> ConfigNodes;
 class AZER_EXPORT ConfigNode : public Resource {
  public:
   typedef std::pair<std::string, std::string> Attribute;
   typedef std::vector<Attribute> Attributes;
-  typedef std::vector<ConfigNodePtr> ConfigNodes;
 
   explicit ConfigNode(const ResPath& path);
   ConfigNode();
