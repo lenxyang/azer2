@@ -35,11 +35,9 @@ inline EffectPtr CreateEffectByName(const std::string& name) {
   return EffectPtr(ClassCreator<Effect>::instance()->create(name));
 }
 
-inline scoped_ptr<EffectParamsProvider> CreateEffectProviderByName(
+inline EffectParamsProvider* CreateEffectProviderByName(
     const std::string& name) {
-  scoped_ptr<EffectParamsProvider> ptr(
-      ClassCreator<EffectParamsProvider>::instance()->create(name));
-  return ptr.Pass();
+  return ClassCreator<EffectParamsProvider>::instance()->create(name);
 }
 }  // namespace azer
 
