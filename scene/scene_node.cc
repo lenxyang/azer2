@@ -79,8 +79,8 @@ void SceneNode::OnParentOrientationChanged() {
 }
 
 void SceneNode::UpdateWorldMatrix() {
-  world_ = std::move(orientation().ToMatrix() * azer::Scale(scale_));
-  world_ = std::move(azer::Translate(position()) * world_);
+  world_ = std::move(orientation().ToMatrix() * Scale(scale_));
+  world_ = std::move(Translate(position()) * world_);
   if (parent()) {
     world_ = std::move(parent()->GetWorldMatrix() * world_);
   }
