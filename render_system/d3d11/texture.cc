@@ -104,7 +104,6 @@ void D3DTexture::GenerateMips(int level) {
   DCHECK(view_ != NULL);
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  // D3DX11FilterTexture(d3d_context, (ID3D11Resource*)view_, 0, level);
   d3d_context->GenerateMips(view_);
 }
 
@@ -125,11 +124,11 @@ bool D3DTexture::SetSamplerState(const SamplerState& sampler_state) {
   D3D11_SAMPLER_DESC sampler_desc;
   ZeroMemory(&sampler_desc, sizeof(sampler_desc));
   sampler_desc.Filter = TranslateSamplerState(sampler_state);
-  sampler_desc.AddressU = TranslateTexWrapMode(options_.sampler.wrap_u);
-  sampler_desc.AddressV = TranslateTexWrapMode(options_.sampler.wrap_v);
-  sampler_desc.AddressW = TranslateTexWrapMode(options_.sampler.wrap_w);
+  sampler_desc.AddressU = TranslateTexWrapMode(sampler_state.wrap_u);
+  sampler_desc.AddressV = TranslateTexWrapMode(sampler_state.wrap_v);
+  sampler_desc.AddressW = TranslateTexWrapMode(sampler_state.wrap_w);
   sampler_desc.ComparisonFunc = TranslateCompareFunc(sampler_state.compare_func);
-  sampler_desc.MaxAnisotropy = options_.sampler.max_anisotropy;
+  sampler_desc.MaxAnisotropy = sampler_state.max_anisotropy;
   sampler_desc.MipLODBias = 0.0f;
   sampler_desc.MinLOD = 0;
   sampler_desc.MaxLOD = D3D11_FLOAT32_MAX;
