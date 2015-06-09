@@ -98,6 +98,9 @@ void D3DTexture::SetVSSampler(int index, D3DRenderer* renderer) {
 }
 
 void D3DTexture::GenerateMips(int level) {
+  // attention:
+  // resource must be specified bind with Resource and RenderTarget
+  // and misc flags must be with D3D11_RESOURCE_MISC_GENERATE_MIPS
   DCHECK(view_ != NULL);
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
