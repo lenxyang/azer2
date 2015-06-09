@@ -61,7 +61,8 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   tex_desc_.Usage          = TranslateUsage(options_.usage);
   tex_desc_.BindFlags      = TranslateBindTarget(options_.target);
   tex_desc_.CPUAccessFlags = TranslateCPUAccess(options_.cpu_access);
-  tex_desc_.MiscFlags      = 0;
+  tex_desc_.MiscFlags      = options_.genmipmap ?  
+      D3D11_RESOURCE_MISC_GENERATE_MIPS : 0;
   ModifyTextureDesc(&tex_desc_);
 
   ID3D11Texture2D* tex = NULL;

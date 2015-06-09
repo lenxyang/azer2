@@ -28,27 +28,8 @@ Texture::Options::Options()
     , usage(GraphicBuffer::kDefault)
     , cpu_access(kCPUNoAccess)
     , target(Texture::kUnknown)
-    , type(k2D) {
-}
-
-Texture* Texture::Load(Type type, const ::base::FilePath& path, RenderSystem* rs) {
-  Texture::Options opt;
-  opt.target = Texture::kShaderResource;
-  opt.type = (Type)type;
-  return Load(opt, path, rs);
-}
-
-Texture* Texture::Load(const Options& o, const ::base::FilePath& path,
-                       RenderSystem* rs) {
-  std::unique_ptr<Image> imgptr(Image::Load(path, (Image::Type)o.type));
-  if (imgptr.get()) {
-    Texture::Options opt = o;
-    opt.size = gfx::Size(imgptr->width(), imgptr->height());
-    return rs->CreateTexture(opt, imgptr.get());
-  } else {
-    LOG(ERROR) << "failed to load texture: \"" << path.value() << "\"";
-    return NULL;
-  }
+    , type(k2D)
+    , genmipmap(false) {
 }
 
 bool Texture::Save(const ::base::FilePath& path) {

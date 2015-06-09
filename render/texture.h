@@ -62,7 +62,7 @@ public:
     int max_anisotropy;
     int sample_level;
     int sample_quality;
-
+ 
     SamplerState();
   };
 
@@ -74,24 +74,13 @@ public:
     CPUAccess cpu_access;
     Texture::BindTarget target;
     Type type;
-
+    bool genmipmap;
     Options();
   };
 
   explicit Texture(const Options& opt);
   virtual ~Texture() {}
   
-  // not opt's width and height will be ignored
-  static Texture* Load(const Options& opt, const ::base::FilePath& path,
-                       RenderSystem* rs);
-  static Texture* Load(const Options& opt, const StringType& path,
-                       RenderSystem* rs);
-  static Texture* Load(Type type, const ::base::FilePath& path,
-                       RenderSystem* rs);
-  static Texture* Load(Type type, const StringType& path, RenderSystem* rs);
-
-  const Options& option() const { return options_;}
-
   virtual bool SetSamplerState(const SamplerState& sampler_state) = 0;
   virtual void GenerateMips(int level) = 0; 
 
@@ -126,15 +115,5 @@ typedef scoped_refptr<Texture> TexturePtr;
 inline Texture::Texture(const Options& opt) 
     : Resource(kTexture)
     , options_(opt) {
-}
-
-inline Texture* Texture::Load(const Options& opt, const StringType& path,
-                              RenderSystem* rs) {
-  return Load(opt, ::base::FilePath(path), rs);
-}
-
-inline Texture* Texture::Load(Type type, const StringType& path,
-                              RenderSystem* rs) {
-  return Load(type, ::base::FilePath(path), rs);
 }
 }  // namespace azer
