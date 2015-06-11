@@ -73,7 +73,7 @@ void MovableObject::set_orientation(const Quaternion& q) {
   Quaternion origin = orientation_;
   orientation_ = q;
   orientation_.Normalize();
-  if (orientation_ != origin) {
+  if (orientation_ != origin && delegate_) {
     delegate_->OnObjectOrientationChanged(origin);
   }
 }
