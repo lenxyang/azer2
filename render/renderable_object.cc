@@ -50,4 +50,17 @@ void RenderableObject::Render(int target, Renderer* renderer) {
     RenderObj(target, renderer);
   }
 }
+
+void RenderableObject::InstancedRender(int num, int target, Renderer* renderer) {
+  EffectPtr effect = effects_[target];
+  if (effect.get()) {
+    provider_->Apply(effect.get());
+    effect->Use(renderer);
+    RenderInstancedObj(num, target, renderer);
+  }
+}
+
+void RenderableObject::RenderInstancedObj(int num, int target, Renderer* renderer) {
+  CHECK(false);
+}
 }  // namespace azer

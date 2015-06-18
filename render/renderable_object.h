@@ -33,11 +33,13 @@ class AZER_EXPORT RenderableObject : public Resource {
   void SetEffectParamsProvider(EffectParamsProvider* provider, bool hold = true);
 
   void Render(int target, Renderer* renderer);
+  void InstancedRender(int num, int target, Renderer* renderer);
   bool HasBlending() const;
   void SetBlending(BlendingPtr blending);
   EffectParamsProvider* provider() { return provider_;}
  protected:
   virtual void RenderObj(int target, Renderer* renderer) = 0;
+  virtual void RenderInstancedObj(int num, int target, Renderer* renderer);
  private:
   std::vector<EffectPtr> effects_;
   BlendingPtr blending_;
