@@ -6,6 +6,7 @@
 namespace azer {
 class AZER_EXPORT Sky : public RenderableObject {
  public:
+  Sky() {}
   TexturePtr GetTexture() { return texture_;}
  protected:
   TexturePtr texture_;
