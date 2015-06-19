@@ -45,8 +45,8 @@ void SceneRender::Update(const FrameArgs& frame) {
   OnUpdateEnd();
 }
 
-void SceneRender::UpdateScene(SceneSurroundings* surroundings, SceneNode* node) {
-  RenderableObjectPtr obj = node->mutable_data()->GetRenderableObject();
+void SceneRender::RenderObj(RenderableObjectPtr obj, 
+                            SceneSurroundings* surroundings, SceneNode* node) {
   DCHECK(obj.get());
   SceneEffectParamsProvider* provider = (SceneEffectParamsProvider*)obj->provider();
   provider->SetSceneNode(node);
@@ -58,13 +58,20 @@ void SceneRender::UpdateScene(SceneSurroundings* surroundings, SceneNode* node) 
 void SceneRender::UpdateSceneRecusive(SceneSurroundings* surroundings,
                                       SceneNode* node) {
   if (node->data().GetRenderableObject().get()) {
-    UpdateScene(surroundings, node);
+    RenderObj(node->data().GetRenderableObject(), surroundings, node);
+  } 
+  if (node->data().GetSky().get()) {
+    RenderObj(node->data().GetSky(), surroundings, node);
   } 
   if (node->data().GetSurroundings().get()) {
     surroundings->PushConfig(node->mutable_data()->GetSurroundings());
   } 
   if (node->data().GetLight().get()) {
     surroundings->PushLight(node->mutable_data()->GetLight());
+  }
+
+  if (node->data().GetSky().get()) {
+    surroundings->PushSky(node->mutable_data()->GetSky());
   }
 
   for (auto iter = node->children().begin(); 
@@ -77,6 +84,9 @@ void SceneRender::UpdateSceneRecusive(SceneSurroundings* surroundings,
   } 
   if (node->data().GetLight().get()) {
     surroundings->PopLight();
+  }
+  if (node->data().GetSky().get()) {
+    surroundings->PopSky();
   }
 }
 

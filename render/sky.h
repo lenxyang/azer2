@@ -1,5 +1,6 @@
 #pragma once
 
+#include "base/memory/ref_counted.h"
 #include "azer/render/texture.h"
 #include "azer/render/renderable_object.h"
 
@@ -12,4 +13,6 @@ class AZER_EXPORT Sky : public RenderableObject {
   TexturePtr texture_;
   DISALLOW_COPY_AND_ASSIGN(Sky);
 };
+
+typedef scoped_refptr<Sky> SkyPtr;
 }  // namespace

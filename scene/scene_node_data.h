@@ -4,6 +4,7 @@
 #include "azer/render/effect_params_provider.h"
 #include "azer/render/renderable_object.h"
 #include "azer/render/light.h"
+#include "azer/render/sky.h"
 
 #include "azer/scene/scene_effect_params_provider.h"
 
@@ -14,6 +15,7 @@ class SceneNodeData {
   
   void Attach(LightPtr light);
   void Attach(RenderableObjectPtr object);
+  void Attach(SkyPtr object);
   void Attach(ConfigNodePtr surrounding);
   void DetachAll();
   
@@ -25,10 +27,14 @@ class SceneNodeData {
 
   LightPtr& GetLight() { return light_;}
   const LightPtr& GetLight() const { return light_;}
+
+  SkyPtr& GetSky() { return sky_;}
+  const SkyPtr& GetSky() const { return sky_;}
  private:
   RenderableObjectPtr renderable_;
   LightPtr light_;
   ConfigNodePtr surroundings_;
+  SkyPtr sky_;
   DISALLOW_COPY_AND_ASSIGN(SceneNodeData);
 };
 }  // namespace azer

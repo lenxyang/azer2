@@ -38,7 +38,7 @@ class SceneSurroundings {
  private:
   std::deque<LightPtr> lights_;
   std::deque<ConfigNodePtr> configs_;
-  std::defque<SkyPtr> sky_;
+  std::deque<SkyPtr> sky_;
   const Camera* camera_;
   DISALLOW_COPY_AND_ASSIGN(SceneSurroundings);
 };

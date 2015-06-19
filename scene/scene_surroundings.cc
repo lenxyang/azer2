@@ -29,4 +29,12 @@ void SceneSurroundings::PushConfig(ConfigNodePtr node) {
 void SceneSurroundings::PopConfig() {
   configs_.pop_back();
 }
+
+void SceneSurroundings::PushSky(SkyPtr node) {
+  sky_.push_back(node);
+}
+
+void SceneSurroundings::PopSky() {
+  sky_.pop_back();
+}
 }

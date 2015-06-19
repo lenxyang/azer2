@@ -19,9 +19,14 @@ void SceneNodeData::Attach(ConfigNodePtr surroundings) {
   surroundings_ = surroundings;
 }
 
+void SceneNodeData::Attach(SkyPtr object) {
+  sky_ = object;
+}
+
 void SceneNodeData::DetachAll() {
   renderable_ = RenderableObjectPtr();
   light_ = LightPtr();
   surroundings_ = ConfigNodePtr();
+  sky_ = SkyPtr();
 }
 }  // namespace azer

@@ -40,8 +40,8 @@ class SceneRender {
  protected:
   virtual void OnUpdateBegin() {}
   virtual void OnUpdateEnd() {}
-  void UpdateScene(SceneSurroundings* env, SceneNode* node);
   void UpdateSceneRecusive(SceneSurroundings* env, SceneNode* node);
+  void RenderObj(RenderableObjectPtr obj, SceneSurroundings* env, SceneNode* node);
   SceneNodePtr node_;
   const FrameArgs* frame_;
   scoped_ptr<SceneSurroundings> surroundings_;
