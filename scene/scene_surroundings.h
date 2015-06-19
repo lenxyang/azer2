@@ -4,6 +4,7 @@
 
 #include "azer/base/config_node.h"
 #include "azer/render/light.h"
+#include "azer/render/sky.h"
 #include "azer/render/camera.h"
 
 namespace azer {
@@ -27,6 +28,9 @@ class SceneSurroundings {
   void PushConfig(ConfigNodePtr node);
   void PopConfig();
   void reset();
+
+  void PushSky(SkyPtr sky);
+  void PopSky();
   
   const Camera* camera() const { return camera_;}
   const std::deque<LightPtr>& lights() const { return lights_;};
@@ -34,6 +38,7 @@ class SceneSurroundings {
  private:
   std::deque<LightPtr> lights_;
   std::deque<ConfigNodePtr> configs_;
+  std::defque<SkyPtr> sky_;
   const Camera* camera_;
   DISALLOW_COPY_AND_ASSIGN(SceneSurroundings);
 };
