@@ -96,8 +96,13 @@ SimpleSceneRender::SimpleSceneRender(SceneNodePtr node)
 }
 
 void SimpleSceneRender::PrepareRender(SceneNode* node) {
-  DCHECK(node->data().GetRenderableObject().get());
-  vec_.push_back(node->mutable_data()->GetRenderableObject());
+  if (node->data().GetRenderableObject().get()) {
+    vec_.push_back(node->mutable_data()->GetRenderableObject());
+  } else if (node->data().GetSky().get()) {
+    vec_.push_back(node->mutable_data()->GetSky());
+  } else {
+    CHECK(false);
+  }
 }
 
 void SimpleSceneRender::Render(int target, Renderer* renderer) {
