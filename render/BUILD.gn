@@ -63,6 +63,8 @@ source_set("render") {
     "reusable_object.h",
     "reusable_object_util.cc",
     "reusable_object_util.h",
+    "sky.cc",
+    "sky.h",
     "swap_chain.h",
     "technique.cc",
     "technique.h",

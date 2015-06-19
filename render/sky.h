@@ -7,8 +7,8 @@
 namespace azer {
 class AZER_EXPORT Sky : public RenderableObject {
  public:
-  Sky() {}
-  TexturePtr GetTexture() { return texture_;}
+  Sky();
+  TexturePtr GetTexture();
  protected:
   TexturePtr texture_;
   DISALLOW_COPY_AND_ASSIGN(Sky);

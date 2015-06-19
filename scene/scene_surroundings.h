@@ -35,6 +35,7 @@ class SceneSurroundings {
   const Camera* camera() const { return camera_;}
   const std::deque<LightPtr>& lights() const { return lights_;};
   const std::deque<ConfigNodePtr>& configs() const { return configs_;}
+  const std::deque<SkyPtr>& sky() const { return sky_;}
  private:
   std::deque<LightPtr> lights_;
   std::deque<ConfigNodePtr> configs_;
