@@ -13,10 +13,10 @@ class SceneNodeData {
  public:
   SceneNodeData();
   
-  void Attach(LightPtr light);
-  void Attach(RenderableObjectPtr object);
-  void Attach(SkyPtr object);
-  void Attach(ConfigNodePtr surrounding);
+  void AttachLight(LightPtr light);
+  void AttachRenderable(RenderableObjectPtr object);
+  void AttachSky(SkyPtr object);
+  void AttachConfig(ConfigNodePtr surrounding);
   void DetachAll();
   
   RenderableObjectPtr& GetRenderableObject() { return renderable_;}

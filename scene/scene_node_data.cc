@@ -7,19 +7,19 @@ namespace azer {
 SceneNodeData::SceneNodeData() {
 }
 
-void SceneNodeData::Attach(RenderableObjectPtr object) {
+void SceneNodeData::AttachRenderable(RenderableObjectPtr object) {
   renderable_ = object;
 }
 
-void SceneNodeData::Attach(LightPtr object) {
+void SceneNodeData::AttachLight(LightPtr object) {
   light_ = object;
 }
 
-void SceneNodeData::Attach(ConfigNodePtr surroundings) {
+void SceneNodeData::AttachConfig(ConfigNodePtr surroundings) {
   surroundings_ = surroundings;
 }
 
-void SceneNodeData::Attach(SkyPtr object) {
+void SceneNodeData::AttachSky(SkyPtr object) {
   sky_ = object;
 }
 
