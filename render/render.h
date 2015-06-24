@@ -16,4 +16,3 @@
 #include "azer/render/scoped_render_target.h"
 #include "azer/render/util/coordinate_grid.h"
 #include "azer/render/util/render_system_loader.h"
-#include "azer/render/util/shader_array.h"
