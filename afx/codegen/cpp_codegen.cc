@@ -328,8 +328,8 @@ std::string CppCodeGen::GenInit(const Technique& tech) {
   ss << "bool " << GetClassName(tech) 
      << "::Init(const ShaderPrograms& sources) {\n"
      << "  DCHECK(sources.size() == azer::kRenderPipelineStageNum);\n"
-     << "  DCHECK(!sources[azer::kVertexStage].empty());\n"
-     << "  DCHECK(!sources[azer::kPixelStage].empty());\n"
+     << "  DCHECK(!sources[azer::kVertexStage].program.empty());\n"
+     << "  DCHECK(!sources[azer::kPixelStage].program.empty());\n"
      << "  InitTechnique(sources);\n"
      << "  InitGpuConstantTable();\n"
      << "  return true;\n"
