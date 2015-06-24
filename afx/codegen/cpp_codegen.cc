@@ -182,7 +182,7 @@ std::string CppCodeGen::GenTechnique(const Technique& tech) {
      << "  DCHECK(!vs_shader_source.empty());\n"
      << "  azer::GpuProgramPtr vs_gpup_ptr(render_system_->CreateVertexGpuProgram(\n"
      << "      vertex_desc_ptr_, vs_shader_source));\n"
-     << "  vs_gpu_ptr->set_shader_path(sources[azer::kVertexStage].path);\n"
+     << "  vs_gpup_ptr->set_shader_path(sources[azer::kVertexStage].path);\n"
      << "  DCHECK(vs_gpup_ptr.get() != NULL);\n"
      << "  technique_->AddGpuProgram(vs_gpup_ptr);\n";
 
@@ -197,7 +197,7 @@ std::string CppCodeGen::GenTechnique(const Technique& tech) {
        << "    azer::GpuProgramPtr gpup_ptr(render_system_->CreateGpuProgram(\n"
        << "        " << StageName(stage) << ", source));\n"
        << "    DCHECK(gpup_ptr.get() != NULL);\n"
-       << "    vs_gpu_ptr->set_shader_path(path);\n"
+       << "    gpup_ptr->set_shader_path(path);\n"
        << "    technique_->AddGpuProgram(gpup_ptr);\n"
        << "  }\n";
   }
