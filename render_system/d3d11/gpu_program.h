@@ -18,8 +18,8 @@ namespace d3d11 {
 class D3DRenderSystem;
 class D3DVertexGpuProgram : public VertexGpuProgram {
  public:
-  D3DVertexGpuProgram(VertexDescPtr desc, const std::string& program)
-      : VertexGpuProgram(desc, program)
+  D3DVertexGpuProgram(VertexDescPtr desc, const ShaderInfo& info)
+      : VertexGpuProgram(desc, info)
       , shader_(NULL)
       , input_layout_(NULL) {
   }
@@ -41,8 +41,8 @@ class D3DVertexGpuProgram : public VertexGpuProgram {
 
 class D3DPixelGpuProgram : public GpuProgram {
  public:
-  D3DPixelGpuProgram(const std::string& program)
-      : GpuProgram(kPixelStage, program)
+  D3DPixelGpuProgram(const GpuProgram::ShaderInfo& info)
+      : GpuProgram(kPixelStage, info)
       , shader_(NULL) {
   }
 
@@ -60,8 +60,8 @@ class D3DPixelGpuProgram : public GpuProgram {
 
 class D3DGeometryGpuProgram : public GpuProgram {
  public:
-  D3DGeometryGpuProgram(const std::string& program)
-      : GpuProgram(kGeometryStage, program)
+  D3DGeometryGpuProgram(const GpuProgram::ShaderInfo& info)
+      : GpuProgram(kGeometryStage, info)
       , shader_(NULL) {
   }
 

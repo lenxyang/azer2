@@ -100,15 +100,15 @@ IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
   }
 }
 
-GpuProgramPtr D3DRenderSystem::CreateGpuProgram(RenderPipelineStage stage,
-                                              const std::string& program) {
+GpuProgramPtr D3DRenderSystem::CreateGpuProgram(
+    RenderPipelineStage stage, const GpuProgram::ShaderInfo& info) {
   GpuProgramPtr gpu_program;
   switch (stage) {
     case kPixelStage:
-      gpu_program = (new D3DPixelGpuProgram(program));
+      gpu_program = (new D3DPixelGpuProgram(info));
       break;
     case kGeometryStage:
-      gpu_program = (new D3DGeometryGpuProgram(program));
+      gpu_program = (new D3DGeometryGpuProgram(info));
       break;
     case kVertexStage:
       CHECK(false) << "Vertex GpuProgram has its own ";
@@ -124,8 +124,8 @@ GpuProgramPtr D3DRenderSystem::CreateGpuProgram(RenderPipelineStage stage,
 }
 
 VertexGpuProgramPtr D3DRenderSystem::CreateVertexGpuProgram(
-    VertexDescPtr desc, const std::string& program) {
-  VertexGpuProgramPtr gpu_program(new D3DVertexGpuProgram(desc, program));
+    VertexDescPtr desc, const GpuProgram::ShaderInfo& info) {
+  VertexGpuProgramPtr gpu_program(new D3DVertexGpuProgram(desc, info));
   if (gpu_program->Init(this)) {
     return gpu_program;
   } else {

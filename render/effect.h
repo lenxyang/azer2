@@ -9,6 +9,7 @@
 #include "azer/render/light.h"
 #include "azer/render/material.h"
 #include "azer/render/vertex_buffer.h"
+#include "azer/render/gpu_program.h"
 
 namespace azer {
 
@@ -28,11 +29,7 @@ typedef scoped_refptr<Technique> TechniquePtr;
  */
 class AZER_EXPORT Effect : public Resource {
  public:
-  struct ShaderProgramInfo {
-    std::string program;
-    std::string path;
-  };
-  typedef std::vector<ShaderProgramInfo> ShaderPrograms;
+  typedef std::vector<GpuProgram::ShaderInfo> ShaderPrograms;
   explicit Effect(RenderSystem* rs);
   ~Effect() override;
 

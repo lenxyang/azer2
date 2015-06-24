@@ -3,16 +3,20 @@
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
-GpuProgram::GpuProgram(RenderPipelineStage stage, const std::string& program)
+GpuProgram::ShaderInfo::ShaderInfo()
+    : stage(kStageNotSpec) {
+}
+  
+GpuProgram::GpuProgram(RenderPipelineStage stage, const ShaderInfo& info)
     : stage_(stage)
-    , program_(program) {
+    , info_(info) {
 }
 
 GpuProgram::~GpuProgram() {
 }
 
-VertexGpuProgram::VertexGpuProgram(VertexDescPtr& desc, const std::string& program)
-    : GpuProgram(kVertexStage, program)
+VertexGpuProgram::VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info)
+    : GpuProgram(kVertexStage, info)
     , desc_ptr_(desc) {
 }
 

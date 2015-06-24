@@ -68,9 +68,9 @@ class AZER_EXPORT RenderSystem {
   // Vertex Gpu Program need to help check "Vertex Layout"
   //
   virtual VertexGpuProgramPtr CreateVertexGpuProgram(
-      VertexDescPtr desc,const std::string& program) = 0;
+      VertexDescPtr desc, const GpuProgram::ShaderInfo& info) = 0;
   virtual GpuProgramPtr CreateGpuProgram(RenderPipelineStage stage,
-                                         const std::string& program) = 0;
+                                         const GpuProgram::ShaderInfo& info) = 0;
   virtual OverlayPtr CreateOverlay() = 0;
 
   virtual bool reset() = 0;
