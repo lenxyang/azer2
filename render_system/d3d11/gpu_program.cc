@@ -14,7 +14,7 @@ bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
   ID3D11Device* d3d_device = rs->GetDevice();
 
   // D3DBlobPtr blob(CompilePixelShader(program_, &msg));
-  ID3DBlob* blob = CompileVertexShader(program_, shader_path_, &msg);
+  ID3DBlob* blob = CompileVertexShader(info_.code, info_.path, &msg);
   if (NULL == blob) {
     LOG(ERROR) << "Failed to compile vertex shader: " << msg;
     return false;
@@ -54,7 +54,7 @@ bool D3DPixelGpuProgram::Init(RenderSystem* vrs) {
   D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
   std::string msg;
   ID3D11Device* d3d_device = rs->GetDevice();
-  D3DBlobPtr blob(CompilePixelShader(program_, shader_path_, &msg));
+  D3DBlobPtr blob(CompilePixelShader(info_.code, info_.path, &msg));
   if (NULL == blob) {
     LOG(ERROR) << "Failed to compiler pixel shader: " << msg;
     return false;
@@ -74,7 +74,7 @@ bool D3DGeometryGpuProgram::Init(RenderSystem* vrs) {
   DCHECK(NULL == shader_);
   std::string msg;
   ID3D11Device* d3d_device = rs->GetDevice();
-  D3DBlobPtr blob(CompileGeometryShader(program_, shader_path_, &msg));
+  D3DBlobPtr blob(CompileGeometryShader(info_.code, info_.path, &msg));
   if (NULL == blob) {
     LOG(ERROR) << "Failed to compiler shader: " << msg;
     return false;
