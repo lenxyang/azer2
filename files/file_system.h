@@ -34,11 +34,10 @@ class AZER_EXPORT FileSystem {
 
   // Load content async
   // virtual ResLoadFileAsync(const ResFilePath& path, FileContent* filecontent) = 0;
- protected:
-  FileSystem(Type type, const ::base::FilePath& root);
-
   // convert the FilePath to FileSystem path;
   virtual bool ConvertFileSystem(const ResPath& path, ::base::FilePath*) = 0;
+ protected:
+  FileSystem(Type type, const ::base::FilePath& root);
 
   const Type type_;
   const ::base::FilePath fs_root_;

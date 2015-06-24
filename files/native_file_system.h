@@ -15,7 +15,6 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
 
   FileContentPtr LoadFile(const azer::ResPath& path) override;
   bool IsPathExists(const azer::ResPath& path) override;
-
   FileType GetFileType(const ResPath& path) override;
  private:
   bool ConvertFileSystem(const azer::ResPath& path, ::base::FilePath*) override;

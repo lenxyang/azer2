@@ -13,5 +13,6 @@ class AZER_EXPORT ResourceContext {
   virtual FileContentPtr LoadFile(const ResPath& path) = 0;
   virtual ResourceLoader* GetResourceLoader(const ResPath& path,
                                             const FileContent* content) = 0;
+  virtual bool GetResourcePath(const ResPath& path, base::FilePath* file_path) = 0;
 };
 }  // namespace azer
