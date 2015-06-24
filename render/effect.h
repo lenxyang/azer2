@@ -28,7 +28,11 @@ typedef scoped_refptr<Technique> TechniquePtr;
  */
 class AZER_EXPORT Effect : public Resource {
  public:
-  typedef std::vector<std::string> ShaderPrograms;
+  struct ShaderProgramInfo {
+    std::string program;
+    std::string path;
+  };
+  typedef std::vector<ShaderProgramInfo> ShaderPrograms;
   explicit Effect(RenderSystem* rs);
   ~Effect() override;
 
