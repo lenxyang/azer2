@@ -21,15 +21,16 @@ const DWORD kCompileFlags =
     ;
 #endif
 
-inline ID3DBlob* CompileHLSL(const std::string& shader, const std::string& target,
-                             const std::string& entrypointer,
-                             std::string* error_msg) {
+ID3DBlob* CompileHLSL(const std::string& shader, const std::string& target,
+                      const std::string& entrypointer,
+                      const std::string& shader_path,
+                      std::string* error_msg) {
   ID3DBlob* blob = NULL;
   ID3DBlob* msgblob = NULL;
   HRESULT hr;
   hr = D3DCompile(shader.c_str(),
                   shader.length(),
-                  NULL,
+                  shader_path.c_str(),
                   NULL,
                   NULL,                 // pIncludes
                   entrypointer.c_str(), // pEntryPointer
@@ -47,13 +48,16 @@ inline ID3DBlob* CompileHLSL(const std::string& shader, const std::string& targe
   return blob;
 }
 
-ID3DBlob* CompileVertexShader(const std::string& shader, std::string* error_msg) {
-  return CompileHLSL(shader, "vs_5_0", "vs_main", error_msg);
+ID3DBlob* CompileVertexShader(const std::string& shader, 
+                              const std::string& path, std::string* error_msg) {
+  return CompileHLSL(shader, "vs_5_0", "vs_main", path, error_msg);
 }
-ID3DBlob* CompilePixelShader(const std::string& shader, std::string* error_msg) {
-  return CompileHLSL(shader, "ps_5_0", "ps_main", error_msg);
+ID3DBlob* CompilePixelShader(const std::string& shader,
+                             const std::string& path, std::string* error_msg) {
+  return CompileHLSL(shader, "ps_5_0", "ps_main", path, error_msg);
 }
-ID3DBlob* CompileGeometryShader(const std::string& shader, std::string* error_msg) {
-  return CompileHLSL(shader, "gs_5_0", "gs_main", error_msg);
+ID3DBlob* CompileGeometryShader(const std::string& shader, 
+                                const std::string& path, std::string* error_msg) {
+  return CompileHLSL(shader, "gs_5_0", "gs_main", path, error_msg);
 }
 }  // namespace azer

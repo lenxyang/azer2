@@ -97,6 +97,20 @@ void SceneNode::set_name(const std::string& name) {
   name_ = name;
 }
 
+SceneNodePtr SceneNode::GetChild(const std::string& path) {
+  return SceneNodePtr();
+}
+
+void SceneNode::CreatePathRecusive(const std::string& path) {
+}
+
+void SceneNode::AddChildAtPath(const std::string& parent, SceneNodePtr node) {
+}
+
+SceneNodePtr SceneNode::RemoveChildAtPath(const std::string& parent) {
+  return SceneNodePtr();
+}
+
 std::string SceneNode::print_info() {
   std::string str;
   print_info(&str, 0, this);

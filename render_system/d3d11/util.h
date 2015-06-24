@@ -31,9 +31,12 @@
 
 namespace azer {
 
-ID3DBlob* CompileVertexShader(const std::string& shader, std::string* error_msg);
-ID3DBlob* CompilePixelShader(const std::string& shader, std::string* error_msg);
-ID3DBlob* CompileGeometryShader(const std::string& shader, std::string* error_msg);
+ID3DBlob* CompileVertexShader(const std::string& shader, 
+                              const std::string& path, std::string* error_msg);
+ID3DBlob* CompilePixelShader(const std::string& shader, 
+                             const std::string& path, std::string* error_msg);
+ID3DBlob* CompileGeometryShader(const std::string& shader, 
+                                const std::string& path, std::string* error_msg);
 
 struct COMDeleter {
   template<typename T> void operator()(T* ptr) {

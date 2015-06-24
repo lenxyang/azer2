@@ -35,11 +35,14 @@ class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
    */
   virtual VertexDescPtr GetInputDesc() { return NULL;}
   virtual VertexDescPtr GetOutputDesc() { return NULL;}
+
+  void set_shader_path(const std::string& path) { shader_path_ = path;}
  protected:
   GpuProgram(RenderPipelineStage stage, const std::string& program);
 
   RenderPipelineStage stage_;
   std::string program_;
+  std::string shader_path_;
   std::string error_msg_;
   DISALLOW_COPY_AND_ASSIGN(GpuProgram);
 };

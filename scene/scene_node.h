@@ -40,6 +40,14 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   bool has_child() const { return !children_.empty();} 
   bool HasAncestor(SceneNode* node) const;
 
+  // absolute path: //level1/level2/level3
+  // relative path: level1/level2/level3
+  // relative path: ../level1/level2
+  SceneNodePtr GetChild(const std::string& path);
+  void CreatePathRecusive(const std::string& path);
+  void AddChildAtPath(const std::string& parent, SceneNodePtr node);
+  SceneNodePtr RemoveChildAtPath(const std::string& parent);
+
   void set_name(const std::string& name);
   const std::string& name() const { return name_;}
 
