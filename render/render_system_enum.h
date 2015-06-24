@@ -69,6 +69,14 @@ enum PrimitiveTopology {
   kLineList,
   kTriangleStrip,
   kTriangleList,
+  kControlPoint1,
+  kControlPoint2,
+  kControlPoint3,
+  kControlPoint4,
+  kControlPoint5,
+  kControlPoint6,
+  kControlPoint7,
+  kControlPoint8,
 };
 
 enum RenderPipelineStage {

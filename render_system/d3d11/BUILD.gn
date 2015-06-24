@@ -49,6 +49,7 @@ shared_library("d3d11") {
     "d3denv.h",
     "depth_buffer.cc",
     "depth_buffer.h",
+    "enum_transform.cc",
     "enum_transform.h",
     "gpu_constants_table.cc",
     "gpu_constants_table.h",
