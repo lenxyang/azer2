@@ -48,16 +48,24 @@ ID3DBlob* CompileHLSL(const std::string& shader, const std::string& target,
   return blob;
 }
 
-ID3DBlob* CompileVertexShader(const std::string& shader, 
-                              const std::string& path, std::string* error_msg) {
-  return CompileHLSL(shader, "vs_5_0", "vs_main", path, error_msg);
+ID3DBlob* CompileShaderForStage(RenderPipelineStage stage, 
+                                const std::string& shader, 
+                                const std::string& path, 
+                                std::string* error_msg) {
+  const char* entry_name = DefaultShaderEntryForStage(stage);
+  return CompileHLSL(shader, "gs_5_0", entry_name, path, error_msg);
 }
-ID3DBlob* CompilePixelShader(const std::string& shader,
-                             const std::string& path, std::string* error_msg) {
-  return CompileHLSL(shader, "ps_5_0", "ps_main", path, error_msg);
+
+const char* DefaultShaderEntryForStage(RenderPipelineStage stage) {
+  switch (stage) {
+    case kVertexStage: return "vs_main";
+    case kConstantsHullStage: return "consts_hull_main";
+    case kControlPointHullStage: return "hull_main";
+    case kDomainStage: return "domain_main";
+    case kGeometryStage: return "gs_main";
+    case kPixelStage: return "ps_main";
+    default: CHECK(false); return "";
+  }
 }
-ID3DBlob* CompileGeometryShader(const std::string& shader, 
-                                const std::string& path, std::string* error_msg) {
-  return CompileHLSL(shader, "gs_5_0", "gs_main", path, error_msg);
-}
+
 }  // namespace azer

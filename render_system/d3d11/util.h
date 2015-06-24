@@ -8,6 +8,7 @@
 
 #include "base/basictypes.h"
 #include "azer/render_system/d3d11/hr_msg.h"
+#include "azer/render/render_system_enum.h"
 #include "azer/base/string.h"
 #include "base/logging.h"
 
@@ -31,12 +32,11 @@
 
 namespace azer {
 
-ID3DBlob* CompileVertexShader(const std::string& shader, 
-                              const std::string& path, std::string* error_msg);
-ID3DBlob* CompilePixelShader(const std::string& shader, 
-                             const std::string& path, std::string* error_msg);
-ID3DBlob* CompileGeometryShader(const std::string& shader, 
-                                const std::string& path, std::string* error_msg);
+ID3DBlob* CompileShaderForStage(RenderPipelineStage stage, 
+                                const std::string& shader, 
+                                const std::string& path, 
+                                std::string* error_msg);
+const char* DefaultShaderEntryForStage(RenderPipelineStage stage);
 
 struct COMDeleter {
   template<typename T> void operator()(T* ptr) {
