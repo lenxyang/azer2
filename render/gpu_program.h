@@ -43,8 +43,6 @@ class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
    */
   virtual VertexDescPtr GetInputDesc() { return NULL;}
   virtual VertexDescPtr GetOutputDesc() { return NULL;}
-
-  const ShaderInfo& GetShaderInfo() const { return info_;}
  protected:
   GpuProgram(RenderPipelineStage stage, const ShaderInfo& info);
 
