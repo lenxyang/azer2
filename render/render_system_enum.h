@@ -84,7 +84,7 @@ enum RenderPipelineStage {
   kInputAssemblerStage = 1,
   kVertexStage,
   kConstantsHullStage,
-  kContronPointHullStage,
+  kControlPointHullStage,
   kTessellatorStage,
   kDomainStage,
   kGeometryStage,
