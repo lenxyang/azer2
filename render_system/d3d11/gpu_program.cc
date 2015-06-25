@@ -1,7 +1,7 @@
 #include "azer/render_system/d3d11/gpu_program.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/hlsl_compile.h"
 
 #include "azer/base/string.h"
 

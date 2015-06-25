@@ -12,23 +12,6 @@
 #include "azer/base/string.h"
 #include "base/logging.h"
 
-#define SAFE_RELEASE(res) \
-  if ((res)) {            \
-    (res)->Release();     \
-    (res) = NULL;         \
-  }
-
-#define HRESULT_HANDLE(HR, LEVEL, MSG)                                  \
-  if (FAILED(HR)) {                                                     \
-    LOG(##LEVEL) << ##MSG << "(" << HRMessage(HR) << ")";       \
-        return false;                                                   \
-  }
-
-#define HRESULT_HANDLE_NORET(HR, LEVEL, MSG)                            \
-  if (FAILED(HR)) {                                                     \
-    LOG(##LEVEL) << ##MSG << "(" << HRMessage(HR) << ")";       \
-  }
-
 
 namespace azer {
 

@@ -6,7 +6,6 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/render/texture.h"
-#include "azer/render_system/d3d11/util.h"
 
 namespace azer {
 namespace d3d11 {

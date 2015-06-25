@@ -1,4 +1,4 @@
-#include "azer/render_system/d3d11/hr_msg.h"
+#include "azer/render_system/d3d11/d3d_util.h"
 
 #include <windows.h>
 #include <tchar.h>

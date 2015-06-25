@@ -10,7 +10,6 @@
 #include "base/logging.h"
 #include "azer/render/gpu_program.h"
 #include "azer/render/vertex_buffer.h"
-#include "azer/render_system/d3d11/util.h"
 
 namespace azer {
 namespace d3d11 {
