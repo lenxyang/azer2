@@ -52,4 +52,24 @@ void Effect::UseConstantsTable(Renderer* renderer) {
     }
   }
 }
+
+void Effect::InitShaders(const ShaderPrograms& sources) {
+  CHECK(vertex_desc_ptr_.get());
+  auto vs_shader_source = sources[kVertexStage];
+  azer::GpuProgramPtr vs_gpup_ptr(render_system_->CreateVertexGpuProgram(
+      vertex_desc_ptr_, vs_shader_source));
+  CHECK(vs_gpup_ptr.get() != NULL);
+  CHECK(!technique_.get());
+  technique_ = render_system_->CreateTechnique();
+  technique_->AddGpuProgram(vs_gpup_ptr);
+  for (uint32 i = (uint32)(kVertexStage + 1); i < sources.size(); ++i) {
+    auto info = sources[i];
+    if (!info.code.empty()) {
+      GpuProgramPtr gpup_ptr(render_system_->CreateGpuProgram(
+          (RenderPipelineStage)i, info));
+      CHECK(gpup_ptr.get() != NULL);
+      technique_->AddGpuProgram(gpup_ptr);
+    }
+  }
+}
 }  // namespace azer

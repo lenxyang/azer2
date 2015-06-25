@@ -48,6 +48,7 @@ class AZER_EXPORT Effect : public Resource {
   void flush(Renderer* renderer);
  protected:
   virtual void UseTexture(Renderer* renderer) = 0;
+  void InitShaders(const ShaderPrograms& sources);
   void UseConstantsTable(Renderer* renderer);
   void UseTechnique(Renderer* renderer);
 

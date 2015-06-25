@@ -175,30 +175,9 @@ std::string CppCodeGen::GenTechnique(const Technique& tech) {
   std::stringstream ss;
   ss << "void " << GetClassName(tech) 
      << "::InitTechnique(const ShaderPrograms& sources) {\n"
-     << "  technique_ = render_system_->CreateTechnique();\n"
-     << "  vertex_desc_ptr_ = new azer::VertexDesc(kVertexDesc, "
-     << "kVertexDescNum);\n"
-     << "  auto vs_shader_source = sources[azer::kVertexStage];\n"
-     << "  DCHECK(!vs_shader_source.code.empty());\n"
-     << "  azer::GpuProgramPtr vs_gpup_ptr(render_system_->CreateVertexGpuProgram(\n"
-     << "      vertex_desc_ptr_, vs_shader_source));\n"
-     << "  DCHECK(vs_gpup_ptr.get() != NULL);\n"
-     << "  technique_->AddGpuProgram(vs_gpup_ptr);\n";
-
-  for (int i = (int)(kVertexStage + 1); i < kRenderPipelineStageNum; ++i) {
-    RenderPipelineStage stage = (RenderPipelineStage)i;
-    const Technique::StageInfo& shader = tech.shader[i];
-    if (shader.entry == NULL) { continue; }
-    ss << "  {\n"
-       << "    auto info = sources[" << StageName(stage) << "];\n"
-       << "    DCHECK(!info.code.empty());\n"
-       << "    azer::GpuProgramPtr gpup_ptr(render_system_->CreateGpuProgram(\n"
-       << "        " << StageName(stage) << ", info));\n"
-       << "    DCHECK(gpup_ptr.get() != NULL);\n"
-       << "    technique_->AddGpuProgram(gpup_ptr);\n"
-       << "  }\n";
-  }
-  ss << "}\n\n";
+     << "  vertex_desc_ptr_ = new azer::VertexDesc(kVertexDesc, kVertexDescNum);\n"
+     << "  InitShaders(shources);\n"
+     << "}\n\n";
   return ss.str();
 }
 
