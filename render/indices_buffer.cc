@@ -18,6 +18,18 @@ int32 IndicesData::unit_size() const {
   }
 }
 
+int32 IndicesData::index_value(int idx) const {
+  switch (type()) {
+    case kUint8: 
+      return *((uint8*)data_.get()) + idx;
+    case kUint16: 
+      return *((int16*)data_.get()) + idx;
+    case kUint32: 
+      return *((int32*)data_.get()) + idx;
+    default: CHECK(false); return 0;
+  }
+}
+
 IndicesBuffer::IndicesBuffer(const Options& opt)
     : options_(opt)
     , indices_num_(-1)
