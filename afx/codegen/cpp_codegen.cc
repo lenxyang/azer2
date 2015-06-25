@@ -176,7 +176,7 @@ std::string CppCodeGen::GenTechnique(const Technique& tech) {
   ss << "void " << GetClassName(tech) 
      << "::InitTechnique(const ShaderPrograms& sources) {\n"
      << "  vertex_desc_ptr_ = new azer::VertexDesc(kVertexDesc, kVertexDescNum);\n"
-     << "  InitShaders(shources);\n"
+     << "  InitShaders(sources);\n"
      << "}\n\n";
   return ss.str();
 }
