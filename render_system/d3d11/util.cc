@@ -1,4 +1,4 @@
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/hlsl_compile.h"
 
 #include <d3d11.h>
 #include <d3dx11.h>
@@ -20,6 +20,10 @@ const DWORD kCompileFlags =
     | D3DCOMPILE_SKIP_VALIDATION
     ;
 #endif
+
+namespace {
+const char* DefaultShaderVersionForStage(RenderPipelineStage stage);
+}
 
 ID3DBlob* CompileHLSL(const std::string& shader, const std::string& target,
                       const std::string& entrypointer,
@@ -53,7 +57,8 @@ ID3DBlob* CompileShaderForStage(RenderPipelineStage stage,
                                 const std::string& path, 
                                 std::string* error_msg) {
   const char* entry_name = DefaultShaderEntryForStage(stage);
-  return CompileHLSL(shader, "gs_5_0", entry_name, path, error_msg);
+  const char* version_name = DefaultShaderVersionForStage(stage);
+  return CompileHLSL(shader, version_name, entry_name, path, error_msg);
 }
 
 const char* DefaultShaderEntryForStage(RenderPipelineStage stage) {
@@ -66,5 +71,18 @@ const char* DefaultShaderEntryForStage(RenderPipelineStage stage) {
     default: CHECK(false); return "";
   }
 }
+
+namespace {
+const char* DefaultShaderVersionForStage(RenderPipelineStage stage) {
+  switch (stage) {
+    case kVertexStage: return "vs_5_0";
+    case kHullStage: return "hs_5_0";
+    case kDomainStage: return "ds_5_0";
+    case kGeometryStage: return "gs_5_0";
+    case kPixelStage: return "ps_5_0";
+    default: CHECK(false); return "";
+  }
+}
+}  // namespace
 
 }  // namespace azer

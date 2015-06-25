@@ -30,6 +30,8 @@ class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
     int32 format;
     std::string code;
     std::string path;
+    std::string version;
+    std::string entry;
   };
 
   std::string error_msg() const { return error_msg_;}

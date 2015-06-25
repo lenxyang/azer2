@@ -77,8 +77,8 @@ shared_library("d3d11") {
     "technique.h",
     "texture.cc",
     "texture.h",
-    "util.cc",
-    "util.h",
+    "hlsl_compile.cc",
+    "hlsl_compile.h",
     "vertex_buffer.cc",
     "vertex_buffer.h",
   ]
