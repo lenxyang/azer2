@@ -35,6 +35,7 @@ class AZER_EXPORT IndicesData : public Resource {
   int32 num() const { return num_;}
   int32 unit_size() const;
   int32 index_value(int idx) const;
+  int32 index_value(uint8* ptr) const;
 
   void reset() { data_.reset();}
  protected:
