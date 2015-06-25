@@ -3,7 +3,7 @@
 #include "base/basictypes.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render_system/d3d11/render_system.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 
 namespace azer {
 namespace d3d11 {

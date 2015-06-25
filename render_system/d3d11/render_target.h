@@ -3,7 +3,7 @@
 #include <d3d11.h>
 #include "azer/render/render_target.h"
 #include "azer/render_system/d3d11/d3denv.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/swap_chain.h"
 

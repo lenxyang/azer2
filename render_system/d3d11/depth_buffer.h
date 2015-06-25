@@ -5,7 +5,6 @@
 
 #include "base/logging.h"
 #include "azer/render/depth_buffer.h"
-#include "azer/render_system/d3d11/util.h"
 
 namespace azer {
 
@@ -21,16 +20,8 @@ class D3DDepthBuffer : public DepthBuffer {
   static D3DDepthBuffer* Create(const Texture::Options& opt, 
                                 D3DRenderSystem* rs);
    // create by rendersystem
-  D3DDepthBuffer(const Texture::Options& opt, D3DRenderSystem* rs)
-      : DepthBuffer(opt)
-      , stencil_ref_value_(0)
-      , target_(NULL)
-      , render_system_(rs) {
-  }
-
-  virtual ~D3DDepthBuffer() {
-    SAFE_RELEASE(target_);
-  }
+  D3DDepthBuffer(const Texture::Options& opt, D3DRenderSystem* rs);
+  ~D3DDepthBuffer() override;
   
   virtual void Enable(bool enable);
   virtual bool IsEnabled();

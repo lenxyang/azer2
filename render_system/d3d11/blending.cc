@@ -1,13 +1,23 @@
 #include "azer/render_system/d3d11/blending.h"
 
 #include <d3d11.h>
-#include "azer/render_system/d3d11/hr_msg.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
 
 namespace azer {
 namespace d3d11 {
+
+D3DBlending::D3DBlending(const Desc& desc, D3DRenderSystem* rs)
+    : Blending(desc)
+    , blending_state_(NULL)
+    , render_system_(rs) {
+}
+
+D3DBlending::~D3DBlending() {
+  SAFE_RELEASE(blending_state_);
+}
 
 bool D3DBlending::Init() {
   D3D11_BLEND_DESC blend_desc;

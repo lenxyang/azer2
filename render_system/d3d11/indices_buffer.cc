@@ -3,12 +3,24 @@
 #include <d3dx11.h>
 
 #include "azer/render/indices_buffer.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
 
 namespace azer {
 namespace d3d11 {
+D3DIndicesBuffer::D3DIndicesBuffer(const IndicesBuffer::Options& opt,
+                                   D3DRenderSystem* rs)
+    : IndicesBuffer(opt)
+    , locked_(false)
+    , buffer_(NULL)
+    , render_system_(rs) {
+}
+
+D3DIndicesBuffer::~D3DIndicesBuffer() {
+  SAFE_RELEASE(buffer_);
+}
+
 bool D3DIndicesBuffer::Init(const IndicesData* data) {
   DCHECK(NULL == buffer_);
   DCHECK(data != NULL);

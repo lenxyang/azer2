@@ -6,10 +6,21 @@
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/texture.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 
 namespace azer {
 namespace d3d11 {
+
+D3DDepthBuffer::D3DDepthBuffer(const Texture::Options& opt, D3DRenderSystem* rs)
+      : DepthBuffer(opt)
+      , stencil_ref_value_(0)
+      , target_(NULL)
+      , render_system_(rs) {
+  }
+
+D3DDepthBuffer::~D3DDepthBuffer() {
+  SAFE_RELEASE(target_);
+}
 
 D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o, 
                                        D3DRenderSystem* rs) {

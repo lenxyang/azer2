@@ -3,10 +3,19 @@
 #include "base/logging.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 
 namespace azer {
 namespace d3d11 {
+D3DGpuConstantsTable::D3DGpuConstantsTable(int32 num, const Desc* desc)
+    : GpuConstantsTable(num, desc)
+    , buffer_(NULL) {
+}
+
+D3DGpuConstantsTable::~D3DGpuConstantsTable() {
+  SAFE_RELEASE(buffer_);
+}
+
 bool D3DGpuConstantsTable::Init(D3DRenderSystem* rs) {
   D3D11_BUFFER_DESC cbbd;
   ID3D11Device* d3d_device = rs->GetDevice();

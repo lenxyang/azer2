@@ -3,7 +3,7 @@
 #include <windows.h>
 
 #include "azer/render/surface.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 
 namespace azer {
 namespace d3d11 {

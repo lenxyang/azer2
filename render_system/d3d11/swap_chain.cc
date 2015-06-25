@@ -4,7 +4,7 @@
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/texture.h"
 
 namespace azer {
