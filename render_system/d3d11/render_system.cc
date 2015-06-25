@@ -112,6 +112,13 @@ GpuProgramPtr D3DRenderSystem::CreateGpuProgram(
       break;
     case kVertexStage:
       CHECK(false) << "Vertex GpuProgram has its own ";
+      break;
+    case kHullStage:
+      gpu_program = new D3DHullGpuProgram(info);
+      break;
+    case kDomainStage:
+      gpu_program = new D3DDomainGpuProgram(info);
+      break;
     default:
       CHECK(false) << "No such GpuProgram Type: " << (int32)stage;
       return NULL;

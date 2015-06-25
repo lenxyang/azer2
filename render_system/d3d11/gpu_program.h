@@ -65,21 +65,8 @@ class D3DGeometryGpuProgram : public GpuProgram {
   virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11GeometryShader* shader_;
+  friend class D3DTechnique;
   DISALLOW_COPY_AND_ASSIGN(D3DGeometryGpuProgram);
-};
-
-class D3DConstsHullGpuProgram : public GpuProgram {
- public:
-  D3DConstsHullGpuProgram(const GpuProgram::ShaderInfo& info)
-      : GpuProgram(kConstsHullStage, info)
-      , shader_(NULL) {
-  }
-  virtual ~D3DConstsHullGpuProgram() {SAFE_RELEASE(shader_);}
-
-  virtual bool Init(RenderSystem* rs) override;
- private:
-  ID3D11ConstsHullShader* shader_;
-  DISALLOW_COPY_AND_ASSIGN(D3DConstsHullGpuProgram);
 };
 
 class D3DHullGpuProgram : public GpuProgram {
@@ -93,6 +80,7 @@ class D3DHullGpuProgram : public GpuProgram {
   virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11HullShader* shader_;
+  friend class D3DTechnique;
   DISALLOW_COPY_AND_ASSIGN(D3DHullGpuProgram);
 };
 
@@ -107,6 +95,7 @@ class D3DDomainGpuProgram : public GpuProgram {
   virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11DomainShader* shader_;
+  friend class D3DTechnique;
   DISALLOW_COPY_AND_ASSIGN(D3DDomainGpuProgram);
 };
 }  // namespace d3d11

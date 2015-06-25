@@ -89,26 +89,6 @@ bool D3DGeometryGpuProgram::Init(RenderSystem* vrs) {
   return true;
 }
 
-bool D3DConstsHullGpuProgram::Init(RenderSystem* vrs) {
-  D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
-  DCHECK(NULL == shader_);
-  std::string msg;
-  ID3D11Device* d3d_device = rs->GetDevice();
-  D3DBlobPtr blob(CompileShaderForStage(stage(), info_.code, info_.path, &msg));
-  if (NULL == blob) {
-    LOG(ERROR) << "Failed to compiler shader: " << msg;
-    return false;
-  }
-
-  HRESULT hr = d3d_device->CreateConstsHullShader(blob->GetBufferPointer(),
-                                                  blob->GetBufferSize(),
-                                                  NULL,
-                                                  &shader_);
-  HRESULT_HANDLE(hr, ERROR, "Create ConstsHull failed ");
-  DCHECK(NULL != shader_);
-  return true;
-}
-
 bool D3DHullGpuProgram::Init(RenderSystem* vrs) {
   D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
   DCHECK(NULL == shader_);
