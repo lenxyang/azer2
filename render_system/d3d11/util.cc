@@ -59,9 +59,8 @@ ID3DBlob* CompileShaderForStage(RenderPipelineStage stage,
 const char* DefaultShaderEntryForStage(RenderPipelineStage stage) {
   switch (stage) {
     case kVertexStage: return "vs_main";
-    case kConstantsHullStage: return "consts_hull_main";
-    case kControlPointHullStage: return "hull_main";
-    case kDomainStage: return "domain_main";
+    case kHullStage: return "hs_main";
+    case kDomainStage: return "ds_main";
     case kGeometryStage: return "gs_main";
     case kPixelStage: return "ps_main";
     default: CHECK(false); return "";

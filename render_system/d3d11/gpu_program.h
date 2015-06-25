@@ -51,6 +51,7 @@ class D3DPixelGpuProgram : public GpuProgram {
   virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11PixelShader* shader_;
+  friend class D3DTechnique;
   DISALLOW_COPY_AND_ASSIGN(D3DPixelGpuProgram);
 };
 

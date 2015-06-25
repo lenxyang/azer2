@@ -10,7 +10,7 @@ void D3DTechnique::Use(Renderer* renderer) {
   D3DVertexGpuProgram* vs = (D3DVertexGpuProgram*)pline_[kVertexStage].get();
   D3DPixelGpuProgram* ps = (D3DPixelGpuProgram*)pline_[kPixelStage].get();
   D3DGeometryGpuProgram* gs = (D3DGeometryGpuProgram*)pline_[kGeometryStage].get();
-  D3DHullGpuProgram* hs = (D3DHullGpuProgram*)pline_[kControlPointHullStage].get();
+  D3DHullGpuProgram* hs = (D3DHullGpuProgram*)pline_[kHullStage].get();
   D3DDomainGpuProgram* ds = (D3DDomainGpuProgram*)pline_[kDomainStage].get();
   DCHECK(vs != NULL);
   DCHECK(ps != NULL);

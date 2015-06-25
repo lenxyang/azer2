@@ -8,8 +8,7 @@ const char* RenderStageName(RenderPipelineStage stage) {
   switch (stage) {
     case kInputAssemblerStage: return "InputAssemblerStage";
     case kVertexStage: return "VertexStage";
-    case kConstantsHullStage: return "ConstantsHullStage";
-    case kControlPointHullStage: return "ControlPointHullStage";
+    case kHullStage: return "HullStage";
     case kTessellatorStage: return "TessellatorStage";
     case kDomainStage: return "DomainStage";
     case kGeometryStage: return "GeometryStage";
