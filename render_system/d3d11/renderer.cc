@@ -270,6 +270,10 @@ void D3DRenderer::UseConstantsTable(RenderPipelineStage stage,
     d3d_context_->VSSetConstantBuffers(0, 1, &(constants->buffer_));
   } else if (stage == kGeometryStage) {
     d3d_context_->GSSetConstantBuffers(0, 1, &(constants->buffer_));
+  } else if (stage == kHullStage) {
+    d3d_context_->HSSetConstantBuffers(0, 1, &(constants->buffer_));
+  } else if (stage == kDomainStage) {
+    d3d_context_->DSSetConstantBuffers(0, 1, &(constants->buffer_));
   } else if (stage == kPixelStage) {
     d3d_context_->PSSetConstantBuffers(0, 1, &(constants->buffer_));
   } else {
