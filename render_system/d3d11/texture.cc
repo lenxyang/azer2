@@ -15,10 +15,38 @@
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
-#include "azer/render_system/d3d11/util.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 
 namespace azer {
 namespace d3d11 {
+
+D3DTexture::D3DTexture(const Texture::Options& opt, D3DRenderSystem* rs)
+    : Texture(opt)
+    , render_system_(rs)
+    , view_(NULL)
+    , resource_(NULL)
+    , sampler_state_(NULL) {
+#ifdef DEBUG
+  mapped_ = false;
+#endif
+}
+
+D3DTexture::~D3DTexture() {
+  SAFE_RELEASE(resource_);
+  SAFE_RELEASE(view_);
+  SAFE_RELEASE(sampler_state_);
+}
+
+
+ID3D11Resource* D3DTexture2DShared::GetSharedResource() {
+  DCHECK(shared_resource_ != NULL);
+  return shared_resource_;
+}
+
+HANDLE D3DTexture2DShared::GetSharedHanle() {
+  DCHECK(shared_handle_ != NULL);
+  return shared_handle_;
+}
 
 bool ValidTextureFlags(const Texture::Options& opt) {
   // cpu access require for Usage

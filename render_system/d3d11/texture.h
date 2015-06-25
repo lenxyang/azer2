@@ -117,33 +117,5 @@ class D3DTextureCubeMap : public D3DTexture {
   virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
   DISALLOW_COPY_AND_ASSIGN(D3DTextureCubeMap);
 };
-
-inline D3DTexture::D3DTexture(const Texture::Options& opt, D3DRenderSystem* rs)
-    : Texture(opt)
-    , render_system_(rs)
-    , view_(NULL)
-    , resource_(NULL)
-    , sampler_state_(NULL) {
-#ifdef DEBUG
-  mapped_ = false;
-#endif
-}
-
-inline D3DTexture::~D3DTexture() {
-  SAFE_RELEASE(resource_);
-  SAFE_RELEASE(view_);
-  SAFE_RELEASE(sampler_state_);
-}
-
-
-inline ID3D11Resource* D3DTexture2DShared::GetSharedResource() {
-  DCHECK(shared_resource_ != NULL);
-  return shared_resource_;
-}
-
-inline HANDLE D3DTexture2DShared::GetSharedHanle() {
-  DCHECK(shared_handle_ != NULL);
-  return shared_handle_;
-}
 }  // namespace d3d11
 }  // namespace azer
