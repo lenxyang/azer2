@@ -18,19 +18,10 @@ void CalcTBN(const Vector3& p1, const Vector2& tex1,
 /**
  * 计算平面的 “法向量“
  */
-inline Vector3 CalcPlaneNormal(const Vector3& p1, const Vector3& p2,
-                               const Vector3& p3) {
-  Vector3 v1 = p2 - p1;
-  Vector3 v2 = p3 - p1;
-  return CrossProduct(v1, v2).Normalize();
-}
-
-inline Vector3 CalcPlaneNormal(const Vector4& p1, const Vector4& p2,
-                               const Vector4& p3) {
-  Vector4 v1 = p2 - p1;
-  Vector4 v2 = p3 - p1;
-  return CrossProduct(Vector3(v1), Vector3(v2)).Normalize();
-}
+Vector3 CalcPlaneNormal(const Vector3& p1, const Vector3& p2,
+                        const Vector3& p3);
+Vector3 CalcPlaneNormal(const Vector4& p1, const Vector4& p2,
+                        const Vector4& p3);
 
 inline Vector3 CalcPlaneNormal(const Vector3* points) {
   return std::move(CalcPlaneNormal(points[0], points[1], points[2]));

@@ -36,18 +36,23 @@ void CalcTBN(const Vector3& p1, const Vector2& tex1,
   b.x = (dt1.x * v2.x - dt2.x * v1.x) * cons;
   b.y = (dt1.x * v2.y - dt2.x * v1.y) * cons;
   b.z = (dt1.x * v2.z - dt2.x * v1.z) * cons;
-
-  *tangent = t;
-  *binormal = b;
-  *normal = n;
-  tangent->Normalize();
-  binormal->Normalize();
   
-  /*
-  *tangent = (t - n* (t.dot(n)));
-  tangent->Normalize();
-  *binormal = tangent->cross(n);
-  binormal->Normalize();
-  */
+  t = (t - n* (t.dot(n)));
+  b = t.cross(n);
+  *tangent = t.NormalizeCopy();
+  *normal = n.NormalizeCopy();
+  *binormal = b.NormalizeCopy();
+}
+
+Vector3 CalcPlaneNormal(const Vector3& p1, const Vector3& p2, const Vector3& p3) {
+  Vector3 v1 = p2 - p1;
+  Vector3 v2 = p3 - p1;
+  return CrossProduct(v1, v2).Normalize();
+}
+
+Vector3 CalcPlaneNormal(const Vector4& p1, const Vector4& p2, const Vector4& p3) {
+  Vector4 v1 = p2 - p1;
+  Vector4 v2 = p3 - p1;
+  return CrossProduct(Vector3(v1), Vector3(v2)).Normalize();
 }
 }  // namespace azer
