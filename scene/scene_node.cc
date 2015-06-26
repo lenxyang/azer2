@@ -12,7 +12,6 @@
 namespace azer {
 SceneNode::SceneNode() 
     : visible_(false)
-    , root_(NULL)
     , parent_(NULL)
     , scale_(Vector3(1.0f, 1.0f, 1.0f)) {
   MovableObject::set_delegate(this);
@@ -20,7 +19,6 @@ SceneNode::SceneNode()
 
 SceneNode::SceneNode(const std::string& name)
     : visible_(false)
-    , root_(NULL)
     , parent_(NULL)
     , scale_(Vector3(1.0f, 1.0f, 1.0f))
     , name_(name) {
@@ -39,7 +37,6 @@ void SceneNode::AddChild(SceneNodePtr child) {
 void SceneNode::RemoveChild(SceneNodePtr child) {
   DCHECK(child->parent_ == this);
   child->parent_ = NULL;
-  child->root_ = NULL;
 
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     if (iter->get() == child.get()) {
@@ -60,6 +57,17 @@ bool SceneNode::HasAncestor(SceneNode* node) const {
   }
 
   return false;
+}
+
+SceneNode* SceneNode::root() {
+  SceneNode* cur = this;
+  while (cur) {
+    if (cur->parent_ == NULL)
+      return cur;
+    cur = cur->parent();
+  }
+
+  return cur;
 }
 
 void SceneNode::OnAttachedToScene() {
@@ -116,7 +124,7 @@ SceneNodePtr SceneNode::GetChild(const std::string& path) {
     ::base::StringTokenizer t(path, std::string("/"));
     while (t.GetNext()) {
       cur = cur->GetLocalChild(t.token());
-      if (cur.get())
+      if (!cur.get())
         return SceneNodePtr();
     }
     return cur;

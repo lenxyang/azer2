@@ -51,7 +51,7 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   void set_name(const std::string& name);
   const std::string& name() const { return name_;}
 
-  SceneNode* root() { return root_;}
+  SceneNode* root();
   SceneNode* parent() { return parent_;}
   const SceneNode* parent() const { return parent_;}
   const SceneNodes& children() const { return children_;}
@@ -82,7 +82,6 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   void print_info(std::string* str, int depth, SceneNode* node);
   bool visible_;
 
-  SceneNode* root_;
   SceneNode* parent_;
   SceneNodes children_;
   Matrix4 world_;
