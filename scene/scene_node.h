@@ -45,8 +45,8 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   // relative path: ../level1/level2
   SceneNodePtr GetChild(const std::string& path);
   void CreatePathRecusive(const std::string& path);
-  void AddChildAtPath(const std::string& parent, SceneNodePtr node);
-  SceneNodePtr RemoveChildAtPath(const std::string& parent);
+  bool AddChildAtPath(const std::string& parent, SceneNodePtr node);
+  SceneNodePtr RemoveChildAtPath(const std::string& path);
 
   void set_name(const std::string& name);
   const std::string& name() const { return name_;}
@@ -67,6 +67,7 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   const SceneNodeData& data() const { return data_;}
   std::string print_info();
  protected:
+  SceneNodePtr GetLocalChild(const std::string& name);
   // override from MovableObject::Delegate
   void OnObjectPositionChanged(const Vector3& origin_position) override;
   void OnObjectOrientationChanged(const Quaternion& origin_orientation) override;

@@ -2,6 +2,8 @@
 
 #include "base/logging.h"
 #include "base/strings/stringprintf.h"
+#include "base/strings/string_util.h"
+#include "base/strings/string_tokenizer.h"
 #include "azer/render/render.h"
 #include "azer/render/renderable_object.h"
 #include "azer/render/frustrum.h"
@@ -97,18 +99,49 @@ void SceneNode::set_name(const std::string& name) {
   name_ = name;
 }
 
-SceneNodePtr SceneNode::GetChild(const std::string& path) {
+SceneNodePtr SceneNode::GetLocalChild(const std::string& name) {
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    if ((*iter)->name() == name) {
+      return *iter;
+    }
+  }
   return SceneNodePtr();
+}
+
+SceneNodePtr SceneNode::GetChild(const std::string& path) {
+  if (StartsWithASCII(path, "//", false)) {
+    return root()->GetChild(path.substr(2));
+  } else {
+    SceneNodePtr cur = this;
+    ::base::StringTokenizer t(path, std::string("/"));
+    while (t.GetNext()) {
+      cur = cur->GetLocalChild(t.token());
+      if (cur.get())
+        return SceneNodePtr();
+    }
+    return cur;
+  }
 }
 
 void SceneNode::CreatePathRecusive(const std::string& path) {
 }
 
-void SceneNode::AddChildAtPath(const std::string& parent, SceneNodePtr node) {
+bool SceneNode::AddChildAtPath(const std::string& parent, SceneNodePtr node) {
+  SceneNodePtr pnode = GetChild(parent);
+  if (pnode.get()) {
+    pnode->AddChild(node);
+    return true;
+  } else {
+    return false;
+  }
 }
 
-SceneNodePtr SceneNode::RemoveChildAtPath(const std::string& parent) {
-  return SceneNodePtr();
+SceneNodePtr SceneNode::RemoveChildAtPath(const std::string& path) {
+  SceneNodePtr pnode = GetChild(path);
+  if (pnode.get() && pnode->parent()) {
+    pnode->parent()->RemoveChild(pnode.get());
+  }
+  return pnode;
 }
 
 std::string SceneNode::print_info() {
