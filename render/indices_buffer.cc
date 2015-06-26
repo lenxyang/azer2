@@ -21,11 +21,11 @@ int32 IndicesData::unit_size() const {
 int32 IndicesData::index_value(int idx) const {
   switch (type()) {
     case kUint8: 
-      return *((uint8*)data_.get()) + idx;
+      return *(uint8*)(data_.get() + idx);
     case kUint16: 
-      return *((int16*)data_.get()) + idx;
+      return *(int16*)(data_.get() + idx * sizeof(int16));
     case kUint32: 
-      return *((int32*)data_.get()) + idx;
+      return *(int32*)(data_.get() + idx * sizeof(uint32));
     default: CHECK(false); return 0;
   }
 }
