@@ -28,6 +28,7 @@ class AZER_EXPORT Resource : public ::base::RefCounted<Resource> {
     kIndicesData,
     kRenderableObject,
     kConfig,
+    kData,
   };
 
   Resource(Type type) : type_(type) {}
