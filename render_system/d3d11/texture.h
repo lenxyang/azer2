@@ -26,6 +26,9 @@ class D3DTexture: public Texture {
 
   void UseForStage(RenderPipelineStage stage, int index, D3DRenderer* renderer);
   void SetVSSampler(int index, D3DRenderer* renderer);
+  void SetHSSampler(int index, D3DRenderer* renderer);
+  void SetDSSampler(int index, D3DRenderer* renderer);
+  void SetGSSampler(int index, D3DRenderer* renderer);
   void SetPSSampler(int index, D3DRenderer* renderer);
 
   bool Initialized() const { return NULL != resource_;}
