@@ -15,14 +15,6 @@ class FrameArgs;
 class Renderer;
 class EffectParamsProvider;
 
-// Renderable object Render Target enum
-enum {
-  kObjRTShadowMap = 0,
-  kObjRTDeferred,
-  kObjRTNormal,
-  kObjRTNum,
-};
-
 class AZER_EXPORT RenderableObject : public Resource {
  public:
   RenderableObject();

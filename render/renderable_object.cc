@@ -4,13 +4,14 @@
 #include "azer/base/resource.h"
 #include "azer/render/blending.h"
 #include "azer/render/effect_params_provider.h"
+#include "azer/scene/scene_stage.h"
 
 namespace azer {
 RenderableObject::RenderableObject()
     : Resource(kRenderableObject),
       provider_(NULL),
       hold_provider_(true) {
-  effects_.resize(kObjRTNum);
+  effects_.resize(kSceneRenderStageNum);
 }
 
 RenderableObject::~RenderableObject() {
@@ -33,12 +34,12 @@ void RenderableObject::SetEffectParamsProvider(
 }
 
 void RenderableObject::SetEffect(int target, EffectPtr effect) {
-  DCHECK_LT(target, kObjRTNum);
+  DCHECK_LT(target, kSceneRenderStageNum);
   effects_[target] = effect;
 }
 
 EffectPtr& RenderableObject::GetEffect(int target) {
-  DCHECK_LT(target, kObjRTNum);
+  DCHECK_LT(target, kSceneRenderStageNum);
   return effects_[target];
 }
 
