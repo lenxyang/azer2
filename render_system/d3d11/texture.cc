@@ -177,6 +177,12 @@ void D3DTexture::UseForStage(RenderPipelineStage stage, int index,
   DCHECK(NULL != render_system_);
   if (stage == kVertexStage) {
     SetVSSampler(index, renderer);
+  } else if (stage == kHullStage) {
+    SetHSSampler(index, renderer);
+  } else if (stage == kDomainStage) {
+    SetDSSampler(index, renderer);
+  } else if (stage == kGeometryStage) {
+    SetGSSampler(index, renderer);
   } else if (stage == kPixelStage) {
     SetPSSampler(index, renderer);
   } else {
