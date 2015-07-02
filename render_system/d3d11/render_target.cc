@@ -51,6 +51,69 @@ bool D3DRenderTarget::Init() {
   return true;
 }
 
+D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
+                                         D3DRenderSystem* rs) {
+  Texture::Options opt;
+  opt = o;
+  opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
+  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, rs));
+  if (!target->Init()) {
+    return NULL;
+  }
+
+  return target.release();
+}
+
+// class D3DCubemapRenderTarget
+D3DCubemapRenderTarget::D3DCubemapRenderTarget(const TexturePtr texture,
+                                               D3DRenderSystem* render_system)
+    : RenderTarget(texture->options(), false),
+      target_(NULL),
+      render_system_(render_system) {
+}
+
+D3DCubemapRenderTarget::~D3DCubemapRenderTarget() {
+}
+
+void D3DRenderTarget::Clear(const azer::Vector4& color) {
+  DCHECK(NULL != target_);
+  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
+  d3d_context->ClearRenderTargetView(
+      target_, D3DXCOLOR(color.x, color.y, color.z, color.w));
+}
+
+bool D3DCubemapRenderTarget::Create(const Texture::Options& o, D3DRenderSystem* rs,
+                                    std::vector<RenderTargetPtr>* vec) {
+  DCHECK_EQ(o.type, Texture::kCubemap);
+  Texture::Options opt;
+  opt = o;
+  opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
+  std::unique_ptr<D3DTexture2D> tex(new D3DTexture2D(opt, rs));
+  if (!tex->Init(NULL, 1)) {
+    return false;
+  }
+
+  TexturePtr texptr(tex.release());
+  for (int i = 0; i < 6; ++i) {
+    RenderTargetPtr ptr(new D3DCubemapRenderTarget(texptr, rs));
+    if (ptr->Init()) {
+      vec->push_back(ptr);
+    } else {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// class D3DSurfaceRenderTarget
+D3DSurfaceRenderTarget::D3DSurfaceRenderTarget(const Texture::Options& opt,
+                                               D3DEnvSwapChain* swapchain,
+                                               D3DRenderSystem* rs)
+    : D3DRenderTarget(opt, true, rs)
+    , swapchain_(swapchain) {
+}
+
 bool D3DSurfaceRenderTarget::Init() {
   D3DRenderSystem* rs = render_system_;
   DCHECK(target_ == NULL);
@@ -66,27 +129,6 @@ bool D3DSurfaceRenderTarget::Init() {
   HRESULT_HANDLE(hr, ERROR, "CreateRenderTargetView failed ");
   texture_ = ptr.release();
   return true;
-}
-
-D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
-                                         D3DRenderSystem* rs) {
-  Texture::Options opt;
-  opt = o;
-  opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
-  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, rs));
-  if (!target->Init()) {
-    return NULL;
-  }
-
-  return target.release();
-}
-
-// class D3DSurfaceRenderTarget
-D3DSurfaceRenderTarget::D3DSurfaceRenderTarget(const Texture::Options& opt,
-                                               D3DEnvSwapChain* swapchain,
-                                               D3DRenderSystem* rs)
-    : D3DRenderTarget(opt, true, rs)
-    , swapchain_(swapchain) {
 }
 
 D3DRenderTarget* D3DSurfaceRenderTarget::Create(D3DEnvSwapChain* swapchain,

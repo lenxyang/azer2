@@ -33,6 +33,21 @@ class D3DRenderTarget : public RenderTarget {
   DISALLOW_COPY_AND_ASSIGN(D3DRenderTarget);
 };
 
+class D3DCubemapRenderTarget : public RenderTarget {
+ public:
+  static bool Create(const Texture::Options& opt, D3DRenderSystem* rs,
+                     std::vector<RenderTargetPtr>* out);
+  D3DCubemapRenderTarget(const TexturePtr texture,
+                         D3DRenderSystem* render_system);
+  virtual ~D3DCubemapRenderTarget();
+  void Clear(const azer::Vector4& color) override;
+  bool Init();
+ private:
+  ID3D11RenderTargetView* target_;
+  D3DRenderSystem* render_system_;
+  DISALLOW_COPY_AND_ASSIGN(D3DCubemapRenderTarget);
+};
+
 class D3DSurfaceRenderTarget : public D3DRenderTarget {
  public:
   static D3DRenderTarget* Create(D3DEnvSwapChain* swapchain,

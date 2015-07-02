@@ -30,7 +30,6 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual const std::string& name() const = 0;
 
   virtual void Use() = 0;
-  virtual void Use(int index) = 0;
 
   virtual bool IsDepthTestEnable() = 0;
   virtual void EnableDepthTest(bool enable) = 0;
@@ -120,5 +119,5 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
 };
 
 typedef scoped_refptr<Renderer> RendererPtr;
-tyepdef std::vector<RendererPtr> RendererPtrVec;
+typedef std::vector<RendererPtr> RendererPtrVec;
 }  // namespace azer
