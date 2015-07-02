@@ -65,11 +65,11 @@ bool Texture::Save(const ::base::FilePath& path) {
 Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   Texture::Options opt;
   opt.size = size;
-  opt.genmipmap = true;
+  // opt.genmipmap = true;
   opt.format = kRGBAn8;
-  opt.target = (Texture::BindTarget)(Texture::kRenderTarget
-                                     | Texture::kShaderResource);
+  opt.target = (Texture::BindTarget)(Texture::kShaderResource);
   opt.type = Texture::k2D;
+  opt.sampler.mip_level = 0;
   return opt;
 }
 }   // namespace azer

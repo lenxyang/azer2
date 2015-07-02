@@ -31,7 +31,7 @@ const StringType& D3DRenderSystem::short_name_ = AZER_LITERAL("d3d11");
 
 D3DRenderSystem::D3DRenderSystem(D3DEnvironmentPtr envptr)
     : envptr_(envptr) {
-  // InitContext2D();
+  InitContext2D();
 }
 
 D3DRenderSystem::~D3DRenderSystem() {

@@ -26,6 +26,7 @@ shared_library("d3d11") {
     "plugin.h",
     "render_system.cc",
     "render_system.h",
+    "render_system_2d.cc",
     "render_target.cc",
     "render_target.h",
     "renderer.cc",
