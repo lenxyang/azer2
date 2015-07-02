@@ -70,6 +70,7 @@ D3D2DArrayRenderTarget::D3D2DArrayRenderTarget(const TexturePtr texture,
     : RenderTarget(texture->options(), false),
       target_(NULL),
       render_system_(render_system) {
+  texture_ = texture;
 }
 
 D3D2DArrayRenderTarget::~D3D2DArrayRenderTarget() {
@@ -91,6 +92,7 @@ bool D3D2DArrayRenderTarget::Init(int index) {
   DCHECK(TranslateBindTarget(options_.target) & D3D11_BIND_RENDER_TARGET);
 
   D3D11_RENDER_TARGET_VIEW_DESC desc;
+  memset(&desc, 0, sizeof(desc));
   desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
   desc.Format = TranslateFormat(texture_->options().format);
   desc.Texture2DArray.ArraySize = 1;

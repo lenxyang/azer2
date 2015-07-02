@@ -70,7 +70,8 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   opt.target = (Texture::BindTarget)(Texture::kRenderTarget
                                      | Texture::kShaderResource);
   opt.type = Texture::k2D;
-  opt.sampler.mip_level = 0;
+  // opt.sampler.mip_level = -1;
+  opt.sampler.mip_level = 1;
   return opt;
 }
 }   // namespace azer

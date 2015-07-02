@@ -303,7 +303,7 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
             D3D11_SRV_DIMENSION_TEXTURE2D);
   desc->Format = tex_desc_.Format;
   desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-  desc->Texture2D.MipLevels = tex_desc_.MipLevels;
+  desc->Texture2D.MipLevels = -1; // tex_desc_.MipLevels;
   desc->Texture2D.MostDetailedMip = 0;
 }
 
