@@ -106,8 +106,14 @@ bool D3D2DArrayRenderTarget::Create(const Texture::Options& o, D3DRenderSystem* 
   Texture::Options opt;
   opt = o;
   opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
-  std::unique_ptr<D3DTexture2D> tex(new D3DTexture2D(opt, rs));
-  if (!tex->Init(NULL, 1)) {
+  std::unique_ptr<D3DTexture> tex;
+  if (o.type == Texture::kCubemap) {
+    tex.reset(new D3DTextureCubeMap(opt, rs));
+    if (!tex->Init(NULL, 1)) {
+      return false;
+    }
+  } else {
+    CHECK(false);
     return false;
   }
 

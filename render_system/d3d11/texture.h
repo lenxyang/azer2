@@ -110,11 +110,9 @@ class D3DTexture2DExtern : public D3DTexture2D {
 
 class D3DTextureCubeMap : public D3DTexture {
  public:
-  D3DTextureCubeMap(const Texture::Options& opt, D3DRenderSystem* rs)
-      : D3DTexture(opt, rs) {
-    
-  }
+  D3DTextureCubeMap(const Texture::Options& opt, D3DRenderSystem* rs);
   virtual bool InitFromImage(const Image* image) override;
+  bool InitTexture();
  protected:
   virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
   virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;

@@ -274,6 +274,7 @@ bool D3DTexture::CopyTo(Texture* texture) {
 }
 
 // class D3DTexture2D
+
 void D3DTexture2D::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
 }
 
@@ -306,11 +307,16 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   desc->Texture2D.MostDetailedMip = 0;
 }
 
+// class D3D11TextureCubeMap
+D3DTextureCubeMap::D3DTextureCubeMap(const Texture::Options& opt, 
+                                     D3DRenderSystem* rs)
+    : D3DTexture(opt, rs) {
+}
+
 void D3DTextureCubeMap::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
-  desc->MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+  desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
 } 
 
-// class D3D11TextureCubeMap
 bool D3DTextureCubeMap::InitFromImage(const Image* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   const ImageDataPtr& data = image->data(0);
@@ -361,7 +367,7 @@ D3DTexture2DShared::~D3DTexture2DShared() {
 }
 
 void D3DTexture2DShared::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
-  desc->MiscFlags      = D3D11_RESOURCE_MISC_SHARED;
+  desc->MiscFlags      |= D3D11_RESOURCE_MISC_SHARED;
 }
 
 bool D3DTexture2DShared::InitSharedResource() {
