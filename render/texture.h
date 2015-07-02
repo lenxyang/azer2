@@ -115,8 +115,6 @@ protected:
 
 typedef scoped_refptr<Texture> TexturePtr;
 
-inline Texture::Texture(const Options& opt) 
-    : Resource(kTexture)
-    , options_(opt) {
-}
+
+AZER_EXPORT Texture::Options InitTexOptForRenderTarget(const gfx::Size& size);
 }  // namespace azer

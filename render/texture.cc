@@ -33,6 +33,11 @@ Texture::Options::Options()
       genmipmap(false) {
 }
 
+Texture::Texture(const Options& opt) 
+    : Resource(kTexture),
+      options_(opt) {
+}
+
 bool Texture::Save(const ::base::FilePath& path) {
   SkBitmap bitmap;
   SkImageInfo info = SkImageInfo::Make(options_.size.width(),
@@ -55,5 +60,14 @@ bool Texture::Save(const ::base::FilePath& path) {
   }
   unmap();
   return SaveSkBitmap(bitmap, path);
+}
+
+Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
+  Texture::Options opt;
+  opt.size = size;
+  opt.genmipmap = true;
+  opt.target = Texture::kRenderTarget;
+  opt.type = Texture::k2D;
+  return opt;
 }
 }   // namespace azer

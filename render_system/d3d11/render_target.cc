@@ -43,7 +43,7 @@ bool D3DRenderTarget::Init() {
     return false;
   }
 
-  ID3D11Resource* resource = ((D3DTexture2D*)texture_.get())->resource_;
+  ID3D11Resource* resource = ((D3DTexture2D*)texture_.get())->GetResource();
   DCHECK(TranslateBindTarget(options_.target) & D3D11_BIND_RENDER_TARGET);
 
   hr = d3d_device->CreateRenderTargetView(resource, NULL, &target_);
@@ -65,24 +65,42 @@ D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
 }
 
 // class D3DCubemapRenderTarget
-D3DCubemapRenderTarget::D3DCubemapRenderTarget(const TexturePtr texture,
+D3D2DArrayRenderTarget::D3D2DArrayRenderTarget(const TexturePtr texture,
                                                D3DRenderSystem* render_system)
     : RenderTarget(texture->options(), false),
       target_(NULL),
       render_system_(render_system) {
 }
 
-D3DCubemapRenderTarget::~D3DCubemapRenderTarget() {
+D3D2DArrayRenderTarget::~D3D2DArrayRenderTarget() {
 }
 
-void D3DRenderTarget::Clear(const azer::Vector4& color) {
+void D3D2DArrayRenderTarget::Clear(const azer::Vector4& color) {
   DCHECK(NULL != target_);
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
   d3d_context->ClearRenderTargetView(
       target_, D3DXCOLOR(color.x, color.y, color.z, color.w));
 }
 
-bool D3DCubemapRenderTarget::Create(const Texture::Options& o, D3DRenderSystem* rs,
+bool D3D2DArrayRenderTarget::Init(int index) {
+  DCHECK(!default_render_target_);
+  DCHECK(target_ == NULL);
+  ID3D11Device* d3d_device = render_system_->GetDevice();
+
+  ID3D11Resource* resource = ((D3DTexture2D*)texture_.get())->GetResource();
+  DCHECK(TranslateBindTarget(options_.target) & D3D11_BIND_RENDER_TARGET);
+
+  D3D11_RENDER_TARGET_VIEW_DESC desc;
+  desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
+  desc.Format = TranslateFormat(texture_->options().format);
+  desc.Texture2DArray.ArraySize = 1;
+  desc.Texture2DArray.FirstArraySlice = index;
+  HRESULT hr = d3d_device->CreateRenderTargetView(resource, &desc, &target_);
+  HRESULT_HANDLE(hr, ERROR, "CreateRenderTargetView failed ");
+  return true;
+}
+
+bool D3D2DArrayRenderTarget::Create(const Texture::Options& o, D3DRenderSystem* rs,
                                     std::vector<RenderTargetPtr>* vec) {
   DCHECK_EQ(o.type, Texture::kCubemap);
   Texture::Options opt;
@@ -95,9 +113,10 @@ bool D3DCubemapRenderTarget::Create(const Texture::Options& o, D3DRenderSystem* 
 
   TexturePtr texptr(tex.release());
   for (int i = 0; i < 6; ++i) {
-    RenderTargetPtr ptr(new D3DCubemapRenderTarget(texptr, rs));
-    if (ptr->Init()) {
-      vec->push_back(ptr);
+    std::unique_ptr<D3D2DArrayRenderTarget> ptr(new D3D2DArrayRenderTarget(
+        texptr, rs));
+    if (ptr->Init(i)) {
+      vec->push_back(RenderTargetPtr(ptr.release()));
     } else {
       return false;
     }

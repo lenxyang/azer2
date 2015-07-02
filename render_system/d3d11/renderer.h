@@ -92,6 +92,7 @@ class D3DRenderer : public Renderer {
   void ResetRenderTarget();
 
   bool Init(const Texture::Options& opt);
+  bool Init(RenderTargetPtr rt, DepthBufferPtr depth);
  protected:
   void InitRenderState();
   void InitForRenderTarget();

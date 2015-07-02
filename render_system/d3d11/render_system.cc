@@ -223,7 +223,37 @@ RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
 RendererPtrVec D3DRenderSystem::CreateRendererVec(const Texture::Options& opt,
                                                   bool shared_depth_buffer) {
   RendererPtrVec vec;
+  std::vector<RenderTargetPtr> targets;
+  std::vector<DepthBufferPtr> depthes;
   // create texture and create render target for event level
+  if (opt.type == Texture::kCubemap) {
+    if (!D3D2DArrayRenderTarget::Create(opt, this, &targets)) {
+      LOG(ERROR) << "Failed to create RendererVec.";
+      return vec;
+    }
+  } else {
+    CHECK(false);
+    return vec;
+  }
+
+  int depth_diminison = shared_depth_buffer ? 1 : static_cast<int32>(targets.size());
+  for (int i = 0; i < depth_diminison; ++i) {
+    DepthBufferPtr depth(D3DDepthBuffer::Create(opt, this));
+    depthes.push_back(depth);
+  }
+
+  for (int i = 0; i < static_cast<int32>(targets.size()); ++i) {
+    ID3D11DeviceContext* context = envptr_->GetContext();
+    scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
+    int depth_index = (shared_depth_buffer ? 0 : i);
+    if (renderer->Init(targets[i], depthes[depth_index])) {
+      vec.push_back(RendererPtr(renderer));
+    } else {
+      vec.clear();
+      return vec;
+    }
+  }
+
   return vec;
 }
 
