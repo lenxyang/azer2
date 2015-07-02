@@ -120,4 +120,5 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
 };
 
 typedef scoped_refptr<Renderer> RendererPtr;
+tyepdef std::vector<RendererPtr> RendererPtrVec;
 }  // namespace azer

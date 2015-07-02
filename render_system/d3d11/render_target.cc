@@ -11,6 +11,18 @@
 namespace azer {
 namespace d3d11 {
 
+D3DRenderTarget::D3DRenderTarget(const Texture::Options& opt,
+                                 bool surface_target, 
+                                 D3DRenderSystem* render_system)
+    : RenderTarget(opt, surface_target)
+    , target_(NULL)
+    , render_system_(render_system) {
+}
+  
+D3DRenderTarget::~D3DRenderTarget() {
+  SAFE_RELEASE(target_);
+}
+
 void D3DRenderTarget::Clear(const azer::Vector4& color) {
   DCHECK(NULL != target_);
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
@@ -69,8 +81,16 @@ D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
   return target.release();
 }
 
+// class D3DSurfaceRenderTarget
+D3DSurfaceRenderTarget::D3DSurfaceRenderTarget(const Texture::Options& opt,
+                                               D3DEnvSwapChain* swapchain,
+                                               D3DRenderSystem* rs)
+    : D3DRenderTarget(opt, true, rs)
+    , swapchain_(swapchain) {
+}
+
 D3DRenderTarget* D3DSurfaceRenderTarget::Create(D3DEnvSwapChain* swapchain,
-                                                       D3DRenderSystem* rs) {
+                                                D3DRenderSystem* rs) {
   Surface* surface = swapchain->GetSurface();
   Texture::Options opt;
   opt.size = gfx::Size(surface->GetBounds().size());

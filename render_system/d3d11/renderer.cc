@@ -44,7 +44,7 @@ const std::string& D3DRenderer::name() const {
 }
 
 D3DRenderer::D3DRenderer(ID3D11DeviceContext* context, D3DRenderSystem* rs)
-    : Renderer(1, rs)
+    : Renderer(rs)
     , d3d11_render_system_(rs)
     , d3d_context_(context) {
 }

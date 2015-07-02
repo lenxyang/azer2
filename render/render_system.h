@@ -49,6 +49,8 @@ class AZER_EXPORT RenderSystem {
   virtual SwapChainPtr CreateSwapChainForSurface(Surface* surface) = 0;
 
   virtual RendererPtr CreateRenderer(const Texture::Options& opt) = 0;
+  virtual RendererPtrVec CreateRendererVec(const Texture::Options& opt,
+                                           bool shared_depth_buffer) = 0;
   virtual RendererPtr CreateDeferredRenderer(const Texture::Options& opt) = 0;
   virtual BlendingPtr CreateBlending(const Blending::Desc& desc) = 0;
   virtual TechniquePtr CreateTechnique() = 0;

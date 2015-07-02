@@ -220,6 +220,13 @@ RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
   }
 }
 
+RendererPtrVec D3DRenderSystem::CreateRendererVec(const Texture::Options& opt,
+                                                  bool shared_depth_buffer) {
+  RendererPtrVec vec;
+  // create texture and create render target for event level
+  return vec;
+}
+
 RendererPtr D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
   DCHECK(GetDevice() != NULL);
   ID3D11DeviceContext* context = NULL;

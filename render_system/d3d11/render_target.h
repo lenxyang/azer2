@@ -20,15 +20,8 @@ class D3DRenderTarget : public RenderTarget {
                                  D3DRenderSystem* rs);
   D3DRenderTarget(const Texture::Options& opt,
                   bool surface_target, 
-                  D3DRenderSystem* render_system)
-      : RenderTarget(opt, surface_target)
-      , target_(NULL)
-      , render_system_(render_system) {
-  }
-  
-  virtual ~D3DRenderTarget() {
-    SAFE_RELEASE(target_);
-  }
+                  D3DRenderSystem* render_system);
+  virtual ~D3DRenderTarget();
   
   virtual void Clear(const azer::Vector4& color);
 
@@ -46,11 +39,7 @@ class D3DSurfaceRenderTarget : public D3DRenderTarget {
                                  D3DRenderSystem* rs);
 
   D3DSurfaceRenderTarget(const Texture::Options& opt, D3DEnvSwapChain* swapchain,
-                         D3DRenderSystem* rs)
-      : D3DRenderTarget(opt, true, rs)
-      , swapchain_(swapchain) {
-  }
-
+                         D3DRenderSystem* rs);
   bool Init();
  protected:
   D3DEnvSwapChain* swapchain_;
