@@ -314,6 +314,7 @@ D3DTextureCubeMap::D3DTextureCubeMap(const Texture::Options& opt,
 }
 
 void D3DTextureCubeMap::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
+  DCHECK_EQ(desc->Width, desc->Height) << "Cubemap's width must equal height.";
   desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
 } 
 
@@ -327,7 +328,6 @@ bool D3DTextureCubeMap::InitFromImage(const Image* image) {
                << " expected: " << expect_size;
     return false;
   }
-  
   
   D3D11_SUBRESOURCE_DATA subres[6];
   for (int i = 0; i < 6; ++i) {
@@ -345,10 +345,11 @@ void D3DTextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) 
   DCHECK(resource_ != NULL);
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURECUBE);
-  res_view_desc_.Format = tex_desc_.Format;
-  res_view_desc_.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-  res_view_desc_.TextureCube.MipLevels = tex_desc_.MipLevels;
-  res_view_desc_.TextureCube.MostDetailedMip = 0;
+  memset(desc, 0, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+  desc->Format = tex_desc_.Format;
+  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+  desc->TextureCube.MipLevels = tex_desc_.MipLevels;
+  desc->TextureCube.MostDetailedMip = 0;
 }
 
 // reference: MSDN, Surface Sharing Between Windows Graphics APIs
