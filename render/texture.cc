@@ -66,7 +66,9 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   Texture::Options opt;
   opt.size = size;
   opt.genmipmap = true;
-  opt.target = Texture::kRenderTarget;
+  opt.format = kRGBAn8;
+  opt.target = (Texture::BindTarget)(Texture::kRenderTarget
+                                     | Texture::kShaderResource);
   opt.type = Texture::k2D;
   return opt;
 }

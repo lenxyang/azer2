@@ -109,7 +109,7 @@ bool D3D2DArrayRenderTarget::Create(const Texture::Options& o, D3DRenderSystem* 
   std::unique_ptr<D3DTexture> tex;
   if (o.type == Texture::kCubemap) {
     tex.reset(new D3DTextureCubeMap(opt, rs));
-    if (!tex->Init(NULL, 1)) {
+    if (!tex->Init(NULL, 6)) {
       return false;
     }
   } else {
