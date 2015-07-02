@@ -2,13 +2,12 @@
 #include "azer/render_system/d3d11/d3denv.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/azer_d3denv.h"
-#include "azer/render_system/d3d11/angle_d3denv.h"
 
 using azer::d3d11::D3DEnvironment;
 using azer::d3d11::D3DEnvironmentPtr;
 using azer::d3d11::D3DRenderSystem;
 using azer::d3d11::InternalD3DEnvironment;
-using azer::d3d11::AngleD3DEnvironment;
+// using azer::d3d11::AngleD3DEnvironment;
 
 extern "C" {
 azer::RenderSystem* CreateRenderSystem() {

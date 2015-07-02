@@ -4,7 +4,6 @@
 
 #include "azer/render/surface.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
-#include "azer/render_system/d3d11/angle_env.h"
 #include "azer/render_system/d3d11/swap_chain.h"
 
 namespace azer {

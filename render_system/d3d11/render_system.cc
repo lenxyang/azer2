@@ -10,7 +10,6 @@
 #include "azer/render/render_system_enum.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/blending.h"
-#include "azer/render_system/d3d11/canvas2d.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
@@ -32,7 +31,7 @@ const StringType& D3DRenderSystem::short_name_ = AZER_LITERAL("d3d11");
 
 D3DRenderSystem::D3DRenderSystem(D3DEnvironmentPtr envptr)
     : envptr_(envptr) {
-  InitContext2D();
+  // InitContext2D();
 }
 
 D3DRenderSystem::~D3DRenderSystem() {
