@@ -332,7 +332,8 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage,
 
 bool D3DRenderer::Init(RenderTargetPtr rt, DepthBufferPtr depth) {
   DCHECK(rt.get() && depth.get());
-  targets_[0] = rt;
+  DCHECK_EQ(targets_.size(), 0u);
+  targets_.push_back(rt);
   depth_ = depth;
   Reset();
   const Texture::Options& o = rt->GetTexture()->options();
@@ -342,7 +343,7 @@ bool D3DRenderer::Init(RenderTargetPtr rt, DepthBufferPtr depth) {
 
 bool D3DRenderer::Init(const Texture::Options& o) {
   DCHECK(!o.size.IsEmpty());
-  DCHECK(targets_[0].get() == NULL);
+  DCHECK_EQ(targets_.size(), 0u);
   DCHECK(depth_.get() == NULL);
 
   RenderTargetPtr target(D3DRenderTarget::Create(o, d3d11_render_system_));
@@ -351,7 +352,7 @@ bool D3DRenderer::Init(const Texture::Options& o) {
     return false;
   }
 
-  targets_[0] = target;
+  targets_.push_back(target);
   depth_ = depth;
   Reset();
   SetViewport(azer::Renderer::Viewport(0, 0, o.size.width(), o.size.height()));
