@@ -24,12 +24,13 @@ Texture::SamplerState::SamplerState()
 }
 
 Texture::Options::Options()
-    : format(kRGBAn8)
-    , usage(GraphicBuffer::kDefault)
-    , cpu_access(kCPUNoAccess)
-    , target(Texture::kUnknown)
-    , type(k2D)
-    , genmipmap(false) {
+    : format(kRGBAn8),
+      usage(GraphicBuffer::kDefault),
+      cpu_access(kCPUNoAccess),
+      target(Texture::kUnknown),
+      type(k2D),
+      diminison(1),
+      genmipmap(false) {
 }
 
 bool Texture::Save(const ::base::FilePath& path) {

@@ -24,16 +24,13 @@ class RenderSystem;
 
 class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
  public:
-  Renderer(int num_of_rt, RenderSystem* rs)
-      : render_system_(rs)
-      , kNumOfRenderTarget(num_of_rt) {
-    targets_.resize(num_of_rt);
-  }
+  Renderer(RenderSystem* rs) : render_system_(rs) { }
   virtual ~Renderer() {}
 
   virtual const std::string& name() const = 0;
 
   virtual void Use() = 0;
+  virtual void Use(int index) = 0;
 
   virtual bool IsDepthTestEnable() = 0;
   virtual void EnableDepthTest(bool enable) = 0;
@@ -119,7 +116,6 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   RenderSystem* render_system_;
   DepthBufferPtr depth_;
   RenderTargetVec targets_;
-  const int kNumOfRenderTarget;
   DISALLOW_COPY_AND_ASSIGN(Renderer);
 };
 

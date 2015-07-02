@@ -74,6 +74,7 @@ public:
     CPUAccess cpu_access;
     Texture::BindTarget target;
     Type type;
+    int32 diminison;
     bool genmipmap;
     Options();
   };
