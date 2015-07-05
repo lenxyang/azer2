@@ -50,6 +50,7 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
 
   void set_name(const std::string& name);
   const std::string& name() const { return name_;}
+  std::string path() const;
 
   SceneNode* root();
   SceneNode* parent() { return parent_;}

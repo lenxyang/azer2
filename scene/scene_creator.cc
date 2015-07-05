@@ -16,6 +16,7 @@ SceneNodePtr SceneCreator::InitSceneNodeRecusive(ConfigNodePtr config_node) {
   if (children.size() == 0u)
     return node;
   if (children.size() > 1u) {
+    LOG(ERROR) << "Multi-children in scene node";
     return SceneNodePtr();
   }
 
@@ -24,11 +25,14 @@ SceneNodePtr SceneCreator::InitSceneNodeRecusive(ConfigNodePtr config_node) {
     azer::ConfigNodePtr child_node = *iter;
     azer::SceneNodePtr child_scene = InitSceneNodeRecusive(child_node);
     if (child_scene.get()) {
-      if (InitSceneConfig(child_scene, config_node))
+      if (InitSceneConfig(child_scene, config_node)) {
         node->AddChild(child_scene);
-      else
+      } else {
+        LOG(INFO) << "Failed to init childnode, parent[" << node->path() << "]";
         return SceneNodePtr();
+      }
     } else {
+      LOG(INFO) << "Failed to init childnode, parent[" << node->path() << "]";
       return SceneNodePtr();
     }
   }
