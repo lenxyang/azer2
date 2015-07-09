@@ -131,6 +131,22 @@ SceneNodePtr SceneNode::GetChild(const std::string& path) {
   }
 }
 
+std::string SceneNode::path() const {
+  std::vector<std::string> path;
+  const SceneNode* ptr = this;
+  while (ptr) {
+    path.push_back(ptr->name());
+    ptr = ptr->parent();
+  }
+
+  std::string str = "/";
+  for (auto iter = path.begin(); iter != path.end(); ++iter) {
+    str.append("/");
+    str.append(*iter);
+  }
+  return str;
+}
+
 void SceneNode::CreatePathRecusive(const std::string& path) {
 }
 
