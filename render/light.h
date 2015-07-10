@@ -9,6 +9,7 @@
 
 namespace azer {
 class AZER_EXPORT Light : public MovableObject,
+                          public MovableObject::Delegate,
                           public ::base::RefCounted<Light> {
  public:
   explicit Light(int32 id);
@@ -27,6 +28,8 @@ class AZER_EXPORT Light : public MovableObject,
    */
   const Camera* GetLightView() const { return &camera_;}
  protected:
+  void OnObjectPositionChanged(const Vector3& origin_position) override;
+  void OnObjectOrientationChanged(const Quaternion& origin_orientation) override;
   int32 id_;
   RendererPtr renderer_;
   Camera camera_;

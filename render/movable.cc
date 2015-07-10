@@ -4,26 +4,21 @@ namespace azer {
 
 MovableObject::MovableObject()
     : position_(0.0f, 0.0f, 0.0f)
-    , orientation_(Vector3(0.0, 1.0, 0.0), Degree(0.0f))
-    , delegate_(NULL) {
-}
+    , orientation_(Vector3(0.0, 1.0, 0.0), Degree(0.0f)) {}
 
 MovableObject::MovableObject(const Vector3& position)
     : position_(position)
-    , orientation_(Vector3(0.0, 1.0, 0.0), Degree(0.0f))
-    , delegate_(NULL) {
+    , orientation_(Vector3(0.0, 1.0, 0.0), Degree(0.0f)) {
 }
 
 MovableObject::MovableObject(const Vector3& pos, const Quaternion& orient)
     : position_(pos)
-    , orientation_(orient)
-    , delegate_(NULL) {
+    , orientation_(orient) {
 }
 
 MovableObject::MovableObject(const MovableObject& obj)
     : position_(obj.position())
-    , orientation_(obj.orientation_)
-    , delegate_(NULL) {
+    , orientation_(obj.orientation_) {
 }
 
 MovableObject& MovableObject::operator = (const MovableObject& obj) {
@@ -31,6 +26,7 @@ MovableObject& MovableObject::operator = (const MovableObject& obj) {
   orientation_ = obj.orientation_;
   return *this;
 }
+
 
 void MovableObject::pitch(const Degree angle) {
   pitch(Radians(angle));
@@ -73,8 +69,8 @@ void MovableObject::set_orientation(const Quaternion& q) {
   Quaternion origin = orientation_;
   orientation_ = q;
   orientation_.Normalize();
-  if (orientation_ != origin && delegate_) {
-    delegate_->OnObjectOrientationChanged(origin);
+  if (orientation_ != origin) {
+    ObjectOrientationChanged(origin);
   }
 }
 
@@ -83,33 +79,25 @@ void MovableObject::rotate(const Quaternion& q) {
   Quaternion origin = orientation_;
   orientation_ = q * orientation_;
   orientation_.Normalize();
-  if (delegate_) {
-    delegate_->OnObjectOrientationChanged(origin);
-  }
+  ObjectOrientationChanged(origin);
 }
 
 void MovableObject::walk(float step) {
   Vector3 position = position_;
   position_ +=  direction() * step;
-  if (delegate_) {
-    delegate_->OnObjectPositionChanged(position);
-  }
+  ObjectPositionChanged(position);
 }
 
 void MovableObject::fly(float step) {
   Vector3 position = position_;
   position_ += up() * step;
-  if (delegate_) {
-    delegate_->OnObjectPositionChanged(position);
-  }
+  ObjectPositionChanged(position);
 }
 
 void MovableObject::strafe(float step) {
   Vector3 position = position_;
   position_ += right() * step;
-  if (delegate_) {
-    delegate_->OnObjectPositionChanged(position);
-  }
+  bjectPositionChanged(position);
 }
 
 Vector3 MovableObject::right() const {
@@ -129,4 +117,11 @@ azer::Matrix4 MovableObject::world() const {
       std::move(orientation_.ToMatrix());
 }
 
+void MovableObject::ObjectPositionChanged(const Vector3& origin_position) {
+  OnObjectPositionChanged(origin_position);
+}
+
+void MovableObject::ObjectOrientationChanged(const Quaternion& origin_orientation) {
+  OnObjectOrientationChanged(origin_orientation);
+}
 }  // namespace azer

@@ -23,8 +23,7 @@ typedef scoped_refptr<SceneNode> SceneNodePtr;
 typedef scoped_refptr<RenderableObject> RenderableObjectPtr;
 
 class SceneNode: public ::base::RefCounted<SceneNode>,
-                 public MovableObject,
-                 public MovableObject::Delegate {
+                 public MovableObject {
  public:
   SceneNode();
   explicit SceneNode(const std::string& name);
