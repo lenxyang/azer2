@@ -1,25 +1,35 @@
-/**
- * light 和 material 的结构可能非常复杂，因此框架并给出明确的结构定义
- * 而仅仅使用 id 进行标识。在实际使用过程中（即游戏引擎当中），会预先定义一组
- * Light，Material，及 Effect。Effect 会提供函数 SetLight 和 SetMatrial 将
- * Light 和 Matrial 传递到 shader 当中。这几个函数的具体实现由最终用户完成。
- *
- */
 #pragma once
 
 #include <string>
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/render/renderer.h"
+#include "azer/render/movable.h"
+#include "azer/render/camera.h"
 
 namespace azer {
-class AZER_EXPORT Light : public ::base::RefCounted<Light> {
+class AZER_EXPORT Light : public MovableObject,
+                          public ::base::RefCounted<Light> {
  public:
   explicit Light(int32 id);
   virtual ~Light() {}
 
   int32 id() const { return id_;}
- private:
+
+  /**
+   * 光照 renderer
+   */
+  RendererPtr GetShadowRenderer();
+  TexturePtr GetShadowMap();
+
+  /**
+   * 获得以光照为视角的 camera
+   */
+  const Camera* GetLightView() const { return &camera_;}
+ protected:
   int32 id_;
+  RendererPtr renderer_;
+  Camera camera_;
   DISALLOW_COPY_AND_ASSIGN(Light);
 };
 
