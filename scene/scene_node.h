@@ -68,9 +68,9 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   std::string print_info();
  protected:
   SceneNodePtr GetLocalChild(const std::string& name);
-  // override from MovableObject::Delegate
-  void OnObjectPositionChanged(const Vector3& origin_position) override;
-  void OnObjectOrientationChanged(const Quaternion& origin_orientation) override;
+  // override from MovableObject
+  void OnPositionChanged(const Vector3& origin_position) override;
+  void OnOrientationChanged(const Quaternion& origin_orientation) override;
 
   void OnParentNodePositionChanged();
   void OnParentOrientationChanged();

@@ -14,7 +14,6 @@ SceneNode::SceneNode()
     : visible_(false)
     , parent_(NULL)
     , scale_(Vector3(1.0f, 1.0f, 1.0f)) {
-  MovableObject::set_delegate(this);
 }
 
 SceneNode::SceneNode(const std::string& name)
@@ -22,7 +21,6 @@ SceneNode::SceneNode(const std::string& name)
     , parent_(NULL)
     , scale_(Vector3(1.0f, 1.0f, 1.0f))
     , name_(name) {
-  MovableObject::set_delegate(this);
 }
 
 SceneNode::~SceneNode() {
@@ -73,11 +71,11 @@ SceneNode* SceneNode::root() {
 void SceneNode::OnAttachedToScene() {
 }
 
-void SceneNode::OnObjectPositionChanged(const Vector3& origin_position) {
+void SceneNode::OnPositionChanged(const Vector3& origin_position) {
   OnParentNodePositionChanged();
 }
 
-void SceneNode::OnObjectOrientationChanged(const Quaternion& origin_orientation) {
+void SceneNode::OnOrientationChanged(const Quaternion& origin_orientation) {
   OnParentOrientationChanged();
 }
 
