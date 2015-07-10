@@ -18,9 +18,9 @@ TexturePtr Light::GetShadowMap() {
   return renderer_->GetRenderTarget()->GetTexture();
 }
 
-void Light::OnObjectPositionChanged(const Vector3& origin_position) {
+void Light::OnPositionChanged(const Vector3& origin_position) {
 }
 
-void Light::OnObjectOrientationChanged(const Quaternion& origin_orientation) {
+void Light::OnOrientationChanged(const Quaternion& origin_orientation) {
 }
 }  // namespace azer

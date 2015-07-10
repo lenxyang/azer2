@@ -117,11 +117,11 @@ azer::Matrix4 MovableObject::world() const {
       std::move(orientation_.ToMatrix());
 }
 
-void MovableObject::ObjectPositionChanged(const Vector3& origin_position) {
-  OnObjectPositionChanged(origin_position);
+void MovableObject::PositionChanged(const Vector3& origin_position) {
+  OnPositionChanged(origin_position);
 }
 
-void MovableObject::ObjectOrientationChanged(const Quaternion& origin_orientation) {
-  OnObjectOrientationChanged(origin_orientation);
+void MovableObject::OrientationChanged(const Quaternion& origin_orientation) {
+  OnOrientationChanged(origin_orientation);
 }
 }  // namespace azer
