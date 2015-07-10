@@ -70,7 +70,7 @@ void MovableObject::set_orientation(const Quaternion& q) {
   orientation_ = q;
   orientation_.Normalize();
   if (orientation_ != origin) {
-    ObjectOrientationChanged(origin);
+    OrientationChanged(origin);
   }
 }
 
@@ -79,25 +79,25 @@ void MovableObject::rotate(const Quaternion& q) {
   Quaternion origin = orientation_;
   orientation_ = q * orientation_;
   orientation_.Normalize();
-  ObjectOrientationChanged(origin);
+  OrientationChanged(origin);
 }
 
 void MovableObject::walk(float step) {
   Vector3 position = position_;
   position_ +=  direction() * step;
-  ObjectPositionChanged(position);
+  PositionChanged(position);
 }
 
 void MovableObject::fly(float step) {
   Vector3 position = position_;
   position_ += up() * step;
-  ObjectPositionChanged(position);
+  PositionChanged(position);
 }
 
 void MovableObject::strafe(float step) {
   Vector3 position = position_;
   position_ += right() * step;
-  bjectPositionChanged(position);
+  PositionChanged(position);
 }
 
 Vector3 MovableObject::right() const {
