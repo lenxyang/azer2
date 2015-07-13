@@ -42,7 +42,7 @@ class SceneNode: public ::base::RefCounted<SceneNode>,
   // absolute path: //level1/level2/level3
   // relative path: level1/level2/level3
   // relative path: ../level1/level2
-  SceneNodePtr GetChild(const std::string& path);
+  SceneNodePtr GetNode(const std::string& path);
   void CreatePathRecusive(const std::string& path);
   bool AddChildAtPath(const std::string& parent, SceneNodePtr node);
   SceneNodePtr RemoveChildAtPath(const std::string& path);

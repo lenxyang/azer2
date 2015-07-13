@@ -114,9 +114,9 @@ SceneNodePtr SceneNode::GetLocalChild(const std::string& name) {
   return SceneNodePtr();
 }
 
-SceneNodePtr SceneNode::GetChild(const std::string& path) {
+SceneNodePtr SceneNode::GetNode(const std::string& path) {
   if (StartsWithASCII(path, "//", false)) {
-    return root()->GetChild(path.substr(2));
+    return root()->GetNode(path.substr(2));
   } else {
     SceneNodePtr cur = this;
     ::base::StringTokenizer t(path, std::string("/"));
@@ -149,7 +149,7 @@ void SceneNode::CreatePathRecusive(const std::string& path) {
 }
 
 bool SceneNode::AddChildAtPath(const std::string& parent, SceneNodePtr node) {
-  SceneNodePtr pnode = GetChild(parent);
+  SceneNodePtr pnode = GetNode(parent);
   if (pnode.get()) {
     pnode->AddChild(node);
     return true;
@@ -159,7 +159,7 @@ bool SceneNode::AddChildAtPath(const std::string& parent, SceneNodePtr node) {
 }
 
 SceneNodePtr SceneNode::RemoveChildAtPath(const std::string& path) {
-  SceneNodePtr pnode = GetChild(path);
+  SceneNodePtr pnode = GetNode(path);
   if (pnode.get() && pnode->parent()) {
     pnode->parent()->RemoveChild(pnode.get());
   }
