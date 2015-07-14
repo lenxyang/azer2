@@ -8,6 +8,14 @@ namespace azer {
 
 class Effect;
 
+class AZER_EXPORT EffectParamsAdapter {
+ public:
+  EffectParamsAdapter();
+  virtual ~EffectParamsAdapter();
+ private:
+  DISALLOW_COPY_AND_ASSIGN(EffectParamsAdapter);
+};
+
 // provider information for effect
 class AZER_EXPORT EffectParamsProvider {
  public:
