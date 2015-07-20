@@ -10,7 +10,6 @@ shared_library("azer") {
     "resources",
     # "scene",
     "math",
-    "ui",
   ]
 
   public_deps = [
