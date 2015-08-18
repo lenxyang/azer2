@@ -64,6 +64,7 @@ RepositoryNodePtr RepositoryNode::FindOrCreate(const StringType& name) {
     return iter->second;
   } else {
     RepositoryNodePtr ptr(new RepositoryNode(name));
+    ptr->parent_ = this;
     children_.insert(std::make_pair(name, ptr));
     return ptr;
   }
