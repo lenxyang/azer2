@@ -93,8 +93,8 @@ void Tile::CalcTBN(float repeat, std::vector<azer::Vector3>* tangent,
     used[index2] += 1.0f;
     used[index3] += 1.0f;
 
-    azer::Vector3 tan, bin;
-    azer::CalcTangentAndBinormal(p1, t1, p2, t2, p3, t3, &tan, &bin);
+    azer::Vector3 tan, normal, bin;
+    azer::CalcTBN(p1, t1, p2, t2, p3, t3, &tan, &normal, &bin);
 
     (*tangent)[index1] += tan;
     (*tangent)[index2] += tan;

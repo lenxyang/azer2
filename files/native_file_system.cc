@@ -19,7 +19,7 @@ FileContentPtr NativeFileSystem::LoadFile(const ResPath& path) {
     return FileContentPtr();
   }
 
-  ::base::FilePath real_path = root_.Append(path.filepath().substr(2));
+  ::base::FilePath real_path = root_.Append(path.filepath().substr(2).as_string());
   int64 size = 0;
   if (!::base::GetFileSize(real_path, &size)) {
     return FileContentPtr();
@@ -69,7 +69,7 @@ bool NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
 
   StringType realpathstr = root_.value();
   realpathstr.append(FILE_PATH_LITERAL("/"));
-  realpathstr.append(path.filepath().substr(2));
+  realpathstr.append(path.filepath().substr(2).as_string());
   *realpath = ::base::FilePath(realpathstr);
   return true;
 }

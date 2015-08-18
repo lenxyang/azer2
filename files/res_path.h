@@ -35,30 +35,28 @@ class AZER_EXPORT ResPath {
   bool empty() const { return fullpath_.empty();}
   void clear();
 
-  std::vector<StringType> dirs() const;
-  // raw path ( which has no normalized )
-  const StringType& rawpath() const { return rawpath_;}
-
+  std::vector<Slice> dirs() const;
+  
   // full path (raw path with normalized)
   const StringType& fullpath() const { return fullpath_;}
 
   // file path (full path without proto header)
-  const StringType& filepath() const { return file_path_;}
+  const Slice& filepath() const { return file_path_;}
 
   // file name: the last part of dirs
-  StringType filename() const;
+  Slice filename() const;
 
   // proto: the proto header, like "http://"
-  const StringType& proto() const { return proto_;}
+  const Slice& proto() const { return proto_;}
 
   // component_: component party
   // for example: net://www.sina.com/a:bcom, :bcom is the component party
-  const StringType& component() const { return component_;}
+  const Slice& component() const { return component_;}
 
   // component name
   // if has component party, the name is component part without comma
   // if has no component part, the name will be same as file name with out suppfix
-  StringType component_name() const;
+  Slice component_name() const;
 
   ResPath parent() const;
   PathType type() const { return type_;}
@@ -78,13 +76,14 @@ class AZER_EXPORT ResPath {
   static const StringType kComponentSeperatorStr;
   static const CharType kComponentSeperator;
  protected:
+  void Init(const StringType& proto, const StringType& path, 
+            const StringType& component, PathType pathtype);
   void OnPathChanged(const StringType& type);
-  StringType rawpath_;
   StringType fullpath_;
-  StringType file_path_;
-  StringType proto_;
-  StringType component_;
-  std::vector<StringType> dirs_;
+  Slice file_path_;
+  Slice proto_;
+  Slice component_;
+  std::vector<Slice> dirs_;
   PathType type_;
 
   friend class ResPathNormalizer;

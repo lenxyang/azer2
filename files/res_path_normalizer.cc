@@ -10,15 +10,17 @@
 
 namespace azer {
 
-ResPathNormalizer::ResPathNormalizer() {
+ResPathNormalizer::ResPathNormalizer(const StringType& raw_path)
+    : raw_path_(raw_path) {
 }
 
 bool ResPathNormalizer::Normalize(ResPath* path) {
   using files::ResPathParser;
-  StringType pathstr = path->rawpath();
+  StringType proto;
+  StringType component;
+  StringType pathstr = raw_path_;
   path->clear();
-  path->type_ = ResPath::kRelativePath;
-  path->rawpath_ = pathstr;
+  ResPath::PathType path_type = ResPath::kRelativePath;
   ResPathParser tokenizer(pathstr);
   std::vector<StringType> vec;
   while (tokenizer.GetNext() == ResPathParser::kSuccess) {
@@ -27,11 +29,11 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
 	if (type == ResPathParser::kEnd) break;
     switch (type) {
       case ResPathParser::kProtoSpecifier:
-        path->proto_ = token;
-        path->type_ = ResPath::kProtoPath;
+        proto = token;
+        path_type = ResPath::kProtoPath;
         break;
       case ResPathParser::kComponent:
-        path->component_ = token;
+        component = token;
         break;
       case ResPathParser::kPrevDir:
         if (vec.empty()) return false;
@@ -43,13 +45,13 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
         break;
       case ResPathParser::kRoot:
         vec.push_back(FILE_PATH_LITERAL("//"));
-        path->type_ = ResPath::kAbsolutePath;
+        path_type = ResPath::kAbsolutePath;
         break;
       case ResPathParser::kName:
         vec.push_back(token);
         break;
       case ResPathParser::kErrorToken:
-        path->type_ = ResPath::kInvalidPath;
+        path_type = ResPath::kInvalidPath;
         return false;
       case ResPathParser::kEnd:
         break;
@@ -59,19 +61,19 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
     }
   }
 
+  StringType filepath;
   for (size_t i = 0; i < vec.size(); ++i) {
     if (i > 1) {
-      path->file_path_.append(FILE_PATH_LITERAL("/"));
-    } else if (i == 1 && path->type() != ResPath::kAbsolutePath) {
-      path->file_path_.append(FILE_PATH_LITERAL("/"));
+      filepath.append(FILE_PATH_LITERAL("/"));
+    } else if (i == 1 && path_type != ResPath::kAbsolutePath) {
+      filepath.append(FILE_PATH_LITERAL("/"));
     }
 
-    path->file_path_.append(vec[i]);
+    filepath.append(vec[i]);
   }
 
-  path->fullpath_.append(path->proto());
-  path->fullpath_.append(path->filepath());
-  path->fullpath_.append(path->component());
+  path->Init(proto, filepath, component, path_type);
+  
   return true;
 }
 

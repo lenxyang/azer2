@@ -23,7 +23,7 @@ ResourcePtr ResourceManager::GetResource(const ResPath& path) {
   if (LoadResourceSync(path, &resptr)) {
     GenerateTreeHierarchy(path, root_);
     RepositoryNodePtr node = root_->GetNode(path);
-    node->AddLocalResource(path.component(), resptr);
+    node->AddLocalResource(path.component().as_string(), resptr);
     return resptr;
   } else {
     return ResourcePtr();

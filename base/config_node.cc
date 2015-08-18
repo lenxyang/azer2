@@ -42,7 +42,7 @@ const ResPath& ConfigNode::respath() const {
 }
 
 ResPath ConfigNode::package_path() const  {
-  return ResPath(std::move(respath().filepath()));
+  return respath();
 }
 
 ConfigNode* ConfigNode::root() {

@@ -1,4 +1,4 @@
-#include "azer/render/vertex_data.h"
+#include "azer/render/vertex_buffer.h"
 #include "azer/math/math.h"
 #include "base/basictypes.h"
 #include "base/logging.h"

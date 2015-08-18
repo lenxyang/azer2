@@ -32,14 +32,12 @@ ResPath::ResPath()
     : type_(kRelativePath) {
 }
 
-ResPath::ResPath(const CharType* path)
-    : rawpath_(StringType(path)) {
-  OnPathChanged(this->rawpath());
+ResPath::ResPath(const CharType* path) {
+  OnPathChanged(StringType(path));
 }
 
-ResPath::ResPath(const StringType& rawpath)
-    : rawpath_(rawpath) {
-  OnPathChanged(this->rawpath());
+ResPath::ResPath(const StringType& rawpath) {
+  OnPathChanged(rawpath);
 }
 
 ResPath::ResPath(const ResPath& path) {
@@ -50,18 +48,33 @@ ResPath::ResPath(const StringType& path, const StringType& component) {
   StringType str = path;
   str.append(kComponentSeperatorStr);
   str.append(component);
-  OnPathChanged(this->rawpath());
+  OnPathChanged(str);
 }
 
 ResPath::ResPath(const ResPath& path, const StringType& component) {
-  StringType str = path.rawpath();
+  StringType str = path.fullpath();
   str.append(kComponentSeperatorStr);
   str.append(component);
-  OnPathChanged(this->rawpath());
+  OnPathChanged(str);
+}
+
+void ResPath::Init(const StringType& proto, const StringType& path, 
+                   const StringType& component, PathType path_type) {
+  fullpath_.clear();
+  fullpath_.append(proto);
+  proto_ = Slice(fullpath_);
+
+  int file_path_index = fullpath_.length();
+  fullpath_.append(path);
+  file_path_ = Slice(fullpath_.c_str() + file_path_index, path.length());
+  
+  int component_index = fullpath_.length();
+  fullpath_.append(component);
+  component_ = Slice(fullpath_.c_str() + component_index, component.length());
+  type_ = path_type;
 }
 
 void ResPath::clear() {
-  rawpath_ = AZER_LITERAL("");
   fullpath_ = AZER_LITERAL("");
   file_path_ = AZER_LITERAL("");
   component_ = AZER_LITERAL("");
@@ -69,7 +82,6 @@ void ResPath::clear() {
 }
 
 ResPath& ResPath::operator = (const ResPath& path) {
-  rawpath_ = path.rawpath();
   fullpath_ = path.fullpath();
   file_path_ = path.filepath();
   proto_ = path.proto();
@@ -79,7 +91,7 @@ ResPath& ResPath::operator = (const ResPath& path) {
 }
 
 void ResPath::OnPathChanged(const StringType& fullpath) {
-  ResPathNormalizer normalizer;
+  ResPathNormalizer normalizer(fullpath);
   normalizer.Normalize(this);
 }
 
@@ -100,16 +112,9 @@ ResPath ResPath::AppendCopyOrDie(const ResPath& path) const {
 }
 
 bool ResPath::Append(const ResPath& str) {
-  if (!rawpath_.empty()) {
-    if (rawpath_.back() != kSeperator) {
-      rawpath_.push_back(kSeperator);
-    }
-  } else {
-    rawpath_ = str.rawpath();
-  }
-  
-  rawpath_.append(str.fullpath());
-  OnPathChanged(this->fullpath());
+  StringType pathstr = this->fullpath();
+  pathstr.append(str.fullpath());
+  OnPathChanged(pathstr);
   return type() != kInvalidPath;
 }
 
@@ -130,44 +135,43 @@ ResPath ResPath::parent() const {
     return parent;
   }
 
-  parent.type_ = type_;
-  parent.component_ = FILE_PATH_LITERAL("");
+  StringType component_ = FILE_PATH_LITERAL("");
+  StringType file_path;
   if (pos == 1 && type_ == kAbsolutePath) {
-    parent.file_path_ = filepath().substr(0, pos + 1);
+    file_path = filepath().substr(0, pos + 1).as_string();
   } else {
-    parent.file_path_ = filepath().substr(0, pos);
+    file_path = filepath().substr(0, pos).as_string();
   }
-  parent.fullpath_.append(proto_);
-  parent.fullpath_.append(parent.file_path_);
+  parent.Init(proto_.as_string(), file_path, component().as_string(), type());
   return parent;
 }
 
 void ResPath::Normalize() {
 }
 
-StringType ResPath::filename() const {
-  StringType path;
+Slice ResPath::filename() const {
+  Slice slice;
   int32 component_pos = fullpath_.find(kComponentSeperatorStr);
   if (component_pos == -1) {
-    path = fullpath_.substr(0, component_pos);
+    slice = Slice(fullpath_.c_str(), component_pos);
   }
   
-  int32 last_dir = path.find_last_of(kSeperatorStr);
-  if (last_dir == static_cast<int32>(path.length()) - 1) {
-    return StringType(FILE_PATH_LITERAL(""));
+  int32 last_dir = slice.find_last_of(kSeperatorStr);
+  if (last_dir == static_cast<int32>(slice.length()) - 1) {
+    return Slice();
   } else if (last_dir != -1) {
-    return path.substr(last_dir + 1);
+    return slice.substr(last_dir + 1);
   } else {
-    return path;
+    return slice;
   }
 }
 
-StringType ResPath::component_name() const {
+Slice ResPath::component_name() const {
   if (!component_.empty()) {
-    DCHECK(StartsWith(component_, FILE_PATH_LITERAL(":"), true));
+    DCHECK(component_.data()[0] == FILE_PATH_LITERAL(':'));
     return component_.substr(1);
   } else {
-    StringType name = std::move(filename());
+    Slice name = filename();
     uint32 pos = name.rfind(FILE_PATH_LITERAL("."));
     if (pos != StringType::npos)
       name = name.substr(0, pos);
@@ -175,16 +179,20 @@ StringType ResPath::component_name() const {
   }
 }
 
-std::vector<StringType> ResPath::dirs() const {
-  std::vector<StringType> components, vec;
-  if (IsAbsolutePath()) 
-    components.push_back(kRootPath);
+std::vector<Slice> ResPath::dirs() const {
+  std::vector<Slice> components, vec;
+  int cur = 0;
+  if (IsAbsolutePath()) {
+    components.push_back(Slice(filepath().data(), 2));
+    cur += 2;
+  }
 
-  ::base::SplitString(parent().fullpath(), kSeperator, &vec);
-  for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
-    if (*iter == kSeperatorStr || iter->empty())
-      continue;
-    components.push_back(*iter);
+  while (cur > 0) {
+    int prev = cur;
+    cur = fullpath().find(cur, kSeperator);
+    if (cur > 0) {
+      components.push_back(Slice(filepath().data() + prev, cur - prev));
+    }
   }
 
   return components;

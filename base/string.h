@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include "azer/base/export.h"
+#include "base/strings/string_piece.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/files/file_path.h"
 #include "base/logging.h"
@@ -48,6 +49,7 @@ inline std::ostream& operator << (std::ostream& os, const ::base::FilePath& path
   return os;
 }
 
-
-
+namespace azer {
+typedef base::BasicStringPiece<StringType> Slice;
+}  // namespace azer
 
