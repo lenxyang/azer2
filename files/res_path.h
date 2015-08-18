@@ -38,20 +38,20 @@ class AZER_EXPORT ResPath {
   std::vector<Slice> dirs() const;
   
   // full path (raw path with normalized)
-  const StringType& fullpath() const { return fullpath_;}
+  const StringType fullpath() const;
 
   // file path (full path without proto header)
-  const Slice& filepath() const { return file_path_;}
+  Slice filepath() const;
 
   // file name: the last part of dirs
   Slice filename() const;
 
   // proto: the proto header, like "http://"
-  const Slice& proto() const { return proto_;}
+  Slice proto() const;
 
   // component_: component party
   // for example: net://www.sina.com/a:bcom, :bcom is the component party
-  const Slice& component() const { return component_;}
+  Slice component() const;
 
   // component name
   // if has component party, the name is component part without comma
@@ -60,8 +60,8 @@ class AZER_EXPORT ResPath {
 
   ResPath parent() const;
   PathType type() const { return type_;}
-  bool has_proto() const { return !proto_.empty();}
-  bool has_component() const { return !component_.empty();}
+  bool has_proto() const { return proto_slice_.len > 0;}
+  bool has_component() const { return component_slice_.len > 0;}
   bool IsRoot() const { return fullpath_ == kRootPath;}
   bool IsAbsolutePath() const { return type_ == kAbsolutePath;}
   bool IsRelativePath() const { return type_ == kRelativePath;}
@@ -79,10 +79,16 @@ class AZER_EXPORT ResPath {
   void Init(const StringType& proto, const StringType& path, 
             const StringType& component, PathType pathtype);
   void OnPathChanged(const StringType& type);
+
+  struct SliceIndex {
+    int begin;
+    int len;
+    SliceIndex() : begin(0), len(0) {}
+  };
   StringType fullpath_;
-  Slice file_path_;
-  Slice proto_;
-  Slice component_;
+  SliceIndex filepath_slice_;
+  SliceIndex proto_slice_;
+  SliceIndex component_slice_;
   std::vector<Slice> dirs_;
   PathType type_;
 
