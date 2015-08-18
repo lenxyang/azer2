@@ -1,8 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "base/basictypes.h"
+#include "base/bind.h"
+#include "base/callback.h"
 #include "base/files/file_path.h"
 #include "azer/base/export.h"
 #include "azer/base/string.h"
@@ -12,36 +15,32 @@
 namespace azer {
 class AZER_EXPORT FileSystem {
  public:
+  FileSystem();
   virtual ~FileSystem() {}
 
-  enum Type {
-    kNativeFS = 1,
-    kPackaged,
-    kCompressedPackaged,
-  };
-
-  static FileSystem* create(Type type, const ::base::FilePath& root);
-  const ::base::FilePath& root() { return fs_root_;}
-
-  virtual FileContentPtr LoadFile(const ResPath& path) = 0;
-  virtual bool IsPathExists(const ResPath& path) = 0;
+  virtual const char* GetFileSystemName() const = 0;
 
   enum FileType {
     kDirectory,
     kArchiveFile,
   };
   virtual FileType GetFileType(const ResPath& path) = 0;
+  virtual bool IsPathExists(const ResPath& path) = 0;
+  virtual int64 GetFileSize(const ResPath& path) = 0;
+
+  struct FileInfo {
+    base::FilePath path;
+    FileType type;
+    int64 size;
+  };
+  typedef std::vector<FileInfo> FileInfoVec;
+  virtual bool EnumDirectory(const ResPath& path, FileInfoVec* vec) = 0;
 
   // Load content async
-  // virtual ResLoadFileAsync(const ResFilePath& path, FileContent* filecontent) = 0;
-  // convert the FilePath to FileSystem path;
-  virtual bool ConvertFileSystem(const ResPath& path, ::base::FilePath*) = 0;
+  virtual FileContentPtr LoadFile(const ResPath& path) = 0;
+  virtual void ResLoadFileAsync(const ResPath& path, FileContent* filecontent,
+                                base::Closure* callback) = 0;
  protected:
-  FileSystem(Type type, const ::base::FilePath& root);
-
-  const Type type_;
-  const ::base::FilePath fs_root_;
-
   DISALLOW_COPY_AND_ASSIGN(FileSystem);
 };
 

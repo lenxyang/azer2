@@ -7,13 +7,19 @@
 
 namespace azer {
 namespace files {
+const char NativeFileSystem::kFileSystemName[] = "azer::NativeFileSystem";
+NativeFileSystem::NativeFileSystem(const ::base::FilePath& root)
+    : FileSystem(),
+      root_(root) {
+}
+
 FileContentPtr NativeFileSystem::LoadFile(const ResPath& path) {
   DCHECK(!path.empty());
   if (!path.IsAbsolutePath()) {
     return FileContentPtr();
   }
 
-  ::base::FilePath real_path = fs_root_.Append(path.filepath().substr(2));
+  ::base::FilePath real_path = root_.Append(path.filepath().substr(2));
   int64 size = 0;
   if (!::base::GetFileSize(real_path, &size)) {
     return FileContentPtr();
@@ -36,19 +42,36 @@ bool NativeFileSystem::IsPathExists(const azer::ResPath& path) {
   return base::PathExists(real_path);
 }
 
+FileSystem::FileType NativeFileSystem::GetFileType(const ResPath& path) {
+  return kArchiveFile;
+}
+
+int64 NativeFileSystem::GetFileSize(const ResPath& path) {
+  NOTIMPLEMENTED();
+  return -1;
+}
+
+bool NativeFileSystem::EnumDirectory(const ResPath& path, FileInfoVec* vec) {
+  NOTIMPLEMENTED();
+  return false;
+}
+
+void NativeFileSystem::ResLoadFileAsync(const ResPath& path,
+                                        FileContent* filecontent,
+                                        ::base::Closure* callback) {
+  NOTIMPLEMENTED();
+}
+
 bool NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
                                          ::base::FilePath* realpath) {
-  if (!path.IsAbsolutePath()) { return false;}
+  if (!path.IsAbsolutePath())
+    return false;
 
-  StringType realpathstr = root().value();
+  StringType realpathstr = root_.value();
   realpathstr.append(FILE_PATH_LITERAL("/"));
   realpathstr.append(path.filepath().substr(2));
   *realpath = ::base::FilePath(realpathstr);
   return true;
-}
-
-FileSystem::FileType NativeFileSystem::GetFileType(const ResPath& path) {
-  return kArchiveFile;
 }
 }  // namespace files
 }  // namespace azer

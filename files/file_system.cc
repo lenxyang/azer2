@@ -6,20 +6,7 @@
 
 namespace azer {
 
-FileSystem* FileSystem::create(FileSystem::Type type, 
-                               const ::base::FilePath& root) {
-  switch(type) {
-    case kNativeFS:
-      return new files::NativeFileSystem(root); 
-    default:
-      NOTREACHED();
-      return NULL;
-  }
-}
-
-FileSystem::FileSystem(Type type, const ::base::FilePath& root)
-    : type_(type)
-    , fs_root_(root) {
+FileSystem::FileSystem() {
 }
 
 }  // namespace azer

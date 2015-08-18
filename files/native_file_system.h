@@ -7,17 +7,21 @@ namespace azer {
 namespace files {
 class AZER_EXPORT NativeFileSystem : public FileSystem {
  public:
-  NativeFileSystem(const ::base::FilePath& root)
-      : FileSystem(FileSystem::kNativeFS, root) {
-  }
-
+  static const char kFileSystemName[];
+  NativeFileSystem(const ::base::FilePath& root);
   ~NativeFileSystem() override {}
 
-  FileContentPtr LoadFile(const azer::ResPath& path) override;
-  bool IsPathExists(const azer::ResPath& path) override;
   FileType GetFileType(const ResPath& path) override;
+  bool IsPathExists(const ResPath& path) override;
+  int64 GetFileSize(const ResPath& path) override;
+  bool EnumDirectory(const ResPath& path, FileInfoVec* vec) override;
+
+  FileContentPtr LoadFile(const azer::ResPath& path) override;
+  void ResLoadFileAsync(const ResPath& path, FileContent* filecontent,
+                        ::base::Closure* callback) override;
  private:
-  bool ConvertFileSystem(const azer::ResPath& path, ::base::FilePath*) override;
+  bool ConvertFileSystem(const azer::ResPath& path, ::base::FilePath*);
+  const ::base::FilePath root_;
   DISALLOW_COPY_AND_ASSIGN(NativeFileSystem);
 };
 }  // namespace files
