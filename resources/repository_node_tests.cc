@@ -77,6 +77,27 @@ TEST(RepositoryNode, RemoveChild) {
   ASSERT_TRUE(leaf3.get() == NULL);
 }
 
+TEST(RepositoryNode, FindOrCreate) {
+  RepositoryNodePtr root(new RepositoryNode(AZER_LITERAL("//")));
+  RepositoryNodePtr node1 = root->FindOrCreate(AZER_LITERAL("group4"));
+  RepositoryNodePtr node2 = node1->FindOrCreate(AZER_LITERAL("group5"));
+  RepositoryNodePtr node3 = node2->FindOrCreate(AZER_LITERAL("group6"));
+  ASSERT_TRUE(node1->parent() == root.get());
+  ASSERT_TRUE(node2->parent() == node1.get());
+  ASSERT_TRUE(node3->parent() == node2.get());
+  RepositoryNodePtr node  = root->GetNode(Utf8ResPath("//group4/group5/group6"));
+  ASSERT_TRUE(node.get() != NULL);
+}
+
+TEST(RepositoryNode, FindOrCreateRecusive) {
+  ResPath path(AZER_LITERAL("//group4/group5/group6/leaf3"));
+  RepositoryNodePtr root(new RepositoryNode(AZER_LITERAL("//")));
+  root->FindOrCreateRecusive(path.fullpath());
+  RepositoryNodePtr leaf3 = root->GetNode(ResPath(path.fullpath()));
+  ASSERT_TRUE(leaf3.get());
+  ASSERT_TRUE(root->HasAncestor(leaf3.get()));
+}
+
 TEST(RepositoryNode, GenerateTreeHierarchy) {
   ResPath path(AZER_LITERAL("//group4/group5/group6/leaf3"));
   RepositoryNodePtr root(new RepositoryNode(AZER_LITERAL("//")));

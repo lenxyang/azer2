@@ -24,6 +24,7 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   bool HasAncestor(RepositoryNode* node) const;
   RepositoryNodePtr GetChild(const StringType& relative);
   RepositoryNodePtr FindOrCreate(const StringType& name);
+  RepositoryNodePtr FindOrCreateRecusive(const StringType& name);
 
   const StringType& name() const { return name_;}
   StringType fullpath() const;
@@ -33,7 +34,6 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
     return const_cast<RepositoryNode*>(
         const_cast<const RepositoryNode*>(this)->root());
   }
-
 
   RepositoryNode* parent() { return parent_;}
   const RepositoryNode* parent() const { return parent_;}

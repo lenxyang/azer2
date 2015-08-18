@@ -170,9 +170,9 @@ void ResPath::Normalize() {
 }
 
 Slice ResPath::filename() const {
-  Slice slice;
+  Slice slice = fullpath_;
   int32 component_pos = fullpath_.find(kComponentSeperatorStr);
-  if (component_pos == -1) {
+  if (component_pos != -1) {
     slice = Slice(fullpath_.c_str(), component_pos);
   }
   
@@ -201,18 +201,20 @@ Slice ResPath::component_name() const {
 }
 
 std::vector<Slice> ResPath::dirs() const {
-  std::vector<Slice> components, vec;
+  std::vector<Slice> components;
   int cur = 0;
+  Slice filepath = this->filepath();
   if (IsAbsolutePath()) {
-    components.push_back(Slice(filepath().data(), 2));
+    components.push_back(Slice(filepath.data(), 2));
     cur += 2;
   }
 
-  while (cur > 0) {
+  while (cur > 0 && cur < filepath.length()) {
     int prev = cur;
-    cur = fullpath().find(cur, kSeperator);
+    cur = filepath.find(kSeperator, prev);
     if (cur > 0) {
-      components.push_back(Slice(filepath().data() + prev, cur - prev));
+      components.push_back(Slice(filepath.data() + prev, cur - prev));
+      cur += 1;
     }
   }
 

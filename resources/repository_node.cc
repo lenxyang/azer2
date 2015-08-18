@@ -70,6 +70,26 @@ RepositoryNodePtr RepositoryNode::FindOrCreate(const StringType& name) {
   }
 }
 
+RepositoryNodePtr RepositoryNode::FindOrCreateRecusive(const StringType& name) {
+  ResPath path(name);
+  std::vector<Slice> dirs = path.dirs();
+  RepositoryNodePtr ptr = this;
+  for (auto iter = dirs.begin(); iter != dirs.end(); ++iter) {
+    if (iter->as_string() != FILE_PATH_LITERAL("//"))  {
+      ptr = ptr->FindOrCreate(iter->as_string());
+    } else {
+      DCHECK(iter == dirs.begin());
+      ptr = root();
+    }
+  }
+  Slice filename = path.filename();
+  if (!filename.empty()) {
+    ptr->FindOrCreate(filename.as_string());
+  }
+
+  return ptr;
+}
+
 bool RepositoryNode::HasAncestor(RepositoryNode* node) const {
   auto cur = node->parent();
   while (cur) {
