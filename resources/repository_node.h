@@ -63,5 +63,5 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
 };
 
 // generate tree hierarchy if the node in path not exits
-void GenerateTreeHierarchy(const ResPath& path, RepositoryNodePtr root);
+void AZER_EXPORT GenerateTreeHierarchy(const ResPath& path, RepositoryNodePtr root);
 }  // namespace azer
