@@ -15,6 +15,7 @@ typedef scoped_refptr<RepositoryNode> RepositoryNodePtr;
 // add StaticRepositoryNode which use dawg build the tree without any resources
 class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
  public:
+  typedef std::map<StringType, RepositoryNodePtr> RepositoryNodeDicts;
   RepositoryNode();
   explicit RepositoryNode(const StringType& name);
   ~RepositoryNode();
@@ -26,6 +27,8 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   int32 GetIndexOf(const RepositoryNodePtr& node) const; 
   RepositoryNodePtr child_at(int32 index);
   int32 child_count() const;
+  const RepositoryNodeDicts& children() const { return children_;}
+
   RepositoryNodePtr FindOrCreate(const StringType& name);
   RepositoryNodePtr FindOrCreateRecusive(const StringType& name);
 
@@ -65,7 +68,7 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   StringType name_;
   RepositoryNode* parent_;
   void* user_data_;
-  std::map<StringType, RepositoryNodePtr> children_;
+  RepositoryNodeDicts children_;
   std::map<StringType, ResourcePtr> resource_dict_;
   DISALLOW_COPY_AND_ASSIGN(RepositoryNode);
 };
