@@ -20,6 +20,8 @@ RepositoryNode::RepositoryNode()
 }
 
 RepositoryNode::~RepositoryNode() {
+  children_.clear();
+  // LOG(ERROR) << "free all: " << fullpath();
 }
 
 const RepositoryNode* RepositoryNode::root() const {
@@ -69,11 +71,15 @@ int32 RepositoryNode::GetIndexOf(const RepositoryNodePtr& node) const {
 }
 
 RepositoryNodePtr RepositoryNode::child_at(int32 index) {
+  DCHECK(index < child_count());
   int cur = 0;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++cur) {
     if (cur == index)
       return iter->second;
   }
+
+  NOTREACHED();
+  return RepositoryNodePtr();
 }
 
 int32 RepositoryNode::child_count() const {
