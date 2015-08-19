@@ -201,7 +201,8 @@ StringType RepositoryNode::fullpath() const {
   StringType path;
   if (parent()) {
     path.append(parent()->fullpath());
-    path.append(FILE_PATH_LITERAL("/"));
+    if (parent()->parent())
+      path.append(FILE_PATH_LITERAL("/"));
   }
   
   path.append(name());
@@ -210,13 +211,11 @@ StringType RepositoryNode::fullpath() const {
 
 std::string RepositoryNode::PrintHierarchy(int ident) {
   std::stringstream ss;
-  std::string ident_str(' ', ident * 2);
-  if (parent()) {
-    ss << ident_str << fullpath() << std::endl;
-  }
+  std::string ident_str(ident * 2, ' ');
+  ss << ident_str << name() << std::endl;
 
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    ss << iter->second->PrintHierarchy(ident);
+    ss << iter->second->PrintHierarchy(ident + 1);
   }
   return ss.str();
 }

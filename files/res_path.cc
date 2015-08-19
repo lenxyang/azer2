@@ -209,7 +209,7 @@ std::vector<Slice> ResPath::dirs() const {
     cur += 2;
   }
 
-  while (cur > 0 && cur < filepath.length()) {
+  while (cur >= 0 && cur < filepath.length()) {
     int prev = cur;
     cur = filepath.find(kSeperator, prev);
     if (cur > 0) {
