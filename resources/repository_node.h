@@ -18,11 +18,14 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   RepositoryNode();
   explicit RepositoryNode(const StringType& name);
   ~RepositoryNode();
-
+  
   void AddChild(RepositoryNodePtr child);
   void RemoveChild(RepositoryNodePtr child);
   bool HasAncestor(RepositoryNode* node) const;
   RepositoryNodePtr GetChild(const StringType& relative);
+  int32 GetIndexOf(const RepositoryNodePtr& node) const; 
+  RepositoryNodePtr child_at(int32 index);
+  int32 child_count() const;
   RepositoryNodePtr FindOrCreate(const StringType& name);
   RepositoryNodePtr FindOrCreateRecusive(const StringType& name);
 
@@ -51,12 +54,17 @@ class AZER_EXPORT RepositoryNode : public ::base::RefCounted<RepositoryNode> {
   RepositoryNodePtr GetNodeParent(const ResPath& path);
   RepositoryNodePtr GetRelativeNode(const StringType& path);
 
+  const void* user_data() const { return user_data_;}
+  void* user_data() { return user_data_;}
+  void set_user_data(void* data) { user_data_ = data;}
+
   std::string PrintHierarchy(int ident = 0);
  private:
   // get relative path's parent
   RepositoryNodePtr GetNodeFromDirVec(const std::vector<StringType>& path);
   StringType name_;
   RepositoryNode* parent_;
+  void* user_data_;
   std::map<StringType, RepositoryNodePtr> children_;
   std::map<StringType, ResourcePtr> resource_dict_;
   DISALLOW_COPY_AND_ASSIGN(RepositoryNode);

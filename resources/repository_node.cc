@@ -10,7 +10,8 @@
 namespace azer {
 RepositoryNode::RepositoryNode(const StringType& name) 
     : name_(name)
-    , parent_(NULL) {
+    , parent_(NULL)
+    , user_data_(NULL) {
 }
 
 RepositoryNode::RepositoryNode()
@@ -56,6 +57,27 @@ RepositoryNodePtr RepositoryNode::GetChild(const StringType& name) {
   } else {
     return RepositoryNodePtr();
   }
+}
+
+int32 RepositoryNode::GetIndexOf(const RepositoryNodePtr& node) const {
+  int index = 0;
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++index) {
+    if (iter->second.get() == node.get())
+      return index;
+  }
+  return -1;
+}
+
+RepositoryNodePtr RepositoryNode::child_at(int32 index) {
+  int cur = 0;
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++cur) {
+    if (cur == index)
+      return iter->second;
+  }
+}
+
+int32 RepositoryNode::child_count() const {
+  return static_cast<int32>(children_.size());
 }
 
 RepositoryNodePtr RepositoryNode::FindOrCreate(const StringType& name) {
@@ -215,7 +237,7 @@ std::string RepositoryNode::PrintHierarchy(int ident) {
   ss << ident_str << name() << std::endl;
 
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    ss << iter->second->PrintHierarchy(ident + 1);
+    ss << std::move(iter->second->PrintHierarchy(ident + 1));
   }
   return ss.str();
 }
