@@ -13,26 +13,25 @@ NativeFileSystem::NativeFileSystem(const ::base::FilePath& root)
       root_(root) {
 }
 
-FileContentPtr NativeFileSystem::LoadFile(const ResPath& path) {
+bool NativeFileSystem::ReadFile(const ResPath& path, std::vector<uint8>* data) {
   DCHECK(!path.empty());
   if (!path.IsAbsolutePath()) {
-    return FileContentPtr();
+    return false;
   }
 
   ::base::FilePath real_path = root_.Append(path.filepath().substr(2).as_string());
   int64 size = 0;
   if (!::base::GetFileSize(real_path, &size)) {
-    return FileContentPtr();
+    return false;
   }
 
-  scoped_ptr<uint8[]> data(new uint8[size]);
-  int read = ::base::ReadFile(real_path, (char*)data.get(), size);
+  data->resize(size);
+  int read = ::base::ReadFile(real_path, (char*)&((*data)[0]), size);
   if (size != read) {
-    return FileContentPtr();
+    return false;
   }
 
-  FileContentPtr ptr(new FileContent(data.Pass(), size));
-  return ptr;
+  return true;
 }
 
 bool NativeFileSystem::IsPathExists(const azer::ResPath& path) {
@@ -56,9 +55,9 @@ bool NativeFileSystem::EnumDirectory(const ResPath& path, FileInfoVec* vec) {
   return false;
 }
 
-void NativeFileSystem::ResLoadFileAsync(const ResPath& path,
-                                        FileContent* filecontent,
-                                        ::base::Closure* callback) {
+void NativeFileSystem::ReadFileAsync(const ResPath& path,
+                                     std::vector<uint8>* data,
+                                     ::base::Closure* callback) {
   NOTIMPLEMENTED();
 }
 

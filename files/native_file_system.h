@@ -16,9 +16,9 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
   int64 GetFileSize(const ResPath& path) override;
   bool EnumDirectory(const ResPath& path, FileInfoVec* vec) override;
 
-  FileContentPtr LoadFile(const azer::ResPath& path) override;
-  void ResLoadFileAsync(const ResPath& path, FileContent* filecontent,
-                        ::base::Closure* callback) override;
+  bool ReadFile(const ResPath& path, std::vector<uint8>* content) override;
+  void ReadFileAsync(const ResPath& path, std::vector<uint8>* content,
+                     ::base::Closure* callback) override;
  private:
   bool ConvertFileSystem(const azer::ResPath& path, ::base::FilePath*);
   const ::base::FilePath root_;
