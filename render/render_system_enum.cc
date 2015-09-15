@@ -23,9 +23,9 @@ const char* RenderStageName(RenderPipelineStage stage) {
 uint32 SizeofDataFormat(DataFormat format) {
   switch (format) {
     case kFloat: return sizeof(float);
-    case kVec2: return sizeof(float) * 4;
-    case kVec3: return sizeof(float) * 9;
-    case kVec4: return sizeof(float) * 16;
+    case kVec2: return sizeof(float) * 2;
+    case kVec3: return sizeof(float) * 3;
+    case kVec4: return sizeof(float) * 4;
     case kMat2: return sizeof(float) * 4;
     case kMat3: return sizeof(float) * 9;
     case kMat4: return sizeof(float) * 16;
