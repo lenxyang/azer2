@@ -36,7 +36,7 @@ int ResPathTokenizer::GetNext() {
         break;
       default:
         if (demils) return ResPathParser::kSuccess;
-		token_type_ = kStringToken;
+        token_type_ = kStringToken;
         current_.push_back(c);
         if (!ValidStringChar(c)) {
           ++index_;
@@ -65,6 +65,7 @@ bool ResPathTokenizer::ValidStringChar(CharType cb) const {
   }
 
   if (cb == '_') { return true;}
+  if (cb == ' ') { return true;}
   return false;
 }
 
