@@ -12,7 +12,6 @@ const char* coordinate_effect_hlsl_vs = ""
     "};\n"
     "struct VSInput {\n"
     "  float4 position:POSITION;\n"
-    "  float4 normal:NORMAL;\n"
     "};\n"
     "cbuffer c_buffer {\n"
     "  float4x4 pvw;\n"
@@ -41,7 +40,9 @@ void CoordinateGridEffect::InitShader() {
   ShaderPrograms sources;
   sources.resize(kRenderPipelineStageNum);
   sources[kVertexStage].code = coordinate_effect_hlsl_vs;
-  sources[kPixelStage].code = coordinate_effect_hlsl_vs;
+  sources[kVertexStage].path = "azer/render/util/coordinate_grid_effect_hlsl.cc";
+  sources[kPixelStage].code = coordinate_effect_hlsl_ps;
+  sources[kPixelStage].path = "azer/render/util/coordinate_grid_effect_hlsl.cc";
   InitShaders(sources);
 }
 }  // namespace azer
