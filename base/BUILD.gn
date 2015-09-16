@@ -45,6 +45,8 @@ source_set("base") {
     "dynlib.h",
     "file_util.cc",
     "file_util.h",
+    "image_data.cc",
+    "image_data.h",
     "image.cc",
     "image.h",
     "resource.h",

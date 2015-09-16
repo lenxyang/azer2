@@ -36,7 +36,6 @@ class AZER_EXPORT ImageData : public ::base::RefCounted<ImageData> {
   // tu and tv [0, 1)
   Vector4 BoxSample(float tu, float tv) const;
 
-  
   static ImageDataPtr Load2D(const char* data, int32 length);
   static ImageDataPtrVec LoadCubemap(const char* data, int32 length);
  private:
@@ -48,61 +47,4 @@ class AZER_EXPORT ImageData : public ::base::RefCounted<ImageData> {
   DISALLOW_COPY_AND_ASSIGN(ImageData);
 };
 
-inline ImageData::ImageData(int32 width, int32 height, DataFormat format)
-    : width_(width)
-    , height_(height)
-    , format_(format) {
-  uint32 size = data_size();
-  data_.reset(new uint8[size]);
-}
-
-inline int ImageData::width() const {
-  DCHECK(data_.get() != NULL);
-  return width_;
-}
-inline int ImageData::height() const {
-  DCHECK(data_.get() != NULL);
-  return height_;
-}
-
-inline int32 ImageData::data_size() const {
-  return width_ * height_ * sizeof_dataformat(format_);
-}
-
-inline uint8* ImageData::data() {
-  DCHECK(data_.get() != NULL);
-  return data_.get();
-}
-
-inline const uint8* ImageData::data() const {
-  DCHECK(data_.get() != NULL);
-  return data_.get();
-}
-
-inline int32 ImageData::sizeof_dataformat(DataFormat format) const {
-  switch (format) {
-    case kRGBA8:
-    case kRGBAn8:
-      return (int32)sizeof(uint32);
-    case kRGBA32:
-    case kRGBAn32:
-      return (int32)sizeof(uint32) * 4;
-    case kRGBAf:
-      return (int32)sizeof(float) * 4;
-    default:
-      NOTREACHED();
-      return -1;
-  }
-}
-
-inline uint32 ImageData::pixel(int x, int y) const {
-  DCHECK(data_.get() != NULL);
-  uint8* ptr = data_.get() + (y * width() + x) * sizeof_dataformat(format());
-  return *(uint32*)ptr;
-}
-
-inline void ImageData::set_pixel(int x, int y, uint32 v) {
-  uint8* ptr = data_.get() + (y * width() + x) * sizeof_dataformat(format());
-  *(uint32*)ptr = v;
-}
 }  // namespace azer
