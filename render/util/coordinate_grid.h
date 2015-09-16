@@ -13,7 +13,7 @@ namespace azer {
 
 class AZER_EXPORT CoordinateGrid {
  public:
-  CoordinateGrid(int width, int height, int num);
+  CoordinateGrid(float width, float height, int num);
   ~CoordinateGrid();
 
   void Render(Renderer* rs);
@@ -27,7 +27,8 @@ class AZER_EXPORT CoordinateGrid {
   VertexDataPtr data_;
   VertexBufferPtr vb_;
   Vector4 x_color_, z_color_;
-  const int kWidth, kHeight, kNum;
+  const float kWidth, kHeight;
+  const int kNum;
   DISALLOW_COPY_AND_ASSIGN(CoordinateGrid);
 };
 }  // namespace azer

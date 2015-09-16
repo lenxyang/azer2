@@ -4,8 +4,9 @@
 #include <vector>
 
 #include "base/basictypes.h"
-#include "base/logging.h"
 #include "base/files/file_path.h"
+#include "base/logging.h"
+#include "base/memory/ref_counted.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"
 #include "azer/render/render_system_enum.h"
@@ -13,10 +14,10 @@
 namespace azer {
 
 class ImageData;
-typedef std::shared_ptr<ImageData> ImageDataPtr;
+typedef scoped_refptr<ImageData> ImageDataPtr;
 typedef std::vector<ImageDataPtr> ImageDataPtrVec;
 
-class AZER_EXPORT ImageData {
+class AZER_EXPORT ImageData : public ::base::RefCounted<ImageData> {
  public:
   ImageData(int width, int height, DataFormat format = kRGBAn8);
 
