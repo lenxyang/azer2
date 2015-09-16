@@ -1,5 +1,7 @@
 #include "azer/render/vertex_buffer.h"
+
 #include "azer/math/math.h"
+#include "azer/render/render_system.h"
 
 namespace azer {
 
@@ -122,4 +124,9 @@ int32 VertexTypeSize(DataFormat type) {
   }
 }
 
+
+VertexBufferPtr VertexBuffer::CreateDefaultVertexBuffer(RenderSystem* rs, 
+                                                        VertexDataPtr vdata) {
+  return rs->CreateVertexBuffer(Options(), vdata);
+}
 }  // namespace azer

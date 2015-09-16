@@ -32,17 +32,8 @@ class AZER_EXPORT CoordinateGridEffect : public azer::Effect {
     Vertex() {}
   };
 
-  void SetWVP(const azer::Matrix4& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
-    DCHECK(tb != NULL);
-    tb->SetValue(0, (void*)&value,  sizeof(azer::Matrix4));
-  }
-
-  void SetGridDiffuse(const azer::Vector4& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kPixelStage].get();
-    DCHECK(tb != NULL);
-    tb->SetValue(0, (void*)&value,  sizeof(azer::Vector4));
-  }
+  void SetPVW(const azer::Matrix4& value);
+  void SetGridDiffuse(const azer::Vector4& value);
 
   azer::VertexDescPtr GetVertexDesc() { return technique_->GetVertexDesc();}
   static const int kVertexDescNum;
@@ -55,24 +46,20 @@ class AZER_EXPORT CoordinateGridEffect : public azer::Effect {
 
 class AZER_EXPORT CoordinateGrid {
  public:
-  CoordinateGrid(RenderSystem* rs, int width, int height, int num)
-      : render_system_(rs)
-      , kWidth(width), kHeight(height), kNum(num) {
-    Init();
-  }
-
+  CoordinateGrid(int width, int height, int num);
   ~CoordinateGrid();
 
   void Render(Renderer* rs);
-  void SetGridDiffuse(const Vector4& grid_diffuse);
-  void SetProjViewMat(const Matrix4& mat);
+  void SetXCoordColor(const Vector4& col) { x_color_ = col;}
+  void SetZCoordColor(const Vector4& col) { z_color_ = col;}
+  void SetPVWMat(const Matrix4& mat);
  private:
   void Init();
 
-  std::unique_ptr<CoordinateGridEffect> effect_ptr_;
+  scoped_refptr<CoordinateGridEffect> effect_ptr_;
   VertexDataPtr data_;
   VertexBufferPtr vb_;
-  RenderSystem* render_system_;
+  Vector4 x_color_, z_color_;
   const int kWidth, kHeight, kNum;
   DISALLOW_COPY_AND_ASSIGN(CoordinateGrid);
 };

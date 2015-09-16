@@ -125,6 +125,9 @@ class AZER_EXPORT VertexData : public Resource {
 };
 
 
+class VertexBuffer;
+typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
+
 class AZER_EXPORT VertexBuffer : public HardwareBuffer {
  public:
   struct AZER_EXPORT Options {
@@ -136,6 +139,9 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
 
   explicit VertexBuffer(const Options &opt);
   virtual ~VertexBuffer();
+
+  static VertexBufferPtr CreateDefaultVertexBuffer(RenderSystem* rs, 
+                                                   VertexDataPtr vdata);
 
   /**
    * 从 Lockable 继承的借口
@@ -153,8 +159,6 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   int32 vertex_num_;
   DISALLOW_COPY_AND_ASSIGN(VertexBuffer);
 };
-
-typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
 
 int32 AZER_EXPORT VertexTypeSize(DataFormat type);
 }  // namespace azer

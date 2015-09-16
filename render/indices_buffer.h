@@ -18,6 +18,9 @@ class AZER_EXPORT IndicesData : public Resource {
     kUint32,
   };
 
+  static IndexType CalcFixType(int num);
+
+  explicit IndicesData(int num);
   IndicesData(int num, IndexType type);
   ~IndicesData() override {}
 
@@ -48,6 +51,9 @@ class AZER_EXPORT IndicesData : public Resource {
 
 typedef scoped_refptr<IndicesData> IndicesDataPtr;
 
+class IndicesBuffer;
+typedef scoped_refptr<IndicesBuffer> IndicesBufferPtr;
+
 class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
 public:
   struct AZER_EXPORT Options {
@@ -55,6 +61,9 @@ public:
     CPUAccess cpu_access;  // defined render_system
     Options();
   };
+
+  static IndicesBufferPtr CreateDefaultIndicesBuffer(RenderSystem* rs,
+                                                     IndicesData* data);
 
   IndicesBuffer(const Options& opt);
 
@@ -73,5 +82,4 @@ public:
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);
 };
 
-typedef scoped_refptr<IndicesBuffer> IndicesBufferPtr;
 }  // namespace azer
