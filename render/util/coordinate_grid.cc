@@ -7,60 +7,6 @@
 #include "azer/render/render_system.h"
 
 namespace azer {
-const char CoordinateGridEffect::kEffectName[] = "CoordinateGridEffect";
-// class CoordinateGridEffect
-const VertexDesc::Desc CoordinateGridEffect::kVertexDesc[] = {
-  {"POSITION", 0, kVec4},
-};
-const int CoordinateGridEffect::kVertexDescNum =
-    arraysize(CoordinateGridEffect::kVertexDesc);
-
-CoordinateGridEffect::CoordinateGridEffect(RenderSystem* rs)
-    : Effect(rs) {
-  Init(rs);
-}
-
-const char* CoordinateGridEffect::name() const {
-  return kEffectName;
-}
-
-void CoordinateGridEffect::SetPVW(const azer::Matrix4& value) {
-  azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(0, (void*)&value,  sizeof(azer::Matrix4));
-}
-
-void CoordinateGridEffect::SetGridDiffuse(const azer::Vector4& value) {
-  azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kPixelStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(0, (void*)&value,  sizeof(azer::Vector4));
-}
-
-void CoordinateGridEffect::Init(RenderSystem* rs) {
-  /*
-  technique_ = ResourceManager::GetCommonResourceManager()->GetTechnique(
-      AZER_LITERAL("technique/coordinate_grid_effect.tech"), rs);
-  */
-  CHECK(false);
- 
- 
-  GpuConstantsTable::Desc vs_table_desc[] = {
-    GpuConstantsTable::Desc("vp", azer::GpuConstantsType::kMatrix4,
-                            offsetof(CoordinateGridEffect::vs_cbuffer, vp), 1), 
-  };
-  gpu_table_[azer::kVertexStage] = render_system_->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc);
-  GpuConstantsTable::Desc ps_table_desc[] = {
-    GpuConstantsTable::Desc("diffuse", azer::GpuConstantsType::kVector4,
-                            offsetof(CoordinateGridEffect::ps_cbuffer, diffuse), 1), 
-  };
-  gpu_table_[azer::kPixelStage] = (render_system_->CreateGpuConstantsTable(
-      arraysize(ps_table_desc), ps_table_desc));
-}
-
-void CoordinateGridEffect::UseTexture(azer::Renderer* renderer) {
-}
-
 
 // class CoordinateGrid
 CoordinateGrid::CoordinateGrid(int width, int height, int num)

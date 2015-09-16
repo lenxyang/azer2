@@ -7,42 +7,9 @@
 #include "azer/render/indices_buffer.h"
 #include "azer/render/technique.h"
 #include "azer/render/vertex_buffer.h"
+#include "azer/render/util/coordinate_grid_effect.h"
 
 namespace azer {
-class AZER_EXPORT CoordinateGridEffect : public azer::Effect {
- public:
-  static const char kEffectName[];
-  CoordinateGridEffect(azer::RenderSystem* rs);
-
-  bool Init(const ShaderPrograms& prog) override {return true;}
-#pragma pack(push, 4)
-  struct vs_cbuffer {
-    azer::Matrix4 vp;
-  };
-  struct ps_cbuffer {
-    azer::Vector4 diffuse;
-  };
-#pragma pack(pop)
-  const char* name() const override;
-  struct Vertex {
-    azer::Vector4 position;
-    Vertex(const azer::Vector4& in_position)
-        : position(in_position)
-    {}
-    Vertex() {}
-  };
-
-  void SetPVW(const azer::Matrix4& value);
-  void SetGridDiffuse(const azer::Vector4& value);
-
-  azer::VertexDescPtr GetVertexDesc() { return technique_->GetVertexDesc();}
-  static const int kVertexDescNum;
-  static const azer::VertexDesc::Desc kVertexDesc[];
- protected:
-  void Init(RenderSystem* rs);
-  virtual void UseTexture(azer::Renderer* renderer) override;
-  DISALLOW_COPY_AND_ASSIGN(CoordinateGridEffect);
-};
 
 class AZER_EXPORT CoordinateGrid {
  public:
