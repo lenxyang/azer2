@@ -24,4 +24,5 @@ class AZER_EXPORT AutoRenderSystemInit {
 
 bool AZER_EXPORT LoadRenderSystem();
 void AZER_EXPORT UnloadRenderSystem();
+bool AZER_EXPORT IsRenderSystemLoaded();
 }  // namespace azer

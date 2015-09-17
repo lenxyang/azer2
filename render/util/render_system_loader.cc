@@ -60,4 +60,8 @@ void UnloadRenderSystem() {
     s_render_system_env = NULL;
   }
 }
+
+bool IsRenderSystemLoaded() {
+  return RenderSystem::Current() != NULL;
+}
 }  // namespace azer
