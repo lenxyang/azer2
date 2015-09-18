@@ -51,7 +51,8 @@ bool LoadRenderSystem() {
   dllpath = dllpath.Append(::base::UTF8ToWide("d3d11_render_system.dll"));
 
   s_render_system_env = new AutoRenderSystemInit(dllpath);
-  return s_render_system_env->GetRenderSystem() != NULL;
+  RenderSystem* rs =  s_render_system_env->GetRenderSystem();
+  return rs != NULL;
 }
 
 void UnloadRenderSystem() {

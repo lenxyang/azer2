@@ -91,9 +91,9 @@ void D3DRenderer::EnableDepthTest(bool enable) {
 FrontFace D3DRenderer::GetFrontFace(void) {
   GET_D3D_RENDER_STATE();
   if (desc.FrontCounterClockwise) 
-    return kClockwise;
-  else 
     return kCounterClockwise;
+  else 
+    return kClockwise;
 }
 
 void D3DRenderer::SetFrontFace(FrontFace mode) {

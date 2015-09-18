@@ -214,6 +214,9 @@ RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
   ID3D11DeviceContext* context = envptr_->GetContext();
   scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(opt)) {
+    renderer->SetFillMode(kSolid);
+    renderer->SetCullingMode(kCullBack);
+    renderer->SetFrontFace(kCounterClockwise);
     return renderer;
   } else {
     return RendererPtr();
@@ -247,6 +250,9 @@ RendererPtrVec D3DRenderSystem::CreateRendererVec(const Texture::Options& opt,
     scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
     int depth_index = (shared_depth_buffer ? 0 : i);
     if (renderer->Init(targets[i], depthes[depth_index])) {
+      renderer->SetFillMode(kSolid);
+      renderer->SetCullingMode(kCullBack);
+      renderer->SetFrontFace(kCounterClockwise);
       vec.push_back(RendererPtr(renderer));
     } else {
       vec.clear();
