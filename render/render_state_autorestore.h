@@ -44,4 +44,24 @@ class AutoFillMode {
   Renderer* renderer_;
   DISALLOW_COPY_AND_ASSIGN(AutoFillMode);
 };
+
+class AutoFrontFace {
+ public:
+  AutoFrontFace(FrontFace mode, Renderer* renderer)
+      : renderer_(renderer) {
+    prev_mode_ = renderer->GetFrontFace();
+    modified_ = (prev_mode_ != mode);
+    if (modified_)
+      renderer_->SetFrontFace(mode);
+  }
+  ~AutoFrontFace() {
+    if (modified_)
+      renderer_->SetFrontFace(prev_mode_);
+  }
+ private:
+  FrontFace prev_mode_;
+  bool modified_;
+  Renderer* renderer_;
+  DISALLOW_COPY_AND_ASSIGN(AutoFrontFace);
+};
 }  // namespace azer
