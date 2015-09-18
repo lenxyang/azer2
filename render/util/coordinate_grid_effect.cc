@@ -2,6 +2,7 @@
 
 #include "base/logging.h"
 #include "azer/render/render_system.h"
+#include "azer/render/render_system_loader.h"
 
 namespace azer {
 const char CoordinateGridEffect::kEffectName[] = "CoordinateGridEffect";
@@ -54,4 +55,16 @@ void CoordinateGridEffect::Init(RenderSystem* rs) {
 void CoordinateGridEffect::UseTexture(Renderer* renderer) {
 }
 
+
+void CoordinateGridEffect::InitShader() {
+  ShaderPrograms sources;
+  sources.resize(kRenderPipelineStageNum);
+  sources[kVertexStage].code = GetCommonShaderProgram(kEffectName, "", kVertexStage, 
+                                                    NULL);
+  sources[kVertexStage].path = kEffectName;
+  sources[kPixelStage].code = GetCommonShaderProgram(kEffectName, "", kPixelStage, 
+                                                   NULL);
+  sources[kPixelStage].path = kEffectName;
+  InitShaders(sources);
+}
 }  // namespace azer
