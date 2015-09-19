@@ -17,8 +17,7 @@ Camera::Camera(const Frustrum& frustrum)
 }
 
 Camera::Camera(const Vector3& pos)
-    : MovableObject(pos)
-    , frustrum_(this) {
+    : frustrum_(this) {
   Update();
 }
 
@@ -29,19 +28,20 @@ Camera::Camera(const Vector3& pos, const Vector3& lookat,
 }
 
 Camera& Camera::operator = (const Camera& camera) {
-  reset(camera.position(), camera.position() + camera.direction(),
-        camera.up());
+  reset(camera.holder_.position(),
+        camera.holder_.position() + camera.holder_.direction(),
+        camera.holder_.up());
   frustrum_ = camera.frustrum();
   return *this;
 }
 
 void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up) {
   Matrix4 mat = LookAtRH(pos, lookat, up);
-  SetPosition(pos);
+  holder_.SetPosition(pos);
   Vector3 xaxis(mat[0][0], mat[0][1], mat[0][2]);
   Vector3 yaxis(mat[1][0], mat[1][1], mat[1][2]);
   Vector3 zaxis(mat[2][0], mat[2][1], mat[2][2]);
-  orientation_ = azer::Quaternion::FromAxis(xaxis, yaxis, zaxis);
+  holder_.set_orientation(Quaternion::FromAxis(xaxis, yaxis, zaxis));
   Update();
 }
 
@@ -66,13 +66,14 @@ void Camera::GenMatrices() {
   view[2][3] = trans.z;
   */
   
-  view_mat_ = std::move(LookDirRH(position(), direction(), up()));
+  view_mat_ = std::move(LookDirRH(holder_.position(), holder_.direction(), 
+                                  holder_.up()));
   proj_view_mat_ = std::move(frustrum_.projection() * view_mat_);
 }
 
 
 void Camera::SetLookAt(const Vector3& lookat) {
-  reset(position_, lookat, up());
+  reset(holder_.position(), lookat, holder_.up());
 }
 
 void Camera::SetDirection(const Vector3& dir) {
@@ -83,5 +84,10 @@ void Camera::SetDirection(const Vector3& dir) {
   DCHECK_FLOAT_EQ(dir.length(), 1.0f);
   Vector3 zaxis = -dir;
   CHECK(false);
+}
+
+void Camera::Update() {
+  GenMatrices();
+  frustrum_.UpdatePlane();
 }
 }  // namespace azer

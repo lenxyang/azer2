@@ -65,6 +65,8 @@ source_set("render") {
     "reusable_object.h",
     "reusable_object_util.cc",
     "reusable_object_util.h",
+    "transform_holder.cc",
+    "transform_holder.h",
     "sky.cc",
     "sky.h",
     "swap_chain.h",

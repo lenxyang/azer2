@@ -5,6 +5,7 @@
 #include "azer/math/math.h"
 #include "azer/render/frustrum.h"
 #include "azer/render/movable.h"
+#include "azer/render/transform_holder.h"
 
 namespace azer {
 
@@ -16,7 +17,7 @@ namespace azer {
  * 因此确定的各轴方式的是 Q * axis * Q^-1, 此运算 Quaternion 提供了直接的方法
  *
  */
-class AZER_EXPORT Camera : public MovableObject {
+class AZER_EXPORT Camera {
  public:
   Camera();
   Camera(const Frustrum& frustrum);
@@ -33,10 +34,10 @@ class AZER_EXPORT Camera : public MovableObject {
   const Matrix4& GetViewMatrix() const { return view_mat_;}
   const Matrix4& GetProjViewMatrix() const { return proj_view_mat_;}
 
-  void Update() {
-    GenMatrices();
-    frustrum_.UpdatePlane();
-  }
+  void Update();
+  TransformHolder* GetTransformHolder() { return &holder_;}
+  const TransformHolder* GetTransformHolder() const { return &holder_;}
+
   const Frustrum& frustrum() const { return frustrum_;}
   Frustrum& frustrum() { return frustrum_;}
   friend std::ostream& operator << (std::ostream& os, const Camera& camera);
@@ -50,12 +51,14 @@ class AZER_EXPORT Camera : public MovableObject {
   Matrix4 view_mat_;
   Matrix4 proj_view_mat_;
   Frustrum frustrum_;
+  TransformHolder holder_;
 };
 
 inline std::ostream& operator << (std::ostream& os, const Camera& camera) {
-  os << "azer::camera info{ dir:" << camera.direction()
-     << ", up: " << camera.up()
-     << ", pos: " << camera.position() << "}";
+  const TransformHolder* holder = camera.GetTransformHolder();
+  os << "azer::camera info{ dir:" << holder->direction()
+     << ", up: " << holder->up()
+     << ", pos: " << holder->position() << "}";
   return os;
 }
 }  // namespace azer
