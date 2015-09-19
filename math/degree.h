@@ -20,6 +20,8 @@ class Degree {
   float value() const { return value_;}
   friend Radians operator / (Radians rad1, float scalar);
 
+  Degree operator + () const;
+  Degree operator - () const;
   Degree& operator * (float val);
   Degree& operator * (double val);
  private:
@@ -40,10 +42,13 @@ class Radians {
 
   Radians(const float r) : value_(r) {}
 
+  Radians operator + () const;
+  Radians operator - () const;
   Radians& operator * (float val);
   Radians& operator * (double val);
   operator float() const{ return value_; }
 
+  
   friend Radians operator + (Radians r1, Radians r2);
   friend Radians operator - (Radians r1, Radians r2);
   friend Radians operator / (Radians rad1, float scalar);
@@ -60,6 +65,14 @@ inline Degree::Degree(const Radians r) {
   value_ = r.value_ * 180.0f / kPI;
 }
 
+inline Degree Degree::operator + () const {
+  return Degree(+value_);
+}
+
+inline Degree Degree::operator - () const {
+  return Degree(-value_);
+}
+
 inline Degree& Degree::operator * (float val) {
   value_ *= val;
   return *this;
@@ -72,6 +85,14 @@ inline Degree& Degree::operator * (double val) {
 
 inline Degree operator / (Degree degree, float scalar) {
   return Degree(degree.value() / scalar);
+}
+
+inline Radians Radians::operator + () const {
+  return Radians(+value_);
+}
+
+inline Radians Radians::operator - () const {
+  return Radians(-value_);
 }
 
 inline Radians& Radians::operator * (float val) {
