@@ -49,15 +49,18 @@ void CoordinateGrid::Init() {
 }
 
 void CoordinateGrid::Render(Renderer* renderer) {
-  effect_ptr_->Use(renderer);
-  effect_ptr_->SetGridDiffuse(z_color_);
-  renderer->Draw(vb_.get(), kLineList, (kNum + 1) * 2, 0);
   effect_ptr_->SetGridDiffuse(x_color_);
+  effect_ptr_->Use(renderer);
   renderer->Draw(vb_.get(), kLineList, (kNum + 1) * 2, (kNum + 1) * 2);
+  effect_ptr_->SetGridDiffuse(z_color_);
+  effect_ptr_->Use(renderer);
+  renderer->Draw(vb_.get(), kLineList, (kNum + 1) * 2, 0);
 }
 
 
-void CoordinateGrid::SetPVWMat(const Matrix4& mat) {
-  effect_ptr_->SetPVW(mat);
+void CoordinateGrid::Update(const Camera& camera) {
+  Matrix4 world = std::move(holder_.GenWorldMatrix());
+  Matrix4 pvw = std::move(camera.GetProjViewMatrix() * world);
+  effect_ptr_->SetPVW(pvw);
 }
 }  // namespace azer
