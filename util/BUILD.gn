@@ -5,7 +5,8 @@ static_library("util") {
   sources = [
     "tile.cc",
     "tile.h",
-    "util.h",
+    "shader_util.cc",
+    "shader_util.h",
   ]
   deps = [
     "//azer",
