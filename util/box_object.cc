@@ -4,7 +4,7 @@
 #include "azer/render/renderer.h"
 #include "azer/util/vertex_pack.h"
 #include "azer/util/index_pack.h"
-#include "azer/util/diffuse_effect.h"
+#include "azer/util/pvw_effect.h"
 
 namespace azer {
 BoxObject::BoxObject(PVWEffectPtr effect)

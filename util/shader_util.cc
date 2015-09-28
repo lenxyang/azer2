@@ -1,6 +1,7 @@
 #include "azer/util/shader_util.h"
 
 #include "base/files/file_path.h"
+#include "base/files/file_util.h"
 #include "azer/render/render_system.h"
 
 namespace azer {
