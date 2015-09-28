@@ -13,6 +13,7 @@ executable("objects") {
     "//ui/gfx/geometry",
     "//azer",
     "//azer/math",
+    "//azer/render/util",
     "//nelf",
   ]
 }

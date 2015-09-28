@@ -23,9 +23,7 @@ class AZER_EXPORT BoundingVolumn : public ::base::RefCounted<BoundingVolumn> {
     kOrientedBox,
   };
 
-  virtual VisibleState IsVisible(const Frustrum& frustrum, const Matrix4& world) = 0;
-  virtual void Render(Renderer* renderer, const Matrix4& world,
-                      const Camera& camera) = 0;
+  virtual VisibleState IsVisible(const Frustrum& frustrum) = 0;
 };
 
 typedef scoped_refptr<BoundingVolumn> BoundingVolumnPtr;

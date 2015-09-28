@@ -48,8 +48,9 @@ shared_library("d3d11") {
     "vertex_buffer.h",
   ]
   deps = [
-    "//base:base",
     "//azer",
+    "//azer/render/util",
+    "//base:base",
     "//ui/gfx",
     "//ui/gl",
     "//skia",

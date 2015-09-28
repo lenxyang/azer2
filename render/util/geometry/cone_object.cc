@@ -4,7 +4,7 @@
 #include "azer/render/renderer.h"
 #include "azer/render/util/index_pack.h"
 #include "azer/render/util/vertex_pack.h"
-#include "azer/render/util/geometry/pvw_effect.h"
+#include "azer/render/util/pvw_effect.h"
 #include "azer/render/util/geometry/indices_util.h"
 
 namespace azer {

@@ -5,7 +5,6 @@
 #include "azer/render/render_system.h"
 #include "azer/render/frustrum.h"
 #include "azer/render/camera.h"
-#include "azer/render/util/axis_aligned_box_mesh.h"
 #include "base/logging.h"
 
 namespace azer {
@@ -49,28 +48,6 @@ AxisAlignedBox AxisAlignedBox::CalcForVertexData(
   return AxisAlignedBox(min_pos, max_pos);
 }
 
-/*
-AxisAlignedBox AxisAlignedBox::CalcForMesh(const Mesh& mesh) {
-  azer::Vector4 min_pos(std::numeric_limits<float>::max(),
-                        std::numeric_limits<float>::max(),
-                        std::numeric_limits<float>::max(), 1.0f);
-  azer::Vector4 max_pos(std::numeric_limits<float>::min(),
-                        std::numeric_limits<float>::min(),
-                        std::numeric_limits<float>::min(), 1.0f);
-  AxisAlignedBox ret;
-  ret.minimum_ = min_pos;
-  ret.maximum_ = max_pos;
-  for (auto iter = mesh.Subs().begin(); iter != mesh.Subs().end(); ++iter) {
-    VertexData* vdata = (*iter)->vb_ptr->data().get();
-    DCHECK(NULL != vdata);
-    AxisAlignedBox aabb = CalcForVertexData(*vdata);
-    ret.merge(aabb);
-  }
-
-  return ret;
-}
-*/
-
 AxisAlignedBox AxisAlignedBox::TransformCopy(const Matrix4& trans) {
   AxisAlignedBox box;
   box.minimum_ = trans * minimum_;
@@ -81,8 +58,10 @@ AxisAlignedBox AxisAlignedBox::TransformCopy(const Matrix4& trans) {
 bool AxisAlignedBox::intersect(const Ray& ray) const {
   // front
   // just test a plane inside the cube
-  TrianglePlane plane1(minimum_, maximum_, vec3(maximum_.x, minimum_.y, maximum_.z));
-  TrianglePlane plane2(minimum_, maximum_, vec3(minimum_.x, maximum_.y, minimum_.z));
+  TrianglePlane plane1(minimum_, maximum_, 
+                       vec3(maximum_.x, minimum_.y, maximum_.z));
+  TrianglePlane plane2(minimum_, maximum_, 
+                       vec3(minimum_.x, maximum_.y, minimum_.z));
 
   vec3 pos = plane1.intersect(ray);
   // LOG(ERROR) << "interact: " << pos << ", dist: " << plane1.distance(ray);
@@ -99,24 +78,65 @@ inline VisibleState IsAABBVisible(const AxisAlignedBox& aabb,
 }
 }  // namespace
 
-VisibleState AxisAlignedBox::IsVisible(const Frustrum& frustrum,
-                                       const Matrix4& world) {
-  AxisAlignedBox aabb = std::move(TransformCopy(world));
-  return IsAABBVisible(aabb, frustrum);
+AxisAlignedBox::AxisAlignedBox()
+    : is_null_(true)  {
 }
 
-void AxisAlignedBox::Render(Renderer* renderer, const Matrix4& world,
-                            const Camera& camera) {
-  /*
-  Vector3 scale = maximum() - minimum();
-  azer::Matrix4 new_world = std::move(world * azer::Scale(scale));
-  azer::Matrix4 wvp = std::move(camera.GetProjViewMatrix() * new_world);
-  AABBMesh* mesh = AABBMesh::GetInstance(renderer->GetRenderSystem());
-  mesh->effect()->SetWVP(wvp);
-  mesh->effect()->SetDiffuse(azer::Vector4(0.0f, 0.6f, 0.0f, 1.0f));
-  mesh->effect()->Use(renderer);
-  mesh->Render(renderer);
-  */
+AxisAlignedBox::AxisAlignedBox(
+    const AxisAlignedBox& box) {
+  *this = box;
+}
+
+AxisAlignedBox::AxisAlignedBox(const Vector3& minimum, const Vector3& maximum)
+    : minimum_(minimum, 1.0f)
+    , maximum_(maximum, 1.0f)
+    , is_null_(false) {
+  DCHECK(minimum_.x <= maximum_.x &&
+         minimum_.y <= maximum_.y &&
+         minimum_.z <= maximum_.z);
+}
+
+AxisAlignedBox::AxisAlignedBox(const Vector4& minimum, const Vector4& maximum)
+    : minimum_(minimum)
+    , maximum_(maximum)
+    , is_null_(false) {
+  DCHECK(minimum_.x <= maximum_.x &&
+         minimum_.y <= maximum_.y &&
+         minimum_.z <= maximum_.z);
+}
+
+AxisAlignedBox& AxisAlignedBox::operator = (
+    const AxisAlignedBox& box) {
+  this->minimum_ = box.minimum_;
+  this->maximum_ = box.maximum_;
+  this->is_null_ = box.is_null_;
+  return *this;
+}
+
+void AxisAlignedBox::merge(const AxisAlignedBox& aabbox) {
+  minimum_.x = std::min(aabbox.minimum().x, minimum_.x);
+  minimum_.y = std::min(aabbox.minimum().y, minimum_.y);
+  minimum_.z = std::min(aabbox.minimum().z, minimum_.z);
+
+  maximum_.x = std::max(aabbox.maximum().x, maximum_.x);
+  maximum_.y = std::max(aabbox.maximum().y, maximum_.y);
+  maximum_.z = std::max(aabbox.maximum().z, maximum_.z);
+  is_null_ = false;
+}
+
+bool AxisAlignedBox::inside(const Vector3& pos) const {
+  return minimum_.x <= pos.x && maximum_.x >= pos.x  &&
+      minimum_.y <= pos.y && maximum_.y >= pos.y  &&
+      minimum_.z <= pos.z && maximum_.z >= pos.z;
+}
+
+bool AxisAlignedBox::intersect(const AxisAlignedBox& box)
+    const {
+  return inside(box.minimum_) || inside(box.maximum_);
+}
+
+VisibleState AxisAlignedBox::IsVisible(const Frustrum& frustrum) {
+  return IsAABBVisible(*this, frustrum);
 }
 
 std::ostream& operator << (std::ostream& o, const AxisAlignedBox& v) {

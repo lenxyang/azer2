@@ -3,7 +3,7 @@
 #include "azer/math/math.h"
 #include "azer/render/camera.h"
 #include "azer/render/renderer.h"
-#include "azer/render/util/geometry/pvw_effect.h"
+#include "azer/render/util/pvw_effect.h"
 
 namespace azer {
 GeometryObject::GeometryObject(PVWEffectPtr effect)
