@@ -1,5 +1,12 @@
 #pragma once
 
-#include "azer/render/render.h"
+#include "azer/math/math.h"
 
+namespace azer {
+struct DirLight {
+  Vector4 dir;
+  Vector4 diffuse;
+  Vector4 ambient;
+};
 
+}  // namespace azer

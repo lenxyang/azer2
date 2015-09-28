@@ -2,6 +2,7 @@
 
 #include "azer/render/effect.h"
 #include "azer/math/math.h"
+#include "azer/render/util/light.h"
 
 namespace azer {
 class PVWEffect: public Effect {
@@ -9,12 +10,6 @@ class PVWEffect: public Effect {
   static const char kEffectName[];
   PVWEffect(VertexDescPtr desc);
   ~PVWEffect();
-
-  struct DirLight{
-    Vector4 dir;
-    Vector4 diffuse;
-    Vector4 ambient;
-  };
 
   const char* name() const override;
   bool Init(const ShaderPrograms& source) override;
