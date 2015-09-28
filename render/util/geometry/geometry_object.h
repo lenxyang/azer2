@@ -6,7 +6,7 @@
 #include "azer/render/indices_buffer.h"
 #include "azer/render/renderer.h"
 #include "azer/render/transform_holder.h"
-#include "wow/render/pvw_effect.h"
+#include "azer/render/util/geometry/pvw_effect.h"
 
 namespace azer {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "wow/render/geometry_object.h"
+#include "azer/render/util/geometry/geometry_object.h"
 
 namespace azer {
 

@@ -10,7 +10,7 @@ namespace azer {
 class Renderer;
 class RenderSystem;
 
-class AZER_EXPORT CoordinateGridEffect : public Effect {
+class CoordinateGridEffect : public Effect {
  public:
   static const char kEffectName[];
   CoordinateGridEffect(RenderSystem* rs);

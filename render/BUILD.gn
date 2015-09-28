@@ -76,12 +76,6 @@ source_set("render") {
     "texture.h",
     "vertex_buffer.cc",
     "vertex_buffer.h",
-    "util/axis_aligned_box_mesh.cc",
-    "util/axis_aligned_box_mesh.h",
-    "util/coordinate_grid.cc",
-    "util/coordinate_grid.h",
-    "util/coordinate_grid_effect.cc",
-    "util/coordinate_grid_effect.h",
   ]
 
   if (is_win) {
@@ -124,7 +118,6 @@ source_set("unittests") {
     "//azer/math",
     "//azer/third_party/glm:glm",
     "//testing/gtest",
-    "//azer/sandbox/base",
     "//azer",
   ]
 

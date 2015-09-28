@@ -13,4 +13,14 @@ struct PositionVertex {
   static const int kVertexDescNum;
   static const VertexDesc::Desc kVertexDesc[];
 };
+
+struct PosNormalVertex {
+ public:
+  Vector4 position;
+  Vector4 normal;
+  static VertexDescPtr CreateVertexDesc();
+ private:
+  static const int kVertexDescNum;
+  static const VertexDesc::Desc kVertexDesc[];
+};
 }  // namespace azer

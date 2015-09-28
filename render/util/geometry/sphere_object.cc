@@ -1,11 +1,12 @@
-#include "azer/util/sphere_object.h"
+#include "azer/render/util/geometry/sphere_object.h"
 
 #include "azer/math/math.h"
 #include "azer/render/renderer.h"
-#include "azer/util/vertex_pack.h"
-#include "azer/util/index_pack.h"
-#include "azer/util/pvw_effect.h"
-#include "azer/util/indices_util.h"
+#include "azer/render/render_system.h"
+#include "azer/render/util/vertex_pack.h"
+#include "azer/render/util/index_pack.h"
+#include "azer/render/util/geometry/pvw_effect.h"
+#include "azer/render/util/geometry/indices_util.h"
 
 namespace azer {
 

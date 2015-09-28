@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
-#include "wow/base/index_pack.h"
+#include "azer/render/util/index_pack.h"
 
 namespace azer {
 bool GenerateTopTriangleStrip(int32 top, int32 begin, int32 vertex_num,

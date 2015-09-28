@@ -1,4 +1,4 @@
-#include "wow/render/pvw_effect.h"
+#include "azer/render/util/pvw_effect.h"
 
 #include <stddef.h>
 
@@ -6,8 +6,8 @@
 #include "base/logging.h"
 
 #include "azer/render/render.h"
-#include "wow/render/vertex_desc.h"
-#include "wow/render/util.h"
+#include "azer/render/util/vertex_desc.h"
+#include "azer/render/util/shader_util.h"
 
 namespace azer {
 const char PVWEffect::kEffectName[] = "PVWEffect";
@@ -21,7 +21,7 @@ PVWEffect::~PVWEffect() {
 }
 
 const char* PVWEffect::name() const {
-   return kEffectName;
+  return kEffectName;
 }
 bool PVWEffect::Init(const ShaderPrograms& sources) {
   DCHECK(sources.size() == kRenderPipelineStageNum);
@@ -33,11 +33,11 @@ bool PVWEffect::Init(const ShaderPrograms& sources) {
   // generate GpuTable init for stage kVertexStage
   GpuConstantsTable::Desc vs_table_desc[] = {
     GpuConstantsTable::Desc("pvw", GpuConstantsType::kMatrix4,
-         offsetof(vs_cbuffer, pvw), 1),
+                            offsetof(vs_cbuffer, pvw), 1),
     GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
-         offsetof(vs_cbuffer, world), 1),
+                            offsetof(vs_cbuffer, world), 1),
   };
-  gpu_table_[azer::kVertexStage] = render_system_->CreateGpuConstantsTable(
+  gpu_table_[kVertexStage] = render_system_->CreateGpuConstantsTable(
       arraysize(vs_table_desc), vs_table_desc);
   return true;
 }
@@ -59,13 +59,13 @@ void PVWEffect::UseTexture(Renderer* renderer) {
 
 PVWEffectPtr CreateDefaultPVWEffect() {
   Effect::ShaderPrograms shaders;
-  CHECK(wow::LoadShaderAtStage(azer::kVertexStage,
-                               "wow/render/hlsl/default_pvw.hlsl.vs",
-                               &shaders));
-  CHECK(wow::LoadShaderAtStage(azer::kPixelStage,
-                               "wow/render/hlsl/default_pvw.hlsl.ps",
-                               &shaders));
-  PVWEffectPtr ptr(new PVWEffect(azer::PositionVertex::CreateVertexDesc()));
+  CHECK(LoadShaderAtStage(kVertexStage,
+                          "azer/render/util/hlsl/pvw.hlsl.vs",
+                          &shaders));
+  CHECK(LoadShaderAtStage(kPixelStage,
+                          "azer/render/util/hlsl/pvw.hlsl.ps",
+                          &shaders));
+  PVWEffectPtr ptr(new PVWEffect(PositionVertex::CreateVertexDesc()));
   ptr->Init(shaders);
   return ptr;
 }

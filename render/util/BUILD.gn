@@ -1,0 +1,36 @@
+
+
+static_library("util") {
+  sources = [
+    "byte_pack.cc",
+    "byte_pack.h",
+    "coordinate_grid.cc",
+    "coordinate_grid.h",
+    "coordinate_grid_effect.cc",
+    "coordinate_grid_effect.h",
+    "geometry/box_object.cc",
+    "geometry/box_object.h",
+    "geometry/cone_object.cc",
+    "geometry/cone_object.h",
+    "geometry/geometry_object.cc",
+    "geometry/geometry_object.h",
+    "geometry/indices_util.cc",
+    "geometry/indices_util.h",
+    "geometry/sphere_object.cc",
+    "geometry/sphere_object.h",
+    "pvw_effect.cc",
+    "pvw_effect.h",
+    "index_pack.cc",
+    "index_pack.h",
+    "shader_util.cc",
+    "shader_util.h",
+    "vertex_desc.cc",
+    "vertex_desc.h",
+    "vertex_pack.cc",
+    "vertex_pack.h",
+  ]
+
+  deps = [
+    "//azer",
+  ]
+}

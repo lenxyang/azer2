@@ -1,7 +1,7 @@
 #pragma once
 
 #include "azer/render/render.h"
-#include "azer/util/geometry_object.h"
+#include "azer/render/util/geometry/geometry_object.h"
 
 namespace azer {
 

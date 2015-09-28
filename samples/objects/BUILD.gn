@@ -1,0 +1,18 @@
+
+executable("objects") {
+  output_name = "azer_sample_objects"
+  sources = [
+    "main.cc",
+  ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//nelf",
+  ]
+}

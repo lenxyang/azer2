@@ -1,8 +1,8 @@
 #pragma once
 
-#include "wow/render/geometry_object.h"
-#include "azer/util/vertex_pack.h"
-#include "azer/util/index_pack.h"
+#include "azer/render/util/geometry/geometry_object.h"
+#include "azer/render/util/vertex_pack.h"
+#include "azer/render/util/index_pack.h"
 
 namespace azer {
 
