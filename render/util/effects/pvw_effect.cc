@@ -57,13 +57,13 @@ void PVWEffect::UseTexture(Renderer* renderer) {
 }
 
 
-PVWEffectPtr CreateDefaultPVWEffect() {
+PVWEffectPtr CreatePVWEffect() {
   Effect::ShaderPrograms shaders;
   CHECK(LoadShaderAtStage(kVertexStage,
-                          "azer/render/util/hlsl/pvw.hlsl.vs",
+                          "azer/render/util/effects/hlsl/pvw.hlsl.vs",
                           &shaders));
   CHECK(LoadShaderAtStage(kPixelStage,
-                          "azer/render/util/hlsl/pvw.hlsl.ps",
+                          "azer/render/util/effects/hlsl/pvw.hlsl.ps",
                           &shaders));
   PVWEffectPtr ptr(new PVWEffect(PositionVertex::CreateVertexDesc()));
   ptr->Init(shaders);

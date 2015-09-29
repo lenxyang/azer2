@@ -30,5 +30,5 @@ class PVWEffect: public Effect {
 
 typedef scoped_refptr<PVWEffect> PVWEffectPtr;
 
-PVWEffectPtr CreateDefaultPVWEffect();
+PVWEffectPtr CreatePVWEffect();
 }  // namespace azer

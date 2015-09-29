@@ -46,13 +46,10 @@ class ColoredDiffuseEffect: public Effect {
   void InitTechnique(const ShaderPrograms& source);
   void InitGpuConstantTable();
   virtual void UseTexture(Renderer* renderer) override;
-
-  TexturePtr tex1_, tex2_, tex3_, tex4_;
-  TexturePtr alphamap_;
   DECLARE_EFFECT_DYNCREATE(ColoredDiffuseEffect);
   DISALLOW_COPY_AND_ASSIGN(ColoredDiffuseEffect);
 };
 
 
-ColoredDiffuseEffect CreateColoredPVWEffect();
+ColoredDiffuseEffect ColoredDiffuseEffect();
 }  // namespace azer

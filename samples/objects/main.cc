@@ -25,15 +25,7 @@ class MainDelegate : public nelf::RenderDelegate {
 
 bool MainDelegate::Initialize() { 
   RenderSystem* rs = RenderSystem::Current();
-  Effect::ShaderPrograms shaders;
-  CHECK(LoadShaderAtStage(kVertexStage,
-                          "azer/sandbox/render/object/diffuse.hlsl.vs",
-                          &shaders));
-  CHECK(LoadShaderAtStage(kPixelStage,
-                          "azer/sandbox/render/object/diffuse.hlsl.ps",
-                          &shaders));
-  effect_ = new PVWEffect(PositionVertex::CreateVertexDesc());
-  effect_->Init(shaders);
+  effect_ = azer::CreatePVWEffect();
   box1_ = new SphereObject(effect_, 8, 8);
   box2_ = new BoxObject(effect_);
   // box1_->GetTransformHolder()->SetPosition(Vector3(-3.0f, 0.0f, 0.0f));
