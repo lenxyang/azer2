@@ -49,8 +49,6 @@ CoordinateObject::CoordinateObject() {
   cylinder_ = new CylinderObject(diffuse_effect_->GetVertexDesc(), 16, 16);
 
   sphere_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 24, 24);
-  bounding_sphere_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 24, 24);
-
   Matrix4 xaxis_orientation = RotateZ(Degree(90.0f));
   Matrix4 zaxis_orientation = RotateX(Degree(-90.0f));
   

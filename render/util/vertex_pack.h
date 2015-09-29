@@ -41,6 +41,7 @@ class VertexPack {
   void ReadVector4(Vector4* v, int32 column)const;
 
   int32 unit_size() const;
+  const std::vector<VertexDesc::Desc>& desc() const { return desc_;}
  private:
   void calc_offsets();
   int32 offset_of_column(int32 column) const;

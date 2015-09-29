@@ -1,4 +1,4 @@
-#include "azer/render/util/geometry/indices_util.h"
+#include "azer/render/util/geometry/util.h"
 
 #include "base/strings/string_util.h"
 #include "azer/math/math.h"
@@ -54,6 +54,94 @@ bool GenerateStripIndex(int32 line1, int32 line2, int32 vertex_num, bool closed,
     FUNC_BOOL_RET(ipack->WriteAndAdvance(line2 + index2));
   }
   return true;
+}
+
+void GenerateConeHat(bool up, float top, float bottom, int32 slice, 
+                     VertexPack* vpack, IndexPack* ipack) {
+  const int begin = vpack->index();
+  float slice_degree = 360.0f / slice;
+  vpack->WriteVector4(Vector4(0.0f, top, 0.0f, 1.0f), 0);
+  vpack->next(1);
+  for (int32 i = 0; i < slice; ++i) {
+    float degree = 360.0f - slice_degree *  i;
+    float x = azer::cos(Degree(degree));
+    float z = azer::sin(Degree(degree));
+
+    vpack->WriteVector4(Vector4(x, bottom, z, 1.0f), 0);
+    vpack->next(1);
+  }
+  
+  const int end = vpack->index();
+  for (int i = 0; i < slice; ++i) {
+    int index1 = i + begin + 1;
+	int index2 = (i + 1) % slice + begin + 1;
+    CHECK(ipack->WriteAndAdvance(begin));
+    if (up) {
+      CHECK(ipack->WriteAndAdvance(index1));
+      CHECK(ipack->WriteAndAdvance(index2));
+    } else {
+      CHECK(ipack->WriteAndAdvance(index2));
+      CHECK(ipack->WriteAndAdvance(index1));
+    }
+  }
+}
+
+void GenerateBarrel(float top_radius, float bottom_radius, float height, 
+                    int32 stack, int32 slice, VertexPack* vpack, IndexPack* ipack) {
+  const int32 kPositionIdx = 0;
+  const int32 kTexcoord0Idx = GetSemanticIndex("texcoord", 0, vpack->desc());
+  float height_unit = height / ((float)stack - 1.0f);
+  float radius_unit = (bottom_radius - top_radius) / (float)stack;
+  float slice_radius = top_radius;
+  float y = height;
+  float tex_u_unit = 1.0f / slice;
+  float tex_v_unit = 1.0f / (stack + 2.0f);
+  const int32 begin = vpack->index();
+  for (int i = 0; i < stack; ++i) {
+    slice_radius += radius_unit;
+    for (int j = 0; j < slice; ++j) {
+      float degree = 360.0f - j * 360.0f / slice;
+      float x = slice_radius * cos(Degree(degree));
+      float z = slice_radius * sin(Degree(degree));
+
+      vpack->WriteVector4(Vector4(x, y, z, 1.0f), kPositionIdx);
+      CHECK(vpack->next(1));
+      float u = j * tex_u_unit;
+      float v = (i + 1) * tex_v_unit;
+      if (kTexcoord0Idx > 0) { 
+        vpack->WriteVector2(Vector2(0.0f, 0.0f),kTexcoord0Idx); 
+      }
+    }
+    y -= height_unit;
+  }
+  
+  for (int i = 0; i < stack - 1; ++i) {
+    int32 line1 = begin + i * slice; 
+    int32 line2 = begin + (i + 1) * slice; 
+    for (int j = 0; j < slice; ++j) {
+      int index1 = j % slice;
+      int index2 = (j + 1) % slice;
+      CHECK(ipack->WriteAndAdvance(line1 + index2));
+      CHECK(ipack->WriteAndAdvance(line1 + index1));
+      CHECK(ipack->WriteAndAdvance(line2 + index1));
+      
+      CHECK(ipack->WriteAndAdvance(line1 + index2));
+      CHECK(ipack->WriteAndAdvance(line2 + index1));
+      CHECK(ipack->WriteAndAdvance(line2 + index2));
+    }
+  }
+}
+
+int32 GetSemanticIndex(const std::string& name, int32 semantic_index, 
+                       const std::vector<VertexDesc::Desc>& desc) {
+  int32 i = 0;
+  for (auto iter = desc.begin(); iter != desc.end(); ++iter, ++i) {
+    if (base::strncasecmp(name.c_str(), iter->name, name.length()) == 0
+        && iter->semantic_index == semantic_index) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 int32 GetSemanticIndex(const std::string& name, int32 semantic_index, 
