@@ -13,11 +13,6 @@ GeometryObject::GeometryObject(VertexDescPtr desc)
 GeometryObject::~GeometryObject() {
 }
 
-void GeometryObject::Update(const Camera& camera) {
-  world_ = std::move(holder_.GenWorldMatrix());
-  pvw_ = std::move(camera.GetProjViewMatrix() * world_);
-}
-
 void GeometryObject::Render(Renderer* renderer) {
   renderer->DrawIndex(vb_, ib_, kTriangleList);
 }

@@ -101,9 +101,6 @@ void BoxObject::InitHardwareBuffers() {
 }
 
 void BoxObject::Render(Renderer* renderer) {
-  effect_->SetWorld(world_);
-  effect_->SetPVW(pvw_);
-  effect_->Use(renderer);
   renderer->Draw(vb_.get(), kTriangleList);
 }
 }  // namespace azer

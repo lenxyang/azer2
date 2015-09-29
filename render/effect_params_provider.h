@@ -19,13 +19,11 @@ class AZER_EXPORT EffectParamsAdapter {
 // provider information for effect
 class AZER_EXPORT EffectParamsProvider {
  public:
+  static const char kEffectParamsProviderName[];
   EffectParamsProvider();
   virtual ~EffectParamsProvider();
 
-  virtual const char* name() const = 0;
-
-  // initialize
-  virtual void CalcParams() = 0;
+  virtual const char* name() const { return kEffectParamsProviderName;}
 
   // apply the parameters on effect
   virtual void Apply(Effect* effect) = 0;

@@ -18,10 +18,6 @@ class GeometryObject : public ::base::RefCounted<GeometryObject> {
   GeometryObject(VertexDescPtr desc);
   ~GeometryObject();
 
-  void Update(const Camera& camera);
-  TransformHolder* GetTransformHolder() { return &holder_;}
-  const TransformHolder* GetTransformHolder() const { return &holder_;}
-
   virtual void Render(Renderer* renderer);
   virtual void RenderWireframe(Renderer* renderer);
  protected:
@@ -29,11 +25,6 @@ class GeometryObject : public ::base::RefCounted<GeometryObject> {
   VertexBufferPtr vb_;
   IndicesBufferPtr ib_;
   IndicesBufferPtr edge_ib_;
-  scoped_refptr<PVWEffect> effect_;
-  TransformHolder holder_;
-
-  Matrix4 world_;
-  Matrix4 pvw_;
   DISALLOW_COPY_AND_ASSIGN(GeometryObject);
 };
 

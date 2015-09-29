@@ -8,6 +8,8 @@ static_library("util") {
     "coordinate_grid.h",
     "coordinate_grid_effect.cc",
     "coordinate_grid_effect.h",
+    "effects/diffuse_effect.cc",
+    "effects/diffuse_effect.h",
     "effects/pvw_effect.cc",
     "effects/pvw_effect.h",
     "effects/vertex_desc.cc",
