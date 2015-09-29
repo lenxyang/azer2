@@ -1,4 +1,4 @@
-#include "azer/render/util/pvw_effect.h"
+#include "azer/render/util/effects/pvw_effect.h"
 
 #include <stddef.h>
 
@@ -6,8 +6,8 @@
 #include "base/logging.h"
 
 #include "azer/render/render.h"
-#include "azer/render/util/vertex_desc.h"
 #include "azer/render/util/shader_util.h"
+#include "azer/render/util/effects/vertex_desc.h"
 
 namespace azer {
 const char PVWEffect::kEffectName[] = "PVWEffect";

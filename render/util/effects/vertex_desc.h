@@ -23,4 +23,26 @@ struct PosNormalVertex {
   static const int kVertexDescNum;
   static const VertexDesc::Desc kVertexDesc[];
 };
+
+struct TexPosNormalVertex {
+ public:
+  Vector4 position;
+  Vector4 normal;
+  Vector2 Texcoord;
+  static VertexDescPtr CreateVertexDesc();
+ private:
+  static const int kVertexDescNum;
+  static const VertexDesc::Desc kVertexDesc[];
+};
+
+struct ColoredPosNormalVertex {
+ public:
+  Vector4 position;
+  Vector4 normal;
+  Vector4 color;
+  static VertexDescPtr CreateVertexDesc();
+ private:
+  static const int kVertexDescNum;
+  static const VertexDesc::Desc kVertexDesc[];
+};
 }  // namespace azer

@@ -1,0 +1,44 @@
+// using row_major
+#pragma pack_matrix(row_major)
+
+struct VsOutput {
+  float4 position:SV_POSITION;
+  float4 normal:NORMAL;
+  float2 texcoord0: TEXCOORD0;
+  float2 texcoord1: TEXCOORD1;
+};
+
+struct DirLight {
+  float4 dir;
+  float4 diffuse;
+  float4 ambient;
+};
+
+cbuffer c_buffer {
+   float4 bufcolor;
+   DirLight light;
+};
+
+Texture2D tex1;
+Texture2D alphamap;
+Texture2D tex2;
+Texture2D tex3;
+Texture2D tex4;
+SamplerState tex_d3d_sampler;
+
+float4 ps_main(VsOutput o):SV_TARGET {
+  float4 tex1_col = tex1.Sample(tex_d3d_sampler, o.texcoord0);
+  float4 tex2_col = tex2.Sample(tex_d3d_sampler, o.texcoord0);
+  float4 tex3_col = tex3.Sample(tex_d3d_sampler, o.texcoord0);
+  float4 tex4_col = tex4.Sample(tex_d3d_sampler, o.texcoord0);
+  float4 alpha_val = alphamap.Sample(tex_d3d_sampler, o.texcoord1);
+  float4 color = tex1_col * (1.0f -  alpha_val.x - alpha_val.y - alpha_val.z)
+               + tex2_col * alpha_val.x
+               + tex3_col * alpha_val.y
+               + tex4_col * alpha_val.z;
+
+  float diffuse_factor = clamp(dot(normalize(o.normal.xyz),	
+                                  -light.dir.xyz), 0.0f, 1.0f);
+  float3 light_factor = light.ambient.xyz + (light.diffuse.xyz * diffuse_factor);
+  return float4(light_factor * color.xyz, 1.0);
+}
