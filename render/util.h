@@ -7,6 +7,7 @@
 #include "azer/render/util/effects/vertex_desc.h"
 #include "azer/render/util/geometry/box_object.h"
 #include "azer/render/util/geometry/cone_object.h"
+#include "azer/render/util/geometry/cylinder_object.h"
 #include "azer/render/util/geometry/sphere_object.h"
 #include "azer/render/util/light.h"
 #include "azer/render/util/shader_util.h"

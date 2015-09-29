@@ -17,3 +17,60 @@ executable("objects") {
     "//nelf",
   ]
 }
+
+executable("cone") {
+  output_name = "azer_sample_objects_cone"
+  sources = [
+    "cone.cc",
+  ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}
+
+executable("cylinder") {
+  output_name = "azer_sample_objects_cylinder"
+  sources = [
+    "cylinder.cc",
+  ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}
+
+executable("box") {
+  output_name = "azer_sample_objects_box"
+  sources = [
+    "box.cc",
+  ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}

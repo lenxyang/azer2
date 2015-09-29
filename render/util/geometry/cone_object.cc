@@ -15,6 +15,7 @@ VertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc) {
   int num = 0;
   CHECK(vdata.first());
   vdata.WriteVector4(Vector4(0.0f, 1.0, 0.0f, 1.0f), 0);
+  num++;
   
   float slice_degree = 360.0f / slice;
   for (int32 i = 0; i < slice; ++i) {
@@ -29,6 +30,7 @@ VertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc) {
 
   CHECK(vdata.next(1));
   vdata.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0);
+  num++;
   CHECK_EQ(num, kVertexNum);
   return vbd;
 }
