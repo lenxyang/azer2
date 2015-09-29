@@ -18,6 +18,8 @@ static_library("util") {
     "geometry/box_object.h",
     "geometry/cone_object.cc",
     "geometry/cone_object.h",
+    "geometry/cylinder_object.cc",
+    "geometry/cylinder_object.h",
     "geometry/geometry_object.cc",
     "geometry/geometry_object.h",
     "geometry/indices_util.cc",

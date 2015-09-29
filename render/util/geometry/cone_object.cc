@@ -30,8 +30,6 @@ VertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc) {
   CHECK(vdata.next(1));
   vdata.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0);
   CHECK_EQ(num, kVertexNum);
-  CHECK(vdata.end());
-
   return vbd;
 }
 
@@ -63,6 +61,11 @@ ConeObject::~ConeObject() {
 void ConeObject::InitHardwareBuffers() {
   VertexDataPtr vdata(InitConeVertexData(slice_, desc_));
   IndicesDataPtr idata = InitConeIndicesData(slice_);
+
+  if (GetSemanticIndex("normal", 0, desc_.get()) > 0) {
+    CalcNormal(vdata.get(), idata.get());
+  }
+
   RenderSystem* rs = RenderSystem::Current();
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
