@@ -6,8 +6,10 @@
 #include "azer/render/util/vertex_pack.h"
 #include "azer/render/util/index_pack.h"
 #include "azer/render/util/effects/pvw_effect.h"
+#include "azer/render/util/geometry/indices_util.h"
 
 namespace azer {
+
 BoxObject::BoxObject(VertexDescPtr desc)
     : GeometryObject(desc) {
   InitHardwareBuffers();
@@ -78,15 +80,23 @@ void BoxObject::InitHardwareBuffers() {
                    4, 1, 5, 4, 0, 1,
                    3, 6, 2, 3, 7, 6};
 
+  int32 texcoord0_idx = GetSemanticIndex("texcoord", 0, desc_.get());
   VertexDataPtr vdata(new VertexData(desc_, arraysize(indices)));
   VertexPack vpack(vdata.get());
+  vpack.first();
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
     int index = indices[i];
     DCHECK(!vpack.end());
     vpack.WriteVector4(position[index], 0);
-    CHECK(vpack.next(1));
+	if (texcoord0_idx > 0)
+      vpack.WriteVector2(texcoord0[index], texcoord0_idx);
+    vpack.next(1);
   }
   DCHECK(vpack.end());
+
+  if (GetSemanticIndex("normal", 0, desc_.get()) > 0) {
+    CalcTriangleListNormal(vdata.get(), indices);
+  }
   
   int32 edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
                           0, 14, 2, 8, 1, 7, 4, 13,
@@ -105,4 +115,6 @@ void BoxObject::InitHardwareBuffers() {
 void BoxObject::Render(Renderer* renderer) {
   renderer->Draw(vb_.get(), kTriangleList);
 }
+
 }  // namespace azer
+

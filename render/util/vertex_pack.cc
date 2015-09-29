@@ -55,9 +55,9 @@ bool VertexPack::first() {
   return current_ < data_ + size_;
 }
 
-int32 move(int32 offset) {
+bool VertexPack::move(int32 offset) {
   first();
-  next(offset);
+  return next(offset);
 }
 
 bool VertexPack::next(int32 step) {

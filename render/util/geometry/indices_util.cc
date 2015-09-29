@@ -56,10 +56,12 @@ bool GenerateStripIndex(int32 line1, int32 line2, int32 vertex_num, bool closed,
   return true;
 }
 
-int32 GetSemanticIndex(const std::string& name, VertexDesc* d) {
+int32 GetSemanticIndex(const std::string& name, int32 semantic_index, 
+                       VertexDesc* d) {
   const VertexDesc::Desc* desc = d->descs();
   for (int32 i = 0; i < d->element_num(); ++i) {
-    if (base::strncasecmp(name.c_str(), (desc + i)->name, name.length()) == 0) {
+    if (base::strncasecmp(name.c_str(), (desc + i)->name, name.length()) == 0
+        && (desc + i)->semantic_index == semantic_index) {
       return i;
     }
   }
@@ -69,7 +71,7 @@ int32 GetSemanticIndex(const std::string& name, VertexDesc* d) {
 
 void CalcNormal(VertexData* vbd, IndicesData* idata) {
   const int32 kPositionIndex = 0;
-  const int32 kNormalIndex = GetSemanticIndex("normal", vbd->desc().get());
+  const int32 kNormalIndex = GetSemanticIndex("normal", 0, vbd->desc().get());
   if (kNormalIndex == -1)
     return;
 
@@ -81,7 +83,7 @@ void CalcNormal(VertexData* vbd, IndicesData* idata) {
   VertexPack vpack(vbd);
   vpack.first();
   for (int i = 0; i < vbd->vertex_num(); ++i) {
-    DCHECK(!vpack.end(1));
+    DCHECK(!vpack.end());
     vpack.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), kNormalIndex);
     vpack.next(1);
     used[i] = 0.0f;
@@ -90,10 +92,60 @@ void CalcNormal(VertexData* vbd, IndicesData* idata) {
   
   vpack.first();
   IndexPack ipack(idata);
-  for (int i = 0; i < vbd->vertex_num(); i+=3) {
+  for (int i = 0; i < idata->num(); i+=3) {
     uint32 idx1 = ipack.ReadAndAdvanceOrDie();
     uint32 idx2 = ipack.ReadAndAdvanceOrDie();
     uint32 idx3 = ipack.ReadAndAdvanceOrDie();
+    Vector4 p1, p2, p3;
+    CHECK(vpack.move(idx1));
+    vpack.ReadVector4(&p1, kPositionIndex);
+    CHECK(vpack.move(idx2));
+    vpack.ReadVector4(&p2, kPositionIndex);
+    CHECK(vpack.move(idx3));
+    vpack.ReadVector4(&p3, kPositionIndex);
+    used[idx1] += 1.0f;
+    used[idx2] += 1.0f;
+    used[idx3] += 1.0f;
+
+    Vector4 normal = Vector4(CalcPlaneNormal(p1, p2, p3), 0.0f);
+    normals[idx1] += normal;
+    normals[idx2] += normal;
+    normals[idx3] += normal;
+  }
+
+  vpack.first();
+  for (int i = 0; i < normals.size(); ++i) {
+    Vector4 normal = normals[i] / used[i];
+    normal.Normalize();
+    vpack.WriteVector4(normal, kNormalIndex);
+    vpack.next(1);
+  }
+}
+
+void CalcTriangleListNormal(VertexData* vbd, int* indices) {
+  const int32 kPositionIndex = 0;
+  const int32 kNormalIndex = GetSemanticIndex("normal", 0, vbd->desc().get());
+  if (kNormalIndex == -1)
+    return;
+  std::vector<float> used;
+  std::vector<Vector4> normals;
+  used.resize(vbd->vertex_num());
+  normals.resize(vbd->vertex_num());
+  
+  VertexPack vpack(vbd);
+  vpack.first();
+  for (int i = 0; i < vbd->vertex_num(); ++i) {
+    vpack.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), kNormalIndex);
+    vpack.next(1);
+    used[i] = 0.0f;
+    normals[i] = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+  }
+  
+  vpack.first();
+  for (int i = 0; i < vbd->vertex_num(); i+=3) {
+    int idx1 = *(indices + i);
+    int idx2 = *(indices + i + 1);
+    int idx3 = *(indices + i + 2);
     Vector4 p1, p2, p3;
     CHECK(vpack.move(idx1));
     vpack.ReadVector4(&p1, kPositionIndex);
@@ -115,10 +167,12 @@ void CalcNormal(VertexData* vbd, IndicesData* idata) {
     normals[i] /= used[i];
   }
 
-  vpack.reset();
+  vpack.first();
   for (int i = 0; i < normals.size(); ++i) {
+    Vector4 normal = normals[i] / used[i];
+    normal.Normalize();
+    vpack.WriteVector4(normal, kNormalIndex);
     vpack.next(1);
-    vpack.WriteVector4(normals[i], kNormalIndex);
   }
 }
 }  // namespace azer

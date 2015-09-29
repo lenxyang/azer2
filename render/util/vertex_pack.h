@@ -19,9 +19,8 @@ class VertexPack {
   ~VertexPack();
 
   int32 size() const { return size_;}
-  void reset();
-  int32 move(int32 offset);
-  bool first(int32 step);
+  bool move(int32 offset);
+  bool first();
   bool next(int32 step);
   bool end();
   uint8* data() { return data_;}

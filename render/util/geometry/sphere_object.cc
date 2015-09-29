@@ -49,7 +49,6 @@ VertexDataPtr InitSphereVertexData(int32 stack, int32 slice,
   CHECK(vpack.next(1));
   vpack.WriteVector4(Vector4(0.0f, -1.0f, 0.0f, 1.0f), 0);
   num++;
-  CHECK(vpack.end());
   DCHECK_EQ(num, kVertexNum);
   return vdata;
 }
@@ -124,7 +123,7 @@ void SphereObject::InitHardwareBuffers() {
   VertexDataPtr vdata(InitSphereVertexData(stack_, slice_, desc_));
   IndicesDataPtr idata = InitSphereIndicesData(stack_, slice_);
 
-  if (GetSemanticIndex("normal", desc_.get()) > 0) {
+  if (GetSemanticIndex("normal", 0, desc_.get()) > 0) {
     CalcNormal(vdata.get(), idata.get());
   }
 

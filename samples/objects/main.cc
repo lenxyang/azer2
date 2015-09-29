@@ -53,17 +53,19 @@ class MainDelegate : public nelf::RenderDelegate {
   ColoredDiffuseEffectPtr diffuse_effect_;
   GeometryObjectPtr sphere1_;
   GeometryObjectPtr sphere2_;
+  GeometryObjectPtr box_;
   EffectProviderPtr provider1_;
   EffectProviderPtr provider2_;
+  EffectProviderPtr box_provider_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
 bool MainDelegate::Initialize() { 
-  light_.dir = azer::Vector4(0.0f, -0.3f, -0.5f, 0.0f);
-  light_.diffuse = azer::Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+  light_.dir = azer::Vector4(-0.6f, -0.6f, -0.2f, 0.0f);
+  light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
   light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
-  Vector3 camera_pos(0.0f, 5.0f, 5.0f);
+  Vector3 camera_pos(0.0f, 10.0f, 10.0f);
   Vector3 lookat(0.0f, 0.0f, 0.0f);
   Vector3 up(0.0f, 1.0f, 0.0f);
   camera_.reset(camera_pos, lookat, up);
@@ -71,13 +73,18 @@ bool MainDelegate::Initialize() {
   RenderSystem* rs = RenderSystem::Current();
   pvw_effect_ = CreatePVWEffect();
   diffuse_effect_ = CreateColoredDiffuseEffect();
-  sphere1_ = new SphereObject(pvw_effect_->GetVertexDesc(), 8, 8);
-  sphere2_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 8, 8);
   
+  sphere1_ = new SphereObject(pvw_effect_->GetVertexDesc(), 8, 8);
   provider1_.reset(new EffectProvider(&light_));
-  provider2_.reset(new EffectProvider(&light_));
   provider1_->GetTransformHolder()->SetPosition(Vector3(-3.0f, 0.0f, 0.0f));
-  provider2_->GetTransformHolder()->SetPosition(Vector3(3.0f, 0.0f, 0.0f));
+
+  sphere2_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 8, 8);
+  provider2_.reset(new EffectProvider(&light_));
+  provider2_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 3.0f));
+
+  box_ = new BoxObject(diffuse_effect_->GetVertexDesc());
+  box_provider_.reset(new EffectProvider(&light_));
+  box_provider_->GetTransformHolder()->SetPosition(Vector3(3.0f, 0.0f, 3.0f));
 
   window()->SetRealTimeRender(true);
   return true;
@@ -86,9 +93,13 @@ bool MainDelegate::Initialize() {
 void MainDelegate::OnUpdate(const FrameArgs& args) {
   Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
   provider1_->GetTransformHolder()->rotate(Vector3(0.0f, 1.0f, 0.0f), rad);
-  provider2_->GetTransformHolder()->rotate(Vector3(0.0f, 0.0f, 1.0f), rad);
   provider1_->Update(camera_);
+
+  provider2_->GetTransformHolder()->rotate(Vector3(0.0f, 0.0f, 1.0f), rad);
   provider2_->Update(camera_);
+  
+  box_provider_->GetTransformHolder()->rotate(Vector3(1.0f, 0.0f, 0.0f), rad);
+  box_provider_->Update(camera_);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -97,7 +108,8 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->Use();
   renderer->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
   renderer->ClearDepthAndStencil();
-  renderer->SetCullingMode(kCullNone);
+  renderer->SetCullingMode(kCullBack);
+  renderer->EnableDepthTest(true);
   pvw_effect_->Use(renderer);
   provider1_->Apply(pvw_effect_.get());
   sphere1_->RenderWireframe(renderer);
@@ -105,6 +117,10 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   diffuse_effect_->Use(renderer);
   provider2_->Apply(diffuse_effect_.get());
   sphere2_->Render(renderer);
+
+  diffuse_effect_->Use(renderer);
+  box_provider_->Apply(diffuse_effect_.get());
+  box_->Render(renderer);
 }
 
 int main(int argc, char* argv[]) {
