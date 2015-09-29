@@ -7,8 +7,8 @@ namespace azer {
 
 class ConeObject : public GeometryObject {
  public:
-  ConeObject(PVWEffectPtr effect);
-  ConeObject(PVWEffectPtr effect, int32 slice);
+  ConeObject(VertexDescPtr desc);
+  ConeObject(VertexDescPtr desc, int32 slice);
   ~ConeObject();
 
  private:

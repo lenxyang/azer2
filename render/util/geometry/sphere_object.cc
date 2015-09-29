@@ -102,15 +102,15 @@ IndicesDataPtr InitSphereWireFrameIndicesData(int32 stack, int32 slice) {
   return idata;
 }
 
-SphereObject::SphereObject(PVWEffectPtr effect)
-    : GeometryObject(effect),
+SphereObject::SphereObject(VertexDescPtr desc)
+    : GeometryObject(desc),
       stack_(24), 
       slice_(24) {
   InitHardwareBuffers();
 }
 
-SphereObject::SphereObject(PVWEffectPtr effect, int32 stack, int32 slice)
-    : GeometryObject(effect),
+SphereObject::SphereObject(VertexDescPtr desc, int32 stack, int32 slice)
+    : GeometryObject(desc),
       stack_(stack), 
       slice_(slice) {
   InitHardwareBuffers();
@@ -120,8 +120,13 @@ SphereObject::~SphereObject() {
 }
 
 void SphereObject::InitHardwareBuffers() {
-  VertexDataPtr vdata(InitSphereVertexData(stack_, slice_, effect_->GetVertexDesc()));
+  VertexDataPtr vdata(InitSphereVertexData(stack_, slice_, desc_));
   IndicesDataPtr idata = InitSphereIndicesData(stack_, slice_);
+
+  if (GetSemanticIndex("normal", desc_.get()) > 0) {
+    CalcNormal(vdata.get(), idata.get());
+  }
+
   IndicesDataPtr edge_idata = InitSphereWireFrameIndicesData(stack_, slice_);
   RenderSystem* rs = RenderSystem::Current();
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);

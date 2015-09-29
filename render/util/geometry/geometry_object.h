@@ -15,7 +15,7 @@ class PVWEffect;
 
 class GeometryObject : public ::base::RefCounted<GeometryObject> {
  public:
-  GeometryObject(PVWEffectPtr effect);
+  GeometryObject(VertexDescPtr desc);
   ~GeometryObject();
 
   void Update(const Camera& camera);

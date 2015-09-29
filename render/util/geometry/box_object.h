@@ -6,7 +6,7 @@ namespace azer {
 
 class BoxObject : public GeometryObject {
  public:
-  BoxObject(PVWEffectPtr effect);
+  BoxObject(VertexDescPtr desc);
   ~BoxObject();
 
   void Render(Renderer* renderer) override;

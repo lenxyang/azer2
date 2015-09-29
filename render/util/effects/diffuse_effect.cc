@@ -86,7 +86,7 @@ void ColoredDiffuseEffect::SetDirLight(const DirLight& value) {
 void ColoredDiffuseEffect::UseTexture(Renderer* renderer) {
 }
 
-ColoredDiffuseEffect ColoredDiffuseEffect() {
+ColoredDiffuseEffectPtr ColoredDiffuseEffect() {
   Effect::ShaderPrograms shaders;
   CHECK(LoadShaderAtStage(kVertexStage, 
                           "azer/render/util/effects/hlsl/colored_diffuse.hlsl.vs",

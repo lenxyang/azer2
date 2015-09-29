@@ -44,14 +44,14 @@ IndicesDataPtr InitConeIndicesData(int32 slice) {
   return idata;
 }
 
-ConeObject::ConeObject(PVWEffectPtr effect)
-    : GeometryObject(effect),
+ConeObject::ConeObject(VertexDescPtr desc)
+    : GeometryObject(desc),
       slice_(24) {
   InitHardwareBuffers();
 }
 
-ConeObject::ConeObject(PVWEffectPtr effect, int32 slice)
-    : GeometryObject(effect),
+ConeObject::ConeObject(VertexDescPtr desc, int32 slice)
+    : GeometryObject(desc),
       slice_(slice) {
   InitHardwareBuffers();
 }
@@ -60,7 +60,7 @@ ConeObject::~ConeObject() {
 }
 
 void ConeObject::InitHardwareBuffers() {
-  VertexDataPtr vdata(InitConeVertexData(slice_, effect_->GetVertexDesc()));
+  VertexDataPtr vdata(InitConeVertexData(slice_, desc_));
   IndicesDataPtr idata = InitConeIndicesData(slice_);
   RenderSystem* rs = RenderSystem::Current();
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);

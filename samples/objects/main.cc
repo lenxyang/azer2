@@ -14,10 +14,9 @@ class MainDelegate : public nelf::RenderDelegate {
   virtual void OnUpdate(const FrameArgs& args) override;
   virtual void OnRender(const FrameArgs& args) override;
  private:
-  PVWEffectPtr effect_;
+  PVWEffectPtr pvw_effect_;
+  ColoredDiffuseEffectPtr diffuse_effect_;
   Camera camera_;
-  GeometryObjectPtr box1_;
-  GeometryObjectPtr box2_;
   GeometryObjectPtr sphere1_;
   GeometryObjectPtr sphere2_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
@@ -25,10 +24,13 @@ class MainDelegate : public nelf::RenderDelegate {
 
 bool MainDelegate::Initialize() { 
   RenderSystem* rs = RenderSystem::Current();
-  effect_ = azer::CreatePVWEffect();
-  box1_ = new SphereObject(effect_, 8, 8);
-  box2_ = new BoxObject(effect_);
-  // box1_->GetTransformHolder()->SetPosition(Vector3(-3.0f, 0.0f, 0.0f));
+  pvw_effect_ = CreatePVWEffect();
+  diffuse_effect_ = ColoredDiffuseEffect();
+  sphere1_ = new SphereObject(pvw_effect_, 8, 8);
+  sphere2_ = new SphereObject(diffuse_effect_, 8, 8);
+  
+  sphere1_->GetTransformHolder()->SetPosition(Vector3(-3.0f, 0.0f, 0.0f));
+  sphere2_->GetTransformHolder()->SetPosition(Vector3(3.0f, 0.0f, 0.0f));
 
   Vector3 camera_pos(0.0f, 5.0f, 5.0f);
   Vector3 lookat(0.0f, 0.0f, 0.0f);
@@ -40,10 +42,10 @@ bool MainDelegate::Initialize() {
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
   Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
-  box1_->GetTransformHolder()->rotate(Vector3(0.0f, 1.0f, 0.0f), rad);
-  box2_->GetTransformHolder()->rotate(Vector3(0.0f, 0.0f, 1.0f), rad);
-  box1_->Update(camera_);
-  box2_->Update(camera_);
+  sphere1_->GetTransformHolder()->rotate(Vector3(0.0f, 1.0f, 0.0f), rad);
+  sphere2_->GetTransformHolder()->rotate(Vector3(0.0f, 0.0f, 1.0f), rad);
+  sphere1_->Update(camera_);
+  sphere2_->Update(camera_);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -53,9 +55,8 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
-  box1_->RenderWireframe(renderer.get());
-  // box1_->Render(renderer.get());
-  // box2_->Render(renderer.get());
+  sphere1_->RenderWireframe(renderer.get());
+  sphere2_->Render(renderer.get());
 }
 
 int main(int argc, char* argv[]) {

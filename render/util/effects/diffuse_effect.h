@@ -50,6 +50,6 @@ class ColoredDiffuseEffect: public Effect {
   DISALLOW_COPY_AND_ASSIGN(ColoredDiffuseEffect);
 };
 
-
-ColoredDiffuseEffect ColoredDiffuseEffect();
+typedef scoped_refptr<ColoredDiffuseEffect> ColoredDiffuseEffectPtr;
+ColoredDiffuseEffectPtr ColoredDiffuseEffect();
 }  // namespace azer

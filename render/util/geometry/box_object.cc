@@ -8,8 +8,8 @@
 #include "azer/render/util/effects/pvw_effect.h"
 
 namespace azer {
-BoxObject::BoxObject(PVWEffectPtr effect)
-    : GeometryObject(effect) {
+BoxObject::BoxObject(VertexDescPtr desc)
+    : GeometryObject(desc) {
   InitHardwareBuffers();
 }
 
@@ -78,7 +78,7 @@ void BoxObject::InitHardwareBuffers() {
                    4, 1, 5, 4, 0, 1,
                    3, 6, 2, 3, 7, 6};
 
-  VertexDataPtr vdata(new VertexData(effect_->GetVertexDesc(), arraysize(indices)));
+  VertexDataPtr vdata(new VertexData(desc_, arraysize(indices)));
   VertexPack vpack(vdata.get());
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
     int index = indices[i];

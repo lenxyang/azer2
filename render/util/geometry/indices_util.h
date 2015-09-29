@@ -12,6 +12,8 @@ bool GenerateStripIndex(int32 line1, int32 line2, int32 vertex_num, bool closed,
                           IndexPack* ipack);
 
 int32 GetSemanticIndex(const std::string& name, VertexDesc* desc);
+
+
 void CalcNormal(VertexData* vbd, IndicesData* idata);
 }  // namespace azer
 

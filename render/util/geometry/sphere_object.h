@@ -8,8 +8,8 @@ namespace azer {
 
 class SphereObject : public GeometryObject {
  public:
-  SphereObject(PVWEffectPtr effect);
-  SphereObject(PVWEffectPtr effect, int32 stack, int32 slice);
+  SphereObject(VertexDescPtr desc);
+  SphereObject(VertexDescPtr desc, int32 stack, int32 slice);
   ~SphereObject();
 
  private:
@@ -21,4 +21,5 @@ class SphereObject : public GeometryObject {
 VertexDataPtr InitSphereVertexData(int32 stack, int32 slice, VertexDescPtr desc); 
 IndicesDataPtr InitSphereIndicesData(int32 stack, int32 slice); 
 IndicesDataPtr InitSphereWireFrameIndicesData(int32 stack, int32 slice);
+
 }  // namespace azer
