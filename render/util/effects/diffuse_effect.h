@@ -1,15 +1,17 @@
 #pragma once
 
-#include "azer/render/render.h"
+#include "base/memory/ref_counted.h"
+#include "azer/render/effect.h"
 #include "azer/render/effect_creator.h"
+#include "azer/render/vertex_buffer.h"
 #include "azer/math/math.h"
 #include "azer/render/util/light.h"
 
 namespace azer {
-class ColoredDiffuseEffect: public Effect {
+class ColoredDiffuseEffect : public Effect {
  public:
   static const char kEffectName[];
-  ColoredDiffuseEffect();
+  ColoredDiffuseEffect(VertexDescPtr desc);
   ~ColoredDiffuseEffect();
 
   const char* name() const override;
@@ -31,25 +33,13 @@ class ColoredDiffuseEffect: public Effect {
   void SetWorld(const Matrix4& value);
   void SetColor(const Vector4& value);
   void SetDirLight(const DirLight& value);
-
-  struct Vertex {
-    Vector4 position;
-    Vector4 normal;
-  };
-
-  static Effect* CreateObject() {
-    return new ColoredDiffuseEffect;
-  }
-  static const int kVertexDescNum;
-  static const VertexDesc::Desc kVertexDesc[];
  protected:
   void InitTechnique(const ShaderPrograms& source);
   void InitGpuConstantTable();
   virtual void UseTexture(Renderer* renderer) override;
-  DECLARE_EFFECT_DYNCREATE(ColoredDiffuseEffect);
   DISALLOW_COPY_AND_ASSIGN(ColoredDiffuseEffect);
 };
 
 typedef scoped_refptr<ColoredDiffuseEffect> ColoredDiffuseEffectPtr;
-ColoredDiffuseEffectPtr ColoredDiffuseEffect();
+ColoredDiffuseEffectPtr CreateColoredDiffuseEffect();
 }  // namespace azer

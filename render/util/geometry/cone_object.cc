@@ -13,7 +13,7 @@ VertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc) {
   VertexDataPtr vbd(new VertexData(desc, kVertexNum));
   VertexPack vdata(vbd.get());
   int num = 0;
-  CHECK(vdata.next(1));
+  CHECK(vdata.first());
   vdata.WriteVector4(Vector4(0.0f, 1.0, 0.0f, 1.0f), 0);
   
   float slice_degree = 360.0f / slice;
@@ -30,6 +30,7 @@ VertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc) {
   CHECK(vdata.next(1));
   vdata.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0);
   CHECK_EQ(num, kVertexNum);
+  CHECK(vdata.end());
 
   return vbd;
 }

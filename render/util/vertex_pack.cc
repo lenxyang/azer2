@@ -46,21 +46,27 @@ VertexPack::VertexPack(int32 alignbytes, const std::vector<VertexDesc::Desc>& de
 VertexPack::~VertexPack() {
 }
 
-void VertexPack::reset() {
-  current_ = NULL;
-}
-
 int32 VertexPack::index() const {
   return (current_ - data_) / unit_size_;
 }
 
-bool VertexPack::next(int32 step) {
-  if (current_ == NULL) {
-    current_ = data_;
-  } else {
-    current_ += step * unit_size();
-  }
+bool VertexPack::first() {
+  current_ = data_;
   return current_ < data_ + size_;
+}
+
+int32 move(int32 offset) {
+  first();
+  next(offset);
+}
+
+bool VertexPack::next(int32 step) {
+  current_ += step * unit_size();
+  return current_ < data_ + size_;
+}
+
+bool VertexPack::end() {
+  return !(current_ < data_ + size_);
 }
 
 void VertexPack::calc_offsets() {

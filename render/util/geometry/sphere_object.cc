@@ -28,7 +28,7 @@ VertexDataPtr InitSphereVertexData(int32 stack, int32 slice,
   VertexPack vpack(vdata.get());
 
   int num = 0;
-  CHECK(vpack.next(1));
+  CHECK(vpack.first());
   vpack.WriteVector4(Vector4(0.0f, 1.0f, 0.0f, 1.0f), 0);
   num++;
 
@@ -49,6 +49,7 @@ VertexDataPtr InitSphereVertexData(int32 stack, int32 slice,
   CHECK(vpack.next(1));
   vpack.WriteVector4(Vector4(0.0f, -1.0f, 0.0f, 1.0f), 0);
   num++;
+  CHECK(vpack.end());
   DCHECK_EQ(num, kVertexNum);
   return vdata;
 }

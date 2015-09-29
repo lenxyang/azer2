@@ -82,10 +82,12 @@ void BoxObject::InitHardwareBuffers() {
   VertexPack vpack(vdata.get());
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
     int index = indices[i];
-    CHECK(vpack.next(1));
+    DCHECK(!vpack.end());
     vpack.WriteVector4(position[index], 0);
+    CHECK(vpack.next(1));
   }
-
+  DCHECK(vpack.end());
+  
   int32 edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
                           0, 14, 2, 8, 1, 7, 4, 13,
                           14, 8, 8, 7, 7, 13, 13, 14};

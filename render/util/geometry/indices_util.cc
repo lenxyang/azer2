@@ -79,25 +79,27 @@ void CalcNormal(VertexData* vbd, IndicesData* idata) {
   normals.resize(vbd->vertex_num());
   
   VertexPack vpack(vbd);
+  vpack.first();
   for (int i = 0; i < vbd->vertex_num(); ++i) {
-    CHECK(vpack.next(1));
+    DCHECK(!vpack.end(1));
     vpack.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), kNormalIndex);
+    vpack.next(1);
     used[i] = 0.0f;
     normals[i] = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
   }
   
-  vpack.reset();
+  vpack.first();
   IndexPack ipack(idata);
   for (int i = 0; i < vbd->vertex_num(); i+=3) {
     uint32 idx1 = ipack.ReadAndAdvanceOrDie();
     uint32 idx2 = ipack.ReadAndAdvanceOrDie();
     uint32 idx3 = ipack.ReadAndAdvanceOrDie();
     Vector4 p1, p2, p3;
-    CHECK(vpack.next(1));
+    CHECK(vpack.move(idx1));
     vpack.ReadVector4(&p1, kPositionIndex);
-    CHECK(vpack.next(1));
+    CHECK(vpack.move(idx2));
     vpack.ReadVector4(&p2, kPositionIndex);
-    CHECK(vpack.next(1));
+    CHECK(vpack.move(idx3));
     vpack.ReadVector4(&p3, kPositionIndex);
     used[idx1] += 1.0f;
     used[idx2] += 1.0f;

@@ -24,7 +24,7 @@ class EffectProvider : public EffectParamsProvider {
       ColoredDiffuseEffect* effect = dynamic_cast<ColoredDiffuseEffect*>(e);
       effect->SetWorld(world_);
       effect->SetPVW(pvw_);
-      effect->SetDirLight(light_);
+      effect->SetDirLight(*light_);
       effect->SetColor(Vector4(1.0, 0.0, 0.0, 1.0));
     }
   }
@@ -70,7 +70,7 @@ bool MainDelegate::Initialize() {
 
   RenderSystem* rs = RenderSystem::Current();
   pvw_effect_ = CreatePVWEffect();
-  diffuse_effect_ = ColoredDiffuseEffect();
+  diffuse_effect_ = CreateColoredDiffuseEffect();
   sphere1_ = new SphereObject(pvw_effect_->GetVertexDesc(), 8, 8);
   sphere2_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 8, 8);
   

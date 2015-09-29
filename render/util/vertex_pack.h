@@ -20,7 +20,10 @@ class VertexPack {
 
   int32 size() const { return size_;}
   void reset();
+  int32 move(int32 offset);
+  bool first(int32 step);
   bool next(int32 step);
+  bool end();
   uint8* data() { return data_;}
   const uint8* data() const { return data_;}
   uint8* current() { return current_;}

@@ -1,4 +1,4 @@
-#include "wow/sandbox/render/mapchunk/diffuse_effect.h"
+#include "azer/render/util/effects/diffuse_effect.h"
 
 #include <stddef.h>
 
@@ -6,20 +6,14 @@
 #include "base/logging.h"
 
 #include "azer/render/render.h"
+#include "azer/render/util/effects/vertex_desc.h"
+#include "azer/render/util/shader_util.h"
 
 namespace azer {
-IMPLEMENT_EFFECT_DYNCREATE(ColoredDiffuseEffect);
 const char ColoredDiffuseEffect::kEffectName[] = "ColoredDiffuseEffect";
-const VertexDesc::Desc ColoredDiffuseEffect::kVertexDesc[] = {
-  {"POSITION", 0, kVec4},
-  {"NORMAL", 0, kVec4},
-};
-
-const int ColoredDiffuseEffect::kVertexDescNum = 
-    arraysize(ColoredDiffuseEffect::kVertexDesc);
-
-ColoredDiffuseEffect::ColoredDiffuseEffect() 
-  : Effect(RenderSystem::Current()) {
+ColoredDiffuseEffect::ColoredDiffuseEffect(VertexDescPtr desc) 
+    : Effect(RenderSystem::Current()) {
+  vertex_desc_ptr_ = desc;
 }
 
 ColoredDiffuseEffect::~ColoredDiffuseEffect() {
@@ -58,7 +52,6 @@ void ColoredDiffuseEffect::InitGpuConstantTable() {
       arraysize(ps_table_desc), ps_table_desc);
 }
 void ColoredDiffuseEffect::InitTechnique(const ShaderPrograms& sources) {
-  vertex_desc_ptr_ = new VertexDesc(kVertexDesc, kVertexDescNum);
   InitShaders(sources);
 }
 
@@ -86,7 +79,7 @@ void ColoredDiffuseEffect::SetDirLight(const DirLight& value) {
 void ColoredDiffuseEffect::UseTexture(Renderer* renderer) {
 }
 
-ColoredDiffuseEffectPtr ColoredDiffuseEffect() {
+ColoredDiffuseEffectPtr CreateColoredDiffuseEffect() {
   Effect::ShaderPrograms shaders;
   CHECK(LoadShaderAtStage(kVertexStage, 
                           "azer/render/util/effects/hlsl/colored_diffuse.hlsl.vs",
@@ -94,7 +87,8 @@ ColoredDiffuseEffectPtr ColoredDiffuseEffect() {
   CHECK(LoadShaderAtStage(kPixelStage, 
                           "azer/render/util/effects/hlsl/colored_diffuse.hlsl.ps",
                           &shaders));
-  PVWEffectPtr ptr(new PVWEffect(PositionVertex::PosNormalVertex()));
+  ColoredDiffuseEffectPtr ptr(new ColoredDiffuseEffect(
+             PosNormalVertex::CreateVertexDesc()));
   ptr->Init(shaders);
   return ptr;
 }
