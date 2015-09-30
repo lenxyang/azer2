@@ -4,7 +4,7 @@
 #include "azer/render/util.h"
 
 namespace azer {
-CoordinateAxis::CoordinateAxis(const Matrix4& orientation, CoordinateObject* object)
+CoordinateAxis::CoordinateAxis(const Matrix4& orientation, AxesFrames* object)
     : orientation_(orientation),
       object_(object) {
   color_ = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
@@ -38,7 +38,8 @@ void CoordinateAxis::Render(const Matrix4& world,  const Matrix4& pvw,
   cylinder->Render(renderer);
 }
 
-CoordinateObject::CoordinateObject() {
+// class AxesFrames
+AxesFrames::AxesFrames() {
   light_.dir = azer::Vector4(-0.6f, -0.6f, -0.2f, 0.0f);
   light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
   light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
@@ -60,6 +61,29 @@ CoordinateObject::CoordinateObject() {
   zaxis_->SetColor(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 }
 
+AxesFrames::~AxesFrames() {
+}
+
+void AxesFrames::Render(const Matrix4& world,  const Matrix4& pvw, 
+                        Renderer* renderer) {
+  xaxis_->Render(world, pvw, renderer);
+  yaxis_->Render(world, pvw, renderer);
+  zaxis_->Render(world, pvw, renderer);
+
+  Matrix4 sphere_world = std::move(Scale(0.1f, 0.1f, 0.1f));
+  diffuse_effect_->SetDirLight(light_);
+  diffuse_effect_->SetColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+  diffuse_effect_->SetWorld(world * sphere_world);
+  diffuse_effect_->SetPVW(pvw * sphere_world);
+  diffuse_effect_->Use(renderer);
+  sphere_->Render(renderer);
+}
+
+// class CoordinateObject
+CoordinateObject::CoordinateObject() {
+  axes_.reset(new AxesFrames);
+}
+
 CoordinateObject::~CoordinateObject() {
 }
 
@@ -69,16 +93,6 @@ void CoordinateObject::Update(const Camera& camera) {
 }
 
 void CoordinateObject::Render(Renderer* renderer) {
-  xaxis_->Render(world_, pvw_, renderer);
-  yaxis_->Render(world_, pvw_, renderer);
-  zaxis_->Render(world_, pvw_, renderer);
-
-  Matrix4 sphere_world = std::move(Scale(0.1f, 0.1f, 0.1f));
-  diffuse_effect_->SetDirLight(light_);
-  diffuse_effect_->SetColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-  diffuse_effect_->SetWorld(world_ * sphere_world);
-  diffuse_effect_->SetPVW(pvw_ * sphere_world);
-  diffuse_effect_->Use(renderer);
-  sphere_->Render(renderer);
+  axes_->Render(world_, pvw_, renderer);
 }
 }  // namespace azer
