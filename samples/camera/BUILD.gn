@@ -36,3 +36,22 @@ executable("overlay") {
     "//nelf",
   ]
 }
+
+executable("window") {
+  output_name = "azer_sample_camera_window"
+  sources = [
+    "camera_window.cc",
+  ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}

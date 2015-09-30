@@ -69,9 +69,9 @@ public:
   struct AZER_EXPORT Options {
     gfx::Size size;
     SamplerState sampler;
-    DataFormat format;
-    GraphicBuffer::Usage usage;
-    CPUAccess cpu_access;
+    DataFormat format;            // default: kRGBAn8
+    GraphicBuffer::Usage usage;   // default: GraphicBuffer::kDefault
+    CPUAccess cpu_access;         // default: kCPUNoAccess
     Texture::BindTarget target;
     Type type;
     int32 diminison;
