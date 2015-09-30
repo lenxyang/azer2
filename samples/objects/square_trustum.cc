@@ -4,6 +4,7 @@
 #include "nelf/nelf.h"
 #include "azer/render/render.h"
 #include "azer/render/util.h"
+#include "azer/samples/objects/effect_provider.h"
 
 using namespace azer;
 
@@ -16,33 +17,36 @@ class MainDelegate : public nelf::RenderDelegate {
  private:
   Camera camera_;
   DirLight light_;
-  scoped_ptr<CameraObject> object_;
-  scoped_ptr<FPSCameraController> camera_controller_;
+  ColoredDiffuseEffectPtr diffuse_effect_;
+  GeometryObjectPtr object_;
+  EffectProviderPtr provider_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
 bool MainDelegate::Initialize() { 
-  light_.dir = Vector4(-0.6f, -0.2f, -0.2f, 0.0f);
-  light_.diffuse = Vector4(0.8f, 0.8f, 1.8f, 1.0f);
-  light_.ambient = Vector4(0.2f, 0.2f, 0.2f, 1.0f);
+  light_.dir = azer::Vector4(-0.6f, -0.6f, -0.2f, 0.0f);
+  light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
+  light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
-  Vector3 camera_pos(0.0f, 1.0f, 5.0f);
-  Vector3 lookat(0.0f, 1.0f, 0.0f);
+  Vector3 camera_pos(0.0f, 3.0f, 5.0f);
+  Vector3 lookat(0.0f, 0.0f, 0.0f);
   Vector3 up(0.0f, 1.0f, 0.0f);
   camera_.reset(camera_pos, lookat, up);
-  camera_controller_.reset(new FPSCameraController(&camera_));
-  view()->AddEventListener(camera_controller_.get());
 
   RenderSystem* rs = RenderSystem::Current();
-  object_.reset(new CameraObject(&camera_));
-  object_->GetTransformHolder()->SetPosition(Vector3(-0.0f, 0.0f, 0.0f));
+  diffuse_effect_ = CreateColoredDiffuseEffect();
+  
+  object_ = new SquareTrustum(diffuse_effect_->GetVertexDesc(), 0.4, 1.0f, 1.0);
+  provider_.reset(new EffectProvider(&light_));
+  provider_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
   window()->SetRealTimeRender(true);
   return true;
 }
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
-  camera_controller_->Update(args);
-  object_->Update(camera_);
+  Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
+  provider_->GetTransformHolder()->rotate(Vector3(0.0f, 1.0f, 0.0f), rad);
+  provider_->Update(camera_);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -51,8 +55,10 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->Use();
   renderer->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
   renderer->ClearDepthAndStencil();
-  renderer->SetCullingMode(kCullBack);
+  renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
+  diffuse_effect_->Use(renderer);
+  provider_->Apply(diffuse_effect_.get());
   object_->Render(renderer);
 }
 

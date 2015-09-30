@@ -1,4 +1,4 @@
-#include "azer/render/util/geometry/coordinate_object.h"
+#include "azer/render/util/coordinate_object.h"
 
 #include "azer/math/math.h"
 #include "azer/render/util.h"

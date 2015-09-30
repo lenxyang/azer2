@@ -112,3 +112,22 @@ executable("arrow") {
     "//nelf",
   ]
 }
+
+executable("square_trustum") {
+  output_name = "azer_sample_objects_square_trustum"
+  sources = [
+    "square_trustum.cc",
+  ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}

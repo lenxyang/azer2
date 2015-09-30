@@ -24,9 +24,9 @@ class TransformHolderRetore {
   DISALLOW_COPY_AND_ASSIGN(TransformHolderRetore);
 };
 
-class EventListener : public nelf::EventListener {
+class FPSCameraController : public nelf::EventListener {
  public:
-  EventListener(Camera* camera);
+  FPSCameraController(Camera* camera);
   void OnKeyPressed(const ui::KeyEvent& event) override;
   void OnKeyReleased(const ui::KeyEvent& event) override;
   void Update(const azer::FrameArgs& args);
@@ -42,7 +42,7 @@ class EventListener : public nelf::EventListener {
   bool negx_, negy_, negz_;
   gfx::Point location_;
   TransformHolderRetore storer_;
-  DISALLOW_COPY_AND_ASSIGN(EventListener);
+  DISALLOW_COPY_AND_ASSIGN(FPSCameraController);
 };
 
 }  // namespace azer

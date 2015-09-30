@@ -1,4 +1,4 @@
-#include "azer/samples/camera/event_listener.h"
+#include "azer/render/util/fps_camera_controller.h"
 
 namespace azer {
 // class TransformHolderRetore
@@ -19,8 +19,8 @@ void TransformHolderRetore::restore() {
   object_->set_orientation(orientation_);
 }
 
-// class EventListener
-EventListener::EventListener(Camera* camera) 
+// class FPSCameraController
+FPSCameraController::FPSCameraController(Camera* camera) 
     : camera_(camera),
       posx_(0),
       posz_(0),
@@ -32,7 +32,7 @@ EventListener::EventListener(Camera* camera)
   orientation_dragging_ = false;
 }
 
-void EventListener::OnKeyPressed(const ui::KeyEvent& event) {
+void FPSCameraController::OnKeyPressed(const ui::KeyEvent& event) {
   Camera* camera = camera_;
   if (event.key_code() == ui::VKEY_W) {
     posz_ = 1;
@@ -49,7 +49,7 @@ void EventListener::OnKeyPressed(const ui::KeyEvent& event) {
   }
 }
 
-void EventListener::OnKeyReleased(const ui::KeyEvent& event) {
+void FPSCameraController::OnKeyReleased(const ui::KeyEvent& event) {
   if (event.key_code() == ui::VKEY_W) {
     posz_ = 0;
   } else if (event.key_code() == ui::VKEY_S) {
@@ -65,7 +65,7 @@ void EventListener::OnKeyReleased(const ui::KeyEvent& event) {
   }
 }
 
-void EventListener::Update(const azer::FrameArgs& args) {
+void FPSCameraController::Update(const azer::FrameArgs& args) {
   float unit = args.delta().InSecondsF() * 32.0f;
   TransformHolder* holder = camera_->GetTransformHolder();
   holder->strafe((posx_ - negx_) * unit);
@@ -74,27 +74,28 @@ void EventListener::Update(const azer::FrameArgs& args) {
   camera_->Update();
 }
 
-void EventListener::OnMousePressed(const ui::MouseEvent& event) {
+void FPSCameraController::OnMousePressed(const ui::MouseEvent& event) {
   location_ = event.location();
   if (event.IsLeftMouseButton() && event.GetClickCount() == 1) {
     orientation_dragging_ = true;
     storer_.store();
   }
 }
-void EventListener::OnMouseDragged(const ui::MouseEvent& event) {
+void FPSCameraController::OnMouseDragged(const ui::MouseEvent& event) {
   if (orientation_dragging_) {
     RotateCamera(location_, event.location());
   }
 }
 
-void EventListener::OnMouseReleased(const ui::MouseEvent& event) {
+void FPSCameraController::OnMouseReleased(const ui::MouseEvent& event) {
   if (orientation_dragging_) {
     RotateCamera(location_, event.location());
     storer_.reset();
     orientation_dragging_ = false;
   }
 }
-void EventListener::RotateCamera(const gfx::Point& prev, const gfx::Point& cur) {
+void FPSCameraController::RotateCamera(const gfx::Point& prev, 
+                                       const gfx::Point& cur) {
   using azer::Degree;
   storer_.restore();
   TransformHolder* holder = camera_->GetTransformHolder();

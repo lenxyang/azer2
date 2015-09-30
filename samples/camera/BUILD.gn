@@ -3,10 +3,6 @@ executable("camera") {
   output_name = "azer_sample_camera"
   sources = [
     "main.cc",
-    "event_listener.cc",
-    "event_listener.h",
-    "camera_sphere_object.cc",
-    "camera_sphere_object.h",
   ] 
   deps = [
     "//skia",
