@@ -9,25 +9,26 @@ namespace azer {
 class ArrowObject {
  public:
   ArrowObject();
+  explicit ArrowObject(ColoredDiffuseEffectPtr effect);
   ~ArrowObject();
 
-  void SetColor(const Vector4& color) { color_ = color;}
-  TransformHolder* GetTransformHolder() { return &holder_;}
-  void Update(const Camera& camera);
-  void Render(Renderer* renderer);
+  void SetColor(Vector4 color) { color_ = color;}
+  void Render(const Matrix4& world,  const Matrix4& pvw, Renderer* renderer);
+
+  ColoredDiffuseEffectPtr GetEffect() { return effect_;}
+  const DirLight& light() const { return light_;}
+  DirLight* mutable_light() { return &light_;}
  private:
-  Vector4 color_;
-  DirLight light_;
+  void Init(ColoredDiffuseEffectPtr effect);
   Matrix4 cone_world_;
   Matrix4 cylinder_world_;
-  Matrix4 world_;
-  Matrix4 pvw_;
-  TransformHolder holder_;
-
+  Vector4 color_;
+  DirLight light_;
   GeometryObjectPtr cone_;
   GeometryObjectPtr cylinder_;
-  ColoredDiffuseEffectPtr diffuse_effect_;
+  ColoredDiffuseEffectPtr effect_;
   DISALLOW_COPY_AND_ASSIGN(ArrowObject);
 };
+
 
 }  // namespace azer

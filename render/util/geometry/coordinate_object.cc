@@ -24,7 +24,7 @@ void CoordinateAxis::Render(const Matrix4& world,  const Matrix4& pvw,
                             Renderer* renderer) {
   GeometryObjectPtr cone = object_->cone_;
   GeometryObjectPtr cylinder = object_->cylinder_;
-  ColoredDiffuseEffectPtr effect = object_->diffuse_effect_;
+  ColoredDiffuseEffectPtr effect = object_->effect_;
   effect->SetDirLight(object_->light_);
   effect->SetColor(color_);
   effect->SetWorld(world * cone_world_);
@@ -39,17 +39,29 @@ void CoordinateAxis::Render(const Matrix4& world,  const Matrix4& pvw,
 }
 
 // class AxesFrames
+AxesFrames::AxesFrames(ColoredDiffuseEffectPtr effect) 
+    : effect_(effect) {
+  Init(effect_);
+}
+
 AxesFrames::AxesFrames() {
+  effect_ = CreateColoredDiffuseEffect();
+  Init(effect_);
+}
+
+AxesFrames::~AxesFrames() {
+}
+
+void AxesFrames::Init(ColoredDiffuseEffectPtr effect) {
   light_.dir = azer::Vector4(-0.6f, -0.6f, -0.2f, 0.0f);
   light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
   light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
-  diffuse_effect_ = CreateColoredDiffuseEffect();
-  sphere_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 16, 16);
-  cone_ = new ConeObject(diffuse_effect_->GetVertexDesc(), 16);
-  cylinder_ = new CylinderObject(diffuse_effect_->GetVertexDesc(), 16, 16);
+  sphere_ = new SphereObject(effect->GetVertexDesc(), 16, 16);
+  cone_ = new ConeObject(effect->GetVertexDesc(), 16);
+  cylinder_ = new CylinderObject(effect->GetVertexDesc(), 16, 16);
 
-  sphere_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 24, 24);
+  sphere_ = new SphereObject(effect->GetVertexDesc(), 24, 24);
   Matrix4 xaxis_orientation = RotateZ(Degree(90.0f));
   Matrix4 zaxis_orientation = RotateX(Degree(-90.0f));
   
@@ -61,9 +73,6 @@ AxesFrames::AxesFrames() {
   zaxis_->SetColor(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 }
 
-AxesFrames::~AxesFrames() {
-}
-
 void AxesFrames::Render(const Matrix4& world,  const Matrix4& pvw, 
                         Renderer* renderer) {
   xaxis_->Render(world, pvw, renderer);
@@ -71,11 +80,11 @@ void AxesFrames::Render(const Matrix4& world,  const Matrix4& pvw,
   zaxis_->Render(world, pvw, renderer);
 
   Matrix4 sphere_world = std::move(Scale(0.1f, 0.1f, 0.1f));
-  diffuse_effect_->SetDirLight(light_);
-  diffuse_effect_->SetColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-  diffuse_effect_->SetWorld(world * sphere_world);
-  diffuse_effect_->SetPVW(pvw * sphere_world);
-  diffuse_effect_->Use(renderer);
+  effect_->SetDirLight(light_);
+  effect_->SetColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+  effect_->SetWorld(world * sphere_world);
+  effect_->SetPVW(pvw * sphere_world);
+  effect_->Use(renderer);
   sphere_->Render(renderer);
 }
 

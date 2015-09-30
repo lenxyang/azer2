@@ -52,7 +52,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->Use();
   renderer->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
   renderer->ClearDepthAndStencil();
-  renderer->SetCullingMode(kCullNone);
+  renderer->SetCullingMode(kCullBack);
   renderer->EnableDepthTest(true);
   object_->Render(renderer);
 }

@@ -66,7 +66,7 @@ void EventListener::OnKeyReleased(const ui::KeyEvent& event) {
 }
 
 void EventListener::Update(const azer::FrameArgs& args) {
-  float unit = args.delta().InSecondsF() * 96.0f;
+  float unit = args.delta().InSecondsF() * 32.0f;
   TransformHolder* holder = camera_->GetTransformHolder();
   holder->strafe((posx_ - negx_) * unit);
   holder->walk((posz_ - negz_) * unit);

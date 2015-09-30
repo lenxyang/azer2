@@ -26,14 +26,20 @@ class CoordinateAxis {
 class AxesFrames {
  public:
   AxesFrames();
+  explicit AxesFrames(ColoredDiffuseEffectPtr effect);
   ~AxesFrames();
 
   void Render(const Matrix4& world,  const Matrix4& pvw, Renderer* renderer);
+
+  const DirLight& light() const { return light_;}
+  DirLight* mutable_light() { return &light_;}
+  ColoredDiffuseEffectPtr GetEffect() { return effect_;}
  private:
+  void Init(ColoredDiffuseEffectPtr effect);
   GeometryObjectPtr sphere_;
   GeometryObjectPtr cone_;
   GeometryObjectPtr cylinder_;
-  ColoredDiffuseEffectPtr diffuse_effect_;
+  ColoredDiffuseEffectPtr effect_;
 
   DirLight light_;
   scoped_ptr<CoordinateAxis> xaxis_;

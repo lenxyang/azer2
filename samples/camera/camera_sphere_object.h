@@ -20,6 +20,7 @@ class CameraSphereObject {
   const Camera* camera_;
   TransformHolder holder_;
   GeometryObjectPtr sphere_;
+  scoped_ptr<ArrowObject> arrow_;
   scoped_ptr<AxesFrames> axes_;
   BlendingPtr blending_;
 
