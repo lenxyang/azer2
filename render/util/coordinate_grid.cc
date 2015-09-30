@@ -28,21 +28,21 @@ void CoordinateGrid::Init() {
   data_ = new VertexData(effect->GetVertexDesc(), (kNum + 1) * 4);
   CoordinateGridEffect::Vertex* vertex =
       (CoordinateGridEffect::Vertex*)data_->pointer();
-  float row_width = kHeight / (float)kNum;
+  float total_width = kWidth * kNum;
+  float total_height = kHeight * kNum;
   for (int i = 0; i < kNum + 1; ++i) {
-    float z = kHeight / 2.0f - row_width * i;
-    vertex->position = Vector4(-kWidth / 2.0f, 0.0f, z, 1.0f);
+    float z = total_height / 2.0f - kHeight * i;
+    vertex->position = Vector4(-total_width / 2.0f, 0.0f, z, 1.0f);
     vertex++;
-    vertex->position = Vector4(kWidth / 2.0f, 0.0f, z, 1.0f);
+    vertex->position = Vector4(total_width / 2.0f, 0.0f, z, 1.0f);
     vertex++;
   }
 
-  float col_width = kHeight / (float)kNum;
   for (int i = 0; i < kNum + 1; ++i) {
-    float x  = kWidth / 2.0f - col_width * i;
-    vertex->position = Vector4(x, 0.0f, -kHeight / 2.0f, 1.0f);
+    float x  = total_width / 2.0f - kWidth * i;
+    vertex->position = Vector4(x, 0.0f, -total_height / 2.0f, 1.0f);
     vertex++;
-    vertex->position = Vector4(x, 0.0f, kHeight / 2.0f, 1.0f);
+    vertex->position = Vector4(x, 0.0f, total_height / 2.0f, 1.0f);
     vertex++;
   }
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data_.get());
