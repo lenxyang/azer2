@@ -12,6 +12,7 @@ class CameraSphereObject {
 
   void Render(Renderer* renderer);
 
+  void SetSphereColor(const Vector4& color) {  sphere_color_ = color;}
   TransformHolder* GetTransformHolder() { return &holder_;}
   const TransformHolder* GetTransformHolder() const { return &holder_;}
  private:
@@ -19,6 +20,7 @@ class CameraSphereObject {
 
   const Camera* camera_;
   TransformHolder holder_;
+  Vector4 sphere_color_;
   GeometryObjectPtr sphere_;
   scoped_ptr<ArrowObject> arrow_;
   scoped_ptr<AxesFrames> axes_;

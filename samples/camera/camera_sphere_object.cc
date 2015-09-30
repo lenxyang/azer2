@@ -13,6 +13,7 @@ CameraSphereObject::CameraSphereObject(const Camera* camera)
   arrow_.reset(new ArrowObject(effect));
   arrow_->SetColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
   
+  sphere_color_ = Vector4(1.0f, 1.0f, 1.0f, 0.2f);
   sphere_ = new SphereObject(effect->GetVertexDesc(), 16, 16);
 
   Blending::Desc blend_desc;
@@ -37,14 +38,19 @@ void CameraSphereObject::Update() {
 
 void CameraSphereObject::Render(Renderer* renderer) {
   Update();
-  
-  axes_->Render(world_, pvw_, renderer);
-  renderer->UseBlending(blending_.get(), 0);
 
+  const TransformHolder* camera_holder = camera_->GetTransformHolder();
+  TransformHolder holder = *camera_holder;
+  holder.pitch(Degree(-90.0));
+  Matrix4 rotate = std::move(holder.orientation().ToMatrix());
+  axes_->Render(world_, pvw_, renderer);
+  arrow_->Render(world_ * rotate, pvw_ * rotate, renderer);
+
+  renderer->UseBlending(blending_.get(), 0);
   ColoredDiffuseEffectPtr effect = axes_->GetEffect();
   effect->Use(renderer);
   effect->SetDirLight(axes_->light());
-  effect->SetColor(Vector4(1.0f, 1.0f, 1.0f, 0.3f));
+  effect->SetColor(sphere_color_);
   effect->SetWorld(world_);
   effect->SetPVW(pvw_);
   effect->Use(renderer);

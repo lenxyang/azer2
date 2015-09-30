@@ -73,14 +73,24 @@ void BoxObject::InitHardwareBuffers() {
     Vector2(1.0f, 0.0f),
     Vector2(1.0f, 1.0f),
   };
-  int indices[] = {0, 2, 1, 0, 3, 2,
-                   1, 6, 5, 1, 3, 6,
-                   5, 7, 4, 5, 6, 7,
-                   4, 3, 0, 4, 7, 3,
-                   4, 1, 5, 4, 0, 1,
-                   3, 6, 2, 3, 7, 6};
+  int indices[] = {0, 2, 1, 0, 3, 2,  // front
+                   1, 6, 5, 1, 2, 6,  // right
+                   5, 7, 4, 5, 6, 7,  // back
+                   4, 3, 0, 4, 7, 3,  // left
+                   4, 1, 5, 4, 0, 1,  // top
+                   3, 6, 2, 3, 7, 6}; // bottom
+  Vector4 normal[] = {
+    Vector4(0.0f, 0.0f, 1.0f, 0.0f),
+    Vector4(1.0f, 0.0f, 0.0f, 0.0f),
+    Vector4(0.0f, 0.0f, -1.0f, 0.0f),
+    Vector4(-1.0f, 0.0f, 0.0f, 0.0f),
+    Vector4(0.0f,  1.0f, 0.0f, 0.0f),
+    Vector4(0.0f,  -1.0f, 0.0f, 0.0f),
+  };
+    
 
-  int32 texcoord0_idx = GetSemanticIndex("texcoord", 0, desc_.get());
+  int32 kNormal0Idx = GetSemanticIndex("normal", 0, desc_.get());
+  int32 kTexcoord0Idx = GetSemanticIndex("texcoord", 0, desc_.get());
   VertexDataPtr vdata(new VertexData(desc_, arraysize(indices)));
   VertexPack vpack(vdata.get());
   vpack.first();
@@ -88,14 +98,21 @@ void BoxObject::InitHardwareBuffers() {
     int index = indices[i];
     DCHECK(!vpack.end());
     vpack.WriteVector4(position[index], 0);
-	if (texcoord0_idx > 0)
-      vpack.WriteVector2(texcoord0[index], texcoord0_idx);
+	if (kTexcoord0Idx > 0)
+      vpack.WriteVector2(texcoord0[index], kTexcoord0Idx);
     vpack.next(1);
   }
   DCHECK(vpack.end());
 
-  if (GetSemanticIndex("normal", 0, desc_.get()) > 0) {
-    CalcTriangleListNormal(vdata.get(), indices);
+  if (kNormal0Idx > 0) {
+    vpack.first(); 
+    for (int i = 0; i < static_cast<int>(arraysize(indices)); i += 6) {
+      int index = i / arraysize(normal);
+      for (int j = 0; j < 6; ++j) { 
+        vpack.WriteVector4(normal[index], kNormal0Idx);
+        vpack.next(1);
+      }
+    }
   }
   
   int32 edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,

@@ -45,7 +45,7 @@ bool MainDelegate::Initialize() {
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
   Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
-  provider_->GetTransformHolder()->rotate(Vector3(1.0f, 0.0f, 0.0f), rad);
+  provider_->GetTransformHolder()->rotate(Vector3(0.0f, 1.0f, 0.0f), rad);
   provider_->Update(camera_);
 }
 
