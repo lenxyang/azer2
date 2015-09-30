@@ -27,40 +27,54 @@ class CameraOverlay {
 class CameraView : public views::View {
  public:
   CameraView(CameraOverlay* overlay) 
-      : overlay_(overlay_) {
+      : overlay_(overlay) {
     SetPaintToLayer(true);
     TexturePtr tex = overlay_->GetTexture();
     gfx::Size size = tex->options().size;
-    bitmap_.allocN32Pixels(size.width(), size.height());
-    info_ = SkImageInfo::MakeN32Premul(size.width(), size.height());
+    info_ = SkImageInfo::MakeN32(size.width(), size.height(), kOpaque_SkAlphaType);
+    info_ = SkImageInfo::Make(size.width(), size.height(), 
+                              kBGRA_8888_SkColorType, kOpaque_SkAlphaType);
+    info_ = SkImageInfo::Make(size.width(), size.height(), 
+                              kRGBA_8888_SkColorType, kPremul_SkAlphaType);
+    // bitmap_.allocN32Pixels(size.width(), size.height());
+    bitmap_.allocPixels(info_);
+
+    RenderSystem* rs = RenderSystem::Current();
+    Texture::Options opt = tex->options();
+    opt.cpu_access = kCPURead;
+    opt.usage = GraphicBuffer::kStaging;
+    opt.target = (Texture::BindTarget)0;
+    texture_ = rs->CreateTexture(opt);
+    CHECK(texture_.get());
   }
 
   void OnPaint(gfx::Canvas* canvas) override {
     TexturePtr tex = overlay_->GetTexture();
-    Texture::MapData mapdata = tex->map(kReadOnly);
+    CHECK(tex->CopyTo(texture_.get()));
+    Texture::MapData mapdata = texture_->map(kReadOnly);
     CHECK(mapdata.pdata);
-    bitmap_.installPixels(info_, mapdata.pdata, mapdata.row_pitch);
-    tex->unmap();
+    // bitmap_.installPixels(info_, mapdata.pdata, mapdata.row_pitch);
+    memcpy(bitmap_.getPixels(), mapdata.pdata, 256 * 256 * 4);
+    texture_->unmap();
     gfx::ImageSkia img = gfx::ImageSkia::CreateFrom1xBitmap(bitmap_);
-    canvas->DrawImageInt(img, 0, 0);
-    SchedulePaint();
+    canvas->DrawImageInt(img, 0, 0, 256, 256,
+                         0, 0, this->width(), this->height(), true);
   }
 
  private:
   CameraOverlay* overlay_;
   SkBitmap bitmap_;
   SkImageInfo info_;
+  TexturePtr texture_;
   DISALLOW_COPY_AND_ASSIGN(CameraView);
 };
 
 CameraOverlay::CameraOverlay(const Camera* camera) {
   RenderSystem* rs = RenderSystem::Current();
   Texture::Options rdopt;
-  rdopt.size = gfx::Size(400, 400);
+  rdopt.size = gfx::Size(256, 256);
   rdopt.target = (Texture::BindTarget)
       (Texture::kRenderTarget | Texture::kShaderResource);
-  rdopt.cpu_access = kCPURead;
-  rdopt.usage = GraphicBuffer::kStaging;
   texrenderer_ = rs->CreateRenderer(rdopt);
   viewport_.bounds = gfx::Rect(rdopt.size);
   texrenderer_->SetViewport(viewport_);
@@ -82,7 +96,7 @@ void CameraOverlay::Update() {
   Renderer* texrd = texrenderer_.get();
   object_->Update(overlay_camera_);
   texrd->Use();
-  texrd->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+  texrd->Clear(Vector4(0.0f, 1.0f, 0.0f, 1.0f));
   texrd->ClearDepthAndStencil();
   object_->Render(texrd);
 }
@@ -94,7 +108,10 @@ void CameraOverlay::Render(Renderer* renderer) {
 
 class MainDelegate : public nelf::RenderDelegate {
  public:
-  MainDelegate() {}
+  MainDelegate() 
+      : prev_show_(0.0f),
+        paint_view_(NULL) {
+  }
   virtual bool Initialize() override;
   virtual void OnUpdate(const FrameArgs& args) override;
   virtual void OnRender(const FrameArgs& args) override;
@@ -107,7 +124,8 @@ class MainDelegate : public nelf::RenderDelegate {
   scoped_ptr<CameraOverlay> camera_overlay_;
   scoped_ptr<CoordinateGrid> gridline_;
   scoped_ptr<CoordinateObject> coord_object_;
-  
+  double prev_show_;
+  CameraView* paint_view_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -140,8 +158,8 @@ void MainDelegate::InitUI() {
   window->GetWidget()->SetBounds(gfx::Rect(0, 0, 100, 180));
   window->SetLayoutManager(new views::FillLayout());
 
-  CameraView* paint_view = new CameraView(camera_overlay_.get());
-  window->AddChildView(paint_view);
+  paint_view_ = new CameraView(camera_overlay_.get());
+  window->AddChildView(paint_view_);
   window->Layout();
   window->Show();
 }
@@ -163,6 +181,11 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   gridline_->Render(renderer);
   coord_object_->Render(renderer);
   camera_overlay_->Render(renderer);
+
+  if (args.time() - prev_show_ > 0.03) {
+    paint_view_->SchedulePaint();
+    prev_show_ = args.time();
+  }
 }
 
 int main(int argc, char* argv[]) {
