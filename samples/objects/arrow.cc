@@ -16,7 +16,7 @@ class MainDelegate : public nelf::RenderDelegate {
  private:
   Camera camera_;
   DirLight light_;
-  scoped_ptr<CoordinateObject> axis_;
+  scoped_ptr<ArrowObject> object_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -31,14 +31,14 @@ bool MainDelegate::Initialize() {
   camera_.reset(camera_pos, lookat, up);
 
   RenderSystem* rs = RenderSystem::Current();
-  axis_.reset(new CoordinateObject);
-  axis_->GetTransformHolder()->SetPosition(Vector3(-0.0f, 0.0f, 0.0f));
+  object_.reset(new ArrowObject);
+  object_->GetTransformHolder()->SetPosition(Vector3(-0.0f, 0.0f, 0.0f));
   window()->SetRealTimeRender(true);
   return true;
 }
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
-  axis_->Update(camera_);
+  object_->Update(camera_);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -49,7 +49,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
-  axis_->Render(renderer);
+  object_->Render(renderer);
 }
 
 int main(int argc, char* argv[]) {

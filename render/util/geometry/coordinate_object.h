@@ -1,7 +1,9 @@
 #pragma once
 
+#include "azer/math/math.h"
 #include "azer/render/render.h"
-#include "azer/render/util.h"
+#include "azer/render/util/effects/diffuse_effect.h"
+#include "azer/render/util/geometry/geometry_object.h"
 
 namespace azer {
 class CoordinateObject;
@@ -50,3 +52,4 @@ class CoordinateObject {
   DISALLOW_COPY_AND_ASSIGN(CoordinateObject);
 };
 }  // namespace azer
+

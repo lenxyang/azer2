@@ -74,3 +74,41 @@ executable("box") {
     "//nelf",
   ]
 }
+
+executable("coordinate") {
+  output_name = "azer_sample_objects_coordinate"
+  sources = [
+    "coordinate.cc",
+  ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}
+
+executable("arrow") {
+  output_name = "azer_sample_objects_arrow"
+  sources = [
+    "arrow.cc",
+  ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}
