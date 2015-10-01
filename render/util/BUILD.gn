@@ -30,6 +30,8 @@ static_library("util") {
     "geometry/cylinder_object.h",
     "geometry/geometry_object.cc",
     "geometry/geometry_object.h",
+    "geometry/plane_object.cc",
+    "geometry/plane_object.h",
     "geometry/sphere_object.cc",
     "geometry/sphere_object.h",
     "geometry/square_trustum.cc",

@@ -1,5 +1,8 @@
 #include "azer/render/util/geometry/plane_object.h"
 
+#include "azer/render/util/geometry/util.h"
+#include "azer/render/render_system.h"
+
 namespace azer {
 PlaneObject::PlaneObject(VertexDescPtr desc, int32 row, int column)
     : GeometryObject(desc),
@@ -11,12 +14,13 @@ PlaneObject::~PlaneObject() {
 }
 
 void PlaneObject::InitHardwareBuffers() {
+  RenderSystem* rs = RenderSystem::Current();
   const int32 kNormalIndex = GetSemanticIndex("normal", 0, desc_.get());
   const int32 kTexcoordIndex = GetSemanticIndex("texcoord", 0, desc_.get());
 
   float row_width = 2.0f / (kRowLine - 1);
   float column_width = 2.0f / (kRowLine - 1);
-  VertexDataPtr vdata(new VertexData(desc_, arraysize(kRowLine * kColumnLine)));
+  VertexDataPtr vdata(new VertexData(desc_, kRowLine * kColumnLine));
   VertexPack vpack(vdata.get());
   vpack.first();
   for (int i = 0; i < kRowLine; ++i) {
@@ -27,27 +31,54 @@ void PlaneObject::InitHardwareBuffers() {
       if (kNormalIndex > 0)
         vpack.WriteVector4(Vector4(0.0f, 0.0f, 1.0f, 0.0f), kNormalIndex);
 
-      if (kTexcoordIndex > 0) 
-        vpack.WriteVector4(Vector4(0.0f, 0.0f, 1.0f, 0.0f), kTexcoordIndex);
+      if (kTexcoordIndex > 0) {
+        float tu = (x + 1.0) * 0.5 + j * 1.0 / kRowLine;
+        float tv = (1.0 - y) * 0.5 + i * 1.0 / kRowLine;
+        vpack.WriteVector2(Vector2(tu, tv), kTexcoordIndex);
       }
-      vpack.next();
+      vpack.next(1);
     }
   }
   CHECK(vpack.end());
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
 
-  const int32 kIndexNum = (kRowLine - 1) * (kColumnLine - 1) * 2 * 3;
-  IndicesDataPtr idata(new IndicesData(kIndexNum));  
-  for (int i = 0; i < kRowLine - 1; ++i) {
-    for (int j = 0; j < kColumnLine - 1; ++j) {
-      int cur_line = i * kColumnLine;
-      int next_line = (i + 1) * kColumnLine;
-      CHECK(ipack.WriteAndAdvance(cur_line  + j));
-      CHECK(ipack.WriteAndAdvance(next_line + j));
-      CHECK(ipack.WriteAndAdvance(next_line + j + 1));
-      CHECK(ipack.WriteAndAdvance(cur_line  + j));
-      CHECK(ipack.WriteAndAdvance(next_line + j + 1));
-      CHECK(ipack.WriteAndAdvance(cur_line  + j + 1));
+  {
+    const int32 kIndexNum = (kRowLine - 1) * (kColumnLine - 1) * 2 * 3;
+    IndicesDataPtr idata(new IndicesData(kIndexNum));
+    IndexPack ipack(idata.get());
+    for (int i = 0; i < kRowLine - 1; ++i) {
+      for (int j = 0; j < kColumnLine - 1; ++j) {
+        int cur_line = i * kColumnLine;
+        int next_line = (i + 1) * kColumnLine;
+        CHECK(ipack.WriteAndAdvance(cur_line  + j));
+        CHECK(ipack.WriteAndAdvance(next_line + j));
+        CHECK(ipack.WriteAndAdvance(next_line + j + 1));
+        CHECK(ipack.WriteAndAdvance(cur_line  + j));
+        CHECK(ipack.WriteAndAdvance(next_line + j + 1));
+        CHECK(ipack.WriteAndAdvance(cur_line  + j + 1));
+      }
     }
+    ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
+  }
+
+  {
+    int32 count = kRowLine * 2 + kColumnLine * 2;
+    IndicesDataPtr idata(new IndicesData(kRowLine));
+    IndexPack ipack(idata.get());
+    for (uint32 i = 0; i < kRowLine; ++i) {
+      int32 index1 = i * kColumnLine;
+      int32 index2 = (i  + 1) * kColumnLine - 1;
+      CHECK(ipack.WriteAndAdvance(index1));
+      CHECK(ipack.WriteAndAdvance(index2));
+    }
+
+    for (uint32 i = 0; i < kColumnLine; ++i) {
+      int32 index1 = i;
+      int32 index2 = (kRowLine  - 1) * kColumnLine + i;
+      CHECK(ipack.WriteAndAdvance(index1));
+      CHECK(ipack.WriteAndAdvance(index2));
+    }
+    edge_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   }
 }
 }  // namespace azer
