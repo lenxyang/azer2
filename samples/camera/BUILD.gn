@@ -1,57 +1,37 @@
 
+common_deps = [
+  "//skia",
+  "//ui/views",
+  "//ui/base",
+  "//ui/events",
+  "//ui/gfx",
+  "//ui/gfx/geometry",
+  "//azer",
+  "//azer/math",
+  "//azer/render/util",
+  "//nelf",
+]
+
 executable("camera") {
   output_name = "azer_sample_camera"
-  sources = [
-    "main.cc",
-  ] 
-  deps = [
-    "//skia",
-    "//ui/views",
-    "//ui/base",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
-    "//azer",
-    "//azer/math",
-    "//azer/render/util",
-    "//nelf",
-  ]
+  sources = [ "main.cc", ] 
+  deps = common_deps
 }
 
 executable("overlay") {
   output_name = "azer_sample_camera_overlay"
-  sources = [
-    "camera_overlay.cc",
-  ] 
-  deps = [
-    "//skia",
-    "//ui/views",
-    "//ui/base",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
-    "//azer",
-    "//azer/math",
-    "//azer/render/util",
-    "//nelf",
-  ]
+  sources = [ "camera_overlay.cc", ] 
+  deps = common_deps
 }
 
 executable("window") {
   output_name = "azer_sample_camera_window"
-  sources = [
-    "camera_window.cc",
-  ] 
-  deps = [
-    "//skia",
-    "//ui/views",
-    "//ui/base",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
-    "//azer",
-    "//azer/math",
-    "//azer/render/util",
-    "//nelf",
-  ]
+  sources = [ "camera_window.cc", ] 
+  deps = common_deps
+}
+
+executable("window2") {
+  output_name = "azer_sample_camera_window2"
+  sources = [ "camera_window2.cc", ] 
+  deps = common_deps
 }

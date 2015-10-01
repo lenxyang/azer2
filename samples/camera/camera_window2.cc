@@ -7,11 +7,9 @@
 
 using namespace azer;
 
-class CameraOverlay;
-
 class CameraView : public nelf::TextureRenderView {
  public:
-  CameraOverlay(const Camera* camera);
+  CameraView(const Camera* camera);
 
   void Render() override;
  private:
@@ -25,7 +23,7 @@ CameraView::CameraView(const Camera* camera) {
 
   Vector3 camera_pos(2.0f, 2.0f, 2.0f);
   Vector3 lookat(0.0f, 0.0f, 0.0f);
-  Vector3 up(0.0f, 1.0f, 0.0f);
+  Vector3 up(0.0f, 0.0f, 0.0f);
   overlay_camera_.reset(camera_pos, lookat, up);
 }
 
@@ -33,17 +31,14 @@ void CameraView::Render() {
   Renderer* renderer = GetRenderer().get();
   object_->Update(overlay_camera_);
   renderer->Use();
-  renderer->Clear(Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+  renderer->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
   renderer->ClearDepthAndStencil();
   object_->Render(renderer);
 }
 
 class MainDelegate : public nelf::RenderDelegate {
  public:
-  MainDelegate() 
-      : prev_show_(0.0f),
-        paint_view_(NULL) {
-  }
+  MainDelegate() : prev_show_(0.0f) {}
   virtual bool Initialize() override;
   virtual void OnUpdate(const FrameArgs& args) override;
   virtual void OnRender(const FrameArgs& args) override;
@@ -53,12 +48,10 @@ class MainDelegate : public nelf::RenderDelegate {
   DirLight light_;
   
   scoped_ptr<FPSCameraController> camera_controller_;
-  scoped_ptr<CameraView> camera_view_;
   scoped_ptr<CoordinateGrid> gridline_;
   scoped_ptr<CoordinateObject> coord_object_;
   double prev_show_;
   CameraView* camera_view_;
-
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -77,7 +70,6 @@ bool MainDelegate::Initialize() {
   window()->SetRenderUI(true);
 
   coord_object_.reset(new CoordinateObject());
-  camera_view_.reset(new CameraView(&camera_));
   gridline_.reset(new CoordinateGrid(1.0f, 1.0f, 100));
   gridline_->SetXCoordColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
   gridline_->SetZCoordColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));

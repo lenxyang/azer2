@@ -89,7 +89,7 @@ CameraOverlay::CameraOverlay(const Camera* camera) {
 
 void CameraOverlay::Update() {
   Renderer* texrd = texrenderer_.get();
-  object_->Update(overlay_camera_);
+  
   texrd->Use();
   texrd->Clear(Vector4(0.0f, 1.0f, 0.0f, 1.0f));
   texrd->ClearDepthAndStencil();
@@ -97,6 +97,7 @@ void CameraOverlay::Update() {
 }
 
 void CameraOverlay::Render(Renderer* renderer) {
+  object_->Update(overlay_camera_);
   overlay_->SetTexture(texrenderer_->GetRenderTarget()->GetTexture());
   overlay_->Render(renderer);
 }
