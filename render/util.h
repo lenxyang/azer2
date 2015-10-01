@@ -16,6 +16,7 @@
 #include "azer/render/util/geometry/sphere_object.h"
 #include "azer/render/util/geometry/square_trustum.h"
 #include "azer/render/util/light.h"
+#include "azer/render/util/image_processing.h"
 #include "azer/render/util/shader_util.h"
 #include "azer/render/util/tile.h"
 #include "azer/render/util/vertex_pack.h"

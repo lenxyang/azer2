@@ -32,12 +32,7 @@ class CameraView : public views::View {
     TexturePtr tex = overlay_->GetTexture();
     gfx::Size size = tex->options().size;
     info_ = SkImageInfo::MakeN32(size.width(), size.height(), kOpaque_SkAlphaType);
-    info_ = SkImageInfo::Make(size.width(), size.height(), 
-                              kBGRA_8888_SkColorType, kOpaque_SkAlphaType);
-    info_ = SkImageInfo::Make(size.width(), size.height(), 
-                              kRGBA_8888_SkColorType, kPremul_SkAlphaType);
-    // bitmap_.allocN32Pixels(size.width(), size.height());
-    bitmap_.allocPixels(info_);
+    bitmap_.allocN32Pixels(size.width(), size.height());
 
     RenderSystem* rs = RenderSystem::Current();
     Texture::Options opt = tex->options();
@@ -47,6 +42,8 @@ class CameraView : public views::View {
     texture_ = rs->CreateTexture(opt);
     CHECK(texture_.get());
   }
+
+  TexturePtr GetTexture() { return texture_;}
 
   void OnPaint(gfx::Canvas* canvas) override {
     TexturePtr tex = overlay_->GetTexture();
@@ -126,6 +123,7 @@ class MainDelegate : public nelf::RenderDelegate {
   scoped_ptr<CoordinateObject> coord_object_;
   double prev_show_;
   CameraView* paint_view_;
+  ImageProcessingPtr processing_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -148,7 +146,11 @@ bool MainDelegate::Initialize() {
   gridline_.reset(new CoordinateGrid(1.0f, 1.0f, 100));
   gridline_->SetXCoordColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
   gridline_->SetZCoordColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+
   InitUI();
+  EffectPtr processing_effect = CreateSimpleImageProcessingEffect();
+  processing_ = new ImageProcessing(processing_effect,
+                                    paint_view_->GetTexture());
   return true;
 }
 

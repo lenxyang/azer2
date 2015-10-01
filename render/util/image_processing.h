@@ -1,21 +1,51 @@
 #pragma once
 
+#include "azer/render/effect.h"
 #include "azer/render/texture.h"
 #include "azer/render/render_target.h"
 #include "azer/render/renderer.h"
+#include "azer/render/util/geometry/geometry_object.h"
 
 namespace azer {
-class ImageProcessing {
+
+class SimpleImageProcessingEffect : public Effect {
  public:
-  ImageProcessing(TexturePtr input, TexturePtr output);
+  static const char kEffectName[];
+  SimpleImageProcessingEffect();
+
+  const char* name() const override;
+  bool Init(const ShaderPrograms& source) override;
+  void SetInputTex(TexturePtr texture) { texture_ = texture;}
+
+  struct Vertex {
+    Vector4 position;
+    Vector2 texcoord;
+  };
+  static const int kVertexDescNum;
+  static const azer::VertexDesc::Desc kVertexDesc[];
+ private:
+  void UseTexture(azer::Renderer* renderer) override;
+  TexturePtr texture_;
+  DISALLOW_COPY_AND_ASSIGN(SimpleImageProcessingEffect);
+};
+
+EffectPtr CreateSimpleImageProcessingEffect();
+
+class ImageProcessing : public ::base::RefCounted<ImageProcessing> {
+ public:
+  ImageProcessing(EffectPtr effect, TexturePtr output);
   ~ImageProcessing();
 
-  void Processing(Effect* effect);
+  void Processing();
  private:
   void Init();
   TexturePtr input_;
   TexturePtr output_;
   RendererPtr renderer_;
+  GeometryObjectPtr object_;
+  EffectPtr effect_;
   DISALLOW_COPY_AND_ASSIGN(ImageProcessing);
 };
+
+typedef scoped_refptr<ImageProcessing> ImageProcessingPtr;
 }  // namespace azer

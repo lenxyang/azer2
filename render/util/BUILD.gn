@@ -38,6 +38,8 @@ static_library("util") {
     "geometry/square_trustum.h",
     "geometry/util.cc",
     "geometry/util.h",
+    "image_processing.cc",
+    "image_processing.h",
     "index_pack.cc",
     "index_pack.h",
     "shader_util.cc",

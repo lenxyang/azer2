@@ -64,7 +64,7 @@ void PlaneObject::InitHardwareBuffers() {
 
   {
     int32 count = kRowLine * 2 + kColumnLine * 2;
-    IndicesDataPtr idata(new IndicesData(kRowLine));
+	IndicesDataPtr idata(new IndicesData(count));
     IndexPack ipack(idata.get());
     for (uint32 i = 0; i < kRowLine; ++i) {
       int32 index1 = i * kColumnLine;
