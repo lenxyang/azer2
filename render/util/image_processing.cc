@@ -76,6 +76,9 @@ void ImageProcessing::Init() {
 
 void ImageProcessing::Processing() {
   Renderer* renderer = renderer_.get();
+  renderer->Use();
+  renderer->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+  renderer->ClearDepthAndStencil();
   effect_->Use(renderer);
   object_->Render(renderer);
   Texture* tex = renderer->GetRenderTarget()->GetTexture().get();

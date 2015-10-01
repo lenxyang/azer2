@@ -46,8 +46,6 @@ class CameraView : public views::View {
   TexturePtr GetTexture() { return texture_;}
 
   void OnPaint(gfx::Canvas* canvas) override {
-    TexturePtr tex = overlay_->GetTexture();
-    CHECK(tex->CopyTo(texture_.get()));
     Texture::MapData mapdata = texture_->map(kReadOnly);
     CHECK(mapdata.pdata);
     // bitmap_.installPixels(info_, mapdata.pdata, mapdata.row_pitch);
@@ -148,9 +146,10 @@ bool MainDelegate::Initialize() {
   gridline_->SetZCoordColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 
   InitUI();
-  EffectPtr processing_effect = CreateSimpleImageProcessingEffect();
-  processing_ = new ImageProcessing(processing_effect,
-                                    paint_view_->GetTexture());
+  EffectPtr myeffect = CreateSimpleImageProcessingEffect();
+  ((SimpleImageProcessingEffect*)(myeffect.get()))->SetInputTex(
+      camera_overlay_->GetTexture());
+  processing_ = new ImageProcessing(myeffect, paint_view_->GetTexture());
   return true;
 }
 
@@ -184,6 +183,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   coord_object_->Render(renderer);
   camera_overlay_->Render(renderer);
 
+  processing_->Processing();
   if (args.time() - prev_show_ > 0.03) {
     paint_view_->SchedulePaint();
     prev_show_ = args.time();

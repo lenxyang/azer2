@@ -20,7 +20,7 @@ void PlaneObject::InitHardwareBuffers() {
   const int32 kTexcoordIndex = GetSemanticIndex("texcoord", 0, desc_.get());
 
   float row_width = 2.0f / (kRowLine - 1);
-  float column_width = 2.0f / (kRowLine - 1);
+  float column_width = 2.0f / (kColumnLine - 1);
   VertexDataPtr vdata(new VertexData(desc_, kRowLine * kColumnLine));
   VertexPack vpack(vdata.get());
   vpack.first();
@@ -33,8 +33,8 @@ void PlaneObject::InitHardwareBuffers() {
         vpack.WriteVector4(Vector4(0.0f, 0.0f, 1.0f, 0.0f), kNormalIndex);
 
       if (kTexcoordIndex > 0) {
-        float tu = (x + 1.0) * 0.5 + j * 1.0 / kRowLine;
-        float tv = (1.0 - y) * 0.5 + i * 1.0 / kRowLine;
+		float tu = (x + 1.0) * 0.5;
+		float tv = (1.0 - y) * 0.5;
         vpack.WriteVector2(Vector2(tu, tv), kTexcoordIndex);
       }
       vpack.next(1);

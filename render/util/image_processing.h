@@ -36,6 +36,7 @@ class ImageProcessing : public ::base::RefCounted<ImageProcessing> {
   ImageProcessing(EffectPtr effect, TexturePtr output);
   ~ImageProcessing();
 
+  EffectPtr GetEffect() { return effect_;}
   void Processing();
  private:
   void Init();
