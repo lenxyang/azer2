@@ -8,6 +8,7 @@ PlaneObject::PlaneObject(VertexDescPtr desc, int32 row, int column)
     : GeometryObject(desc),
       kRowLine(row + 1),
       kColumnLine(column + 1) {
+  InitHardwareBuffers();
 }
 
 PlaneObject::~PlaneObject() {

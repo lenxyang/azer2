@@ -12,6 +12,7 @@
 #include "azer/render/util/geometry/box_object.h"
 #include "azer/render/util/geometry/cone_object.h"
 #include "azer/render/util/geometry/cylinder_object.h"
+#include "azer/render/util/geometry/plane_object.h"
 #include "azer/render/util/geometry/sphere_object.h"
 #include "azer/render/util/geometry/square_trustum.h"
 #include "azer/render/util/light.h"

@@ -36,7 +36,7 @@ bool MainDelegate::Initialize() {
   RenderSystem* rs = RenderSystem::Current();
   diffuse_effect_ = CreateColoredDiffuseEffect();
   
-  object_ = new BoxObject(diffuse_effect_->GetVertexDesc());
+  object_ = new PlaneObject(diffuse_effect_->GetVertexDesc(), 1, 1);
   provider_.reset(new EffectProvider(&light_));
   provider_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
   window()->SetRealTimeRender(true);
