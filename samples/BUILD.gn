@@ -1,6 +1,7 @@
 
 group("samples") {
   deps = [
+    "triangle",
     "objects",
     "coordinate",
     "camera",
