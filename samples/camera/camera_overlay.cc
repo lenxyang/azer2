@@ -48,7 +48,7 @@ void CameraOverlay::Update() {
   Renderer* texrd = texrenderer_.get();
   object_->Update(overlay_camera_);
   texrd->Use();
-  texrd->Clear(azer::Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+  texrd->Clear(azer::Vector4(0.0f, 0.0f, 0.0f, 0.0f));
   texrd->ClearDepthAndStencil();
   object_->Render(texrd);
 }
