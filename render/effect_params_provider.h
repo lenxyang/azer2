@@ -10,8 +10,12 @@ class Effect;
 
 class AZER_EXPORT EffectParamsAdapter {
  public:
+  static const char kEffectParamsAdapterName[];
   EffectParamsAdapter();
   virtual ~EffectParamsAdapter();
+
+  virtual const char* name() const { return kEffectParamsAdapterName;}
+  virtual void Apply(Effect* effect, EffectParamsProvider* params) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(EffectParamsAdapter);
 };

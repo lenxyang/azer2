@@ -2,6 +2,8 @@
 
 namespace azer {
 
+const char EffectParamsAdapter::kEffectParamsAdapterName[] = 
+    "azer::EffectParamsAdapter";
 EffectParamsAdapter::EffectParamsAdapter() {
 }
 
