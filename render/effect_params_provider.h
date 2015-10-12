@@ -7,6 +7,7 @@
 namespace azer {
 
 class Effect;
+class EffectParamsProvider;
 
 class AZER_EXPORT EffectParamsAdapter {
  public:
