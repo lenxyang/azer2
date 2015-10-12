@@ -19,6 +19,9 @@ class GeometryObject : public ::base::RefCounted<GeometryObject> {
   GeometryObject(VertexDescPtr desc);
   ~GeometryObject();
 
+  VertexBufferPtr GetVertexBuffer() { return vb_;}
+  IndicesBufferPtr GetIndicesBuffer() { return ib_; }
+
   virtual void Render(Renderer* renderer);
   virtual void RenderWireframe(Renderer* renderer);
  protected:

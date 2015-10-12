@@ -48,19 +48,19 @@ bool MainDelegate::Initialize() {
   diffuse_effect_ = CreateColoredDiffuseEffect();
   
   sphere1_ = new SphereObject(pvw_effect_->GetVertexDesc(), 8, 8);
-  provider1_.reset(new EffectProvider(&light_));
+  provider1_ = new EffectProvider(&light_, &camera_);
   provider1_->GetTransformHolder()->SetPosition(Vector3(-3.0f, 0.0f, 0.0f));
 
   sphere2_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 8, 8);
-  provider2_.reset(new EffectProvider(&light_));
+  provider2_ = new EffectProvider(&light_, &camera_);
   provider2_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 3.0f));
 
   box_ = new BoxObject(diffuse_effect_->GetVertexDesc());
-  box_provider_.reset(new EffectProvider(&light_));
+  box_provider_ = new EffectProvider(&light_, &camera_);
   box_provider_->GetTransformHolder()->SetPosition(Vector3(3.0f, 0.0f, 3.0f));
 
   cone_ = new BoxObject(diffuse_effect_->GetVertexDesc());
-  cone_provider_.reset(new EffectProvider(&light_));
+  cone_provider_ = new EffectProvider(&light_, &camera_);
   cone_provider_->GetTransformHolder()->SetPosition(Vector3(3.0f, 0.0f, -3.0f));
 
   window()->SetRealTimeRender(true);
@@ -70,16 +70,16 @@ bool MainDelegate::Initialize() {
 void MainDelegate::OnUpdate(const FrameArgs& args) {
   Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
   provider1_->GetTransformHolder()->rotate(Vector3(0.0f, 1.0f, 0.0f), rad);
-  provider1_->Update(camera_);
+  provider1_->UpdateParams(args);
 
   provider2_->GetTransformHolder()->rotate(Vector3(0.0f, 0.0f, 1.0f), rad);
-  provider2_->Update(camera_);
+  provider2_->UpdateParams(args);
   
   box_provider_->GetTransformHolder()->rotate(Vector3(1.0f, 0.0f, 0.0f), rad);
-  box_provider_->Update(camera_);
+  box_provider_->UpdateParams(args);
 
   cone_provider_->GetTransformHolder()->rotate(Vector3(1.0f, 0.0f, 0.0f), rad);
-  cone_provider_->Update(camera_);
+  cone_provider_->UpdateParams(args);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -91,14 +91,16 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->SetCullingMode(kCullBack);
   renderer->EnableDepthTest(true);
   pvw_effect_->Use(renderer);
-  provider1_->Apply(pvw_effect_.get());
+  PVWEffectAdapter pvw_adapter;
+  pvw_adapter.Apply(pvw_effect_.get(), provider1_.get());
   sphere1_->RenderWireframe(renderer);
 
   diffuse_effect_->Use(renderer);
-  provider2_->Apply(diffuse_effect_.get());
+  ColoredEffectAdapter diffuse_adapter;
+  diffuse_adapter.Apply(diffuse_effect_.get(), provider2_.get());
   sphere2_->Render(renderer);
 
-  box_provider_->Apply(diffuse_effect_.get());
+  diffuse_adapter.Apply(diffuse_effect_.get(), box_provider_.get());
   box_->Render(renderer);
 
   // cone_provider_->Apply(diffuse_effect_.get());

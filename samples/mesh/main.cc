@@ -4,7 +4,7 @@
 #include "nelf/nelf.h"
 #include "azer/render/render.h"
 #include "azer/render/util.h"
-#include "azer/samples/objects/effect_provider.h"
+#include "azer/samples/mesh/effect_provider.h"
 
 using namespace azer;
 
@@ -17,9 +17,7 @@ class MainDelegate : public nelf::RenderDelegate {
  private:
   Camera camera_;
   DirLight light_;
-  ColoredDiffuseEffectPtr diffuse_effect_;
-  GeometryObjectPtr object_;
-  EffectProviderPtr provider_;
+  MeshPtr mesh_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -34,19 +32,25 @@ bool MainDelegate::Initialize() {
   camera_.reset(camera_pos, lookat, up);
 
   RenderSystem* rs = RenderSystem::Current();
-  diffuse_effect_ = CreateColoredDiffuseEffect();
-  
-  object_ = new ConeObject(diffuse_effect_->GetVertexDesc());
-  provider_ = new EffectProvider(&light_, &camera_);
-  provider_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+  ColoredDiffuseEffectPtr diffuse_effect = CreateColoredDiffuseEffect();
+  GeometryObjectPtr obj = new CylinderObject(diffuse_effect->GetVertexDesc());
+  EffectProviderPtr provider(new EffectProvider(&light_, &camera_));
+  provider->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+  EntityBuffer buffer;
+  buffer.effect = diffuse_effect;
+  buffer.vb = obj->GetVertexBuffer();
+  buffer.ib = obj->GetIndicesBuffer();
+  buffer.provider.push_back(provider);
+  buffer.adapter.push_back(new ColoredEffectAdapter);
+  mesh_ = new Mesh();
+  mesh_->AddEntityBuffer(&buffer);
+
   window()->SetRealTimeRender(true);
   return true;
 }
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
-  Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
-  provider_->GetTransformHolder()->rotate(Vector3(1.0f, 0.0f, 0.0f), rad);
-  provider_->UpdateParams(args);
+  mesh_->Update(args);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -57,10 +61,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
-  diffuse_effect_->Use(renderer);
-  ColoredEffectAdapter diffuse_adapter;
-  diffuse_adapter.Apply(diffuse_effect_.get(), provider_.get());
-  object_->Render(renderer);
+  mesh_->DrawIndex(renderer, azer::kTriangleList);
 }
 
 int main(int argc, char* argv[]) {

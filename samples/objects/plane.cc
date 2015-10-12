@@ -37,7 +37,7 @@ bool MainDelegate::Initialize() {
   diffuse_effect_ = CreateColoredDiffuseEffect();
   
   object_ = new PlaneObject(diffuse_effect_->GetVertexDesc(), 1, 1);
-  provider_.reset(new EffectProvider(&light_));
+  provider_ = new EffectProvider(&light_, &camera_);
   provider_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
   window()->SetRealTimeRender(true);
   return true;
@@ -58,7 +58,8 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
   diffuse_effect_->Use(renderer);
-  provider_->Apply(diffuse_effect_.get());
+  ColoredEffectAdapter diffuse_adapter;
+  diffuse_adapter.Apply(diffuse_effect_.get(), provider_.get());
   object_->Render(renderer);
 }
 

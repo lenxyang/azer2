@@ -46,6 +46,8 @@ source_set("render") {
     "light.h",
     "material.cc",
     "material.h",
+    "mesh.cc",
+    "mesh.h",
     "movable.cc",
     "movable.h",
     "overlay.cc",

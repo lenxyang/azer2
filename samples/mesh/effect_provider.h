@@ -12,6 +12,8 @@ class EffectProvider : public EffectParamsProvider {
   }
   
   void UpdateParams(const FrameArgs& args) {
+    Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
+    holder_.rotate(Vector3(0.0f, 1.0f, 0.0f), rad);
     world_ = std::move(holder_.GenWorldMatrix());
     pvw_ = std::move(camera_->GetProjViewMatrix() * world_);
   }
@@ -26,21 +28,6 @@ class EffectProvider : public EffectParamsProvider {
   Matrix4 world_;
   Matrix4 pvw_;
   TransformHolder holder_;
-};
-
-class PVWEffectAdapter : public EffectParamsAdapter {
- public:
-  PVWEffectAdapter() {}
-  void Apply(Effect* e, EffectParamsProvider* params) override {
-    CHECK(typeid(*e) == typeid(PVWEffect));
-    CHECK(typeid(*params) == typeid(EffectProvider));
-    PVWEffect* effect = dynamic_cast<PVWEffect*>(e);
-    EffectProvider* provider = (EffectProvider*)params;
-    effect->SetWorld(provider->world_);
-    effect->SetPVW(provider->pvw_);
-  }
- private:
-  DISALLOW_COPY_AND_ASSIGN(PVWEffectAdapter);
 };
 
 class ColoredEffectAdapter : public EffectParamsAdapter {

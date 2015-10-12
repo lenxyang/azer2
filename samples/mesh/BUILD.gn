@@ -1,0 +1,16 @@
+executable("mesh") {
+  output_name = "azer_sample_mesh"
+  sources = [ "main.cc", ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}
