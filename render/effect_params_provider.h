@@ -8,6 +8,7 @@ namespace azer {
 
 class Effect;
 class EffectParamsProvider;
+class FrameArgs;
 
 class AZER_EXPORT EffectParamsAdapter {
  public:
@@ -22,7 +23,8 @@ class AZER_EXPORT EffectParamsAdapter {
 };
 
 // provider information for effect
-class AZER_EXPORT EffectParamsProvider {
+class AZER_EXPORT EffectParamsProvider : 
+      public ::base::RefCounted<EffectParamsProvider> {
  public:
   static const char kEffectParamsProviderName[];
   EffectParamsProvider();
@@ -31,9 +33,10 @@ class AZER_EXPORT EffectParamsProvider {
   virtual const char* name() const { return kEffectParamsProviderName;}
 
   // apply the parameters on effect
-  virtual void Apply(Effect* effect) = 0;
+  virtual void UpdateParams(const FrameArgs& args) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(EffectParamsProvider);
 };
 
+typedef scoped_refptr<EffectParamsProvider> EffectParamsProviderPtr;
 }  // namespace azer

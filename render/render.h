@@ -3,6 +3,7 @@
 #include "azer/render/axis_aligned_box.h"
 #include "azer/render/camera.h"
 #include "azer/render/effect.h"
+#include "azer/render/effect_params_provider.h"
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render/render_target.h"
