@@ -4,7 +4,7 @@
 #include "nelf/nelf.h"
 #include "azer/render/render.h"
 #include "azer/render/util.h"
-#include "azer/samples/mesh/effect_provider.h"
+#include "azer/samples/mesh/effect_provider1.h"
 
 using namespace azer;
 
@@ -36,14 +36,15 @@ bool MainDelegate::Initialize() {
   GeometryObjectPtr obj = new CylinderObject(diffuse_effect->GetVertexDesc());
   EffectProviderPtr provider(new EffectProvider(&light_, &camera_));
   provider->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-  EntityBuffer buffer;
-  buffer.effect = diffuse_effect;
-  buffer.vb = obj->GetVertexBuffer();
-  buffer.ib = obj->GetIndicesBuffer();
-  buffer.provider.push_back(provider);
-  buffer.adapter.push_back(new ColoredEffectAdapter);
+
+  Mesh::Entity entity;
+  entity.effect = diffuse_effect;
+  entity.vb = obj->GetVertexBuffer();
+  entity.ib = obj->GetIndicesBuffer();
+  entity.provider = (provider);
+  entity.adapter = new ColoredEffectAdapter;
   mesh_ = new Mesh();
-  mesh_->AddEntityBuffer(&buffer);
+  mesh_->AddEntity(entity);
 
   window()->SetRealTimeRender(true);
   return true;

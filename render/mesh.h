@@ -9,56 +9,41 @@
 
 namespace azer {
 
-struct AZER_EXPORT EntityData {
-  VertexDataPtr vdata;
-  IndicesDataPtr idata;
-  EffectPtr effect;
-  std::vector<EffectParamsProviderPtr> provider;
-  std::vector<EffectParamsAdapter*> adapter;
-};
-
-struct AZER_EXPORT EntityBuffer {
-  VertexBufferPtr vb;
-  IndicesBufferPtr ib;
-  EffectPtr effect;
-  std::vector<EffectParamsProviderPtr> provider;
-  std::vector<EffectParamsAdapter*> adapter;
-};
-
 class AZER_EXPORT Mesh : public ::base::RefCounted<Mesh> {
  public:
+  Mesh();
+  explicit Mesh(EffectAdapterContext* context);
+  ~Mesh();
+
   struct AZER_EXPORT Entity {
     VertexBufferPtr vb;
     IndicesBufferPtr ib;
-    int32 group_index;
-  };
-
-  struct AZER_EXPORT Group {
     EffectPtr effect;
-    std::vector<int32> provider;
-    std::vector<int32> adapter;
+    EffectParamsProviderPtr provider;
+    const EffectParamsAdapter* adapter;
+    std::vector<const EffectParamsAdapter*> common_adapter;
   };
 
-  Mesh();
-  ~Mesh();
+  void ResetCommonProvider();
 
-  void AddEntityData(EntityData* data);
-  void AddEntityBuffer(EntityBuffer* data);
+  Entity* entity_at(int32 index);
+  const Entity* entity_at(int32 index) const;
+  int32 entity_count() const { return static_cast<int32>(entity_.size());}
+  Entity RemoveEntityAt(int32 index);
+
+  void AddEntity(Entity entity);
+  void AddCommonProvider(EffectParamsProviderPtr provider);
+  void RemoveProvider(EffectParamsProviderPtr provider);
 
   void Update(const FrameArgs& args);
   void Draw(Renderer* renderer, PrimitiveTopology primitive);
   void DrawIndex(Renderer* renderer, PrimitiveTopology primitive);
  private:
-  int32 LookupAdapter(EffectParamsAdapter* adapter);
-  int32 LookupProvider(EffectParamsProvider* provider);
-  int32 LookupAdapterOrInsert(EffectParamsAdapter* adapter);
-  int32 LookupProviderOrInsert(EffectParamsProvider* provider);
+  void ApplyEffectParams(Entity* entity, Renderer* renderer);
 
-  void ApplyEffectParams(int32 group_index, Renderer* renderer);
   std::vector<Entity> entity_;
-  std::vector<Group> group_;
-  std::vector<EffectParamsProviderPtr> provider_;
-  std::vector<EffectParamsAdapter*> adapter_;
+  std::vector<EffectParamsProviderPtr> common_provider_;
+  EffectAdapterContext* context_;
   DISALLOW_COPY_AND_ASSIGN(Mesh);
 };
 

@@ -1,6 +1,31 @@
-executable("mesh") {
-  output_name = "azer_sample_mesh"
-  sources = [ "main.cc", ] 
+
+group("mesh") {
+  deps = [
+    ":mesh1",
+    ":mesh2",
+  ]
+}
+
+executable("mesh1") {
+  output_name = "azer_sample_mesh1"
+  sources = [ "mesh1.cc", ] 
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/math",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}
+
+executable("mesh2") {
+  output_name = "azer_sample_mesh2"
+  sources = [ "mesh2.cc", ] 
   deps = [
     "//skia",
     "//ui/views",

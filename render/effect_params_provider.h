@@ -1,5 +1,9 @@
 #pragma once
 
+#include <map>
+#include <typeinfo>
+#include <typeindex>
+
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
@@ -17,7 +21,7 @@ class AZER_EXPORT EffectParamsAdapter {
   virtual ~EffectParamsAdapter();
 
   virtual const char* name() const { return kEffectParamsAdapterName;}
-  virtual void Apply(Effect* effect, EffectParamsProvider* params) = 0;
+  virtual void Apply(Effect* effect, EffectParamsProvider* params) const = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(EffectParamsAdapter);
 };
@@ -36,6 +40,23 @@ class AZER_EXPORT EffectParamsProvider :
   virtual void UpdateParams(const FrameArgs& args) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(EffectParamsProvider);
+};
+
+class AZER_EXPORT EffectAdapterContext {
+ public:
+  EffectAdapterContext();
+  ~EffectAdapterContext();
+
+  void RegisteAdapter(std::type_index effect_type_index,
+                      std::type_index provider_type_index,
+                      EffectParamsAdapter* adapter);
+                      
+  const EffectParamsAdapter* LookupAdapter(
+      std::type_index effect_type_index, std::type_index provider_type_index) const;
+ private:
+  typedef std::pair<std::type_index, std::type_index> DictKey;
+  std::map<DictKey,  const EffectParamsAdapter*> dict_;
+  DISALLOW_COPY_AND_ASSIGN(EffectAdapterContext);
 };
 
 typedef scoped_refptr<EffectParamsProvider> EffectParamsProviderPtr;
