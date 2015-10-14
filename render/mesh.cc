@@ -1,97 +1,35 @@
 #include "azer/render/mesh.h"
 
 #include "base/logging.h"
+#include "azer/render/renderer.h"
+#include "azer/render/render_closure.h"
 #include "azer/render/render_system.h"
 
 namespace azer {
-Mesh::Mesh() 
-    : context_(NULL) {
-}
-
 Mesh::Mesh(EffectAdapterContext* context)
-    : context_(context) {
+    : EffectParamsProviderContainer(context) {
 }
 
 Mesh::~Mesh() {
 }
 
-Mesh::Entity* Mesh::entity_at(int32 index) {
-  return &entity_.at(index);
-}
-
-const Mesh::Entity* Mesh::entity_at(int32 index) const {
-  return &entity_.at(index);
-}
-
-void Mesh::AddEntity(Entity entity) {
-  entity_.push_back(entity);
-  for (auto iter = entity.provider.begin();
-       iter != entity.provider.end();
-       ++iter) {
-  }
-}
-
-Mesh::Entity Mesh::RemoveEntityAt(int32 index) {
-  CHECK_LT(index, entity_.size());
-  Mesh::Entity entity = entity_.at(index);
-  entity_.erase(entity_.begin() + index);
-  return entity;
-}
-
-void Mesh::ResetProvider() {
-  provider_.clear();
-}
-
-void Mesh::AddProvider(EffectParamsProviderPtr provider, int32 group_index) {
-  CHECK(context_);
-  provider_.push_back(provider);
-  provider_index_.push_back(group_index);
-}
-
-void Mesh::RemoveProvider(EffectParamsProviderPtr provider) {
-  int index = 0;
-  for (auto iter = provider_.begin(); 
-       iter != provider_.end(); 
-       ++iter, ++index) {
-    if (iter->get() == provider) {
-      provider_.erase(iter);
-      break;
-    }
-  }
-}
-
-void Mesh::Update(const FrameArgs& args) {
-  for (auto iter = provider_.begin(); 
-       iter != provider_.end(); 
-       ++iter) {
+void Mesh::UpdateParams(const FrameArgs& args) {
+  EffectParamsProviderContainer::UpdateParams(args);
+  for (auto iter = closure_.begin(); iter != closure_.end(); ++iter) {
     (*iter)->UpdateParams(args);
   }
+}
 
-  for (auto iter = entity_.begin(); 
-       iter != entity_.end();
-       ++iter) {
-    iter->provider->UpdateParams(args);
+void Mesh::Draw(Renderer* renderer, Effect* effect, PrimitiveTopology primitive) {
+  for (auto iter = closure_.begin(); iter != closure_.end(); ++iter) {
+    (*iter)->Draw(renderer, effect, primitive);
   }
 }
 
-void Mesh::ApplyEffectParams(Entity* entity, Renderer* renderer) {
-  Effect* effect = entity->effect.get();
-  effect->Use(renderer);
-}
-
-void Mesh::DrawIndex(Renderer* renderer, PrimitiveTopology primitive) {
-  for (int32 i = 0; i < static_cast<int32>(entity_.size()); ++i) {
-    Entity& entity = entity_[i];
-    ApplyEffectParams(&entity, renderer);
-    renderer->DrawIndex(entity.vb.get(), entity.ib.get(), primitive);
-  }
-}
-
-void Mesh::Draw(Renderer* renderer, PrimitiveTopology primitive) {
-  for (int32 i = 0; i < static_cast<int32>(entity_.size()); ++i) {
-    Entity& entity = entity_[i];
-    ApplyEffectParams(&entity, renderer);
-    renderer->Draw(entity.vb.get(), primitive);
+void Mesh::DrawIndex(Renderer* renderer, Effect* effect,
+                     PrimitiveTopology primitive) {
+  for (auto iter = closure_.begin(); iter != closure_.end(); ++iter) {
+    (*iter)->DrawIndex(renderer, effect, primitive);
   }
 }
 

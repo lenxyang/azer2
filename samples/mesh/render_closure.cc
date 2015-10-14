@@ -17,7 +17,9 @@ class MainDelegate : public nelf::RenderDelegate {
  private:
   Camera camera_;
   DirLight light_;
-  MeshPtr mesh_;
+  RenderClosurePtr render_closure_;
+  ColoredDiffuseEffectPtr diffuse_effect_;
+  EffectAdapterContext context_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -32,26 +34,23 @@ bool MainDelegate::Initialize() {
   camera_.reset(camera_pos, lookat, up);
 
   RenderSystem* rs = RenderSystem::Current();
-  ColoredDiffuseEffectPtr diffuse_effect = CreateColoredDiffuseEffect();
-  GeometryObjectPtr obj = new CylinderObject(diffuse_effect->GetVertexDesc());
+  diffuse_effect_ = CreateColoredDiffuseEffect();
+  GeometryObjectPtr obj = new CylinderObject(diffuse_effect_->GetVertexDesc());
   EffectProviderPtr provider(new EffectProvider(&light_, &camera_));
   provider->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
-  Mesh::Entity entity;
-  entity.effect = diffuse_effect;
-  entity.vb = obj->GetVertexBuffer();
-  entity.ib = obj->GetIndicesBuffer();
-  entity.provider = (provider);
-  entity.adapter = new ColoredEffectAdapter;
-  mesh_ = new Mesh();
-  mesh_->AddEntity(entity);
+  context_.RegisteAdapter(new ColoredEffectAdapter);
+  render_closure_ = new RenderClosure(&context_);
+  render_closure_->SetVertexBuffer(obj->GetVertexBuffer());
+  render_closure_->SetIndicesBuffer(obj->GetIndicesBuffer());
+  render_closure_->AddProvider(provider);
 
   window()->SetRealTimeRender(true);
   return true;
 }
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
-  mesh_->Update(args);
+  render_closure_->UpdateParams(args);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -62,7 +61,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
-  mesh_->DrawIndex(renderer, azer::kTriangleList);
+  render_closure_->DrawIndex(renderer, diffuse_effect_.get(), azer::kTriangleList);
 }
 
 int main(int argc, char* argv[]) {

@@ -4,45 +4,29 @@
 #include "base/memory/ref_counted.h"
 #include "azer/render/effect.h"
 #include "azer/render/effect_params_provider.h"
-#include "azer/render/indices_buffer.h"
-#include "azer/render/vertex_buffer.h"
 
 namespace azer {
 
-class AZER_EXPORT Mesh : public ::base::RefCounted<Mesh> {
+class RenderClosure;
+class EffectAdapterContext;
+class EffectParamsProvider;
+typedef scoped_refptr<RenderClosure> RenderClosurePtr;
+typedef scoped_refptr<EffectParamsProvider> EffectParamsProviderPtr;
+typedef std::vector<EffectParamsProviderPtr> EffectParamsProviderVector;
+
+class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
  public:
   Mesh();
   explicit Mesh(EffectAdapterContext* context);
   ~Mesh();
 
-  struct AZER_EXPORT Entity {
-    VertexBufferPtr vb;
-    IndicesBufferPtr ib;
-    std::vector<EffectParamsProviderPtr> provider;
-  };
+  void AddRenderClosure(RenderClosurePtr ptr);
 
-  // entity operation
-  void AddEntity(Entity entity);
-  Entity RemoveEntityAt(int32 index);
-  Entity* entity_at(int32 index);
-  const Entity* entity_at(int32 index) const;
-  int32 entity_count() const { return static_cast<int32>(entity_.size());}
-
-  // provider operation
-  void AddProvider(EffectParamsProviderPtr provider);
-  void RemoveProvider(EffectParamsProviderPtr provider);
-  void ResetProvider();
-
-  void Update(const FrameArgs& args);
-  void Draw(Renderer* renderer, PrimitiveTopology primitive);
-  void DrawIndex(Renderer* renderer, PrimitiveTopology primitive);
+  void UpdateParams(const FrameArgs& args) override;
+  void Draw(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
+  void DrawIndex(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
  private:
-  void ApplyEffectParams(Entity* entity, Renderer* renderer);
-
-  std::vector<Entity> entity_;
-  std::vector<EffectParamsProviderPtr> provider_;
-  std::vector<int32> provider_index_;
-  EffectAdapterContext* context_;
+  std::vector<RenderClosurePtr> closure_;
   DISALLOW_COPY_AND_ASSIGN(Mesh);
 };
 

@@ -40,7 +40,7 @@ class ColoredEffectAdapter : public EffectParamsAdapter {
                           typeid(EffectProvider).name());
   }
 
-  void Apply(Effect* e, EffectParamsProvider* params) const override {
+  void Apply(Effect* e, const EffectParamsProvider* params) const override {
     CHECK(typeid(*e) == typeid(ColoredDiffuseEffect));
     CHECK(typeid(*params) == typeid(EffectProvider));
     EffectProvider* provider = (EffectProvider*)params;

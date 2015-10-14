@@ -1,14 +1,14 @@
 
 group("mesh") {
   deps = [
-    ":mesh1",
+    ":render_closure",
     ":mesh2",
   ]
 }
 
-executable("mesh1") {
-  output_name = "azer_sample_mesh1"
-  sources = [ "mesh1.cc", ] 
+executable("render_closure") {
+  output_name = "azer_sample_render_closure"
+  sources = [ "render_closure.cc", ] 
   deps = [
     "//skia",
     "//ui/views",
