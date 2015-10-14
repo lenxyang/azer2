@@ -14,13 +14,16 @@ class Effect;
 class EffectParamsProvider;
 class FrameArgs;
 
+typedef std::pair<std::type_index, std::type_index> EffectAdapterKey;
+
 class AZER_EXPORT EffectParamsAdapter {
  public:
   static const char kEffectParamsAdapterName[];
   EffectParamsAdapter();
   virtual ~EffectParamsAdapter();
 
-  virtual const char* name() const { return kEffectParamsAdapterName;}
+  virtual const char* GetAdapterName() const;
+  virtual EffectAdapterKey key() const = 0;
   virtual void Apply(Effect* effect, EffectParamsProvider* params) const = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(EffectParamsAdapter);
@@ -54,8 +57,7 @@ class AZER_EXPORT EffectAdapterContext {
   const EffectParamsAdapter* LookupAdapter(
       std::type_index effect_type_index, std::type_index provider_type_index) const;
  private:
-  typedef std::pair<std::type_index, std::type_index> DictKey;
-  std::map<DictKey,  const EffectParamsAdapter*> dict_;
+  std::map<EffectAdapterKey,  const EffectParamsAdapter*> dict_;
   DISALLOW_COPY_AND_ASSIGN(EffectAdapterContext);
 };
 
