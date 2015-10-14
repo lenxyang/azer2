@@ -22,12 +22,11 @@ class D3DOverlayEffect : public Effect {
   void SetTransform(const Matrix4& matrx);
   void SetTexcoord(const Vector4 texcoord[4]);
   void SetVertex(const Vector4 vertex[4]);  
-
-  void Use(Renderer* renderer) override;
-
-  void UseTexture(Renderer* renderer) override {}
+  
  protected:
   bool Init(Overlay* surface, D3DRenderSystem* rs);
+  void UseTexture(Renderer* renderer) override;
+  void ApplyGpuConstantTable(Renderer* renderer) override;
   static const char* kVertexShaderProg;
   static const char* kPixelShaderProg;
   TexturePtr texture_;

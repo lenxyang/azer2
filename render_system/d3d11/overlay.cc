@@ -56,11 +56,11 @@ const char* D3DOverlayEffect::name() const {
   return kEffectName;
 }
 
-void D3DOverlayEffect::Use(Renderer* renderer) {
-  DCHECK(texture_.get() != NULL);
+void D3DOverlayEffect::UseTexture(Renderer* renderer) {
   renderer->UseTexture(azer::kPixelStage, 0, texture_.get());
-  UseConstantsTable(renderer);
-  UseTechnique(renderer);
+}
+
+void D3DOverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
 }
 
 void D3DOverlayEffect::SetTransform(const Matrix4& matrix) {

@@ -36,7 +36,10 @@ class ColoredDiffuseEffect : public Effect {
  protected:
   void InitTechnique(const ShaderPrograms& source);
   void InitGpuConstantTable();
-  virtual void UseTexture(Renderer* renderer) override;
+  void ApplyGpuConstantTable(Renderer* renderer) override;
+
+  vs_cbuffer vs_data_;
+  ps_cbuffer ps_data_;
   DISALLOW_COPY_AND_ASSIGN(ColoredDiffuseEffect);
 };
 

@@ -22,16 +22,23 @@ const char* CoordinateGridEffect::name() const {
   return kEffectName;
 }
 
+void CoordinateGridEffect::ApplyGpuConstantTable(Renderer* renderer) {
+  GpuConstantsTable* vstb = gpu_table_[(int)kVertexStage].get();
+  DCHECK(vstb != NULL);
+  vstb->SetValue(0, (void*)&vs_data_.vp,  sizeof(Matrix4));
+
+  GpuConstantsTable* pstb = gpu_table_[(int)kPixelStage].get();
+  DCHECK(pstb != NULL);
+  pstb->SetValue(0, (void*)&ps_data_.diffuse,  sizeof(Vector4));
+}
+
 void CoordinateGridEffect::SetPVW(const Matrix4& value) {
-  GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(0, (void*)&value,  sizeof(Matrix4));
+  vs_data_.vp = value;
 }
 
 void CoordinateGridEffect::SetGridDiffuse(const Vector4& value) {
-  GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(0, (void*)&value,  sizeof(Vector4));
+  ps_data_.diffuse = value;
+  
 }
 
 void CoordinateGridEffect::Init(RenderSystem* rs) {
@@ -51,10 +58,6 @@ void CoordinateGridEffect::Init(RenderSystem* rs) {
 
   InitShader();
 }
-
-void CoordinateGridEffect::UseTexture(Renderer* renderer) {
-}
-
 
 void CoordinateGridEffect::InitShader() {
   ShaderPrograms sources;

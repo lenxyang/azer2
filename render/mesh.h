@@ -18,13 +18,7 @@ class AZER_EXPORT Mesh : public ::base::RefCounted<Mesh> {
   struct AZER_EXPORT Entity {
     VertexBufferPtr vb;
     IndicesBufferPtr ib;
-    EffectPtr effect;
-    EffectParamsProviderPtr provider;
-    const EffectParamsAdapter* adapter;
-    std::vector<const EffectParamsAdapter*> common_adapter;
   };
-
-  void ResetCommonProvider();
 
   Entity* entity_at(int32 index);
   const Entity* entity_at(int32 index) const;
@@ -32,8 +26,9 @@ class AZER_EXPORT Mesh : public ::base::RefCounted<Mesh> {
   Entity RemoveEntityAt(int32 index);
 
   void AddEntity(Entity entity);
-  void AddCommonProvider(EffectParamsProviderPtr provider);
+  void AddProvider(EffectParamsProviderPtr provider);
   void RemoveProvider(EffectParamsProviderPtr provider);
+  void ResetProvider();
 
   void Update(const FrameArgs& args);
   void Draw(Renderer* renderer, PrimitiveTopology primitive);
@@ -42,7 +37,7 @@ class AZER_EXPORT Mesh : public ::base::RefCounted<Mesh> {
   void ApplyEffectParams(Entity* entity, Renderer* renderer);
 
   std::vector<Entity> entity_;
-  std::vector<EffectParamsProviderPtr> common_provider_;
+  std::vector<EffectParamsProviderPtr> provider_;
   EffectAdapterContext* context_;
   DISALLOW_COPY_AND_ASSIGN(Mesh);
 };

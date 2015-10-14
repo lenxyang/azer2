@@ -14,17 +14,18 @@ class PVWEffect: public Effect {
   const char* name() const override;
   bool Init(const ShaderPrograms& source) override;
 
-  #pragma pack(push, 4)
+#pragma pack(push, 4)
   struct vs_cbuffer {
     Matrix4 pvw;
     Matrix4 world;
   };
-  #pragma pack(pop)
+#pragma pack(pop)
 
   void SetPVW(const Matrix4& value);
   void SetWorld(const Matrix4& value);
  protected:
-  void UseTexture(Renderer* renderer) override;
+  void ApplyGpuConstantTable(Renderer* renderer) override;
+  vs_cbuffer data_;
   DISALLOW_COPY_AND_ASSIGN(PVWEffect);
 };
 

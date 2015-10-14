@@ -27,9 +27,7 @@ bool MainDelegate::Initialize() {
   light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
   light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
-  context_.RegisteAdapter(typeid(ColoredDiffuseEffect), 
-                          typeid(EnvironmentEffectProvider), 
-                          new EnvironmentEffectAdapter);
+  context_.RegisteAdapter(new EnvironmentEffectAdapter);
 
   Vector3 camera_pos(0.0f, 3.0f, 5.0f);
   Vector3 lookat(0.0f, 0.0f, 0.0f);

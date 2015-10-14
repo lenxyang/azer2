@@ -14,6 +14,11 @@ class MaterialEffectProvider : public EffectParamsProvider {
 class MaterialEffectAdapter : public EffectParamsAdapter {
  public:
   MaterialEffectAdapter() {}
+  EffectAdapterKey key() const override {
+    return std::make_pair(typeid(ColoredDiffuseEffect).name(), 
+                          typeid(MaterialEffectProvider).name());
+  }
+
   void Apply(Effect* e, EffectParamsProvider* params) const override {
     CHECK(typeid(*e) == typeid(ColoredDiffuseEffect));
     CHECK(typeid(*params) == typeid(MaterialEffectProvider));
@@ -58,6 +63,11 @@ class EnvironmentEffectProvider : public EffectParamsProvider {
 class EnvironmentEffectAdapter : public EffectParamsAdapter {
  public:
   EnvironmentEffectAdapter() {}
+  EffectAdapterKey key() const override {
+    return std::make_pair(typeid(ColoredDiffuseEffect).name(), 
+                          typeid(EnvironmentEffectProvider).name());
+  }
+
   void Apply(Effect* e, EffectParamsProvider* params) const override {
     CHECK(typeid(*e) == typeid(ColoredDiffuseEffect));
     CHECK(typeid(*params) == typeid(EnvironmentEffectProvider));

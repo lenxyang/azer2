@@ -35,7 +35,7 @@ class AZER_EXPORT Effect : public Resource {
 
   virtual const char* name() const = 0;
   virtual bool Init(const ShaderPrograms& programs) = 0;
-  virtual void Use(Renderer* renderer);
+  void Use(Renderer* renderer);
 
   // light and material didn't have a fixed structure
   // all will be dependent its implementation.
@@ -47,7 +47,8 @@ class AZER_EXPORT Effect : public Resource {
   // 刷新所有的 GpuConstantTable
   void flush(Renderer* renderer);
  protected:
-  virtual void UseTexture(Renderer* renderer) = 0;
+  virtual void UseTexture(Renderer* renderer);
+  virtual void ApplyGpuConstantTable(Renderer* renderer) = 0;
   void InitShaders(const ShaderPrograms& sources);
   void UseConstantsTable(Renderer* renderer);
   void UseTechnique(Renderer* renderer);

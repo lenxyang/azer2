@@ -33,6 +33,9 @@ bool SimpleImageProcessingEffect::Init(const ShaderPrograms& sources) {
   return true;
 }
 
+void SimpleImageProcessingEffect::ApplyGpuConstantTable(Renderer* renderer) {
+}
+
 void SimpleImageProcessingEffect::UseTexture(azer::Renderer* renderer) {
   renderer->UseTexture(azer::kPixelStage, 0, texture_.get());
 }

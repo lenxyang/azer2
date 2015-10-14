@@ -42,8 +42,10 @@ class CoordinateGridEffect : public Effect {
   void InitShader();
   bool Init(const ShaderPrograms& prog) override { return true;}
   void Init(RenderSystem* rs);
+  void ApplyGpuConstantTable(Renderer* renderer) override;
 
-  virtual void UseTexture(Renderer* renderer) override;
+  vs_cbuffer vs_data_;
+  ps_cbuffer ps_data_;
   DISALLOW_COPY_AND_ASSIGN(CoordinateGridEffect);
 };
 }  // namespace azer

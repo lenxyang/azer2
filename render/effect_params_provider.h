@@ -3,8 +3,11 @@
 #include <map>
 #include <typeinfo>
 #include <typeindex>
+#include <string>
+#include <vector>
 
 #include "base/basictypes.h"
+#include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 
@@ -14,7 +17,7 @@ class Effect;
 class EffectParamsProvider;
 class FrameArgs;
 
-typedef std::pair<std::type_index, std::type_index> EffectAdapterKey;
+typedef std::pair<std::string, std::string> EffectAdapterKey;
 
 class AZER_EXPORT EffectParamsAdapter {
  public:
@@ -50,16 +53,32 @@ class AZER_EXPORT EffectAdapterContext {
   EffectAdapterContext();
   ~EffectAdapterContext();
 
-  void RegisteAdapter(std::type_index effect_type_index,
-                      std::type_index provider_type_index,
-                      EffectParamsAdapter* adapter);
+  void RegisteAdapter(EffectParamsAdapter* adapter);
                       
   const EffectParamsAdapter* LookupAdapter(
-      std::type_index effect_type_index, std::type_index provider_type_index) const;
+      std::string effect_string, std::string provider_string) const;
  private:
   std::map<EffectAdapterKey,  const EffectParamsAdapter*> dict_;
   DISALLOW_COPY_AND_ASSIGN(EffectAdapterContext);
 };
 
 typedef scoped_refptr<EffectParamsProvider> EffectParamsProviderPtr;
+
+class AZER_EXPORT EffectAdapterCache {
+ public:
+  EffectAdapterCache(EffectAdapterContext* context,
+                     const std::vector<EffectParamsProviderPtr>* provider);
+  ~EffectAdapterCache();
+
+  void ApplyParams(Effect* effect);
+ private:
+  typedef std::vector<EffectParamsAdapter*> AdapterVector;
+  AdapterVector* GetAdapter(Effect* effect);
+
+  AdapterVector adapter_;
+  std::map<std::string, scoped_ptr<AdapterVector> > cached_;
+  const std::vector<EffectParamsProviderPtr>* providers_;
+  EffectAdapterContext* context_;
+  DISALLOW_COPY_AND_ASSIGN(EffectAdapterCache);
+};
 }  // namespace azer

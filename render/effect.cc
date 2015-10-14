@@ -19,9 +19,13 @@ Effect::Effect(RenderSystem* rs)
 Effect::~Effect() {
 }
 
+void Effect::UseTexture(Renderer* renderer) {
+}
+
 void Effect::Use(Renderer* renderer) {
   UseTexture(renderer);
   UseConstantsTable(renderer);
+  ApplyGpuConstantTable(renderer);
   UseTechnique(renderer);
 }
 

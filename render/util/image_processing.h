@@ -25,6 +25,7 @@ class SimpleImageProcessingEffect : public Effect {
   static const azer::VertexDesc::Desc kVertexDesc[];
  private:
   void UseTexture(azer::Renderer* renderer) override;
+  void ApplyGpuConstantTable(Renderer* renderer) override;
   TexturePtr texture_;
   DISALLOW_COPY_AND_ASSIGN(SimpleImageProcessingEffect);
 };

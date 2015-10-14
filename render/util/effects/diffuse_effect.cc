@@ -55,28 +55,29 @@ void ColoredDiffuseEffect::InitTechnique(const ShaderPrograms& sources) {
   InitShaders(sources);
 }
 
-void ColoredDiffuseEffect::SetPVW(const Matrix4& value) {
-  GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(0, &value, sizeof(Matrix4));
-}
-void ColoredDiffuseEffect::SetWorld(const Matrix4& value) {
-  GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(1, &value, sizeof(Matrix4));
-}
-void ColoredDiffuseEffect::SetColor(const Vector4& value) {
-  GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(0, &value, sizeof(Vector4));
-}
-void ColoredDiffuseEffect::SetDirLight(const DirLight& value) {
-  GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(1, &value, sizeof(DirLight));
+void ColoredDiffuseEffect::ApplyGpuConstantTable(Renderer* renderer) {
+  GpuConstantsTable* vs_tb = gpu_table_[(int)kVertexStage].get();
+  DCHECK(vs_tb != NULL);
+  vs_tb->SetValue(0, &vs_data_.pvw, sizeof(Matrix4));
+  vs_tb->SetValue(1, &vs_data_.world, sizeof(Matrix4));
+
+  GpuConstantsTable* ps_tb = gpu_table_[(int)kPixelStage].get();
+  DCHECK(ps_tb != NULL);
+  ps_tb->SetValue(0, &ps_data_.color, sizeof(Vector4));
+  ps_tb->SetValue(1, &ps_data_.light, sizeof(DirLight));
 }
 
-void ColoredDiffuseEffect::UseTexture(Renderer* renderer) {
+void ColoredDiffuseEffect::SetPVW(const Matrix4& value) {
+  vs_data_.pvw = value;
+}
+void ColoredDiffuseEffect::SetWorld(const Matrix4& value) {
+  vs_data_.world = value;
+}
+void ColoredDiffuseEffect::SetColor(const Vector4& value) {
+  ps_data_.color = value;
+}
+void ColoredDiffuseEffect::SetDirLight(const DirLight& value) {
+  ps_data_.light = value;
 }
 
 ColoredDiffuseEffectPtr CreateColoredDiffuseEffect() {

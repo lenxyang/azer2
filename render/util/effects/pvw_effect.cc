@@ -43,19 +43,18 @@ bool PVWEffect::Init(const ShaderPrograms& sources) {
 }
 
 void PVWEffect::SetPVW(const Matrix4& value) {
-  GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
-  DCHECK(tb != NULL);
-  tb->SetValue(0, &value, sizeof(Matrix4));
+  data_.pvw = value;
 }
 void PVWEffect::SetWorld(const Matrix4& value) {
+  data_.world = value;
+}
+
+void PVWEffect::ApplyGpuConstantTable(Renderer* renderer) {
   GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
   DCHECK(tb != NULL);
-  tb->SetValue(1, &value, sizeof(Matrix4));
+  tb->SetValue(0, &data_.pvw, sizeof(Matrix4));
+  tb->SetValue(1, &data_.world, sizeof(Matrix4));
 }
-
-void PVWEffect::UseTexture(Renderer* renderer) {
-}
-
 
 PVWEffectPtr CreatePVWEffect() {
   Effect::ShaderPrograms shaders;

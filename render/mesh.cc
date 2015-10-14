@@ -30,61 +30,34 @@ Mesh::Entity Mesh::RemoveEntityAt(int32 index) {
   return entity;
 }
 
-void Mesh::ResetCommonProvider() {
-  for (auto iter = entity_.begin(); iter != entity_.end(); ++iter) {
-    iter->common_adapter.clear();
-  }
-  common_provider_.clear();
+void Mesh::ResetProvider() {
+  provider_.clear();
 }
 
 void Mesh::RemoveProvider(EffectParamsProviderPtr provider) {
   int index = 0;
-  for (auto iter = common_provider_.begin(); 
-       iter != common_provider_.end(); 
+  for (auto iter = provider_.begin(); 
+       iter != provider_.end(); 
        ++iter, ++index) {
     if (iter->get() == provider) {
-      common_provider_.erase(iter);
+      provider_.erase(iter);
       break;
     }
   }
-
-  for (auto iter = entity_.begin(); iter != entity_.end(); ++iter) {
-    iter->common_adapter.erase(iter->common_adapter.begin() + index);
-  }
 }
 
-void Mesh::AddCommonProvider(EffectParamsProviderPtr provider) {
+void Mesh::AddProvider(EffectParamsProviderPtr provider) {
   CHECK(context_);
-  common_provider_.push_back(provider);
-  for (auto iter = entity_.begin(); iter != entity_.end(); ++iter) {
-    std::type_index effect_id = typeid(*(iter->effect.get()));
-    std::type_index provider_id = typeid(*(provider.get()));
-    const EffectParamsAdapter* adapter = 
-        context_->LookupAdapter(effect_id, provider_id);
-    iter->common_adapter.push_back(adapter);
-  }
+  provider_.push_back(provider);
 }
 
 void Mesh::AddEntity(Entity entity) {
-  CHECK(entity.common_adapter.empty());
-  if (context_) {
-    for (auto iter = common_provider_.begin(); 
-         iter != common_provider_.end(); 
-         ++iter) {
-      std::type_index effect_id = typeid(*(entity.effect.get()));
-      std::type_index provider_id = typeid(*(iter->get()));
-      const EffectParamsAdapter* adapter = 
-          context_->LookupAdapter(effect_id, provider_id);
-      entity.common_adapter.push_back(adapter);
-    }
-  }
   entity_.push_back(entity);
-  // lookup provider
 }
 
 void Mesh::Update(const FrameArgs& args) {
-  for (auto iter = common_provider_.begin(); 
-       iter != common_provider_.end(); 
+  for (auto iter = provider_.begin(); 
+       iter != provider_.end(); 
        ++iter) {
     (*iter)->UpdateParams(args);
   }
@@ -98,15 +71,6 @@ void Mesh::Update(const FrameArgs& args) {
 
 void Mesh::ApplyEffectParams(Entity* entity, Renderer* renderer) {
   Effect* effect = entity->effect.get();
-  if (entity->adapter)
-    entity->adapter->Apply(effect, entity->provider.get());
-  for (int32 i = 0; i < static_cast<int32>(common_provider_.size()); ++i) {
-    EffectParamsProvider* provider = common_provider_[i].get();
-    const EffectParamsAdapter* adapter = entity->common_adapter[i];
-    if (adapter) {
-      adapter->Apply(effect, provider);
-    }
-  }
   effect->Use(renderer);
 }
 

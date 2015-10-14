@@ -1,6 +1,8 @@
 #pragma once
 
+#include <typeindex>
 #include "azer/render/render.h"
+#include "azer/render/util.h"
 
 namespace azer {
 
@@ -33,6 +35,11 @@ class EffectProvider : public EffectParamsProvider {
 class ColoredEffectAdapter : public EffectParamsAdapter {
  public:
   ColoredEffectAdapter() {}
+  EffectAdapterKey key() const override {
+    return std::make_pair(typeid(ColoredDiffuseEffect).name(), 
+                          typeid(EffectProvider).name());
+  }
+
   void Apply(Effect* e, EffectParamsProvider* params) const override {
     CHECK(typeid(*e) == typeid(ColoredDiffuseEffect));
     CHECK(typeid(*params) == typeid(EffectProvider));
