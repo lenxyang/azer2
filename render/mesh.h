@@ -18,14 +18,17 @@ class AZER_EXPORT Mesh : public ::base::RefCounted<Mesh> {
   struct AZER_EXPORT Entity {
     VertexBufferPtr vb;
     IndicesBufferPtr ib;
+    std::vector<EffectParamsProviderPtr> provider;
   };
 
+  // entity operation
+  void AddEntity(Entity entity);
+  Entity RemoveEntityAt(int32 index);
   Entity* entity_at(int32 index);
   const Entity* entity_at(int32 index) const;
   int32 entity_count() const { return static_cast<int32>(entity_.size());}
-  Entity RemoveEntityAt(int32 index);
 
-  void AddEntity(Entity entity);
+  // provider operation
   void AddProvider(EffectParamsProviderPtr provider);
   void RemoveProvider(EffectParamsProviderPtr provider);
   void ResetProvider();
@@ -38,6 +41,7 @@ class AZER_EXPORT Mesh : public ::base::RefCounted<Mesh> {
 
   std::vector<Entity> entity_;
   std::vector<EffectParamsProviderPtr> provider_;
+  std::vector<int32> provider_index_;
   EffectAdapterContext* context_;
   DISALLOW_COPY_AND_ASSIGN(Mesh);
 };

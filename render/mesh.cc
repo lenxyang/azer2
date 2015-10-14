@@ -23,6 +23,14 @@ const Mesh::Entity* Mesh::entity_at(int32 index) const {
   return &entity_.at(index);
 }
 
+void Mesh::AddEntity(Entity entity) {
+  entity_.push_back(entity);
+  for (auto iter = entity.provider.begin();
+       iter != entity.provider.end();
+       ++iter) {
+  }
+}
+
 Mesh::Entity Mesh::RemoveEntityAt(int32 index) {
   CHECK_LT(index, entity_.size());
   Mesh::Entity entity = entity_.at(index);
@@ -32,6 +40,12 @@ Mesh::Entity Mesh::RemoveEntityAt(int32 index) {
 
 void Mesh::ResetProvider() {
   provider_.clear();
+}
+
+void Mesh::AddProvider(EffectParamsProviderPtr provider, int32 group_index) {
+  CHECK(context_);
+  provider_.push_back(provider);
+  provider_index_.push_back(group_index);
 }
 
 void Mesh::RemoveProvider(EffectParamsProviderPtr provider) {
@@ -44,15 +58,6 @@ void Mesh::RemoveProvider(EffectParamsProviderPtr provider) {
       break;
     }
   }
-}
-
-void Mesh::AddProvider(EffectParamsProviderPtr provider) {
-  CHECK(context_);
-  provider_.push_back(provider);
-}
-
-void Mesh::AddEntity(Entity entity) {
-  entity_.push_back(entity);
 }
 
 void Mesh::Update(const FrameArgs& args) {
