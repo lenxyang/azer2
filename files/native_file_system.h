@@ -10,6 +10,8 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
   NativeFileSystem(const ::base::FilePath& root);
   ~NativeFileSystem() override {}
 
+  const char* GetFileSystemName() const override;
+
   FileType GetFileType(const ResPath& path) override;
   bool IsPathExists(const ResPath& path) override;
   int64 GetFileSize(const ResPath& path) override;

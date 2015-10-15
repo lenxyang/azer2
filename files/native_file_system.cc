@@ -12,6 +12,10 @@ NativeFileSystem::NativeFileSystem(const ::base::FilePath& root)
       root_(root) {
 }
 
+const char* NativeFileSystem::GetFileSystemName() const {
+  return kFileSystemName;
+}
+
 bool NativeFileSystem::ReadFile(const ResPath& path, std::vector<uint8>* data) {
   DCHECK(!path.empty());
   if (!path.IsAbsolutePath()) {
