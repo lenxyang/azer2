@@ -24,8 +24,8 @@ void Effect::UseTexture(Renderer* renderer) {
 
 void Effect::Use(Renderer* renderer) {
   UseTexture(renderer);
-  UseConstantsTable(renderer);
   ApplyGpuConstantTable(renderer);
+  UseConstantsTable(renderer);
   UseTechnique(renderer);
 }
 
