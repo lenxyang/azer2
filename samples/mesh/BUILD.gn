@@ -2,7 +2,7 @@
 group("mesh") {
   deps = [
     ":render_closure",
-    ":mesh2",
+    ":mesh_demo",
   ]
 }
 
@@ -23,9 +23,9 @@ executable("render_closure") {
   ]
 }
 
-executable("mesh2") {
-  output_name = "azer_sample_mesh2"
-  sources = [ "mesh2.cc", ] 
+executable("mesh_demo") {
+  output_name = "azer_sample_mesh"
+  sources = [ "mesh.cc", ] 
   deps = [
     "//skia",
     "//ui/views",

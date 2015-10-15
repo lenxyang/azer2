@@ -19,6 +19,7 @@ class MainDelegate : public nelf::RenderDelegate {
   DirLight light_;
   MeshPtr mesh_;
   EffectAdapterContext context_;
+  ColoredDiffuseEffectPtr diffuse_effect_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -27,36 +28,34 @@ bool MainDelegate::Initialize() {
   light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
   light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
-  context_.RegisteAdapter(new EnvironmentEffectAdapter);
-
   Vector3 camera_pos(0.0f, 3.0f, 5.0f);
   Vector3 lookat(0.0f, 0.0f, 0.0f);
   Vector3 up(0.0f, 1.0f, 0.0f);
   camera_.reset(camera_pos, lookat, up);
 
-  RenderSystem* rs = RenderSystem::Current();
-  ColoredDiffuseEffectPtr diffuse_effect = CreateColoredDiffuseEffect();
-  GeometryObjectPtr obj = new CylinderObject(diffuse_effect->GetVertexDesc());
-  EnvironmentEffectProviderPtr env_provider(
-      new EnvironmentEffectProvider(&light_, &camera_));
-  env_provider->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-  mesh_ = new Mesh(&context_);
-  mesh_->AddCommonProvider(env_provider);
+  context_.RegisteAdapter(new MaterialEffectAdapter);
+  context_.RegisteAdapter(new EnvironmentEffectAdapter);
 
-  Mesh::Entity entity;
-  entity.effect = diffuse_effect;
-  entity.vb = obj->GetVertexBuffer();
-  entity.ib = obj->GetIndicesBuffer();
-  entity.provider = new MaterialEffectProvider();
-  entity.adapter = new MaterialEffectAdapter;
-  mesh_->AddEntity(entity);
+  RenderSystem* rs = RenderSystem::Current();
+  diffuse_effect_ = CreateColoredDiffuseEffect();
+  GeometryObjectPtr obj = new CylinderObject(diffuse_effect_->GetVertexDesc());
+  RenderClosurePtr  render_closure(new RenderClosure(&context_));
+  render_closure->SetVertexBuffer(obj->GetVertexBuffer());
+  render_closure->SetIndicesBuffer(obj->GetIndicesBuffer());
+  render_closure->AddProvider(EffectParamsProviderPtr(new MaterialEffectProvider));
+  mesh_ = new Mesh(&context_);
+  mesh_->AddRenderClosure(render_closure);
+  EnvironmentEffectProvider* provider = new EnvironmentEffectProvider(
+      &light_, &camera_);
+  provider->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+  mesh_->AddProvider(EffectParamsProviderPtr(provider));
 
   window()->SetRealTimeRender(true);
   return true;
 }
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
-  mesh_->Update(args);
+  mesh_->UpdateParams(args);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -67,7 +66,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
-  mesh_->DrawIndex(renderer, azer::kTriangleList);
+  mesh_->DrawIndex(renderer, diffuse_effect_.get(), azer::kTriangleList);
 }
 
 int main(int argc, char* argv[]) {
