@@ -98,7 +98,7 @@ void BoxObject::InitHardwareBuffers() {
     int index = indices[i];
     DCHECK(!vpack.end());
     vpack.WriteVector4(position[index], 0);
-	if (kTexcoord0Idx > 0)
+    if (kTexcoord0Idx > 0)
       vpack.WriteVector2(texcoord0[index], kTexcoord0Idx);
     vpack.next(1);
   }

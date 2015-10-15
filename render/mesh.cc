@@ -6,6 +6,9 @@
 #include "azer/render/render_system.h"
 
 namespace azer {
+Mesh::Mesh() {
+}
+
 Mesh::Mesh(EffectAdapterContext* context)
     : EffectParamsProviderContainer(context) {
 }

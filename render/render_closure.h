@@ -13,6 +13,7 @@ class EffectAdapterCache;
 
 class AZER_EXPORT RenderClosure : public EffectParamsProviderContainer {
  public:
+  RenderClosure();
   explicit RenderClosure(EffectAdapterContext* context);
   
   void SetVertexBuffer(VertexBufferPtr vb);

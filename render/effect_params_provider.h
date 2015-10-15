@@ -39,8 +39,11 @@ typedef std::vector<EffectParamsProviderPtr> EffectParamsProviderVector;
 class AZER_EXPORT EffectParamsProviderContainer : 
       public ::base::RefCounted<EffectParamsProviderContainer> {
  public:
+  EffectParamsProviderContainer();
   EffectParamsProviderContainer(EffectAdapterContext* context);
   virtual ~EffectParamsProviderContainer();
+
+  void SetEffectAdapterContext(EffectAdapterContext* context);
 
   int32 provider_count() const;
   EffectParamsProviderPtr provider_at(int32 index);

@@ -3,6 +3,9 @@
 #include "azer/render/renderer.h"
 
 namespace azer {
+RenderClosure::RenderClosure() {
+}
+
 RenderClosure::RenderClosure(EffectAdapterContext* context)
     : EffectParamsProviderContainer(context) {
 }

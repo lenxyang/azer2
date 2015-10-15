@@ -28,6 +28,10 @@ EffectParamsProvider::~EffectParamsProvider() {
 }
 
 // class EffectParamsProviderContainer
+EffectParamsProviderContainer::EffectParamsProviderContainer()
+    : context_(NULL) {
+}
+
 EffectParamsProviderContainer::EffectParamsProviderContainer
 (EffectAdapterContext* context)
     : context_(context) {
@@ -38,6 +42,12 @@ EffectParamsProviderContainer::~EffectParamsProviderContainer() {
 
 void EffectParamsProviderContainer::RebuildCache() {
   cached_.reset(new EffectAdapterCache(context_, &vector_));
+}
+
+void EffectParamsProviderContainer::SetEffectAdapterContext(
+    EffectAdapterContext* context) {
+  context_ = context;
+  RebuildCache();
 }
 
 int32 EffectParamsProviderContainer::provider_count() const {
