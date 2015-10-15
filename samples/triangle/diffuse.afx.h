@@ -53,9 +53,9 @@ class DiffuseEffect: public azer::Effect {
   static const int kVertexDescNum;
   static const azer::VertexDesc::Desc kVertexDesc[];
  protected:
+  void ApplyGpuConstantTable(azer::Renderer* renderer) override;
   void InitTechnique(const ShaderPrograms& source);
   void InitGpuConstantTable();
-  virtual void UseTexture(azer::Renderer* renderer) override;
 
   DECLARE_EFFECT_DYNCREATE(DiffuseEffect);
   DISALLOW_COPY_AND_ASSIGN(DiffuseEffect);

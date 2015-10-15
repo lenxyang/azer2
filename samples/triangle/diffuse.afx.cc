@@ -53,5 +53,6 @@ void DiffuseEffect::InitTechnique(const ShaderPrograms& sources) {
   InitShaders(sources);
 }
 
-void DiffuseEffect::UseTexture(azer::Renderer* renderer) {
+void DiffuseEffect::ApplyGpuConstantTable(azer::Renderer* renderer) {
 }
+
