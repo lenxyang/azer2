@@ -4,7 +4,6 @@
 #include "azer/files/file_system.h"
 
 namespace azer {
-namespace files {
 class AZER_EXPORT NativeFileSystem : public FileSystem {
  public:
   static const char kFileSystemName[];
@@ -24,5 +23,4 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
   const ::base::FilePath root_;
   DISALLOW_COPY_AND_ASSIGN(NativeFileSystem);
 };
-}  // namespace files
 }  // namespace azer

@@ -6,7 +6,6 @@
 #include "azer/files/file_content.h"
 
 namespace azer {
-namespace files {
 const char NativeFileSystem::kFileSystemName[] = "azer::NativeFileSystem";
 NativeFileSystem::NativeFileSystem(const ::base::FilePath& root)
     : FileSystem(),
@@ -72,5 +71,4 @@ bool NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,
   *realpath = ::base::FilePath(realpathstr);
   return true;
 }
-}  // namespace files
 }  // namespace azer
