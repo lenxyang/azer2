@@ -31,7 +31,11 @@ class EffectProvider : public EffectParamsProvider {
 class PVWEffectAdapter : public EffectParamsAdapter {
  public:
   PVWEffectAdapter() {}
-  void Apply(Effect* e, EffectParamsProvider* params) override {
+  EffectAdapterKey key() const override {
+    return std::make_pair(typeid(PVWEffect).name(), 
+                          typeid(EffectProvider).name());
+  }
+  void Apply(Effect* e, const EffectParamsProvider* params) const override {
     CHECK(typeid(*e) == typeid(PVWEffect));
     CHECK(typeid(*params) == typeid(EffectProvider));
     PVWEffect* effect = dynamic_cast<PVWEffect*>(e);
@@ -46,7 +50,11 @@ class PVWEffectAdapter : public EffectParamsAdapter {
 class ColoredEffectAdapter : public EffectParamsAdapter {
  public:
   ColoredEffectAdapter() {}
-  void Apply(Effect* e, EffectParamsProvider* params) override {
+  EffectAdapterKey key() const override {
+    return std::make_pair(typeid(ColoredDiffuseEffect).name(), 
+                          typeid(EffectProvider).name());
+  }
+  void Apply(Effect* e, const EffectParamsProvider* params) const override {
     CHECK(typeid(*e) == typeid(ColoredDiffuseEffect));
     CHECK(typeid(*params) == typeid(EffectProvider));
     EffectProvider* provider = (EffectProvider*)params;

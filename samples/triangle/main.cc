@@ -53,13 +53,12 @@ bool MainDelegate::Initialize() {
   Vector3 up(0.0f, 1.0f, 0.0f);
   camera_.reset(pos, lookat, up);
   window()->SetRealTimeRender(true);
-  
+  window()->SetRenderUI(true);
   nelf::SubWindow* window = new nelf::SubWindow(this->window());
   window->Init();
   window->GetWidget()->SetBounds(gfx::Rect(10, 10, 200, 300));
   window->SetLayoutManager(new views::BoxLayout(views::BoxLayout::kVertical, 0, 0, 3));
   window->Show();
-
   views::Label* label = new views::Label(UTF8ToUTF16("Label"));
   label->SetBounds(10, 0, 100, 30);
   window->AddChildView(label);
