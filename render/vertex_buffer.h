@@ -43,11 +43,11 @@ class AZER_EXPORT VertexDesc : public Resource {
   // size of single vertex 
   int32 slot_count() const;
   int32 stride(int32 slot) const;
-  int32 element_num() const;
+  int32 element_num(int32 index) const;
   int32 vertex_size() const;
   const Desc* descs() const;
 
-  scoped_ptr<Desc[]> gen_slot_desc(int32 index) const;
+  VertexDescPtr gen_slot_desc(int32 index) const;
 
   // print Desc info
   friend std::ostream& operator << (std::ostream& os, const VertexDesc& data);
@@ -63,7 +63,7 @@ class AZER_EXPORT VertexDesc : public Resource {
    * 不匹配的，此函数将根据 GPU 返回的长度重新计算 Desc
    */
   void ReCalc(int strip);
-  std::unique_ptr<Desc[]> desc_;
+  scoped_ptr<Desc[]> desc_;
   int32 vertex_size_;
   int32 slot_count_;
 
@@ -71,6 +71,7 @@ class AZER_EXPORT VertexDesc : public Resource {
   OffsetIndex offsets_idx_;
   std::vector<int32> slot_index_;
   std::vector<int32> slot_stride_;
+  std::vector<int32> slot_element_;
 
   DISALLOW_COPY_AND_ASSIGN(VertexDesc);
 };
@@ -96,6 +97,23 @@ class AZER_EXPORT SlotVertexData : public Resource {
   int32 vertex_num_;
   VertexDescPtr desc_;
   DISALLOW_COPY_AND_ASSIGN(SlotVertexData);
+};
+
+class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
+ public:
+  VertexData(const VertexDescPtr& desc, int32 vertex_num);
+  ~VertexData();
+
+  void InitSlotFromDesc();
+  void set_slot_vertex_data(SlotVertexDataPtr data, int32 slot_index);
+  SlotVertexData* vertex_data_at(int32 index);
+
+  const VertexDesc* desc() const;
+ private:
+  VertexDescPtr desc_;
+  int32 vertex_num_;
+  std::vector<SlotVertexDataPtr> vector_;
+  DISALLOW_COPY_AND_ASSIGN(VertexData);
 };
 
 class VertexBuffer;
