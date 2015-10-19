@@ -85,6 +85,9 @@ class AZER_EXPORT SlotVertexData : public Resource {
 
   uint8* pointer();
   const uint8* pointer() const;
+
+  uint8* vertex_data_at(int32 index);
+  const uint8* vertex_data_at(int32 index) const;
   int32 buffer_size() const;
   int32 vertex_num() const;
   int32 element_num() const;

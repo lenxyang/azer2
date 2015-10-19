@@ -142,6 +142,21 @@ uint8* SlotVertexData::next(const uint8* cur) {
       const_cast<const SlotVertexData*>(this)->next(cur));
 }
 
+uint8* SlotVertexData::vertex_data_at(int32 index) {
+  int32 pindex = index;
+  const VertexDesc::Desc* d = desc_->descs();
+  if (d->instance_data_step > 1) {
+    pindex = static_cast<int32>(
+        (index + d->instance_data_step - 1) / d->instance_data_step);
+  }
+  return pointer() + desc_->vertex_size() * pindex;
+}
+
+const uint8* SlotVertexData::vertex_data_at(int32 index) const {
+  return const_cast<uint8*>(
+      const_cast<const SlotVertexData*>(this)->vertex_data_at(index));
+}
+
 uint8* SlotVertexData::pointer() {
   return data_.get();
 }

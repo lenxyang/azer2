@@ -19,6 +19,7 @@ VertexPos GetSemanticIndex(const std::string& name, int32 semantic_index,
 class VertexPack {
  public:
   VertexPack(VertexData* data);
+  VertexPack(SlotVertexData* data);
   ~VertexPack();
 
   int32 size() const { return size_;}
@@ -47,7 +48,8 @@ class VertexPack {
   VertexDesc* desc();
  private:
   void calc_offsets();
-  int32 offset_of_column(int32 column) const;
+  uint8* get_data_ptr(const VertexPos& pos);
+  DataFormat get_data_type(const VertexPos& pos);
   int32 index_;
   VertexDataPtr vertex_data_;
   const int32 kAlignBytes;
