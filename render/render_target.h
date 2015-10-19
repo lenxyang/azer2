@@ -19,8 +19,8 @@ class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
 
   virtual void Clear(const azer::Vector4& color) = 0;
 
-  TexturePtr& GetTexture() { return texture_;}
-  const TexturePtr& GetTexture() const { return texture_;}
+  Texture* GetTexture() { return texture_.get();}
+  const Texture* GetTexture() const { return texture_.get();}
   bool IsDefaultRenderTarget() { return default_render_target_;}
 
   const Texture::Options& options() { return options_;}

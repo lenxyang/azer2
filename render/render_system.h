@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "base/basictypes.h"
 #include "base/files/file_path.h"
@@ -57,9 +58,9 @@ class AZER_EXPORT RenderSystem {
 
   // create gpu buffers
   virtual VertexBufferPtr CreateVertexBuffer(const VertexBuffer::Options& opt,
-                                             VertexData*) = 0;
+                                             VertexData* vdata, int32 slot) = 0;
   virtual IndicesBufferPtr CreateIndicesBuffer(const IndicesBuffer::Options& opt,
-                                               IndicesData*) = 0;
+                                               IndicesData* idata) = 0;
   virtual GpuConstantsTablePtr CreateGpuConstantsTable(
       int32 num, const GpuConstantsTable::Desc* desc) = 0;
 

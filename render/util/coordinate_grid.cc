@@ -45,7 +45,7 @@ void CoordinateGrid::Init() {
     vertex->position = Vector4(x, 0.0f, total_height / 2.0f, 1.0f);
     vertex++;
   }
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data_.get());
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data_.get(), 0);
 }
 
 void CoordinateGrid::Render(Renderer* renderer) {

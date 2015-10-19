@@ -41,7 +41,7 @@ void PlaneObject::InitHardwareBuffers() {
     }
   }
   CHECK(vpack.end());
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
 
   {
     const int32 kIndexNum = (kRowLine - 1) * (kColumnLine - 1) * 2 * 3;

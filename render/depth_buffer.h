@@ -22,7 +22,7 @@ class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
   virtual void PushState() = 0;
   virtual void PopState() = 0;
 
-  TexturePtr& GetTexture() { return texture_;}
+  Texture* GetTexture() { return texture_.get();}
   
   enum ClearFlag {
     kClearDepth    = 0x0001,

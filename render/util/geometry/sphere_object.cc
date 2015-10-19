@@ -129,7 +129,7 @@ void SphereObject::InitHardwareBuffers() {
 
   IndicesDataPtr edge_idata = InitSphereWireFrameIndicesData(stack_, slice_);
   RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   edge_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), edge_idata);
 }

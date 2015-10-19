@@ -151,7 +151,7 @@ bool D3DOverlay::InitVertex(RenderSystem* rs) {
   scoped_refptr<VertexData> data(new VertexData(vertex_desc_ptr_, kVertexNum));
   int32* ptr = (int32*)data->pointer();
   memcpy(ptr, indices, sizeof(indices));
-  vb_ptr_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data.get());
+  vb_ptr_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data.get(), 0);
   if (!vb_ptr_.get()) {
     return false;
   }

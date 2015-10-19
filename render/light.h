@@ -19,8 +19,8 @@ class AZER_EXPORT Light : public MovableObject,
   /**
    * 光照 renderer
    */
-  RendererPtr GetShadowRenderer();
-  TexturePtr GetShadowMap();
+  Renderer* GetShadowRenderer();
+  Texture* GetShadowMap();
 
   /**
    * 获得以光照为视角的 camera

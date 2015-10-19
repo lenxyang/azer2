@@ -125,7 +125,7 @@ void BoxObject::InitHardwareBuffers() {
   }
 
   RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
   edge_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
 }
 

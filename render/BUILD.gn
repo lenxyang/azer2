@@ -78,6 +78,8 @@ source_set("render") {
     "texture.h",
     "vertex_buffer.cc",
     "vertex_buffer.h",
+    "viewport.cc",
+    "viewport.h",
   ]
 
   if (is_win) {

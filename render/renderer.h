@@ -5,7 +5,6 @@
 
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
-#include "ui/gfx/geometry/rect.h"
 
 #include "azer/base/export.h"
 #include "azer/render/indices_buffer.h"
@@ -17,6 +16,7 @@
 #include "azer/render/render_system_enum.h"
 #include "azer/render/texture.h"
 #include "azer/render/vertex_buffer.h"
+#include "azer/render/viewport.h"
 
 namespace azer {
 
@@ -82,32 +82,11 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
                                   int32 first_indices = 0, int32 index_base = 0,
                                   int32 instance_start_index = 0) = 0;
   
-  struct Viewport {
-    gfx::Rect bounds;
-    int32 min_depth;
-    int32 max_depth;
-
-    Viewport(int32 l, int32 t, int32 w, int32 h, float mindepth = 0.0f,
-             float maxdepth = 1.0f)
-        : bounds(l, t, w, h)
-        , min_depth(mindepth), max_depth(maxdepth) {
-    }
-
-    Viewport(const gfx::Rect& rect, float mindepth = 0.0f, float maxdepth = 1.0f)
-        : bounds(rect)
-        , min_depth(mindepth), max_depth(maxdepth) {
-    }
-
-    Viewport()
-        : bounds(0, 0, 800, 600)
-        , min_depth(0.0f), max_depth(1.0f) {
-    }
-  };
   virtual void SetViewport(const Viewport& viewport) = 0;
   virtual const Viewport& GetViewport() const  = 0;
 
-  DepthBufferPtr& GetDepthBuffer() { return depth_;}
-  RenderTargetPtr& GetRenderTarget() { return targets_[0];}
+  DepthBuffer* GetDepthBuffer() { return depth_.get();}
+  RenderTarget* GetRenderTarget(int32 index) { return targets_[index].get();}
   typedef std::vector<RenderTargetPtr> RenderTargetVec;
   RenderTargetVec* GetAllRenderTargets() { return &targets_;}
   RenderSystem* GetRenderSystem() { return render_system_;}

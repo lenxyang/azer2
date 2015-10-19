@@ -302,7 +302,7 @@ void D3DRenderer::UseTexture(RenderPipelineStage stage, int index,
   }
 }
 
-const Renderer::Viewport& D3DRenderer::GetViewport() const {
+const Viewport& D3DRenderer::GetViewport() const {
   return viewport_;
 }
 
@@ -337,7 +337,7 @@ bool D3DRenderer::Init(RenderTargetPtr rt, DepthBufferPtr depth) {
   depth_ = depth;
   Reset();
   const Texture::Options& o = rt->GetTexture()->options();
-  SetViewport(azer::Renderer::Viewport(0, 0, o.size.width(), o.size.height()));
+  SetViewport(Viewport(0, 0, o.size.width(), o.size.height()));
   return true;
 }
 
@@ -355,7 +355,7 @@ bool D3DRenderer::Init(const Texture::Options& o) {
   targets_.push_back(target);
   depth_ = depth;
   Reset();
-  SetViewport(azer::Renderer::Viewport(0, 0, o.size.width(), o.size.height()));
+  SetViewport(Viewport(0, 0, o.size.width(), o.size.height()));
   return true;
 }
 
@@ -399,7 +399,7 @@ bool D3DSurfaceRenderer::InitForSurface(RenderTargetPtr target,
   targets_[0] = target;
   depth_ = depth;
   Reset();
-  SetViewport(azer::Renderer::Viewport(0, 0, width, height));
+  SetViewport(Viewport(0, 0, width, height));
   return true;
 }
 

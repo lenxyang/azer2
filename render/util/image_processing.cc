@@ -70,7 +70,7 @@ void ImageProcessing::Init() {
   rdopt.target = (Texture::BindTarget)
       (Texture::kRenderTarget | Texture::kShaderResource);
   renderer_ = rs->CreateRenderer(rdopt);
-  Renderer::Viewport viewport;
+  Viewport viewport;
   viewport.bounds = gfx::Rect(rdopt.size);
   renderer_->SetViewport(viewport);
 
@@ -84,7 +84,7 @@ void ImageProcessing::Processing() {
   renderer->ClearDepthAndStencil();
   effect_->Use(renderer);
   object_->Render(renderer);
-  Texture* tex = renderer->GetRenderTarget()->GetTexture().get();
+  Texture* tex = renderer->GetRenderTarget(0)->GetTexture();
   CHECK(tex->CopyTo(output_.get()));
 }
 }  // namespace azer

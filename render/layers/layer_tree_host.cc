@@ -120,9 +120,9 @@ gfx::Rect LayerTreeHost::CalcRect(Layer* layer, const gfx::Rect& rect) {
   return std::move(gfx::IntersectRects(rect, rc));
 }
 
-azer::TexturePtr& LayerTreeHost::GetCompositedTexture() {
+azer::Texture* LayerTreeHost::GetCompositedTexture() {
   DCHECK(renderer_.get());
-  return renderer_->GetRenderTarget()->GetTexture();
+  return renderer_->GetRenderTarget(0)->GetTexture();
 }
 }  // namespace layers
 }  // namespace azer

@@ -8,14 +8,14 @@ namespace azer {
 Light::Light(int32 id) {
 }
 
-RendererPtr Light::GetShadowRenderer() {
+Renderer* Light::GetShadowRenderer() {
   DCHECK(renderer_.get());
-  return renderer_;
+  return renderer_.get();
 }
 
-TexturePtr Light::GetShadowMap() {
-  DCHECK(renderer_.get() && renderer_->GetRenderTarget().get());
-  return renderer_->GetRenderTarget()->GetTexture();
+Texture* Light::GetShadowMap() {
+  DCHECK(renderer_.get() && renderer_->GetRenderTarget(0));
+  return renderer_->GetRenderTarget(0)->GetTexture();
 }
 
 void Light::OnPositionChanged(const Vector3& origin_position) {

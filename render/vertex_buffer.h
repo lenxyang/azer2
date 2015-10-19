@@ -2,9 +2,9 @@
 
 #include <memory>
 #include <string.h>
+#include <vector>
 
 #include "base/basictypes.h"
-#include "base/logging.h"
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
 #include "azer/render/render_system_enum.h"
@@ -26,36 +26,27 @@ class AZER_EXPORT VertexDesc : public Resource {
    * 参考 Opengl glAttributePointer()
    */
   struct AZER_EXPORT Desc {
-    char name[64];          // semantic_name
-    int semantic_index;     // semantic_index
-    DataFormat type;        // type
-    bool aligned;           // aligned
+    char name[64];             // semantic_name
+    int semantic_index;        // semantic_index
+    DataFormat type;           // type
+    int32 input_slot;         // input slot
+    int32 instance_data_step;  // step
+    bool aligned;              // aligned
   };
 
   VertexDesc(const Desc* desc, int desc_num);
   ~VertexDesc();
 
-  /**
-   * calc offset by name or index
-   */
-  int32 offset(const int32 index) const {
-    DCHECK_LT(index, offsets_idx_.size());
-    return offsets_idx_[index];
-  }
+  // calc offset by name or index
+  int32 offset(const int32 index) const;
 
-  /**
-   * size of single vertex 
-   */
-  int32 stride() const { return vertex_size_;}
-  int32 element_num() const {
-    DCHECK_GT(offsets_idx_.size(), 0u);
-    return static_cast<int32>(offsets_idx_.size());
-  }
-  const Desc* descs() const { return desc_.get(); }
+  // size of single vertex 
+  int32 slot_count() const;
+  int32 stride() const;
+  int32 element_num() const;
+  const Desc* descs() const;
 
-  /**
-   * 工具函数，仅仅打印 VertexDesc 的 Desc
-   */
+  // print Desc info
   friend std::ostream& operator << (std::ostream& os, const VertexDesc& data);
 
   // debug function
@@ -71,6 +62,7 @@ class AZER_EXPORT VertexDesc : public Resource {
   void ReCalc(int strip);
   std::unique_ptr<Desc[]> desc_;
   int32 vertex_size_;
+  int32 slot_count_;
 
   typedef std::vector<int32> OffsetIndex;
   OffsetIndex offsets_idx_;
@@ -93,22 +85,16 @@ class AZER_EXPORT VertexData : public Resource {
    * 当 next() 返回 NULL 时， 表明已经到达最后一个定点
    */
   uint8* next(uint8* current) const;
-  uint8* pointer() const { return data_.get();}
+  uint8* pointer() const;
   void CopyFrom(uint8* data, uint32 size);
 
-  int32 vertex_num() const {  return vertex_num_;}
-  int32 element_num() const {
-    DCHECK(desc_ptr_.get() != NULL);
-    return desc_ptr_->element_num();
-  }
+  int32 vertex_num() const;
+  int32 element_num() const;
 
-  int32 stride() const {
-    DCHECK(desc_ptr_.get() != NULL);
-    return desc_ptr_->stride();
-  }
+  int32 stride() const;
 
-  const VertexDescPtr& desc() const;
-  VertexDescPtr& desc();
+  const VertexDesc* desc() const;
+  VertexDesc* desc();
 
   /**
    * whole buffer sizef of vertex data
@@ -140,9 +126,6 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   explicit VertexBuffer(const Options &opt);
   virtual ~VertexBuffer();
 
-  static VertexBufferPtr CreateDefaultVertexBuffer(RenderSystem* rs, 
-                                                   VertexDataPtr vdata);
-
   /**
    * 从 Lockable 继承的借口
    */
@@ -161,4 +144,22 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
 };
 
 int32 AZER_EXPORT VertexTypeSize(DataFormat type);
+
+class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGroup> {
+ public:
+  VertexBufferGroup(VertexDescPtr vdesc);
+  ~VertexBufferGroup();
+
+  int32 vertex_buffer_count() const;
+  VertexBuffer* vertex_buffer_at(int32 index);
+  void add_vertex_buffer(VertexBufferPtr vb);
+  void add_vertex_buffer_at(VertexBufferPtr vb, int32 index);
+  void remove_vertex_buffer_at(int32 index);
+ private:
+  VertexDescPtr vdesc_;
+  std::vector<VertexBufferPtr> vector_;
+  DISALLOW_COPY_AND_ASSIGN(VertexBufferGroup);
+};
+
+typedef scoped_refptr<VertexBufferGroup> VertexBufferGroupPtr;
 }  // namespace azer

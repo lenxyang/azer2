@@ -42,7 +42,7 @@ class AZER_EXPORT Effect : public Resource {
   virtual void SetLight(int light_index, Light* light) {}
   virtual void SetMatrial(Material* material) {}
 
-  VertexDescPtr GetVertexDesc() { return vertex_desc_ptr_;}
+  VertexDesc* GetVertexDesc() { return vertex_desc_ptr_.get();}
   
   // 刷新所有的 GpuConstantTable
   void flush(Renderer* renderer);

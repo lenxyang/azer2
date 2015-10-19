@@ -52,7 +52,7 @@ class AZER_EXPORT LayerTreeHost {
   void Composite(const CompositeArgs& args);
   void Composite();
 
-  azer::TexturePtr& GetCompositedTexture();
+  azer::Texture* GetCompositedTexture();
  private:
   void DoDraw();
 

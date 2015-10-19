@@ -39,7 +39,7 @@ class D3DRenderSystem : public RenderSystem {
   RendererPtr CreateDeferredRenderer(const Texture::Options& opt) override;
   BlendingPtr CreateBlending(const Blending::Desc& desc) override;
   VertexBufferPtr CreateVertexBuffer(const VertexBuffer::Options& opt,
-                                     VertexData*) override;
+                                     VertexData*, int32 slot) override;
   IndicesBufferPtr CreateIndicesBuffer(const IndicesBuffer::Options& opt,
                                        IndicesData*) override;
   GpuConstantsTablePtr CreateGpuConstantsTable(

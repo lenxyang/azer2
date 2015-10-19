@@ -40,7 +40,7 @@ void ConeObject::InitHardwareBuffers() {
   }
 
   RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
 }
 }  // namespace azer

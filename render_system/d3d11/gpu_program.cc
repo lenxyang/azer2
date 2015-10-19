@@ -35,10 +35,14 @@ bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
     curr_layout->SemanticName = desc->name;
     curr_layout->SemanticIndex = desc->semantic_index;
     curr_layout->Format = TranslateFormat(desc->type);
-    curr_layout->InputSlot = 0;
+    curr_layout->InputSlot = desc->input_slot;
     curr_layout->AlignedByteOffset = desc_ptr_->offset(i);
-    curr_layout->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    curr_layout->InstanceDataStepRate = 0;
+    curr_layout->InstanceDataStepRate = desc->instance_data_step;
+    if (desc->instance_data_step == 0) {
+      curr_layout->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+    } else {
+      curr_layout->InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+    }
   }
 
   hr = d3d_device->CreateInputLayout(layout_ptr.get(),
