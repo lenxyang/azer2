@@ -89,27 +89,27 @@ void BoxObject::InitHardwareBuffers() {
   };
     
 
-  int32 kNormal0Idx = GetSemanticIndex("normal", 0, desc_.get());
-  int32 kTexcoord0Idx = GetSemanticIndex("texcoord", 0, desc_.get());
+  VertexPos normal_pos, tex0_pos;
+  bool kHasNormal0Idx = GetSemanticIndex("normal", 0, desc_.get(), &normal_pos);
+  bool kHasTexcoord0Idx = GetSemanticIndex("texcoord", 0, desc_.get(), &tex0_pos);
   SlotVertexDataPtr vdata(new SlotVertexData(desc_, arraysize(indices)));
   VertexPack vpack(vdata.get());
   vpack.first();
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
     int index = indices[i];
     DCHECK(!vpack.end());
-    vpack.WriteVector4(position[index], 0);
-    if (kTexcoord0Idx > 0)
-      vpack.WriteVector2(texcoord0[index], kTexcoord0Idx);
+    vpack.WriteVector4(position[index], VertexPos(0, 0));
+	vpack.WriteVector2(texcoord0[index], tex0_pos);
     vpack.next(1);
   }
   DCHECK(vpack.end());
 
-  if (kNormal0Idx > 0) {
+  if (kHasNormal0Idx) {
     vpack.first(); 
     for (int i = 0; i < static_cast<int>(arraysize(indices)); i += 6) {
       int index = i / arraysize(normal);
       for (int j = 0; j < 6; ++j) { 
-        vpack.WriteVector4(normal[index], kNormal0Idx);
+		vpack.WriteVector4(normal[index], normal_pos);
         vpack.next(1);
       }
     }

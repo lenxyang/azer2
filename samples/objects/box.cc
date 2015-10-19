@@ -37,7 +37,7 @@ bool MainDelegate::Initialize() {
   diffuse_effect_ = CreateColoredDiffuseEffect();
   
   object_ = new BoxObject(diffuse_effect_->GetVertexDesc());
-  provider_.reset(new EffectProvider(&light_, &camera_));
+  provider_ = new EffectProvider(&light_, &camera_);
   provider_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
   window()->SetRealTimeRender(true);
   return true;
@@ -46,7 +46,7 @@ bool MainDelegate::Initialize() {
 void MainDelegate::OnUpdate(const FrameArgs& args) {
   Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
   provider_->GetTransformHolder()->rotate(Vector3(0.0f, 1.0f, 0.0f), rad);
-  provider_->UpdateParams(camera_);
+  provider_->UpdateParams(args);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {

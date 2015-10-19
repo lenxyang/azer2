@@ -82,22 +82,22 @@ void SquareTrustum::InitHardwareBuffers() {
                    4, 1, 5, 4, 0, 1,  // top
                    3, 6, 2, 3, 7, 6}; // bottom
 
-  int32 kNormal0Idx = GetSemanticIndex("normal", 0, desc_.get());
-  int32 kTexcoord0Idx = GetSemanticIndex("texcoord", 0, desc_.get());
+  VertexPos npos, tpos;
+  bool kHasNormal = GetSemanticIndex("normal", 0, desc_.get(), &npos);
+  GetSemanticIndex("texcoord", 0, desc_.get(), &tpos);
   SlotVertexDataPtr vdata(new SlotVertexData(desc_, arraysize(indices)));
   VertexPack vpack(vdata.get());
   vpack.first();
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
     int index = indices[i];
     DCHECK(!vpack.end());
-    vpack.WriteVector4(position[index], 0);
-	if (kTexcoord0Idx > 0)
-      vpack.WriteVector2(texcoord0[index], kTexcoord0Idx);
+    vpack.WriteVector4(position[index], VertexPos(0, 0));
+    vpack.WriteVector2(texcoord0[index], tpos);
     vpack.next(1);
   }
   DCHECK(vpack.end());
 
-  if (kNormal0Idx > 0) {
+  if (kHasNormal) {
     vpack.first(); 
     for (int i = 0; i < static_cast<int>(arraysize(indices)); i += 6) {
       const Vector4& p1 = position[indices[i]];
@@ -105,7 +105,7 @@ void SquareTrustum::InitHardwareBuffers() {
       const Vector4& p3 = position[indices[i+2]];
       Vector4 normal = Vector4(std::move(CalcPlaneNormal(p1, p2, p3)), 0.0);
       for (int j = 0; j < 6; ++j) { 
-        vpack.WriteVector4(normal, kNormal0Idx);
+        vpack.WriteVector4(normal, npos);
         vpack.next(1);
       }
     }

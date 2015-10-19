@@ -72,7 +72,9 @@ void CylinderObject::InitHardwareBuffers() {
   GenerateBarrel(top_radius_, bottom_radius_, 1.0f, stack_, slice_,
                  &vpack, &ipack);
   GenerateConeHat(false, 0.0f, 0.0f, slice_, &vpack, &ipack);
-  if (GetSemanticIndex("normal", 0, desc_.get()) > 0) {
+
+  VertexPos npos;
+  if (GetSemanticIndex("normal", 0, desc_.get(), &npos)) {
     CalcNormal(vdata.get(), idata.get());
   }
 

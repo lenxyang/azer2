@@ -16,8 +16,9 @@ PlaneObject::~PlaneObject() {
 
 void PlaneObject::InitHardwareBuffers() {
   RenderSystem* rs = RenderSystem::Current();
-  const int32 kNormalIndex = GetSemanticIndex("normal", 0, desc_.get());
-  const int32 kTexcoordIndex = GetSemanticIndex("texcoord", 0, desc_.get());
+  VertexPos npos, tpos;
+  const bool kHasNormalIndex = GetSemanticIndex("normal", 0, desc_.get(), &npos);
+  const bool kHasTexcoordIndex = GetSemanticIndex("texcoord", 0, desc_.get(), &tpos);
 
   float row_width = 2.0f / (kRowLine - 1);
   float column_width = 2.0f / (kColumnLine - 1);
@@ -28,15 +29,12 @@ void PlaneObject::InitHardwareBuffers() {
     for (int j = 0; j < kColumnLine; ++j) {
       float x = -1.0 + j * column_width;
       float y = 1.0 - i * row_width;
-      vpack.WriteVector4(Vector4(x, y, 0.0f, 1.0f), 0);
-      if (kNormalIndex > 0)
-        vpack.WriteVector4(Vector4(0.0f, 0.0f, 1.0f, 0.0f), kNormalIndex);
+      vpack.WriteVector4(Vector4(x, y, 0.0f, 1.0f), VertexPos(0, 0));
+      vpack.WriteVector4(Vector4(0.0f, 0.0f, 1.0f, 0.0f), npos);
 
-      if (kTexcoordIndex > 0) {
-		float tu = (x + 1.0) * 0.5;
-		float tv = (1.0 - y) * 0.5;
-        vpack.WriteVector2(Vector2(tu, tv), kTexcoordIndex);
-      }
+      float tu = (x + 1.0) * 0.5;
+      float tv = (1.0 - y) * 0.5;
+      vpack.WriteVector2(Vector2(tu, tv), tpos);
       vpack.next(1);
     }
   }

@@ -29,7 +29,7 @@ SlotVertexDataPtr InitSphereVertexData(int32 stack, int32 slice,
 
   int num = 0;
   CHECK(vpack.first());
-  vpack.WriteVector4(Vector4(0.0f, 1.0f, 0.0f, 1.0f), 0);
+  vpack.WriteVector4(Vector4(0.0f, 1.0f, 0.0f, 1.0f), VertexPos(0, 0));
   num++;
 
   for (int i = 1; i < stack - 1; ++i) {
@@ -41,13 +41,13 @@ SlotVertexDataPtr InitSphereVertexData(int32 stack, int32 slice,
       float z = slice_radius * sin(Degree(degree));
 
       CHECK(vpack.next(1));
-      vpack.WriteVector4(Vector4(x, y, z, 1.0f), 0);
+      vpack.WriteVector4(Vector4(x, y, z, 1.0f), VertexPos(0, 0));
       num++;
     }
   }
 
   CHECK(vpack.next(1));
-  vpack.WriteVector4(Vector4(0.0f, -1.0f, 0.0f, 1.0f), 0);
+  vpack.WriteVector4(Vector4(0.0f, -1.0f, 0.0f, 1.0f), VertexPos(0, 0));
   num++;
   DCHECK_EQ(num, kVertexNum);
   return vdata;
@@ -123,7 +123,8 @@ void SphereObject::InitHardwareBuffers() {
   SlotVertexDataPtr vdata(InitSphereVertexData(stack_, slice_, desc_));
   IndicesDataPtr idata = InitSphereIndicesData(stack_, slice_);
 
-  if (GetSemanticIndex("normal", 0, desc_.get()) > 0) {
+  VertexPos npos;
+  if (GetSemanticIndex("normal", 0, desc_.get(), &npos)) {
     CalcNormal(vdata.get(), idata.get());
   }
 

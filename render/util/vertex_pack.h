@@ -12,9 +12,12 @@ namespace azer {
 struct VertexPos {
   int32 slot;
   int32 index;
+
+  VertexPos();
+  VertexPos(int32 slot, int32 index);
 };
-VertexPos GetSemanticIndex(const std::string& name, int32 semantic_index, 
-                           VertexDesc* desc);
+bool GetSemanticIndex(const std::string& name, int32 semantic_index, 
+                      const VertexDesc* desc, VertexPos* pos);
 
 class VertexPack {
  public:
@@ -22,34 +25,28 @@ class VertexPack {
   VertexPack(SlotVertexData* data);
   ~VertexPack();
 
-  int32 size() const { return size_;}
   bool move(int32 offset);
   bool first();
   bool next(int32 step);
   bool end();
-  uint8* data() { return data_;}
-  const uint8* data() const { return data_;}
-  uint8* current() { return current_;}
-  const uint8* current() const { return current_;}
-  int32 rest_bytes() const { return data_ + size_ - current_;}
   int32 index() const;
 
-  void WriteFloat(float v, int32 column);
-  void WriteVector2(const Vector2& v, int32 column);
-  void WriteVector3(const Vector3& v, int32 column);
-  void WriteVector4(const Vector4& v, int32 column);
+  void WriteFloat(float v, const VertexPos& pos);
+  void WriteVector2(const Vector2& v, const VertexPos& pos);
+  void WriteVector3(const Vector3& v, const VertexPos& pos);
+  void WriteVector4(const Vector4& v, const VertexPos& pos);
 
-  void ReadFloat(float* v, int32 column) const;
-  void ReadVector2(Vector2* v, int32 column) const;
-  void ReadVector3(Vector3* v, int32 column) const;
-  void ReadVector4(Vector4* v, int32 column) const;
+  void ReadFloat(float* v, const VertexPos& pos) const;
+  void ReadVector2(Vector2* v, const VertexPos& pos) const;
+  void ReadVector3(Vector3* v, const VertexPos& pos) const;
+  void ReadVector4(Vector4* v, const VertexPos& pos) const;
 
   VertexData* data();
-  VertexDesc* desc();
+  const VertexDesc* desc() const;
  private:
   void calc_offsets();
-  uint8* get_data_ptr(const VertexPos& pos);
-  DataFormat get_data_type(const VertexPos& pos);
+  uint8* get_data_ptr(const VertexPos& pos) const;
+  DataFormat get_data_type(const VertexPos& pos) const;
   int32 index_;
   VertexDataPtr vertex_data_;
   const int32 kAlignBytes;

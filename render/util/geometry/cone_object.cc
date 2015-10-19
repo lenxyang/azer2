@@ -35,7 +35,8 @@ void ConeObject::InitHardwareBuffers() {
   GenerateConeHat(true, 1.0f, 0.0f, slice_, &vpack, &ipack);
   GenerateConeHat(false, 0.0f, 0.0f, slice_, &vpack, &ipack);
 
-  if (GetSemanticIndex("normal", 0, desc_.get()) > 0) {
+  VertexPos pos;
+  if (GetSemanticIndex("normal", 0, desc_.get(), &pos)) {
     CalcNormal(vdata.get(), idata.get());
   }
 

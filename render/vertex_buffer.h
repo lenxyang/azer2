@@ -111,6 +111,7 @@ class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
   void set_slot_vertex_data(SlotVertexDataPtr data, int32 slot_index);
   SlotVertexData* vertex_data_at(int32 index);
 
+  int32 vertex_num() const { return vertex_num_;}
   const VertexDesc* desc() const;
  private:
   VertexDescPtr desc_;
@@ -118,6 +119,7 @@ class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
   std::vector<SlotVertexDataPtr> vector_;
   DISALLOW_COPY_AND_ASSIGN(VertexData);
 };
+typedef scoped_refptr<VertexData> VertexDataPtr;
 
 class VertexBuffer;
 typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
