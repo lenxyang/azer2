@@ -263,6 +263,7 @@ void D3DRenderer::DrawIndexInstanced(int32 instance_num, VertexBuffer* vvb,
                                      instance_start_index);
 }
 
+
 void D3DRenderer::UseConstantsTable(RenderPipelineStage stage,
                                     GpuConstantsTable* table) {
   D3DGpuConstantsTable* constants = (D3DGpuConstantsTable*)table;

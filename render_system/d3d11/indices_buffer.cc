@@ -49,6 +49,12 @@ bool D3DIndicesBuffer::Init(const IndicesData* data) {
   return true;
 }
 
+void D3DIndicesBuffer::Use(Renderer* r) {
+  D3DRenderer* render = (D3DRenderer*)r;
+  ID3D11DeviceContext* d3d_context = render->GetContext(); 
+  d3d_context->IASetIndexBuffer(buffer_, TranslateIndexType(type()), 0);
+}
+
 HardwareBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
   DCHECK(options_.usage & GraphicBuffer::kDynamic
          || options_.usage & GraphicBuffer::kStaging);

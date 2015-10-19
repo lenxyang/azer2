@@ -14,8 +14,9 @@ class D3DIndicesBuffer : public IndicesBuffer {
   D3DIndicesBuffer(const IndicesBuffer::Options& opt, D3DRenderSystem* rs);
   ~D3DIndicesBuffer() override;
 
-  virtual HardwareBufferDataPtr map(MapType flags) override;
-  virtual void unmap() override;
+  void Use(Renderer* renderer) override;
+  HardwareBufferDataPtr map(MapType flags) override;
+  void unmap() override;
 
   bool Initialized() { return NULL != buffer_;}
  private:

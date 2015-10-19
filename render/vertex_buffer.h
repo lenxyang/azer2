@@ -165,6 +165,10 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
   void add_vertex_buffer(VertexBufferPtr vb);
   void add_vertex_buffer_at(VertexBufferPtr vb, int32 index);
   void remove_vertex_buffer_at(int32 index);
+
+  VertexBufferPtr* get_vb_vector() { return &vector_;}
+
+  virtual void Use(Renderer* renderer) = 0;
  private:
   VertexDescPtr vdesc_;
   std::vector<VertexBufferPtr> vector_;

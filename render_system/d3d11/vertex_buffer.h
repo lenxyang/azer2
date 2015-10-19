@@ -38,5 +38,9 @@ class D3DVertexBuffer : public VertexBuffer {
   DISALLOW_COPY_AND_ASSIGN(D3DVertexBuffer);
 };
 
+class D3DVertexBufferGroup : public VertexBufferGroup {
+ public:
+  void Use(Renderer* renderer) override;
+};
 }  // namespace d3d11
 }  // namespace azer

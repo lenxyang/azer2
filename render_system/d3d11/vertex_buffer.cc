@@ -77,5 +77,30 @@ void D3DVertexBuffer::unmap() {
   d3d_context->Unmap(buffer_, 0);
   locked_ = false;
 }
+
+// class D3DVertexBufferGroup
+namespace {
+static const int32 kMaxVertexBuffer = 16;
+void GenVertexArray(VertexBufferGroup* group, ID3D11Buffer* buf, uint32* stride, 
+                    int32* count) {
+  for (int i = 0; i < group->vertex_buffer_count(); ++i) {
+    D3DVertexBuffer* vb = (D3DVertexBuffer*)(group->vertex_buffer_at(i));
+    DCHECK(vb->Initialized()) << "VertexBuffer not initialized.";
+    buf[i] = vb->buffer_;
+    stride[i] = vb->stride();
+  }
+  *count = group->vertex_buffer_count();
+}
+}  // namespace
+void D3DVertexBufferGroup::Use(Renderer* renderer) {
+  int32 count = 0;
+  ID3D11Buffer vbs[kMaxVertexBuffer];
+  uint32 strides[kMaxVertexBuffer] = {0};
+  uint32 offsets[kMaxVertexBuffer] = {0}
+
+  D3DRenderer* render = (D3DRenderer*)r;
+  ID3D11DeviceContext* d3d_context = render->GetContext(); 
+  d3d_context->IASetVertexBuffers(0, count, vbs, strides, offset);
+}
 }  // namespace d3d11
 }  // namespace azer
