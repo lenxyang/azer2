@@ -21,7 +21,7 @@ void PlaneObject::InitHardwareBuffers() {
 
   float row_width = 2.0f / (kRowLine - 1);
   float column_width = 2.0f / (kColumnLine - 1);
-  VertexDataPtr vdata(new VertexData(desc_, kRowLine * kColumnLine));
+  SlotVertexDataPtr vdata(new SlotVertexData(desc_, kRowLine * kColumnLine));
   VertexPack vpack(vdata.get());
   vpack.first();
   for (int i = 0; i < kRowLine; ++i) {
@@ -41,7 +41,7 @@ void PlaneObject::InitHardwareBuffers() {
     }
   }
   CHECK(vpack.end());
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
 
   {
     const int32 kIndexNum = (kRowLine - 1) * (kColumnLine - 1) * 2 * 3;

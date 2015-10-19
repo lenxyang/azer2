@@ -26,7 +26,7 @@ ConeObject::~ConeObject() {
 void ConeObject::InitHardwareBuffers() {
   int32 kVertexCount = (slice_  + 1) * 2;
   int32 kIndicesCount = slice_ * 3 * 2;
-  VertexDataPtr vdata(new VertexData(desc_, kVertexCount));
+  SlotVertexDataPtr vdata(new SlotVertexData(desc_, kVertexCount));
   IndicesDataPtr idata(new IndicesData(kIndicesCount));  
   VertexPack vpack(vdata.get());
   IndexPack ipack(idata.get());
@@ -40,7 +40,7 @@ void ConeObject::InitHardwareBuffers() {
   }
 
   RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
 }
 }  // namespace azer

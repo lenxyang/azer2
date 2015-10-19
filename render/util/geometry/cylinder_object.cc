@@ -62,7 +62,7 @@ CylinderObject::~CylinderObject() {
 void CylinderObject::InitHardwareBuffers() {
   int32 kVertexCount = (slice_  + 1) * 2 + stack_ * slice_;
   int32 kIndicesCount = (stack_ - 1) * slice_* 3 * 2 + slice_ * 2 * 3;
-  VertexDataPtr vdata(new VertexData(desc_, kVertexCount));
+  SlotVertexDataPtr vdata(new SlotVertexData(desc_, kVertexCount));
   IndicesDataPtr idata(new IndicesData(kIndicesCount));  
   VertexPack vpack(vdata.get());
   IndexPack ipack(idata.get());
@@ -77,7 +77,7 @@ void CylinderObject::InitHardwareBuffers() {
   }
 
   RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
 }
 }  // namespace azer

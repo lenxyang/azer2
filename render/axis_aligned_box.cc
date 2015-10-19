@@ -10,7 +10,7 @@
 namespace azer {
 
 AxisAlignedBox AxisAlignedBox::CalcForVertexData(
-    const VertexData& vdata) {
+    const SlotVertexData& vdata) {
   azer::Vector4 min_pos(std::numeric_limits<float>::max(),
                         std::numeric_limits<float>::max(),
                         std::numeric_limits<float>::max(), 1.0f);
@@ -19,11 +19,11 @@ AxisAlignedBox AxisAlignedBox::CalcForVertexData(
                         std::numeric_limits<float>::min(), 1.0f);
   DataFormat pos_type = vdata.desc()->descs()[0].type;
   DCHECK(pos_type == kVec3 || pos_type == kVec4);
-  uint8* next = vdata.pointer();
+  const uint8* next = vdata.pointer();
   CHECK(next != NULL);
   do {
     if (pos_type == kVec3) {
-      azer::Vector3* pos = (azer::Vector3*)next;
+      Vector3* pos = (Vector3*)next;
       min_pos.x = std::min(min_pos.x, pos->x);
       min_pos.y = std::min(min_pos.y, pos->y);
       min_pos.z = std::min(min_pos.z, pos->z);
@@ -32,7 +32,7 @@ AxisAlignedBox AxisAlignedBox::CalcForVertexData(
       max_pos.y = std::max(max_pos.y, pos->y);
       max_pos.z = std::max(max_pos.z, pos->z);
     } else if (pos_type == kVec4) {
-      azer::Vector4* pos = (azer::Vector4*)next;
+      Vector4* pos = (Vector4*)next;
       min_pos.x = std::min(min_pos.x, pos->x);
       min_pos.y = std::min(min_pos.y, pos->y);
       min_pos.z = std::min(min_pos.z, pos->z);

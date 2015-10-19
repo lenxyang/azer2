@@ -21,10 +21,10 @@ inline int32 CalcSphereVertexNum(int32 stack_num, int32 slice_num) {
 }  // namespace
 
 
-VertexDataPtr InitSphereVertexData(int32 stack, int32 slice, 
+SlotVertexDataPtr InitSphereVertexData(int32 stack, int32 slice, 
                                    VertexDescPtr desc) {
   const int32 kVertexNum = CalcSphereVertexNum(stack, slice);
-  VertexDataPtr vdata(new VertexData(desc, kVertexNum));
+  SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
   VertexPack vpack(vdata.get());
 
   int num = 0;
@@ -120,7 +120,7 @@ SphereObject::~SphereObject() {
 }
 
 void SphereObject::InitHardwareBuffers() {
-  VertexDataPtr vdata(InitSphereVertexData(stack_, slice_, desc_));
+  SlotVertexDataPtr vdata(InitSphereVertexData(stack_, slice_, desc_));
   IndicesDataPtr idata = InitSphereIndicesData(stack_, slice_);
 
   if (GetSemanticIndex("normal", 0, desc_.get()) > 0) {
@@ -129,7 +129,7 @@ void SphereObject::InitHardwareBuffers() {
 
   IndicesDataPtr edge_idata = InitSphereWireFrameIndicesData(stack_, slice_);
   RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   edge_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), edge_idata);
 }

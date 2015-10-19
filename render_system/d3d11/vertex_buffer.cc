@@ -11,7 +11,7 @@
 namespace azer {
 namespace d3d11 {
 
-bool D3DVertexBuffer::Init(const VertexData* dataptr) {
+bool D3DVertexBuffer::Init(const SlotVertexData* dataptr) {
   DCHECK(element_size_ == -1 && buffer_size_ == -1 && vertex_num_ == -1);
   ID3D11Device* d3d_device = render_system_->GetDevice();
 
@@ -35,7 +35,7 @@ bool D3DVertexBuffer::Init(const VertexData* dataptr) {
   hr = d3d_device->CreateBuffer(&vb_desc, &d3d_vdata, &buffer_);
   HRESULT_HANDLE(hr, ERROR, "D3D11: CreateVertexBuffer failed ");
 
-  element_size_ = dataptr->desc()->stride();
+  element_size_ = dataptr->stride();
   buffer_size_ = dataptr->buffer_size();
   vertex_num_ = dataptr->vertex_num();
   return true;

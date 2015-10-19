@@ -157,7 +157,7 @@ int32 GetSemanticIndex(const std::string& name, int32 semantic_index,
   return -1;
 }
 
-void CalcNormal(VertexData* vbd, IndicesData* idata) {
+void CalcNormal(SlotVertexData* vbd, IndicesData* idata) {
   const int32 kPositionIndex = 0;
   const int32 kNormalIndex = GetSemanticIndex("normal", 0, vbd->desc());
   if (kNormalIndex == -1)
@@ -210,7 +210,7 @@ void CalcNormal(VertexData* vbd, IndicesData* idata) {
   }
 }
 
-void CalcTriangleListNormal(VertexData* vbd, int* indices) {
+void CalcTriangleListNormal(SlotVertexData* vbd, int* indices) {
   const int32 kPositionIndex = 0;
   const int32 kNormalIndex = GetSemanticIndex("normal", 0, vbd->desc());
   if (kNormalIndex == -1)

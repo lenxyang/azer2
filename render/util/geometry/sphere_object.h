@@ -18,7 +18,8 @@ class SphereObject : public GeometryObject {
   DISALLOW_COPY_AND_ASSIGN(SphereObject);
 };
 
-VertexDataPtr InitSphereVertexData(int32 stack, int32 slice, VertexDescPtr desc); 
+SlotVertexDataPtr InitSphereVertexData(int32 stack, int32 slice,
+                                       VertexDescPtr desc); 
 IndicesDataPtr InitSphereIndicesData(int32 stack, int32 slice); 
 IndicesDataPtr InitSphereWireFrameIndicesData(int32 stack, int32 slice);
 

@@ -25,7 +25,7 @@ void CoordinateGrid::Init() {
   vec.resize(kRenderPipelineStageNum);
   CoordinateGridEffect* effect = new CoordinateGridEffect(rs);
   effect_ptr_ = effect;
-  data_ = new VertexData(effect->GetVertexDesc(), (kNum + 1) * 4);
+  data_ = new SlotVertexData(effect->GetVertexDesc(), (kNum + 1) * 4);
   CoordinateGridEffect::Vertex* vertex =
       (CoordinateGridEffect::Vertex*)data_->pointer();
   float total_width = kWidth * kNum;
@@ -45,7 +45,7 @@ void CoordinateGrid::Init() {
     vertex->position = Vector4(x, 0.0f, total_height / 2.0f, 1.0f);
     vertex++;
   }
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data_.get(), 0);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data_.get());
 }
 
 void CoordinateGrid::Render(Renderer* renderer) {

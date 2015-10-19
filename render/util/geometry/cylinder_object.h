@@ -22,8 +22,9 @@ class CylinderObject : public GeometryObject {
   DISALLOW_COPY_AND_ASSIGN(CylinderObject);
 };
 
-VertexDataPtr InitCylinderVertexData(float top_radius, float bottom_radius,
-                                     int32 stack, int32 slice, VertexDescPtr desc); 
+SlotVertexDataPtr InitCylinderVertexData(float top_radius, float bottom_radius,
+                                         int32 stack, int32 slice,
+                                         VertexDescPtr desc); 
 IndicesDataPtr InitCylinderIndicesData(int32 stack, int32 slice); 
 
 }  // namespace azer

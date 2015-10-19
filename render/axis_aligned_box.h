@@ -11,7 +11,7 @@ namespace azer {
 
 class Camera;
 class RenderSystem;
-class VertexData;
+class SlotVertexData;
 
 class AZER_EXPORT AxisAlignedBox : public BoundingVolumn {
  public:
@@ -19,7 +19,7 @@ class AZER_EXPORT AxisAlignedBox : public BoundingVolumn {
   AxisAlignedBox(const Vector4& minimum, const Vector4& maximum);
   AxisAlignedBox(const Vector3& minimum, const Vector3& maximum);
   AxisAlignedBox(const AxisAlignedBox& box);
-  static AxisAlignedBox CalcForVertexData(const VertexData& vdata);
+  static AxisAlignedBox CalcForVertexData(const SlotVertexData& vdata);
 
   AxisAlignedBox& operator = (const AxisAlignedBox& box);
 

@@ -91,7 +91,7 @@ void BoxObject::InitHardwareBuffers() {
 
   int32 kNormal0Idx = GetSemanticIndex("normal", 0, desc_.get());
   int32 kTexcoord0Idx = GetSemanticIndex("texcoord", 0, desc_.get());
-  VertexDataPtr vdata(new VertexData(desc_, arraysize(indices)));
+  SlotVertexDataPtr vdata(new SlotVertexData(desc_, arraysize(indices)));
   VertexPack vpack(vdata.get());
   vpack.first();
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
@@ -125,7 +125,7 @@ void BoxObject::InitHardwareBuffers() {
   }
 
   RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   edge_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
 }
 

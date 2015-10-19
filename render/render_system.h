@@ -25,7 +25,7 @@ class Image;
 class Overlay;
 class RenderTarget;
 class Technique;
-class VertexBuffer;
+class SlotVertexBuffer;
 
 typedef scoped_refptr<Blending> BlendingPtr;
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTpablePtr;;
@@ -35,7 +35,7 @@ typedef scoped_refptr<Renderer> RendererPtr;
 typedef scoped_refptr<RenderTarget> RenderTargetPtr;
 typedef scoped_refptr<SwapChain> SwapChainPtr;
 typedef scoped_refptr<Technique> TechniquePtr;
-typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
+typedef scoped_refptr<SlotVertexBuffer> SlotVertexBufferPtr;
 
 class AZER_EXPORT RenderSystem {
  public:
@@ -58,7 +58,7 @@ class AZER_EXPORT RenderSystem {
 
   // create gpu buffers
   virtual VertexBufferPtr CreateVertexBuffer(const VertexBuffer::Options& opt,
-                                             VertexData* vdata, int32 slot) = 0;
+                                             SlotVertexData* vdata) = 0;
   virtual IndicesBufferPtr CreateIndicesBuffer(const IndicesBuffer::Options& opt,
                                                IndicesData* idata) = 0;
   virtual GpuConstantsTablePtr CreateGpuConstantsTable(

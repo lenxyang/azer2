@@ -26,7 +26,7 @@ class CoordinateGrid {
   void Init();
 
   scoped_refptr<CoordinateGridEffect> effect_ptr_;
-  VertexDataPtr data_;
+  SlotVertexDataPtr data_;
   VertexBufferPtr vb_;
   Vector4 x_color_, z_color_;
   TransformHolder holder_;

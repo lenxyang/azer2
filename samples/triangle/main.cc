@@ -44,7 +44,7 @@ bool MainDelegate::Initialize() {
     DiffuseEffect::Vertex(Vector4( 1.0f, -1.0f, 0.0f, 1.0f ),
                           Vector4( 0.0f, 0.0f, 1.0f, 1.0f )),
   };
-  VertexDataPtr vdata(new VertexData(effect_->GetVertexDesc(), ARRAYSIZE(v)));
+  SlotVertexDataPtr vdata(new SlotVertexData(effect_->GetVertexDesc(), ARRAYSIZE(v)));
   memcpy(vdata->pointer(), (uint8*)v, sizeof(v));
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata.get());
 

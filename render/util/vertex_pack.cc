@@ -7,11 +7,11 @@ int32 memalign(int32 n, int32 align) {
   return (n + align - 1) & (~(align - 1));
 }
 
-VertexPack::VertexPack(VertexData* data) 
+VertexPack::VertexPack(SlotVertexData* data) 
     : data_(data->pointer()),
       current_(NULL),
       size_(data->buffer_size()),
-      unit_size_(data->desc()->stride()),
+      unit_size_(data->stride()),
       kAlignBytes(1) {
   for (int32 i = 0; i < data->desc()->element_num(); ++i) {
     desc_.push_back(data->desc()->descs()[i]);

@@ -77,7 +77,7 @@ const StringType& D3DRenderSystem::short_name() const {
 }
 
 VertexBufferPtr D3DRenderSystem::CreateVertexBuffer(
-    const VertexBuffer::Options& opt, VertexData* dataptr, int32 slot) {
+    const VertexBuffer::Options& opt, SlotVertexData* dataptr) {
   scoped_refptr<D3DVertexBuffer> vertex_buffer(
       new D3DVertexBuffer(opt, this));
   if (vertex_buffer->Init(dataptr)) {

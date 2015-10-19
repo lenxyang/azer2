@@ -17,7 +17,7 @@ class ConeObject : public GeometryObject {
   DISALLOW_COPY_AND_ASSIGN(ConeObject);
 };
 
-VertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc); 
+SlotVertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc); 
 IndicesDataPtr InitConeIndicesData(int32 slice); 
 
 }  // namespace azer

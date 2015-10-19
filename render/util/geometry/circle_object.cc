@@ -23,7 +23,7 @@ void CircleObject::InitHardwareBuffers() {
   const int32 kNormalIndex = GetSemanticIndex("normal", 0, desc_.get());
   const int32 kVertexNum = kSlice + 1;
   float degree = 360.0f / (float)kSlice;
-  VertexDataPtr vdata(new VertexData(desc_, kVertexNum));
+  SlotVertexDataPtr vdata(new SlotVertexData(desc_, kVertexNum));
   VertexPack vpack(vdata.get());
   vpack.first();
   for (int i = 0; i < kVertexNum; ++i) {
@@ -46,7 +46,7 @@ void CircleObject::InitHardwareBuffers() {
   }
 
   RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata, 0);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
 }
 

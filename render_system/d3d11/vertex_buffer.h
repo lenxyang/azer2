@@ -13,7 +13,7 @@ class D3DVertexBuffer : public VertexBuffer {
     SAFE_RELEASE(buffer_);
   }
   
-  bool Init(const VertexData* dataptr);
+  bool Init(const SlotVertexData* dataptr);
 
   /**
    * 对于 VertexBuffer 来说，它是不分行和列的， 仅仅知道大小

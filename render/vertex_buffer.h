@@ -13,9 +13,9 @@
 namespace azer {
 
 class Renderer;
-class VertexData;
+class SlotVertexData;
 class VertexDesc;
-typedef scoped_refptr<VertexData> VertexDataPtr;
+typedef scoped_refptr<SlotVertexData> SlotVertexDataPtr;
 typedef scoped_refptr<VertexDesc> VertexDescPtr;
 
 class AZER_EXPORT VertexDesc : public Resource {
@@ -42,9 +42,12 @@ class AZER_EXPORT VertexDesc : public Resource {
 
   // size of single vertex 
   int32 slot_count() const;
-  int32 stride() const;
+  int32 stride(int32 slot) const;
   int32 element_num() const;
+  int32 vertex_size() const;
   const Desc* descs() const;
+
+  scoped_ptr<Desc[]> gen_slot_desc(int32 index) const;
 
   // print Desc info
   friend std::ostream& operator << (std::ostream& os, const VertexDesc& data);
@@ -66,50 +69,34 @@ class AZER_EXPORT VertexDesc : public Resource {
 
   typedef std::vector<int32> OffsetIndex;
   OffsetIndex offsets_idx_;
+  std::vector<int32> slot_index_;
+  std::vector<int32> slot_stride_;
 
   DISALLOW_COPY_AND_ASSIGN(VertexDesc);
 };
 
-class AZER_EXPORT VertexData : public Resource {
+class AZER_EXPORT SlotVertexData : public Resource {
  public:
-  enum MemoryMode {
-    kMainMemory,
-    kGPUMemr,
-  };
+  SlotVertexData(const VertexDescPtr& desc, int32 vertex_num);
 
-  VertexData(const VertexDescPtr& desc, int vertex_num);
+  uint8* next(const uint8* cur);
+  const uint8* next(const uint8* cur) const;
 
-  /**
-   * 枚举方法
-   * 如果对 next 的参数为 NULL， 它将返回第一个定点
-   * 当 next() 返回 NULL 时， 表明已经到达最后一个定点
-   */
-  uint8* next(uint8* current) const;
-  uint8* pointer() const;
-  void CopyFrom(uint8* data, uint32 size);
-
+  uint8* pointer();
+  const uint8* pointer() const;
+  int32 buffer_size() const;
   int32 vertex_num() const;
   int32 element_num() const;
-
   int32 stride() const;
 
   const VertexDesc* desc() const;
   VertexDesc* desc();
-
-  /**
-   * whole buffer sizef of vertex data
-   */
-  int32 buffer_size() const {
-    return vertex_num() * stride();
-  }
-
-  void reset() { data_.reset();}
  private:
-  int32 vertex_num_;
   std::unique_ptr<uint8[]> data_;
-  VertexDescPtr desc_ptr_;
+  int32 vertex_num_;
+  VertexDescPtr desc_;
+  DISALLOW_COPY_AND_ASSIGN(SlotVertexData);
 };
-
 
 class VertexBuffer;
 typedef scoped_refptr<VertexBuffer> VertexBufferPtr;

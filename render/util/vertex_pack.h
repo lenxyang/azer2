@@ -11,7 +11,7 @@ namespace azer {
 
 class VertexPack {
  public:
-  VertexPack(VertexData* data);
+  VertexPack(SlotVertexData* data);
   VertexPack(int32 alignbytes, const std::vector<VertexDesc::Desc>& desc, 
              uint8* data, int32 data_size);
   VertexPack(int32 alignbytes, const VertexDesc::Desc* desc, int desc_count,

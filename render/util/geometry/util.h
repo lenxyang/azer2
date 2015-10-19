@@ -18,8 +18,8 @@ int32 GetSemanticIndex(const std::string& name, int32 semantic_index,
                        const std::vector<VertexDesc::Desc>& desc);
 
 
-void CalcNormal(VertexData* vbd, IndicesData* idata);
-void CalcTriangleListNormal(VertexData* vbd, int* indices);
+void CalcNormal(SlotVertexData* vbd, IndicesData* idata);
+void CalcTriangleListNormal(SlotVertexData* vbd, int* indices);
 
 void GenerateConeHat(bool up, float top, float bottom, int32 slice, 
                      VertexPack* vpack, IndexPack* ipack);
