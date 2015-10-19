@@ -61,19 +61,14 @@ class D3DRenderer : public Renderer {
   void ClearDepthAndStencil(DepthBuffer::ClearFlag, float depth_val, 
                             int stencil_val) override;
   
-  void Draw(VertexBuffer* vb, PrimitiveTopology primitive,
-            int32 num_of_vertices, int32 first_vertex) override;
-  void DrawIndex(VertexBuffer* vb, IndicesBuffer* ib,
-                 PrimitiveTopology primitive, int32 num_of_indices,
-                 int32 first_indices, int32 index_base) override;
-  void DrawInstanced(int32 instance_num, VertexBuffer* vb,
-                     PrimitiveTopology primitive,
-                     int32 num_of_vertices, int32 first_vertex,
+  void SetPrimitiveTopology(PrimitiveTopology primitive) override;
+  void Draw(int32 num_of_vertices, int32 first_vertex) override;
+  void DrawIndex(int32 num_of_indices, int32 first_indices, 
+                 int32 index_base) override;
+  void DrawInstanced(int32 instance_num, int32 num_of_vertices, int32 first_vertex,
                      int32 instance_start_index) override;
-  void DrawIndexInstanced(int32 instance_num, VertexBuffer* vb,
-                          IndicesBuffer* ib, PrimitiveTopology primitive,
-                          int32 num_of_indices, int32 first_indices,
-                          int32 index_base,
+  void DrawIndexInstanced(int32 instance_num, int32 num_of_indices, 
+                          int32 first_indices, int32 index_base,
                           int32 instance_start_index) override;
 
   void SetViewport(const Viewport& viewport) override;

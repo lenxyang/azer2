@@ -82,7 +82,9 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->SetCullingMode(kCullNone);
   effect_->SetPVW(pvw);
   effect_->Use(renderer.get());
-  renderer->Draw(vb_.get(), kTriangleList, 3, 0);
+  vb_->Use(renderer.get());
+  renderer->SetPrimitiveTopology(kTriangleList);
+  renderer->Draw(3, 0);
 }
 
 int main(int argc, char* argv[]) {

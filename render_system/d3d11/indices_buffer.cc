@@ -6,6 +6,7 @@
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
+#include "azer/render_system/d3d11/renderer.h"
 
 namespace azer {
 namespace d3d11 {

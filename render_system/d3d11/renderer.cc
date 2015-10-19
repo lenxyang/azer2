@@ -12,6 +12,7 @@
 #include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
+#include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/vertex_buffer.h"
@@ -190,79 +191,32 @@ void D3DRenderer::ResetShader(RenderPipelineStage stage) {
   }
 }
 
-void D3DRenderer::Draw(VertexBuffer* vvb, PrimitiveTopology primitive,
-                       int vertices_num, int32 start_vertex) {
-  const int num_of_vertices =
-      (vertices_num != -1) ? vertices_num : vvb->vertex_num();
-  CHECK(num_of_vertices > 0);
-  D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
-  DCHECK(vb->Initialized()) << "VertexBuffer not initialized.";
-  UINT stride = vvb->element_size();
-  UINT offset = 0;
-  d3d_context_->IASetVertexBuffers(0, 1, &vb->buffer_, &stride, &offset);
+void D3DRenderer::SetPrimitiveTopology(PrimitiveTopology primitive) {
   d3d_context_->IASetPrimitiveTopology(TranslatePrimitiveTopology(primitive));
-  d3d_context_->Draw(num_of_vertices, start_vertex);
 }
 
-void D3DRenderer::DrawIndex(VertexBuffer* vvb, IndicesBuffer* vib,
-                            PrimitiveTopology primitive, int indices_num,
-                            int32 first_indices, int32 index_base) {
-  const int num_of_indices =
-      (indices_num != -1) ? indices_num : vib->indices_num();
-  UINT stride = vvb->element_size();
-  UINT offset = 0;
-  D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
-  DCHECK(NULL != vb && vb->Initialized()) << "VertexBuffer not initialized.";
-  D3DIndicesBuffer* ib = (D3DIndicesBuffer*)vib;
-  DCHECK(NULL != ib && ib->Initialized()) << "IndicesBuffer not initialized.";
-  d3d_context_->IASetVertexBuffers(0, 1, &vb->buffer_, &stride, &offset);
-  d3d_context_->IASetIndexBuffer(ib->buffer_,
-                                 TranslateIndexType(ib->type()),
-                                 0);
-  d3d_context_->IASetPrimitiveTopology(TranslatePrimitiveTopology(primitive));
-  d3d_context_->DrawIndexed(num_of_indices, first_indices, index_base);
+void D3DRenderer::Draw(int vertices_num, int32 start_vertex) {
+  d3d_context_->Draw(vertices_num, start_vertex);
 }
 
-void D3DRenderer::DrawInstanced(int32 instance_num, VertexBuffer* vvb,
-                                PrimitiveTopology primitive,
-                                int32 vertices_num, int32 first_vertex,
-                                int32 instance_start_index) {
-  D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
-  DCHECK(NULL != vb && vb->Initialized()) << "VertexBuffer not initialized.";
-  const int num_of_vertices =
-      (vertices_num != -1) ? vertices_num : vb->vertex_num();
-  UINT stride = vvb->element_size();
-  UINT offset = 0;
-  d3d_context_->IASetVertexBuffers(0, 1, &vb->buffer_, &stride, &offset);
-  d3d_context_->IASetPrimitiveTopology(TranslatePrimitiveTopology(primitive));
-  d3d_context_->DrawInstanced(num_of_vertices, instance_num,
+void D3DRenderer::DrawIndex(int indices_num, int32 first_indices, 
+                            int32 index_base) {
+  d3d_context_->DrawIndexed(indices_num, first_indices, index_base);
+}
+
+void D3DRenderer::DrawInstanced(int32 instance_num, int32 vertices_num, 
+                                int32 first_vertex, int32 instance_start_index) {
+  d3d_context_->DrawInstanced(vertices_num, instance_num,
                               first_vertex, instance_start_index);
 }
 
-void D3DRenderer::DrawIndexInstanced(int32 instance_num, VertexBuffer* vvb,
-                                     IndicesBuffer* vib,
-                                     PrimitiveTopology primitive,
-                                     int32 indices_num, int32 first_indices,
-                                     int32 index_base,
+void D3DRenderer::DrawIndexInstanced(int32 instance_num, int32 indices_num, 
+                                     int32 first_indices, int32 index_base,
                                      int32 instance_start_index) {
-  const int num_of_indices =
-      (indices_num != -1) ? indices_num : vib->indices_num();
-  UINT stride = vvb->element_size();
-  UINT offset = 0;
-  D3DVertexBuffer* vb = (D3DVertexBuffer*)vvb;
-  DCHECK(NULL != vb && vb->Initialized()) << "VertexBuffer not initialized.";
-  D3DIndicesBuffer* ib = (D3DIndicesBuffer*)vib;
-  DCHECK(NULL != ib && ib->Initialized()) << "IndicesBuffer not initialized.";
-  d3d_context_->IASetVertexBuffers(0, 1, &vb->buffer_, &stride, &offset);
-  d3d_context_->IASetIndexBuffer(ib->buffer_,
-                                 TranslateIndexType(ib->type()),
-                                 0);
-  d3d_context_->IASetPrimitiveTopology(TranslatePrimitiveTopology(primitive));
-  d3d_context_->DrawIndexedInstanced(num_of_indices, instance_num,
+  d3d_context_->DrawIndexedInstanced(indices_num, instance_num,
                                      first_indices, index_base,
                                      instance_start_index);
 }
-
 
 void D3DRenderer::UseConstantsTable(RenderPipelineStage stage,
                                     GpuConstantsTable* table) {

@@ -139,6 +139,7 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   /**
    * 从 Lockable 继承的借口
    */
+  virtual void Use(Renderer* renderer) = 0;
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
 
@@ -166,7 +167,7 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
   void add_vertex_buffer_at(VertexBufferPtr vb, int32 index);
   void remove_vertex_buffer_at(int32 index);
 
-  VertexBufferPtr* get_vb_vector() { return &vector_;}
+  std::vector<VertexBufferPtr>* get_vb_vector() { return &vector_;}
 
   virtual void Use(Renderer* renderer) = 0;
  private:

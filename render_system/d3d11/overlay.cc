@@ -170,7 +170,9 @@ void D3DOverlay::Render(Renderer* renderer) {
   effect_->SetTexcoord(texcoord_);
   effect_->SetTexture(tex_);
   effect_->Use(renderer);
-  renderer->Draw(vb_ptr_.get(), azer::kTriangleList, 6);
+  vb_ptr_->Use(renderer);
+  renderer->SetPrimitiveTopology(azer::kTriangleList);
+  renderer->Draw(6, 0);
   ResetBlending(renderer);
 }
 }  // namespace d3d11

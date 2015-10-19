@@ -15,11 +15,9 @@ class D3DVertexBuffer : public VertexBuffer {
   
   bool Init(const SlotVertexData* dataptr);
 
-  /**
-   * 对于 VertexBuffer 来说，它是不分行和列的， 仅仅知道大小
-   */
-  virtual HardwareBufferDataPtr map(MapType flags) override;
-  virtual void unmap() override;
+  void Use(Renderer* renderer) override;
+  HardwareBufferDataPtr map(MapType flags) override;
+  void unmap() override;
 
   bool Initialized() const { return NULL != buffer_;}
  private:
@@ -35,12 +33,16 @@ class D3DVertexBuffer : public VertexBuffer {
   D3DRenderSystem* render_system_;
   friend class D3DRenderSystem;
   friend class D3DRenderer;
+  friend class D3DVertexBufferGroup;
   DISALLOW_COPY_AND_ASSIGN(D3DVertexBuffer);
 };
 
 class D3DVertexBufferGroup : public VertexBufferGroup {
  public:
+  D3DVertexBufferGroup(VertexDescPtr desc);
   void Use(Renderer* renderer) override;
+ private:
+  int32 GenVertexArray(ID3D11Buffer** buf, uint32* stride);
 };
 }  // namespace d3d11
 }  // namespace azer

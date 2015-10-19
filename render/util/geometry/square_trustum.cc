@@ -126,7 +126,9 @@ void SquareTrustum::InitHardwareBuffers() {
 }
 
 void SquareTrustum::Render(Renderer* renderer) {
-  renderer->Draw(vb_.get(), kTriangleList);
+  vb_->Use(renderer);
+  renderer->SetPrimitiveTopology(kTriangleList);
+  renderer->Draw(0, vb_->vertex_num());
 }
 
 void SquareTrustum::RenderWireframe(Renderer* renderer) {

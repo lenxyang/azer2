@@ -78,29 +78,42 @@ void D3DVertexBuffer::unmap() {
   locked_ = false;
 }
 
+void D3DVertexBuffer::Use(Renderer* r) {
+  D3DRenderer* render = (D3DRenderer*)r;
+  ID3D11DeviceContext* d3d_context = render->GetContext(); 
+  UINT stride = element_size();
+  UINT offset = 0;
+  d3d_context->IASetVertexBuffers(0, 1, &buffer_, &stride, &offset);
+}
+
 // class D3DVertexBufferGroup
 namespace {
 static const int32 kMaxVertexBuffer = 16;
-void GenVertexArray(VertexBufferGroup* group, ID3D11Buffer* buf, uint32* stride, 
-                    int32* count) {
-  for (int i = 0; i < group->vertex_buffer_count(); ++i) {
-    D3DVertexBuffer* vb = (D3DVertexBuffer*)(group->vertex_buffer_at(i));
-    DCHECK(vb->Initialized()) << "VertexBuffer not initialized.";
-    buf[i] = vb->buffer_;
-    stride[i] = vb->stride();
-  }
-  *count = group->vertex_buffer_count();
-}
 }  // namespace
-void D3DVertexBufferGroup::Use(Renderer* renderer) {
-  int32 count = 0;
-  ID3D11Buffer vbs[kMaxVertexBuffer];
-  uint32 strides[kMaxVertexBuffer] = {0};
-  uint32 offsets[kMaxVertexBuffer] = {0}
+D3DVertexBufferGroup::D3DVertexBufferGroup(VertexDescPtr desc)
+    : VertexBufferGroup(desc) {
+}
 
+void D3DVertexBufferGroup::Use(Renderer* r) {
+  int32 count = 0;
+  ID3D11Buffer* vbs[kMaxVertexBuffer];
+  uint32 strides[kMaxVertexBuffer] = {0};
+  uint32 offsets[kMaxVertexBuffer] = {0};
+
+  count = GenVertexArray(vbs, strides);
   D3DRenderer* render = (D3DRenderer*)r;
   ID3D11DeviceContext* d3d_context = render->GetContext(); 
-  d3d_context->IASetVertexBuffers(0, count, vbs, strides, offset);
+  d3d_context->IASetVertexBuffers(0, count, vbs, strides, offsets);
+}
+
+int32 D3DVertexBufferGroup::GenVertexArray(ID3D11Buffer** buf, uint32* stride) {
+  for (int i = 0; i < vertex_buffer_count(); ++i) {
+    D3DVertexBuffer* vb = (D3DVertexBuffer*)(vertex_buffer_at(i));
+    DCHECK(vb->Initialized()) << "VertexBuffer not initialized.";
+    buf[i] = vb->buffer_;
+    stride[i] = vb->element_size();
+  }
+  return vertex_buffer_count();
 }
 }  // namespace d3d11
 }  // namespace azer

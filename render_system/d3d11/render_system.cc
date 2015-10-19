@@ -87,6 +87,10 @@ VertexBufferPtr D3DRenderSystem::CreateVertexBuffer(
   }
 }
 
+VertexBufferGroupPtr D3DRenderSystem::CreateVertexBufferGroup(VertexDescPtr desc) {
+  scoped_refptr<D3DVertexBufferGroup> ptr(new D3DVertexBufferGroup(desc));
+  return ptr;
+}
 
 IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
     const IndicesBuffer::Options& opt, IndicesData* dataptr) {

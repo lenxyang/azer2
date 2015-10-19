@@ -14,14 +14,19 @@ void RenderClosure::Draw(Renderer* renderer, Effect* effect,
                          PrimitiveTopology primitive) {
   ApplyParams(effect);
   effect->Use(renderer);
-  renderer->Draw(vb_.get(), primitive);
+  vb_->Use(renderer);
+  renderer->SetPrimitiveTopology(primitive);
+  renderer->Draw(0, vb_->vertex_num());
 }
 
 void RenderClosure::DrawIndex(Renderer* renderer, Effect* effect,
                               PrimitiveTopology primitive) {
   ApplyParams(effect);
   effect->Use(renderer);
-  renderer->DrawIndex(vb_.get(), ib_.get(), primitive);
+  vb_->Use(renderer);
+  ib_->Use(renderer);
+  renderer->SetPrimitiveTopology(primitive);
+  renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }
 
 void RenderClosure::SetVertexBuffer(VertexBufferPtr vb) {

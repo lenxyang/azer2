@@ -66,34 +66,14 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
       float depth_val = 1.0,int stencil_val = 0) = 0;
 
   virtual void ResetShader(RenderPipelineStage stage) = 0;
-  
-  virtual void Draw(VertexBuffer* vb, PrimitiveTopology primitive,
-                    int32 num_of_vertices = -1, int32 first_vertex = 0) = 0;
-  virtual void DrawIndex(VertexBuffer* vb, IndicesBuffer* ib,
-                         PrimitiveTopology primitive, int32 num_of_indices = -1,
-                         int32 first_indices = 0, int32 index_base = 0) = 0;
-  virtual void DrawInstanced(int32 instance_num, VertexBuffer* vb,
-                             PrimitiveTopology primitive, int32 num_of_vertices = -1,
-                             int32 first_vertex = 0,
+  virtual void SetPrimitiveTopology(PrimitiveTopology primitive) = 0;
+  virtual void Draw(int32 num_of_vertices = -1, int32 first_vertex = 0) = 0;
+  virtual void DrawIndex(int32 num_of_indices, int32 first_indices = 0, 
+                         int32 index_base = 0) = 0;
+  virtual void DrawInstanced(int32 instance_num, int32 num_of_vertices = -1,
+                             int32 first_vertex = 0, 
                              int32 instance_start_index = 0) = 0;
-  virtual void DrawIndexInstanced(int32 instance_num, VertexBuffer* vb,
-                                  IndicesBuffer* ib, PrimitiveTopology primitive,
-                                  int32 num_of_indices = -1,
-                                  int32 first_indices = 0, int32 index_base = 0,
-                                  int32 instance_start_index = 0) = 0;
-
-  virtual void Draw(VertexBufferGroup* vb, PrimitiveTopology primitive,
-                    int32 num_of_vertices = -1, int32 first_vertex = 0) = 0;
-  virtual void DrawIndex(VertexBufferGroup* vb, IndicesBuffer* ib,
-                         PrimitiveTopology primitive, int32 num_of_indices = -1,
-                         int32 first_indices = 0, int32 index_base = 0) = 0;
-  virtual void DrawInstanced(int32 instance_num, VertexBufferGroup* vb,
-                             PrimitiveTopology primitive, int32 num_of_vertices = -1,
-                             int32 first_vertex = 0,
-                             int32 instance_start_index = 0) = 0;
-  virtual void DrawIndexInstanced(int32 instance_num, VertexBufferGroup* vb,
-                                  IndicesBuffer* ib, PrimitiveTopology primitive,
-                                  int32 num_of_indices = -1,
+  virtual void DrawIndexInstanced(int32 instance_num, int32 num_of_indices = -1,
                                   int32 first_indices = 0, int32 index_base = 0,
                                   int32 instance_start_index = 0) = 0;
   

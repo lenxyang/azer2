@@ -14,11 +14,17 @@ GeometryObject::~GeometryObject() {
 }
 
 void GeometryObject::Render(Renderer* renderer) {
-  renderer->DrawIndex(vb_, ib_, kTriangleList);
+  vb_->Use(renderer);
+  ib_->Use(renderer);
+  renderer->SetPrimitiveTopology(kTriangleList);
+  renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }
 
 void GeometryObject::RenderWireframe(Renderer* renderer) {
-  renderer->DrawIndex(vb_.get(), edge_ib_.get(), kLineList);
+  vb_->Use(renderer);
+  edge_ib_->Use(renderer);
+  renderer->SetPrimitiveTopology(kLineList);
+  renderer->DrawIndex(edge_ib_->indices_num(), 0, 0);
 }
 
 }  // namespace azer

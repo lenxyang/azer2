@@ -51,10 +51,12 @@ void CoordinateGrid::Init() {
 void CoordinateGrid::Render(Renderer* renderer) {
   effect_ptr_->SetGridDiffuse(x_color_);
   effect_ptr_->Use(renderer);
-  renderer->Draw(vb_.get(), kLineList, (kNum + 1) * 2, (kNum + 1) * 2);
+  vb_->Use(renderer);
+  renderer->SetPrimitiveTopology(kLineList);
+  renderer->Draw((kNum + 1) * 2, (kNum + 1) * 2);
   effect_ptr_->SetGridDiffuse(z_color_);
   effect_ptr_->Use(renderer);
-  renderer->Draw(vb_.get(), kLineList, (kNum + 1) * 2, 0);
+  renderer->Draw((kNum + 1) * 2, 0);
 }
 
 
