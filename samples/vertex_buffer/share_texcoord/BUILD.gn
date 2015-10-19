@@ -1,0 +1,46 @@
+group("share_texcoord") {
+  deps = [
+    ":shared",
+    ":indep",
+  ]
+}
+
+executable("shared") {
+  output_name = "azer_sample_vb_shared"
+  sources = [
+    "shared.cc",
+    "diffuse.afx.cc",
+    "diffuse.afx.h",
+  ]
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}
+
+executable("indep") {
+  output_name = "azer_sample_vb_indep"
+  sources = [
+    "indep.cc",
+    "indepeffect.afx.cc",
+    "indepeffect.afx.h",
+  ]
+  deps = [
+    "//skia",
+    "//ui/views",
+    "//ui/base",
+    "//ui/events",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//azer",
+    "//azer/render/util",
+    "//nelf",
+  ]
+}

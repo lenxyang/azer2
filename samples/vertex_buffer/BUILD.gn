@@ -1,0 +1,6 @@
+
+group("vertex_buffer") {
+  deps = [
+    "share_texcoord",
+  ]
+}

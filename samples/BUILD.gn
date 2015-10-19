@@ -4,6 +4,7 @@ group("samples") {
     "triangle",
     "objects",
     "coordinate",
+    "vertex_buffer",
     "camera",
     "mesh",
   ]

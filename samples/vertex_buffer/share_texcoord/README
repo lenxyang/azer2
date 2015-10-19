@@ -1,0 +1,5 @@
+
+
+shared_texcoord
+
+地形的绘制时，可以分成小个的 title 进行渲染，每一个 tile 的顶点位置虽然不同但他们的 texcoord 经常是相同的。这就是一个优化点了，将所有的 tile 的 texcoord 的坐标使用一个 texcoord 表示
