@@ -9,13 +9,16 @@
 
 namespace azer {
 
+struct VertexPos {
+  int32 slot;
+  int32 index;
+};
+VertexPos GetSemanticIndex(const std::string& name, int32 semantic_index, 
+                           VertexDesc* desc);
+
 class VertexPack {
  public:
-  VertexPack(SlotVertexData* data);
-  VertexPack(int32 alignbytes, const std::vector<VertexDesc::Desc>& desc, 
-             uint8* data, int32 data_size);
-  VertexPack(int32 alignbytes, const VertexDesc::Desc* desc, int desc_count,
-             uint8* data, int32 data_size);
+  VertexPack(VertexData* data);
   ~VertexPack();
 
   int32 size() const { return size_;}
@@ -38,19 +41,15 @@ class VertexPack {
   void ReadFloat(float* v, int32 column) const;
   void ReadVector2(Vector2* v, int32 column) const;
   void ReadVector3(Vector3* v, int32 column) const;
-  void ReadVector4(Vector4* v, int32 column)const;
+  void ReadVector4(Vector4* v, int32 column) const;
 
-  int32 unit_size() const;
-  const std::vector<VertexDesc::Desc>& desc() const { return desc_;}
+  VertexData* data();
+  VertexDesc* desc();
  private:
   void calc_offsets();
   int32 offset_of_column(int32 column) const;
-  uint8* data_;
-  uint8* current_;
-  uint32 size_;
-  uint32 unit_size_;
-  std::vector<int32> offsets_;
-  std::vector<VertexDesc::Desc> desc_;
+  int32 index_;
+  VertexDataPtr vertex_data_;
   const int32 kAlignBytes;
   DISALLOW_COPY_AND_ASSIGN(VertexPack);
 };

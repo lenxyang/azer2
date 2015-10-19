@@ -12,11 +12,6 @@ bool GenerateBottomTriangleStrip(int32 bottom, int32 begin, int32 vertex_num,
 bool GenerateStripIndex(int32 line1, int32 line2, int32 vertex_num, bool closed,
                           IndexPack* ipack);
 
-int32 GetSemanticIndex(const std::string& name, int32 semantic_index, 
-                       VertexDesc* desc);
-int32 GetSemanticIndex(const std::string& name, int32 semantic_index, 
-                       const std::vector<VertexDesc::Desc>& desc);
-
 
 void CalcNormal(SlotVertexData* vbd, IndicesData* idata);
 void CalcTriangleListNormal(SlotVertexData* vbd, int* indices);
