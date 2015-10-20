@@ -13,12 +13,6 @@ executable("shared") {
     "diffuse.afx.h",
   ]
   deps = [
-    "//skia",
-    "//ui/views",
-    "//ui/base",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
     "//azer",
     "//azer/render/util",
     "//nelf",
@@ -33,12 +27,6 @@ executable("indep") {
     "indepeffect.afx.h",
   ]
   deps = [
-    "//skia",
-    "//ui/views",
-    "//ui/base",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
     "//azer",
     "//azer/render/util",
     "//nelf",

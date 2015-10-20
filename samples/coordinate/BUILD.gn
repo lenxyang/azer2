@@ -5,12 +5,6 @@ executable("coordinate") {
     "main.cc",
   ] 
   deps = [
-    "//skia",
-    "//ui/views",
-    "//ui/base",
-    "//ui/events",
-    "//ui/gfx",
-    "//ui/gfx/geometry",
     "//azer",
     "//azer/math",
     "//azer/render/util",
