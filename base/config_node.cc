@@ -17,7 +17,12 @@ bool StringToDoubleVec(const std::string& text, std::vector<double>* vec) {
   double dv;
   ::base::SplitString(text, ',', &v);
   for (auto iter = v.begin(); iter != v.end(); ++iter) {
-    if (!::base::StringToDouble(*iter, &dv))
+    std::string str = *iter;
+    if (str.empty())
+      return false;
+    if (str[str.length() - 1] == 'f')
+      str = str.substr(0, str.length() - 1);
+    if (!::base::StringToDouble(str, &dv))
       return false;
 
     vec->push_back(dv);
@@ -26,23 +31,30 @@ bool StringToDoubleVec(const std::string& text, std::vector<double>* vec) {
 }
 }  // namespace
 
+ConfigNodePtr ConfigNode::InitFromXML(util::xml::Element* ele) {
+  ConfigNodePtr node(new ConfigNode);
+  if (node->InitFromXMLNodeRecusive(ele)) {
+    return node;
+  } else {
+    return ConfigNodePtr();
+  }
+}
+
+ConfigNodePtr ConfigNode::InitFromXMLStr(const std::string& xml_text) {
+  util::xml::XMLContext xml_context;
+  util::xml::XMLParser parser;
+  if (!parser.Parse(xml_text, &xml_context)) {
+    return false;
+  }
+
+  util::xml::Element* root = xml_context.root()->ToElement();
+  DCHECK(root);
+  return ConfigNode::InitFromXML(root);
+}
+
 ConfigNode::ConfigNode()
     : Resource(kConfig),
       parent_(NULL) {
-}
-
-ConfigNode::ConfigNode(const ResPath& path)
-    : Resource(kConfig),
-      parent_(NULL),
-      respath_(path) {
-}
-
-const ResPath& ConfigNode::respath() const {
-  return root()->respath_;
-}
-
-ResPath ConfigNode::package_path() const  {
-  return respath();
 }
 
 ConfigNode* ConfigNode::root() {
@@ -282,6 +294,13 @@ bool ConfigNode::GetChildText(const std::string& name, std::string* text) const 
   return true;
 }
 
+std::string ConfigNode::GetChildTextString(const std::string& name) const {
+  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  if (vec.size() != 1u)
+    return std::string();
+  return vec[0]->GetText();
+}
+
 bool ConfigNode::GetChildTextAsDouble(const std::string& name, double* v) const {
   std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
   if (vec.size() != 1u)
@@ -335,10 +354,6 @@ bool ConfigNode::GetChildTextAsQuaternion(const std::string& name, Quaternion* v
 
 void ConfigNode::AddAttr(const std::string& name, const std::string& value) {
   attrs_.push_back(std::make_pair(name, value));
-}
-
-bool ConfigNode::InitFromXML(util::xml::Element* ele) {
-  return InitFromXMLNodeRecusive(ele);
 }
 
 bool ConfigNode::InitFromXMLNode(util::xml::Element* element) {
