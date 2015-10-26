@@ -25,7 +25,14 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   void UpdateParams(const FrameArgs& args) override;
   void Draw(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
   void DrawIndex(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
+
+  const Vector3& vmin() { return vmin_;}
+  const Vector3& vmax() { return vmax_;}
+  Vector3* mutable_vmin() { return &vmin_;}
+  Vector3* mutable_vmax() { return &vmax_;}
  private:
+  Vector3 vmin_;
+  Vector3 vmax_;
   std::vector<RenderClosurePtr> closure_;
   DISALLOW_COPY_AND_ASSIGN(Mesh);
 };
