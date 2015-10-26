@@ -17,7 +17,12 @@ bool StringToDoubleVec(const std::string& text, std::vector<double>* vec) {
   double dv;
   ::base::SplitString(text, ',', &v);
   for (auto iter = v.begin(); iter != v.end(); ++iter) {
-    if (!::base::StringToDouble(*iter, &dv))
+    std::string str = *iter;
+    if (str.empty())
+      return false;
+    if (str[str.length() - 1] == 'f')
+      str = str.substr(0, str.length() - 1);
+    if (!::base::StringToDouble(str, &dv))
       return false;
 
     vec->push_back(dv);
