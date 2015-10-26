@@ -20,7 +20,9 @@ class AZER_EXPORT ConfigNode : public Resource {
   typedef std::pair<std::string, std::string> Attribute;
   typedef std::vector<Attribute> Attributes;
 
-  explicit ConfigNode(const ResPath& path);
+  static ConfigNodePtr InitFromXML(util::xml::Element* element);
+  static ConfigNodePtr InitFromXMLStr(const std::string& str);
+
   ConfigNode();
 
   const std::string& tagname() const { return tagname_;}
@@ -28,9 +30,6 @@ class AZER_EXPORT ConfigNode : public Resource {
   const ConfigNode* parent() const { return parent_;}
   ConfigNode* root();
   const ConfigNode* root() const;
-
-  const ResPath& respath() const;
-  ResPath package_path() const;
 
   void AddAttr(const std::string& name, const std::string& value);
   const Attributes& attributes() const { return attrs_;}
@@ -53,6 +52,7 @@ class AZER_EXPORT ConfigNode : public Resource {
   bool GetTextAsVec4(Vector4* v) const;
   bool GetTextAsQuaternion(Quaternion* v) const;
 
+  std::string GetChildTextString(const std::string& name) const;
   bool GetChildText(const std::string& name, std::string* text) const;
   bool GetChildTextAsDouble(const std::string& name, double* v) const;
   bool GetChildTextAsFloat(const std::string& name, float* v) const;
@@ -74,7 +74,6 @@ class AZER_EXPORT ConfigNode : public Resource {
   std::vector<ConfigNodePtr> GetNamedChildren(const std::string& name) const;
   ConfigNodePtr GetFirstChildNamed(const std::string& name) const;
   ConfigNodePtr GetLastChildNamed(const std::string& name) const;
-  bool InitFromXML(util::xml::Element* element);
 
   std::string print_info();
  private:
@@ -87,7 +86,6 @@ class AZER_EXPORT ConfigNode : public Resource {
   Attributes attrs_;
   std::string tagname_;
   std::string text_;
-  const ResPath respath_;
   DISALLOW_COPY_AND_ASSIGN(ConfigNode);
 };
 }  // namespace azer
