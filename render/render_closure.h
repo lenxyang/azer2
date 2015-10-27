@@ -19,6 +19,7 @@ class AZER_EXPORT RenderClosure : public EffectParamsProviderContainer {
   void SetVertexBuffer(VertexBufferPtr vb);
   void SetIndicesBuffer(IndicesBufferPtr ib);
 
+  virtual void Render(Renderer* renderer, Effect* effect);
   void Draw(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
   void DrawIndex(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
 

@@ -22,7 +22,9 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
 
   void AddRenderClosure(RenderClosurePtr ptr);
 
-  void UpdateParams(const FrameArgs& args) override;
+  void UpdateProviderParams(const FrameArgs& args) override;
+  virtual void Render(Renderer* renderer, Effect* effect);
+  
   void Draw(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
   void DrawIndex(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
 

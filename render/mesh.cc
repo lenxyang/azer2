@@ -20,10 +20,10 @@ void Mesh::AddRenderClosure(RenderClosurePtr ptr) {
   closure_.push_back(ptr);
 }
 
-void Mesh::UpdateParams(const FrameArgs& args) {
-  EffectParamsProviderContainer::UpdateParams(args);
+void Mesh::UpdateProviderParams(const FrameArgs& args) {
+  EffectParamsProviderContainer::UpdateProviderParams(args);
   for (auto iter = closure_.begin(); iter != closure_.end(); ++iter) {
-    (*iter)->UpdateParams(args);
+    (*iter)->UpdateProviderParams(args);
   }
 }
 
@@ -42,4 +42,7 @@ void Mesh::DrawIndex(Renderer* renderer, Effect* effect,
   }
 }
 
+void Mesh::Render(Renderer* renderer, Effect* effect) {
+  DrawIndex(renderer, effect, kTriangleList);
+}
 }  // namespace azer

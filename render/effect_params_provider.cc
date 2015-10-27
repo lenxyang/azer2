@@ -86,7 +86,7 @@ void EffectParamsProviderContainer::ApplyParams(Effect* effect) {
   }
 }
 
-void EffectParamsProviderContainer::UpdateParams(const FrameArgs& args) {
+void EffectParamsProviderContainer::UpdateProviderParams(const FrameArgs& args) {
   for (auto iter = vector_.begin(); iter != vector_.end(); ++iter) {
     (*iter)->UpdateParams(args);
   }

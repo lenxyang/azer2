@@ -29,6 +29,14 @@ void RenderClosure::DrawIndex(Renderer* renderer, Effect* effect,
   renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }
 
+void RenderClosure::Render(Renderer* renderer, Effect* effect) {
+  if (ib_.get()) {
+    DrawIndex(renderer, effect, kTriangleList);
+  } else {
+    Draw(renderer, effect, kTriangleList);
+  }
+}
+
 void RenderClosure::SetVertexBuffer(VertexBufferPtr vb) {
   vb_ = vb;
 }
