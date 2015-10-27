@@ -13,6 +13,20 @@ GeometryObject::GeometryObject(VertexDescPtr desc)
 GeometryObject::~GeometryObject() {
 }
 
+MeshPartPtr GeometryObject::CreateObject(Effect* effect) {
+  EntityPtr entity(new Entity(vb_, ib_));
+  MeshPartPtr part(new MeshPart(effect));
+  part->AddEntity(entity);
+  return part;
+}
+
+MeshPartPtr GeometryObject::CreateFrameObject(Effect* effect) {
+  EntityPtr entity(new Entity(vb_, frame_ib_));
+  MeshPartPtr part(new MeshPart(effect));
+  part->AddEntity(entity);
+  return part;
+}
+
 void GeometryObject::Render(Renderer* renderer) {
   vb_->Use(renderer);
   ib_->Use(renderer);

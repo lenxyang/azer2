@@ -5,6 +5,7 @@
 #include "azer/math/math.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/indices_buffer.h"
+#include "azer/render/mesh.h"
 #include "azer/render/renderer.h"
 #include "azer/render/transform_holder.h"
 #include "azer/render/util/effects/pvw_effect.h"
@@ -22,6 +23,9 @@ class GeometryObject : public ::base::RefCounted<GeometryObject> {
   VertexBuffer* GetVertexBuffer() { return vb_.get();}
   IndicesBuffer* GetIndicesBuffer() { return ib_.get(); }
   IndicesBuffer* GetFrameIndicesBuffer() { return frame_ib_.get();}
+
+  virtual MeshPartPtr CreateObject(Effect* effect);
+  virtual MeshPartPtr CreateFrameObject(Effect* effect);
 
   virtual void Render(Renderer* renderer);
   virtual void RenderWireframe(Renderer* renderer);

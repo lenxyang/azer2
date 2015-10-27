@@ -135,5 +135,13 @@ void BoxObject::Render(Renderer* renderer) {
   renderer->Draw(0, vb_->vertex_num());
 }
 
+MeshPartPtr BoxObject::CreateFrameObject(Effect* effect) {
+  EntityPtr entity(new Entity(vb_, frame_ib_));
+  entity->set_topology(kLineList);
+  MeshPartPtr part(new MeshPart(effect));
+  part->AddEntity(entity);
+  return part;
+}
+
 }  // namespace azer
 

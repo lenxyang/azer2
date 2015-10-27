@@ -7,27 +7,36 @@
 namespace azer {
 
 // class Entity
-Entity::Entity() {
+Entity::Entity() : topology_(kTriangleList) {
 }
 
 Entity::Entity(VertexBufferPtr vb, IndicesBufferPtr ib)
     : vb_(vb),
-      ib_(ib) {
+      ib_(ib),
+      topology_(kTriangleList) {
 }
 
 Entity::~Entity() {
 }
 
-void Entity::Draw(Renderer* renderer, PrimitiveTopology primitive) {
+void Entity::Render(Renderer* renderer) {
+  if (ib_.get()) {
+    DrawIndex(renderer);
+  } else {
+    Draw(renderer);
+  }
+}
+
+void Entity::Draw(Renderer* renderer) {
   vb_->Use(renderer);
-  renderer->SetPrimitiveTopology(primitive);
+  renderer->SetPrimitiveTopology(topology());
   renderer->Draw(0, vb_->vertex_num());
 }
 
-void Entity::DrawIndex(Renderer* renderer, PrimitiveTopology primitive) {
+void Entity::DrawIndex(Renderer* renderer) {
   vb_->Use(renderer);
   ib_->Use(renderer);
-  renderer->SetPrimitiveTopology(primitive);
+  renderer->SetPrimitiveTopology(topology());
   renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }
 
@@ -106,7 +115,7 @@ void MeshPart::Render(Renderer* renderer) {
   for (int32 i = 0; i < vecptr_->entity_count(); ++i) {
     effect_->Use(renderer);
     Entity* entity = vecptr_->entity_at(i);
-    entity->DrawIndex(renderer, kTriangleList);
+    entity->Render(renderer);
   }
 }
 

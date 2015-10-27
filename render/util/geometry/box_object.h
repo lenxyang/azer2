@@ -10,6 +10,7 @@ class BoxObject : public GeometryObject {
   ~BoxObject();
 
   void Render(Renderer* renderer) override;
+  MeshPartPtr CreateFrameObject(Effect* effect) override;
  private:
   void InitHardwareBuffers();
   DISALLOW_COPY_AND_ASSIGN(BoxObject);

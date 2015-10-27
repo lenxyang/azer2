@@ -27,8 +27,9 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   void SetVertexBuffer(VertexBufferPtr vb);
   void SetIndicesBuffer(IndicesBufferPtr ib);
 
-  void Draw(Renderer* renderer, PrimitiveTopology primitive);
-  void DrawIndex(Renderer* renderer, PrimitiveTopology primitive);
+  void Draw(Renderer* renderer);
+  void DrawIndex(Renderer* renderer);
+  virtual void Render(Renderer* renderer);
 
   EntityPtr DeepCopy();
 
@@ -36,9 +37,13 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   const Vector3& vmax() { return vmax_;}
   Vector3* mutable_vmin() { return &vmin_;}
   Vector3* mutable_vmax() { return &vmax_;}
+
+  PrimitiveTopology topology() const { return topology_;}
+  void set_topology(PrimitiveTopology top) { topology_ = top;}
  private:
   VertexBufferPtr vb_;
   IndicesBufferPtr ib_;
+  PrimitiveTopology topology_;
   Vector3 vmin_;
   Vector3 vmax_;
   DISALLOW_COPY_AND_ASSIGN(Entity);
@@ -75,7 +80,7 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
   MeshPart& operator = (const MeshPart& part);
 
   void UpdateProviderParams(const FrameArgs& args) override;
-  virtual void Render(Renderer* renderer);
+  void Render(Renderer* renderer);
 
   Effect* effect() { return effect_.get();}
   void SetEffect(Effect* effect) { effect_ = effect;}

@@ -17,9 +17,10 @@ class MainDelegate : public nelf::RenderDelegate {
  private:
   Camera camera_;
   DirLight light_;
-  ColoredDiffuseEffectPtr diffuse_effect_;
-  GeometryObjectPtr object_;
+  ColoredDiffuseEffectPtr effect_;
+  azer::MeshPtr object_;
   EffectProviderPtr provider_;
+  EffectAdapterContext context_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -27,6 +28,8 @@ bool MainDelegate::Initialize() {
   light_.dir = azer::Vector4(-0.6f, -0.6f, -0.2f, 0.0f);
   light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
   light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
+  context_.RegisteAdapter(new PVWEffectAdapter);
+  context_.RegisteAdapter(new ColoredEffectAdapter);
 
   Vector3 camera_pos(0.0f, 3.0f, 5.0f);
   Vector3 lookat(0.0f, 0.0f, 0.0f);
@@ -34,11 +37,14 @@ bool MainDelegate::Initialize() {
   camera_.reset(camera_pos, lookat, up);
 
   RenderSystem* rs = RenderSystem::Current();
-  diffuse_effect_ = CreateColoredDiffuseEffect();
+  effect_ = CreateColoredDiffuseEffect();
   
-  object_ = new ConeObject(diffuse_effect_->GetVertexDesc());
+  GeometryObjectPtr geo = new ConeObject(effect_->GetVertexDesc());
+  object_ = new Mesh(&context_);
+  object_->AddMeshPart(geo->CreateObject(effect_.get()));
   provider_ = new EffectProvider(&light_, &camera_);
   provider_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+  object_->AddProvider(provider_);
   window()->SetRealTimeRender(true);
   return true;
 }
@@ -46,7 +52,7 @@ bool MainDelegate::Initialize() {
 void MainDelegate::OnUpdate(const FrameArgs& args) {
   Radians rad((3.14f) * (args.delta().InSecondsF()) * 0.2f);
   provider_->GetTransformHolder()->rotate(Vector3(1.0f, 0.0f, 0.0f), rad);
-  provider_->UpdateParams(args);
+  object_->UpdateProviderParams(args);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -57,9 +63,6 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
-  diffuse_effect_->Use(renderer);
-  ColoredEffectAdapter diffuse_adapter;
-  diffuse_adapter.Apply(diffuse_effect_.get(), provider_.get());
   object_->Render(renderer);
 }
 
