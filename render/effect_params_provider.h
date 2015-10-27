@@ -51,7 +51,7 @@ class AZER_EXPORT EffectParamsProviderContainer :
   void RemoveProvider(EffectParamsProviderPtr provider);
   void ResetProvider();
 
-  virtual void UpdateParams(const FrameArgs& args);
+  virtual void UpdateProviderParams(const FrameArgs& args);
   void ApplyParams(Effect* effect);
  protected:
   void RebuildCache();

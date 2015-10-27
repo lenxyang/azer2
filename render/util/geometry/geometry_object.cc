@@ -22,9 +22,9 @@ void GeometryObject::Render(Renderer* renderer) {
 
 void GeometryObject::RenderWireframe(Renderer* renderer) {
   vb_->Use(renderer);
-  edge_ib_->Use(renderer);
+  frame_ib_->Use(renderer);
   renderer->SetPrimitiveTopology(kLineList);
-  renderer->DrawIndex(edge_ib_->indices_num(), 0, 0);
+  renderer->DrawIndex(frame_ib_->indices_num(), 0, 0);
 }
 
 }  // namespace azer

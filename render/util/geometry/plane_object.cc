@@ -77,7 +77,7 @@ void PlaneObject::InitHardwareBuffers() {
       CHECK(ipack.WriteAndAdvance(index1));
       CHECK(ipack.WriteAndAdvance(index2));
     }
-    edge_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
+    frame_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   }
 }
 }  // namespace azer

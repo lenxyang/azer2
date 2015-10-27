@@ -19,8 +19,9 @@ class GeometryObject : public ::base::RefCounted<GeometryObject> {
   GeometryObject(VertexDescPtr desc);
   ~GeometryObject();
 
-  VertexBufferPtr GetVertexBuffer() { return vb_;}
-  IndicesBufferPtr GetIndicesBuffer() { return ib_; }
+  VertexBuffer* GetVertexBuffer() { return vb_.get();}
+  IndicesBuffer* GetIndicesBuffer() { return ib_.get(); }
+  IndicesBuffer* GetFrameIndicesBuffer() { return frame_ib_.get();}
 
   virtual void Render(Renderer* renderer);
   virtual void RenderWireframe(Renderer* renderer);
@@ -28,7 +29,7 @@ class GeometryObject : public ::base::RefCounted<GeometryObject> {
   VertexDescPtr desc_;
   VertexBufferPtr vb_;
   IndicesBufferPtr ib_;
-  IndicesBufferPtr edge_ib_;
+  IndicesBufferPtr frame_ib_;
   DISALLOW_COPY_AND_ASSIGN(GeometryObject);
 };
 

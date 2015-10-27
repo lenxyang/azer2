@@ -54,8 +54,6 @@ source_set("render") {
     "movable.h",
     "overlay.cc",
     "overlay.h",
-    "render_closure.cc",
-    "render_closure.h",
     "render_system.h",
     "render_system.cc",
     "render_system_loader.cc",

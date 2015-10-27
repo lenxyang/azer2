@@ -132,7 +132,7 @@ void SphereObject::InitHardwareBuffers() {
   RenderSystem* rs = RenderSystem::Current();
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  edge_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), edge_idata);
+  frame_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), edge_idata);
 }
 
 }  // namespace azer
