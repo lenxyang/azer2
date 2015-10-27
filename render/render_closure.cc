@@ -6,14 +6,11 @@ namespace azer {
 RenderClosure::RenderClosure() {
 }
 
-RenderClosure::RenderClosure(EffectAdapterContext* context)
-    : EffectParamsProviderContainer(context) {
+RenderClosure::RenderClosure() {
 }
 
 void RenderClosure::Draw(Renderer* renderer, Effect* effect,
                          PrimitiveTopology primitive) {
-  ApplyParams(effect);
-  effect->Use(renderer);
   vb_->Use(renderer);
   renderer->SetPrimitiveTopology(primitive);
   renderer->Draw(0, vb_->vertex_num());
@@ -21,8 +18,6 @@ void RenderClosure::Draw(Renderer* renderer, Effect* effect,
 
 void RenderClosure::DrawIndex(Renderer* renderer, Effect* effect,
                               PrimitiveTopology primitive) {
-  ApplyParams(effect);
-  effect->Use(renderer);
   vb_->Use(renderer);
   ib_->Use(renderer);
   renderer->SetPrimitiveTopology(primitive);
@@ -31,9 +26,9 @@ void RenderClosure::DrawIndex(Renderer* renderer, Effect* effect,
 
 void RenderClosure::Render(Renderer* renderer, Effect* effect) {
   if (ib_.get()) {
-    DrawIndex(renderer, effect, kTriangleList);
+    DrawIndex(renderer, kTriangleList);
   } else {
-    Draw(renderer, effect, kTriangleList);
+    Draw(renderer, kTriangleList);
   }
 }
 
