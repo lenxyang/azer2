@@ -19,6 +19,11 @@ void EffectAdapterContext::RegisteAdapter(EffectParamsAdapter* adapter) {
 }
 
 const EffectParamsAdapter* EffectAdapterContext::LookupAdapter(
+    const EffectAdapterKey& key) const {
+  return LookupAdapter(key.first, key.second);
+}
+
+const EffectParamsAdapter* EffectAdapterContext::LookupAdapter(
     const std::string& effect_string, const std::string& provider_string) const {
   EffectAdapterKey key = std::make_pair(effect_string, provider_string);
   auto iter = dict_.find(key);

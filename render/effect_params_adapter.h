@@ -55,6 +55,7 @@ class AZER_EXPORT EffectAdapterContext {
   ~EffectAdapterContext();
 
   void RegisteAdapter(EffectParamsAdapter* adapter);
+  const EffectParamsAdapter* LookupAdapter(const EffectAdapterKey& key) const;
   const EffectParamsAdapter* LookupAdapter(const std::string& effect_string,
                                            const std::string& provider_string) const;
  private:
