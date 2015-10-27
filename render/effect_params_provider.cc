@@ -41,7 +41,11 @@ EffectParamsProviderContainer::~EffectParamsProviderContainer() {
 }
 
 void EffectParamsProviderContainer::RebuildCache() {
-  cached_.reset(new EffectAdapterCache(context_, &vector_));
+  if (context_) {
+    cached_.reset(new EffectAdapterCache(context_, &vector_));
+  } else {
+    cached_.reset();
+  }
 }
 
 void EffectParamsProviderContainer::SetEffectAdapterContext(

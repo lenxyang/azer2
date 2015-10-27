@@ -17,7 +17,7 @@ class MainDelegate : public nelf::RenderDelegate {
  private:
   Camera camera_;
   DirLight light_;
-  RenderClosurePtr render_closure_;
+  MeshPartPtr meshpart_;
   ColoredDiffuseEffectPtr diffuse_effect_;
   EffectAdapterContext context_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
@@ -40,17 +40,18 @@ bool MainDelegate::Initialize() {
   provider->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
   context_.RegisteAdapter(new ColoredEffectAdapter);
-  render_closure_ = new RenderClosure(&context_);
-  render_closure_->SetVertexBuffer(obj->GetVertexBuffer());
-  render_closure_->SetIndicesBuffer(obj->GetIndicesBuffer());
-  render_closure_->AddProvider(provider);
+  meshpart_ = new MeshPart(diffuse_effect_.get());
+  meshpart_->SetEffectAdapterContext(&context_);
+  EntityPtr entity(new Entity(obj->GetVertexBuffer(), obj->GetIndicesBuffer()));
+  meshpart_->AddEntity(entity.get());
+  meshpart_->AddProvider(provider);
 
   window()->SetRealTimeRender(true);
   return true;
 }
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
-  render_closure_->UpdateParams(args);
+  meshpart_->UpdateProviderParams(args);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -61,7 +62,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
-  render_closure_->DrawIndex(renderer, diffuse_effect_.get(), azer::kTriangleList);
+  meshpart_->Render(renderer);
 }
 
 int main(int argc, char* argv[]) {

@@ -39,12 +39,15 @@ bool MainDelegate::Initialize() {
   RenderSystem* rs = RenderSystem::Current();
   diffuse_effect_ = CreateColoredDiffuseEffect();
   GeometryObjectPtr obj = new CylinderObject(diffuse_effect_->GetVertexDesc());
-  RenderClosurePtr  render_closure(new RenderClosure(&context_));
-  render_closure->SetVertexBuffer(obj->GetVertexBuffer());
-  render_closure->SetIndicesBuffer(obj->GetIndicesBuffer());
-  render_closure->AddProvider(EffectParamsProviderPtr(new MaterialEffectProvider));
+
+  MeshPartPtr meshpart = new MeshPart(diffuse_effect_);
+  EntityPtr entity(new Entity(obj->GetVertexBuffer(), obj->GetIndicesBuffer()));
+  meshpart->AddEntity(entity.get());
+  meshpart->AddProvider(EffectParamsProviderPtr(new MaterialEffectProvider));
+
+
   mesh_ = new Mesh(&context_);
-  mesh_->AddRenderClosure(render_closure);
+  mesh_->AddMeshPart(meshpart);
   EnvironmentEffectProvider* provider = new EnvironmentEffectProvider(
       &light_, &camera_);
   provider->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
@@ -55,7 +58,7 @@ bool MainDelegate::Initialize() {
 }
 
 void MainDelegate::OnUpdate(const FrameArgs& args) {
-  mesh_->UpdateParams(args);
+  mesh_->UpdateProviderParams(args);
 }
 
 void MainDelegate::OnRender(const FrameArgs& args) {
@@ -66,7 +69,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
-  mesh_->DrawIndex(renderer, diffuse_effect_.get(), azer::kTriangleList);
+  mesh_->Render(renderer);
 }
 
 int main(int argc, char* argv[]) {
