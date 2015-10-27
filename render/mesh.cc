@@ -27,22 +27,10 @@ void Mesh::UpdateProviderParams(const FrameArgs& args) {
   }
 }
 
-void Mesh::Draw(Renderer* renderer, Effect* effect, PrimitiveTopology primitive) {
-  ApplyParams(effect);
-  for (auto iter = closure_.begin(); iter != closure_.end(); ++iter) {
-    (*iter)->Draw(renderer, effect, primitive);
-  }
-}
-
-void Mesh::DrawIndex(Renderer* renderer, Effect* effect,
-                     PrimitiveTopology primitive) {
+void Mesh::Render(Renderer* renderer, Effect* effect) {
   ApplyParams(effect);
   for (auto iter = closure_.begin(); iter != closure_.end(); ++iter) {
     (*iter)->DrawIndex(renderer, effect, primitive);
   }
-}
-
-void Mesh::Render(Renderer* renderer, Effect* effect) {
-  DrawIndex(renderer, effect, kTriangleList);
 }
 }  // namespace azer

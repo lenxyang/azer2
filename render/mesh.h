@@ -25,9 +25,6 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   void UpdateProviderParams(const FrameArgs& args) override;
   virtual void Render(Renderer* renderer, Effect* effect);
   
-  void Draw(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
-  void DrawIndex(Renderer* renderer, Effect* effect, PrimitiveTopology primitive);
-
   const Vector3& vmin() { return vmin_;}
   const Vector3& vmax() { return vmax_;}
   Vector3* mutable_vmin() { return &vmin_;}
