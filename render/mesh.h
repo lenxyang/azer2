@@ -123,5 +123,5 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
 
 typedef scoped_refptr<Mesh> MeshPtr;
 
-void UpdateVMinAndVMax(const Vector3 pos, Vector3* vmin, Vector3* vmax);
+void AZER_EXPORT UpdateVMinAndVMax(const Vector3 pos, Vector3* vmin, Vector3* vmax);
 }  // namespace azer
