@@ -112,8 +112,8 @@ void MeshPart::UpdateProviderParams(const FrameArgs& args) {
 
 void MeshPart::Render(Renderer* renderer) {
   ApplyParams(effect_.get());
+  effect_->Use(renderer);
   for (int32 i = 0; i < vecptr_->entity_count(); ++i) {
-    effect_->Use(renderer);
     Entity* entity = vecptr_->entity_at(i);
     entity->Render(renderer);
   }
