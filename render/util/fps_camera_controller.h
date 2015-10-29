@@ -27,13 +27,18 @@ class TransformHolderRetore {
 class FPSCameraController : public nelf::EventListener {
  public:
   FPSCameraController(Camera* camera);
+
+  void Update(const azer::FrameArgs& args);
+
   void OnKeyPressed(const ui::KeyEvent& event) override;
   void OnKeyReleased(const ui::KeyEvent& event) override;
-  void Update(const azer::FrameArgs& args);
-  void OnMousePressed(const ui::MouseEvent& event);
-  void OnMouseDragged(const ui::MouseEvent& event);
-  void OnMouseReleased(const ui::MouseEvent& event);
+  void OnMousePressed(const ui::MouseEvent& event) override;
+  void OnMouseDragged(const ui::MouseEvent& event) override;
+  void OnMouseReleased(const ui::MouseEvent& event) override;;
+  void OnMouseCaptureLost() override;
+  void OnLostFocus() override;
  private:
+  void ResetState();
   void RotateCamera(const gfx::Point& prev, const gfx::Point& cur);
 
   bool orientation_dragging_;

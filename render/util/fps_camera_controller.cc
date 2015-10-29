@@ -32,6 +32,15 @@ FPSCameraController::FPSCameraController(Camera* camera)
   orientation_dragging_ = false;
 }
 
+void FPSCameraController::ResetState() {
+  posx_ = 0;
+  posz_ = 0;
+  posy_ = 0;
+  negx_ = 0;
+  negz_ = 0;
+  negy_ = 0;
+}
+
 void FPSCameraController::OnKeyPressed(const ui::KeyEvent& event) {
   Camera* camera = camera_;
   if (event.key_code() == ui::VKEY_W) {
@@ -63,6 +72,24 @@ void FPSCameraController::OnKeyReleased(const ui::KeyEvent& event) {
   } else if (event.key_code() == ui::VKEY_R) {
     negy_ = 0;
   }
+}
+
+void FPSCameraController::OnMouseCaptureLost() {
+  if (orientation_dragging_) {
+    storer_.reset();
+    orientation_dragging_ = false;
+  }
+
+  ResetState();
+}
+
+void FPSCameraController::OnLostFocus() {
+  if (orientation_dragging_) {
+    storer_.reset();
+    orientation_dragging_ = false;
+  }
+
+  ResetState();
 }
 
 void FPSCameraController::Update(const azer::FrameArgs& args) {
