@@ -19,9 +19,11 @@ class Vector3 {
   Vector3(const Vector4& vec);
  public:
   float length() const;
-
+  
   friend Vector3 operator *(const Vector3& v, const float scalar);
+  friend Vector3 operator *(const Vector3& v1, const Vector3& v2);
   friend Vector3 operator /(const Vector3& v, const float scalar);
+  friend Vector3 operator /(const Vector3& v1, const Vector3& v2);
   friend Vector3 operator + (const Vector3& v1, const Vector3& v2);
   friend Vector3 operator - (const Vector3& v1, const Vector3& v2);
 
@@ -43,6 +45,8 @@ class Vector3 {
   friend Vector3 CrossProduct(const Vector3 v1, const Vector3 v2);
   Vector3& Normalize();
   Vector3 NormalizeCopy() const;
+  Vector3& inverse();
+  Vector3 InverseCopy() const;
 
   static const Vector3& kZero;
   static const Vector3& kUnitX;

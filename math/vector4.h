@@ -26,7 +26,9 @@ class Vector4 {
   float& operator[](int index);
 
   friend Vector4 operator *(const Vector4& v, const float scalar);
+  friend Vector4 operator *(const Vector4& v1, const Vector4& v2);
   friend Vector4 operator /(const Vector4& v, const float scalar);
+  friend Vector4 operator /(const Vector4& v1, const Vector4& v2);
   friend Vector4 operator + (const Vector4& v1, const Vector4& v2);
   friend Vector4 operator - (const Vector4& v1, const Vector4& v2);
 

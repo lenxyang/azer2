@@ -125,8 +125,16 @@ inline Vector3 operator *(const Vector3& v, const float scalar) {
   return Vector3(v.x * scalar, v.y * scalar, v.z * scalar);
 }
 
+inline Vector3 operator *(const Vector3& v1, const Vector3 v2) {
+  return Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+}
+
 inline Vector3 operator /(const Vector3& v, const float scalar) {
   return Vector3(v.x / scalar, v.y / scalar, v.z / scalar);
+}
+
+inline Vector3 operator /(const Vector3& v1, const Vector3 v2) {
+  return Vector3(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
 }
 
 inline Vector3 operator + (const Vector3& v1, const Vector3& v2) {
@@ -150,6 +158,17 @@ inline Vector3& Vector3::operator = (const Vector4 & vec) {
 inline Vector3 Vector3::RotateCopy(const Vector3& axis, const Radians rad) const {
   Quaternion Q(axis, rad);
   return Q * *this;
+}
+
+inline Vector3& Vector3::inverse() {
+  x = 1.0 / x;
+  y = 1.0 / y;
+  z = 1.0 / z;
+  return *this;
+}
+
+inline Vector3 Vector3::InverseCopy() const {
+  return Vector3(1.0f / x, 1.0f / y, 1.0f / z);
 }
 
 inline void Vector3::Rotate(const Vector3& axis, const Radians rad) {
