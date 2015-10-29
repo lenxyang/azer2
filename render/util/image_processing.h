@@ -13,7 +13,7 @@ class SimpleImageProcessingEffect : public Effect {
   static const char kEffectName[];
   SimpleImageProcessingEffect();
 
-  const char* name() const override;
+  const char* GetEffectName() const override;
   bool Init(const ShaderPrograms& source) override;
   void SetInputTex(TexturePtr texture) { texture_ = texture;}
 

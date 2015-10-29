@@ -28,7 +28,7 @@ FPSCameraController::FPSCameraController(Camera* camera)
       negx_(0),
       negz_(0),
       negy_(0),
-      storer_(camera->GetTransformHolder()) {
+      storer_(camera->mutable_holder()) {
   orientation_dragging_ = false;
 }
 
@@ -94,7 +94,7 @@ void FPSCameraController::OnLostFocus() {
 
 void FPSCameraController::Update(const azer::FrameArgs& args) {
   float unit = args.delta().InSecondsF() * 32.0f;
-  TransformHolder* holder = camera_->GetTransformHolder();
+  TransformHolder* holder = camera_->mutable_holder();
   holder->strafe((posx_ - negx_) * unit);
   holder->walk((posz_ - negz_) * unit);
   holder->fly((posy_ - negy_)* unit);
@@ -125,7 +125,7 @@ void FPSCameraController::RotateCamera(const gfx::Point& prev,
                                        const gfx::Point& cur) {
   using azer::Degree;
   storer_.restore();
-  TransformHolder* holder = camera_->GetTransformHolder();
+  TransformHolder* holder = camera_->mutable_holder();
   Degree to_yaw = Degree(cur.x() - prev.x()) * 0.1;
   // holder->yaw(to_yaw);
   holder->rotate(azer::Vector3(0.0f, 1.0f, 0.0f), to_yaw);

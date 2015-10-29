@@ -33,9 +33,9 @@ class AZER_EXPORT Effect : public Resource {
   explicit Effect(RenderSystem* rs);
   ~Effect() override;
 
-  virtual const char* name() const = 0;
+  virtual const char* GetEffectName() const = 0;
   virtual bool Init(const ShaderPrograms& programs) = 0;
-  void Use(Renderer* renderer);
+  void Apply(Renderer* renderer);
 
   // light and material didn't have a fixed structure
   // all will be dependent its implementation.

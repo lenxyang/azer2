@@ -27,7 +27,7 @@ IndepDiffuseEffect::IndepDiffuseEffect()
 IndepDiffuseEffect::~IndepDiffuseEffect() {
 }
 
-const char* IndepDiffuseEffect::name() const {
+const char* IndepDiffuseEffect::GetEffectName() const {
    return kEffectName;
 }
 bool IndepDiffuseEffect::Init(const ShaderPrograms& sources) {

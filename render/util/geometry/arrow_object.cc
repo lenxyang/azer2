@@ -39,12 +39,12 @@ void ArrowObject::Render(const Matrix4& world,  const Matrix4& pvw,
   effect->SetColor(color_);
   effect->SetWorld(world * cone_world_);
   effect->SetPVW(pvw * cone_world_);
-  effect->Use(renderer);
+  renderer->UseEffect(effect);
   cone_->Render(renderer);
 
   effect->SetWorld(world * cylinder_world_);
   effect->SetPVW(pvw * cylinder_world_);
-  effect->Use(renderer);
+  renderer->UseEffect(effect);
   cylinder_->Render(renderer);
 }
 }  // namespace azer

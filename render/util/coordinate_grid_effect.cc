@@ -18,7 +18,7 @@ CoordinateGridEffect::CoordinateGridEffect(RenderSystem* rs)
   Init(rs);
 }
 
-const char* CoordinateGridEffect::name() const {
+const char* CoordinateGridEffect::GetEffectName() const {
   return kEffectName;
 }
 

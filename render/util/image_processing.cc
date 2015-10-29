@@ -20,7 +20,7 @@ SimpleImageProcessingEffect::SimpleImageProcessingEffect()
     : azer::Effect(azer::RenderSystem::Current()) {
 }
 
-const char* SimpleImageProcessingEffect::name() const {
+const char* SimpleImageProcessingEffect::GetEffectName() const {
    return kEffectName;
 }
 bool SimpleImageProcessingEffect::Init(const ShaderPrograms& sources) {
@@ -82,7 +82,7 @@ void ImageProcessing::Processing() {
   renderer->Use();
   renderer->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
   renderer->ClearDepthAndStencil();
-  effect_->Use(renderer);
+  renderer->UseEffect(effect_.get());
   object_->Render(renderer);
   Texture* tex = renderer->GetRenderTarget(0)->GetTexture();
   CHECK(tex->CopyTo(output_.get()));

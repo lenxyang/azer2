@@ -143,16 +143,16 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   
   effect_->SetPVW(camera_.GetProjViewMatrix());
   effect_->SetTexture(tex1_);
-  effect_->Use(renderer);
-  ib_->Use(renderer);
-  plane1_->Use(renderer);
+  renderer->UseEffect(effect_.get());
+  renderer->UseIndicesBuffer(ib_.get());
+  renderer->UseVertexBufferGroup(plane1_.get());
   renderer->SetPrimitiveTopology(kTriangleList);
   renderer->DrawIndex(ib_->indices_num(), 0);
 
   effect_->SetTexture(tex2_);
-  effect_->Use(renderer);
-  ib_->Use(renderer);
-  plane2_->Use(renderer);
+  renderer->UseEffect(effect_.get());
+  renderer->UseIndicesBuffer(ib_.get());
+  renderer->UseVertexBufferGroup(plane2_.get());
   renderer->DrawIndex(ib_->indices_num(), 0);
 }
 

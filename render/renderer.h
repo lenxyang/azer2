@@ -7,20 +7,21 @@
 #include "base/memory/ref_counted.h"
 
 #include "azer/base/export.h"
-#include "azer/render/indices_buffer.h"
-#include "azer/render/blending.h"
 #include "azer/render/depth_buffer.h"
-#include "azer/render/gpu_program.h"
-#include "azer/render/gpu_constants_table.h"
 #include "azer/render/render_target.h"
 #include "azer/render/render_system_enum.h"
-#include "azer/render/texture.h"
-#include "azer/render/vertex_buffer.h"
 #include "azer/render/viewport.h"
 
 namespace azer {
 
+class Blending;
+class Effect;
+class IndicesBuffer;
+class GpuConstantsTable;
 class RenderSystem;
+class Texture;
+class VertexBuffer;
+class VertexBufferGroup;
 
 class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
  public:
@@ -49,6 +50,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void SaveState() = 0;
   virtual void RestoreState() = 0;
 
+  void UseEffect(Effect* effect); 
   virtual void UseVertexBuffer(VertexBuffer* vb) = 0;
   virtual void UseVertexBufferGroup(VertexBufferGroup* vbg) = 0;
   virtual void UseIndicesBuffer(IndicesBuffer* ib) = 0;

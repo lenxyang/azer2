@@ -35,8 +35,8 @@ class AZER_EXPORT Camera {
   const Matrix4& GetProjViewMatrix() const { return proj_view_mat_;}
 
   void Update();
-  TransformHolder* GetTransformHolder() { return &holder_;}
-  const TransformHolder* GetTransformHolder() const { return &holder_;}
+  TransformHolder* mutable_holder() { return &holder_;}
+  const TransformHolder& holder() const { return holder_;}
 
   const Frustrum& frustrum() const { return frustrum_;}
   Frustrum& frustrum() { return frustrum_;}
@@ -55,10 +55,10 @@ class AZER_EXPORT Camera {
 };
 
 inline std::ostream& operator << (std::ostream& os, const Camera& camera) {
-  const TransformHolder* holder = camera.GetTransformHolder();
-  os << "azer::camera info{ dir:" << holder->direction()
-     << ", up: " << holder->up()
-     << ", pos: " << holder->position() << "}";
+  const TransformHolder& holder = camera.holder();
+  os << "azer::camera info{ dir:" << holder.direction()
+     << ", up: " << holder.up()
+     << ", pos: " << holder.position() << "}";
   return os;
 }
 }  // namespace azer

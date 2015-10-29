@@ -29,12 +29,12 @@ void CoordinateAxis::Render(const Matrix4& world,  const Matrix4& pvw,
   effect->SetColor(color_);
   effect->SetWorld(world * cone_world_);
   effect->SetPVW(pvw * cone_world_);
-  effect->Use(renderer);
+  renderer->UseEffect(effect);
   cone->Render(renderer);
 
   effect->SetWorld(world * cylinder_world_);
   effect->SetPVW(pvw * cylinder_world_);
-  effect->Use(renderer);
+  renderer->UseEffect(effect);
   cylinder->Render(renderer);
 }
 
@@ -84,7 +84,7 @@ void AxesFrames::Render(const Matrix4& world,  const Matrix4& pvw,
   effect_->SetColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
   effect_->SetWorld(world * sphere_world);
   effect_->SetPVW(pvw * sphere_world);
-  effect_->Use(renderer);
+  renderer->UseEffect(effect_.get());
   sphere_->Render(renderer);
 }
 

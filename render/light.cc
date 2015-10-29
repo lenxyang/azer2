@@ -19,12 +19,12 @@ Texture* Light::GetShadowMap() {
 }
 
 void Light::OnPositionChanged(const Vector3& origin_position) {
-  camera_.GetTransformHolder()->SetPosition(position());
-  camera_.GetTransformHolder()->set_orientation(orientation());
+  camera_.mutable_holder()->SetPosition(position());
+  camera_.mutable_holder()->set_orientation(orientation());
 }
 
 void Light::OnOrientationChanged(const Quaternion& origin_orientation) {
-  camera_.GetTransformHolder()->SetPosition(position());
-  camera_.GetTransformHolder()->set_orientation(orientation());
+  camera_.mutable_holder()->SetPosition(position());
+  camera_.mutable_holder()->set_orientation(orientation());
 }
 }  // namespace azer

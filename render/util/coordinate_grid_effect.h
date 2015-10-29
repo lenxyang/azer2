@@ -23,7 +23,7 @@ class CoordinateGridEffect : public Effect {
     Vector4 diffuse;
   };
 #pragma pack(pop)
-  const char* name() const override;
+  const char* GetEffectName() const override;
   struct Vertex {
     Vector4 position;
     Vertex(const Vector4& in_position)

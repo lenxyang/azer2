@@ -27,7 +27,7 @@ DiffuseEffect::DiffuseEffect()
 DiffuseEffect::~DiffuseEffect() {
 }
 
-const char* DiffuseEffect::name() const {
+const char* DiffuseEffect::GetEffectName() const {
    return kEffectName;
 }
 bool DiffuseEffect::Init(const ShaderPrograms& sources) {

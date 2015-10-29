@@ -63,6 +63,7 @@ source_set("render") {
     "render_target.h",
     "render_system_enum.cc",
     "render_system_enum.h",
+    "renderer.cc",
     "reusable_object.cc",
     "reusable_object.h",
     "reusable_object_util.cc",

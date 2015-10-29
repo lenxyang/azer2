@@ -81,8 +81,8 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   effect_->SetPVW(pvw);
-  effect_->Use(renderer.get());
-  vb_->Use(renderer.get());
+  renderer->UseEffect(effect_.get());
+  renderer->UseVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleList);
   renderer->Draw(3, 0);
 }

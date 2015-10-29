@@ -8,6 +8,9 @@
 #include "azer/math/math.h"
 #include "azer/base/export.h"
 #include "azer/base/string.h"
+#include "azer/render/blending.h"
+#include "azer/render/gpu_constants_table.h"
+#include "azer/render/indices_buffer.h"
 #include "azer/render/render_capability.h"
 #include "azer/render/renderer.h"
 #include "azer/render/surface.h"
@@ -29,7 +32,6 @@ class SlotVertexBuffer;
 
 typedef scoped_refptr<Blending> BlendingPtr;
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTpablePtr;;
-typedef scoped_refptr<IndicesData> IndicesDataPtr;
 typedef scoped_refptr<Overlay> OverlayPtr;
 typedef scoped_refptr<Renderer> RendererPtr;
 typedef scoped_refptr<RenderTarget> RenderTargetPtr;

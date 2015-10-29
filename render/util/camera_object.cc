@@ -41,8 +41,8 @@ void CameraObject::Update(const Camera& camera) {
 }
 
 void CameraObject::Render(Renderer* renderer) {
-  const TransformHolder* camera_holder = camera_->GetTransformHolder();
-  TransformHolder holder = *camera_holder;
+  const TransformHolder& camera_holder = camera_->holder();
+  TransformHolder holder = camera_holder;
   holder.pitch(Degree(-90.0));
   Matrix4 rotate = std::move(holder.orientation().ToMatrix());
   axes_->Render(world_, pvw_, renderer);
@@ -52,18 +52,18 @@ void CameraObject::Render(Renderer* renderer) {
   Matrix4 frustrum_world = std::move(rotate * frustrum_tran);
   renderer->UseBlending(blending_.get(), 0);
   ColoredDiffuseEffectPtr effect = axes_->GetEffect();
-  effect->Use(renderer);
+  renderer->UseEffect(effect);
   effect->SetDirLight(axes_->light());
   effect->SetColor(frustrum_color_);
   effect->SetWorld(world_ * frustrum_world);
   effect->SetPVW(pvw_ * frustrum_world);
-  effect->Use(renderer);
+  renderer->UseEffect(effect);
   frustrum_object_->Render(renderer);
 
   effect->SetColor(sphere_color_);
   effect->SetWorld(world_);
   effect->SetPVW(pvw_);
-  effect->Use(renderer);
+  renderer->UseEffect(effect);
   sphere_->Render(renderer);
   renderer->ResetBlending();
 }

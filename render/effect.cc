@@ -22,7 +22,7 @@ Effect::~Effect() {
 void Effect::UseTexture(Renderer* renderer) {
 }
 
-void Effect::Use(Renderer* renderer) {
+void Effect::Apply(Renderer* renderer) {
   UseTexture(renderer);
   ApplyGpuConstantTable(renderer);
   UseConstantsTable(renderer);

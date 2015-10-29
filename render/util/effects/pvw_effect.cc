@@ -20,7 +20,7 @@ PVWEffect::PVWEffect(VertexDescPtr desc)
 PVWEffect::~PVWEffect() {
 }
 
-const char* PVWEffect::name() const {
+const char* PVWEffect::GetEffectName() const {
   return kEffectName;
 }
 bool PVWEffect::Init(const ShaderPrograms& sources) {

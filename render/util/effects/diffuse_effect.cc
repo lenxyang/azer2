@@ -19,7 +19,7 @@ ColoredDiffuseEffect::ColoredDiffuseEffect(VertexDescPtr desc)
 ColoredDiffuseEffect::~ColoredDiffuseEffect() {
 }
 
-const char* ColoredDiffuseEffect::name() const {
+const char* ColoredDiffuseEffect::GetEffectName() const {
    return kEffectName;
 }
 bool ColoredDiffuseEffect::Init(const ShaderPrograms& sources) {

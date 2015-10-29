@@ -90,12 +90,12 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullBack);
   renderer->EnableDepthTest(true);
-  pvw_effect_->Use(renderer);
+  renderer->UseEffect(pvw_effect_.get());
   PVWEffectAdapter pvw_adapter;
   pvw_adapter.Apply(pvw_effect_.get(), provider1_.get());
   sphere1_->RenderWireframe(renderer);
 
-  diffuse_effect_->Use(renderer);
+  renderer->UseEffect(diffuse_effect_.get());
   ColoredEffectAdapter diffuse_adapter;
   diffuse_adapter.Apply(diffuse_effect_.get(), provider2_.get());
   sphere2_->Render(renderer);

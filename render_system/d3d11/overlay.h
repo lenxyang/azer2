@@ -16,7 +16,7 @@ class D3DOverlayEffect : public Effect {
       : Effect((RenderSystem*)rs) {
   }
 
-  const char* name() const override;
+  const char* GetEffectName() const override;
   bool Init(const ShaderPrograms&) override { return true;}
   void SetTexture(TexturePtr texture) { texture_ = texture;}
   void SetTransform(const Matrix4& matrx);

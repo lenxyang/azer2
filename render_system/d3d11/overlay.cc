@@ -52,7 +52,7 @@ const char* D3DOverlayEffect::kPixelShaderProg = ""
     "}";
 
 
-const char* D3DOverlayEffect::name() const {
+const char* D3DOverlayEffect::GetEffectName() const {
   return kEffectName;
 }
 
@@ -169,7 +169,7 @@ void D3DOverlay::Render(Renderer* renderer) {
   effect_->SetVertex(vertex_);
   effect_->SetTexcoord(texcoord_);
   effect_->SetTexture(tex_);
-  effect_->Use(renderer);
+  renderer->UseEffect(effect_.get());
   renderer->UseVertexBuffer(vb_ptr_.get());
   renderer->SetPrimitiveTopology(azer::kTriangleList);
   renderer->Draw(6, 0);
