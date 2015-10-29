@@ -69,7 +69,6 @@ public:
 
   virtual ~IndicesBuffer();
 
-  virtual void Use(Renderer* renderer) = 0;
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
   IndicesData::IndexType type() const { return type_;}

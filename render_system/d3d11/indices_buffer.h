@@ -14,11 +14,11 @@ class D3DIndicesBuffer : public IndicesBuffer {
   D3DIndicesBuffer(const IndicesBuffer::Options& opt, D3DRenderSystem* rs);
   ~D3DIndicesBuffer() override;
 
-  void Use(Renderer* renderer) override;
   HardwareBufferDataPtr map(MapType flags) override;
   void unmap() override;
 
   bool Initialized() { return NULL != buffer_;}
+  ID3D11Buffer* buffer() { return buffer_;}
  private:
   bool Init(const IndicesData* data);
   bool locked_;

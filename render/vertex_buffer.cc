@@ -285,6 +285,7 @@ VertexBuffer* VertexBufferGroup::vertex_buffer_at(int32 index) {
 void VertexBufferGroup::add_vertex_buffer(VertexBufferPtr vb) {
   DCHECK(vertex_buffer_count() + 1 <= vdesc_->slot_count());
   add_vertex_buffer_at(vb, vertex_buffer_count() - 1);
+  OnVertexBufferChanged();
 }
 
 void VertexBufferGroup::add_vertex_buffer_at(VertexBufferPtr vb, int32 index) {
@@ -293,5 +294,6 @@ void VertexBufferGroup::add_vertex_buffer_at(VertexBufferPtr vb, int32 index) {
 
 void VertexBufferGroup::remove_vertex_buffer_at(int32 index) {
   vector_.erase(vector_.begin() + index);
+  OnVertexBufferChanged();
 }
 }  // namespace azer

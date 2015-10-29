@@ -50,15 +50,15 @@ void CircleObject::InitHardwareBuffers() {
 }
 
 void CircleObject::Render(Renderer* renderer) {
-  vb_->Use(renderer);
-  ib_->Use(renderer);
+  renderer->UseVertexBuffer(vb_.get());
+  renderer->UseIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(kTriangleList);
   renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }
 
 void CircleObject::RenderWireframe(Renderer* renderer) {
-  vb_->Use(renderer);
-  ib_->Use(renderer);
+  renderer->UseVertexBuffer(vb_.get());
+  renderer->UseIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(kLineList);
   renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }

@@ -78,40 +78,25 @@ void D3DVertexBuffer::unmap() {
   locked_ = false;
 }
 
-void D3DVertexBuffer::Use(Renderer* r) {
-  D3DRenderer* render = (D3DRenderer*)r;
-  ID3D11DeviceContext* d3d_context = render->GetContext(); 
-  UINT stride = element_size();
-  UINT offset = 0;
-  d3d_context->IASetVertexBuffers(0, 1, &buffer_, &stride, &offset);
-}
-
 // class D3DVertexBufferGroup
-namespace {
-static const int32 kMaxVertexBuffer = 16;
-}  // namespace
 D3DVertexBufferGroup::D3DVertexBufferGroup(VertexDescPtr desc)
     : VertexBufferGroup(desc) {
+  memcpy(vbs_, 0, sizeof(vbs_));
+  memcpy(stride_, 0, sizeof(stride_));
+  memcpy(offset_, 0, sizeof(offset_));
 }
 
-void D3DVertexBufferGroup::Use(Renderer* r) {
-  int32 count = 0;
-  ID3D11Buffer* vbs[kMaxVertexBuffer];
-  uint32 strides[kMaxVertexBuffer] = {0};
-  uint32 offsets[kMaxVertexBuffer] = {0};
-
-  count = GenVertexArray(vbs, strides);
-  D3DRenderer* render = (D3DRenderer*)r;
-  ID3D11DeviceContext* d3d_context = render->GetContext(); 
-  d3d_context->IASetVertexBuffers(0, count, vbs, strides, offsets);
+void D3DVertexBufferGroup::OnVertexBufferChanged() {
+  GenVertexArray();
 }
 
-int32 D3DVertexBufferGroup::GenVertexArray(ID3D11Buffer** buf, uint32* stride) {
+int32 D3DVertexBufferGroup::GenVertexArray() {
   for (int i = 0; i < vertex_buffer_count(); ++i) {
     D3DVertexBuffer* vb = (D3DVertexBuffer*)(vertex_buffer_at(i));
     DCHECK(vb->Initialized()) << "VertexBuffer not initialized.";
-    buf[i] = vb->buffer_;
-    stride[i] = vb->element_size();
+    vbs_[i] = vb->buffer_;
+    stride_[i] = vb->element_size();
+    offset_[i] = 0;
   }
   return vertex_buffer_count();
 }

@@ -47,6 +47,9 @@ class D3DRenderer : public Renderer {
   void SaveState() override;
   void RestoreState() override;
 
+  void UseVertexBuffer(VertexBuffer* vb) override;
+  void UseVertexBufferGroup(VertexBufferGroup* vbg) override;
+  void UseIndicesBuffer(IndicesBuffer* ib) override;
   void UseBlending(Blending* blending, float* factor, uint32 mask) override;
   void ResetBlending() override;
 

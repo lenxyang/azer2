@@ -151,6 +151,28 @@ void D3DRenderer::ResetBlending() {
   d3d_context_->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
 
+void D3DRenderer::UseVertexBuffer(VertexBuffer* vvb) {
+  DCHECK(typeid(*vvb) == typeid(D3DVertexBuffer));
+  D3DVertexBuffer* vb = static_cast<D3DVertexBuffer*>(vvb);
+  UINT stride = vb->element_size();
+  UINT offset = 0;
+  ID3D11Buffer* buf = vb->buffer();
+  d3d_context_->IASetVertexBuffers(0, 1, &buf, &stride, &offset);
+}
+
+void D3DRenderer::UseVertexBufferGroup(VertexBufferGroup* vbg) {
+  DCHECK(typeid(*vbg) == typeid(D3DVertexBufferGroup));
+  D3DVertexBufferGroup* vg = static_cast<D3DVertexBufferGroup*>(vbg);
+  d3d_context_->IASetVertexBuffers(0, vg->vertex_buffer_count(),
+                                   vg->buffer(), vg->strides(), vg->offsets());
+}
+
+void D3DRenderer::UseIndicesBuffer(IndicesBuffer* vib) {
+  DCHECK(typeid(*vib) == typeid(D3DIndicesBuffer));
+  D3DIndicesBuffer* ib = static_cast<D3DIndicesBuffer*>(vib);
+  d3d_context_->IASetIndexBuffer(ib->buffer(), TranslateIndexType(ib->type()), 0);
+}
+
 void D3DRenderer::UseBlending(Blending* vblending, float* factor, uint32 mask) {
   DCHECK(NULL != d3d_context_);
   D3DBlending* blending = (D3DBlending*)vblending;

@@ -170,7 +170,7 @@ void D3DOverlay::Render(Renderer* renderer) {
   effect_->SetTexcoord(texcoord_);
   effect_->SetTexture(tex_);
   effect_->Use(renderer);
-  vb_ptr_->Use(renderer);
+  renderer->UseVertexBuffer(vb_ptr_.get());
   renderer->SetPrimitiveTopology(azer::kTriangleList);
   renderer->Draw(6, 0);
   ResetBlending(renderer);

@@ -28,14 +28,15 @@ void Entity::Render(Renderer* renderer) {
 }
 
 void Entity::Draw(Renderer* renderer) {
-  vb_->Use(renderer);
+  renderer->UseVertexBuffer(vb_.get());
+  renderer->UseIndicesBuffer(NULL);
   renderer->SetPrimitiveTopology(topology());
   renderer->Draw(0, vb_->vertex_num());
 }
 
 void Entity::DrawIndex(Renderer* renderer) {
-  vb_->Use(renderer);
-  ib_->Use(renderer);
+  renderer->UseVertexBuffer(vb_.get());
+  renderer->UseIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(topology());
   renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }

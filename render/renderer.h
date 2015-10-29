@@ -49,6 +49,9 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void SaveState() = 0;
   virtual void RestoreState() = 0;
 
+  virtual void UseVertexBuffer(VertexBuffer* vb) = 0;
+  virtual void UseVertexBufferGroup(VertexBufferGroup* vbg) = 0;
+  virtual void UseIndicesBuffer(IndicesBuffer* ib) = 0;
   virtual void UseBlending(Blending* blending, float* factor,
                            uint32 mask = 0xffffffff) = 0;
   virtual void ResetBlending() = 0;

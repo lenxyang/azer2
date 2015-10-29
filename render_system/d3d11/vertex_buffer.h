@@ -15,11 +15,11 @@ class D3DVertexBuffer : public VertexBuffer {
   
   bool Init(const SlotVertexData* dataptr);
 
-  void Use(Renderer* renderer) override;
   HardwareBufferDataPtr map(MapType flags) override;
   void unmap() override;
 
   bool Initialized() const { return NULL != buffer_;}
+  ID3D11Buffer* buffer() { return buffer_;}
  private:
   D3DVertexBuffer(const Options &opt, D3DRenderSystem* rs)
       : VertexBuffer(opt)
@@ -40,9 +40,18 @@ class D3DVertexBuffer : public VertexBuffer {
 class D3DVertexBufferGroup : public VertexBufferGroup {
  public:
   D3DVertexBufferGroup(VertexDescPtr desc);
-  void Use(Renderer* renderer) override;
+  void OnVertexBufferChanged() override;
+
+  ID3D11Buffer** buffer() { return vbs_;}
+  uint32* strides() { return stride_;}
+  uint32* offsets() { return offset_;}
  private:
-  int32 GenVertexArray(ID3D11Buffer** buf, uint32* stride);
+  int32 GenVertexArray();
+  static const int32 kMaxVertexBuffer = 16;
+  ID3D11Buffer* vbs_[kMaxVertexBuffer];
+  uint32 stride_[kMaxVertexBuffer];
+  uint32 offset_[kMaxVertexBuffer];
+  DISALLOW_COPY_AND_ASSIGN(D3DVertexBufferGroup);
 };
 }  // namespace d3d11
 }  // namespace azer

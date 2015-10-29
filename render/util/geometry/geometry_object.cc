@@ -28,15 +28,15 @@ MeshPartPtr GeometryObject::CreateFrameObject(Effect* effect) {
 }
 
 void GeometryObject::Render(Renderer* renderer) {
-  vb_->Use(renderer);
-  ib_->Use(renderer);
+  renderer->UseVertexBuffer(vb_.get());
+  renderer->UseIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(kTriangleList);
   renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }
 
 void GeometryObject::RenderWireframe(Renderer* renderer) {
-  vb_->Use(renderer);
-  frame_ib_->Use(renderer);
+  renderer->UseVertexBuffer(vb_.get());
+  renderer->UseIndicesBuffer(frame_ib_.get());
   renderer->SetPrimitiveTopology(kLineList);
   renderer->DrawIndex(frame_ib_->indices_num(), 0, 0);
 }
