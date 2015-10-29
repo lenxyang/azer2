@@ -38,6 +38,7 @@ class Vector3 {
   Vector3& operator = (const Vector4 & vec);
 
   friend bool operator == (const Vector3& v1, const Vector3& v2);
+  friend bool operator != (const Vector3& v1, const Vector3& v2);
 
   float dot(const Vector3& vec) const;
   float distance(const Vector3& vec) const;

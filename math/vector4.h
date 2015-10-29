@@ -33,6 +33,7 @@ class Vector4 {
   friend Vector4 operator - (const Vector4& v1, const Vector4& v2);
 
   friend bool operator == (const Vector4& v1, const Vector4& v2);
+  friend bool operator != (const Vector4& v1, const Vector4& v2);
   Vector4 operator - () const;
   Vector4& operator += (const Vector4& vec);
   Vector4& operator -= (const Vector4& vec);

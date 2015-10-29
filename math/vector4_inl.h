@@ -54,6 +54,10 @@ inline bool operator == (const Vector4& v1, const Vector4& v2) {
       && Float(v1.w).AlmostEquals(Float(v2.w));
 }
 
+inline bool operator != (const Vector4& v1, const Vector4& v2) {
+  return !(v1 == v2);
+}
+
 inline Vector4 Vector4::operator - () const {
   return Vector4(-x, -y, -z, -w);
 }

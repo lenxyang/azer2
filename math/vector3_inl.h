@@ -32,6 +32,10 @@ inline bool operator == (const Vector3& v1, const Vector3& v2) {
       && (std::abs(v1.z - v2.z) < kFloatMargin);
 }
 
+inline bool operator != (const Vector3& v1, const Vector3& v2) {
+  return !(v1 == v2);
+}
+
 inline float Vector3::dot(const Vector3& vec) const {
   return vec.x * x + vec.y * y + vec.z * z;
 }
