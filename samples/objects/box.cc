@@ -57,7 +57,7 @@ void MainDelegate::OnRender(const FrameArgs& args) {
   renderer->ClearDepthAndStencil();
   renderer->SetCullingMode(kCullNone);
   renderer->EnableDepthTest(true);
-  diffuse_effect_->Use(renderer);
+  renderer->UseEffect(diffuse_effect_.get());
   ColoredEffectAdapter diffuse_adapter;
   diffuse_adapter.Apply(diffuse_effect_.get(), provider_.get());
   object_->Render(renderer);

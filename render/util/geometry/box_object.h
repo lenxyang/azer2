@@ -15,4 +15,7 @@ class BoxObject : public GeometryObject {
   void InitHardwareBuffers();
   DISALLOW_COPY_AND_ASSIGN(BoxObject);
 };
+
+SlotVertexDataPtr CreateBoxVertexData(VertexDesc* desc);
+IndicesDataPtr CreateBoxFrameIndicesData();
 }  // namespace azer

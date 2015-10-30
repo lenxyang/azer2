@@ -30,6 +30,8 @@ static_library("util") {
     "geometry/cone_object.h",
     "geometry/cylinder_object.cc",
     "geometry/cylinder_object.h",
+    "geometry/frustrum_object.cc",
+    "geometry/frustrum_object.h",
     "geometry/geometry_object.cc",
     "geometry/geometry_object.h",
     "geometry/plane_object.cc",
