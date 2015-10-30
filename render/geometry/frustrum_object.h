@@ -1,11 +1,11 @@
 #pragma once
 
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/util/geometry/geometry_object.h"
+#include "azer/render/geometry/geometry_object.h"
 
 namespace azer {
 class Camera;
-class FrustrumObject : public GeometryObject {
+class AZER_EXPORT FrustrumObject : public GeometryObject {
  public:
   FrustrumObject(const Camera* camera, VertexDescPtr desc);
   ~FrustrumObject();

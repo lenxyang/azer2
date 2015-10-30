@@ -2,6 +2,14 @@
 #include "azer/math/normal_util.h"
 
 namespace azer {
+
+void Plane::reset(const Vector3& p1, const Vector3& p2, const Vector3& p3) {
+  point_ = p1;
+  normal_ = CalcPlaneNormal(p1, p2, p3);
+  DCHECK(std::abs(normal_.length() - 1.0f) <  0.0001) << normal_.length();
+  d_ = -normal_.dot(p1);
+}
+
 float Plane::distance(const Ray& ray) const {
   // 方向如何确定
   // 从 ray 的顶点到平面的方向如何与 ray 的方向一致，则取正
@@ -17,6 +25,29 @@ float Plane::distance(const Ray& ray) const {
   } else {
     return std::numeric_limits<float>::signaling_NaN();
   }
+}
+
+// class triangle
+TrianglePlane::TrianglePlane() {
+}
+
+void TrianglePlane::reset(const Vector3& p1, const Vector3& p2, const Vector3& p3) {
+  Plane::reset(p1, p2, p3);
+  points_[0] = p1;
+  points_[1] = p2;
+  points_[2] = p3;
+}
+
+TrianglePlane::TrianglePlane(const Vector3& p1, const Vector3& p2, const Vector3& p3)
+    : Plane(p1, p2, p3) {
+  points_[0] = p1;
+  points_[1] = p2;
+  points_[2] = p3;
+}
+
+TrianglePlane::TrianglePlane(const Vector3* points)
+    : Plane(points) {
+  memcpy(points_, points, sizeof(points_));
 }
 
 bool TrianglePlane::IsPointIn(const Vector3& pt) const {

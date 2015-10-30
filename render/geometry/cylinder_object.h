@@ -1,11 +1,11 @@
 #pragma once
 
 #include "azer/render/render.h"
-#include "azer/render/util/geometry/geometry_object.h"
+#include "azer/render/geometry/geometry_object.h"
 
 namespace azer {
 
-class CylinderObject : public GeometryObject {
+class AZER_EXPORT CylinderObject : public GeometryObject {
  public:
   CylinderObject(VertexDescPtr desc);
   CylinderObject(VertexDescPtr desc, int32 stack, int32 slick);
@@ -22,9 +22,10 @@ class CylinderObject : public GeometryObject {
   DISALLOW_COPY_AND_ASSIGN(CylinderObject);
 };
 
-SlotVertexDataPtr InitCylinderVertexData(float top_radius, float bottom_radius,
-                                         int32 stack, int32 slice,
-                                         VertexDescPtr desc); 
-IndicesDataPtr InitCylinderIndicesData(int32 stack, int32 slice); 
+SlotVertexDataPtr AZER_EXPORT InitCylinderVertexData(float top_radius, 
+                                                     float bottom_radius,
+                                                     int32 stack, int32 slice,
+                                                     VertexDescPtr desc); 
+IndicesDataPtr AZER_EXPORT InitCylinderIndicesData(int32 stack, int32 slice); 
 
 }  // namespace azer

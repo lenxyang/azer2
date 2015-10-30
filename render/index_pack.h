@@ -3,7 +3,7 @@
 #include "azer/render/indices_buffer.h"
 
 namespace azer {
-class IndexPack {
+class AZER_EXPORT IndexPack {
  public:
   IndexPack(IndicesData* data);
   IndexPack(uint8* data, int32 data_size, IndicesData::IndexType type);

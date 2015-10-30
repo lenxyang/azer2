@@ -9,17 +9,17 @@
 
 namespace azer {
 
-struct VertexPos {
+struct AZER_EXPORT VertexPos {
   int32 slot;
   int32 index;
 
   VertexPos();
   VertexPos(int32 slot, int32 index);
 };
-bool GetSemanticIndex(const std::string& name, int32 semantic_index, 
-                      const VertexDesc* desc, VertexPos* pos);
+bool AZER_EXPORT GetSemanticIndex(const std::string& name, int32 semantic_index, 
+                                  const VertexDesc* desc, VertexPos* pos);
 
-class VertexPack {
+class AZER_EXPORT VertexPack {
  public:
   VertexPack(VertexData* data);
   VertexPack(SlotVertexData* data);
@@ -53,5 +53,4 @@ class VertexPack {
   DISALLOW_COPY_AND_ASSIGN(VertexPack);
 };
 
-int32 memalign(int32 n, int32 align);
 }  // namespace azer

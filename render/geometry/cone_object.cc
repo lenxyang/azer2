@@ -1,11 +1,10 @@
-#include "azer/render/util/geometry/cone_object.h"
+#include "azer/render/geometry/cone_object.h"
 
 #include "azer/math/math.h"
 #include "azer/render/renderer.h"
-#include "azer/render/util/index_pack.h"
-#include "azer/render/util/vertex_pack.h"
-#include "azer/render/util/effects/pvw_effect.h"
-#include "azer/render/util/geometry/util.h"
+#include "azer/render/index_pack.h"
+#include "azer/render/vertex_pack.h"
+#include "azer/render/geometry/util.h"
 
 namespace azer {
 ConeObject::ConeObject(VertexDescPtr desc)

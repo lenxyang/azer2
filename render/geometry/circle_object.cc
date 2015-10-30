@@ -1,7 +1,7 @@
-#include "azer/render/util/geometry/circle_object.h"
+#include "azer/render/geometry/circle_object.h"
 
 #include "azer/render/render.h"
-#include "azer/render/util/geometry/util.h"
+#include "azer/render/geometry/util.h"
 
 namespace azer {
 CircleObject::CircleObject(VertexDescPtr desc) 

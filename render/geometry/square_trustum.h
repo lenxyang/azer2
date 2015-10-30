@@ -1,9 +1,9 @@
 #pragma once
 
-#include "azer/render/util/geometry/geometry_object.h"
+#include "azer/render/geometry/geometry_object.h"
 
 namespace azer {
-class SquareTrustum : public GeometryObject {
+class AZER_EXPORT SquareTrustum : public GeometryObject {
  public:
   SquareTrustum(VertexDescPtr desc, float top, float bottom, float height);
   ~SquareTrustum();

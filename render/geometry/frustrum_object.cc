@@ -1,10 +1,10 @@
-#include "azer/render/util/geometry/frustrum_object.h"
+#include "azer/render/geometry/frustrum_object.h"
 
 #include "base/logging.h"
 #include "azer/render/render.h"
-#include "azer/render/util/vertex_pack.h"
-#include "azer/render/util/index_pack.h"
-#include "azer/render/util/geometry/box_object.h"
+#include "azer/render/vertex_pack.h"
+#include "azer/render/index_pack.h"
+#include "azer/render/geometry/box_object.h"
 
 namespace azer {
 FrustrumObject::FrustrumObject(const Camera* camera, VertexDescPtr desc)

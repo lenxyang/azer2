@@ -1,10 +1,10 @@
 #pragma once
 
-#include "azer/render/util/geometry/geometry_object.h"
+#include "azer/render/geometry/geometry_object.h"
 
 namespace azer {
 
-class BoxObject : public GeometryObject {
+class AZER_EXPORT BoxObject : public GeometryObject {
  public:
   BoxObject(VertexDescPtr desc);
   ~BoxObject();
@@ -16,6 +16,6 @@ class BoxObject : public GeometryObject {
   DISALLOW_COPY_AND_ASSIGN(BoxObject);
 };
 
-SlotVertexDataPtr CreateBoxVertexData(VertexDesc* desc);
-IndicesDataPtr CreateBoxFrameIndicesData();
+SlotVertexDataPtr AZER_EXPORT CreateBoxVertexData(VertexDesc* desc);
+IndicesDataPtr AZER_EXPORT CreateBoxFrameIndicesData();
 }  // namespace azer

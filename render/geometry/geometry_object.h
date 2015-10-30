@@ -13,9 +13,8 @@
 namespace azer {
 
 class Camera;
-class PVWEffect;
 
-class GeometryObject : public ::base::RefCounted<GeometryObject> {
+class AZER_EXPORT GeometryObject : public ::base::RefCounted<GeometryObject> {
  public:
   GeometryObject(VertexDescPtr desc);
   ~GeometryObject();

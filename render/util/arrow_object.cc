@@ -1,7 +1,7 @@
-#include "azer/render/util/geometry/arrow_object.h"
+#include "azer/render/util/arrow_object.h"
 
-#include "azer/render/util/geometry/cone_object.h"
-#include "azer/render/util/geometry/cylinder_object.h"
+#include "azer/render/geometry/cone_object.h"
+#include "azer/render/geometry/cylinder_object.h"
 
 namespace azer {
 ArrowObject::ArrowObject() {

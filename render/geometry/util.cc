@@ -1,10 +1,10 @@
-#include "azer/render/util/geometry/util.h"
+#include "azer/render/geometry/util.h"
 
 #include "base/strings/string_util.h"
 #include "azer/math/math.h"
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/util/index_pack.h"
-#include "azer/render/util/vertex_pack.h"
+#include "azer/render/index_pack.h"
+#include "azer/render/vertex_pack.h"
 
 
 namespace azer {

@@ -2,8 +2,8 @@
 
 #include "azer/math/math.h"
 #include "azer/render/render.h"
+#include "azer/render/geometry/geometry_object.h"
 #include "azer/render/util/effects/diffuse_effect.h"
-#include "azer/render/util/geometry/geometry_object.h"
 
 namespace azer {
 class ArrowObject {

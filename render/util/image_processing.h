@@ -4,7 +4,7 @@
 #include "azer/render/texture.h"
 #include "azer/render/render_target.h"
 #include "azer/render/renderer.h"
-#include "azer/render/util/geometry/geometry_object.h"
+#include "azer/render/geometry/geometry_object.h"
 
 namespace azer {
 

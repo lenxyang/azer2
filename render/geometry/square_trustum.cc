@@ -1,8 +1,8 @@
-#include "azer/render/util/geometry/square_trustum.h"
+#include "azer/render/geometry/square_trustum.h"
 
 #include "azer/math/math.h"
 #include "azer/render/render_system.h"
-#include "azer/render/util/geometry/util.h"
+#include "azer/render/geometry/util.h"
 
 namespace azer {
 SquareTrustum::SquareTrustum(VertexDescPtr desc, float top_length,

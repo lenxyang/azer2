@@ -1,10 +1,10 @@
 #pragma once
 
-#include "azer/render/util/geometry/geometry_object.h"
+#include "azer/render/geometry/geometry_object.h"
 
 namespace azer {
 
-class PlaneObject : public GeometryObject {
+class AZER_EXPORT PlaneObject : public GeometryObject {
  public:
   PlaneObject(VertexDescPtr desc, int32 row, int column);
   ~PlaneObject();

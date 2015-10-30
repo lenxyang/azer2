@@ -1,4 +1,4 @@
-#include "azer/render/util/vertex_pack.h"
+#include "azer/render/vertex_pack.h"
 
 #include "base/logging.h"
 #include "base/strings/string_util.h"

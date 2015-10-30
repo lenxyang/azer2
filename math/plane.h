@@ -16,6 +16,7 @@ class Plane {
   explicit Plane(const Vector3* points);
   Plane(const Plane& plane);
   Plane(const Vector3& p1, const Vector3& p2, const Vector3& p3);
+  void reset(const Vector3& p1, const Vector3& p2, const Vector3& p3);
 
   Plane& operator = (const Plane& plane);
   Vector3& normal() { return normal_;}
@@ -63,7 +64,7 @@ class Plane {
   // (a, b, c, d) satify a*x + b*y + c*z + d = 0
   Vector3 normal_;
   float d_;
-  const Vector3 point_;
+  Vector3 point_;
 };
 
 /**
@@ -72,23 +73,14 @@ class Plane {
  */
 class TrianglePlane : public Plane {
  public:
-  explicit TrianglePlane(const azer::Vector3& p1, const azer::Vector3& p2,
-                         const azer::Vector3& p3)
-      : Plane(p1, p2, p3) {
-    points_[0] = p1;
-    points_[1] = p2;
-    points_[2] = p3;
-  }
+  TrianglePlane();
+  TrianglePlane(const Vector3& p1, const Vector3& p2, const Vector3& p3);
+  explicit TrianglePlane(const Vector3* points);
 
-  explicit TrianglePlane(const azer::Vector3* points)
-      : Plane(points) {
-    memcpy(points_, points, sizeof(points_));
-  }
-
-  bool IsPointIn(const Vector3& pt) const ;
-
+  void reset(const Vector3& p1, const Vector3& p2, const Vector3& p3);
+  bool IsPointIn(const Vector3& pt) const;
   friend std::ostream& operator << (std::ostream& o, const TrianglePlane& v);
  protected:
-  azer::Vector3 points_[3];
+  Vector3 points_[3];
 };
 }  // namespace azer

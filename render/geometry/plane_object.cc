@@ -1,6 +1,6 @@
-#include "azer/render/util/geometry/plane_object.h"
+#include "azer/render/geometry/plane_object.h"
 
-#include "azer/render/util/geometry/util.h"
+#include "azer/render/geometry/util.h"
 #include "azer/render/render_system.h"
 
 namespace azer {

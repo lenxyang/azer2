@@ -8,15 +8,11 @@ inline Plane::Plane()
 
 inline Plane::Plane(const Vector3* points)
     : point_(points[0]) {
-  normal_ = CalcPlaneNormal(points);
-  DCHECK(std::abs(normal_.length() - 1.0f) <  0.0001) << normal_.length();
-  d_ = -normal_.dot(points[0]);
+  reset(*points, *(points+1), *(points+2));
 }
 
 inline Plane::Plane(const Vector3& p1, const Vector3& p2, const Vector3& p3) {
-  normal_ = CalcPlaneNormal(p1, p2, p3);
-  DCHECK(std::abs(normal_.length() - 1.0f) <  0.0001) << normal_.length();
-  d_ = -normal_.dot(p1);
+  reset(p1, p2, p3);
 }
 
 inline Plane::Plane(const Plane& plane)
@@ -26,9 +22,9 @@ inline Plane::Plane(const Plane& plane)
 }
 
 inline Plane& Plane::operator = (const Plane& plane) {
-    normal_ = plane.normal_;
-    d_ = plane.d_;
-    return *this;
+  normal_ = plane.normal_;
+  d_ = plane.d_;
+  return *this;
 }
 
 inline Plane& Plane::Normalize() {
@@ -43,8 +39,8 @@ inline float Plane::distance(const azer::Vector3& point) const {
   // ogre3d
   return normal_.dot(point) + d_;
   /*
-  float dir = normal_.dot(point_ - point) > 0.0f ? 1.0f : -1.0f;
-  float dist = point_.distance(point);
+    float dir = normal_.dot(point_ - point) > 0.0f ? 1.0f : -1.0f;
+    float dist = point_.distance(point);
   */
 }
 

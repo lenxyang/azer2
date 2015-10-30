@@ -1,8 +1,8 @@
 #pragma once
 
 #include "azer/render/util/coordinate_object.h"
-#include "azer/render/util/geometry/arrow_object.h"
-#include "azer/render/util/geometry/sphere_object.h"
+#include "azer/render/util/arrow_object.h"
+#include "azer/render/geometry/sphere_object.h"
 
 namespace azer {
 class CameraObject {

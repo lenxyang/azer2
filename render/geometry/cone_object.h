@@ -1,11 +1,11 @@
 #pragma once
 
 #include "azer/render/render.h"
-#include "azer/render/util/geometry/geometry_object.h"
+#include "azer/render/geometry/geometry_object.h"
 
 namespace azer {
 
-class ConeObject : public GeometryObject {
+class AZER_EXPORT ConeObject : public GeometryObject {
  public:
   ConeObject(VertexDescPtr desc);
   ConeObject(VertexDescPtr desc, int32 slice);
@@ -17,7 +17,7 @@ class ConeObject : public GeometryObject {
   DISALLOW_COPY_AND_ASSIGN(ConeObject);
 };
 
-SlotVertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc); 
-IndicesDataPtr InitConeIndicesData(int32 slice); 
+SlotVertexDataPtr AZER_EXPORT InitConeVertexData(int32 slice, VertexDescPtr desc); 
+IndicesDataPtr AZER_EXPORT InitConeIndicesData(int32 slice); 
 
 }  // namespace azer

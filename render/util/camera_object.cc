@@ -3,7 +3,7 @@
 #include "base/logging.h"
 #include "azer/render/blending.h"
 #include "azer/render/render_system.h"
-#include "azer/render/util/geometry/square_trustum.h"
+#include "azer/render/geometry/square_trustum.h"
 
 namespace azer {
 CameraObject::CameraObject(const Camera* camera) 

@@ -2,7 +2,7 @@
 
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
-#include "azer/render/util/geometry/plane_object.h"
+#include "azer/render/geometry/plane_object.h"
 #include "azer/render/util/shader_util.h"
 
 namespace azer {

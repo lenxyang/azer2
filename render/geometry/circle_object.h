@@ -1,8 +1,8 @@
 #pragma once
 
-#include "azer/render/util/geometry/geometry_object.h"
-#include "azer/render/util/vertex_pack.h"
-#include "azer/render/util/index_pack.h"
+#include "azer/render/geometry/geometry_object.h"
+#include "azer/render/vertex_pack.h"
+#include "azer/render/index_pack.h"
 
 namespace azer {
 
