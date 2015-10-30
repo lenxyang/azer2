@@ -6,10 +6,12 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "base/logging.h"
+#include "azer/base/export.h"
 
 namespace azer {
+class Renderer;
 
-class Blending : public ::base::RefCounted<Blending> {
+class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
  public:
   enum Oper {
     kAdd = 1,
@@ -78,4 +80,13 @@ class Blending : public ::base::RefCounted<Blending> {
 };
 
 typedef scoped_refptr<Blending> BlendingPtr;
+
+class AZER_EXPORT ScopedResetBlending {
+ public:
+  ScopedResetBlending(Renderer* renderer);
+  ~ScopedResetBlending();
+ private:
+  Renderer* renderer_;
+  DISALLOW_COPY_AND_ASSIGN(ScopedResetBlending);
+};
 }  // namespace azer

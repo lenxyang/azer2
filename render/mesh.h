@@ -8,10 +8,12 @@
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
+class Blending;
 class EffectAdapterContext;
 class EffectParamsProvider;
 typedef scoped_refptr<EffectParamsProvider> EffectParamsProviderPtr;
 typedef std::vector<EffectParamsProviderPtr> EffectParamsProviderVector;
+typedef scoped_refptr<Blending> BlendingPtr;
 
 class Entity;
 class EntityVec;
@@ -80,6 +82,8 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
 
   MeshPart& operator = (const MeshPart& part);
 
+  void SetBlending(Blending* blending) { blending_ = blending;}
+  Blending* blending() { return blending_.get();}
   void UpdateProviderParams(const FrameArgs& args) override;
   void Render(Renderer* renderer);
 
@@ -94,6 +98,7 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
  private:
   EffectPtr effect_;
   EntityVecPtr vecptr_;
+  BlendingPtr blending_;
 };
 typedef scoped_refptr<MeshPart> MeshPartPtr;
 

@@ -125,9 +125,6 @@ SlotVertexDataPtr CreateBoxVertexData(VertexDesc* desc) {
                    4, 3, 0, 4, 7, 3,  // left
                    4, 1, 5, 4, 0, 1,  // top
                    3, 6, 2, 3, 7, 6}; // bottom
-  
-    
-
   VertexPos normal_pos, tex0_pos;
   bool kHasNormal0Idx = GetSemanticIndex("normal", 0, desc, &normal_pos);
   bool kHasTexcoord0Idx = GetSemanticIndex("texcoord", 0, desc, &tex0_pos);

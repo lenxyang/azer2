@@ -3,27 +3,48 @@
 #include "base/logging.h"
 #include "azer/render/render.h"
 #include "azer/render/util/vertex_pack.h"
+#include "azer/render/util/index_pack.h"
 #include "azer/render/util/geometry/box_object.h"
 
 namespace azer {
 FrustrumObject::FrustrumObject(const Camera* camera, VertexDescPtr desc)
     : GeometryObject(desc) {
-  Matrix4 viewins = camera->GetViewMatrix().Inverse();
+  const Matrix4& proj = camera->frustrum().projection();
+  const Matrix4& view = camera->GetViewMatrix();
+  Matrix4 mat = std::move(view.InverseCopy() * proj.InverseCopy());
   SlotVertexDataPtr vdata = CreateBoxVertexData(desc.get());
   VertexPack vpack(vdata.get());
   VertexPos posidx;
   CHECK(GetSemanticIndex("position", 0, desc_.get(), &posidx));
-  Vector4 value;
+  Vector4 v;
   vpack.first();
   while (!vpack.end()) {
-    vpack.ReadVector4(&value, posidx);
-    value.x *= 2.0f;
-    value.y *= 2.0f;
-    value.z += 0.5f;
+    vpack.ReadVector4(&v, posidx);
+    v.x *= 2.0f;
+    v.y *= 2.0f;
+    v.z += 0.5f;
+    v.z *= 0.92f;
 
-    value = viewins * value;
-    vpack.WriteVector4(value, posidx);
+    Vector4 test = v;
+    v = mat * v;
+    v /= v.w;
+    vpack.WriteVector4(v, posidx);
     vpack.next(1);
+  }
+
+  {
+    vpack.first();
+    Vector4 v1, v2, v3;
+    while (!vpack.end()) {
+      vpack.ReadVector4(&v1, posidx); vpack.next(1);
+      vpack.ReadVector4(&v2, posidx); vpack.next(1);
+      vpack.ReadVector4(&v3, posidx); vpack.next(1);
+
+      vpack.next(-3);
+      vpack.WriteVector4(v3, posidx); vpack.next(1);
+      vpack.WriteVector4(v2, posidx); vpack.next(1);
+      vpack.WriteVector4(v1, posidx); vpack.next(1);
+    }
   }
 
   VertexPos normidx;
@@ -46,8 +67,19 @@ FrustrumObject::FrustrumObject(const Camera* camera, VertexDescPtr desc)
     } 
   }
 
-  IndicesDataPtr idata = CreateBoxFrameIndicesData();
-  
+  // because of triangle has been revese, so need some operation on indices
+  int32 edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
+                          0, 14, 2, 8, 1, 7, 4, 13,
+                          14, 8, 8, 7, 7, 13, 13, 14};
+  IndicesDataPtr idata(new IndicesData(arraysize(edge_indices)));
+  IndexPack ipack(idata.get());
+  for (uint32 i = 0; i < arraysize(edge_indices); ++i) {
+    int32 index = edge_indices[i];
+    if (index % 3 == 0) { index += 2;}
+    else if (index % 3 == 2) { index -= 2;}
+    CHECK(ipack.WriteAndAdvance(index));
+  }
+
   RenderSystem* rs = RenderSystem::Current();
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   frame_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);

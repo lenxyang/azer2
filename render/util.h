@@ -13,6 +13,7 @@
 #include "azer/render/util/geometry/circle_object.h"
 #include "azer/render/util/geometry/cone_object.h"
 #include "azer/render/util/geometry/cylinder_object.h"
+#include "azer/render/util/geometry/frustrum_object.h"
 #include "azer/render/util/geometry/plane_object.h"
 #include "azer/render/util/geometry/sphere_object.h"
 #include "azer/render/util/geometry/square_trustum.h"

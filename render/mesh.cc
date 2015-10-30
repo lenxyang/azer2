@@ -1,6 +1,7 @@
 #include "azer/render/mesh.h"
 
 #include "base/logging.h"
+#include "azer/render/blending.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
 
@@ -31,7 +32,7 @@ void Entity::Draw(Renderer* renderer) {
   renderer->UseVertexBuffer(vb_.get());
   renderer->UseIndicesBuffer(NULL);
   renderer->SetPrimitiveTopology(topology());
-  renderer->Draw(0, vb_->vertex_num());
+  renderer->Draw(vb_->vertex_num(), 0);
 }
 
 void Entity::DrawIndex(Renderer* renderer) {
@@ -112,6 +113,12 @@ void MeshPart::UpdateProviderParams(const FrameArgs& args) {
 }
 
 void MeshPart::Render(Renderer* renderer) {
+  scoped_ptr<ScopedResetBlending> autoblending_;
+  if (blending_.get()) {
+    autoblending_.reset(new ScopedResetBlending(renderer));
+    renderer->UseBlending(blending_.get(), 0);
+  }
+
   ApplyParams(effect_.get());
   renderer->UseEffect(effect_.get());
   for (int32 i = 0; i < vecptr_->entity_count(); ++i) {

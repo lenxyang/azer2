@@ -1,6 +1,7 @@
 #include "azer/render/util/geometry/geometry_object.h"
 
 #include "azer/math/math.h"
+#include "azer/render/blending.h"
 #include "azer/render/camera.h"
 #include "azer/render/renderer.h"
 #include "azer/render/util/effects/pvw_effect.h"

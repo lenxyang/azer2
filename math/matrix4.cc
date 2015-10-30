@@ -15,7 +15,7 @@ const Matrix4 Matrix4::kZero = Matrix4(0.0f, 0.0f, 0.0f, 0.0f,
                                        0.0f, 0.0f, 0.0f, 0.0f);
 
 
-Matrix4 Matrix4::Inverse() const {
+Matrix4 Matrix4::InverseCopy() const {
   float m00 = m_[0][0], m01 = m_[0][1], m02 = m_[0][2], m03 = m_[0][3];
   float m10 = m_[1][0], m11 = m_[1][1], m12 = m_[1][2], m13 = m_[1][3];
   float m20 = m_[2][0], m21 = m_[2][1], m22 = m_[2][2], m23 = m_[2][3];
@@ -76,7 +76,7 @@ Matrix4 Matrix4::Inverse() const {
       d30, d31, d32, d33);
 }
 
-Matrix4 Matrix4::InverseAffine() const {
+Matrix4 Matrix4::InverseAffineCopy() const {
   DCHECK(IsAffine());
 
   float m10 = m_[1][0], m11 = m_[1][1], m12 = m_[1][2];

@@ -59,8 +59,8 @@ class Matrix4 {
     return m_[3][0] == 0 && m_[3][1] == 0 && m_[3][2] == 0 && m_[3][3] == 1;
   }
 
-  Matrix4 Inverse() const;
-  Matrix4 InverseAffine() const;
+  Matrix4 InverseCopy() const;
+  Matrix4 InverseAffineCopy() const;
 
   void Transpose();
   Matrix4 TransposeCopy() const;

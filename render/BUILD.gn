@@ -23,6 +23,7 @@ source_set("render") {
   sources = [
     "axis_aligned_box.cc",
     "axis_aligned_box.h",
+    "blending.cc",
     "blending.h",
     "camera.cc",
     "camera.h",
