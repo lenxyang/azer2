@@ -6,7 +6,7 @@
 
 namespace azer {
 
-class CircleObject : public GeometryObject {
+class AZER_EXPORT CircleObject : public GeometryObject {
  public:
   CircleObject(VertexDescPtr desc);
   CircleObject(VertexDescPtr desc, int32 slice);

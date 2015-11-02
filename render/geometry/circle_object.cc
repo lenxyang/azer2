@@ -52,7 +52,7 @@ void CircleObject::InitHardwareBuffers() {
 void CircleObject::Render(Renderer* renderer) {
   renderer->UseVertexBuffer(vb_.get());
   renderer->UseIndicesBuffer(ib_.get());
-  renderer->SetPrimitiveTopology(kTriangleList);
+  renderer->SetPrimitiveTopology(kLineList);
   renderer->DrawIndex(ib_->indices_num(), 0, 0);
 }
 
