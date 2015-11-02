@@ -22,6 +22,8 @@ static_library("math") {
     "quaternion.cc",
     "quaternion.h",
     "quaternion_inl.h",
+    "ray.cc",
+    "ray.h",
     "test_util.h",
     "transform.cc",
     "transform.h",
