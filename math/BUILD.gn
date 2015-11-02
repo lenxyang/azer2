@@ -7,6 +7,8 @@ static_library("math") {
     "float_util.h",
     "light_model.cc",
     "light_model.h",
+    "linear.cc",
+    "linear.h",
     "logging.h",
     "math.h",
     "matrix4.cc",

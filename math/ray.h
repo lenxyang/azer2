@@ -12,10 +12,8 @@ class Ray {
 
   const Vector3& directional() const { return directional_;}
   const Vector3& position() const { return position_;}
-  float d() const { return d_;}
  private:
   Vector3 position_;
   Vector3 directional_;
-  float d_;
 };
 }  // namespace azer
