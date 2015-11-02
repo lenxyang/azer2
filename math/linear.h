@@ -13,6 +13,9 @@ class Linear {
 
   Vector3 directional() const;
   Vector3 position() const;
+
+  const Vector4& v1() const { return v1_;}
+  const Vector4& v2() const { return v2_;}
  public:
   Vector4 v1_;
   Vector4 v2_;

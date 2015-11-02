@@ -6,6 +6,11 @@ inline Plane::Plane()
     , d_(0.0) {
 }
 
+inline Plane::Plane(const Vector3& normal, float d) 
+    : normal_(normal),
+      d_(d) {
+}
+
 inline Plane::Plane(const Vector3* points)
     : point_(points[0]) {
   reset(*points, *(points+1), *(points+2));

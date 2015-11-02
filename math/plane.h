@@ -14,6 +14,7 @@ class Plane {
    */
   Plane();
   explicit Plane(const Vector3* points);
+  Plane(const Vector3& normal, float d);
   Plane(const Plane& plane);
   Plane(const Vector3& p1, const Vector3& p2, const Vector3& p3);
   void reset(const Vector3& p1, const Vector3& p2, const Vector3& p3);
