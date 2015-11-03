@@ -23,24 +23,63 @@ ConeObject::~ConeObject() {
 }
 
 void ConeObject::InitHardwareBuffers() {
-  int32 kVertexCount = (slice_  + 1) * 2;
-  int32 kIndicesCount = slice_ * 3 * 2;
-  SlotVertexDataPtr vdata(new SlotVertexData(desc_, kVertexCount));
-  IndicesDataPtr idata(new IndicesData(kIndicesCount));  
+  RenderSystem* rs = RenderSystem::Current();
+  SlotVertexDataPtr vdata = InitConeVertexData(slice_, desc_);
+  IndicesDataPtr idata = InitConeIndicesData(slice_);
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
+  ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
+}
+
+SlotVertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc) {
+  int32 kVertexCount = (slice  + 1) * 2;
+  SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexCount));
   VertexPack vpack(vdata.get());
+  int32 kIndicesCount = slice * 3 * 2;
+  IndicesDataPtr idata(new IndicesData(kIndicesCount));  
   IndexPack ipack(idata.get());
 
   vpack.first();
-  GenerateConeHat(true, 1.0f, 0.0f, slice_, &vpack, &ipack);
-  GenerateConeHat(false, 0.0f, 0.0f, slice_, &vpack, &ipack);
+  GenerateConeHat(true, 1.0f, 0.0f, slice, &vpack, &ipack);
+  GenerateConeHat(false, 0.0f, 0.0f, slice, &vpack, &ipack);
 
   VertexPos pos;
-  if (GetSemanticIndex("normal", 0, desc_.get(), &pos)) {
+  if (GetSemanticIndex("normal", 0, desc.get(), &pos)) {
     CalcNormal(vdata.get(), idata.get());
   }
 
-  RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
-  ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
+  return vdata;
+}
+
+namespace {
+// class PositionVertex
+const VertexDesc::Desc kVertexDesc[] = {
+  {"POSITION", 0, kVec4},
+};
+
+const int kVertexDescNum = arraysize(kVertexDesc);
+VertexDescPtr CreateVertexDesc() {
+  return VertexDescPtr(new VertexDesc(kVertexDesc, kVertexDescNum));
+}
+}  // namespace
+
+IndicesDataPtr InitConeIndicesData(int32 slice) {
+  VertexDescPtr desc = CreateVertexDesc();
+  int32 kVertexCount = (slice  + 1) * 2;
+  SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexCount));
+  VertexPack vpack(vdata.get());
+  int32 kIndicesCount = slice * 3 * 2;
+  IndicesDataPtr idata(new IndicesData(kIndicesCount));  
+  IndexPack ipack(idata.get());
+
+  vpack.first();
+  GenerateConeHat(true, 1.0f, 0.0f, slice, &vpack, &ipack);
+  GenerateConeHat(false, 0.0f, 0.0f, slice, &vpack, &ipack);
+
+  VertexPos pos;
+  if (GetSemanticIndex("normal", 0, desc.get(), &pos)) {
+    CalcNormal(vdata.get(), idata.get());
+  }
+
+  return idata;
 }
 }  // namespace azer

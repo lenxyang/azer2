@@ -134,7 +134,7 @@ SlotVertexDataPtr CreateBoxVertexData(VertexDesc* desc) {
     int index = indices[i];
     DCHECK(!vpack.end());
     vpack.WriteVector4(position[index], VertexPos(0, 0));
-	vpack.WriteVector2(texcoord0[index], tex0_pos);
+    vpack.WriteVector2(texcoord0[index], tex0_pos);
     vpack.next(1);
   }
   DCHECK(vpack.end());
@@ -144,7 +144,7 @@ SlotVertexDataPtr CreateBoxVertexData(VertexDesc* desc) {
     for (int i = 0; i < static_cast<int>(arraysize(indices)); i += 6) {
       int index = i / arraysize(normal);
       for (int j = 0; j < 6; ++j) { 
-		vpack.WriteVector4(normal[index], normal_pos);
+        vpack.WriteVector4(normal[index], normal_pos);
         vpack.next(1);
       }
     }

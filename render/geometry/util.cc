@@ -8,9 +8,9 @@
 
 
 namespace azer {
-#define FUNC_BOOL_RET(func)  {                                          \
-    bool ret = (func);                                                  \
-    if (!ret) return false;                                             \
+#define FUNC_BOOL_RET(func)  {                  \
+    bool ret = (func);                          \
+    if (!ret) return false;                     \
   }
 
 bool GenerateTopTriangleStrip(int32 top, int32 begin, int32 vertex_num,
@@ -74,7 +74,7 @@ void GenerateConeHat(bool up, float top, float bottom, int32 slice,
   const int end = vpack->index();
   for (int i = 0; i < slice; ++i) {
     int index1 = i + begin + 1;
-	int index2 = (i + 1) % slice + begin + 1;
+    int index2 = (i + 1) % slice + begin + 1;
     CHECK(ipack->WriteAndAdvance(begin));
     if (up) {
       CHECK(ipack->WriteAndAdvance(index1));
