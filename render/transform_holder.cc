@@ -64,11 +64,13 @@ void TransformHolder::roll(const Radians angle) {
 
 void TransformHolder::rotate(const Vector3& axis, const Radians rad) {
   Quaternion q(axis, rad);
+  q.Normalize();
   rotate(q);
 }
 
 void TransformHolder::rotate(const Vector3& axis, const Degree angle) {
   Quaternion q(axis, angle);
+  q.Normalize();
   rotate(q);
 }
 
