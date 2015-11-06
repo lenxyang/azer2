@@ -53,32 +53,76 @@ CylinderObject::CylinderObject(VertexDescPtr desc,
       top_radius_(top_radius),
       bottom_radius_(bottom_radius) {
   InitHardwareBuffers();
+  float max_x = std::max(top_radius_, bottom_radius_);
+  float min_x = std::max(top_radius_, bottom_radius_);
+  vmin_ = Vector3(min_x,  0.0f, min_x);
+  vmax_ = Vector3(max_x,  1.0f, max_x);
 }
 
 CylinderObject::~CylinderObject() {
 }
 
 void CylinderObject::InitHardwareBuffers() {
-  int32 kVertexCount = (slice_  + 1) * 2 + stack_ * slice_;
-  int32 kIndicesCount = (stack_ - 1) * slice_* 3 * 2 + slice_ * 2 * 3;
-  SlotVertexDataPtr vdata(new SlotVertexData(desc_, kVertexCount));
+  SlotVertexDataPtr vdata = InitCylinderVertexData(top_radius_, 
+                                                   bottom_radius_,
+                                                   stack_, slice_,
+                                                   desc_.get());
+  IndicesDataPtr idata = InitCylinderIndicesData(stack_, slice_);
+  RenderSystem* rs = RenderSystem::Current();
+  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
+  ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
+}
+
+SlotVertexDataPtr InitCylinderVertexData(float top_radius, 
+                                         float bottom_radius,
+                                         int32 stack, int32 slice,
+                                         VertexDescPtr desc) {
+  int32 kVertexCount = (slice  + 1) * 2 + stack * slice;
+  int32 kIndicesCount = (stack - 1) * slice* 3 * 2 + slice * 2 * 3;
+  SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexCount));
   IndicesDataPtr idata(new IndicesData(kIndicesCount));  
   VertexPack vpack(vdata.get());
   IndexPack ipack(idata.get());
 
   vpack.first();
-  GenerateConeHat(true, 1.0f, 1.0f, slice_, &vpack, &ipack);
-  GenerateBarrel(top_radius_, bottom_radius_, 1.0f, stack_, slice_,
+  GenerateConeHat(true, 1.0f, 1.0f, slice, &vpack, &ipack);
+  GenerateBarrel(top_radius, bottom_radius, 1.0f, stack, slice,
                  &vpack, &ipack);
-  GenerateConeHat(false, 0.0f, 0.0f, slice_, &vpack, &ipack);
+  GenerateConeHat(false, 0.0f, 0.0f, slice, &vpack, &ipack);
 
   VertexPos npos;
-  if (GetSemanticIndex("normal", 0, desc_.get(), &npos)) {
+  if (GetSemanticIndex("normal", 0, desc, &npos)) {
     CalcNormal(vdata.get(), idata.get());
   }
+  return vdata;
+}
 
-  RenderSystem* rs = RenderSystem::Current();
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
-  ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
+namespace {
+// class PositionVertex
+const VertexDesc::Desc kVertexDesc[] = {
+  {"POSITION", 0, kVec4},
+};
+
+const int kVertexDescNum = arraysize(kVertexDesc);
+VertexDescPtr CreateVertexDesc() {
+  return VertexDescPtr(new VertexDesc(kVertexDesc, kVertexDescNum));
+}
+}  // namespace
+
+IndicesDataPtr InitCylinderIndicesData(int32 stack, int32 slice) {
+  VertexDescPtr desc = CreateVertexDesc();
+  int32 kVertexCount = (slice  + 1) * 2 + stack * slice;
+  int32 kIndicesCount = (stack - 1) * slice* 3 * 2 + slice * 2 * 3;
+  SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexCount));
+  IndicesDataPtr idata(new IndicesData(kIndicesCount));  
+  VertexPack vpack(vdata.get());
+  IndexPack ipack(idata.get());
+
+  vpack.first();
+  GenerateConeHat(true, 1.0f, 1.0f, slice, &vpack, &ipack);
+  GenerateBarrel(1.0f, 1.0f, 1.0f, stack, slice, &vpack, &ipack);
+  GenerateConeHat(false, 0.0f, 0.0f, slice, &vpack, &ipack);
+
+  return idata;
 }
 }  // namespace azer

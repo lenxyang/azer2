@@ -20,6 +20,8 @@ BoxObject::~BoxObject() {
 void BoxObject::InitHardwareBuffers() {
   SlotVertexDataPtr vdata = CreateBoxVertexData(desc_.get());
   IndicesDataPtr idata = CreateBoxFrameIndicesData();
+  vmin_ = Vector3(-0.5f, -0.5f, -0.5f);
+  vmax_ = Vector3( 0.5f,  0.5f,  0.5f);
   
   RenderSystem* rs = RenderSystem::Current();
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);

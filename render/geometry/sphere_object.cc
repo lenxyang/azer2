@@ -132,6 +132,8 @@ void SphereObject::InitHardwareBuffers() {
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   frame_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), edge_idata);
+  vmin_ = Vector3(-0.5f, -0.5f, -0.5f);
+  vmax_ = Vector3( 0.5f,  0.5f,  0.5f);
 }
 
 }  // namespace azer
