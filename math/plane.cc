@@ -6,7 +6,7 @@ namespace azer {
 void Plane::reset(const Vector3& p1, const Vector3& p2, const Vector3& p3) {
   point_ = p1;
   normal_ = CalcPlaneNormal(p1, p2, p3);
-  DCHECK(std::abs(normal_.length() - 1.0f) <  0.0001) << normal_.length();
+  DCHECK_LT(std::abs(normal_.length() - 1.0f), 0.0001) << normal_.length();
   d_ = -normal_.dot(p1);
 }
 
