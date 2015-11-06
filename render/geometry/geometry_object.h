@@ -18,6 +18,8 @@ class AZER_EXPORT GeometryObject : public ::base::RefCounted<GeometryObject> {
   GeometryObject(VertexDescPtr desc);
   ~GeometryObject();
 
+  const Vector3& vmin() { return vmin_;}
+  const Vector3& vmax() { return vmax_;}
   VertexBuffer* GetVertexBuffer() { return vb_.get();}
   IndicesBuffer* GetIndicesBuffer() { return ib_.get(); }
   IndicesBuffer* GetFrameIndicesBuffer() { return frame_ib_.get();}
@@ -32,6 +34,7 @@ class AZER_EXPORT GeometryObject : public ::base::RefCounted<GeometryObject> {
   VertexBufferPtr vb_;
   IndicesBufferPtr ib_;
   IndicesBufferPtr frame_ib_;
+  Vector3 vmin_, vmax_;
   DISALLOW_COPY_AND_ASSIGN(GeometryObject);
 };
 

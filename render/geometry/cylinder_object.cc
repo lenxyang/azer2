@@ -53,6 +53,10 @@ CylinderObject::CylinderObject(VertexDescPtr desc,
       top_radius_(top_radius),
       bottom_radius_(bottom_radius) {
   InitHardwareBuffers();
+  float max_x = std::max(top_radius_, bottom_radius_);
+  float min_x = std::max(top_radius_, bottom_radius_);
+  vmin_ = Vector3(min_x,  0.0f, min_x);
+  vmax_ = Vector3(max_x,  1.0f, max_x);
 }
 
 CylinderObject::~CylinderObject() {

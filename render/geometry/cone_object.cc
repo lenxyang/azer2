@@ -28,6 +28,9 @@ void ConeObject::InitHardwareBuffers() {
   IndicesDataPtr idata = InitConeIndicesData(slice_);
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
+
+  vmin_ = Vector3(-1.0f,  0.0f, -1.0f);
+  vmax_ = Vector3( 1.0f,  1.0f,  1.0f);
 }
 
 SlotVertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc) {
