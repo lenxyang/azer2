@@ -42,8 +42,8 @@ SlotVertexDataPtr InitConeVertexData(int32 slice, VertexDescPtr desc) {
   IndexPack ipack(idata.get());
 
   vpack.first();
-  GenerateConeHat(true, 1.0f, 0.0f, slice, &vpack, &ipack);
-  GenerateConeHat(false, 0.0f, 0.0f, slice, &vpack, &ipack);
+  GenerateConeHat(true, 1.0f, 0.0f, 1.0f, slice, &vpack, &ipack);
+  GenerateConeHat(false, 0.0f, 0.0f, 1.0f, slice, &vpack, &ipack);
 
   VertexPos pos;
   if (GetSemanticIndex("normal", 0, desc.get(), &pos)) {
@@ -75,8 +75,8 @@ IndicesDataPtr InitConeIndicesData(int32 slice) {
   IndexPack ipack(idata.get());
 
   vpack.first();
-  GenerateConeHat(true, 1.0f, 0.0f, slice, &vpack, &ipack);
-  GenerateConeHat(false, 0.0f, 0.0f, slice, &vpack, &ipack);
+  GenerateConeHat(true, 1.0f, 0.0f, 1.0f, slice, &vpack, &ipack);
+  GenerateConeHat(false, 0.0f, 0.0f, 1.0f, slice, &vpack, &ipack);
 
   VertexPos pos;
   if (GetSemanticIndex("normal", 0, desc.get(), &pos)) {

@@ -85,10 +85,10 @@ SlotVertexDataPtr InitCylinderVertexData(float top_radius,
   IndexPack ipack(idata.get());
 
   vpack.first();
-  GenerateConeHat(true, 1.0f, 1.0f, slice, &vpack, &ipack);
+  GenerateConeHat(true, 1.0f, 1.0f, top_radius, slice, &vpack, &ipack);
   GenerateBarrel(top_radius, bottom_radius, 1.0f, stack, slice,
                  &vpack, &ipack);
-  GenerateConeHat(false, 0.0f, 0.0f, slice, &vpack, &ipack);
+  GenerateConeHat(false, 0.0f, 0.0f, bottom_radius, slice, &vpack, &ipack);
 
   VertexPos npos;
   if (GetSemanticIndex("normal", 0, desc, &npos)) {
@@ -119,9 +119,9 @@ IndicesDataPtr InitCylinderIndicesData(int32 stack, int32 slice) {
   IndexPack ipack(idata.get());
 
   vpack.first();
-  GenerateConeHat(true, 1.0f, 1.0f, slice, &vpack, &ipack);
+  GenerateConeHat(true, 1.0f, 1.0f, 1.0f, slice, &vpack, &ipack);
   GenerateBarrel(1.0f, 1.0f, 1.0f, stack, slice, &vpack, &ipack);
-  GenerateConeHat(false, 0.0f, 0.0f, slice, &vpack, &ipack);
+  GenerateConeHat(false, 0.0f, 0.0f, 1.0f, slice, &vpack, &ipack);
 
   return idata;
 }

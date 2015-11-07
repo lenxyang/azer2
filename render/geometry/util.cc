@@ -56,7 +56,7 @@ bool GenerateStripIndex(int32 line1, int32 line2, int32 vertex_num, bool closed,
   return true;
 }
 
-void GenerateConeHat(bool up, float top, float bottom, int32 slice, 
+void GenerateConeHat(bool up, float top, float bottom, float radius, int32 slice, 
                      VertexPack* vpack, IndexPack* ipack) {
   const int begin = vpack->index();
   float slice_degree = 360.0f / slice;
@@ -64,8 +64,8 @@ void GenerateConeHat(bool up, float top, float bottom, int32 slice,
   vpack->next(1);
   for (int32 i = 0; i < slice; ++i) {
     float degree = 360.0f - slice_degree *  i;
-    float x = azer::cos(Degree(degree));
-    float z = azer::sin(Degree(degree));
+    float x = azer::cos(Degree(degree)) * radius;
+    float z = azer::sin(Degree(degree)) * radius;
 
     vpack->WriteVector4(Vector4(x, bottom, z, 1.0f), VertexPos(0, 0));
     vpack->next(1);
