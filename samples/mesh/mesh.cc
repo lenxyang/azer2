@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
   CHECK(context.get());
 
   // delegate and views must be create by "new"
-  nelf::Mainframe* mainframe = new nelf::Mainframe(
+  nelf::MainFrame* mainframe = new nelf::MainFrame(
       gfx::Rect(100, 100, 800, 600), context.get());
   mainframe->Init();
   mainframe->Show();
