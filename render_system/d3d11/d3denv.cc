@@ -51,7 +51,7 @@ void D3DEnvironment::GetD3DMultisampleSupported(
   
   HRESULT hr = 0;
   for (int i = 1; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; i <<= 2) {
-    UINT count = -1;
+    UINT count = static_cast<UINT>(-1);
     hr = d3d_device_->CheckMultisampleQualityLevels(
         DXGI_FORMAT_R8G8B8A8_UNORM, i, &count);
 
