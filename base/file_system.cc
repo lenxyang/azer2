@@ -31,7 +31,7 @@ FileSystem::FileSystem() {
 }
 
 bool LoadFileContents(const ResPath& path, FileContents* contents, FileSystem* fs) {
-  FilePtr file = fs->Open(path);
+  FilePtr file = fs->OpenFile(path);
   if (!file.get()) {
     LOG(ERROR) << "Failed to open file: " << path.fullpath();
     return false;

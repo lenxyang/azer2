@@ -6,6 +6,7 @@
 #include "base/basictypes.h"
 #include "base/bind.h"
 #include "base/callback.h"
+#include "base/files/file.h"
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
@@ -63,8 +64,7 @@ class AZER_EXPORT FileSystem {
 
   virtual const char* GetFileSystemName() const = 0;
 
-  virtual FilePtr CreateFileHandle() = 0;
-  virtual FilePtr Open(const ResPath& path) = 0;
+  virtual FilePtr OpenFile(const ResPath& path) = 0;
   virtual FileType GetFileType(const ResPath& path) = 0;
   virtual bool IsPathExists(const ResPath& path) = 0;
   virtual int64 GetFileSize(const ResPath& path) = 0;
