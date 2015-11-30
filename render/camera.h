@@ -34,6 +34,12 @@ class AZER_EXPORT Camera {
   const Matrix4& GetViewMatrix() const { return view_mat_;}
   const Matrix4& GetProjViewMatrix() const { return proj_view_mat_;}
 
+  const Vector3& position() const;
+  Vector3 right() const;
+  Vector3 up() const;
+  Vector3 direction() const;
+  const Quaternion& orientation() const;
+
   void Update();
   TransformHolder* mutable_holder() { return &holder_;}
   const TransformHolder& holder() const { return holder_;}

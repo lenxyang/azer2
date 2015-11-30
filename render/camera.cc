@@ -90,4 +90,24 @@ void Camera::Update() {
   GenMatrices();
   frustrum_.UpdatePlane();
 }
+
+const Vector3& Camera::position() const {
+  return holder().position();
+}
+
+Vector3 Camera::right() const {
+  return std::move(holder().right());
+}
+
+Vector3 Camera::up() const {
+  return std::move(holder().up());
+}
+
+Vector3 Camera::direction() const {
+  return std::move(holder().direction());
+}
+
+const Quaternion& Camera::orientation() const {
+  return holder().orientation();
+}
 }  // namespace azer
