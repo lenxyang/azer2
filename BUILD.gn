@@ -2,7 +2,6 @@
 shared_library("azer") {
   deps = [
     "base",
-    "files",
     "render",
     "render/layers",
     "render:render2d",
@@ -35,7 +34,6 @@ test("unittests") {
   output_name = "azer_unittests"
   deps = [
     "base:unittests",
-    "files:unittests",
     "render:unittests",
     "render/layers:unittests",
     "resources:unittests",

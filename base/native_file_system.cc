@@ -1,9 +1,8 @@
-#include "azer/files/native_file_system.h"
+#include "azer/base/native_file_system.h"
 
 #include "base/files/file_util.h"
 #include "base/files/file_path.h"
 #include "base/strings/string_util.h"
-#include "azer/files/file_content.h"
 
 namespace azer {
 const char NativeFileSystem::kFileSystemName[] = "azer::NativeFileSystem";
@@ -16,6 +15,7 @@ const char* NativeFileSystem::GetFileSystemName() const {
   return kFileSystemName;
 }
 
+/*
 bool NativeFileSystem::ReadFile(const ResPath& path, std::vector<uint8>* data) {
   DCHECK(!path.empty());
   if (!path.IsAbsolutePath()) {
@@ -36,6 +36,7 @@ bool NativeFileSystem::ReadFile(const ResPath& path, std::vector<uint8>* data) {
 
   return true;
 }
+*/
 
 bool NativeFileSystem::IsPathExists(const azer::ResPath& path) {
   DCHECK(!path.empty());
@@ -44,7 +45,7 @@ bool NativeFileSystem::IsPathExists(const azer::ResPath& path) {
   return base::PathExists(real_path);
 }
 
-FileSystem::FileType NativeFileSystem::GetFileType(const ResPath& path) {
+FileType NativeFileSystem::GetFileType(const ResPath& path) {
   return kArchiveFile;
 }
 
@@ -56,12 +57,6 @@ int64 NativeFileSystem::GetFileSize(const ResPath& path) {
 bool NativeFileSystem::EnumDirectory(const ResPath& path, FileInfoVec* vec) {
   NOTIMPLEMENTED();
   return false;
-}
-
-void NativeFileSystem::ReadFileAsync(const ResPath& path,
-                                     std::vector<uint8>* data,
-                                     ::base::Closure* callback) {
-  NOTIMPLEMENTED();
 }
 
 bool NativeFileSystem::ConvertFileSystem(const azer::ResPath& path,

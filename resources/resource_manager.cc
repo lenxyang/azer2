@@ -2,6 +2,7 @@
 
 #include "base/logging.h"
 
+#include "azer/base/file_system.h"
 #include "azer/resources/resource_context.h"
 #include "azer/resources/resource_loader.h"
 #include "azer/resources/resource_manager.h"
@@ -36,10 +37,13 @@ void ResourceManager::RegisterResource(const ResPath& path, ResourcePtr& resourc
 }
 
 bool ResourceManager::LoadResourceSync(const ResPath& path, ResourcePtr* ptr) {
-  FileContentPtr content = context_->LoadFile(path);
-  if (content.get()) {
-    ResourceLoader* loader = context_->GetResourceLoader(path, content.get());
-    *ptr = loader->LoadResource(path, content.get(), this);
+  FileContents contents;
+  if (!LoadFileContents(path, &contents, context_->GetFileSystem())) {
+    return false;
+  }
+  ResourceLoader* loader = context_->GetResourceLoader(path, contents);
+  if (loader) {
+    *ptr = loader->LoadResource(path, contents, this);
     return ptr->get() != NULL;
   } else {
     return false;

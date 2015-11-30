@@ -1,4 +1,4 @@
-#include "azer/files/res_path.h"
+#include "azer/base/res_path.h"
 
 #include "base/logging.h"
 #include "base/files/file_util.h"
@@ -6,7 +6,7 @@
 #include "base/strings/string_tokenizer.h"
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
-#include "azer/files/res_path_normalizer.h"
+#include "azer/base/res_path_parser.h"
 
 namespace azer {
 
@@ -110,7 +110,7 @@ ResPath& ResPath::operator = (const ResPath& path) {
 }
 
 void ResPath::OnPathChanged(const StringType& fullpath) {
-  ResPathNormalizer normalizer(fullpath);
+  files::ResPathNormalizer normalizer(fullpath);
   normalizer.Normalize(this);
 }
 

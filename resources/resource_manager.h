@@ -1,6 +1,6 @@
 #pragma once
 
-#include "azer/files/res_path.h"
+#include "azer/base/res_path.h"
 #include "azer/base/resource.h"
 #include "azer/resources/repository_node.h"
 

@@ -43,12 +43,20 @@ source_set("base") {
     "config_node.h",
     "dynlib.cc",
     "dynlib.h",
+    "file_system.cc",
+    "file_system.h",
+    "native_file_system.cc",
+    "native_file_system.h",
     "file_util.cc",
     "file_util.h",
     "image_data.cc",
     "image_data.h",
     "image.cc",
     "image.h",
+    "res_path.cc",
+    "res_path.h",
+    "res_path_parser.cc",
+    "res_path_parser.h",
     "resource.h",
     "string.cc",
     "string.h",
@@ -66,16 +74,30 @@ source_set("base") {
   configs += [":build_render_config"]
 }
 
+static_library("test_support") {
+  sources = [
+    "tests/test_file_system.cc",
+    "tests/test_file_system.h",
+    "tests/test_util.cc",
+    "tests/test_util.h",
+  ]
+  deps = ["//azer"]
+}
 
 source_set("unittests") {
   sources = [
-    "tree_node_unittest.cc",
+    "tests/file_system_tests.cc",
+    "tests/res_path_tests.cc",
+    "tests/res_path_parser_tests.cc",
+    "tests/tree_node_unittest.cc",
   ]
 
   defines = ["AZER_UNITTEST"]
   deps = [
     "//azer/math",
     "//azer",
+    ":test_support",
+    "//testing/gtest"
   ]
   visibility = ["//azer:unittests"]
 }

@@ -5,6 +5,9 @@
 #include "azer/base/string.h"
 
 namespace azer {
+
+class ResPath;
+
 namespace files {
 class AZER_EXPORT ResPathTokenizer {
  public:
@@ -91,6 +94,17 @@ class AZER_EXPORT ResPathParser {
   Type token_type_;
   bool following_token_;  // not first_token
   DISALLOW_COPY_AND_ASSIGN(ResPathParser);
+};
+
+class AZER_EXPORT ResPathNormalizer {
+ public:
+  explicit ResPathNormalizer(const StringType& raw_path);
+  bool Normalize(ResPath* path);
+ private:
+  StringType proto_;
+  StringType component_;
+  StringType raw_path_;
+  DISALLOW_COPY_AND_ASSIGN(ResPathNormalizer);
 };
 }  // namespace files
 }  // namespace azer

@@ -4,8 +4,8 @@
 
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
-#include "azer/files/res_path.h"
-#include "azer/files/file_system.h"
+#include "azer/base/res_path.h"
+#include "azer/base/file_system.h"
 
 namespace azer {
 class ResourceManager;
@@ -18,7 +18,8 @@ class AZER_EXPORT ResourceLoader {
   virtual ~ResourceLoader();
 
   // load resource into RepositoryNode   
-  virtual ResourcePtr LoadResource(const ResPath& path, const FileContent* content,
+  virtual ResourcePtr LoadResource(const ResPath& path,
+                                   const std::vector<uint8>& contents,
                                    ResourceManager* manager) = 0;
  protected:
   DISALLOW_COPY_AND_ASSIGN(ResourceLoader);

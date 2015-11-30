@@ -5,6 +5,10 @@
 #include "azer/base/string.h"
 
 namespace azer {
+namespace files {
+class ResPathNormalizer;
+}
+
 // ResPath's format 
 // '//.../.../../filename:component
 // ResPath's root is setting in FileSystem
@@ -92,6 +96,6 @@ class AZER_EXPORT ResPath {
   std::vector<Slice> dirs_;
   PathType type_;
 
-  friend class ResPathNormalizer;
+  friend class files::ResPathNormalizer;
 };
 }  // namespace azer
