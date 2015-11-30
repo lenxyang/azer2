@@ -7,7 +7,7 @@
 #include "base/strings/string16.h"
 
 #include "azer/base/resource.h"
-#include "azer/files/res_path.h"
+#include "azer/base/res_path.h"
 #include "azer/math/math.h"
 #include "azer/util/xml/xml.h"
 

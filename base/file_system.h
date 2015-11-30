@@ -7,10 +7,10 @@
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/files/file_path.h"
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/base/string.h"
-#include "azer/files/res_path.h"
-#include "azer/files/file_content.h"
+#include "azer/base/res_path.h"
 
 namespace azer {
 enum FileType {
@@ -19,14 +19,18 @@ enum FileType {
   kSystemFile,
 };
 
-struct FileInfo {
+struct AZER_EXPORT FileInfo {
   base::FilePath path;
   FileType type;
   int64 size;
 };
 typedef std::vector<FileInfo> FileInfoVec;
 
-class AZER_EXPORT File : ::base::RefCountedThreadSafeBase<File> {
+typedef std::vector<uint8> FileContents;
+
+class FileSystem;
+
+class AZER_EXPORT File : public ::base::RefCounted<File> {
  public:
   explicit File(FileSystem* file_system);
   virtual ~File();
@@ -41,14 +45,16 @@ class AZER_EXPORT File : ::base::RefCountedThreadSafeBase<File> {
   
   // Load content async
   // params: if size == -1, read the whole file
-  virtual bool PRead(int64 offset, int64 size, std::vector<uint8>* content) = 0;
-  virtual bool AsyncPRead(int64 offset, int64 size, std::vector<uint8>* content, 
+  virtual bool PRead(int64 offset, int64 size, FileContents* content) = 0;
+  virtual bool AsyncPRead(int64 offset, int64 size, FileContents* content, 
                           base::Closure* callback) = 0;
  protected:
   FileSystem* file_system_;
   FileInfo file_info_;
   DISALLOW_COPY_AND_ASSIGN(File);
 };
+
+typedef scoped_refptr<File> FilePtr;
 
 class AZER_EXPORT FileSystem {
  public:
@@ -67,5 +73,5 @@ class AZER_EXPORT FileSystem {
   DISALLOW_COPY_AND_ASSIGN(FileSystem);
 };
 
-typedef std::shared_ptr<FileSystem> FileSystemPtr;
+bool LoadFileContents(const ResPath& path, FileContents* contents, FileSystem* fs);
 }  // namespace azer
