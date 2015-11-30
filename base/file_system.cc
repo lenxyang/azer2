@@ -8,6 +8,9 @@ File::File(FileSystem* fs)
     : file_system_(fs) {
 }
 
+File::~File() {
+}
+
 FileSystem* File::file_system() {
   return file_system_;
 }
