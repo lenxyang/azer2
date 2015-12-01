@@ -89,6 +89,25 @@ void VertexPack::WriteVector4(const Vector4& v, const VertexPos& pos) {
   *vec = v;
 }
 
+void VertexPack::WriteVector3Or4(Vector4* v, const VertexPos& pos) const {
+  if (pos.slot == -1 || pos.index == -1)
+    return;
+
+  if (get_data_type(pos) == kVec4) {
+    uint8* ptr = get_data_ptr(pos);
+    Vector4* vec = (Vector4*)ptr;
+    *vec = *v;
+  } else if (get_data_type(pos) == kVec3) {
+    uint8* ptr = get_data_ptr(pos);
+    Vector3* vec = (Vector3*)ptr;
+    vec->x = v->x;
+    vec->y = v->y;
+    vec->z = v->z;
+  } else {
+    CHECK(false);
+  }
+}
+
 void VertexPack::ReadFloat(float* v, const VertexPos& pos) const {
   CHECK(pos.slot != -1 && pos.index != -1);
   DCHECK(get_data_type(pos) == kFloat);
@@ -115,6 +134,21 @@ void VertexPack::ReadVector4(Vector4* v, const VertexPos& pos) const {
   DCHECK(get_data_type(pos) == kVec4);
   Vector4* ptr = (Vector4*)(get_data_ptr(pos));
   *v = *ptr;
+}
+
+void VertexPack::ReadVector3Or4(Vector3* v, const VertexPos& pos) const {
+  CHECK(pos.slot != -1 && pos.index != -1);
+  if (get_data_type(pos) == kVec4) {
+    Vector4* ptr = (Vector4*)(get_data_ptr(pos));
+    v->x = ptr->x;
+    v->y = ptr->y;
+    v->z = ptr->z;
+  } else if (get_data_type(pos) == kVec3) {
+    Vector3* ptr = (Vector3*)(get_data_ptr(pos));
+    *v = *ptr;
+  } else {
+    CHECK(false);
+  }
 }
 
 VertexData* VertexPack::data() { 

@@ -35,10 +35,16 @@ bool AutoRenderSystemInit::Init() {
     return false;
   }
 
-  CreateRenderSystemFunc func = (CreateRenderSystemFunc)
-      dynlib_.GetSymbol("CreateRenderSystem");
-  if (func == NULL || !(current_ = (*func)())) {
+  CreateRenderSystemFunc func =
+      (CreateRenderSystemFunc)dynlib_.GetSymbol("CreateRenderSystem");
+  if (func == NULL) {
     PLOG(ERROR) << "not a RenderSystem shared library.";
+    return false;
+  }
+
+  current_ = (*func)();
+  if (!current_) {
+    PLOG(ERROR) << "Failed initialize RenderSystem.";
     return false;
   }
  

@@ -1,13 +1,30 @@
-#include "azer/util/tile.h"
+#include "azer/render/util/tile.h"
 
 #include "base/logging.h"
-#include "azer/util/index_pack.h"
+#include "azer/render/index_pack.h"
+#include "azer/render/vertex_pack.h"
 
 namespace azer {
 
 Tile::Tile(int32 level) 
     : kGridLine( (1 << level) + 1),
       kLevel(level) {
+}
+
+void Tile::GenerateVertex(float width, float depth, VertexPack* pack) {
+  VertexPos pos_pos;
+  CHECK(GetSemanticIndex("position", 0, pack->desc(), &pos_pos));
+  float cell_width = width / kGridLine;
+  float cell_depth = width / kGridLine;
+  
+  for (int32 i = 0; i < kGridLine; ++i) {
+    float z = 0.5f * depth - i * cell_depth;
+    for (int32 j = 0; j < kGridLine; ++j) {
+      float x = -0.5f * width + j * cell_width;
+      Vector4 v(x, 0.0f, z, 1.0f);
+      pack->WriteVector3Or4(&v, pos_pos);
+    }
+  }
 }
 
 int32 Tile::GetVertexCount() const {

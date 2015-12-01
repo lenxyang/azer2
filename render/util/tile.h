@@ -27,6 +27,7 @@ class Tile {
  public:
   Tile(int32 level);
   int32 GetVertexCount() const;
+  void GenerateVertex(float width, float depth, VertexPack* pack);
   int32 GetTriangleListIndexCount() const;
   void GenerateTriangleListIndices(int32 step, const Pitch& pitch, IndexPack* pack);
   void GenerateTriangleListIndices(int32 step, IndexPack* pack);

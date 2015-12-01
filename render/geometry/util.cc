@@ -5,7 +5,7 @@
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/index_pack.h"
 #include "azer/render/vertex_pack.h"
-
+#include "azer/render/geometry/normal_util.h"
 
 namespace azer {
 #define FUNC_BOOL_RET(func)  {                  \

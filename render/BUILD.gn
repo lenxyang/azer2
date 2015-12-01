@@ -49,6 +49,7 @@ source_set("render") {
     "geometry/frustrum_object.h",
     "geometry/geometry_object.cc",
     "geometry/geometry_object.h",
+    "geometry/normal_util.h",
     "geometry/plane_object.cc",
     "geometry/plane_object.h",
     "geometry/sphere_object.cc",

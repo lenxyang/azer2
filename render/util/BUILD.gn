@@ -26,6 +26,8 @@ static_library("util") {
     "image_processing.h",
     "shader_util.cc",
     "shader_util.h",
+    "tile.cc",
+    "tile.h",
   ]
 
   deps = [

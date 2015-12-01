@@ -43,7 +43,8 @@ AxisAlignedBox AxisAlignedBox::CalcForVertexData(
     } else {
       CHECK(false) << "Type not support: " << pos_type;
     }
-  } while ((next = vdata.next(next)));
+    next = vdata.next(next);
+  } while (next);
 
   return AxisAlignedBox(min_pos, max_pos);
 }

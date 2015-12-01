@@ -6,6 +6,7 @@
 #include "azer/render/vertex_pack.h"
 #include "azer/render/index_pack.h"
 #include "azer/render/geometry/util.h"
+#include "azer/render/geometry/normal_util.h"
 
 namespace azer {
 
