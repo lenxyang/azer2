@@ -15,6 +15,7 @@ namespace azer {
 class ConfigNode;
 typedef scoped_refptr<ConfigNode> ConfigNodePtr;
 typedef std::vector<ConfigNodePtr> ConfigNodes;
+
 class AZER_EXPORT ConfigNode : public Resource {
  public:
   typedef std::pair<std::string, std::string> Attribute;
@@ -70,10 +71,16 @@ class AZER_EXPORT ConfigNode : public Resource {
 
   bool AddChild(ConfigNodePtr node);
   bool Contains(ConfigNode* node) const;
-  bool HasNamedChild(const std::string& name) const;
-  std::vector<ConfigNodePtr> GetNamedChildren(const std::string& name) const;
-  ConfigNodePtr GetFirstChildNamed(const std::string& name) const;
-  ConfigNodePtr GetLastChildNamed(const std::string& name) const;
+  bool HasTaggedChild(const std::string& name) const;
+  ConfigNodes GetTaggedChildren(const std::string& name) const;
+
+  // get children from path(not xpath, like file path)
+  ConfigNodePtr GetNodeFromPath(const std::string& path);
+  std::string GetNodePath() const;
+
+  ConfigNodes GetNodeWithAttr(const std::string& name, const std::string& value);
+  ConfigNodePtr GetFirstChildTagged(const std::string& tag) const;
+  ConfigNodePtr GetLastChildTagged(const std::string& tag) const;
 
   std::string print_info();
  private:

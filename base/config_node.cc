@@ -4,6 +4,7 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_split.h"
 #include "base/strings/stringprintf.h"
+#include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
 
 #include "azer/base/string.h"
@@ -105,7 +106,7 @@ bool ConfigNode::Contains(ConfigNode* node) const {
   return false;
 }
 
-std::vector<ConfigNodePtr> ConfigNode::GetNamedChildren(
+ConfigNodes ConfigNode::GetTaggedChildren(
     const std::string& name) const {
   std::vector<ConfigNodePtr> vec;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
@@ -116,17 +117,70 @@ std::vector<ConfigNodePtr> ConfigNode::GetNamedChildren(
   return vec;
 }
 
-ConfigNodePtr ConfigNode::GetFirstChildNamed(
-    const std::string& name) const {
+ConfigNodePtr ConfigNode::GetNodeFromPath(const std::string& path) {
+  if (StartsWithASCII(path, "//", false)) {
+    return root()->GetNodeFromPath(path.substr(2));
+  } else {
+    ConfigNode* cur = this;
+    std::vector<std::string> vec;
+    ::base::SplitString(path, '/', &vec);
+    for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
+      const std::string& name = *iter;
+      ConfigNodes nodes = std::move(cur->GetNodeWithAttr("name", name));
+      if (nodes.size() == 1u) {
+        cur = nodes[0].get();
+        continue;
+      } else if (nodes.size() == 0u) {
+        LOG(ERROR) << "Failed to get node: " << path << ", node: \""
+                   << cur->GetNodePath() << "\" has no child named \"" 
+                   << name << "\"";
+        return ConfigNodePtr();
+      } if (nodes.size() > 1u) {
+        LOG(ERROR) << "Failed to get node: " << path << ", node: \""
+                   << cur->GetNodePath() << "\" has too many children named \"" 
+                   << name << "\"";
+        return ConfigNodePtr();
+      }
+    }
+
+    return cur;
+  }
+}
+
+std::string ConfigNode::GetNodePath() const {
+  std::string path;
+  const ConfigNode* node = this;
+  while (node) {
+    const std::string& name = GetAttr("name");
+    path = std::move(name + "/" + path);
+  }
+
+  path = std::move("//" + path);
+  return path;
+}
+
+ConfigNodes ConfigNode::GetNodeWithAttr(const std::string& name, 
+                                        const std::string& value) {
+  ConfigNodes nodes;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
-    if ((*iter)->tagname() == name)
+    if ((*iter)->GetAttr(name) == value) {
+      nodes.push_back(*iter);
+    }
+  }
+
+  return nodes;
+}
+
+ConfigNodePtr ConfigNode::GetFirstChildTagged(const std::string& tag) const {
+  for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
+    if ((*iter)->tagname() == tag)
       return *iter;
   }
 
   return ConfigNodePtr();
 }
 
-ConfigNodePtr ConfigNode::GetLastChildNamed(
+ConfigNodePtr ConfigNode::GetLastChildTagged(
     const std::string& name) const {
   for (auto iter = children_.rbegin(); iter != children_.rend(); ++iter) {
     if ((*iter)->tagname() == name)
@@ -136,7 +190,7 @@ ConfigNodePtr ConfigNode::GetLastChildNamed(
   return ConfigNodePtr();
 }
 
-bool ConfigNode::HasNamedChild(const std::string& name) const {
+bool ConfigNode::HasTaggedChild(const std::string& name) const {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     if ((*iter)->tagname() == name)
       return true;
@@ -287,7 +341,7 @@ bool ConfigNode::GetTextAsQuaternion(Quaternion* v) const {
 }
 
 bool ConfigNode::GetChildText(const std::string& name, std::string* text) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
   *text = vec[0]->GetText();
@@ -295,56 +349,56 @@ bool ConfigNode::GetChildText(const std::string& name, std::string* text) const 
 }
 
 std::string ConfigNode::GetChildTextString(const std::string& name) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return std::string();
   return vec[0]->GetText();
 }
 
 bool ConfigNode::GetChildTextAsDouble(const std::string& name, double* v) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
   return vec[0]->GetTextAsDouble(v);
 }
 
 bool ConfigNode::GetChildTextAsFloat(const std::string& name, float* v) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
   return vec[0]->GetTextAsFloat(v);
 }
 
 bool ConfigNode::GetChildTextAsInt(const std::string& name, int32* v) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
   return vec[0]->GetTextAsInt(v);
 }
 
 bool ConfigNode::GetChildTextAsVec2(const std::string& name, Vector2* v) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
   return vec[0]->GetTextAsVec2(v);
 }
 
 bool ConfigNode::GetChildTextAsVec3(const std::string& name, Vector3* v) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
   return vec[0]->GetTextAsVec3(v);
 }
 
 bool ConfigNode::GetChildTextAsVec4(const std::string& name, Vector4* v) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
   return vec[0]->GetTextAsVec4(v);
 }
 
 bool ConfigNode::GetChildTextAsQuaternion(const std::string& name, Quaternion* v) const {
-  std::vector<ConfigNodePtr> vec = std::move(GetNamedChildren(name));
+  std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
   return vec[0]->GetTextAsQuaternion(v);
