@@ -19,7 +19,7 @@ void Tile::GenerateVertex(float width, float depth, VertexPack* pack) {
   
   pack->first();
   for (int32 i = 0; i < kGridLine; ++i) {
-    float z = 0.5f * depth - i * cell_depth;
+    float z = -0.5f * depth + i * cell_depth;
     for (int32 j = 0; j < kGridLine; ++j) {
       float x = -0.5f * width + j * cell_width;
       Vector4 v(x, 0.0f, z, 1.0f);
