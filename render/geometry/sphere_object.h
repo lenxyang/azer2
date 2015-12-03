@@ -8,19 +8,20 @@ namespace azer {
 
 class AZER_EXPORT SphereObject : public GeometryObject {
  public:
-  SphereObject(VertexDescPtr desc);
-  SphereObject(VertexDescPtr desc, int32 stack, int32 slice);
+  SphereObject(VertexDescPtr desc, float radius = 1.0f, int32 stack = 24, 
+               int32 slice = 24);
   ~SphereObject();
 
  private:
   void InitHardwareBuffers();
+  float radius_;
   int32 stack_, slice_;
   DISALLOW_COPY_AND_ASSIGN(SphereObject);
 };
 
-SlotVertexDataPtr AZER_EXPORT InitSphereVertexData(int32 stack, int32 slice,
-                                       VertexDescPtr desc); 
-IndicesDataPtr AZER_EXPORT InitSphereIndicesData(int32 stack, int32 slice); 
-IndicesDataPtr AZER_EXPORT InitSphereWireFrameIndicesData(int32 stack, int32 slice);
+AZER_EXPORT SlotVertexDataPtr InitSphereVertexData(
+    int32 stack, int32 slice, float radius, VertexDescPtr desc); 
+AZER_EXPORT IndicesDataPtr InitSphereIndicesData(int32 stack, int32 slice); 
+AZER_EXPORT IndicesDataPtr InitSphereWireFrameIndicesData(int32 stack, int32 slice);
 
 }  // namespace azer

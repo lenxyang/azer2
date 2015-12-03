@@ -22,23 +22,23 @@ inline int32 CalcSphereVertexNum(int32 stack_num, int32 slice_num) {
 
 
 SlotVertexDataPtr InitSphereVertexData(int32 stack, int32 slice, 
-                                   VertexDescPtr desc) {
+                                       float rad, VertexDescPtr desc) {
   const int32 kVertexNum = CalcSphereVertexNum(stack, slice);
   SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
   VertexPack vpack(vdata.get());
 
   int num = 0;
   CHECK(vpack.first());
-  vpack.WriteVector4(Vector4(0.0f, 1.0f, 0.0f, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector4(Vector4(0.0f, rad, 0.0f, 1.0f), VertexPos(0, 0));
   num++;
 
   for (int i = 1; i < stack - 1; ++i) {
-    float y = sin(Degree(90.0f - i * 180.0f / (float)stack));
+    float y = rad * sin(Degree(90.0f - i * 180.0f / (float)stack));
     float slice_radius =  cos(Degree(90.0f - i * 180.0f / (float)stack));
     for (int j = 0; j < slice; ++j) {
       float degree = 360.0f - j * 360.0f / slice;
-      float x = slice_radius * cos(Degree(degree));
-      float z = slice_radius * sin(Degree(degree));
+      float x = rad * slice_radius * cos(Degree(degree));
+      float z = rad * slice_radius * sin(Degree(degree));
 
       CHECK(vpack.next(1));
       vpack.WriteVector4(Vector4(x, y, z, 1.0f), VertexPos(0, 0));
@@ -47,7 +47,7 @@ SlotVertexDataPtr InitSphereVertexData(int32 stack, int32 slice,
   }
 
   CHECK(vpack.next(1));
-  vpack.WriteVector4(Vector4(0.0f, -1.0f, 0.0f, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector4(Vector4(0.0f, -rad, 0.0f, 1.0f), VertexPos(0, 0));
   num++;
   DCHECK_EQ(num, kVertexNum);
   return vdata;
@@ -102,15 +102,11 @@ IndicesDataPtr InitSphereWireFrameIndicesData(int32 stack, int32 slice) {
   return idata;
 }
 
-SphereObject::SphereObject(VertexDescPtr desc)
-    : GeometryObject(desc),
-      stack_(24), 
-      slice_(24) {
-  InitHardwareBuffers();
-}
 
-SphereObject::SphereObject(VertexDescPtr desc, int32 stack, int32 slice)
+SphereObject::SphereObject(VertexDescPtr desc, float radius, int32 stack, 
+                           int32 slice)
     : GeometryObject(desc),
+      radius_(radius),
       stack_(stack), 
       slice_(slice) {
   InitHardwareBuffers();
@@ -120,7 +116,7 @@ SphereObject::~SphereObject() {
 }
 
 void SphereObject::InitHardwareBuffers() {
-  SlotVertexDataPtr vdata(InitSphereVertexData(stack_, slice_, desc_));
+  SlotVertexDataPtr vdata(InitSphereVertexData(stack_, slice_, radius_, desc_));
   IndicesDataPtr idata = InitSphereIndicesData(stack_, slice_);
 
   VertexPos npos;
