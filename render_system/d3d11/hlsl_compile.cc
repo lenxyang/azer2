@@ -29,14 +29,15 @@ ID3DBlob* CompileHLSL(const std::string& shader, const std::string& target,
                       const std::string& entrypointer,
                       const std::string& shader_path,
                       std::string* error_msg) {
+  std::string source_path = shader_path.empty() ? "noname.hlsl" : shader_path;
   ID3DBlob* blob = NULL;
   ID3DBlob* msgblob = NULL;
   HRESULT hr;
   hr = D3DCompile(shader.c_str(),
                   shader.length(),
-                  shader_path.c_str(),
+                  source_path.c_str(),
                   NULL,
-                  NULL,                 // pIncludes
+                  D3D_COMPILE_STANDARD_FILE_INCLUDE, // pIncludes
                   entrypointer.c_str(), // pEntryPointer
                   target.c_str(),
                   kCompileFlags,
