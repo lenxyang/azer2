@@ -110,6 +110,8 @@ SphereObject::SphereObject(VertexDescPtr desc, float radius, int32 stack,
       stack_(stack), 
       slice_(slice) {
   InitHardwareBuffers();
+  vmin_ = Vector3(-radius, -radius, -radius);
+  vmax_ = Vector3( radius,  radius,  radius);
 }
 
 SphereObject::~SphereObject() {
