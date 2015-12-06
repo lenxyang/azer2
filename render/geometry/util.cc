@@ -105,10 +105,10 @@ void GenerateBarrel(float top_radius, float bottom_radius, float height,
       float z = slice_radius * sin(Degree(degree));
 
       vpack->WriteVector4(Vector4(x, y, z, 1.0f), VertexPos(0, 0));
-      CHECK(vpack->next(1));
       float u = j * tex_u_unit;
       float v = (i + 1) * tex_v_unit;
       vpack->WriteVector2(Vector2(0.0f, 0.0f), tpos); 
+      vpack->next(1);
     }
     y -= height_unit;
   }
