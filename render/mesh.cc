@@ -113,12 +113,17 @@ void MeshPart::UpdateProviderParams(const FrameArgs& args) {
 }
 
 void MeshPart::Render(Renderer* renderer) {
-  scoped_ptr<ScopedResetBlending> autoblending_;
-  if (blending_.get()) {
+  if (!blending_.get()) {
+    RenderPart(renderer);
+  } else {
+    scoped_ptr<ScopedResetBlending> autoblending_;
     autoblending_.reset(new ScopedResetBlending(renderer));
     renderer->UseBlending(blending_.get(), 0);
+    RenderPart(renderer);
   }
+}
 
+void MeshPart::RenderPart(Renderer* renderer) {
   ApplyParams(effect_.get());
   renderer->UseEffect(effect_.get());
   for (int32 i = 0; i < vecptr_->entity_count(); ++i) {
@@ -128,11 +133,13 @@ void MeshPart::Render(Renderer* renderer) {
 }
 
 // class Mesh
-Mesh::Mesh() {
+Mesh::Mesh() 
+    : blending_count_(0) {
 }
 
 Mesh::Mesh(EffectAdapterContext* context)
-    : EffectParamsProviderContainer(context) {
+    : EffectParamsProviderContainer(context),
+      blending_count_(0) {
 }
 
 Mesh::~Mesh() {
@@ -143,6 +150,7 @@ void Mesh::AddMeshPart(MeshPart* ptr) {
   part_.push_back(MeshPartPtr(ptr));
   UpdateVMinAndVMax(ptr->entity_vector()->vmin(), &vmin_, &vmax_);
   UpdateVMinAndVMax(ptr->entity_vector()->vmax(), &vmin_, &vmax_);
+  blending_count_ += (ptr->blending() != NULL) ? 1 : 0;
 }
 
 MeshPartPtr Mesh::RemoveMeshPartAt(int32 index) {
@@ -151,11 +159,13 @@ MeshPartPtr Mesh::RemoveMeshPartAt(int32 index) {
   ptr->SetEffectAdapterContext(NULL);
   part_.erase(part_.begin() + index);
   UpdateMinAndMax();
+  blending_count_ -= (ptr->blending() != NULL) ? 1 : 0;
   return ptr;
 }
 
 void Mesh::ClearMeshPart() {
   part_.clear();
+  blending_count_ = 0;
 }
 
 void Mesh::UpdateProviderParams(const FrameArgs& args) {

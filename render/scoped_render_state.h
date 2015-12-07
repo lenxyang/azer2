@@ -64,4 +64,24 @@ class ScopedFrontFace {
   Renderer* renderer_;
   DISALLOW_COPY_AND_ASSIGN(ScopedFrontFace);
 };
+
+class ScopedDepthBuffer {
+ public:
+  ScopedDepthBuffer(bool enable, Renderer* renderer)
+      : renderer_(renderer) {
+    prev_mode_ = renderer->IsDepthTestEnable();
+    modified_ = (prev_mode_ != enable);
+    if (modified_)
+      renderer_->EnableDepthTest(enable);
+  }
+  ~ScopedDepthBuffer() {
+    if (modified_)
+      renderer_->EnableDepthTest(prev_mode_);
+  }
+ private:
+  bool prev_mode_;
+  bool modified_;
+  Renderer* renderer_;
+  DISALLOW_COPY_AND_ASSIGN(ScopedDepthBuffer);
+};
 }  // namespace azer

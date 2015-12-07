@@ -17,8 +17,12 @@ typedef scoped_refptr<Blending> BlendingPtr;
 
 class Entity;
 class EntityVec;
+class MeshPart;
+class Mesh;
 typedef scoped_refptr<Entity> EntityPtr;
 typedef scoped_refptr<EntityVec> EntityVecPtr;
+typedef scoped_refptr<MeshPart> MeshPartPtr;
+typedef scoped_refptr<Mesh> MeshPtr;
 
 // class Entity
 class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
@@ -85,7 +89,7 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
   void SetBlending(Blending* blending) { blending_ = blending;}
   Blending* blending() { return blending_.get();}
   void UpdateProviderParams(const FrameArgs& args) override;
-  void Render(Renderer* renderer);
+  virtual void Render(Renderer* renderer);
 
   Effect* effect() { return effect_.get();}
   void SetEffect(Effect* effect) { effect_ = effect;}
@@ -96,11 +100,11 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
   Entity* entity_at(int32 index) { return vecptr_->entity_at(index);}
   int32 entity_count() { return vecptr_->entity_count();}
  private:
+  void RenderPart(Renderer* renderer);
   EffectPtr effect_;
   EntityVecPtr vecptr_;
   BlendingPtr blending_;
 };
-typedef scoped_refptr<MeshPart> MeshPartPtr;
 
 class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
  public:
@@ -113,9 +117,10 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   void ClearMeshPart();
   int32 part_count() const { return static_cast<int32>(part_.size());}
   MeshPart* part_at(int32 index) { return part_[index].get();}
+  bool has_blending() const { return blending_count_ > 0;}
 
   void UpdateProviderParams(const FrameArgs& args) override;
-  void Render(Renderer* renderer);
+  virtual void Render(Renderer* renderer);
   
   const Vector3& vmin() { return vmin_;}
   const Vector3& vmax() { return vmax_;}
@@ -123,11 +128,10 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   void UpdateMinAndMax();
   Vector3 vmin_;
   Vector3 vmax_;
-  std::vector<scoped_refptr<MeshPart> > part_;
+  int32 blending_count_;
+  std::vector<MeshPartPtr> part_;
   DISALLOW_COPY_AND_ASSIGN(Mesh);
 };
-
-typedef scoped_refptr<Mesh> MeshPtr;
 
 void AZER_EXPORT UpdateVMinAndVMax(const Vector3 pos, Vector3* vmin, Vector3* vmax);
 }  // namespace azer
