@@ -18,13 +18,14 @@ int32 CalcCylinderVertexNum(int32 stack_num, int32 slice_num) {
 }
 }
 CylinderObject::CylinderObject(VertexDescPtr desc, 
-                               float top_radius, float bottom_radius,
+                               float top_radius, float bottom_radius, float height,
                                int32 stack, int32 slice, bool withhat)
     : GeometryObject(desc),
       stack_(stack),
       slice_(slice),
       top_radius_(top_radius),
       bottom_radius_(bottom_radius),
+      height_(height),
       withhat_(withhat) {
   InitHardwareBuffers();
   float max_x = std::max(top_radius_, bottom_radius_);
@@ -38,7 +39,7 @@ CylinderObject::~CylinderObject() {
 
 void CylinderObject::InitHardwareBuffers() {
   SlotVertexDataPtr vdata = InitCylinderVertexData(
-      top_radius_, bottom_radius_, stack_, slice_, withhat_, desc_.get());
+      top_radius_, bottom_radius_, height_, stack_, slice_, withhat_, desc_.get());
   IndicesDataPtr idata = InitCylinderIndicesData(stack_, slice_, withhat_);
   RenderSystem* rs = RenderSystem::Current();
   vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
@@ -46,7 +47,7 @@ void CylinderObject::InitHardwareBuffers() {
 }
 
 SlotVertexDataPtr InitCylinderVertexData(
-    float top_radius, float bottom_radius, int32 stack, int32 slice,
+    float top_radius, float bottom_radius, float height, int32 stack, int32 slice,
     bool withhat, VertexDescPtr desc) {
   int32 kVertexCount =  stack * slice;
   int32 kIndicesCount = (stack - 1) * slice* 3 * 2;
@@ -61,10 +62,10 @@ SlotVertexDataPtr InitCylinderVertexData(
 
   vpack.first();
   
-  GenerateBarrel(top_radius, bottom_radius, 1.0f, stack, slice,
+  GenerateBarrel(top_radius, bottom_radius, height, stack, slice,
                  &vpack, &ipack);
   if (withhat) {
-    GenerateConeHat(true, 1.0f, 1.0f, top_radius, slice, &vpack, &ipack);
+    GenerateConeHat(true, height, height, top_radius, slice, &vpack, &ipack);
     GenerateConeHat(false, 0.0f, 0.0f, bottom_radius, slice, &vpack, &ipack);
   }
 

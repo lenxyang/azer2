@@ -4,7 +4,7 @@
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render/reusable_object.h"
 #include "azer/render/reusable_object_util.h"
-#include "azer/render/render_state_autorestore.h"
+#include "azer/render/scoped_render_state.h"
 
 namespace azer {
 namespace d3d11 {
@@ -164,7 +164,7 @@ void D3DOverlay::Render(Renderer* renderer) {
   azer::Vector2 texcoord[4];
   
   DCHECK (effect_.get() != NULL);
-  AutoCullingMode(kCullNone, renderer);
+  ScopedCullingMode(kCullNone, renderer);
   effect_->SetTransform(transform_);
   effect_->SetVertex(vertex_);
   effect_->SetTexcoord(texcoord_);

@@ -59,7 +59,7 @@ void AxesFrames::Init(ColoredDiffuseEffectPtr effect) {
 
   sphere_ = new SphereObject(effect->GetVertexDesc(), 16, 16);
   cone_ = new ConeObject(effect->GetVertexDesc(), 16);
-  cylinder_ = new CylinderObject(effect->GetVertexDesc(), 16, 16);
+  cylinder_ = new CylinderObject(effect->GetVertexDesc());
 
   sphere_ = new SphereObject(effect->GetVertexDesc(), 24, 24);
   Matrix4 xaxis_orientation = RotateZ(Degree(90.0f));

@@ -8,8 +8,8 @@ namespace azer {
 
 class AZER_EXPORT CircleObject : public GeometryObject {
  public:
-  CircleObject(VertexDescPtr desc);
-  CircleObject(VertexDescPtr desc, int32 slice);
+  CircleObject(VertexDescPtr desc, int32 slice = 32, 
+               float radius = 1.0f, float y = 0.0f);
   ~CircleObject();
 
   void Render(Renderer* renderer) override;
@@ -17,6 +17,8 @@ class AZER_EXPORT CircleObject : public GeometryObject {
  private:
   void InitHardwareBuffers();
   const int32 kSlice;
+  float radius_;
+  float y_;
   DISALLOW_COPY_AND_ASSIGN(CircleObject);
 };
 

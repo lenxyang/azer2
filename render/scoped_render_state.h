@@ -3,16 +3,16 @@
 #include "azer/render/renderer.h"
 
 namespace azer {
-class AutoCullingMode {
+class ScopedCullingMode {
  public:
-  AutoCullingMode(CullingMode mode, Renderer* renderer)
+  ScopedCullingMode(CullingMode mode, Renderer* renderer)
       : renderer_(renderer) {
     prev_mode_ = renderer->GetCullingMode();
     modified_ = (prev_mode_ != mode);
     if (modified_)
       renderer_->SetCullingMode(mode);
   }
-  ~AutoCullingMode() {
+  ~ScopedCullingMode() {
     if (modified_)
       renderer_->SetCullingMode(prev_mode_);
   }
@@ -20,12 +20,12 @@ class AutoCullingMode {
   CullingMode prev_mode_;
   bool modified_;
   Renderer* renderer_;
-  DISALLOW_COPY_AND_ASSIGN(AutoCullingMode);
+  DISALLOW_COPY_AND_ASSIGN(ScopedCullingMode);
 };
 
-class AutoFillMode {
+class ScopedFillMode {
  public:
-  AutoFillMode(FillMode mode, Renderer* renderer)
+  ScopedFillMode(FillMode mode, Renderer* renderer)
       : renderer_(renderer) {
     prev_mode_ = renderer->GetFillMode();
     modified_ = (prev_mode_ != mode);
@@ -33,7 +33,7 @@ class AutoFillMode {
       renderer_->SetFillMode(mode);
     }
   }
-  ~AutoFillMode() {
+  ~ScopedFillMode() {
     if (modified_) {
       renderer_->SetFillMode(prev_mode_);
     }
@@ -42,19 +42,19 @@ class AutoFillMode {
   FillMode prev_mode_;
   bool modified_;
   Renderer* renderer_;
-  DISALLOW_COPY_AND_ASSIGN(AutoFillMode);
+  DISALLOW_COPY_AND_ASSIGN(ScopedFillMode);
 };
 
-class AutoFrontFace {
+class ScopedFrontFace {
  public:
-  AutoFrontFace(FrontFace mode, Renderer* renderer)
+  ScopedFrontFace(FrontFace mode, Renderer* renderer)
       : renderer_(renderer) {
     prev_mode_ = renderer->GetFrontFace();
     modified_ = (prev_mode_ != mode);
     if (modified_)
       renderer_->SetFrontFace(mode);
   }
-  ~AutoFrontFace() {
+  ~ScopedFrontFace() {
     if (modified_)
       renderer_->SetFrontFace(prev_mode_);
   }
@@ -62,6 +62,6 @@ class AutoFrontFace {
   FrontFace prev_mode_;
   bool modified_;
   Renderer* renderer_;
-  DISALLOW_COPY_AND_ASSIGN(AutoFrontFace);
+  DISALLOW_COPY_AND_ASSIGN(ScopedFrontFace);
 };
 }  // namespace azer

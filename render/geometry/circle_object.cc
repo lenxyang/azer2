@@ -4,15 +4,11 @@
 #include "azer/render/geometry/util.h"
 
 namespace azer {
-CircleObject::CircleObject(VertexDescPtr desc) 
+CircleObject::CircleObject(VertexDescPtr desc, int32 slice, float radius, float y) 
     : GeometryObject(desc),
-      kSlice(32) {
-  InitHardwareBuffers();
-}
-
-CircleObject::CircleObject(VertexDescPtr desc, int32 slice) 
-    : GeometryObject(desc),
-      kSlice(slice) {
+      kSlice(24),
+      radius_(radius),
+      y_(y) {
   InitHardwareBuffers();
 }
 
@@ -28,10 +24,10 @@ void CircleObject::InitHardwareBuffers() {
   VertexPack vpack(vdata.get());
   vpack.first();
   for (int i = 0; i < kVertexNum; ++i) {
-    float x = cos(Degree(i * degree));
-    float y = sin(Degree(i * degree));
-    vpack.WriteVector4(Vector4(x, y, 0.0f, 1.0f), VertexPos(0, 0));
-    vpack.WriteVector4(Vector4(0.0f, 0.0f, 1.0f, 0.0f), npos);
+    float x = cos(Degree(i * degree)) * radius_;
+    float z = sin(Degree(i * degree)) * radius_;
+    vpack.WriteVector4(Vector4(x, y_, z, 1.0f), VertexPos(0, 0));
+    vpack.WriteVector4(Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
     vpack.next(1);
   }
   CHECK(vpack.end());
