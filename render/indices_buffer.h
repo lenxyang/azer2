@@ -25,15 +25,8 @@ class AZER_EXPORT IndicesData : public Resource {
   ~IndicesData() override {}
 
   int32 size() const { return size_;}
-  const uint8* pointer() const {
-    DCHECK(data_.get() != NULL);
-    return data_.get();
-  }
-
-  uint8* pointer() {
-    DCHECK(data_.get() != NULL);
-    return data_.get();
-  }
+  const uint8* pointer() const;
+  uint8* pointer();
   IndexType type() const { return type_;}
   int32 num() const { return num_;}
   int32 unit_size() const;

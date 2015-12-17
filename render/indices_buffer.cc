@@ -1,6 +1,7 @@
 #include "azer/render/indices_buffer.h"
 
 #include <limits>
+#include "base/logging.h"
 #include "azer/render/render_system.h"
 
 namespace azer {
@@ -67,6 +68,16 @@ IndicesBuffer::~IndicesBuffer() {
 IndicesBuffer::Options::Options()
     : usage(GraphicBuffer::kDefault)
     , cpu_access(kCPUNoAccess) {
+}
+
+const uint8* IndicesBuffer::pointer() const {
+  DCHECK(data_.get() != NULL);
+  return data_.get();
+}
+
+uint8* IndicesBuffer::pointer() {
+  DCHECK(data_.get() != NULL);
+  return data_.get();
 }
 
 IndicesBufferPtr IndicesBuffer::CreateDefaultIndicesBuffer(RenderSystem* rs,
