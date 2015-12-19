@@ -113,6 +113,7 @@ class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
 
   int32 vertex_count() const { return vertex_count_;}
   const VertexDesc* vertex_desc() const;
+  VertexDesc* vertex_desc();
  private:
   VertexDescPtr desc_;
   int32 vertex_count_;

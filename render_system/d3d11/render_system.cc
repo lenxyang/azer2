@@ -80,7 +80,7 @@ VertexBufferPtr D3DRenderSystem::CreateVertexBuffer(
   }
 }
 
-VertexBufferGroupPtr D3DRenderSystem::CreateVertexBufferGroup(VertexDescPtr desc) {
+VertexBufferGroupPtr D3DRenderSystem::CreateVertexBufferGroup(VertexDesc* desc) {
   scoped_refptr<D3DVertexBufferGroup> ptr(new D3DVertexBufferGroup(desc));
   return ptr;
 }

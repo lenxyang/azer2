@@ -27,6 +27,8 @@ source_set("render") {
     "blending.h",
     "camera.cc",
     "camera.h",
+    "create_object_util.cc",
+    "create_object_util.h",
     "effect.cc",
     "effect.h",
     "effect_params_adapter.cc",

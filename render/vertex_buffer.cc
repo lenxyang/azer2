@@ -28,10 +28,8 @@ void VertexDesc::init(const Desc* desc, int desc_num) {
   DCHECK_EQ(offsets_idx_.size(), 0u);
   uint32 offset = 0;
   const Desc* cur = desc;
-  int32 cur_slot_count = 0;
-  int32 slot_element_size = 0;
+  int32 cur_slot_count = -1;
   offsets_idx_.resize(desc_num);
-  slot_element_.push_back(0);
   for (int i = 0; i < desc_num; ++i, ++cur) {
     offsets_idx_[i] = offset;
     int32 element_size = calc_vertex_desc_size(cur);
@@ -40,16 +38,14 @@ void VertexDesc::init(const Desc* desc, int desc_num) {
     DCHECK(cur_slot_count <= cur->input_slot);
     if (cur_slot_count < cur->input_slot) {
       cur_slot_count = cur->input_slot;
-      slot_stride_.push_back(slot_element_size);
-      slot_element_size = element_size;
+      slot_stride_.push_back(element_size);
+      slot_element_.push_back(1);
     } else {
-      slot_element_size += element_size;
       slot_element_.back() += 1;
+      slot_stride_.back() += (element_size);
     }
   }
 
-  slot_element_.back() += 1;
-  slot_stride_.push_back(slot_element_size);
   slot_count_ = slot_stride_.size();
   vertex_size_ = offset;
   desc_.reset(new Desc[desc_num]);
@@ -103,7 +99,7 @@ VertexDescPtr VertexDesc::gen_slot_desc(int32 sindex) const {
   scoped_ptr<VertexDesc::Desc[]> descptr(new VertexDesc::Desc[element_num]);
   VertexDesc::Desc* desc = descptr.get();
   int32 index = 0;
-  for (int32 i = 0; i < static_cast<int32>(slot_index_.size()); i) {
+  for (int32 i = 0; i < static_cast<int32>(slot_index_.size()); i++) {
     if (slot_index_[i] != sindex) {
       continue;
     }
@@ -191,16 +187,16 @@ int32 SlotVertexData::stride() const {
 VertexData::VertexData(VertexDesc* desc, int32 vertex_count)
     : desc_(desc),
       vertex_count_(vertex_count) {
-  vector_.resize(desc->element_num(-1));
+  vector_.resize(desc->slot_count());
 }
 
 VertexData::~VertexData() {
 }
 
 void VertexData::InitSlotFromDesc() {
-  DCHECK(vector_.size() == 0u);
+  DCHECK(static_cast<int32>(vector_.size()) == desc_->slot_count());
   for (int32 i = 0; i < desc_->slot_count(); ++i) {
-    VertexDesc* desc = desc_->gen_slot_desc(i);
+    VertexDescPtr desc = desc_->gen_slot_desc(i);
     const VertexDesc::Desc* d = desc->descs();
     int32 vertex_count = d->instance_data_step == 0 ? vertex_count_
         : (vertex_count_ + d->instance_data_step - 1) / d->instance_data_step;
@@ -218,6 +214,10 @@ SlotVertexData* VertexData::vertex_data_at(int32 index) {
 }
 
 const VertexDesc* VertexData::vertex_desc() const {
+  return desc_.get();
+}
+
+VertexDesc* VertexData::vertex_desc() {
   return desc_.get();
 }
 
@@ -283,11 +283,12 @@ VertexBuffer* VertexBufferGroup::vertex_buffer_at(int32 index) {
 }
 
 void VertexBufferGroup::add_vertex_buffer(VertexBuffer* vb) {
-  DCHECK(vertex_buffer_count() + 1 <= vdesc_->slot_count());
-  add_vertex_buffer_at(vb, vertex_buffer_count() - 1);
+  DCHECK(vertex_buffer_count() <= vdesc_->slot_count());
+  add_vertex_buffer_at(vb, vertex_buffer_count());
 }
 
 void VertexBufferGroup::add_vertex_buffer_at(VertexBuffer* vb, int32 index) {
+  DCHECK(vertex_buffer_count() <= vdesc_->slot_count());
   DCHECK(vertex_count_ == -1 || vertex_count_ != vb->vertex_count());
   vertex_count_ = vb->vertex_count();
   vector_.insert(vector_.begin() + index, vb);

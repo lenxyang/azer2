@@ -39,7 +39,7 @@ class D3DVertexBuffer : public VertexBuffer {
 
 class D3DVertexBufferGroup : public VertexBufferGroup {
  public:
-  D3DVertexBufferGroup(VertexDescPtr desc);
+  explicit D3DVertexBufferGroup(VertexDesc* desc);
   void OnVertexBufferChanged() override;
 
   ID3D11Buffer** buffer() { return vbs_;}

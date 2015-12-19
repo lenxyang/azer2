@@ -38,7 +38,7 @@ class D3DRenderSystem : public RenderSystem {
                                    bool shared_depth_buffer) override;
   RendererPtr CreateDeferredRenderer(const Texture::Options& opt) override;
   BlendingPtr CreateBlending(const Blending::Desc& desc) override;
-  VertexBufferGroupPtr CreateVertexBufferGroup(VertexDescPtr desc) override;
+  VertexBufferGroupPtr CreateVertexBufferGroup(VertexDesc* desc) override;
   VertexBufferPtr CreateVertexBuffer(const VertexBuffer::Options& opt,
                                      SlotVertexData* data) override;
   IndicesBufferPtr CreateIndicesBuffer(const IndicesBuffer::Options& opt,

@@ -79,7 +79,7 @@ void D3DVertexBuffer::unmap() {
 }
 
 // class D3DVertexBufferGroup
-D3DVertexBufferGroup::D3DVertexBufferGroup(VertexDescPtr desc)
+D3DVertexBufferGroup::D3DVertexBufferGroup(VertexDesc* desc)
     : VertexBufferGroup(desc) {
   memset(vbs_, 0, sizeof(vbs_));
   memset(stride_, 0, sizeof(stride_));
