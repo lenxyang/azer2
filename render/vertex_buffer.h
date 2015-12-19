@@ -34,7 +34,7 @@ class AZER_EXPORT VertexDesc : public Resource {
     bool aligned;              // aligned
   };
 
-  VertexDesc(const Desc* desc, int desc_num);
+  VertexDesc(const Desc* desc, int desc_count);
   ~VertexDesc();
 
   // calc offset by name or index
@@ -43,7 +43,10 @@ class AZER_EXPORT VertexDesc : public Resource {
   // size of single vertex 
   int32 slot_count() const;
   int32 stride(int32 slot) const;
-  int32 element_num(int32 index) const;
+  int32 element_slot(int32 index) const;
+  int32 element_index_inslot(int32 index) const;
+  int32 element_count_inslot(int32 index) const;
+  int32 element_count() const;
   int32 vertex_size() const;
   const Desc* descs() const;
 
@@ -55,7 +58,7 @@ class AZER_EXPORT VertexDesc : public Resource {
   // debug function
   std::string dump_vertex_data() const;
  private:
-  void init(const Desc* desc, int desc_num);
+  void init(const Desc* desc, int desc_count);
 
   /**
    * 此函数用于根据 strip 跟新 VertexDesc
@@ -90,7 +93,7 @@ class AZER_EXPORT SlotVertexData : public Resource {
   const uint8* vertex_data_at(int32 index) const;
   int32 buffer_size() const;
   int32 vertex_count() const;
-  int32 element_num() const;
+  int32 element_count() const;
   int32 stride() const;
 
   const VertexDesc* vertex_desc() const;

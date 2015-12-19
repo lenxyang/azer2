@@ -29,9 +29,9 @@ bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
 
   const VertexDesc::Desc* desc = desc_ptr_->descs();
   std::unique_ptr<D3D11_INPUT_ELEMENT_DESC[]>
-      layout_ptr(new D3D11_INPUT_ELEMENT_DESC[desc_ptr_->element_num(-1)]);
+      layout_ptr(new D3D11_INPUT_ELEMENT_DESC[desc_ptr_->element_count()]);
   D3D11_INPUT_ELEMENT_DESC* curr_layout = layout_ptr.get();
-  for (int i = 0; i < desc_ptr_->element_num(-1); ++i, ++curr_layout, ++desc) {
+  for (int i = 0; i < desc_ptr_->element_count(); ++i, ++curr_layout, ++desc) {
     curr_layout->SemanticName = desc->name;
     curr_layout->SemanticIndex = desc->semantic_index;
     curr_layout->Format = TranslateFormat(desc->type);
@@ -46,7 +46,7 @@ bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
   }
 
   hr = d3d_device->CreateInputLayout(layout_ptr.get(),
-                                     desc_ptr_->element_num(-1),
+                                     desc_ptr_->element_count(),
                                      blob->GetBufferPointer(),
                                      blob->GetBufferSize(),
                                      &input_layout_);

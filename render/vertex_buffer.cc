@@ -82,12 +82,28 @@ int32 VertexDesc::vertex_size() const {
   return vertex_size_;
 }
 
-int32 VertexDesc::element_num(int32 index) const {
-  if (index >= 0) {
-    return slot_element_[index];
-  } else {
-    return static_cast<int32>(slot_index_.size());
+int32 VertexDesc::element_slot(int32 index) const {
+  return static_cast<int32>(slot_index_[index]);
+}
+
+int32 VertexDesc::element_index_inslot(int32 index) const {
+  int32 idx = -1;
+  int32 slot = slot_index_[index];
+  for (int32 i = index; i >= 0; --i, ++idx) {
+    if (slot_index_[i] != slot)
+      break;
   }
+
+  return idx;
+}
+
+int32 VertexDesc::element_count_inslot(int32 index) const {
+  CHECK(index >= 0);
+  return slot_element_[index];
+}
+
+int32 VertexDesc::element_count() const {
+  return static_cast<int32>(slot_index_.size());
 }
 
 const VertexDesc::Desc* VertexDesc::descs() const { 
@@ -95,8 +111,8 @@ const VertexDesc::Desc* VertexDesc::descs() const {
 }
 
 VertexDescPtr VertexDesc::gen_slot_desc(int32 sindex) const {
-  int32 element_num = this->element_num(sindex);
-  scoped_ptr<VertexDesc::Desc[]> descptr(new VertexDesc::Desc[element_num]);
+  int32 element_count = this->element_count_inslot(sindex);
+  scoped_ptr<VertexDesc::Desc[]> descptr(new VertexDesc::Desc[element_count]);
   VertexDesc::Desc* desc = descptr.get();
   int32 index = 0;
   for (int32 i = 0; i < static_cast<int32>(slot_index_.size()); i++) {
@@ -107,7 +123,7 @@ VertexDescPtr VertexDesc::gen_slot_desc(int32 sindex) const {
     desc->input_slot = 0;
     desc++;
   }
-  return VertexDescPtr(new VertexDesc(descptr.get(), element_num));
+  return VertexDescPtr(new VertexDesc(descptr.get(), element_count));
 }
 
 // class SlotVertexData
@@ -173,9 +189,9 @@ int32 SlotVertexData::vertex_count() const {
   return vertex_count_;
 }
 
-int32 SlotVertexData::element_num() const {
+int32 SlotVertexData::element_count() const {
   DCHECK(desc_.get() != NULL);
-  return desc_->element_num(0);
+  return desc_->element_count();
 }
 
 int32 SlotVertexData::stride() const {
@@ -289,7 +305,7 @@ void VertexBufferGroup::add_vertex_buffer(VertexBuffer* vb) {
 
 void VertexBufferGroup::add_vertex_buffer_at(VertexBuffer* vb, int32 index) {
   DCHECK(vertex_buffer_count() <= vdesc_->slot_count());
-  DCHECK(vertex_count_ == -1 || vertex_count_ != vb->vertex_count());
+  DCHECK(vertex_count_ == -1 || vertex_count_ == vb->vertex_count());
   vertex_count_ = vb->vertex_count();
   vector_.insert(vector_.begin() + index, vb);
   OnVertexBufferChanged();

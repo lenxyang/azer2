@@ -177,7 +177,7 @@ bool GetSemanticIndex(const std::string& name, int32 semantic_index,
   const VertexDesc::Desc* desc = d->descs();
   int32 index = 0;
   int32 prev_slot = 0;
-  for (int32 i = 0; i < d->element_num(-1); ++i) {
+  for (int32 i = 0; i < d->element_count(); ++i) {
     if (base::strncasecmp(name.c_str(), (desc + i)->name, name.length()) == 0
         && (desc + i)->semantic_index == semantic_index) {
       const VertexDesc::Desc* cur = (desc + i);
@@ -186,8 +186,8 @@ bool GetSemanticIndex(const std::string& name, int32 semantic_index,
         index = 0;
       }
 
-      pos->slot = desc->input_slot;
-      pos->index = index;
+      pos->slot = d->element_slot(index);
+      pos->index = d->element_index_inslot(index);
       return true;
     }
     index++;
