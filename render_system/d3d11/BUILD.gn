@@ -31,8 +31,6 @@ shared_library("d3d11") {
     "render_target.h",
     "renderer.cc",
     "renderer.h",
-    "reusable_object.cc",
-    "reusable_object.h",
     "shader/coordinate_effect.cc",
     "shader/coordinate_effect.h",
     "shader/shader.cc",

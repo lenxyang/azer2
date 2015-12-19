@@ -2,8 +2,6 @@
 
 #include "azer/render/render.h"
 #include "azer/render_system/d3d11/render_system.h"
-#include "azer/render/reusable_object.h"
-#include "azer/render/reusable_object_util.h"
 #include "azer/render/scoped_render_state.h"
 
 namespace azer {
@@ -96,7 +94,6 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
 
   technique_ = rs->CreateTechnique();
   VertexDescPtr& desc = overlay->GetVertexDesc();
-  ReusableObject* object = rs->GetReusableObject();
 
   GpuProgram::ShaderInfo vsinfo, psinfo;
   vsinfo.code = kVertexShaderProg;
@@ -104,8 +101,9 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
   
   const char* overlay_vs = "azer_overlay_vs";
   const char* overlay_ps = "azer_overlay_ps";
-  GpuProgramPtr vs(GetVertexProgramMayCreate(overlay_vs, vsinfo, desc));
-  GpuProgramPtr ps(GetPixelProgramMayCreate(overlay_ps, psinfo));
+  
+  GpuProgramPtr vs(rs->CreateVertexGpuProgram(desc, vsinfo));
+  GpuProgramPtr ps(rs->CreateGpuProgram(kPixelStage, psinfo));
   if (vs.get() && ps.get()) {
     technique_->AddGpuProgram(vs);
     technique_->AddGpuProgram(ps);

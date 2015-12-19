@@ -10,13 +10,13 @@
 #include "azer/base/string.h"
 #include "azer/render/blending.h"
 #include "azer/render/gpu_constants_table.h"
+#include "azer/render/gpu_program.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/render_capability.h"
 #include "azer/render/renderer.h"
 #include "azer/render/surface.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/swap_chain.h"
-#include "azer/render/reusable_object.h"
 #include "ui/gfx/geometry/rect.h"
 
 namespace azer {
@@ -70,6 +70,7 @@ class AZER_EXPORT RenderSystem {
   // textures functions
   virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;
   virtual TexturePtr CreateTexture(const Texture::Options& opt, const Image* image) = 0;
+
   // create GpuProgram
   // Vertex Gpu Program need to help check "Vertex Layout"
   //
@@ -81,8 +82,6 @@ class AZER_EXPORT RenderSystem {
 
   virtual bool reset() = 0;
 
-  ReusableObject* GetReusableObject() { return reusable_object_.get();}
-
   Context2D* GetContext2D() { return context2d_.get();}
   const RenderSystemCapability& capability() const {
     return capability_;
@@ -93,7 +92,6 @@ class AZER_EXPORT RenderSystem {
   RenderSystemCapability capability_;
   std::unique_ptr<Context2D> context2d_;
 
-  ReusableObjectPtr reusable_object_;
   friend class AutoRenderSystemInit;
  private:
   static RenderSystem* render_system_;

@@ -17,7 +17,6 @@
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/renderer.h"
-#include "azer/render_system/d3d11/reusable_object.h"
 #include "azer/render_system/d3d11/overlay.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
@@ -47,14 +46,8 @@ SwapChainPtr D3DRenderSystem::CreateSwapChainForSurface(Surface* surface) {
 }
 
 bool D3DRenderSystem::Init() {
-  std::unique_ptr<D3DReusableObject> ptr(new D3DReusableObject());
-  if (ptr->Init(this)) {
-    reusable_object_ = ptr.release();
-	GetDriverCapability();
-    return true;
-  } else {
-    return false;
-  }
+  GetDriverCapability();
+  return true;
 }
 
 bool D3DRenderSystem::reset() {
