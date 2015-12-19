@@ -78,7 +78,7 @@ class AZER_EXPORT VertexDesc : public Resource {
 
 class AZER_EXPORT SlotVertexData : public Resource {
  public:
-  SlotVertexData(const VertexDescPtr& desc, int32 vertex_num);
+  SlotVertexData(VertexDesc* desc, int32 vertex_count);
 
   uint8* next(const uint8* cur);
   const uint8* next(const uint8* cur) const;
@@ -89,33 +89,33 @@ class AZER_EXPORT SlotVertexData : public Resource {
   uint8* vertex_data_at(int32 index);
   const uint8* vertex_data_at(int32 index) const;
   int32 buffer_size() const;
-  int32 vertex_num() const;
+  int32 vertex_count() const;
   int32 element_num() const;
   int32 stride() const;
 
-  const VertexDesc* desc() const;
-  VertexDesc* desc();
+  const VertexDesc* vertex_desc() const;
+  VertexDesc* vertex_desc();
  private:
   std::unique_ptr<uint8[]> data_;
-  int32 vertex_num_;
+  int32 vertex_count_;
   VertexDescPtr desc_;
   DISALLOW_COPY_AND_ASSIGN(SlotVertexData);
 };
 
 class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
  public:
-  VertexData(const VertexDescPtr& desc, int32 vertex_num);
+  VertexData(VertexDesc* desc, int32 vertex_count);
   ~VertexData();
 
   void InitSlotFromDesc();
-  void set_slot_vertex_data(SlotVertexDataPtr data, int32 slot_index);
+  void set_slot_vertex_data(SlotVertexData* data, int32 slot_index);
   SlotVertexData* vertex_data_at(int32 index);
 
-  int32 vertex_num() const { return vertex_num_;}
-  const VertexDesc* desc() const;
+  int32 vertex_count() const { return vertex_count_;}
+  const VertexDesc* vertex_desc() const;
  private:
   VertexDescPtr desc_;
-  int32 vertex_num_;
+  int32 vertex_count_;
   std::vector<SlotVertexDataPtr> vector_;
   DISALLOW_COPY_AND_ASSIGN(VertexData);
 };
@@ -142,14 +142,14 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
 
-  int32 vertex_num() const { return vertex_num_;}
-  int32 buffer_size() const { return vertex_num_;}
+  int32 vertex_count() const { return vertex_count_;}
+  int32 buffer_size() const { return vertex_count_;}
   int32 element_size() const { return element_size_;}
  protected:
   const Options options_;
   int32 element_size_;
   int32 buffer_size_;
-  int32 vertex_num_;
+  int32 vertex_count_;
   DISALLOW_COPY_AND_ASSIGN(VertexBuffer);
 };
 
@@ -157,13 +157,15 @@ int32 AZER_EXPORT VertexTypeSize(DataFormat type);
 
 class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGroup> {
  public:
-  VertexBufferGroup(VertexDescPtr vdesc);
+  explicit VertexBufferGroup(VertexDesc* vdesc);
   ~VertexBufferGroup();
 
-  int32 vertex_buffer_count() const;
+  bool validate() const;
+  int32 vertex_count() const { return vertex_count_;}
+  int32 vertex_buffer_count() const { return static_cast<int32>(vector_.size());}
   VertexBuffer* vertex_buffer_at(int32 index);
-  void add_vertex_buffer(VertexBufferPtr vb);
-  void add_vertex_buffer_at(VertexBufferPtr vb, int32 index);
+  void add_vertex_buffer(VertexBuffer* vb);
+  void add_vertex_buffer_at(VertexBuffer* vb, int32 index);
   void remove_vertex_buffer_at(int32 index);
 
   std::vector<VertexBufferPtr>* get_vb_vector() { return &vector_;}
@@ -171,6 +173,7 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
   virtual void OnVertexBufferChanged() = 0;
   VertexDescPtr vdesc_;
   std::vector<VertexBufferPtr> vector_;
+  int32 vertex_count_;
   DISALLOW_COPY_AND_ASSIGN(VertexBufferGroup);
 };
 

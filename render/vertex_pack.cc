@@ -20,7 +20,7 @@ VertexPack::VertexPack(VertexData* data)
 VertexPack::VertexPack(SlotVertexData* data)
     : index_(-1),
       kAlignBytes(1) {
-  vertex_data_ = new VertexData(data->desc(), data->vertex_num());
+  vertex_data_ = new VertexData(data->vertex_desc(), data->vertex_count());
   vertex_data_->set_slot_vertex_data(SlotVertexDataPtr(data), 0);
 }
 
@@ -33,22 +33,22 @@ int32 VertexPack::index() const {
 
 bool VertexPack::first() {
   index_ = 0;
-  return index_ < vertex_data_->vertex_num();
+  return index_ < vertex_data_->vertex_count();
 }
 
 bool VertexPack::move(int32 offset) {
   first();
   index_ = offset;
-  return index_ < vertex_data_->vertex_num();
+  return index_ < vertex_data_->vertex_count();
 }
 
 bool VertexPack::next(int32 step) {
   index_ += step;
-  return index_ < vertex_data_->vertex_num();
+  return index_ < vertex_data_->vertex_count();
 }
 
 bool VertexPack::end() {
-  return !(index_ < vertex_data_->vertex_num());
+  return !(index_ < vertex_data_->vertex_count());
 }
 
 void VertexPack::WriteFloat(float v, const VertexPos& pos) {
@@ -156,19 +156,19 @@ VertexData* VertexPack::data() {
 }
 
 const VertexDesc* VertexPack::desc() const{ 
-  return vertex_data_->desc();
+  return vertex_data_->vertex_desc();
 }
 
 uint8* VertexPack::get_data_ptr(const VertexPos& pos) const {
   SlotVertexData* slot = vertex_data_->vertex_data_at(pos.slot);
   uint8* ptr = slot->vertex_data_at(index_);
-  return ptr + slot->desc()->offset(pos.index);
+  return ptr + slot->vertex_desc()->offset(pos.index);
 }
 
 DataFormat VertexPack::get_data_type(const VertexPos& pos) const {
   DCHECK(pos.slot != -1 && pos.index != -1);
   SlotVertexData* slot = vertex_data_->vertex_data_at(pos.slot);
-  const VertexDesc::Desc* desc = slot->desc()->descs() + pos.index;
+  const VertexDesc::Desc* desc = slot->vertex_desc()->descs() + pos.index;
   return desc->type;
 }
 

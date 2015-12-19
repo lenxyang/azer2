@@ -83,17 +83,17 @@ bool MainDelegate::Initialize() {
 
   RenderSystem* rs = RenderSystem::Current();
   effect_ = CreateDiffuse();
-  VertexBufferPtr vb1 = InitVertexBuffer(effect_->GetVertexDesc(), -10.0f, -10.0f);
-  VertexBufferPtr vb2 = InitVertexBuffer(effect_->GetVertexDesc(), 0.0f, 0.0f);
+  VertexBufferPtr vb1 = InitVertexBuffer(effect_->vertex_desc(), -10.0f, -10.0f);
+  VertexBufferPtr vb2 = InitVertexBuffer(effect_->vertex_desc(), 0.0f, 0.0f);
   ib_ = CreatePlaneIndices(11, 11);
-  plane1_ = rs->CreateVertexBufferGroup(effect_->GetVertexDesc());
-  plane2_ = rs->CreateVertexBufferGroup(effect_->GetVertexDesc());
+  plane1_ = rs->CreateVertexBufferGroup(effect_->vertex_desc());
+  plane2_ = rs->CreateVertexBufferGroup(effect_->vertex_desc());
   plane1_->add_vertex_buffer_at(vb1, 0);
   plane2_->add_vertex_buffer_at(vb2, 0);
 
-  scoped_ptr<Image> img1(Image::Load(::base::FilePath(
+  ImagePtr img1(Image::Load(::base::FilePath(
       FILE_PATH_LITERAL("azer/samples/media/texture/WoodCrate01.dds")), Image::k2D));
-  scoped_ptr<Image> img2(Image::Load(::base::FilePath(
+  ImagePtr img2(Image::Load(::base::FilePath(
       FILE_PATH_LITERAL("azer/samples/media/texture/WoodCrate02.dds")), Image::k2D));
   Texture::Options opt;
   opt.target = Texture::kShaderResource;

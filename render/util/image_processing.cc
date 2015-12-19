@@ -74,7 +74,7 @@ void ImageProcessing::Init() {
   viewport.bounds = gfx::Rect(rdopt.size);
   renderer_->SetViewport(viewport);
 
-  object_ = new PlaneObject(effect_->GetVertexDesc(), 1, 1);
+  object_ = new PlaneObject(effect_->vertex_desc(), 1, 1);
 }
 
 void ImageProcessing::Processing() {

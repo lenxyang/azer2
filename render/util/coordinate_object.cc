@@ -57,11 +57,11 @@ void AxesFrames::Init(ColoredDiffuseEffectPtr effect) {
   light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
   light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
-  sphere_ = new SphereObject(effect->GetVertexDesc(), 16, 16);
-  cone_ = new ConeObject(effect->GetVertexDesc(), 16);
-  cylinder_ = new CylinderObject(effect->GetVertexDesc());
+  sphere_ = new SphereObject(effect->vertex_desc(), 16, 16);
+  cone_ = new ConeObject(effect->vertex_desc(), 16);
+  cylinder_ = new CylinderObject(effect->vertex_desc());
 
-  sphere_ = new SphereObject(effect->GetVertexDesc(), 24, 24);
+  sphere_ = new SphereObject(effect->vertex_desc(), 24, 24);
   Matrix4 xaxis_orientation = RotateZ(Degree(90.0f));
   Matrix4 zaxis_orientation = RotateX(Degree(-90.0f));
   

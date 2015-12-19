@@ -27,12 +27,15 @@ typedef scoped_refptr<Mesh> MeshPtr;
 // class Entity
 class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
  public:
-  Entity();
-  Entity(VertexBufferPtr vb, IndicesBufferPtr ib);
+  explicit Entity(VertexDesc* desc);
+  explicit Entity(VertexBufferGroup* vb);
+  Entity(VertexDesc* desc, VertexBuffer* vb);
+  Entity(VertexDesc* desc, VertexBuffer* vb, IndicesBuffer* ib);
+  Entity(VertexBufferGroup* vb, IndicesBuffer* ib);
   ~Entity();
   
-  void SetVertexBuffer(VertexBufferPtr vb);
-  void SetIndicesBuffer(IndicesBufferPtr ib);
+  void SetVertexBuffer(VertexBuffer* vb, int32 index);
+  void SetIndicesBuffer(IndicesBuffer* ib);
 
   void Draw(Renderer* renderer);
   void DrawIndex(Renderer* renderer);
@@ -48,7 +51,7 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   PrimitiveTopology topology() const { return topology_;}
   void set_topology(PrimitiveTopology top) { topology_ = top;}
  private:
-  VertexBufferPtr vb_;
+  VertexBufferGroupPtr vbg_;
   IndicesBufferPtr ib_;
   PrimitiveTopology topology_;
   Vector3 vmin_;

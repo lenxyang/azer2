@@ -14,7 +14,7 @@ GeometryObject::~GeometryObject() {
 }
 
 MeshPartPtr GeometryObject::CreateObject(Effect* effect) {
-  EntityPtr entity(new Entity(vb_, ib_));
+  EntityPtr entity(new Entity(effect->vertex_desc(), vb_, ib_));
   *entity->mutable_vmin() = vmin_;
   *entity->mutable_vmax() = vmax_;
   MeshPartPtr part(new MeshPart(effect));
@@ -23,7 +23,7 @@ MeshPartPtr GeometryObject::CreateObject(Effect* effect) {
 }
 
 MeshPartPtr GeometryObject::CreateFrameObject(Effect* effect) {
-  EntityPtr entity(new Entity(vb_, frame_ib_));
+  EntityPtr entity(new Entity(effect->vertex_desc(), vb_, frame_ib_));
   *entity->mutable_vmin() = vmin_;
   *entity->mutable_vmax() = vmax_;
   MeshPartPtr part(new MeshPart(effect));

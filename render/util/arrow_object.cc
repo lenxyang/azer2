@@ -22,8 +22,8 @@ void ArrowObject::Init(ColoredDiffuseEffectPtr effect) {
   light_.diffuse = azer::Vector4(0.8f, 0.8f, 1.8f, 1.0f);
   light_.ambient = azer::Vector4(0.2f, 0.2f, 0.2f, 1.0f);
 
-  cone_ = new ConeObject(effect->GetVertexDesc(), 16);
-  cylinder_ = new CylinderObject(effect->GetVertexDesc(), 16, 16);
+  cone_ = new ConeObject(effect->vertex_desc(), 16);
+  cylinder_ = new CylinderObject(effect->vertex_desc(), 16, 16);
 
   
   color_ = Vector4(0.0f, 0.0f, 1.0f, 1.0f);

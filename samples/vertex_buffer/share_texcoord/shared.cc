@@ -109,16 +109,16 @@ bool MainDelegate::Initialize() {
   VertexBufferPtr vb2 = InitVertexBuffer(  0.0f,   0.0f, 1.0f);
   VertexBufferPtr texvb = InitVertexBufferTexcoord(11, 11);
   ib_ = CreatePlaneIndices(11, 11);
-  plane1_ = rs->CreateVertexBufferGroup(effect_->GetVertexDesc());
-  plane2_ = rs->CreateVertexBufferGroup(effect_->GetVertexDesc());
+  plane1_ = rs->CreateVertexBufferGroup(effect_->vertex_desc());
+  plane2_ = rs->CreateVertexBufferGroup(effect_->vertex_desc());
   plane1_->add_vertex_buffer_at(vb1, 0);
   plane2_->add_vertex_buffer_at(vb2, 0);
   plane1_->add_vertex_buffer_at(texvb, 1);
   plane2_->add_vertex_buffer_at(texvb, 1);
 
-  scoped_ptr<Image> img1(Image::Load(::base::FilePath(
+  ImagePtr img1(Image::Load(::base::FilePath(
       FILE_PATH_LITERAL("azer/samples/media/texture/WoodCrate01.dds")), Image::k2D));
-  scoped_ptr<Image> img2(Image::Load(::base::FilePath(
+  ImagePtr img2(Image::Load(::base::FilePath(
       FILE_PATH_LITERAL("azer/samples/media/texture/WoodCrate02.dds")), Image::k2D));
   Texture::Options opt;
   opt.target = Texture::kShaderResource;

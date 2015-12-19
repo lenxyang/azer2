@@ -19,7 +19,7 @@ class MainDelegate : public nelf::RenderDelegate {
   DirLight light_;
   MeshPtr mesh_;
   EffectAdapterContext context_;
-  ColoredDiffuseEffectPtr diffuse_effect_;
+  ColoredDiffuseEffectPtr effect_;
   DISALLOW_COPY_AND_ASSIGN(MainDelegate);
 };
 
@@ -37,11 +37,12 @@ bool MainDelegate::Initialize() {
   context_.RegisteAdapter(new EnvironmentEffectAdapter);
 
   RenderSystem* rs = RenderSystem::Current();
-  diffuse_effect_ = CreateColoredDiffuseEffect();
-  GeometryObjectPtr obj = new CylinderObject(diffuse_effect_->GetVertexDesc());
+  effect_ = CreateColoredDiffuseEffect();
+  VertexDesc* desc = effect_->vertex_desc();
+  GeometryObjectPtr obj = new CylinderObject(desc);
 
-  MeshPartPtr meshpart = new MeshPart(diffuse_effect_);
-  EntityPtr entity(new Entity(obj->GetVertexBuffer(), obj->GetIndicesBuffer()));
+  MeshPartPtr meshpart = new MeshPart(effect_);
+  EntityPtr entity(new Entity(desc, obj->GetVertexBuffer(), obj->GetIndicesBuffer()));
   meshpart->AddEntity(entity.get());
   meshpart->AddProvider(EffectParamsProviderPtr(new MaterialEffectProvider));
 

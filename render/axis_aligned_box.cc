@@ -17,7 +17,7 @@ AxisAlignedBox AxisAlignedBox::CalcForVertexData(
   azer::Vector4 max_pos(std::numeric_limits<float>::min(),
                         std::numeric_limits<float>::min(),
                         std::numeric_limits<float>::min(), 1.0f);
-  DataFormat pos_type = vdata.desc()->descs()[0].type;
+  DataFormat pos_type = vdata.vertex_desc()->descs()[0].type;
   DCHECK(pos_type == kVec3 || pos_type == kVec4);
   const uint8* next = vdata.pointer();
   CHECK(next != NULL);

@@ -132,18 +132,18 @@ void GenerateBarrel(float top_radius, float bottom_radius, float height,
 
 void CalcNormal(SlotVertexData* vbd, IndicesData* idata) {
   VertexPos npos;
-  if (!GetSemanticIndex("normal", 0, vbd->desc(), &npos)) {
+  if (!GetSemanticIndex("normal", 0, vbd->vertex_desc(), &npos)) {
     return;
   }
 
   std::vector<float> used;
   std::vector<Vector4> normals;
-  used.resize(vbd->vertex_num());
-  normals.resize(vbd->vertex_num());
+  used.resize(vbd->vertex_count());
+  normals.resize(vbd->vertex_count());
   
   VertexPack vpack(vbd);
   vpack.first();
-  for (int i = 0; i < vbd->vertex_num(); ++i) {
+  for (int i = 0; i < vbd->vertex_count(); ++i) {
     DCHECK(!vpack.end());
     vpack.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), npos);
     vpack.next(1);
@@ -185,18 +185,18 @@ void CalcNormal(SlotVertexData* vbd, IndicesData* idata) {
 
 void CalcTriangleListNormal(SlotVertexData* vbd, int* indices) {
   VertexPos npos;
-  if (!GetSemanticIndex("normal", 0, vbd->desc(), &npos)) {
+  if (!GetSemanticIndex("normal", 0, vbd->vertex_desc(), &npos)) {
     return;
   }
 
   std::vector<float> used;
   std::vector<Vector4> normals;
-  used.resize(vbd->vertex_num());
-  normals.resize(vbd->vertex_num());
+  used.resize(vbd->vertex_count());
+  normals.resize(vbd->vertex_count());
   
   VertexPack vpack(vbd);
   vpack.first();
-  for (int i = 0; i < vbd->vertex_num(); ++i) {
+  for (int i = 0; i < vbd->vertex_count(); ++i) {
     vpack.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), npos);
     vpack.next(1);
     used[i] = 0.0f;
@@ -204,7 +204,7 @@ void CalcTriangleListNormal(SlotVertexData* vbd, int* indices) {
   }
   
   vpack.first();
-  for (int i = 0; i < vbd->vertex_num(); i+=3) {
+  for (int i = 0; i < vbd->vertex_count(); i+=3) {
     int idx1 = *(indices + i);
     int idx2 = *(indices + i + 1);
     int idx3 = *(indices + i + 2);

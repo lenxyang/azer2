@@ -33,16 +33,17 @@ bool MainDelegate::Initialize() {
   Vector3 up(0.0f, 1.0f, 0.0f);
   camera_.reset(camera_pos, lookat, up);
 
+  VertexDesc* desc = diffuse_effect_->vertex_desc();
   RenderSystem* rs = RenderSystem::Current();
   diffuse_effect_ = CreateColoredDiffuseEffect();
-  GeometryObjectPtr obj = new CylinderObject(diffuse_effect_->GetVertexDesc());
+  GeometryObjectPtr obj = new CylinderObject(desc);
   EffectProviderPtr provider(new EffectProvider(&light_, &camera_));
   provider->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
   context_.RegisteAdapter(new ColoredEffectAdapter);
   meshpart_ = new MeshPart(diffuse_effect_.get());
   meshpart_->SetEffectAdapterContext(&context_);
-  EntityPtr entity(new Entity(obj->GetVertexBuffer(), obj->GetIndicesBuffer()));
+  EntityPtr entity(new Entity(desc, obj->GetVertexBuffer(), obj->GetIndicesBuffer()));
   meshpart_->AddEntity(entity.get());
   meshpart_->AddProvider(provider);
 

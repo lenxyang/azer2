@@ -89,7 +89,7 @@ FrustrumObject::~FrustrumObject() {
 }
 
 MeshPartPtr FrustrumObject::CreateFrameObject(Effect* effect) {
-  EntityPtr entity(new Entity(vb_, frame_ib_));
+  EntityPtr entity(new Entity(effect->vertex_desc(), vb_, frame_ib_));
   entity->set_topology(kLineList);
   MeshPartPtr part(new MeshPart(effect));
   part->AddEntity(entity);
@@ -99,6 +99,6 @@ MeshPartPtr FrustrumObject::CreateFrameObject(Effect* effect) {
 void FrustrumObject::Render(Renderer* renderer) {
   renderer->UseVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleList);
-  renderer->Draw(0, vb_->vertex_num());
+  renderer->Draw(0, vb_->vertex_count());
 }
 }  // namespace azer

@@ -9,7 +9,7 @@
 
 namespace azer {
 
-class AZER_EXPORT Image : base::RefCounted<Image> {
+class AZER_EXPORT Image : public base::RefCounted<Image> {
  public:
   enum Type {
     k1D = Texture::k1D,

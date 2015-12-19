@@ -15,10 +15,10 @@ CameraObject::CameraObject(const Camera* camera)
   arrow_->SetColor(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
   
   sphere_color_ = Vector4(1.0f, 1.0f, 1.0f, 0.2f);
-  sphere_ = new SphereObject(effect->GetVertexDesc(), 16, 16);
+  sphere_ = new SphereObject(effect->vertex_desc(), 16, 16);
 
   frustrum_color_ = Vector4(0.0f, 0.255f, 0.761f, 0.6f);
-  frustrum_object_ = new SquareTrustum(effect->GetVertexDesc(), 0.4f, 0.1f, 1.0f);
+  frustrum_object_ = new SquareTrustum(effect->vertex_desc(), 0.4f, 0.1f, 1.0f);
 
   Blending::Desc blend_desc;
   blend_desc.src = Blending::kSrcAlpha;

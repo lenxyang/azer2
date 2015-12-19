@@ -4,20 +4,67 @@
 #include "azer/render/blending.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
+#include "azer/render/vertex_buffer.h"
 
 namespace azer {
 
 // class Entity
-Entity::Entity() : topology_(kTriangleList) {
+Entity::Entity(VertexDesc* desc)
+    : topology_(kTriangleList) {
+  RenderSystem* rs = RenderSystem::Current();
+  vbg_ = rs->CreateVertexBufferGroup(desc);
 }
 
-Entity::Entity(VertexBufferPtr vb, IndicesBufferPtr ib)
-    : vb_(vb),
-      ib_(ib),
-      topology_(kTriangleList) {
+Entity::Entity(VertexDesc* desc, VertexBuffer* vb)
+    : topology_(kTriangleList) {
+  RenderSystem* rs = RenderSystem::Current();
+  vbg_ = rs->CreateVertexBufferGroup(desc);
+  SetVertexBuffer(vb, 0);
 }
+
+Entity::Entity(VertexBufferGroup* vbg)
+    : topology_(kTriangleList) {
+  vbg_ = vbg;
+}
+
+Entity::Entity(VertexDesc* desc, VertexBuffer* vb, IndicesBuffer* ib)
+    : topology_(kTriangleList) {
+  RenderSystem* rs = RenderSystem::Current();
+  vbg_ = rs->CreateVertexBufferGroup(desc);
+  SetVertexBuffer(vb, 0);
+  ib_ = ib;
+}
+
+Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib)
+    : topology_(kTriangleList) {
+  vbg_ = vbg;
+  ib_ = ib;
+}
+
+/*
+Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
+    : ib_(ib),
+      topology_(kTriangleList) {
+  vbg_ = new VertexBufferGroup;
+  SetVertexBuffer(vb, 0);
+  vbg_->add_vertex_buffer(vb.get());
+}
+*/
 
 Entity::~Entity() {
+}
+
+void Entity::SetVertexBuffer(VertexBuffer* vb, int32 index) {
+  vbg_->add_vertex_buffer_at(vb, index);
+}
+
+void Entity::SetIndicesBuffer(IndicesBuffer* ib) {
+  ib_ = ib;
+}
+
+EntityPtr Entity::DeepCopy() {
+  NOTIMPLEMENTED();
+  return EntityPtr();
 }
 
 void Entity::Render(Renderer* renderer) {
@@ -29,30 +76,19 @@ void Entity::Render(Renderer* renderer) {
 }
 
 void Entity::Draw(Renderer* renderer) {
-  renderer->UseVertexBuffer(vb_.get());
+  DCHECK(vbg_.get() && vbg_->validate());
+  renderer->UseVertexBufferGroup(vbg_.get());
   renderer->UseIndicesBuffer(NULL);
   renderer->SetPrimitiveTopology(topology());
-  renderer->Draw(vb_->vertex_num(), 0);
+  renderer->Draw(vbg_->vertex_count(), 0);
 }
 
 void Entity::DrawIndex(Renderer* renderer) {
-  renderer->UseVertexBuffer(vb_.get());
+  DCHECK(vbg_.get() && vbg_->validate());
+  renderer->UseVertexBufferGroup(vbg_.get());
   renderer->UseIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(topology());
   renderer->DrawIndex(ib_->indices_num(), 0, 0);
-}
-
-void Entity::SetVertexBuffer(VertexBufferPtr vb) {
-  vb_ = vb;
-}
-
-void Entity::SetIndicesBuffer(IndicesBufferPtr ib) {
-  ib_ = ib;
-}
-
-EntityPtr Entity::DeepCopy() {
-  NOTIMPLEMENTED();
-  return EntityPtr();
 }
 
 // class EntityVec

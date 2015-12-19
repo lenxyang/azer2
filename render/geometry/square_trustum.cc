@@ -129,7 +129,7 @@ void SquareTrustum::Render(Renderer* renderer) {
   renderer->UseVertexBuffer(vb_.get());
   renderer->UseIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(kTriangleList);
-  renderer->Draw(0, vb_->vertex_num());
+  renderer->Draw(0, vb_->vertex_count());
 }
 
 void SquareTrustum::RenderWireframe(Renderer* renderer) {

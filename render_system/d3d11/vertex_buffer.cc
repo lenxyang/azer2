@@ -12,7 +12,7 @@ namespace azer {
 namespace d3d11 {
 
 bool D3DVertexBuffer::Init(const SlotVertexData* dataptr) {
-  DCHECK(element_size_ == -1 && buffer_size_ == -1 && vertex_num_ == -1);
+  DCHECK(element_size_ == -1 && buffer_size_ == -1 && vertex_count_ == -1);
   ID3D11Device* d3d_device = render_system_->GetDevice();
 
   // attention
@@ -37,7 +37,7 @@ bool D3DVertexBuffer::Init(const SlotVertexData* dataptr) {
 
   element_size_ = dataptr->stride();
   buffer_size_ = dataptr->buffer_size();
-  vertex_num_ = dataptr->vertex_num();
+  vertex_count_ = dataptr->vertex_count();
   return true;
 }
 
@@ -81,9 +81,9 @@ void D3DVertexBuffer::unmap() {
 // class D3DVertexBufferGroup
 D3DVertexBufferGroup::D3DVertexBufferGroup(VertexDescPtr desc)
     : VertexBufferGroup(desc) {
-  memcpy(vbs_, 0, sizeof(vbs_));
-  memcpy(stride_, 0, sizeof(stride_));
-  memcpy(offset_, 0, sizeof(offset_));
+  memset(vbs_, 0, sizeof(vbs_));
+  memset(stride_, 0, sizeof(stride_));
+  memset(offset_, 0, sizeof(offset_));
 }
 
 void D3DVertexBufferGroup::OnVertexBufferChanged() {

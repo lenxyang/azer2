@@ -47,19 +47,19 @@ bool MainDelegate::Initialize() {
   pvw_effect_ = CreatePVWEffect();
   diffuse_effect_ = CreateColoredDiffuseEffect();
   
-  sphere1_ = new SphereObject(pvw_effect_->GetVertexDesc(), 8, 8);
+  sphere1_ = new SphereObject(pvw_effect_->vertex_desc(), 8, 8);
   provider1_ = new EffectProvider(&light_, &camera_);
   provider1_->GetTransformHolder()->SetPosition(Vector3(-3.0f, 0.0f, 0.0f));
 
-  sphere2_ = new SphereObject(diffuse_effect_->GetVertexDesc(), 8, 8);
+  sphere2_ = new SphereObject(diffuse_effect_->vertex_desc(), 8, 8);
   provider2_ = new EffectProvider(&light_, &camera_);
   provider2_->GetTransformHolder()->SetPosition(Vector3(0.0f, 0.0f, 3.0f));
 
-  box_ = new BoxObject(diffuse_effect_->GetVertexDesc());
+  box_ = new BoxObject(diffuse_effect_->vertex_desc());
   box_provider_ = new EffectProvider(&light_, &camera_);
   box_provider_->GetTransformHolder()->SetPosition(Vector3(3.0f, 0.0f, 3.0f));
 
-  cone_ = new BoxObject(diffuse_effect_->GetVertexDesc());
+  cone_ = new BoxObject(diffuse_effect_->vertex_desc());
   cone_provider_ = new EffectProvider(&light_, &camera_);
   cone_provider_->GetTransformHolder()->SetPosition(Vector3(3.0f, 0.0f, -3.0f));
 

@@ -31,11 +31,11 @@ void BoxObject::InitHardwareBuffers() {
 void BoxObject::Render(Renderer* renderer) {
   renderer->UseVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleList);
-  renderer->Draw(vb_->vertex_num(), 0);
+  renderer->Draw(vb_->vertex_count(), 0);
 }
 
 MeshPartPtr BoxObject::CreateFrameObject(Effect* effect) {
-  EntityPtr entity(new Entity(vb_, frame_ib_));
+  EntityPtr entity(new Entity(effect->vertex_desc(), vb_, frame_ib_));
   entity->set_topology(kLineList);
   MeshPartPtr part(new MeshPart(effect));
   part->AddEntity(entity);
