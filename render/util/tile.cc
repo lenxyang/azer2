@@ -23,7 +23,7 @@ void Tile::GenerateVertex(float width, float depth, VertexPack* pack) {
     for (int32 j = 0; j < kGridLine; ++j) {
       float x = -0.5f * width + j * cell_width;
       Vector4 v(x, 0.0f, z, 1.0f);
-      pack->WriteVector3Or4(&v, pos_pos);
+      pack->WriteVector3Or4(v, pos_pos);
       pack->next(1);
     }
   }
