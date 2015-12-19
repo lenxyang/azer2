@@ -9,7 +9,7 @@
 
 namespace azer {
 
-class AZER_EXPORT Image {
+class AZER_EXPORT Image : base::RefCounted<Image> {
  public:
   enum Type {
     k1D = Texture::k1D,
@@ -41,7 +41,7 @@ class AZER_EXPORT Image {
   DISALLOW_COPY_AND_ASSIGN(Image);
 };
 
-typedef std::shared_ptr<Image> ImagePtr;
+typedef scoped_refptr<Image> ImagePtr;
 
 inline Image::Image(ImageDataPtr& image, Type type)
     : type_(type) {
