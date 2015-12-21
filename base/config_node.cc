@@ -153,6 +153,7 @@ std::string ConfigNode::GetNodePath() const {
   while (node) {
     const std::string& name = GetAttr("name");
     path = std::move(name + "/" + path);
+    node = node->parent();
   }
 
   path = std::move("//" + path);
