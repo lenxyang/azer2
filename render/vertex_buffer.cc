@@ -29,25 +29,31 @@ void VertexDesc::init(const Desc* desc, int desc_num) {
   uint32 offset = 0;
   const Desc* cur = desc;
   int32 cur_slot_count = -1;
+  int32 element_size = 0, prev_element_size = 0;
+  vertex_size_ = 0;
   offsets_idx_.resize(desc_num);
   for (int i = 0; i < desc_num; ++i, ++cur) {
-    offsets_idx_[i] = offset;
-    int32 element_size = calc_vertex_desc_size(cur);
-    offset += element_size;
-    slot_index_.push_back(cur->input_slot);
+    prev_element_size = element_size;
+    element_size = calc_vertex_desc_size(cur);
     DCHECK(cur_slot_count <= cur->input_slot);
     if (cur_slot_count < cur->input_slot) {
+      offset = 0;
       cur_slot_count = cur->input_slot;
       slot_stride_.push_back(element_size);
       slot_element_.push_back(1);
     } else {
+      offset += prev_element_size;
       slot_element_.back() += 1;
       slot_stride_.back() += (element_size);
     }
+
+    vertex_size_ += element_size;
+    offsets_idx_[i] = offset;
+    slot_index_.push_back(cur->input_slot);
   }
 
   slot_count_ = slot_stride_.size();
-  vertex_size_ = offset;
+  
   desc_.reset(new Desc[desc_num]);
   memcpy(desc_.get(), desc, sizeof(Desc) * desc_num);
 }
