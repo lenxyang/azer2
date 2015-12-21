@@ -5,7 +5,7 @@ shared_library("azer") {
     "render",
     "render/layers",
     "render:render2d",
-    "resources",
+    # "resources",
     # "scene",
     "math",
   ]
@@ -36,7 +36,6 @@ test("unittests") {
     "base:unittests",
     "render:unittests",
     "render/layers:unittests",
-    "resources:unittests",
     "//base/test:run_all_unittests",
     "//base",
     "//azer",
