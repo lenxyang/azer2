@@ -73,5 +73,6 @@ class AZER_EXPORT FileSystem {
   DISALLOW_COPY_AND_ASSIGN(FileSystem);
 };
 
-bool LoadFileContents(const ResPath& path, FileContents* contents, FileSystem* fs);
+AZER_EXPORT bool LoadFileContents(const ResPath& path, FileContents* contents,
+                                  FileSystem* fs);
 }  // namespace azer
