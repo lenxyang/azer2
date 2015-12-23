@@ -86,6 +86,7 @@ void EffectParamsProviderContainer::ResetProvider() {
 
 void EffectParamsProviderContainer::ApplyParams(Effect* effect) {
   if (vector_.size() > 0u) {
+    DCHECK(cached_.get());
     cached_->ApplyParams(effect);
   }
 }

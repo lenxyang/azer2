@@ -115,6 +115,7 @@ void ResPath::OnPathChanged(const StringType& fullpath) {
 }
 
 bool ResPath::AppendCopy(const ResPath& path, ResPath* output) const {
+  CHECK(!path.empty());
   ResPath new_path(*this);
   if (new_path.Append(path)) {
     *output = new_path;

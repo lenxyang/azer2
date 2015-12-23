@@ -5,6 +5,7 @@
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
 #include "azer/render/vertex_buffer.h"
+#include "azer/render/effect_params_adapter.h"
 
 namespace azer {
 
@@ -145,10 +146,12 @@ MeshPart& MeshPart::operator = (const MeshPart& part) {
 }
 
 void MeshPart::UpdateProviderParams(const FrameArgs& args) {
+  DCHECK(context_ || vector_.size() == 0u);
   EffectParamsProviderContainer::UpdateProviderParams(args);
 }
 
 void MeshPart::Render(Renderer* renderer) {
+  DCHECK(context_ || vector_.size() == 0u);
   if (!blending_.get()) {
     RenderPart(renderer);
   } else {
@@ -205,6 +208,7 @@ void Mesh::ClearMeshPart() {
 }
 
 void Mesh::UpdateProviderParams(const FrameArgs& args) {
+  DCHECK(context_ || vector_.size() == 0u);
   EffectParamsProviderContainer::UpdateProviderParams(args);
   for (auto iter = part_.begin(); iter != part_.end(); ++iter) {
     (*iter)->UpdateProviderParams(args);
@@ -212,6 +216,7 @@ void Mesh::UpdateProviderParams(const FrameArgs& args) {
 }
 
 void Mesh::Render(Renderer* renderer) {
+  DCHECK(context_ || vector_.size() == 0u);
   for (auto iter = part_.begin(); iter != part_.end(); ++iter) {
     MeshPart* part = iter->get();
     ApplyParams(part->effect());
