@@ -6,8 +6,6 @@
 
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
-#include "azer/render/light.h"
-#include "azer/render/material.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/gpu_program.h"
 
@@ -36,12 +34,6 @@ class AZER_EXPORT Effect : public Resource {
   virtual const char* GetEffectName() const = 0;
   virtual bool Init(const ShaderPrograms& programs) = 0;
   void Apply(Renderer* renderer);
-
-  // light and material didn't have a fixed structure
-  // all will be dependent its implementation.
-  virtual void SetLight(int light_index, Light* light) {}
-  virtual void SetMatrial(Material* material) {}
-
   VertexDesc* vertex_desc() { return vertex_desc_ptr_.get();}
   
   // 刷新所有的 GpuConstantTable
