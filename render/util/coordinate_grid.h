@@ -2,10 +2,8 @@
 
 #include "base/basictypes.h"
 #include "azer/base/export.h"
-#include "azer/render/gpu_constants_table.h"
-#include "azer/render/transform_holder.h"
+#include "azer/render/camera.h"
 #include "azer/render/indices_buffer.h"
-#include "azer/render/technique.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/util/coordinate_grid_effect.h"
 
