@@ -36,6 +36,9 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   
   void SetVertexBuffer(VertexBuffer* vb, int32 index);
   void SetIndicesBuffer(IndicesBuffer* ib);
+  VertexBuffer* vertex_buffer_at(int32 index);
+  VertexBufferGroup* vertex_buffer_group() { return vbg_.get();}
+  IndicesBuffer* indices_buffer() { return ib_.get();}
 
   void Draw(Renderer* renderer);
   void DrawIndex(Renderer* renderer);

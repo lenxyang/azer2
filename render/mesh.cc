@@ -42,6 +42,10 @@ Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib)
   ib_ = ib;
 }
 
+VertexBuffer* Entity::vertex_buffer_at(int32 index) { 
+  return vbg_->vertex_buffer_at(index);
+}
+
 /*
 Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
     : ib_(ib),

@@ -25,9 +25,7 @@ class AZER_EXPORT EffectParamsProvider :
   EffectParamsProvider();
   virtual ~EffectParamsProvider();
 
-  virtual const char* name() const { return kEffectParamsProviderName;}
-
-  // apply the parameters on effect
+  virtual const char* GetProviderName() const { return kEffectParamsProviderName;}
   virtual void UpdateParams(const FrameArgs& args) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(EffectParamsProvider);
@@ -43,6 +41,7 @@ class AZER_EXPORT EffectParamsProviderContainer :
   EffectParamsProviderContainer(EffectAdapterContext* context);
   virtual ~EffectParamsProviderContainer();
 
+  EffectAdapterContext* adapter_context() { return context_;}
   void SetEffectAdapterContext(EffectAdapterContext* context);
 
   int32 provider_count() const;
