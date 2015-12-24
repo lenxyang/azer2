@@ -23,7 +23,7 @@ void CoordinateGrid::Init() {
   RenderSystem* rs = RenderSystem::Current();
   std::vector<std::string> vec;
   vec.resize(kRenderPipelineStageNum);
-  CoordinateGridEffect* effect = new CoordinateGridEffect(rs);
+  CoordinateGridEffect* effect = new CoordinateGridEffect();
   effect_ptr_ = effect;
   data_ = new SlotVertexData(effect->GetVertexDesc(), (kNum + 1) * 4);
   CoordinateGridEffect::Vertex* vertex =

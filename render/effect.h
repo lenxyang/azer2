@@ -30,7 +30,7 @@ typedef scoped_refptr<Technique> TechniquePtr;
 class AZER_EXPORT Effect : public Resource {
  public:
   typedef std::vector<GpuProgram::ShaderInfo> ShaderPrograms;
-  explicit Effect(RenderSystem* rs);
+  Effect();
   ~Effect() override;
 
   virtual const char* GetEffectName() const = 0;
@@ -55,7 +55,6 @@ class AZER_EXPORT Effect : public Resource {
 
   TechniquePtr technique_;
   std::vector<scoped_refptr<GpuConstantsTable> > gpu_table_;
-  RenderSystem* render_system_;
   VertexDescPtr vertex_desc_ptr_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };

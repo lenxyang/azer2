@@ -13,7 +13,7 @@ class RenderSystem;
 class CoordinateGridEffect : public Effect {
  public:
   static const char kEffectName[];
-  CoordinateGridEffect(RenderSystem* rs);
+  CoordinateGridEffect();
 
 #pragma pack(push, 4)
   struct vs_cbuffer {

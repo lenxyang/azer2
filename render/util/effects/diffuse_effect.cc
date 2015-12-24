@@ -11,8 +11,7 @@
 
 namespace azer {
 const char ColoredDiffuseEffect::kEffectName[] = "ColoredDiffuseEffect";
-ColoredDiffuseEffect::ColoredDiffuseEffect(VertexDescPtr desc) 
-    : Effect(RenderSystem::Current()) {
+ColoredDiffuseEffect::ColoredDiffuseEffect(VertexDescPtr desc) {
   vertex_desc_ptr_ = desc;
 }
 
@@ -32,6 +31,7 @@ bool ColoredDiffuseEffect::Init(const ShaderPrograms& sources) {
 }
 
 void ColoredDiffuseEffect::InitGpuConstantTable() {
+  RenderSystem* rs =  RenderSystem::Current();
   // generate GpuTable init for stage kVertexStage
   GpuConstantsTable::Desc vs_table_desc[] = {
     GpuConstantsTable::Desc("pvw", GpuConstantsType::kMatrix4,
@@ -39,7 +39,7 @@ void ColoredDiffuseEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
          offsetof(vs_cbuffer, world), 1),
   };
-  gpu_table_[kVertexStage] = render_system_->CreateGpuConstantsTable(
+  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
       arraysize(vs_table_desc), vs_table_desc);
   // generate GpuTable init for stage kPixelStage
   GpuConstantsTable::Desc ps_table_desc[] = {
@@ -48,7 +48,7 @@ void ColoredDiffuseEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("light", offsetof(ps_cbuffer, light),
          sizeof(DirLight), 1),
   };
-  gpu_table_[kPixelStage] = render_system_->CreateGpuConstantsTable(
+  gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc);
 }
 void ColoredDiffuseEffect::InitTechnique(const ShaderPrograms& sources) {

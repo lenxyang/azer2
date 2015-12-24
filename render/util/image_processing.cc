@@ -16,8 +16,7 @@ const azer::VertexDesc::Desc SimpleImageProcessingEffect::kVertexDesc[] = {
 const int SimpleImageProcessingEffect::kVertexDescNum = 
     arraysize(SimpleImageProcessingEffect::kVertexDesc);
 
-SimpleImageProcessingEffect::SimpleImageProcessingEffect() 
-    : azer::Effect(azer::RenderSystem::Current()) {
+SimpleImageProcessingEffect::SimpleImageProcessingEffect() {
 }
 
 const char* SimpleImageProcessingEffect::GetEffectName() const {

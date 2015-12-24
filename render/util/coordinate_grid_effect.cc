@@ -13,9 +13,8 @@ const VertexDesc::Desc CoordinateGridEffect::kVertexDesc[] = {
 const int CoordinateGridEffect::kVertexDescNum =
     arraysize(CoordinateGridEffect::kVertexDesc);
 
-CoordinateGridEffect::CoordinateGridEffect(RenderSystem* rs)
-    : Effect(rs) {
-  Init(rs);
+CoordinateGridEffect::CoordinateGridEffect() {
+  Init(RenderSystem::Current());
 }
 
 const char* CoordinateGridEffect::GetEffectName() const {
@@ -47,13 +46,13 @@ void CoordinateGridEffect::Init(RenderSystem* rs) {
     GpuConstantsTable::Desc("vp", GpuConstantsType::kMatrix4,
                             offsetof(CoordinateGridEffect::vs_cbuffer, vp), 1), 
   };
-  gpu_table_[kVertexStage] = render_system_->CreateGpuConstantsTable(
+  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
       arraysize(vs_table_desc), vs_table_desc);
   GpuConstantsTable::Desc ps_table_desc[] = {
     GpuConstantsTable::Desc("diffuse", GpuConstantsType::kVector4,
                             offsetof(CoordinateGridEffect::ps_cbuffer, diffuse), 1), 
   };
-  gpu_table_[kPixelStage] = (render_system_->CreateGpuConstantsTable(
+  gpu_table_[kPixelStage] = (rs->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc));
 
   InitShader();

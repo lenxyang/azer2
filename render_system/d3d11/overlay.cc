@@ -49,7 +49,7 @@ const char* D3DOverlayEffect::kPixelShaderProg = ""
     "  return diffuse;                                                  \n"
     "}";
 
-
+D3DOverlayEffect::D3DOverlayEffect() {}
 const char* D3DOverlayEffect::GetEffectName() const {
   return kEffectName;
 }
@@ -89,7 +89,7 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
     azer::GpuConstantsTable::Desc("texcoord", azer::GpuConstantsType::kVector4,
                                   offsetof(vs_cbuffer, texcoord), 4),
   };
-  gpu_table_[azer::kVertexStage] = render_system_->CreateGpuConstantsTable(
+  gpu_table_[azer::kVertexStage] = rs->CreateGpuConstantsTable(
       arraysize(vs_table_desc), vs_table_desc);
 
   technique_ = rs->CreateTechnique();
@@ -115,7 +115,7 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
 
 bool D3DOverlay::InitEffect() {
   DCHECK(render_system_ != NULL);
-  effect_ = new D3DOverlayEffect(render_system_);
+  effect_ = new D3DOverlayEffect();
   if (effect_->Init(this, render_system_)) {
     return true;
   } else {

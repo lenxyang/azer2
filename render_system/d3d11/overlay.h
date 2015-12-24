@@ -12,9 +12,7 @@ class D3DRenderSystem;
 class D3DOverlayEffect : public Effect {
  public:
   static const char kEffectName[];
-  D3DOverlayEffect(D3DRenderSystem* rs)
-      : Effect((RenderSystem*)rs) {
-  }
+  D3DOverlayEffect();
 
   const char* GetEffectName() const override;
   bool Init(const ShaderPrograms&) override { return true;}

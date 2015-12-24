@@ -12,8 +12,7 @@
 namespace azer {
 const char PVWEffect::kEffectName[] = "PVWEffect";
 
-PVWEffect::PVWEffect(VertexDescPtr desc) 
-    : Effect(RenderSystem::Current()) {
+PVWEffect::PVWEffect(VertexDescPtr desc) {
   vertex_desc_ptr_ = desc;
 }
 
@@ -24,6 +23,7 @@ const char* PVWEffect::GetEffectName() const {
   return kEffectName;
 }
 bool PVWEffect::Init(const ShaderPrograms& sources) {
+  RenderSystem* rs = RenderSystem::Current();
   DCHECK(sources.size() == kRenderPipelineStageNum);
   DCHECK(!sources[kVertexStage].code.empty());
   DCHECK(!sources[kPixelStage].code.empty());
@@ -37,7 +37,7 @@ bool PVWEffect::Init(const ShaderPrograms& sources) {
     GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
                             offsetof(vs_cbuffer, world), 1),
   };
-  gpu_table_[kVertexStage] = render_system_->CreateGpuConstantsTable(
+  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
       arraysize(vs_table_desc), vs_table_desc);
   return true;
 }
