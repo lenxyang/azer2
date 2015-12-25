@@ -11,7 +11,6 @@
 
 namespace azer {
 
-class Light;
 class Renderer;
 
 class GpuConstantsType {
@@ -80,7 +79,6 @@ class AZER_EXPORT GpuConstantsTable : public ::base::RefCounted<GpuConstantsTabl
   virtual void flush(Renderer*) = 0;
 
   // set value to gpu constants
-  // vodi SetLight(int32 idx, const Light& light);
   void SetValue(int32 idx, const void* value, int32 size);
   void SetValueWithOffset(int32 idx, int32 offset, const void* value, int32 size);
   void SetArrayItem(int32 idx, int32 arridx, const void* value, int32 size);
