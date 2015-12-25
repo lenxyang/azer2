@@ -67,7 +67,13 @@ void EffectAdapterCache::ApplyParams(Effect* effect) {
   for (uint32 i = 0; i < adapter_vec->size(); ++i) {
     const EffectParamsAdapter* adapter = (*adapter_vec)[i];
     const EffectParamsProvider* provider = (*providers_)[i].get();
-    adapter->Apply(effect, provider);
+    /*
+    CHECK(adapter) << " No Adapter for Effect[" 
+                   << effect->GetEffectName() << "] and "
+                   << "Provider[" << provider->GetProviderName() << "]";
+    */
+    if (adapter)
+      adapter->Apply(effect, provider);
   }
 }
 

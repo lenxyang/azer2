@@ -7,9 +7,11 @@
 namespace azer {
 
 IndicesData::IndexType IndicesData::CalcFixType(int num) {
-  if (num < std::numeric_limits<uint8>::max()) {
+  // directX donnot support kUint8
+  /*if (num < std::numeric_limits<uint8>::max()) {
     return kUint8;
-  } else if (num < std::numeric_limits<uint16>::max()) {
+    } else */
+  if (num < std::numeric_limits<uint16>::max()) {
     return kUint16;
   } else if (num < std::numeric_limits<uint32>::max()) {
     return kUint32;
