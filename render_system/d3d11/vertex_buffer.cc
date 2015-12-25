@@ -11,7 +11,64 @@
 namespace azer {
 namespace d3d11 {
 
-bool D3DVertexBuffer::Init(const SlotVertexData* dataptr) {
+// class D3DVertexLayout
+D3DVertexLayout::D3DVertexLayout(VertexDesc* desc) 
+    : VertexLayout(desc), 
+      input_layout_(NULL) {
+}
+
+D3DVertexLayout::~D3DVertexLayout() {
+  SAFE_RELEASE(input_layout_);
+}
+
+bool D3DVertexLayout::Init(RenderSystem* rs) {
+  return Init(rs, NULL);
+}
+
+bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
+  HRESULT hr;
+  DCHECK(typeid(*rs) == typeid(D3DRenderSystem));
+  D3DRenderSystem* render_system = static_cast<D3DRenderSystem*>(rs);
+  ID3D11Device* d3d_device = render_system->GetDevice();
+  const VertexDesc::Desc* desc = desc_->descs();
+  std::unique_ptr<D3D11_INPUT_ELEMENT_DESC[]>
+      layout_ptr(new D3D11_INPUT_ELEMENT_DESC[desc_->element_count()]);
+  D3D11_INPUT_ELEMENT_DESC* curr_layout = layout_ptr.get();
+  for (int i = 0; i < desc_->element_count(); ++i, ++curr_layout, ++desc) {
+    curr_layout->SemanticName = desc->name;
+    curr_layout->SemanticIndex = desc->semantic_index;
+    curr_layout->Format = TranslateFormat(desc->type);
+    curr_layout->InputSlot = desc->input_slot;
+    curr_layout->AlignedByteOffset = desc_->offset(i);
+    curr_layout->InstanceDataStepRate = desc->instance_data_step;
+    if (desc->instance_data_step == 0) {
+      curr_layout->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+    } else {
+      curr_layout->InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+    }
+  }
+
+  hr = d3d_device->CreateInputLayout(layout_ptr.get(),
+                                     desc_->element_count(),
+                                     (blob ? blob->GetBufferPointer() : NULL),
+                                     (blob ? blob->GetBufferSize() : NULL),
+                                     &input_layout_);
+  HRESULT_HANDLE(hr, ERROR, "CreateInputLayout failed");
+  return true;
+}
+
+// class D3DVertexBuffer
+D3DVertexBuffer::D3DVertexBuffer(const Options &opt, D3DRenderSystem* rs)
+    : VertexBuffer(opt)
+    , locked_(false)
+    , buffer_(NULL)
+    , render_system_(rs) {
+}
+
+D3DVertexBuffer::~D3DVertexBuffer() {
+  SAFE_RELEASE(buffer_);
+}
+bool D3DVertexBuffer::Init(SlotVertexData* dataptr) {
   DCHECK(element_size_ == -1 && buffer_size_ == -1 && vertex_count_ == -1);
   ID3D11Device* d3d_device = render_system_->GetDevice();
 
@@ -38,6 +95,9 @@ bool D3DVertexBuffer::Init(const SlotVertexData* dataptr) {
   element_size_ = dataptr->stride();
   buffer_size_ = dataptr->buffer_size();
   vertex_count_ = dataptr->vertex_count();
+
+  layout_ = new D3DVertexLayout(dataptr->vertex_desc());
+  CHECK(layout_->Init(render_system_));
   return true;
 }
 
@@ -79,11 +139,13 @@ void D3DVertexBuffer::unmap() {
 }
 
 // class D3DVertexBufferGroup
-D3DVertexBufferGroup::D3DVertexBufferGroup(VertexDesc* desc)
+D3DVertexBufferGroup::D3DVertexBufferGroup(VertexDesc* desc, D3DRenderSystem* rs)
     : VertexBufferGroup(desc) {
   memset(vbs_, 0, sizeof(vbs_));
   memset(stride_, 0, sizeof(stride_));
   memset(offset_, 0, sizeof(offset_));
+  layout_ = new D3DVertexLayout(desc);
+  CHECK(layout_->Init(rs));
 }
 
 void D3DVertexBufferGroup::OnVertexBufferChanged() {

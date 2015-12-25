@@ -65,6 +65,7 @@ class D3DRenderer : public Renderer {
                             int stencil_val) override;
   
   void SetPrimitiveTopology(PrimitiveTopology primitive) override;
+  void SetVertexLayout(VertexLayout* layout) override;
   void Draw(int32 num_of_vertices, int32 first_vertex) override;
   void DrawIndex(int32 num_of_indices, int32 first_indices, 
                  int32 index_base) override;

@@ -18,9 +18,6 @@ void D3DTechnique::Use(Renderer* renderer) {
   DCHECK_EQ(ps->stage(), kPixelStage);
 
   ID3D11DeviceContext* d3d_context = ((D3DRenderer*)renderer)->GetContext();
-
-  DCHECK(vs->input_layout_ != NULL);
-  d3d_context->IASetInputLayout(vs->input_layout_);
   d3d_context->VSSetShader(vs->shader_, 0, 0);
   d3d_context->PSSetShader(ps->shader_, 0, 0);
 

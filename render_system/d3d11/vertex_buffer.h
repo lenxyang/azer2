@@ -7,13 +7,26 @@
 
 namespace azer {
 namespace d3d11 {
+class D3DBlob;
+
+class D3DVertexLayout : public VertexLayout {
+ public:
+  D3DVertexLayout(VertexDesc* desc);
+  ~D3DVertexLayout() override;
+
+  bool Init(RenderSystem* rs) override;
+  bool Init(RenderSystem* rs, ID3DBlob* blob);
+  ID3D11InputLayout* input_layout() { return input_layout_;}
+ private:
+  ID3D11InputLayout *input_layout_;
+  DISALLOW_COPY_AND_ASSIGN(D3DVertexLayout);
+};
+
 class D3DVertexBuffer : public VertexBuffer {
  public:
-  virtual ~D3DVertexBuffer() {
-    SAFE_RELEASE(buffer_);
-  }
-  
-  bool Init(const SlotVertexData* dataptr);
+  D3DVertexBuffer(const Options &opt, D3DRenderSystem* rs);
+  virtual ~D3DVertexBuffer();
+  bool Init(SlotVertexData* dataptr);
 
   HardwareBufferDataPtr map(MapType flags) override;
   void unmap() override;
@@ -21,13 +34,6 @@ class D3DVertexBuffer : public VertexBuffer {
   bool Initialized() const { return NULL != buffer_;}
   ID3D11Buffer* buffer() { return buffer_;}
  private:
-  D3DVertexBuffer(const Options &opt, D3DRenderSystem* rs)
-      : VertexBuffer(opt)
-      , locked_(false)
-      , buffer_(NULL)
-      , render_system_(rs) {
-  }
-
   bool locked_;
   ID3D11Buffer* buffer_;
   D3DRenderSystem* render_system_;
@@ -39,7 +45,7 @@ class D3DVertexBuffer : public VertexBuffer {
 
 class D3DVertexBufferGroup : public VertexBufferGroup {
  public:
-  explicit D3DVertexBufferGroup(VertexDesc* desc);
+  explicit D3DVertexBufferGroup(VertexDesc* desc, D3DRenderSystem* rs);
   void OnVertexBufferChanged() override;
 
   ID3D11Buffer** buffer() { return vbs_;}

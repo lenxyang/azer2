@@ -155,9 +155,11 @@ void D3DRenderer::UseVertexBuffer(VertexBuffer* vvb) {
   if (vvb) {
     DCHECK(typeid(*vvb) == typeid(D3DVertexBuffer));
     D3DVertexBuffer* vb = static_cast<D3DVertexBuffer*>(vvb);
+    D3DVertexLayout* layout = static_cast<D3DVertexLayout*>(vb->vertex_layout());
     UINT stride = vb->element_size();
     UINT offset = 0;
     ID3D11Buffer* buf = vb->buffer();
+    d3d_context_->IASetInputLayout(layout->input_layout());
     d3d_context_->IASetVertexBuffers(0, 1, &buf, &stride, &offset);
   } else {
     // d3d_context_->IASetVertexBuffers(0, 0, NULL, NULL, NULL);
@@ -167,6 +169,8 @@ void D3DRenderer::UseVertexBuffer(VertexBuffer* vvb) {
 void D3DRenderer::UseVertexBufferGroup(VertexBufferGroup* vbg) {
   DCHECK(typeid(*vbg) == typeid(D3DVertexBufferGroup));
   D3DVertexBufferGroup* vg = static_cast<D3DVertexBufferGroup*>(vbg);
+  D3DVertexLayout* layout = static_cast<D3DVertexLayout*>(vg->vertex_layout());
+  d3d_context_->IASetInputLayout(layout->input_layout());
   d3d_context_->IASetVertexBuffers(0, vg->vertex_buffer_count(),
                                    vg->buffer(), vg->strides(), vg->offsets());
 }
@@ -223,6 +227,12 @@ void D3DRenderer::ResetShader(RenderPipelineStage stage) {
 
 void D3DRenderer::SetPrimitiveTopology(PrimitiveTopology primitive) {
   d3d_context_->IASetPrimitiveTopology(TranslatePrimitiveTopology(primitive));
+}
+
+void D3DRenderer::SetVertexLayout(VertexLayout* layout) {
+  DCHECK(typeid(*layout) == typeid(D3DVertexLayout));
+  D3DVertexLayout* d3dlayout = static_cast<D3DVertexLayout*>(layout);
+  d3d_context_->IASetInputLayout(d3dlayout->input_layout());
 }
 
 void D3DRenderer::Draw(int vertices_num, int32 start_vertex) {

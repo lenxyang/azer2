@@ -22,6 +22,8 @@ class RenderSystem;
 class Texture;
 class VertexBuffer;
 class VertexBufferGroup;
+class VertexLayout;
+
 
 class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
  public:
@@ -71,6 +73,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
       float depth_val = 1.0,int stencil_val = 0) = 0;
 
   virtual void ResetShader(RenderPipelineStage stage) = 0;
+  virtual void SetVertexLayout(VertexLayout* layout) = 0;
   virtual void SetPrimitiveTopology(PrimitiveTopology primitive) = 0;
   virtual void Draw(int32 num_of_vertices = -1, int32 first_vertex = 0) = 0;
   virtual void DrawIndex(int32 num_of_indices, int32 first_indices = 0, 

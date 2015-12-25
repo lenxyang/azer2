@@ -14,9 +14,17 @@ namespace azer {
 
 class Renderer;
 class SlotVertexData;
+class VertexData;
 class VertexDesc;
+class VertexBuffer;
+class VertexBufferGroup;
+class VertexLayout;
 typedef scoped_refptr<SlotVertexData> SlotVertexDataPtr;
+typedef scoped_refptr<VertexData> VertexDataPtr;
 typedef scoped_refptr<VertexDesc> VertexDescPtr;
+typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
+typedef scoped_refptr<VertexBufferGroup> VertexBufferGroupPtr;
+typedef scoped_refptr<VertexLayout> VertexLayoutPtr;
 
 class AZER_EXPORT VertexDesc : public Resource {
  public:
@@ -123,10 +131,19 @@ class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
   std::vector<SlotVertexDataPtr> vector_;
   DISALLOW_COPY_AND_ASSIGN(VertexData);
 };
-typedef scoped_refptr<VertexData> VertexDataPtr;
 
-class VertexBuffer;
-typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
+class AZER_EXPORT VertexLayout : public ::base::RefCounted<VertexLayout> {
+ public:
+  VertexLayout(VertexDesc* desc) : desc_(desc) {}
+  virtual ~VertexLayout() {}
+  // just for cannot be init
+  virtual bool Init(RenderSystem* rs) = 0;
+  VertexDesc* desc() { return desc_.get();}
+  const VertexDesc* desc() const { return desc_.get();}
+ protected:
+  VertexDescPtr desc_;
+  DISALLOW_COPY_AND_ASSIGN(VertexLayout);
+};
 
 class AZER_EXPORT VertexBuffer : public HardwareBuffer {
  public:
@@ -149,15 +166,15 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   int32 vertex_count() const { return vertex_count_;}
   int32 buffer_size() const { return vertex_count_;}
   int32 element_size() const { return element_size_;}
+  VertexLayout* vertex_layout() { return layout_.get();}
  protected:
   const Options options_;
+  VertexLayoutPtr layout_;
   int32 element_size_;
   int32 buffer_size_;
   int32 vertex_count_;
   DISALLOW_COPY_AND_ASSIGN(VertexBuffer);
 };
-
-int32 AZER_EXPORT VertexTypeSize(DataFormat type);
 
 class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGroup> {
  public:
@@ -172,14 +189,17 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
   void add_vertex_buffer_at(VertexBuffer* vb, int32 index);
   void remove_vertex_buffer_at(int32 index);
 
+  VertexLayout* vertex_layout() { return layout_.get();}
   std::vector<VertexBufferPtr>* get_vb_vector() { return &vector_;}
- private:
+ protected:
   virtual void OnVertexBufferChanged() = 0;
+  VertexLayoutPtr layout_;
+ private:
   VertexDescPtr vdesc_;
   std::vector<VertexBufferPtr> vector_;
   int32 vertex_count_;
   DISALLOW_COPY_AND_ASSIGN(VertexBufferGroup);
 };
 
-typedef scoped_refptr<VertexBufferGroup> VertexBufferGroupPtr;
+int32 AZER_EXPORT VertexTypeSize(DataFormat type);
 }  // namespace azer

@@ -20,19 +20,16 @@ class D3DVertexGpuProgram : public VertexGpuProgram {
  public:
   D3DVertexGpuProgram(VertexDescPtr desc, const ShaderInfo& info)
       : VertexGpuProgram(desc, info)
-      , shader_(NULL)
-      , input_layout_(NULL) {
+      , shader_(NULL) {
   }
 
   virtual ~D3DVertexGpuProgram() {
     SAFE_RELEASE(shader_);
-    SAFE_RELEASE(input_layout_);
   }
 
   virtual bool Init(RenderSystem* rs) override;
  private:
   ID3D11VertexShader* shader_;
-  ID3D11InputLayout *input_layout_;
 
   friend class D3DRenderer;
   friend class D3DTechnique;

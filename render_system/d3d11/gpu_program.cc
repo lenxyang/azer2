@@ -1,9 +1,10 @@
 #include "azer/render_system/d3d11/gpu_program.h"
-#include "azer/render_system/d3d11/render_system.h"
-#include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/hlsl_compile.h"
 
 #include "azer/base/string.h"
+#include "azer/render_system/d3d11/enum_transform.h"
+#include "azer/render_system/d3d11/hlsl_compile.h"
+#include "azer/render_system/d3d11/render_system.h"
+#include "azer/render_system/d3d11/vertex_buffer.h"
 
 namespace azer {
 namespace d3d11 {
@@ -27,30 +28,12 @@ bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
                                               &shader_);
   HRESULT_HANDLE(hr, ERROR, "CreateVertexShader failed ");
 
-  const VertexDesc::Desc* desc = desc_ptr_->descs();
-  std::unique_ptr<D3D11_INPUT_ELEMENT_DESC[]>
-      layout_ptr(new D3D11_INPUT_ELEMENT_DESC[desc_ptr_->element_count()]);
-  D3D11_INPUT_ELEMENT_DESC* curr_layout = layout_ptr.get();
-  for (int i = 0; i < desc_ptr_->element_count(); ++i, ++curr_layout, ++desc) {
-    curr_layout->SemanticName = desc->name;
-    curr_layout->SemanticIndex = desc->semantic_index;
-    curr_layout->Format = TranslateFormat(desc->type);
-    curr_layout->InputSlot = desc->input_slot;
-    curr_layout->AlignedByteOffset = desc_ptr_->offset(i);
-    curr_layout->InstanceDataStepRate = desc->instance_data_step;
-    if (desc->instance_data_step == 0) {
-      curr_layout->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    } else {
-      curr_layout->InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-    }
+  // check layout is validate for shader
+  scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_ptr_));
+  if (!layout->Init(vrs, blob.get())) {
+    return false;
   }
 
-  hr = d3d_device->CreateInputLayout(layout_ptr.get(),
-                                     desc_ptr_->element_count(),
-                                     blob->GetBufferPointer(),
-                                     blob->GetBufferSize(),
-                                     &input_layout_);
-  HRESULT_HANDLE(hr, ERROR, "CreateInputLayout failed");
   return true;
 }
 
