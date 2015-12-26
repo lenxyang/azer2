@@ -86,4 +86,19 @@ const char* DefaultShaderVersionForStage(RenderPipelineStage stage) {
 }
 }  // namespace
 
+const char* HLSLTypeName(DataFormat format) {
+  switch (format) {
+    case kFloat: return "float";
+    case kVec2: return "float2";
+    case kVec3: return "float3";
+    case kVec4: return "float4";
+    case kMat2: return "float2x2";
+    case kMat3: return "float3x3";
+    case kMat4: return "float4x4";
+    case kInt: return "int";
+    default: 
+      CHECK(false) << " not support :" << format;
+      return "";
+  }
+}
 }  // namespace azer

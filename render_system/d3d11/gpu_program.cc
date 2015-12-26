@@ -30,7 +30,7 @@ bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
 
   // check layout is validate for shader
   scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_ptr_));
-  if (!layout->Init(vrs, blob.get())) {
+  if (!layout->ValidateShaderLayout(vrs, blob.get())) {
     return false;
   }
 

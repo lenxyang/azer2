@@ -1,12 +1,15 @@
 #include "azer/render_system/d3d11/vertex_buffer.h"
 
+#include <sstream>
 #include <windows.h>
 #include "base/logging.h"
+#include "base/strings/string_util.h"
 #include "azer/base/string.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
+#include "azer/render_system/d3d11/enum_transform.h"
+#include "azer/render_system/d3d11/hlsl_compile.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
-#include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/dx3d_util.h"
 
 namespace azer {
 namespace d3d11 {
@@ -21,25 +24,44 @@ D3DVertexLayout::~D3DVertexLayout() {
   SAFE_RELEASE(input_layout_);
 }
 
-bool D3DVertexLayout::Init(RenderSystem* rs) {
-  return Init(rs, NULL);
+std::string D3DVertexLayout::GenVSForDesc(VertexDesc* vertex_desc) {
+  std::stringstream ss;
+  ss << "\nstruct VSInput {\n";
+  for (int32 i = 0; i < vertex_desc->element_count(); ++i) {
+    const VertexDesc::Desc* desc = vertex_desc->descs() + i;
+     std::string name(desc->name);
+     ss << HLSLTypeName(desc->type) << " "
+        << ::base::StringToLowerASCII(name) << ":" 
+        << StringToUpperASCII(name) << desc->semantic_index
+        << ";" << std::endl;
+  }
+  ss << "};\n";
+  ss << "struct VSOutput {float4 position: SV_POSITION;};\n"
+     << "VSOutput vs_main(VSInput input) {"
+     << "VSOutput o; o.position = float4(0, 0, 0, 0);return o;}\n";
+  return ss.str();
 }
 
-bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
-  HRESULT hr;
-  DCHECK(typeid(*rs) == typeid(D3DRenderSystem));
-  D3DRenderSystem* render_system = static_cast<D3DRenderSystem*>(rs);
-  ID3D11Device* d3d_device = render_system->GetDevice();
-  const VertexDesc::Desc* desc = desc_->descs();
-  std::unique_ptr<D3D11_INPUT_ELEMENT_DESC[]>
-      layout_ptr(new D3D11_INPUT_ELEMENT_DESC[desc_->element_count()]);
+bool D3DVertexLayout::Init(RenderSystem* rs) {
+  std::string shader = GenVSForDesc(desc());
+  std::string msg;
+  D3DBlobPtr blob(CompileShaderForStage(kVertexStage, shader, "gen", &msg));
+  CHECK(blob.get()) << "compile shader failed." << shader << "\n" << msg;
+  return Init(rs, blob.get());
+}
+
+scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> D3DVertexLayout::CreateInputDesc(
+    VertexDesc* vertex_desc) {
+  const VertexDesc::Desc* desc = vertex_desc->descs();
+  scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]>
+      layout_ptr(new D3D11_INPUT_ELEMENT_DESC[vertex_desc->element_count()]);
   D3D11_INPUT_ELEMENT_DESC* curr_layout = layout_ptr.get();
-  for (int i = 0; i < desc_->element_count(); ++i, ++curr_layout, ++desc) {
+  for (int i = 0; i < vertex_desc->element_count(); ++i, ++curr_layout, ++desc) {
     curr_layout->SemanticName = desc->name;
     curr_layout->SemanticIndex = desc->semantic_index;
     curr_layout->Format = TranslateFormat(desc->type);
     curr_layout->InputSlot = desc->input_slot;
-    curr_layout->AlignedByteOffset = desc_->offset(i);
+    curr_layout->AlignedByteOffset = vertex_desc->offset(i);
     curr_layout->InstanceDataStepRate = desc->instance_data_step;
     if (desc->instance_data_step == 0) {
       curr_layout->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
@@ -47,7 +69,30 @@ bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
       curr_layout->InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
     }
   }
+  return layout_ptr.Pass();
+}
 
+bool D3DVertexLayout::ValidateShaderLayout(RenderSystem* rs, ID3DBlob* blob) {
+  HRESULT hr;
+  DCHECK(typeid(*rs) == typeid(D3DRenderSystem));
+  D3DRenderSystem* render_system = static_cast<D3DRenderSystem*>(rs);
+  ID3D11Device* d3d_device = render_system->GetDevice();
+  scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> layout_ptr = CreateInputDesc(desc_).Pass();
+  hr = d3d_device->CreateInputLayout(layout_ptr.get(),
+                                     desc_->element_count(),
+                                     (blob ? blob->GetBufferPointer() : NULL),
+                                     (blob ? blob->GetBufferSize() : NULL),
+                                     NULL);
+  HRESULT_HANDLE(hr, ERROR, "CreateInputLayout failed");
+  return true;
+}
+
+bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
+  HRESULT hr;
+  DCHECK(typeid(*rs) == typeid(D3DRenderSystem));
+  D3DRenderSystem* render_system = static_cast<D3DRenderSystem*>(rs);
+  ID3D11Device* d3d_device = render_system->GetDevice();
+  scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> layout_ptr = CreateInputDesc(desc_).Pass();
   hr = d3d_device->CreateInputLayout(layout_ptr.get(),
                                      desc_->element_count(),
                                      (blob ? blob->GetBufferPointer() : NULL),

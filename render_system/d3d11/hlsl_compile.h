@@ -21,4 +21,5 @@ ID3DBlob* CompileShaderForStage(RenderPipelineStage stage,
                                 std::string* error_msg);
 const char* DefaultShaderEntryForStage(RenderPipelineStage stage);
 
+const char* HLSLTypeName(DataFormat format);
 }  // namespace azer

@@ -17,7 +17,10 @@ class D3DVertexLayout : public VertexLayout {
   bool Init(RenderSystem* rs) override;
   bool Init(RenderSystem* rs, ID3DBlob* blob);
   ID3D11InputLayout* input_layout() { return input_layout_;}
+  bool ValidateShaderLayout(RenderSystem* rs, ID3DBlob* blob);
  private:
+  scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> CreateInputDesc(VertexDesc* desc);
+  std::string GenVSForDesc(VertexDesc* desc);
   ID3D11InputLayout *input_layout_;
   DISALLOW_COPY_AND_ASSIGN(D3DVertexLayout);
 };
