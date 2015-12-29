@@ -8,11 +8,11 @@ namespace azer {
 class PVWEffect: public Effect {
  public:
   static const char kEffectName[];
-  PVWEffect(VertexDescPtr desc);
+  PVWEffect();
   ~PVWEffect();
 
   const char* GetEffectName() const override;
-  bool Init(const ShaderPrograms& source) override;
+  bool Init(VertexDesc* desc, const ShaderPrograms& source) override;
 
 #pragma pack(push, 4)
   struct vs_cbuffer {

@@ -11,17 +11,14 @@
 
 namespace azer {
 const char ColoredDiffuseEffect::kEffectName[] = "ColoredDiffuseEffect";
-ColoredDiffuseEffect::ColoredDiffuseEffect(VertexDescPtr desc) {
-  vertex_desc_ptr_ = desc;
-}
-
-ColoredDiffuseEffect::~ColoredDiffuseEffect() {
-}
+ColoredDiffuseEffect::ColoredDiffuseEffect() {}
+ColoredDiffuseEffect::~ColoredDiffuseEffect() {}
 
 const char* ColoredDiffuseEffect::GetEffectName() const {
    return kEffectName;
 }
-bool ColoredDiffuseEffect::Init(const ShaderPrograms& sources) {
+bool ColoredDiffuseEffect::Init(VertexDesc* desc, const ShaderPrograms& sources) {
+  vertex_desc_ = desc;
   DCHECK(sources.size() == kRenderPipelineStageNum);
   DCHECK(!sources[kVertexStage].code.empty());
   DCHECK(!sources[kPixelStage].code.empty());
@@ -88,9 +85,8 @@ ColoredDiffuseEffectPtr CreateColoredDiffuseEffect() {
   CHECK(LoadShaderAtStage(kPixelStage, 
                           "azer/render/util/effects/hlsl/colored_diffuse.hlsl.ps",
                           &shaders));
-  ColoredDiffuseEffectPtr ptr(new ColoredDiffuseEffect(
-             PosNormalVertex::CreateVertexDesc()));
-  ptr->Init(shaders);
+  ColoredDiffuseEffectPtr ptr(new ColoredDiffuseEffect());
+  ptr->Init(PosNormalVertex::CreateVertexDesc(), shaders);
   return ptr;
 }
 }  // namespace azer

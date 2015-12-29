@@ -14,7 +14,7 @@ const int CoordinateGridEffect::kVertexDescNum =
     arraysize(CoordinateGridEffect::kVertexDesc);
 
 CoordinateGridEffect::CoordinateGridEffect() {
-  Init(RenderSystem::Current());
+  InitEffect();
 }
 
 const char* CoordinateGridEffect::GetEffectName() const {
@@ -40,8 +40,9 @@ void CoordinateGridEffect::SetGridDiffuse(const Vector4& value) {
   
 }
 
-void CoordinateGridEffect::Init(RenderSystem* rs) {
-  vertex_desc_ptr_ = new azer::VertexDesc(kVertexDesc, kVertexDescNum);
+void CoordinateGridEffect::InitEffect() {
+  RenderSystem* rs = RenderSystem::Current();
+  vertex_desc_ = new azer::VertexDesc(kVertexDesc, kVertexDescNum);
   GpuConstantsTable::Desc vs_table_desc[] = {
     GpuConstantsTable::Desc("vp", GpuConstantsType::kMatrix4,
                             offsetof(CoordinateGridEffect::vs_cbuffer, vp), 1), 
@@ -55,10 +56,6 @@ void CoordinateGridEffect::Init(RenderSystem* rs) {
   gpu_table_[kPixelStage] = (rs->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc));
 
-  InitShader();
-}
-
-void CoordinateGridEffect::InitShader() {
   ShaderPrograms sources;
   sources.resize(kRenderPipelineStageNum);
   sources[kVertexStage].code = GetCommonShaderProgram(kEffectName, "", kVertexStage, 
@@ -69,4 +66,5 @@ void CoordinateGridEffect::InitShader() {
   sources[kPixelStage].path = kEffectName;
   InitShaders(sources);
 }
+
 }  // namespace azer

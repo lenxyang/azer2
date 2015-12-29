@@ -12,17 +12,14 @@
 namespace azer {
 const char PVWEffect::kEffectName[] = "PVWEffect";
 
-PVWEffect::PVWEffect(VertexDescPtr desc) {
-  vertex_desc_ptr_ = desc;
-}
-
-PVWEffect::~PVWEffect() {
-}
+PVWEffect::PVWEffect() {}
+PVWEffect::~PVWEffect() {}
 
 const char* PVWEffect::GetEffectName() const {
   return kEffectName;
 }
-bool PVWEffect::Init(const ShaderPrograms& sources) {
+bool PVWEffect::Init(VertexDesc* desc, const ShaderPrograms& sources) {
+  vertex_desc_ = desc;
   RenderSystem* rs = RenderSystem::Current();
   DCHECK(sources.size() == kRenderPipelineStageNum);
   DCHECK(!sources[kVertexStage].code.empty());
@@ -64,8 +61,8 @@ PVWEffectPtr CreatePVWEffect() {
   CHECK(LoadShaderAtStage(kPixelStage,
                           "azer/render/util/effects/hlsl/pvw.hlsl.ps",
                           &shaders));
-  PVWEffectPtr ptr(new PVWEffect(PositionVertex::CreateVertexDesc()));
-  ptr->Init(shaders);
+  PVWEffectPtr ptr(new PVWEffect);
+  ptr->Init(PositionVertex::CreateVertexDesc(), shaders);
   return ptr;
 }
 }  // namespace azer

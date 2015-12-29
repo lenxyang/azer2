@@ -20,6 +20,11 @@ Effect::~Effect() {
 void Effect::UseTexture(Renderer* renderer) {
 }
 
+void Effect::SetVertexDesc(VertexDesc* desc) {
+  DCHECK(vertex_desc_ == NULL);
+  vertex_desc_ = desc;
+}
+
 void Effect::Apply(Renderer* renderer) {
   UseTexture(renderer);
   ApplyGpuConstantTable(renderer);
@@ -54,11 +59,10 @@ void Effect::UseConstantsTable(Renderer* renderer) {
 }
 
 void Effect::InitShaders(const ShaderPrograms& sources) {
-  CHECK(vertex_desc_ptr_.get());
+  CHECK(vertex_desc_.get());
   RenderSystem* rs = RenderSystem::Current();
-  auto vs_shader_source = sources[kVertexStage];
-  azer::GpuProgramPtr vs_gpup_ptr(rs->CreateVertexGpuProgram(
-      vertex_desc_ptr_, vs_shader_source));
+  auto vs_shader_src = sources[kVertexStage];
+  GpuProgramPtr vs_gpup_ptr(rs->CreateVertexGpuProgram(vertex_desc_, vs_shader_src));
   CHECK(vs_gpup_ptr.get() != NULL);
   CHECK(!technique_.get());
   technique_ = rs->CreateTechnique();

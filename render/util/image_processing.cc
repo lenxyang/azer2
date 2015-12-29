@@ -22,12 +22,17 @@ SimpleImageProcessingEffect::SimpleImageProcessingEffect() {
 const char* SimpleImageProcessingEffect::GetEffectName() const {
    return kEffectName;
 }
-bool SimpleImageProcessingEffect::Init(const ShaderPrograms& sources) {
+bool SimpleImageProcessingEffect::Init(VertexDesc* desc,
+                                       const ShaderPrograms& sources) {
+  if (desc) {
+    vertex_desc_ = desc;
+  } else {
+    vertex_desc_ = new azer::VertexDesc(kVertexDesc, kVertexDescNum);
+  }
+
   DCHECK(sources.size() == azer::kRenderPipelineStageNum);
   DCHECK(!sources[azer::kVertexStage].code.empty());
   DCHECK(!sources[azer::kPixelStage].code.empty());
-
-  vertex_desc_ptr_ = new azer::VertexDesc(kVertexDesc, kVertexDescNum);
   InitShaders(sources);
   return true;
 }
@@ -48,7 +53,7 @@ EffectPtr CreateSimpleImageProcessingEffect() {
                           "azer/render/util/effects/hlsl/rgba2bgra.hlsl.ps",
                           &shaders));
   EffectPtr ptr(new SimpleImageProcessingEffect);
-  ptr->Init(shaders);
+  ptr->Init(NULL, shaders);
   return ptr;
 }
 

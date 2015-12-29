@@ -11,11 +11,11 @@ namespace azer {
 class ColoredDiffuseEffect : public Effect {
  public:
   static const char kEffectName[];
-  ColoredDiffuseEffect(VertexDescPtr desc);
+  ColoredDiffuseEffect();
   ~ColoredDiffuseEffect();
 
   const char* GetEffectName() const override;
-  bool Init(const ShaderPrograms& source) override;
+  bool Init(VertexDesc* desc, const ShaderPrograms& source) override;
 
 #pragma pack(push, 4)
   struct vs_cbuffer {

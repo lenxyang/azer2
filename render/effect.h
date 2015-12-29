@@ -32,9 +32,10 @@ class AZER_EXPORT Effect : public Resource {
   ~Effect() override;
 
   virtual const char* GetEffectName() const = 0;
-  virtual bool Init(const ShaderPrograms& programs) = 0;
+  virtual bool Init(VertexDesc* desc, const ShaderPrograms& programs) = 0;
   void Apply(Renderer* renderer);
-  VertexDesc* vertex_desc() { return vertex_desc_ptr_.get();}
+  VertexDesc* vertex_desc() { return vertex_desc_.get();}
+  void SetVertexDesc(VertexDesc* desc);
   
   // 刷新所有的 GpuConstantTable
   void flush(Renderer* renderer);
@@ -47,7 +48,7 @@ class AZER_EXPORT Effect : public Resource {
 
   TechniquePtr technique_;
   std::vector<scoped_refptr<GpuConstantsTable> > gpu_table_;
-  VertexDescPtr vertex_desc_ptr_;
+  VertexDescPtr vertex_desc_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };
 
