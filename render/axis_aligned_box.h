@@ -41,9 +41,9 @@ class AZER_EXPORT AxisAlignedBox : public BoundingVolumn {
   bool IsNull() const { return is_null_;}
 
   // from Bounding Volumn
-  VisibleState IsVisible(const Frustrum& frustrum) override;
-  friend AZER_EXPORT std::ostream& operator << (std::ostream& o,
-                                                const AxisAlignedBox& v);
+  VisibleState IsVisible(const Frustum& frustum) override;
+  friend AZER_EXPORT std::ostream& operator <<
+      (std::ostream& o, const AxisAlignedBox& v);
  private:
   Vector4 minimum_;
   Vector4 maximum_;

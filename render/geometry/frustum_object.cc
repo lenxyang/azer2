@@ -1,4 +1,4 @@
-#include "azer/render/geometry/frustrum_object.h"
+#include "azer/render/geometry/frustum_object.h"
 
 #include "base/logging.h"
 #include "azer/render/render.h"
@@ -7,9 +7,9 @@
 #include "azer/render/geometry/box_object.h"
 
 namespace azer {
-FrustrumObject::FrustrumObject(const Camera* camera, VertexDescPtr desc)
+FrustumObject::FrustumObject(const Camera* camera, VertexDescPtr desc)
     : GeometryObject(desc) {
-  const Matrix4& proj = camera->frustrum().projection();
+  const Matrix4& proj = camera->frustum().projection();
   const Matrix4& view = camera->GetViewMatrix();
   Matrix4 mat = std::move(view.InverseCopy() * proj.InverseCopy());
   SlotVertexDataPtr vdata = CreateBoxVertexData(desc.get());
@@ -85,10 +85,10 @@ FrustrumObject::FrustrumObject(const Camera* camera, VertexDescPtr desc)
   frame_ib_ = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
 }
 
-FrustrumObject::~FrustrumObject() {
+FrustumObject::~FrustumObject() {
 }
 
-MeshPartPtr FrustrumObject::CreateFrameObject(Effect* effect) {
+MeshPartPtr FrustumObject::CreateFrameObject(Effect* effect) {
   EntityPtr entity(new Entity(effect->vertex_desc(), vb_, frame_ib_));
   entity->set_topology(kLineList);
   MeshPartPtr part(new MeshPart(effect));
@@ -96,7 +96,7 @@ MeshPartPtr FrustrumObject::CreateFrameObject(Effect* effect) {
   return part;
 }
 
-void FrustrumObject::Render(Renderer* renderer) {
+void FrustumObject::Render(Renderer* renderer) {
   renderer->UseVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleList);
   renderer->Draw(0, vb_->vertex_count());

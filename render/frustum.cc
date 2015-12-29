@@ -1,4 +1,4 @@
-#include "azer/render/frustrum.h"
+#include "azer/render/frustum.h"
 
 #include "azer/render/camera.h"
 #include "base/logging.h"
@@ -34,11 +34,11 @@ VisibleState Frustum::IsVisible(const Vector3& point) const {
   return IsVisible(point, kCheckAll);
 }
 
-Frustum& Frustum::operator = (const Frustum& frustrum) {
-  set_far(frustrum.get_far());
-  set_near(frustrum.get_near());
-  set_aspect(frustrum.aspect());
-  set_fovy(frustrum.fovy());
+Frustum& Frustum::operator = (const Frustum& frustum) {
+  set_far(frustum.get_far());
+  set_near(frustum.get_near());
+  set_aspect(frustum.aspect());
+  set_fovy(frustum.fovy());
   return *this;
 }
 

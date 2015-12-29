@@ -3,7 +3,7 @@
 #include <limits>
 
 #include "azer/render/render_system.h"
-#include "azer/render/frustrum.h"
+#include "azer/render/frustum.h"
 #include "azer/render/camera.h"
 #include "base/logging.h"
 
@@ -72,10 +72,10 @@ bool AxisAlignedBox::intersect(const Ray& ray) const {
 
 namespace {
 inline VisibleState IsAABBVisible(const AxisAlignedBox& aabb,
-                                  const Frustrum& frustrum) {
+                                  const Frustum& frustum) {
   Vector3 center((aabb.maximum() + aabb.minimum()) / 2.0f);
   Vector3 halfsize((aabb.maximum() - aabb.minimum()) / 2.0f);
-  return frustrum.IsVisible(center, halfsize);
+  return frustum.IsVisible(center, halfsize);
 }
 }  // namespace
 
@@ -136,8 +136,8 @@ bool AxisAlignedBox::intersect(const AxisAlignedBox& box)
   return inside(box.minimum_) || inside(box.maximum_);
 }
 
-VisibleState AxisAlignedBox::IsVisible(const Frustrum& frustrum) {
-  return IsAABBVisible(*this, frustrum);
+VisibleState AxisAlignedBox::IsVisible(const Frustum& frustum) {
+  return IsAABBVisible(*this, frustum);
 }
 
 std::ostream& operator << (std::ostream& o, const AxisAlignedBox& v) {

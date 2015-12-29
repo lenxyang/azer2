@@ -13,7 +13,7 @@ class Camera;
 class Renderer;
 class Matrix4;
 
-class Frustrum;
+class Frustum;
 class AZER_EXPORT BoundingVolumn : public ::base::RefCounted<BoundingVolumn> {
  public:
   enum Type {
@@ -23,7 +23,7 @@ class AZER_EXPORT BoundingVolumn : public ::base::RefCounted<BoundingVolumn> {
     kOrientedBox,
   };
 
-  virtual VisibleState IsVisible(const Frustrum& frustrum) = 0;
+  virtual VisibleState IsVisible(const Frustum& frustum) = 0;
 };
 
 typedef scoped_refptr<BoundingVolumn> BoundingVolumnPtr;

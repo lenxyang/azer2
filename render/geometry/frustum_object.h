@@ -5,14 +5,14 @@
 
 namespace azer {
 class Camera;
-class AZER_EXPORT FrustrumObject : public GeometryObject {
+class AZER_EXPORT FrustumObject : public GeometryObject {
  public:
-  FrustrumObject(const Camera* camera, VertexDescPtr desc);
-  ~FrustrumObject();
+  FrustumObject(const Camera* camera, VertexDescPtr desc);
+  ~FrustumObject();
 
   void Render(Renderer* renderer) override;
   MeshPartPtr CreateFrameObject(Effect* effect) override;
  private:
-  DISALLOW_COPY_AND_ASSIGN(FrustrumObject);
+  DISALLOW_COPY_AND_ASSIGN(FrustumObject);
 };
 }   // namespace azer

@@ -18,7 +18,7 @@ public:
 
   Frustum(Camera* camera, Radians fovy, float apsect,
            float z_near = 1.0f, float z_far = 1000.0f);
-  Frustum& operator = (const Frustum& frustrum);
+  Frustum& operator = (const Frustum& frustum);
 
   void set_fovy(Radians fovy) { fovY_ = fovy; GenProjMatrix();}
   void set_far(float _far) { far_ = _far; GenProjMatrix();}
@@ -56,7 +56,7 @@ public:
   VisibleState IsVisible(const Vector3& point) const;
   VisibleState IsVisible(const Vector3& center, const Vector3& halfsize) const;
 
-  // recalc frustrum plane of camera
+  // recalc frustum plane of camera
   void UpdatePlane();
   const Camera* camera() const { return camera_;}
  private:

@@ -6,24 +6,24 @@
 
 namespace azer {
 
-Camera::Camera() : frustrum_(this) {
+Camera::Camera() : frustum_(this) {
   Update();
 }
 
-Camera::Camera(const Frustrum& frustrum)
-    : frustrum_(this, frustrum.fovy(), frustrum.aspect(), frustrum.get_near(),
-                frustrum.get_far()) {
+Camera::Camera(const Frustum& frustum)
+    : frustum_(this, frustum.fovy(), frustum.aspect(), frustum.get_near(),
+                frustum.get_far()) {
   Update();
 }
 
 Camera::Camera(const Vector3& pos)
-    : frustrum_(this) {
+    : frustum_(this) {
   Update();
 }
 
 Camera::Camera(const Vector3& pos, const Vector3& lookat,
                const Vector3& up)
-    : frustrum_(this) {
+    : frustum_(this) {
   reset(pos, lookat, up);
 }
 
@@ -31,7 +31,7 @@ Camera& Camera::operator = (const Camera& camera) {
   reset(camera.holder_.position(),
         camera.holder_.position() + camera.holder_.direction(),
         camera.holder_.up());
-  frustrum_ = camera.frustrum();
+  frustum_ = camera.frustum();
   return *this;
 }
 
@@ -68,7 +68,7 @@ void Camera::GenMatrices() {
   
   view_mat_ = std::move(LookDirRH(holder_.position(), holder_.direction(), 
                                   holder_.up()));
-  proj_view_mat_ = std::move(frustrum_.projection() * view_mat_);
+  proj_view_mat_ = std::move(frustum_.projection() * view_mat_);
 }
 
 
@@ -88,7 +88,7 @@ void Camera::SetDirection(const Vector3& dir) {
 
 void Camera::Update() {
   GenMatrices();
-  frustrum_.UpdatePlane();
+  frustum_.UpdatePlane();
 }
 
 const Vector3& Camera::position() const {

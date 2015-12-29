@@ -20,7 +20,7 @@ namespace azer {
 class AZER_EXPORT Camera {
  public:
   Camera();
-  Camera(const Frustum& frustrum);
+  Camera(const Frustum& frustum);
   explicit Camera(const Vector3& pos);
   Camera(const Vector3& pos, const Vector3& lookat, const Vector3& up);
   Camera& operator = (const Camera& camera);
@@ -44,8 +44,8 @@ class AZER_EXPORT Camera {
   TransformHolder* mutable_holder() { return &holder_;}
   const TransformHolder& holder() const { return holder_;}
 
-  const Frustum& frustrum() const { return frustrum_;}
-  Frustum* mutable_frustrum() { return &frustrum_;}
+  const Frustum& frustum() const { return frustum_;}
+  Frustum* mutable_frustum() { return &frustum_;}
   friend std::ostream& operator << (std::ostream& os, const Camera& camera);
  protected:
   // generate camera transform matrix
@@ -56,7 +56,7 @@ class AZER_EXPORT Camera {
 
   Matrix4 view_mat_;
   Matrix4 proj_view_mat_;
-  Frustum frustrum_;
+  Frustum frustum_;
   TransformHolder holder_;
 };
 
