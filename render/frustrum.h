@@ -12,13 +12,13 @@ namespace azer {
 class Camera;
 class AxisAlignedBoundingBox;
 
-class AZER_EXPORT Frustrum {
+class AZER_EXPORT Frustum {
 public:
-  Frustrum(Camera* camera);
+  Frustum(Camera* camera);
 
-  Frustrum(Camera* camera, Radians fovy, float apsect,
+  Frustum(Camera* camera, Radians fovy, float apsect,
            float z_near = 1.0f, float z_far = 1000.0f);
-  Frustrum& operator = (const Frustrum& frustrum);
+  Frustum& operator = (const Frustum& frustrum);
 
   void set_fovy(Radians fovy) { fovY_ = fovy; GenProjMatrix();}
   void set_far(float _far) { far_ = _far; GenProjMatrix();}

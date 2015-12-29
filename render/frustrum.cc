@@ -5,7 +5,7 @@
 
 namespace azer {
 
-Frustrum::Frustrum(Camera* camera)
+Frustum::Frustum(Camera* camera)
     : fovY_(Radians((float)(kPI / 3.0f)))
     , aspect_(4.0f / 3.0f)
     , near_(1.0f)
@@ -15,8 +15,8 @@ Frustrum::Frustrum(Camera* camera)
   GenProjMatrix();
 }
 
-Frustrum::Frustrum(Camera* camera, Radians fovy, float apsect, float z_near,
-                   float z_far)
+Frustum::Frustum(Camera* camera, Radians fovy, float apsect, float z_near,
+                 float z_far)
     : fovY_(fovy)
     , aspect_(apsect)
     , near_(z_near)
@@ -26,15 +26,15 @@ Frustrum::Frustrum(Camera* camera, Radians fovy, float apsect, float z_near,
   GenProjMatrix();
 }
 
-void Frustrum::GenProjMatrix() {
+void Frustum::GenProjMatrix() {
   projection_ = PerspectiveRHD3D(fovY_, aspect_, near_, far_);
 }
 
-VisibleState Frustrum::IsVisible(const Vector3& point) const {
+VisibleState Frustum::IsVisible(const Vector3& point) const {
   return IsVisible(point, kCheckAll);
 }
 
-Frustrum& Frustrum::operator = (const Frustrum& frustrum) {
+Frustum& Frustum::operator = (const Frustum& frustrum) {
   set_far(frustrum.get_far());
   set_near(frustrum.get_near());
   set_aspect(frustrum.aspect());
@@ -42,7 +42,7 @@ Frustrum& Frustrum::operator = (const Frustrum& frustrum) {
   return *this;
 }
 
-void Frustrum::UpdatePlane() {
+void Frustum::UpdatePlane() {
   DCHECK(NULL != camera_);
   const Matrix4& combo = camera_->GetProjViewMatrix();
   
@@ -81,8 +81,8 @@ void Frustrum::UpdatePlane() {
   }
 }
 
-VisibleState Frustrum::IsVisible(const Vector3& point,
-                                 CheckVisibleOption opt) const {
+VisibleState Frustum::IsVisible(const Vector3& point,
+                                CheckVisibleOption opt) const {
   for (int i = 0; i < 6; ++i) {
     if (opt & (1 << 0)) {
       if (planes_[i].GetSide(point) == Plane::kNegative) {
@@ -94,8 +94,8 @@ VisibleState Frustrum::IsVisible(const Vector3& point,
   return kFullyVisible;
 }
 
-VisibleState Frustrum::IsVisible(const Vector3& center,
-                                 const Vector3& halfsize) const {
+VisibleState Frustum::IsVisible(const Vector3& center,
+                                const Vector3& halfsize) const {
   for (int i = 0; i < 6; ++i) {
     if (planes_[i].GetSide(center, halfsize) == Plane::kNegative) {
       return kNoneVisible;

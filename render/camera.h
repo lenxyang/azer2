@@ -3,7 +3,7 @@
 
 #include "azer/base/export.h"
 #include "azer/math/math.h"
-#include "azer/render/frustrum.h"
+#include "azer/render/frustum.h"
 #include "azer/render/movable.h"
 #include "azer/render/transform_holder.h"
 
@@ -20,7 +20,7 @@ namespace azer {
 class AZER_EXPORT Camera {
  public:
   Camera();
-  Camera(const Frustrum& frustrum);
+  Camera(const Frustum& frustrum);
   explicit Camera(const Vector3& pos);
   Camera(const Vector3& pos, const Vector3& lookat, const Vector3& up);
   Camera& operator = (const Camera& camera);
@@ -44,8 +44,8 @@ class AZER_EXPORT Camera {
   TransformHolder* mutable_holder() { return &holder_;}
   const TransformHolder& holder() const { return holder_;}
 
-  const Frustrum& frustrum() const { return frustrum_;}
-  Frustrum& frustrum() { return frustrum_;}
+  const Frustum& frustrum() const { return frustrum_;}
+  Frustum* mutable_frustrum() { return &frustrum_;}
   friend std::ostream& operator << (std::ostream& os, const Camera& camera);
  protected:
   // generate camera transform matrix
@@ -56,7 +56,7 @@ class AZER_EXPORT Camera {
 
   Matrix4 view_mat_;
   Matrix4 proj_view_mat_;
-  Frustrum frustrum_;
+  Frustum frustrum_;
   TransformHolder holder_;
 };
 
