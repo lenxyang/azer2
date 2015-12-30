@@ -28,17 +28,9 @@ class D3DRenderer : public Renderer {
 
   void Reset() override;
   void Use() override;
-  const std::string& name() const override;
-
   bool IsDepthTestEnable() override;
   void EnableDepthTest(bool enable) override;
-
-  FillMode GetFillMode(void) override;
-  void SetFillMode(FillMode mode) override;
-  CullingMode GetCullingMode(void) override;
-  void SetCullingMode(CullingMode mode) override;
-  FrontFace GetFrontFace() override;
-  void SetFrontFace(FrontFace mode) override;
+  const std::string& name() const override;
   void EnableMultisampleAntiAliasing(bool enable) override;
   bool IsMultisampleAntiAliasingEnabled() override;
   void EnableLineAntialiasing(bool enable) override;

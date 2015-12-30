@@ -21,23 +21,6 @@
 namespace azer {
 namespace d3d11 {
 
-#define GET_D3D_RENDER_STATE()                          \
-  DCHECK(d3d_context_ != NULL);                         \
-  ID3D11RasterizerState* obj = NULL;                    \
-  d3d_context_->RSGetState(&obj);                       \
-  D3DObjPtr setting(obj);                               \
-  D3D11_RASTERIZER_DESC desc;                           \
-  ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));     \
-  obj->GetDesc(&desc);
-
-#define SET_D3D_RENDER_STATE()  {                                       \
-    ID3D11RasterizerState* newobj = NULL;                               \
-    HRESULT hr = GetDevice()->CreateRasterizerState(&desc, &newobj);    \
-    HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");   \
-    D3DObjPtr auto_ptr(newobj);                                         \
-    d3d_context_->RSSetState(newobj);                                   \
-  }
-
 const std::string& D3DRenderer::name_ = "Direct3D11Renderer";
 
 const std::string& D3DRenderer::name() const {
@@ -87,64 +70,6 @@ bool D3DRenderer::IsDepthTestEnable() {
 void D3DRenderer::EnableDepthTest(bool enable) {
   CHECK(depth_);
   depth_->Enable(enable);
-}
-
-FrontFace D3DRenderer::GetFrontFace(void) {
-  GET_D3D_RENDER_STATE();
-  if (desc.FrontCounterClockwise) 
-    return kCounterClockwise;
-  else 
-    return kClockwise;
-}
-
-void D3DRenderer::SetFrontFace(FrontFace mode) {
-  GET_D3D_RENDER_STATE();
-  desc.FrontCounterClockwise = (mode == kCounterClockwise);
-  SET_D3D_RENDER_STATE();
-}
-
-FillMode D3DRenderer::GetFillMode(void) {
-  GET_D3D_RENDER_STATE();
-  return TranslateD3DFillMode(desc.FillMode);
-}
-
-void D3DRenderer::SetFillMode(FillMode mode) {
-  GET_D3D_RENDER_STATE();
-  desc.FillMode = TranslateFillMode(mode);
-  SET_D3D_RENDER_STATE();
-}
-
-CullingMode D3DRenderer::GetCullingMode(void) {
-  GET_D3D_RENDER_STATE();
-  return TranslateD3DCullingMode(desc.CullMode);
-}
-
-void D3DRenderer::SetCullingMode(CullingMode mode) {
-  GET_D3D_RENDER_STATE();
-  desc.CullMode = TranslateCullingMode(mode);
-  SET_D3D_RENDER_STATE();
-}
-
-void D3DRenderer::EnableMultisampleAntiAliasing(bool enable) {
-  GET_D3D_RENDER_STATE();
-  desc.MultisampleEnable = (enable ? TRUE : FALSE);
-  SET_D3D_RENDER_STATE();
-}
-
-bool D3DRenderer::IsMultisampleAntiAliasingEnabled() {
-  GET_D3D_RENDER_STATE();
-  return desc.MultisampleEnable == TRUE;
-} 
-
-void D3DRenderer::EnableLineAntialiasing(bool enable) {
-  GET_D3D_RENDER_STATE();
-  desc.AntialiasedLineEnable = (enable ? TRUE : FALSE);
-  SET_D3D_RENDER_STATE();
-}
-
-bool D3DRenderer::IsLineAntialiasingEnabled() {
-  GET_D3D_RENDER_STATE();
-  return desc.AntialiasedLineEnable == TRUE;
 }
 
 void D3DRenderer::ResetBlending() {

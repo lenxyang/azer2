@@ -8,6 +8,7 @@
 
 #include "azer/base/export.h"
 #include "azer/render/depth_buffer.h"
+#include "azer/render/render_state.h"
 #include "azer/render/render_target.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render/viewport.h"
@@ -31,26 +32,13 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual ~Renderer() {}
 
   virtual const std::string& name() const = 0;
-
-  virtual void Use() = 0;
+  void ResetRenderState();
+  void SetRenderState(RenderState* render_state);
+  RenderState* GetRenderState();
 
   virtual bool IsDepthTestEnable() = 0;
   virtual void EnableDepthTest(bool enable) = 0;
-
-  virtual FillMode GetFillMode(void) = 0;
-  virtual void SetFillMode(FillMode mode) = 0;
-  virtual CullingMode GetCullingMode(void) = 0;
-  virtual void SetCullingMode(CullingMode mode) = 0;
-  virtual FrontFace GetFrontFace() = 0;
-  virtual void SetFrontFace(FrontFace mode) = 0;
-  virtual void EnableMultisampleAntiAliasing(bool enable) = 0;
-  virtual bool IsMultisampleAntiAliasingEnabled() = 0;
-  virtual void EnableLineAntialiasing(bool enable) = 0;
-  virtual bool IsLineAntialiasingEnabled() = 0;
-
-  // save and restore the current state of renderer
-  virtual void SaveState() = 0;
-  virtual void RestoreState() = 0;
+  virtual void Use() = 0;
 
   void UseEffect(Effect* effect); 
   virtual void UseVertexBuffer(VertexBuffer* vb) = 0;
@@ -97,6 +85,8 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   RenderSystem* render_system_;
   DepthBufferPtr depth_;
   RenderTargetVec targets_;
+  RenderStatePtr current_state_;
+  RenderStatePtr default_state_;
   DISALLOW_COPY_AND_ASSIGN(Renderer);
 };
 
