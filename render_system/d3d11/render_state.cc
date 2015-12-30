@@ -18,11 +18,17 @@ ID3D11Device* GetDevice() {
 D3DRenderState::D3DRenderState() {
   D3D11_RASTERIZER_DESC desc;
   memset(&desc, 0, sizeof(desc));
+  desc.FillMode = D3D11_FILL_SOLID;
+  desc.CullMode = D3D11_CULL_BACK;
+  desc.FrontCounterClockwise = TRUE;
   desc.MultisampleEnable = TRUE;
   desc.AntialiasedLineEnable = TRUE;
-  desc.FrontCounterClockwise = TRUE;
-  HRESULT hr = d3drs->CreateRasterizerState(&desc, &state_);
+  HRESULT hr = GetDevice()->CreateRasterizerState(&desc, &state_);
   HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");
+}
+
+D3DRenderState::~D3DRenderState() {
+  SAFE_RELEASE(state_);
 }
 
 FillMode D3DRenderState::GetFillMode(void) {
@@ -101,15 +107,15 @@ bool D3DRenderState::IsLineAntialiasingEnabled() {
 }
 
 void D3DRenderState::SetRasterizerState(const D3D11_RASTERIZER_DESC& desc) {
-  DCHEC(state_);
+  DCHECK(state_);
   SAFE_RELEASE(state_);
   HRESULT hr = GetDevice()->CreateRasterizerState(&desc, &state_);
   HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");
 }
 
 void D3DRenderState::Apply(Renderer* r) {
-  D3DRenderer* renderer = dynamic_cast<D3DRenderer>(r);
-  renderer->GetContext()->RSSetState(newobj);
+  D3DRenderer* renderer = dynamic_cast<D3DRenderer*>(r);
+  renderer->GetContext()->RSSetState(state_);
 }
 }  // naemspace d3d11
 }  // naemspace azer

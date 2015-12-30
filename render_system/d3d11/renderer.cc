@@ -56,10 +56,7 @@ void D3DRenderer::Use() {
 void D3DRenderer::Reset() {
   DCHECK(d3d_context_ != NULL);
   d3d_context_->ClearState();
-  InitRenderState();
-  SetViewport(viewport_);
-  SetFrontFace(azer::kCounterClockwise);
-  SetCullingMode(azer::kCullBack);
+  ResetRenderState();
   EnableDepthTest(false);
 }
 
@@ -321,14 +318,6 @@ bool D3DSurfaceRenderer::InitForSurface(RenderTargetPtr target,
   Reset();
   SetViewport(Viewport(0, 0, width, height));
   return true;
-}
-
-void D3DRenderer::SaveState() {
-  CHECK(false);
-}
-
-void D3DRenderer::RestoreState() {
-  CHECK(false);
 }
 }  // namespace d3d11
 }  // namespace azer

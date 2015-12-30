@@ -13,6 +13,7 @@
 #include "azer/render/gpu_program.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/render_capability.h"
+#include "azer/render/render_state.h"
 #include "azer/render/renderer.h"
 #include "azer/render/surface.h"
 #include "azer/render/vertex_buffer.h"
@@ -51,6 +52,7 @@ class AZER_EXPORT RenderSystem {
 
   virtual SwapChainPtr CreateSwapChainForSurface(Surface* surface) = 0;
 
+  virtual RenderStatePtr CreateRenderState() = 0;
   virtual RendererPtr CreateRenderer(const Texture::Options& opt) = 0;
   virtual RendererPtrVec CreateRendererVec(const Texture::Options& opt,
                                            bool shared_depth_buffer) = 0;

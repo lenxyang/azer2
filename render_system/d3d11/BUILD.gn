@@ -24,6 +24,8 @@ shared_library("d3d11") {
     "overlay.h",
     "plugin.cc",
     "plugin.h",
+    "render_state.cc",
+    "render_state.h",
     "render_system.cc",
     "render_system.h",
     "render_system_2d.cc",

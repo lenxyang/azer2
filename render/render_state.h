@@ -3,6 +3,7 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/render/render_system_enum.h"
 
 namespace azer {
 class Renderer;
@@ -10,9 +11,6 @@ class AZER_EXPORT RenderState : public ::base::RefCounted<RenderState> {
  public:
   RenderState() {}
   virtual ~RenderState() {}
-
-  virtual bool IsDepthTestEnable() = 0;
-  virtual void EnableDepthTest(bool enable) = 0;
 
   virtual FillMode GetFillMode(void) = 0;
   virtual void SetFillMode(FillMode mode) = 0;

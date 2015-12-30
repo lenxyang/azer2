@@ -2,8 +2,16 @@
 
 #include "base/logging.h"
 #include "azer/render/effect.h"
+#include "azer/render/render_system.h"
 
 namespace azer {
+Renderer::Renderer(RenderSystem* rs) :
+    render_system_(rs) {
+  default_state_ = rs->CreateRenderState();
+}
+
+Renderer::~Renderer() {
+}
 
 void Renderer::UseEffect(Effect* effect) {
   effect->Apply(this);

@@ -31,13 +31,6 @@ class D3DRenderer : public Renderer {
   bool IsDepthTestEnable() override;
   void EnableDepthTest(bool enable) override;
   const std::string& name() const override;
-  void EnableMultisampleAntiAliasing(bool enable) override;
-  bool IsMultisampleAntiAliasingEnabled() override;
-  void EnableLineAntialiasing(bool enable) override;
-  bool IsLineAntialiasingEnabled() override;
-
-  void SaveState() override;
-  void RestoreState() override;
 
   void UseVertexBuffer(VertexBuffer* vb) override;
   void UseVertexBufferGroup(VertexBufferGroup* vbg) override;

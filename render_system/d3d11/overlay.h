@@ -1,8 +1,9 @@
 #pragma once
 
 #include "base/basictypes.h"
-#include "azer/render/overlay.h"
 #include "azer/render/effect.h"
+#include "azer/render/overlay.h"
+#include "azer/render/render_state.h"
 
 namespace azer {
 namespace d3d11 {
@@ -34,9 +35,8 @@ class D3DOverlayEffect : public Effect {
 
 class D3DOverlay : public Overlay {
  public:
-  D3DOverlay(D3DRenderSystem* rs)
-      : render_system_(rs) {}
-  virtual ~D3DOverlay() {}
+  D3DOverlay(D3DRenderSystem* rs);
+  virtual ~D3DOverlay();
 
   void Render(Renderer* renderer) override;
 
@@ -47,6 +47,7 @@ class D3DOverlay : public Overlay {
   bool InitEffect();
   bool InitVertex(RenderSystem* rs);
   D3DRenderSystem* render_system_;
+  RenderStatePtr render_state_;
   scoped_refptr<D3DOverlayEffect> effect_;
   friend class D3DRenderSystem;
   DISALLOW_COPY_AND_ASSIGN(D3DOverlay);

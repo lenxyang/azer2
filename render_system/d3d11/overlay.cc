@@ -2,7 +2,6 @@
 
 #include "azer/render/render.h"
 #include "azer/render_system/d3d11/render_system.h"
-#include "azer/render/scoped_render_state.h"
 
 namespace azer {
 namespace d3d11 {
@@ -113,6 +112,14 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
   }
 }
 
+// class D3DOverlay
+D3DOverlay::D3DOverlay(D3DRenderSystem* rs) : render_system_(rs) {
+  render_state_ = rs->CreateRenderState();
+  render_state_->SetCullingMode(kCullNone);
+}
+
+D3DOverlay::~D3DOverlay() {}
+
 bool D3DOverlay::InitEffect() {
   DCHECK(render_system_ != NULL);
   effect_ = new D3DOverlayEffect();
@@ -162,7 +169,7 @@ void D3DOverlay::Render(Renderer* renderer) {
   azer::Vector2 texcoord[4];
   
   DCHECK (effect_.get() != NULL);
-  ScopedCullingMode(kCullNone, renderer);
+  ScopedRenderState(renderer, render_state_);
   effect_->SetTransform(transform_);
   effect_->SetVertex(vertex_);
   effect_->SetTexcoord(texcoord_);

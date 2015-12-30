@@ -33,6 +33,7 @@ class D3DRenderSystem : public RenderSystem {
 
   SwapChainPtr CreateSwapChainForSurface(Surface* surface) override;
 
+  RenderStatePtr CreateRenderState() override;
   RendererPtr CreateRenderer(const Texture::Options& opt) override;
   RendererPtrVec CreateRendererVec(const Texture::Options& opt,
                                    bool shared_depth_buffer) override;
