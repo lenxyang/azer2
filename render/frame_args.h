@@ -14,7 +14,8 @@ class AZER_EXPORT FrameArgs {
   FrameArgs();
 
   void Update();
-
+  
+  int64 frame_id() const { return frame_id_;}
   float recent_average_fps() const; 
   float total_average_fps() const; 
 
@@ -27,6 +28,7 @@ class AZER_EXPORT FrameArgs {
   ::base::Time time_[2];
   ::base::TimeDelta delta_;
   int64 frame_cnt_;
+  int64 frame_id_;
   void *extra_;
   double total_seconds_; 
   double recent_seconds_;

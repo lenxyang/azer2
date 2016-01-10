@@ -5,12 +5,13 @@
 namespace azer {
 
 FrameArgs::FrameArgs() 
-    : which_(0)
-    , frame_cnt_(0)
-    , extra_(NULL)
-    , total_seconds_(0.0)
-    , recent_seconds_(0.0)
-    , max_frame_stored_(30) {
+    : which_(0),
+      frame_cnt_(0),
+      frame_id_(0),
+      extra_(NULL),
+      total_seconds_(0.0),
+      recent_seconds_(0.0),
+      max_frame_stored_(30) {
   int cur = which_;
   time_[which_] = ::base::Time::Now();
   started_ = time_[which_];
@@ -18,6 +19,7 @@ FrameArgs::FrameArgs()
 }
 
 void FrameArgs::Update() {
+  frame_id_++;
   which_ ^= 1;
   int cur = which_;
   int prev = which_ ^ 1;
