@@ -24,10 +24,9 @@ class AZER_EXPORT EffectParamsProvider :
   static const char kEffectParamsProviderName[];
   EffectParamsProvider();
   virtual ~EffectParamsProvider();
-
   virtual const char* GetProviderName() const { return kEffectParamsProviderName;}
-  virtual void UpdateParams(const FrameArgs& args) = 0;
  private:
+  const FrameArgs* args_;
   DISALLOW_COPY_AND_ASSIGN(EffectParamsProvider);
 };
 
@@ -49,8 +48,6 @@ class AZER_EXPORT EffectParamsProviderContainer :
   void AddProvider(EffectParamsProviderPtr provider);
   void RemoveProvider(EffectParamsProviderPtr provider);
   void ResetProvider();
-
-  virtual void UpdateProviderParams(const FrameArgs& args);
   void ApplyParams(Effect* effect);
  protected:
   void RebuildCache();

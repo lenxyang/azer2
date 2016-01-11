@@ -95,7 +95,6 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
 
   void SetBlending(Blending* blending) { blending_ = blending;}
   Blending* blending() { return blending_.get();}
-  void UpdateProviderParams(const FrameArgs& args) override;
   virtual void Render(Renderer* renderer);
 
   Effect* effect() { return effect_.get();}
@@ -126,7 +125,6 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   MeshPart* part_at(int32 index) { return part_[index].get();}
   bool has_blending() const { return blending_count_ > 0;}
 
-  void UpdateProviderParams(const FrameArgs& args) override;
   virtual void Render(Renderer* renderer);
   
   const Vector3& vmin() { return vmin_;}

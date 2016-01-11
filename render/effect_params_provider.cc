@@ -1,6 +1,7 @@
 #include "azer/render/effect_params_adapter.h"
 
 #include "base/logging.h"
+#include "azer/render/frame_args.h"
 #include "azer/render/effect_params_provider.h"
 
 namespace azer {
@@ -19,13 +20,12 @@ const char* EffectParamsAdapter::GetAdapterName() const {
 }
 
 
+// class EffectParamsProvider
 const char EffectParamsProvider::kEffectParamsProviderName[] =
     "azer::EffectParamsProvider";
-EffectParamsProvider::EffectParamsProvider() {
-}
+EffectParamsProvider::EffectParamsProvider() {}
+EffectParamsProvider::~EffectParamsProvider() {}
 
-EffectParamsProvider::~EffectParamsProvider() {
-}
 
 // class EffectParamsProviderContainer
 EffectParamsProviderContainer::EffectParamsProviderContainer()
@@ -91,9 +91,4 @@ void EffectParamsProviderContainer::ApplyParams(Effect* effect) {
   }
 }
 
-void EffectParamsProviderContainer::UpdateProviderParams(const FrameArgs& args) {
-  for (auto iter = vector_.begin(); iter != vector_.end(); ++iter) {
-    (*iter)->UpdateParams(args);
-  }
-}
 }

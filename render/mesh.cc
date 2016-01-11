@@ -149,11 +149,6 @@ MeshPart& MeshPart::operator = (const MeshPart& part) {
   return *this;
 }
 
-void MeshPart::UpdateProviderParams(const FrameArgs& args) {
-  DCHECK(context_ || vector_.size() == 0u);
-  EffectParamsProviderContainer::UpdateProviderParams(args);
-}
-
 void MeshPart::Render(Renderer* renderer) {
   DCHECK(context_ || vector_.size() == 0u);
   if (!blending_.get()) {
@@ -209,14 +204,6 @@ MeshPartPtr Mesh::RemoveMeshPartAt(int32 index) {
 void Mesh::ClearMeshPart() {
   part_.clear();
   blending_count_ = 0;
-}
-
-void Mesh::UpdateProviderParams(const FrameArgs& args) {
-  DCHECK(context_ || vector_.size() == 0u);
-  EffectParamsProviderContainer::UpdateProviderParams(args);
-  for (auto iter = part_.begin(); iter != part_.end(); ++iter) {
-    (*iter)->UpdateProviderParams(args);
-  }
 }
 
 void Mesh::Render(Renderer* renderer) {
