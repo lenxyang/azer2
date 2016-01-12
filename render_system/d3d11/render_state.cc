@@ -142,6 +142,11 @@ void D3DRenderState::SetDepthState(const D3D11_DEPTH_STENCIL_DESC& desc) {
 }
 
 void D3DRenderState::Apply(Renderer* r) {
+  /*
+  D3D11_DEPTH_STENCIL_DESC desc;
+  depth_state_->GetDesc(&desc);
+  LOG(ERROR) << "Depth Enable: " << (desc.DepthEnable ? "TRUE" : "FALSE");
+  */
   D3DRenderer* renderer = dynamic_cast<D3DRenderer*>(r);
   renderer->GetContext()->RSSetState(raster_state_);
   renderer->GetContext()->OMSetDepthStencilState(depth_state_, 0.0f);
