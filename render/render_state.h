@@ -23,6 +23,11 @@ class AZER_EXPORT RenderState : public ::base::RefCounted<RenderState> {
   virtual void EnableLineAntialiasing(bool enable) = 0;
   virtual bool IsLineAntialiasingEnabled() = 0;
 
+  // depth buffer state
+  virtual void EnableDepthTest(bool enable) = 0;
+  virtual bool IsDepthTestEnabled()  = 0;
+  virtual void SetDepthCompareFunc(CompareFunc::Type func) = 0;
+
   virtual void Apply(Renderer* renderer) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(RenderState);

@@ -57,16 +57,6 @@ void D3DRenderer::Reset() {
   DCHECK(d3d_context_ != NULL);
   d3d_context_->ClearState();
   ResetRenderState();
-  EnableDepthTest(false);
-}
-
-bool D3DRenderer::IsDepthTestEnable() {
-  return depth_ && depth_->IsEnabled();
-}
-
-void D3DRenderer::EnableDepthTest(bool enable) {
-  CHECK(depth_);
-  depth_->Enable(enable);
 }
 
 void D3DRenderer::ResetBlending() {

@@ -12,10 +12,9 @@ namespace azer {
 namespace d3d11 {
 
 D3DDepthBuffer::D3DDepthBuffer(const Texture::Options& opt, D3DRenderSystem* rs)
-      : DepthBuffer(opt)
-      , stencil_ref_value_(0)
-      , target_(NULL)
-      , render_system_(rs) {
+    : DepthBuffer(opt),
+      target_(NULL),
+      render_system_(rs) {
   }
 
 D3DDepthBuffer::~D3DDepthBuffer() {
@@ -45,69 +44,6 @@ D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
   return Create(o, rs);
 }
 
-bool D3DDepthBuffer::InitDepthAndStencilState(D3DRenderSystem* rs) {
-  HRESULT hr;
-  ID3D11DepthStencilState* state;
-  ID3D11Device* d3d_device = rs->GetDevice();
-  ZeroMemory(&desc_, sizeof(desc_));
-  desc_.DepthEnable = FALSE;
-  desc_.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-  desc_.DepthFunc = D3D11_COMPARISON_LESS;
-  desc_.StencilEnable = FALSE;
-  desc_.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
-  desc_.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
-  desc_.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-  desc_.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-  desc_.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-  desc_.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-  desc_.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-  desc_.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-  desc_.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-  desc_.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-
-  hr = d3d_device->CreateDepthStencilState(&desc_, &state);
-  HRESULT_HANDLE_NORET(hr, ERROR, "CreateDepthStencilState failed");
-  SAFE_RELEASE(state);
-  return true;
-}
-
-void D3DDepthBuffer::PushState() {
-  state_stack_.push(desc_);
-}
-
-void D3DDepthBuffer::PopState() {
-  DCHECK(!state_stack_.empty());
-  desc_ = state_stack_.top();
-  state_stack_.pop();
-  UpdateState();
-}
-
-void D3DDepthBuffer::Enable(bool enable) {
-  desc_.DepthEnable = enable;
-  UpdateState();
-}
-
-void D3DDepthBuffer::UpdateState() {
-  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-
-  ID3D11DepthStencilState* state = NULL;
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  HRESULT hr = d3d_device->CreateDepthStencilState(&desc_, &state);
-  
-  HRESULT_HANDLE_NORET(hr, ERROR, "CreateDepthStencilState failed");
-  d3d_context->OMSetDepthStencilState(state, stencil_ref_value_);
-  SAFE_RELEASE(state);
-}
-
-bool D3DDepthBuffer::IsEnabled() {
-  return desc_.DepthEnable == TRUE;
-}
-
-void D3DDepthBuffer::SetDepthCompareFunc(CompareFunc::Type func) {
-  desc_.DepthFunc = TranslateCompareFunc(func);
-  UpdateState();
-}
-
 bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
   ID3D11Device* d3d_device = rs->GetDevice();
   HRESULT hr;
@@ -124,7 +60,7 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
   hr = d3d_device->CreateDepthStencilView(resource, NULL, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateDepthStencilView failed ");  
 
-  return InitDepthAndStencilState(rs);
+  return true;
 }
 
 void D3DDepthBuffer::Clear(D3DRenderer* renderer, ClearFlag flag,
@@ -135,7 +71,6 @@ void D3DDepthBuffer::Clear(D3DRenderer* renderer, ClearFlag flag,
                                      TranslateDepthAndStencilClearFlag(flag),
                                      depth_val, // depth value (clamp(0.0, 1.0)
                                      stencil_val);   // stencil value
-  stencil_ref_value_ = stencil_val;
 }
 }  // namespace d3d11
 }  // namespace azer

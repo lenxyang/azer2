@@ -12,18 +12,8 @@ class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
  public:
   virtual ~DepthBuffer() {};
 
-  virtual void Enable(bool) = 0;
-  virtual bool IsEnabled() = 0;
-  virtual void EnableWrite(bool) = 0;
-  virtual void SetBias(float val) = 0;
-  virtual void SetDepthCompareFunc(CompareFunc::Type func) = 0;
-
-  // store and restore state of DepthBuffer and Stencil Buffer
-  virtual void PushState() = 0;
-  virtual void PopState() = 0;
 
   Texture* GetTexture() { return texture_.get();}
-  
   enum ClearFlag {
     kClearDepth    = 0x0001,
     kClearStencil  = 0x0002,
@@ -40,17 +30,4 @@ protected:
 };
 
 typedef scoped_refptr<DepthBuffer> DepthBufferPtr;
-
-class ScopedDepthBufferState {
- public:
-  ScopedDepthBufferState(DepthBuffer* buffer)
-      : depth_buffer_(buffer) {
-    depth_buffer_->PushState();
-  }
-  ~ScopedDepthBufferState() {
-    depth_buffer_->PopState();
-  }
- private:
-  DepthBuffer* depth_buffer_;
-};
 }  // namespace azer

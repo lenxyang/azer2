@@ -36,8 +36,6 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   void SetRenderState(RenderState* render_state);
   RenderState* GetRenderState();
 
-  virtual bool IsDepthTestEnable() = 0;
-  virtual void EnableDepthTest(bool enable) = 0;
   virtual void Use() = 0;
 
   void UseEffect(Effect* effect); 

@@ -28,8 +28,6 @@ class D3DRenderer : public Renderer {
 
   void Reset() override;
   void Use() override;
-  bool IsDepthTestEnable() override;
-  void EnableDepthTest(bool enable) override;
   const std::string& name() const override;
 
   void UseVertexBuffer(VertexBuffer* vb) override;
