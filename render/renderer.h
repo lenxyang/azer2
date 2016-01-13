@@ -7,8 +7,6 @@
 #include "base/memory/ref_counted.h"
 
 #include "azer/base/export.h"
-#include "azer/render/depth_buffer.h"
-#include "azer/render/render_state.h"
 #include "azer/render/render_target.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render/viewport.h"
@@ -18,12 +16,19 @@ namespace azer {
 class Blending;
 class Effect;
 class IndicesBuffer;
+class DepthBuffer;
+class DepthStencilState;
 class GpuConstantsTable;
 class RenderSystem;
+class RasterizerState;
 class Texture;
 class VertexBuffer;
 class VertexBufferGroup;
 class VertexLayout;
+
+typedef scoped_refptr<DepthBuffer> DepthBufferPtr;
+typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
+typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
 
 
 class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
@@ -35,6 +40,10 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   void ResetRasterizerState();
   void SetRasterizerState(RasterizerState* render_state);
   RasterizerState* GetRasterizerState();
+
+  void ResetDepthStencilState();
+  void SetDepthStencilState(DepthStencilState* render_state);
+  DepthStencilState* GetDepthStencilState();
 
   virtual void Use() = 0;
 
@@ -54,9 +63,10 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
 
   virtual void Clear(const azer::Vector4& color) = 0;
 
-  virtual void ClearDepthAndStencil(
-      DepthBuffer::ClearFlag flag = DepthBuffer::kClearAll,
-      float depth_val = 1.0,int stencil_val = 0) = 0;
+  virtual void ClearDepthAndStencil(bool clear_depth = true,
+                                    bool clear_stencil = false,
+                                    float depth_val = 1.0,
+                                    int stencil_val = 0) = 0;
 
   virtual void ResetShader(RenderPipelineStage stage) = 0;
   virtual void SetVertexLayout(VertexLayout* layout) = 0;
@@ -83,8 +93,10 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   RenderSystem* render_system_;
   DepthBufferPtr depth_;
   RenderTargetVec targets_;
-  RasterizerStatePtr current_state_;
-  RasterizerStatePtr default_state_;
+  RasterizerStatePtr current_rasterizer_state_;
+  RasterizerStatePtr default_rasterizer_state_;
+  DepthStencilStatePtr current_depth_state_;
+  DepthStencilStatePtr default_depth_state_;
   DISALLOW_COPY_AND_ASSIGN(Renderer);
 };
 

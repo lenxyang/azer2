@@ -16,7 +16,7 @@
 #include "azer/render_system/d3d11/gpu_program.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
-#include "azer/render_system/d3d11/render_state.h"
+#include "azer/render_system/d3d11/rasterizer_state.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/overlay.h"
 #include "azer/render_system/d3d11/technique.h"
@@ -206,8 +206,12 @@ BlendingPtr D3DRenderSystem::CreateBlending(const Blending::Desc& desc) {
   }
 }
 
-RenderStatePtr D3DRenderSystem::CreateRenderState() {
-  return RenderStatePtr(new D3DRenderState);
+RasterizerStatePtr D3DRenderSystem::CreateRasterizerState() {
+  return RasterizerStatePtr(new D3DRasterizerState);
+}
+
+DepthStencilStatePtr D3DRenderSystem::CreateDepthStencilState() {
+  return DepthStencilStatePtr(new D3DDepthStencilState);
 }
 
 RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {

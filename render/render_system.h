@@ -13,7 +13,6 @@
 #include "azer/render/gpu_program.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/render_capability.h"
-#include "azer/render/render_state.h"
 #include "azer/render/renderer.h"
 #include "azer/render/surface.h"
 #include "azer/render/vertex_buffer.h"
@@ -30,12 +29,14 @@ class Overlay;
 class RenderTarget;
 class Technique;
 class SlotVertexBuffer;
+class RasterizerState;
 
 typedef scoped_refptr<Blending> BlendingPtr;
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTpablePtr;;
 typedef scoped_refptr<Overlay> OverlayPtr;
 typedef scoped_refptr<Renderer> RendererPtr;
 typedef scoped_refptr<RenderTarget> RenderTargetPtr;
+typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
 typedef scoped_refptr<SwapChain> SwapChainPtr;
 typedef scoped_refptr<Technique> TechniquePtr;
 typedef scoped_refptr<SlotVertexBuffer> SlotVertexBufferPtr;
@@ -52,7 +53,8 @@ class AZER_EXPORT RenderSystem {
 
   virtual SwapChainPtr CreateSwapChainForSurface(Surface* surface) = 0;
 
-  virtual RenderStatePtr CreateRenderState() = 0;
+  virtual RasterizerStatePtr CreateRasterizerState() = 0;
+  virtual DepthStencilStatePtr CreateDepthStencilState() = 0;
   virtual RendererPtr CreateRenderer(const Texture::Options& opt) = 0;
   virtual RendererPtrVec CreateRendererVec(const Texture::Options& opt,
                                            bool shared_depth_buffer) = 0;

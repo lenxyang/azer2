@@ -44,7 +44,7 @@ class D3DRenderer : public Renderer {
   void ResetShader(RenderPipelineStage stage) override;
 
   void Clear(const azer::Vector4& color) override;
-  void ClearDepthAndStencil(DepthBuffer::ClearFlag, float depth_val, 
+  void ClearDepthAndStencil(bool clear_depth, bool clear_stencil, float depth_val, 
                             int stencil_val) override;
   
   void SetPrimitiveTopology(PrimitiveTopology primitive) override;
@@ -76,7 +76,7 @@ class D3DRenderer : public Renderer {
   bool Init(const Texture::Options& opt);
   bool Init(RenderTargetPtr rt, DepthBufferPtr depth);
  protected:
-  void InitRenderState();
+  void InitRasterizerState();
   void InitForRenderTarget();
   void ResetTexture(RenderPipelineStage stage, int index);
   void SetShaderResource(RenderPipelineStage stage, uint32 first, uint32 num,

@@ -1,4 +1,4 @@
-#include "azer/render_system/d3d11/render_state.h"
+#include "azer/render_system/d3d11/rasterizer_state.h"
 
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/renderer.h"
@@ -15,7 +15,7 @@ ID3D11Device* GetDevice() {
 }
 }
 
-D3DRenderState::D3DRenderState() {
+D3DRasterizerState::D3DRasterizerState() {
   D3D11_RASTERIZER_DESC raster_desc;
   memset(&raster_desc, 0, sizeof(raster_desc));
   raster_desc.FillMode = D3D11_FILL_SOLID;
@@ -25,40 +25,19 @@ D3DRenderState::D3DRenderState() {
   raster_desc.AntialiasedLineEnable = TRUE;
   HRESULT hr = GetDevice()->CreateRasterizerState(&raster_desc, &raster_state_);
   HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");
-
-  D3D11_DEPTH_STENCIL_DESC depth_desc;
-  ZeroMemory(&depth_desc, sizeof(depth_desc));
-  depth_desc.DepthEnable = FALSE;
-  depth_desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-  depth_desc.DepthFunc = D3D11_COMPARISON_LESS;
-  depth_desc.StencilEnable = FALSE;
-  depth_desc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
-  depth_desc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
-  depth_desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-  depth_desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-  depth_desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-  depth_desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-  depth_desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-  depth_desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
-  depth_desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-  depth_desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-
-  hr = GetDevice()->CreateDepthStencilState(&depth_desc, &depth_state_);
-  HRESULT_HANDLE_NORET(hr, ERROR, "CreateDepthStencilState failed");
 }
 
-D3DRenderState::~D3DRenderState() {
+D3DRasterizerState::~D3DRasterizerState() {
   SAFE_RELEASE(raster_state_);
-  SAFE_RELEASE(depth_state_);
 }
 
-FillMode D3DRenderState::GetFillMode(void) {
+FillMode D3DRasterizerState::GetFillMode(void) {
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
   return TranslateD3DFillMode(desc.FillMode);
 }
 
-void D3DRenderState::SetFillMode(FillMode mode) {
+void D3DRasterizerState::SetFillMode(FillMode mode) {
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
   SAFE_RELEASE(raster_state_);
@@ -66,13 +45,13 @@ void D3DRenderState::SetFillMode(FillMode mode) {
   SetRasterizerState(desc);
 }
 
-CullingMode D3DRenderState::GetCullingMode(void) {
+CullingMode D3DRasterizerState::GetCullingMode(void) {
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
   return TranslateD3DCullingMode(desc.CullMode);
 }
 
-void D3DRenderState::SetCullingMode(CullingMode mode) {
+void D3DRasterizerState::SetCullingMode(CullingMode mode) {
   DCHECK(raster_state_);
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
@@ -80,7 +59,7 @@ void D3DRenderState::SetCullingMode(CullingMode mode) {
   SetRasterizerState(desc);
 }
 
-FrontFace D3DRenderState::GetFrontFace() {
+FrontFace D3DRasterizerState::GetFrontFace() {
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
   if (desc.FrontCounterClockwise) 
@@ -89,7 +68,7 @@ FrontFace D3DRenderState::GetFrontFace() {
     return kClockwise;
 }
 
-void D3DRenderState::SetFrontFace(FrontFace mode) {
+void D3DRasterizerState::SetFrontFace(FrontFace mode) {
   DCHECK(raster_state_);
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
@@ -97,7 +76,7 @@ void D3DRenderState::SetFrontFace(FrontFace mode) {
   SetRasterizerState(desc);
 }
 
-void D3DRenderState::EnableMultisampleAntiAliasing(bool enable) {
+void D3DRasterizerState::EnableMultisampleAntiAliasing(bool enable) {
   DCHECK(raster_state_);
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
@@ -105,14 +84,14 @@ void D3DRenderState::EnableMultisampleAntiAliasing(bool enable) {
   SetRasterizerState(desc);
 }
 
-bool D3DRenderState::IsMultisampleAntiAliasingEnabled() {
+bool D3DRasterizerState::IsMultisampleAntiAliasingEnabled() {
   DCHECK(raster_state_);
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
   return desc.MultisampleEnable == TRUE;
 } 
 
-void D3DRenderState::EnableLineAntialiasing(bool enable) {
+void D3DRasterizerState::EnableLineAntialiasing(bool enable) {
   DCHECK(raster_state_);
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
@@ -120,28 +99,21 @@ void D3DRenderState::EnableLineAntialiasing(bool enable) {
   SetRasterizerState(desc);
 }
 
-bool D3DRenderState::IsLineAntialiasingEnabled() {
+bool D3DRasterizerState::IsLineAntialiasingEnabled() {
   DCHECK(raster_state_);
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
   return desc.AntialiasedLineEnable == TRUE;
 }
 
-void D3DRenderState::SetRasterizerState(const D3D11_RASTERIZER_DESC& desc) {
+void D3DRasterizerState::SetRasterizerState(const D3D11_RASTERIZER_DESC& desc) {
   DCHECK(raster_state_);
   SAFE_RELEASE(raster_state_);
   HRESULT hr = GetDevice()->CreateRasterizerState(&desc, &raster_state_);
   HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");
 }
 
-void D3DRenderState::SetDepthState(const D3D11_DEPTH_STENCIL_DESC& desc) {
-  DCHECK(depth_state_);
-  SAFE_RELEASE(depth_state_);
-  HRESULT hr = GetDevice()->CreateDepthStencilState(&desc, &depth_state_);
-  HRESULT_HANDLE_NORET(hr, ERROR, "CreateDepthStencilState failed ");
-}
-
-void D3DRenderState::Apply(Renderer* r) {
+void D3DRasterizerState::Apply(Renderer* r) {
   /*
   D3D11_DEPTH_STENCIL_DESC desc;
   depth_state_->GetDesc(&desc);
@@ -149,27 +121,6 @@ void D3DRenderState::Apply(Renderer* r) {
   */
   D3DRenderer* renderer = dynamic_cast<D3DRenderer*>(r);
   renderer->GetContext()->RSSetState(raster_state_);
-  renderer->GetContext()->OMSetDepthStencilState(depth_state_, 0.0f);
-}
-
-void D3DRenderState::EnableDepthTest(bool enable) {
-  D3D11_DEPTH_STENCIL_DESC desc;  
-  depth_state_->GetDesc(&desc);
-  desc.DepthEnable = enable;
-  return SetDepthState(desc);
-}
-
-bool D3DRenderState::IsDepthTestEnabled() {
-  D3D11_DEPTH_STENCIL_DESC desc;  
-  depth_state_->GetDesc(&desc);
-  return desc.DepthEnable == TRUE;
-}
-
-void D3DRenderState::SetDepthCompareFunc(CompareFunc::Type func) {
-  D3D11_DEPTH_STENCIL_DESC desc;  
-  depth_state_->GetDesc(&desc);
-  desc.DepthFunc = TranslateCompareFunc(func);
-  SetDepthState(desc);
 }
 }  // naemspace d3d11
 }  // naemspace azer

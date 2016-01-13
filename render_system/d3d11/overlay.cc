@@ -114,8 +114,8 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
 
 // class D3DOverlay
 D3DOverlay::D3DOverlay(D3DRenderSystem* rs) : render_system_(rs) {
-  render_state_ = rs->CreateRenderState();
-  render_state_->SetCullingMode(kCullNone);
+  rasterizer_state_ = rs->CreateRasterizerState();
+  rasterizer_state_->SetCullingMode(kCullNone);
 }
 
 D3DOverlay::~D3DOverlay() {}
@@ -169,7 +169,7 @@ void D3DOverlay::Render(Renderer* renderer) {
   azer::Vector2 texcoord[4];
   
   DCHECK (effect_.get() != NULL);
-  ScopedRenderState(renderer, render_state_);
+  ScopedRasterizerState(renderer, rasterizer_state_);
   effect_->SetTransform(transform_);
   effect_->SetVertex(vertex_);
   effect_->SetTexcoord(texcoord_);

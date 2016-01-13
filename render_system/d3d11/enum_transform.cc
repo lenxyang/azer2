@@ -133,20 +133,6 @@ DXGI_FORMAT TranslateIndexType(IndicesData::IndexType type) {
   }
 }
 
-D3D11_CLEAR_FLAG TranslateDepthAndStencilClearFlag(
-    azer::DepthBuffer::ClearFlag clear) {
-  DWORD flags = 0;
-  if (clear & azer::DepthBuffer::kClearDepth) {
-    flags |= D3D11_CLEAR_DEPTH;
-  }
-
-  if (clear & azer::DepthBuffer::kClearStencil) {
-    flags |= D3D11_CLEAR_STENCIL;
-  }
-
-  return (D3D11_CLEAR_FLAG)flags;
-}
-
 D3D11_BIND_FLAG TranslateBindTarget(Texture::BindTarget target) {
   DWORD flags = 0;
   if (target & Texture::kShaderResource)

@@ -3,6 +3,7 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/render/renderer.h"
 #include "azer/render/render_system_enum.h"
 
 namespace azer {
@@ -22,6 +23,8 @@ class AZER_EXPORT RasterizerState : public ::base::RefCounted<RasterizerState> {
   virtual bool IsMultisampleAntiAliasingEnabled() = 0;
   virtual void EnableLineAntialiasing(bool enable) = 0;
   virtual bool IsLineAntialiasingEnabled() = 0;
+
+  virtual void Apply(Renderer* renderer) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(RasterizerState);
 };

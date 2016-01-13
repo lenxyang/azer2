@@ -25,7 +25,6 @@ D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(PrimitiveTopology topology);
 
 DXGI_FORMAT TranslateIndexType(IndicesData::IndexType type);
 
-D3D11_CLEAR_FLAG TranslateDepthAndStencilClearFlag(DepthBuffer::ClearFlag clear);
 D3D11_BIND_FLAG TranslateBindTarget(Texture::BindTarget target);
 
 D3D11_FILL_MODE TranslateFillMode(FillMode mode);

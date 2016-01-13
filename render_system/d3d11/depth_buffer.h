@@ -13,6 +13,21 @@ namespace d3d11 {
 class D3DRenderSystem;
 class D3DRenderer;
 
+class D3DDepthStencilState : public DepthStencilState {
+ public:
+  D3DDepthStencilState();
+  ~D3DDepthStencilState() override;
+  
+  void EnableDepthTest(bool enable) override;
+  bool IsDepthTestEnabled()  override;
+  void SetDepthCompareFunc(CompareFunc::Type func) override;
+  void Apply(Renderer* renderer) override;
+ private:
+  void SetDepthState(const D3D11_DEPTH_STENCIL_DESC& desc);
+  ID3D11DepthStencilState* depth_state_;
+  DISALLOW_COPY_AND_ASSIGN(D3DDepthStencilState);
+};
+
 class D3DDepthBuffer : public DepthBuffer {
  public:
   static D3DDepthBuffer* Create(Surface* surface, D3DRenderSystem* rs);
@@ -23,8 +38,8 @@ class D3DDepthBuffer : public DepthBuffer {
   ~D3DDepthBuffer() override;
 
   bool Init(D3DRenderSystem* rs);
-  void Clear(D3DRenderer*, ClearFlag flag = kClearAll, float depth_val = 1.0,
-             int stencil_val = 0);
+  void Clear(D3DRenderer*, bool clear_depth, bool clear_stencil, float depth_val,
+             int stencil_val);
 
   ID3D11DepthStencilView* GetD3DDepthStencilView() { return target_;}
  private:

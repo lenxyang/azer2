@@ -56,7 +56,8 @@ void D3DRenderer::Use() {
 void D3DRenderer::Reset() {
   DCHECK(d3d_context_ != NULL);
   d3d_context_->ClearState();
-  ResetRenderState();
+  ResetRasterizerState();
+  ResetDepthStencilState();
 }
 
 void D3DRenderer::ResetBlending() {
@@ -115,10 +116,11 @@ void D3DRenderer::Clear(const azer::Vector4& color) {
   d3d_context_->ClearRenderTargetView(target_view, dxcolor);
 }
 
-void D3DRenderer::ClearDepthAndStencil(DepthBuffer::ClearFlag flag,
+void D3DRenderer::ClearDepthAndStencil(bool clear_depth, bool clear_stencil,
                                        float depth_val, int stencil_val) {
   DCHECK(NULL != depth_.get());
-  ((D3DDepthBuffer*)depth_.get())->Clear(this, flag, depth_val, stencil_val);
+  D3DDepthBuffer* depth = ((D3DDepthBuffer*)depth_.get());
+  depth->Clear(this, clear_depth, clear_stencil, depth_val, stencil_val);
 }
 
 void D3DRenderer::ResetShader(RenderPipelineStage stage) {
@@ -264,34 +266,6 @@ bool D3DRenderer::Init(const Texture::Options& o) {
   Reset();
   SetViewport(Viewport(0, 0, o.size.width(), o.size.height()));
   return true;
-}
-
-/**
- * 在调用 ID3D11DeviceContext::GetRSState() 之前必须首先调用 CreateTasterizerState
- * 此函数会在初始化结束之后调用。
- * 如果初始化成功，那么之后的代码就可以放心大胆的调用 SetCullingMode 等函数了
- * 1. Stackoverflow: RSGetState in out parameter returns null pointer? [http://stackoverflow.com/questions/16874481/rsgetstate-in-out-parameter-returns-null-pointer]
- *
- */
-void D3DRenderer::InitRenderState() {
-  ID3D11RasterizerState* obj = NULL;
-  DCHECK(d3d_context_ != NULL); 
-  D3D11_RASTERIZER_DESC desc;
-  ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
-  desc.FillMode = D3D11_FILL_SOLID;
-  desc.CullMode = D3D11_CULL_BACK;
-  desc.FrontCounterClockwise = FALSE;
-  desc.DepthBias = 0;
-  desc.SlopeScaledDepthBias = 0.0f;
-  desc.DepthBiasClamp = 0.0f;
-  desc.DepthClipEnable = TRUE;
-  desc.ScissorEnable = FALSE;
-  desc.MultisampleEnable = TRUE;
-  desc.AntialiasedLineEnable = TRUE;
-  HRESULT hr = d3d11_render_system_->GetDevice()->CreateRasterizerState(&desc, &obj);
-  HRESULT_HANDLE_NORET(hr, ERROR, "CreateTasterizerState failed ");
-  D3DObjPtr auto_ptr(obj);
-  d3d_context_->RSSetState(obj);
 }
 
 bool D3DSurfaceRenderer::InitForSurface(RenderTargetPtr target,
