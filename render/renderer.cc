@@ -7,7 +7,7 @@
 namespace azer {
 Renderer::Renderer(RenderSystem* rs) :
     render_system_(rs) {
-  default_state_ = rs->CreateRenderState();
+  default_state_ = rs->CreateRasterizerState();
 }
 
 Renderer::~Renderer() {
@@ -17,17 +17,17 @@ void Renderer::UseEffect(Effect* effect) {
   effect->Apply(this);
 }
 
-void Renderer::ResetRenderState() {
+void Renderer::ResetRasterizerState() {
   DCHECK(default_state_.get());
-  SetRenderState(default_state_);
+  SetRasterizerState(default_state_);
 }
 
-void Renderer::SetRenderState(RenderState* render_state) {
+void Renderer::SetRasterizerState(RasterizerState* render_state) {
   current_state_ = render_state;
   current_state_->Apply(this);
 }
 
-RenderState* Renderer::GetRenderState() {
+RasterizerState* Renderer::GetRasterizerState() {
   return current_state_;
 }
 }  // namespace azer

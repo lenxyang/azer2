@@ -112,6 +112,8 @@ void D3DTexture::SetPSSampler(int index, D3DRenderer* renderer) {
   d3d_context->PSSetShaderResources(index, 1, &view_);
   if (sampler_state_) {
     d3d_context->PSSetSamplers(index, 1, &sampler_state_);
+  } else {
+    d3d_context->PSSetSamplers(index, 1, NULL);
   }
 }
 
@@ -122,6 +124,8 @@ void D3DTexture::SetVSSampler(int index, D3DRenderer* renderer) {
   d3d_context->VSSetShaderResources(index, 1, &view_);
   if (sampler_state_) {
     d3d_context->VSSetSamplers(index, 1, &sampler_state_);
+  } else {
+    d3d_context->VSSetSamplers(index, 1, NULL);
   }
 }
 
@@ -132,6 +136,8 @@ void D3DTexture::SetHSSampler(int index, D3DRenderer* renderer) {
   d3d_context->HSSetShaderResources(index, 1, &view_);
   if (sampler_state_) {
     d3d_context->HSSetSamplers(index, 1, &sampler_state_);
+  } else {
+    d3d_context->HSSetSamplers(index, 1, NULL);
   }
 }
 
@@ -142,6 +148,8 @@ void D3DTexture::SetDSSampler(int index, D3DRenderer* renderer) {
   d3d_context->DSSetShaderResources(index, 1, &view_);
   if (sampler_state_) {
     d3d_context->DSSetSamplers(index, 1, &sampler_state_);
+  } else {
+    d3d_context->DSSetSamplers(index, 1, NULL);
   }
 }
 
@@ -152,6 +160,8 @@ void D3DTexture::SetGSSampler(int index, D3DRenderer* renderer) {
   d3d_context->GSSetShaderResources(index, 1, &view_);
   if (sampler_state_) {
     d3d_context->GSSetSamplers(index, 1, &sampler_state_);
+  } else {
+    d3d_context->GSSetSamplers(index, 1, NULL);
   }
 }
 

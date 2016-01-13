@@ -8,6 +8,18 @@
 
 namespace azer {
 
+class AZER_EXPORT DepthStencilState : public ::base::RefCounted<DepthStencilState> {
+ public:
+  // depth buffer state
+  virtual void EnableDepthTest(bool enable) = 0;
+  virtual bool IsDepthTestEnabled()  = 0;
+  virtual void SetDepthCompareFunc(CompareFunc::Type func) = 0;
+ private:
+  DISALLOW_COPY_AND_ASSIGN();
+};
+
+typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
+
 class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
  public:
   virtual ~DepthBuffer() {};
@@ -19,7 +31,7 @@ class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
     kClearStencil  = 0x0002,
     kClearAll      = (kClearDepth | kClearStencil),
   };
-protected:
+ protected:
   DepthBuffer(const Texture::Options& opt)
       : options_(opt) {
   }

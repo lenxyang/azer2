@@ -7,10 +7,10 @@
 
 namespace azer {
 class Renderer;
-class AZER_EXPORT RenderState : public ::base::RefCounted<RenderState> {
+class AZER_EXPORT RasterizerState : public ::base::RefCounted<RasterizerState> {
  public:
-  RenderState() {}
-  virtual ~RenderState() {}
+  RasterizerState() {}
+  virtual ~RasterizerState() {}
 
   virtual FillMode GetFillMode(void) = 0;
   virtual void SetFillMode(FillMode mode) = 0;
@@ -22,16 +22,25 @@ class AZER_EXPORT RenderState : public ::base::RefCounted<RenderState> {
   virtual bool IsMultisampleAntiAliasingEnabled() = 0;
   virtual void EnableLineAntialiasing(bool enable) = 0;
   virtual bool IsLineAntialiasingEnabled() = 0;
-
-  // depth buffer state
-  virtual void EnableDepthTest(bool enable) = 0;
-  virtual bool IsDepthTestEnabled()  = 0;
-  virtual void SetDepthCompareFunc(CompareFunc::Type func) = 0;
-
-  virtual void Apply(Renderer* renderer) = 0;
  private:
-  DISALLOW_COPY_AND_ASSIGN(RenderState);
+  DISALLOW_COPY_AND_ASSIGN(RasterizerState);
 };
 
-typedef scoped_refptr<RenderState> RenderStatePtr;
+typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
+
+class ScopedRasterizerState {
+ public:
+  ScopedRasterizerState(Renderer* renderer, RasterizerState* new_state)
+      : renderer_(renderer) {
+    prev_state_ = renderer->GetRasterizerState();;
+    renderer->SetRasterizerState(new_state);
+  }
+  ~ScopedRasterizerState() {
+    renderer_->SetRasterizerState(prev_state_);
+  }
+ private:
+  RasterizerStatePtr prev_state_;
+  Renderer* renderer_;
+  DISALLOW_COPY_AND_ASSIGN(ScopedRasterizerState);
+};
 }  // namespace azer

@@ -32,9 +32,9 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual ~Renderer();
 
   virtual const std::string& name() const = 0;
-  void ResetRenderState();
-  void SetRenderState(RenderState* render_state);
-  RenderState* GetRenderState();
+  void ResetRasterizerState();
+  void SetRasterizerState(RasterizerState* render_state);
+  RasterizerState* GetRasterizerState();
 
   virtual void Use() = 0;
 
@@ -83,27 +83,11 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   RenderSystem* render_system_;
   DepthBufferPtr depth_;
   RenderTargetVec targets_;
-  RenderStatePtr current_state_;
-  RenderStatePtr default_state_;
+  RasterizerStatePtr current_state_;
+  RasterizerStatePtr default_state_;
   DISALLOW_COPY_AND_ASSIGN(Renderer);
 };
 
 typedef scoped_refptr<Renderer> RendererPtr;
 typedef std::vector<RendererPtr> RendererPtrVec;
-
-class ScopedRenderState {
- public:
-  ScopedRenderState(Renderer* renderer, RenderState* new_state)
-      : renderer_(renderer) {
-    prev_state_ = renderer->GetRenderState();;
-    renderer->SetRenderState(new_state);
-  }
-  ~ScopedRenderState() {
-    renderer_->SetRenderState(prev_state_);
-  }
- private:
-  RenderStatePtr prev_state_;
-  Renderer* renderer_;
-  DISALLOW_COPY_AND_ASSIGN(ScopedRenderState);
-};
 }  // namespace azer
