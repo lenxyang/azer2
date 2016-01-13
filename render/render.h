@@ -17,7 +17,7 @@
 #include "azer/render/geometry/square_trustum.h"
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/indices_buffer.h"
-#include "azer/render/render_closure.h"
+#include "azer/render/rasterizer_state.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render/render_target.h"
 #include "azer/render/render_system.h"
