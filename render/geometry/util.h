@@ -3,6 +3,7 @@
 #include "base/basictypes.h"
 #include "azer/render/index_pack.h"
 #include "azer/render/vertex_pack.h"
+#include "azer/render/geometry.h"
 
 namespace azer {
 bool GenerateTopTriangleStrip(int32 top, int32 begin, int32 vertex_num,

@@ -6,5 +6,4 @@
 
 namespace azer {
 void AZER_EXPORT CalcNormal(SlotVertexData* vbd, IndicesData* idata);
-void AZER_EXPORT CalcTriangleListNormal(SlotVertexData* vbd, int* indices);
 }  // namespace azer
