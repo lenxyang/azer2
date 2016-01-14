@@ -49,8 +49,8 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
 
   const Vector3& vmin() { return vmin_;}
   const Vector3& vmax() { return vmax_;}
-  Vector3* mutable_vmin() { return &vmin_;}
-  Vector3* mutable_vmax() { return &vmax_;}
+  void set_vmin(const Vector3& v) { vmin_ = v;}
+  void set_vmax(const Vector3& v) { vmax_ = v;}
 
   PrimitiveTopology topology() const { return topology_;}
   void set_topology(PrimitiveTopology top) { topology_ = top;}
