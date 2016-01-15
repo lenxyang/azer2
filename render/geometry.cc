@@ -62,6 +62,12 @@ bool GenerateStripIndex(int32 line1, int32 line2, int32 vertex_num, bool closed,
   return true;
 }
 
+void MergeMeshPart(MeshPart* merge_to, MeshPart* part) {
+  for (int32 i = 0; i < part->entity_count(); ++i) {
+    merge_to->AddEntity(part->entity_at(i));
+  }
+}
+
 inline int32 CalcSphereIndexNum(int32 stack_num, int32 slice_num) {
   return (stack_num - 2 - 1) * slice_num * 3 * 2 + slice_num * 2 * 3;
 }
@@ -628,7 +634,7 @@ IndicesDataPtr CreateRoundInidcesData(int32 slice) {
   return idata;
 }
 
-IndicesDataPtr CreateRoundFrameInidcesData(int32 slice) {
+IndicesDataPtr CreateCircleInidcesData(int32 slice) {
   const int kIndexNum = slice * 2;
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
   IndexPack ipack(idata.get());
@@ -662,14 +668,14 @@ MeshPartPtr CreateRoundMeshPart(VertexDesc* desc, const Matrix4& transform,
   return part;  
 }
 
-MeshPartPtr CreateRoundFrameMeshPart(VertexDesc* desc, float radius, int slice) {
-  return CreateRoundFrameMeshPart(desc, Matrix4::kIdentity, radius, slice);
+MeshPartPtr CreateCircleMeshPart(VertexDesc* desc, float radius, int slice) {
+  return CreateCircleMeshPart(desc, Matrix4::kIdentity, radius, slice);
 }
 
-MeshPartPtr CreateRoundFrameMeshPart(VertexDesc* desc, const Matrix4& transform, 
+MeshPartPtr CreateCircleMeshPart(VertexDesc* desc, const Matrix4& transform, 
                                      float radius, int slice) {
   SlotVertexDataPtr vdata = CreateRoundVertexData(desc, transform, radius, slice);
-  IndicesDataPtr idata = CreateRoundFrameInidcesData(slice);
+  IndicesDataPtr idata = CreateCircleInidcesData(slice);
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
@@ -843,5 +849,47 @@ MeshPartPtr CreateCylinderMeshPart(VertexDesc* desc, const Matrix4& matrix,
     part->AddEntity(top->entity_at(0));
   }
   return part;
+}
+
+MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const Matrix4& transform, 
+                               const GeoAxisParams& params) {
+  GeoConeParams cone_params;
+  cone_params.radius = params.cone_radius;
+  cone_params.height = params.cone_height;
+  cone_params.slice = 32;
+  Matrix4 mat = Translate(Vector3(0.0f, params.height, 0.0f));
+  MeshPartPtr part = CreateConeMeshPart(desc, mat, cone_params);
+  
+  return part;
+}
+MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const GeoAxisParams& params) {
+  return CreateAxisMeshPart(desc, Matrix4::kIdentity, params);
+}
+MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const Matrix4& transform, 
+                                   const GeoAxisParams& params) {
+  return MeshPartPtr();
+}
+MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const GeoAxisParams& params) {
+  return CreateLineAxisMeshPart(desc, Matrix4::kIdentity, params);
+}
+
+EntityPtr CreatePointList(const std::vector<Vector3>& points, VertexDesc* desc) {
+  return EntityPtr();
+}
+
+EntityPtr CreateLineList(const std::vector<Vector3>& points, VertexDesc* desc) {
+  return EntityPtr();
+}
+
+EntityPtr CreateLineStrip(const std::vector<Vector3>& points, VertexDesc* desc) {
+  return EntityPtr();
+}
+
+EntityPtr CreateRectEntity(const Vector4 pos[4], VertexDesc* desc) {
+  return EntityPtr();
+}
+
+EntityPtr CreateTriEntity(const Vector4 pos[3], VertexDesc* desc) {
+  return EntityPtr();
 }
 }  // namespace azer

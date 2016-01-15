@@ -57,9 +57,9 @@ AZER_EXPORT MeshPartPtr CreateRoundMeshPart(
     VertexDesc* desc, float radius, int32 slice);
 AZER_EXPORT MeshPartPtr CreateRoundMeshPart(
     VertexDesc* desc, const Matrix4& transform, float radius, int32 slice);
-AZER_EXPORT MeshPartPtr CreateRoundFrameMeshPart(
+AZER_EXPORT MeshPartPtr CreateCircleMeshPart(
     VertexDesc* desc, float radius, int32 slice);
-AZER_EXPORT MeshPartPtr CreateRoundFrameMeshPart(
+AZER_EXPORT MeshPartPtr CreateCircleMeshPart(
     VertexDesc* desc, const Matrix4& transform, float radius, int32 slice);
 
 //
@@ -94,6 +94,31 @@ AZER_EXPORT MeshPartPtr CreateCylinderMeshPart(
     VertexDesc* desc, const Matrix4& transform, const GeoBarrelParams& params);
 AZER_EXPORT MeshPartPtr CreateCylinderMeshPart(
     VertexDesc* desc, const GeoBarrelParams& params);
+
+struct GeoAxisParams {
+  float axis_lenght;
+  float axis_radius;
+  float cone_radius;
+  float cone_height;
+};
+
+AZER_EXPORT MeshPartPtr CreateAxisMeshPart(
+    VertexDesc* desc, const Matrix4& transform, const GeoAxisParams& params);
+AZER_EXPORT MeshPartPtr CreateAxisMeshPart(
+    VertexDesc* desc, const GeoAxisParams& params);
+AZER_EXPORT MeshPartPtr CreateLineAxisMeshPart(
+    VertexDesc* desc, const Matrix4& transform, const GeoAxisParams& params);
+AZER_EXPORT MeshPartPtr CreateLineAxisMeshPart(
+    VertexDesc* desc, const GeoAxisParams& params);
+
+AZER_EXPORT EntityPtr CreatePointList(const std::vector<Vector3>& points, 
+                                       VertexDesc* desc);
+AZER_EXPORT EntityPtr CreateLineList(const std::vector<Vector3>& points, 
+                                       VertexDesc* desc);
+AZER_EXPORT EntityPtr CreateLineStrip(const std::vector<Vector3>& points, 
+                                      VertexDesc* desc);
+AZER_EXPORT EntityPtr CreateRectEntity(const Vector4 pos[4], VertexDesc* desc);
+AZER_EXPORT EntityPtr CreateTriEntity(const Vector4 pos[3], VertexDesc* desc);
 
 // util
 AZER_EXPORT void CalcIndexedTriangleNormal(SlotVertexData* vbd, IndicesData* idata);
