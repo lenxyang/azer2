@@ -851,45 +851,76 @@ MeshPartPtr CreateCylinderMeshPart(VertexDesc* desc, const Matrix4& matrix,
   return part;
 }
 
-MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const Matrix4& transform, 
+MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const Matrix4& matrix,
                                const GeoAxisParams& params) {
   GeoConeParams cone_params;
   cone_params.radius = params.cone_radius;
   cone_params.height = params.cone_height;
-  cone_params.slice = 32;
-  Matrix4 mat = Translate(Vector3(0.0f, params.height, 0.0f));
+  cone_params.slice = params.slice;
+  Matrix4 mat = matrix * Translate(Vector3(0.0f, params.axis_length, 0.0f));
   MeshPartPtr part = CreateConeMeshPart(desc, mat, cone_params);
-  
+
+  GeoBarrelParams col_params;
+  col_params.top_radius = params.axis_radius;
+  col_params.bottom_radius = params.axis_radius;
+  col_params.slice = params.slice;
+  col_params.stack = 12;
+  Matrix4 colmat = matrix * Scale(1.0f, params.axis_length, 1.0f);
+  MeshPartPtr colpart = CreateCylinderMeshPart(desc, colmat, col_params);
+  MergeMeshPart(part, colpart);
   return part;
 }
 MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const GeoAxisParams& params) {
   return CreateAxisMeshPart(desc, Matrix4::kIdentity, params);
 }
-MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const Matrix4& transform, 
+MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const Matrix4& matrix, 
                                    const GeoAxisParams& params) {
-  return MeshPartPtr();
+  GeoConeParams cone_params;
+  cone_params.radius = params.cone_radius;
+  cone_params.height = params.cone_height;
+  cone_params.slice = 32;
+  Matrix4 mat = matrix * Translate(Vector3(0.0f, params.axis_length, 0.0f));
+  MeshPartPtr part = CreateConeMeshPart(desc, mat, cone_params);
+
+  Vector3 points[] = {
+    Vector3(0.0f, 0.0f, 0.0f),
+    Vector3(0.0f, params.axis_length, 0.0f),
+  };
+
+  EntityPtr entity = CreateGeoPointsList(
+      points, (int)arraysize(points), matrix, desc);
+  entity->set_topology(kLineList);
+  part->AddEntity(entity);
+  return part;
 }
 MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const GeoAxisParams& params) {
   return CreateLineAxisMeshPart(desc, Matrix4::kIdentity, params);
 }
 
-EntityPtr CreatePointList(const std::vector<Vector3>& points, VertexDesc* desc) {
-  return EntityPtr();
+EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
+                              const Matrix4& mat, VertexDesc* desc) {
+  SlotVertexDataPtr vdata(new SlotVertexData(desc, count));
+  VertexPack vpack(vdata.get());
+  vpack.first();
+  Vector3 vmin(mat * Vector4(points[0], 1.0));
+  Vector3 vmax(mat * Vector4(points[0], 1.0));
+  for (int32 i = 0; i < count; ++i) {
+    Vector4 vec(mat * Vector4(points[i], 1.0f));
+    vpack.WriteVector3Or4(vec, VertexPos(0, 0));
+    UpdateVMinAndVMax(Vector3(vec), &vmin, &vmax);
+    vpack.next(1);
+  }
+
+  RenderSystem* rs = RenderSystem::Current();
+  VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
+  EntityPtr entity(new Entity(desc, vb));
+  entity->set_vmin(vmin);
+  entity->set_vmax(vmax);
+  return entity;
 }
 
-EntityPtr CreateLineList(const std::vector<Vector3>& points, VertexDesc* desc) {
-  return EntityPtr();
+EntityPtr CreateGeoPointsList(const Vector3* points, int32 count, VertexDesc* desc) {
+  return CreateGeoPointsList(points, count, Matrix4::kIdentity, desc);
 }
 
-EntityPtr CreateLineStrip(const std::vector<Vector3>& points, VertexDesc* desc) {
-  return EntityPtr();
-}
-
-EntityPtr CreateRectEntity(const Vector4 pos[4], VertexDesc* desc) {
-  return EntityPtr();
-}
-
-EntityPtr CreateTriEntity(const Vector4 pos[3], VertexDesc* desc) {
-  return EntityPtr();
-}
 }  // namespace azer
