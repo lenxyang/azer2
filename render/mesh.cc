@@ -162,6 +162,7 @@ void MeshPart::Render(Renderer* renderer) {
 }
 
 void MeshPart::RenderPart(Renderer* renderer) {
+  DCHECK(effect_.get()) << "MeshPart Entity cannot be NULL";
   ApplyParams(effect_.get());
   renderer->UseEffect(effect_.get());
   for (int32 i = 0; i < vecptr_->entity_count(); ++i) {

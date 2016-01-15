@@ -273,9 +273,9 @@ MeshPartPtr CreateSphereMeshPart(VertexDesc* desc, const GeoSphereParams& params
   return CreateSphereMeshPart(desc, Matrix4::kIdentity, params);
 }
 
-MeshPartPtr CreateSphereMeshPart(VertexDesc* desc, const Matrix4& transform, 
+MeshPartPtr CreateSphereMeshPart(VertexDesc* desc, const Matrix4& mat, 
                                  const GeoSphereParams& params) {
-  SlotVertexDataPtr vdata(InitSphereVertexData(desc, transform, params.radius,
+  SlotVertexDataPtr vdata(InitSphereVertexData(desc, mat, params.radius,
                                                params.stack, params.slice));
   IndicesDataPtr idata = InitSphereIndicesData(params.stack, params.slice);
 
@@ -288,8 +288,8 @@ MeshPartPtr CreateSphereMeshPart(VertexDesc* desc, const Matrix4& transform,
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = transform * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-  Vector4 vmax = transform * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
+  Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
+  Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
@@ -303,9 +303,9 @@ MeshPartPtr CreateSphereFrameMeshPart(VertexDesc* desc,
   return CreateSphereFrameMeshPart(desc, Matrix4::kIdentity, params);
 }
 
-MeshPartPtr CreateSphereFrameMeshPart(VertexDesc* desc, const Matrix4& transform, 
+MeshPartPtr CreateSphereFrameMeshPart(VertexDesc* desc, const Matrix4& mat, 
                                       const GeoSphereParams& params) {
-  SlotVertexDataPtr vdata(InitSphereVertexData(desc, transform, params.radius,
+  SlotVertexDataPtr vdata(InitSphereVertexData(desc, mat, params.radius,
                                                params.stack, params.slice));
   IndicesDataPtr idata = InitSphereIndicesData(params.stack, params.slice);
   IndicesDataPtr edge_idata = InitSphereWireFrameIndicesData(
@@ -319,8 +319,8 @@ MeshPartPtr CreateSphereFrameMeshPart(VertexDesc* desc, const Matrix4& transform
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), edge_idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = transform * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-  Vector4 vmax = transform * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
+  Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
+  Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_topology(kLineList);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
@@ -448,13 +448,13 @@ MeshPartPtr CreateBoxMeshPart(VertexDesc* desc) {
   return CreateBoxMeshPart(desc, Matrix4::kIdentity);
 }
 
-MeshPartPtr CreateBoxMeshPart(VertexDesc* desc, const Matrix4& transform) {
+MeshPartPtr CreateBoxMeshPart(VertexDesc* desc, const Matrix4& mat) {
   RenderSystem* rs = RenderSystem::Current();
   SlotVertexDataPtr vdata = CreateBoxVertexData(desc);;
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   EntityPtr entity(new Entity(desc, vb));
-  Vector4 vmin = transform * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-  Vector4 vmax = transform * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
+  Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
+  Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
@@ -467,15 +467,15 @@ MeshPartPtr CreateBoxFrameMeshPart(VertexDesc* desc) {
   return CreateBoxFrameMeshPart(desc, Matrix4::kIdentity);
 }
 
-MeshPartPtr CreateBoxFrameMeshPart(VertexDesc* desc, const Matrix4& transform) {
+MeshPartPtr CreateBoxFrameMeshPart(VertexDesc* desc, const Matrix4& mat) {
   RenderSystem* rs = RenderSystem::Current();
   SlotVertexDataPtr vdata = CreateBoxVertexData(desc);;
   IndicesDataPtr idata = CreateBoxFrameIndicesData();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = transform * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-  Vector4 vmax = transform * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
+  Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
+  Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kLineList);
@@ -556,16 +556,18 @@ MeshPartPtr CreatePlaneMeshPart(VertexDesc* desc, const GeoPlaneParams& params) 
   return CreatePlaneMeshPart(desc, Matrix4::kIdentity, params);
 }
 
-MeshPartPtr CreatePlaneMeshPart(VertexDesc* desc, const Matrix4& transform, 
+MeshPartPtr CreatePlaneMeshPart(VertexDesc* desc, const Matrix4& mat, 
                                 const GeoPlaneParams& params) {
   RenderSystem* rs = RenderSystem::Current();
-  SlotVertexDataPtr vdata = CreatePlaneVertexData(desc, transform, params);;
+  SlotVertexDataPtr vdata = CreatePlaneVertexData(desc, mat, params);;
   IndicesDataPtr idata = CreatePlaneIndicesData(params);
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = transform * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-  Vector4 vmax = transform * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
+  Vector4 vmin = mat * Vector4(-params.column_width * 0.5f,  0.00f, 
+                               -params.row_width * 0.5f, 1.0f);
+  Vector4 vmax = mat * Vector4( params.column_width * 0.5f,  0.01f,  
+                                params.row_width * 0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
@@ -578,16 +580,18 @@ MeshPartPtr CreatePlaneFrameMeshPart(VertexDesc* desc, const GeoPlaneParams& par
   return CreatePlaneFrameMeshPart(desc, Matrix4::kIdentity, params);
 }
 
-MeshPartPtr CreatePlaneFrameMeshPart(VertexDesc* desc, const Matrix4& transform, 
+MeshPartPtr CreatePlaneFrameMeshPart(VertexDesc* desc, const Matrix4& mat, 
                                      const GeoPlaneParams& params) {
   RenderSystem* rs = RenderSystem::Current();
-  SlotVertexDataPtr vdata = CreatePlaneVertexData(desc, transform, params);;
+  SlotVertexDataPtr vdata = CreatePlaneVertexData(desc, mat, params);;
   IndicesDataPtr idata = CreatePlaneFrameIndicesData(params);
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = transform * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
-  Vector4 vmax = transform * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
+  Vector4 vmin = mat * Vector4(-params.column_width * 0.5f,  0.00f, 
+                               -params.row_width * 0.5f, 1.0f);
+  Vector4 vmax = mat * Vector4( params.column_width * 0.5f,  0.01f,  
+                                params.row_width * 0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kLineList);
@@ -598,7 +602,7 @@ MeshPartPtr CreatePlaneFrameMeshPart(VertexDesc* desc, const Matrix4& transform,
 
 // class round
 namespace {
-SlotVertexDataPtr CreateRoundVertexData(VertexDesc* desc, const Matrix4& transform,
+SlotVertexDataPtr CreateRoundVertexData(VertexDesc* desc, const Matrix4& mat,
                                         float radius, float slice) {
   VertexPos npos;
   GetSemanticIndex("normal", 0, desc, &npos);
@@ -607,14 +611,14 @@ SlotVertexDataPtr CreateRoundVertexData(VertexDesc* desc, const Matrix4& transfo
   SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
   VertexPack vpack(vdata);
   vpack.first();
-  vpack.WriteVector4(transform * Vector4(0, 0, 0, 1.0f), VertexPos(0, 0));
-  vpack.WriteVector4(transform * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
+  vpack.WriteVector4(mat * Vector4(0, 0, 0, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector4(mat * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
   vpack.next(1);
   for (int i = 1; i < kVertexNum; ++i) {
     float x = cos(Degree(i * degree)) * radius;
     float z = sin(Degree(i * degree)) * radius;
-    vpack.WriteVector4(transform * Vector4(x, 0, z, 1.0f), VertexPos(0, 0));
-    vpack.WriteVector4(transform * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
+    vpack.WriteVector4(mat * Vector4(x, 0, z, 1.0f), VertexPos(0, 0));
+    vpack.WriteVector4(mat * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
     vpack.next(1);
   }
   CHECK(vpack.end());
@@ -650,16 +654,16 @@ MeshPartPtr CreateRoundMeshPart(VertexDesc* desc, float radius, int slice) {
   return CreateRoundMeshPart(desc, Matrix4::kIdentity, radius, slice);
 }
 
-MeshPartPtr CreateRoundMeshPart(VertexDesc* desc, const Matrix4& transform, 
+MeshPartPtr CreateRoundMeshPart(VertexDesc* desc, const Matrix4& mat, 
                                 float radius, int slice) {
-  SlotVertexDataPtr vdata = CreateRoundVertexData(desc, transform, radius, slice);
+  SlotVertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   IndicesDataPtr idata = CreateRoundInidcesData(slice);
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = transform * Vector4(-radius, -0.01f, -radius, 1.0f);
-  Vector4 vmax = transform * Vector4( radius,  0.01f,  radius, 1.0f);
+  Vector4 vmin = mat * Vector4(-radius, -0.00f, -radius, 1.0f);
+  Vector4 vmax = mat * Vector4( radius,  0.01f,  radius, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
@@ -672,16 +676,16 @@ MeshPartPtr CreateCircleMeshPart(VertexDesc* desc, float radius, int slice) {
   return CreateCircleMeshPart(desc, Matrix4::kIdentity, radius, slice);
 }
 
-MeshPartPtr CreateCircleMeshPart(VertexDesc* desc, const Matrix4& transform, 
-                                     float radius, int slice) {
-  SlotVertexDataPtr vdata = CreateRoundVertexData(desc, transform, radius, slice);
+MeshPartPtr CreateCircleMeshPart(VertexDesc* desc, const Matrix4& mat, 
+                                 float radius, int slice) {
+  SlotVertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   IndicesDataPtr idata = CreateCircleInidcesData(slice);
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = transform * Vector4(-radius, -0.01f, -radius, 1.0f);
-  Vector4 vmax = transform * Vector4( radius,  0.01f,  radius, 1.0f);
+  Vector4 vmin = mat * Vector4(-radius, -0.00f, -radius, 1.0f);
+  Vector4 vmax = mat * Vector4( radius,  0.01f,  radius, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kLineList);
@@ -695,20 +699,20 @@ MeshPartPtr CreateTaperMeshPart(VertexDesc* desc, const GeoConeParams& params) {
   return CreateTaperMeshPart(desc, Matrix4::kIdentity, params);
 }
 
-MeshPartPtr CreateTaperMeshPart(VertexDesc* desc, const Matrix4& transform,
+MeshPartPtr CreateTaperMeshPart(VertexDesc* desc, const Matrix4& mat,
                                 const GeoConeParams& params) {
   const int32 kVertexNum = 1 + params.slice + 1;
   float degree = 360.0f / (float)params.slice;
   SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
   VertexPack vpack(vdata);
   vpack.first();
-  vpack.WriteVector4(transform * Vector4(0, params.height, 0, 1.0f), 
+  vpack.WriteVector4(mat * Vector4(0, params.height, 0, 1.0f), 
                      VertexPos(0, 0));
   vpack.next(1);
   for (int i = 1; i < kVertexNum; ++i) {
     float x = cos(Degree(i * degree)) * params.radius;
     float z = sin(Degree(i * degree)) * params.radius;
-    vpack.WriteVector4(transform * Vector4(x, 0, z, 1.0f), VertexPos(0, 0));
+    vpack.WriteVector4(mat * Vector4(x, 0, z, 1.0f), VertexPos(0, 0));
     vpack.next(1);
   }
   CHECK(vpack.end());
@@ -719,8 +723,9 @@ MeshPartPtr CreateTaperMeshPart(VertexDesc* desc, const Matrix4& transform,
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = transform * Vector4(-params.radius, -0.01f, -params.radius, 1.0f);
-  Vector4 vmax = transform * Vector4( params.radius,  0.01f,  params.radius, 1.0f);
+  Vector4 vmin = mat * Vector4(-params.radius, 0.0f, -params.radius, 1.0f);
+  Vector4 vmax = mat * Vector4( params.radius, params.height,  
+                                params.radius, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
@@ -733,12 +738,12 @@ MeshPartPtr CreateConeMeshPart(VertexDesc* desc, const GeoConeParams& params) {
   return CreateConeMeshPart(desc, Matrix4::kIdentity, params);
 }
 
-MeshPartPtr CreateConeMeshPart(VertexDesc* desc, const Matrix4& transform,
+MeshPartPtr CreateConeMeshPart(VertexDesc* desc, const Matrix4& mat,
                                const GeoConeParams& params) {
-  MeshPartPtr part = CreateTaperMeshPart(desc, transform, params);
+  MeshPartPtr part = CreateTaperMeshPart(desc, mat, params);
 
-  Matrix4 round_transform = std::move(transform * RotateX(Degree(180.0)));
-  MeshPartPtr part2 = CreateRoundMeshPart(desc, round_transform, 
+  Matrix4 round_mat = std::move(mat * RotateX(Degree(180.0)));
+  MeshPartPtr part2 = CreateRoundMeshPart(desc, round_mat, 
                                           params.radius, params.slice);
   CHECK(part2->entity_count() == 1);
   part->AddEntity(part2->entity_at(0));
@@ -816,7 +821,7 @@ MeshPartPtr CreateBarrelMeshPart(VertexDesc* desc, const Matrix4& matrix,
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
   float rad = std::max(params.top_radius, params.bottom_radius);
-  Vector4 vmin = matrix * Vector4(-rad,  0.5f,          -rad, 1.0f);
+  Vector4 vmin = matrix * Vector4(-rad,  0.0f,          -rad, 1.0f);
   Vector4 vmax = matrix * Vector4( rad,  params.height,  rad, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
@@ -889,6 +894,8 @@ MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const Matrix4& matrix,
 
   EntityPtr entity = CreateGeoPointsList(
       points, (int)arraysize(points), matrix, desc);
+  entity->set_vmin(points[0]);
+  entity->set_vmax(points[1] + Vector3(0.0f, 0.0f, 0.01f));
   entity->set_topology(kLineList);
   part->AddEntity(entity);
   return part;

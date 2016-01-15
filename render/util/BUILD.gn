@@ -2,18 +2,12 @@
 
 static_library("util") {
   sources = [
-    "arrow_object.cc",
-    "arrow_object.h",
     "byte_pack.cc",
     "byte_pack.h",
-    "camera_object.cc",
-    "camera_object.h",
     "coordinate_grid.cc",
     "coordinate_grid.h",
     "coordinate_grid_effect.cc",
     "coordinate_grid_effect.h",
-    "coordinate_object.cc",
-    "coordinate_object.h",
     "effects/diffuse_effect.cc",
     "effects/diffuse_effect.h",
     "effects/pvw_effect.cc",

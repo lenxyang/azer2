@@ -2,7 +2,7 @@
 
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
-#include "azer/render/geometry/plane_object.h"
+#include "azer/render/geometry.h"
 #include "azer/render/util/shader_util.h"
 
 namespace azer {
@@ -77,8 +77,11 @@ void ImageProcessing::Init() {
   Viewport viewport;
   viewport.bounds = gfx::Rect(rdopt.size);
   renderer_->SetViewport(viewport);
-
-  object_ = new PlaneObject(effect_->vertex_desc(), 1, 1);
+  GeoPlaneParams params;
+  params.row = params.column = 2;
+  params.row_width = params.column_width = 1.0f;
+  Matrix4 mat = RotateX(Degree(90.0f));
+  object_ = CreatePlaneMeshPart(effect_->vertex_desc(), mat, params);
 }
 
 void ImageProcessing::Processing() {
@@ -86,7 +89,6 @@ void ImageProcessing::Processing() {
   renderer->Use();
   renderer->Clear(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
   renderer->ClearDepthAndStencil();
-  renderer->UseEffect(effect_.get());
   object_->Render(renderer);
   Texture* tex = renderer->GetRenderTarget(0)->GetTexture();
   CHECK(tex->CopyTo(output_.get()));

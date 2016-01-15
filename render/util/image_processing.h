@@ -3,8 +3,8 @@
 #include "azer/render/effect.h"
 #include "azer/render/texture.h"
 #include "azer/render/render_target.h"
+#include "azer/render/mesh.h"
 #include "azer/render/renderer.h"
-#include "azer/render/geometry/geometry_object.h"
 
 namespace azer {
 
@@ -44,7 +44,7 @@ class ImageProcessing : public ::base::RefCounted<ImageProcessing> {
   TexturePtr input_;
   TexturePtr output_;
   RendererPtr renderer_;
-  GeometryObjectPtr object_;
+  MeshPartPtr object_;
   EffectPtr effect_;
   DISALLOW_COPY_AND_ASSIGN(ImageProcessing);
 };
