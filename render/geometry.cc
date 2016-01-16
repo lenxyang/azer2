@@ -871,7 +871,7 @@ MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const Matrix4& matrix,
   col_params.slice = params.slice;
   col_params.stack = 12;
   col_params.height = params.axis_length;
-  MeshPartPtr colpart = CreateCylinderMeshPart(desc, col_params);
+  MeshPartPtr colpart = CreateCylinderMeshPart(desc, matrix, col_params);
   MergeMeshPart(part, colpart);
   return part;
 }
