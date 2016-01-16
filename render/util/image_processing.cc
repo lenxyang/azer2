@@ -81,7 +81,7 @@ void ImageProcessing::Init() {
   params.row = params.column = 2;
   params.row_width = params.column_width = 1.0f;
   Matrix4 mat = RotateX(Degree(90.0f));
-  object_ = CreatePlaneMeshPart(effect_->vertex_desc(), mat, params);
+  object_ = CreatePlaneMeshPart(effect_, params, mat);
 }
 
 void ImageProcessing::Processing() {

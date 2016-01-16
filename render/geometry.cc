@@ -269,12 +269,8 @@ void CalcTriangleListNormal(SlotVertexData* vbd, int* indices) {
 
 
 // class Sphere objects
-MeshPartPtr CreateSphereMeshPart(VertexDesc* desc, const GeoSphereParams& params) {
-  return CreateSphereMeshPart(desc, Matrix4::kIdentity, params);
-}
-
-MeshPartPtr CreateSphereMeshPart(VertexDesc* desc, const Matrix4& mat, 
-                                 const GeoSphereParams& params) {
+EntityPtr CreateSphereEntity(VertexDesc* desc,const GeoSphereParams& params,
+                             const Matrix4& mat) {
   SlotVertexDataPtr vdata(InitSphereVertexData(desc, mat, params.radius,
                                                params.stack, params.slice));
   IndicesDataPtr idata = InitSphereIndicesData(params.stack, params.slice);
@@ -293,39 +289,43 @@ MeshPartPtr CreateSphereMeshPart(VertexDesc* desc, const Matrix4& mat,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
-  return part;
+  return entity;
 }
 
-MeshPartPtr CreateSphereFrameMeshPart(VertexDesc* desc, 
-                                      const GeoSphereParams& params) {
-  return CreateSphereFrameMeshPart(desc, Matrix4::kIdentity, params);
-}
 
-MeshPartPtr CreateSphereFrameMeshPart(VertexDesc* desc, const Matrix4& mat, 
-                                      const GeoSphereParams& params) {
+EntityPtr CreateSphereFrameEntity(VertexDesc* desc, const GeoSphereParams& params,
+                                  const Matrix4& mat) {
   SlotVertexDataPtr vdata(InitSphereVertexData(desc, mat, params.radius,
                                                params.stack, params.slice));
   IndicesDataPtr idata = InitSphereIndicesData(params.stack, params.slice);
-  IndicesDataPtr edge_idata = InitSphereWireFrameIndicesData(
-      params.stack, params.slice);
+  IndicesDataPtr iedata = InitSphereWireFrameIndicesData(params.stack, params.slice);
   VertexPos npos;
   if (GetSemanticIndex("normal", 0, desc, &npos)) {
     CalcIndexedTriangleNormal(vdata.get(), idata.get());
   }
-
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), edge_idata);
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), iedata);
   EntityPtr entity(new Entity(desc, vb, ib));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_topology(kLineList);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
+  return entity;
+}
+
+MeshPartPtr CreateSphereMeshPart(Effect* effect, const GeoSphereParams& params,
+                                 const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(effect));
+  part->AddEntity(CreateSphereEntity(effect->vertex_desc(), params, mat));
+  return part;
+}
+
+MeshPartPtr CreateSphereFrameMeshPart(Effect* e, const GeoSphereParams& params,
+                                      const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateSphereFrameEntity(e->vertex_desc(), params, mat));
   return part;
 }
 
@@ -444,11 +444,7 @@ IndicesDataPtr CreateBoxFrameIndicesData() {
 }
 }
 
-MeshPartPtr CreateBoxMeshPart(VertexDesc* desc) {
-  return CreateBoxMeshPart(desc, Matrix4::kIdentity);
-}
-
-MeshPartPtr CreateBoxMeshPart(VertexDesc* desc, const Matrix4& mat) {
+EntityPtr CreateBoxEntity(VertexDesc* desc, const Matrix4& mat) {
   RenderSystem* rs = RenderSystem::Current();
   SlotVertexDataPtr vdata = CreateBoxVertexData(desc);;
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
@@ -458,16 +454,10 @@ MeshPartPtr CreateBoxMeshPart(VertexDesc* desc, const Matrix4& mat) {
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
-  return part;  
+  return entity;
 }
 
-MeshPartPtr CreateBoxFrameMeshPart(VertexDesc* desc) {
-  return CreateBoxFrameMeshPart(desc, Matrix4::kIdentity);
-}
-
-MeshPartPtr CreateBoxFrameMeshPart(VertexDesc* desc, const Matrix4& mat) {
+EntityPtr CreateBoxFrameEntity(VertexDesc* desc, const Matrix4& mat) {
   RenderSystem* rs = RenderSystem::Current();
   SlotVertexDataPtr vdata = CreateBoxVertexData(desc);;
   IndicesDataPtr idata = CreateBoxFrameIndicesData();
@@ -479,8 +469,18 @@ MeshPartPtr CreateBoxFrameMeshPart(VertexDesc* desc, const Matrix4& mat) {
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kLineList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
+  return entity;
+}
+
+MeshPartPtr CreateBoxMeshPart(Effect* e, const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateBoxEntity(e->vertex_desc(), mat));
+  return part;  
+}
+
+MeshPartPtr CreateBoxFrameMeshPart(Effect* e, const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateBoxFrameEntity(e->vertex_desc(), mat));
   return part;  
 }
 
@@ -552,12 +552,9 @@ IndicesDataPtr CreatePlaneFrameIndicesData(const GeoPlaneParams& params) {
   return idata;
 }
 }
-MeshPartPtr CreatePlaneMeshPart(VertexDesc* desc, const GeoPlaneParams& params) {
-  return CreatePlaneMeshPart(desc, Matrix4::kIdentity, params);
-}
 
-MeshPartPtr CreatePlaneMeshPart(VertexDesc* desc, const Matrix4& mat, 
-                                const GeoPlaneParams& params) {
+EntityPtr CreatePlaneEntity(VertexDesc* desc, const GeoPlaneParams& params,
+                            const Matrix4& mat) {
   RenderSystem* rs = RenderSystem::Current();
   SlotVertexDataPtr vdata = CreatePlaneVertexData(desc, mat, params);;
   IndicesDataPtr idata = CreatePlaneIndicesData(params);
@@ -571,17 +568,11 @@ MeshPartPtr CreatePlaneMeshPart(VertexDesc* desc, const Matrix4& mat,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
-  return part;  
+  return entity;
 }
 
-MeshPartPtr CreatePlaneFrameMeshPart(VertexDesc* desc, const GeoPlaneParams& params) {
-  return CreatePlaneFrameMeshPart(desc, Matrix4::kIdentity, params);
-}
-
-MeshPartPtr CreatePlaneFrameMeshPart(VertexDesc* desc, const Matrix4& mat, 
-                                     const GeoPlaneParams& params) {
+EntityPtr CreatePlaneFrameEntity(VertexDesc* desc, const GeoPlaneParams& params,
+                                 const Matrix4& mat) {
   RenderSystem* rs = RenderSystem::Current();
   SlotVertexDataPtr vdata = CreatePlaneVertexData(desc, mat, params);;
   IndicesDataPtr idata = CreatePlaneFrameIndicesData(params);
@@ -595,8 +586,20 @@ MeshPartPtr CreatePlaneFrameMeshPart(VertexDesc* desc, const Matrix4& mat,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kLineList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
+  return entity;
+}
+
+MeshPartPtr CreatePlaneMeshPart(Effect* e, const GeoPlaneParams& params,
+                                const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreatePlaneEntity(e->vertex_desc(), params, mat));
+  return part;  
+}
+
+MeshPartPtr CreatePlaneFrameMeshPart(Effect* e,const GeoPlaneParams& params,
+                                     const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreatePlaneFrameEntity(e->vertex_desc(), params, mat));
   return part;  
 }
 
@@ -650,13 +653,9 @@ IndicesDataPtr CreateCircleInidcesData(int32 slice) {
 }
 } // namespace
 
-MeshPartPtr CreateRoundMeshPart(VertexDesc* desc, float radius, int slice) {
-  return CreateRoundMeshPart(desc, Matrix4::kIdentity, radius, slice);
-}
-
-MeshPartPtr CreateRoundMeshPart(VertexDesc* desc, const Matrix4& mat, 
-                                float radius, int slice) {
-  SlotVertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
+EntityPtr CreateRoundEntity(VertexDesc* desc, float radius, int32 slice, 
+                            const Matrix4& mat) {
+SlotVertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   IndicesDataPtr idata = CreateRoundInidcesData(slice);
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
@@ -667,18 +666,12 @@ MeshPartPtr CreateRoundMeshPart(VertexDesc* desc, const Matrix4& mat,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
-  return part;  
+  return entity;
 }
 
-MeshPartPtr CreateCircleMeshPart(VertexDesc* desc, float radius, int slice) {
-  return CreateCircleMeshPart(desc, Matrix4::kIdentity, radius, slice);
-}
-
-MeshPartPtr CreateCircleMeshPart(VertexDesc* desc, const Matrix4& mat, 
-                                 float radius, int slice) {
-  SlotVertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
+EntityPtr CreateCircleEntity(VertexDesc* desc, float radius, int32 slice, 
+                             const Matrix4& mat) {
+SlotVertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   IndicesDataPtr idata = CreateCircleInidcesData(slice);
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
@@ -689,18 +682,26 @@ MeshPartPtr CreateCircleMeshPart(VertexDesc* desc, const Matrix4& mat,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kLineList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
+  return entity;
+}
+MeshPartPtr CreateRoundMeshPart(Effect* e, float radius, int slice, 
+                                const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateRoundEntity(e->vertex_desc(), radius, slice, mat));
+  return part;  
+}
+
+MeshPartPtr CreateCircleMeshPart(Effect* e, float radius, int slice,
+                                 const Matrix4& mat) {
+  
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateCircleEntity(e->vertex_desc(), radius, slice, mat));
   return part;  
 }
 
 // cone
-MeshPartPtr CreateTaperMeshPart(VertexDesc* desc, const GeoConeParams& params) {
-  return CreateTaperMeshPart(desc, Matrix4::kIdentity, params);
-}
-
-MeshPartPtr CreateTaperMeshPart(VertexDesc* desc, const Matrix4& mat,
-                                const GeoConeParams& params) {
+EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params, 
+                            const Matrix4& mat) {
   const int32 kVertexNum = 1 + params.slice + 1;
   float degree = 360.0f / (float)params.slice;
   SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
@@ -729,24 +730,27 @@ MeshPartPtr CreateTaperMeshPart(VertexDesc* desc, const Matrix4& mat,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
+  return entity;
+}
+MeshPartPtr CreateTaperMeshPart(Effect* e, const GeoConeParams& params,
+                                const Matrix4& mat) {
+  
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateTaperEntity(e->vertex_desc(), params, mat));
   return part;  
 }
 
-MeshPartPtr CreateConeMeshPart(VertexDesc* desc, const GeoConeParams& params) {
-  return CreateConeMeshPart(desc, Matrix4::kIdentity, params);
-}
-
-MeshPartPtr CreateConeMeshPart(VertexDesc* desc, const Matrix4& mat,
-                               const GeoConeParams& params) {
-  MeshPartPtr part = CreateTaperMeshPart(desc, mat, params);
+MeshPartPtr CreateConeMeshPart(Effect* e, const GeoConeParams& params, 
+                               const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  EntityPtr taper = CreateTaperEntity(e->vertex_desc(), params, mat);
 
   Matrix4 round_mat = std::move(mat * RotateX(Degree(180.0)));
-  MeshPartPtr part2 = CreateRoundMeshPart(desc, round_mat, 
-                                          params.radius, params.slice);
-  CHECK(part2->entity_count() == 1);
-  part->AddEntity(part2->entity_at(0));
+  EntityPtr round = CreateRoundEntity(e->vertex_desc(), params.radius, params.slice,
+                                      round_mat);
+  
+  part->AddEntity(round);
+  part->AddEntity(taper);
   return part;
 }
 
@@ -760,13 +764,9 @@ int32 CalcCylinderVertexNum(int32 stack_num, int32 slice_num) {
 }
 }
 
-MeshPartPtr CreateBarrelMeshPart(VertexDesc* desc, const GeoBarrelParams& params) {
-  return CreateBarrelMeshPart(desc, Matrix4::kIdentity, params);
-}
-
-MeshPartPtr CreateBarrelMeshPart(VertexDesc* desc, const Matrix4& matrix, 
-                                 const GeoBarrelParams& params) {
-  const int kVertexNum = CalcCylinderVertexNum(params.stack, params.slice);
+EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params, 
+                             const Matrix4& mat) {
+const int kVertexNum = CalcCylinderVertexNum(params.stack, params.slice);
   const int kIndexNum = CalcCylinderIndexNum(params.stack, params.slice);
   SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
@@ -787,7 +787,7 @@ MeshPartPtr CreateBarrelMeshPart(VertexDesc* desc, const Matrix4& matrix,
       float x = slice_radius * cos(Degree(degree));
       float z = slice_radius * sin(Degree(degree));
 
-      vpack.WriteVector4(matrix * Vector4(x, y, z, 1.0f), VertexPos(0, 0));
+      vpack.WriteVector4(mat * Vector4(x, y, z, 1.0f), VertexPos(0, 0));
       float u = j * tex_u_unit;
       float v = (i + 1) * tex_v_unit;
       vpack.WriteVector2(Vector2(0.0f, 0.0f), tpos); 
@@ -821,49 +821,62 @@ MeshPartPtr CreateBarrelMeshPart(VertexDesc* desc, const Matrix4& matrix,
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
   float rad = std::max(params.top_radius, params.bottom_radius);
-  Vector4 vmin = matrix * Vector4(-rad,  0.0f,          -rad, 1.0f);
-  Vector4 vmax = matrix * Vector4( rad,  params.height,  rad, 1.0f);
+  Vector4 vmin = mat * Vector4(-rad,  0.0f,          -rad, 1.0f);
+  Vector4 vmax = mat * Vector4( rad,  params.height,  rad, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
-  MeshPartPtr part(new MeshPart(NULL));
-  part->AddEntity(entity);
+  return entity;
+}
+
+MeshPartPtr CreateBarrelMeshPart(Effect* e, const GeoBarrelParams& params, 
+                                 const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateBarrelEntity(e->vertex_desc(), params, mat));
   return part;  
 }
 
-MeshPartPtr CreateCylinderMeshPart(VertexDesc* desc, const GeoBarrelParams& params) {
-  return CreateCylinderMeshPart(desc, Matrix4::kIdentity, params);
-}
-
-MeshPartPtr CreateCylinderMeshPart(VertexDesc* desc, const Matrix4& matrix,
-                                   const GeoBarrelParams& params) {
-  MeshPartPtr part = CreateBarrelMeshPart(desc, matrix, params);
+MeshPartPtr CreateCylinderMeshPart(Effect* e, const GeoBarrelParams& params,
+                                   const Matrix4& matrix) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateBarrelEntity(e->vertex_desc(), params, matrix));
   {
     Matrix4 round_matrix = std::move(matrix * RotateX(Degree(180.0)));
-    MeshPartPtr bot = CreateRoundMeshPart(desc, round_matrix, 
-                                          params.bottom_radius, params.slice);
-    CHECK(bot->entity_count() == 1);
-    part->AddEntity(bot->entity_at(0));
+    EntityPtr bot = CreateRoundEntity(e->vertex_desc(), params.bottom_radius, 
+                                      params.slice, round_matrix);
+    part->AddEntity(bot);
   }
 
   {
     Matrix4 round_matrix = matrix * Translate(Vector3(0.0f, params.height, 0.0f));
-    MeshPartPtr top = CreateRoundMeshPart(desc, round_matrix, 
-                                          params.top_radius, params.slice);
-    CHECK(top->entity_count() == 1);
-    part->AddEntity(top->entity_at(0));
+    EntityPtr top = CreateRoundEntity(e->vertex_desc(), params.top_radius, 
+                                      params.slice, round_matrix);
+    part->AddEntity(top);
   }
   return part;
 }
 
-MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const Matrix4& matrix,
-                               const GeoAxisParams& params) {
+EntityPtr CreateTourEntity(
+    VertexDesc* desc, const GeoTourParams& params, const Matrix4& mat) {
+  return EntityPtr();
+}
+
+MeshPartPtr CreateTourMeshPart(Effect* e, const GeoTourParams& params,
+                               const Matrix4& mat) {
+  MeshPartPtr part(new MeshPart(e));
+  part->AddEntity(CreateTourEntity(e->vertex_desc(), params, mat));
+  return part;
+}
+
+// Axis
+MeshPartPtr CreateAxisMeshPart(Effect* e, const GeoAxisParams& params,
+                               const Matrix4& matrix) {
   GeoConeParams cone_params;
   cone_params.radius = params.cone_radius;
   cone_params.height = params.cone_height;
   cone_params.slice = params.slice;
   Matrix4 mat = matrix * Translate(Vector3(0.0f, params.axis_length, 0.0f));
-  MeshPartPtr part = CreateConeMeshPart(desc, mat, cone_params);
+  MeshPartPtr part = CreateConeMeshPart(e, cone_params, mat);
 
   GeoBarrelParams col_params;
   col_params.top_radius = params.axis_radius;
@@ -871,21 +884,19 @@ MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const Matrix4& matrix,
   col_params.slice = params.slice;
   col_params.stack = 12;
   col_params.height = params.axis_length;
-  MeshPartPtr colpart = CreateCylinderMeshPart(desc, matrix, col_params);
+  MeshPartPtr colpart = CreateCylinderMeshPart(e, col_params, matrix);
   MergeMeshPart(part, colpart);
   return part;
 }
-MeshPartPtr CreateAxisMeshPart(VertexDesc* desc, const GeoAxisParams& params) {
-  return CreateAxisMeshPart(desc, Matrix4::kIdentity, params);
-}
-MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const Matrix4& matrix, 
-                                   const GeoAxisParams& params) {
+
+MeshPartPtr CreateLineAxisMeshPart(Effect* e, const GeoAxisParams& params,
+                                   const Matrix4& matrix) {
   GeoConeParams cone_params;
   cone_params.radius = params.cone_radius;
   cone_params.height = params.cone_height;
   cone_params.slice = 32;
   Matrix4 mat = matrix * Translate(Vector3(0.0f, params.axis_length, 0.0f));
-  MeshPartPtr part = CreateConeMeshPart(desc, mat, cone_params);
+  MeshPartPtr part = CreateConeMeshPart(e, cone_params, mat);
 
   Vector3 points[] = {
     Vector3(0.0f, 0.0f, 0.0f),
@@ -893,19 +904,16 @@ MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const Matrix4& matrix,
   };
 
   EntityPtr entity = CreateGeoPointsList(
-      points, (int)arraysize(points), matrix, desc);
+      points, (int)arraysize(points), e->vertex_desc(), matrix);
   entity->set_vmin(points[0]);
   entity->set_vmax(points[1] + Vector3(0.0f, 0.0f, 0.01f));
   entity->set_topology(kLineList);
   part->AddEntity(entity);
   return part;
 }
-MeshPartPtr CreateLineAxisMeshPart(VertexDesc* desc, const GeoAxisParams& params) {
-  return CreateLineAxisMeshPart(desc, Matrix4::kIdentity, params);
-}
 
 EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
-                              const Matrix4& mat, VertexDesc* desc) {
+                              VertexDesc* desc, const Matrix4& mat) {
   SlotVertexDataPtr vdata(new SlotVertexData(desc, count));
   VertexPack vpack(vdata.get());
   vpack.first();
@@ -924,10 +932,6 @@ EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
   entity->set_vmin(vmin);
   entity->set_vmax(vmax);
   return entity;
-}
-
-EntityPtr CreateGeoPointsList(const Vector3* points, int32 count, VertexDesc* desc) {
-  return CreateGeoPointsList(points, count, Matrix4::kIdentity, desc);
 }
 
 }  // namespace azer
