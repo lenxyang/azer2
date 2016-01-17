@@ -141,15 +141,15 @@ enum CompareFunc {
   kCompareFuncAlways,
 };
 
-enum DepthStencilOper {
-  kDepthStencilOperKeep,
-  kDepthStencilOperZero,
-  kDepthStencilOperReplace,
-  kDepthStencilOperIncrSat,
-  kDepthStencilOperDecrSat,
-  kDepthStencilOperInvert,
-  kDepthStencilOperIncr,
-  kDepthStencilOperDecr;
+enum StencilOper {
+  kStencilOperKeep,
+  kStencilOperZero,
+  kStencilOperReplace,
+  kStencilOperIncrSat,
+  kStencilOperDecrSat,
+  kStencilOperInvert,
+  kStencilOperIncr,
+  kStencilOperDecr,
 };
 
 enum MapType {

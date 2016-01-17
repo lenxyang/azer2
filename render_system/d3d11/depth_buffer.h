@@ -20,10 +20,16 @@ class D3DDepthStencilState : public DepthStencilState {
   
   void EnableDepthTest(bool enable) override;
   bool IsDepthTestEnabled()  override;
-  void SetDepthCompareFunc(CompareFunc::Type func) override;
+  void SetDepthCompareFunc(CompareFunc func) override;
+
+  void EnableStencil(bool enable) override;
+  bool IsStencilTestEnabled() override; 
+  void SetStencilMask(uint8 read_mask, uint8 write_mask) override;
+  void SetFrontFaceOper(const StencilOperStruct& oper) override;
+  void SetBackFaceOper(const StencilOperStruct& oper) override;
   void Apply(Renderer* renderer) override;
  private:
-  void SetDepthState(const D3D11_DEPTH_STENCIL_DESC& desc);
+  void SetDepthStencilState(const D3D11_DEPTH_STENCIL_DESC& desc);
   ID3D11DepthStencilState* depth_state_;
   DISALLOW_COPY_AND_ASSIGN(D3DDepthStencilState);
 };

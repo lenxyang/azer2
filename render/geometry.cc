@@ -497,10 +497,13 @@ SlotVertexDataPtr CreatePlaneVertexData(VertexDesc* desc, const Matrix4& matrix,
   SlotVertexDataPtr vdata(new SlotVertexData(desc, params.row * params.column));
   VertexPack vpack(vdata.get());
   vpack.first();
+  
+  int beginx = -params.column * params.column_width * 0.5;
+  int beginz = -params.row * params.row_width * 0.5;
   for (int i = 0; i < params.row; ++i) {
     for (int j = 0; j < params.column; ++j) {
-      float x = -1.0 + j * params.column_width;
-      float z = -1.0 + i * params.row_width;
+      float x = beginx + j * params.column_width;
+      float z = beginz + i * params.row_width;
       vpack.WriteVector4(matrix * Vector4(x,    0.0f, z, 1.0f), VertexPos(0, 0));
       vpack.WriteVector4(matrix * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
 

@@ -40,7 +40,8 @@ D3D11_BLEND_OP TranslateBlendingOper(Blending::Oper oper);
 D3D11_COLOR_WRITE_ENABLE TranslateWriteMask(Blending::WriteMask mask);
 D3D11_SRV_DIMENSION  GetViewDimensionFromTextureType(Texture::Type type);
 D3D11_MAP TranslateMapType(MapType type);
-D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc::Type type);
+D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc type);
+D3D11_STENCIL_OP TranslateStencilOper(StencilOper oper);
 D3D11_FILTER TranslateSamplerState(const Texture::SamplerState& state);
 }  // namespace d3d11
 }  // namespace azer

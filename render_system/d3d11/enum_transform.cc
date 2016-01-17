@@ -266,7 +266,7 @@ D3D11_MAP TranslateMapType(MapType type) {
   }
 }
 
-D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc::Type type) {
+D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc type) {
   switch (type) {
     case kCompareFuncNever: return D3D11_COMPARISON_NEVER;
     case kCompareFuncLess: return D3D11_COMPARISON_LESS;
@@ -311,6 +311,21 @@ D3D11_FILTER TranslateSamplerState(const Texture::SamplerState& state) {
   } else {
     NOTREACHED();
     return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+  }
+}
+
+D3D11_STENCIL_OP TranslateStencilOper(StencilOper oper) {
+  switch (oper) {
+    case kStencilOperKeep: return D3D11_STENCIL_OP_KEEP;
+    case kStencilOperZero: return D3D11_STENCIL_OP_ZERO;
+    case kStencilOperReplace: return D3D11_STENCIL_OP_REPLACE;
+    case kStencilOperIncrSat: return D3D11_STENCIL_OP_INCR_SAT;
+    case kStencilOperDecrSat: return D3D11_STENCIL_OP_DECR_SAT;
+    case kStencilOperInvert: return D3D11_STENCIL_OP_INVERT;
+    case kStencilOperIncr: return D3D11_STENCIL_OP_INCR;
+    case kStencilOperDecr: return D3D11_STENCIL_OP_DECR;
+    default: NOTREACHED();
+      return D3D11_STENCIL_OP_KEEP;
   }
 }
 }  // namespace d3d11

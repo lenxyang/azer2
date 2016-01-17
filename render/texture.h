@@ -56,7 +56,7 @@ public:
     Texture::FilterMode mag_filter;
     Texture::FilterMode min_filter;
     Texture::FilterMode mip_filter;
-    CompareFunc::Type compare_func;
+    CompareFunc compare_func;
     Vector4 border_color;
     int mip_level;
     int max_anisotropy;

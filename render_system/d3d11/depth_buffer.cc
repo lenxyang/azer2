@@ -47,7 +47,8 @@ D3DDepthStencilState::~D3DDepthStencilState() {
   SAFE_RELEASE(depth_state_);
 }
 
-void D3DDepthStencilState::SetDepthState(const D3D11_DEPTH_STENCIL_DESC& desc) {
+void D3DDepthStencilState::SetDepthStencilState(
+    const D3D11_DEPTH_STENCIL_DESC& desc) {
   DCHECK(depth_state_);
   SAFE_RELEASE(depth_state_);
   HRESULT hr = GetDevice()->CreateDepthStencilState(&desc, &depth_state_);
@@ -58,7 +59,7 @@ void D3DDepthStencilState::EnableDepthTest(bool enable) {
   D3D11_DEPTH_STENCIL_DESC desc;  
   depth_state_->GetDesc(&desc);
   desc.DepthEnable = enable;
-  return SetDepthState(desc);
+  return SetDepthStencilState(desc);
 }
 
 bool D3DDepthStencilState::IsDepthTestEnabled() {
@@ -67,11 +68,52 @@ bool D3DDepthStencilState::IsDepthTestEnabled() {
   return desc.DepthEnable == TRUE;
 }
 
-void D3DDepthStencilState::SetDepthCompareFunc(CompareFunc::Type func) {
+void D3DDepthStencilState::SetDepthCompareFunc(CompareFunc func) {
   D3D11_DEPTH_STENCIL_DESC desc;  
   depth_state_->GetDesc(&desc);
   desc.DepthFunc = TranslateCompareFunc(func);
-  SetDepthState(desc);
+  SetDepthStencilState(desc);
+}
+
+void D3DDepthStencilState::EnableStencil(bool enable) {
+  D3D11_DEPTH_STENCIL_DESC desc;  
+  depth_state_->GetDesc(&desc);
+  desc.StencilEnable = enable;
+  SetDepthStencilState(desc);
+}
+
+bool D3DDepthStencilState::IsStencilTestEnabled() {
+  D3D11_DEPTH_STENCIL_DESC desc;  
+  depth_state_->GetDesc(&desc);
+  return desc.StencilEnable == TRUE;
+}
+
+void D3DDepthStencilState::SetStencilMask(uint8 read_mask, uint8 write_mask) {
+  D3D11_DEPTH_STENCIL_DESC desc;  
+  depth_state_->GetDesc(&desc);
+  desc.StencilReadMask = read_mask;
+  desc.StencilWriteMask = write_mask;
+  SetDepthStencilState(desc);
+}
+
+void D3DDepthStencilState::SetFrontFaceOper(const StencilOperStruct& oper) {
+  D3D11_DEPTH_STENCIL_DESC desc;  
+  depth_state_->GetDesc(&desc);
+  desc.FrontFace.StencilFunc = TranslateCompareFunc(oper.stencil_func);
+  desc.FrontFace.StencilDepthFailOp = TranslateStencilOper(oper.depth_pass_op);
+  desc.FrontFace.StencilPassOp = TranslateStencilOper(oper.pass_op);
+  desc.FrontFace.StencilFailOp = TranslateStencilOper(oper.failed_op);
+  SetDepthStencilState(desc);
+}
+
+void D3DDepthStencilState::SetBackFaceOper(const StencilOperStruct& oper) {
+  D3D11_DEPTH_STENCIL_DESC desc;  
+  depth_state_->GetDesc(&desc);
+  desc.BackFace.StencilFunc = TranslateCompareFunc(oper.stencil_func);
+  desc.BackFace.StencilDepthFailOp = TranslateStencilOper(oper.depth_pass_op);
+  desc.BackFace.StencilPassOp = TranslateStencilOper(oper.pass_op);
+  desc.BackFace.StencilFailOp = TranslateStencilOper(oper.failed_op);
+  SetDepthStencilState(desc);
 }
 
 void D3DDepthStencilState::Apply(Renderer* r) {
