@@ -268,14 +268,14 @@ D3D11_MAP TranslateMapType(MapType type) {
 
 D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc::Type type) {
   switch (type) {
-    case CompareFunc::kNever: return D3D11_COMPARISON_NEVER;
-    case CompareFunc::kLess: return D3D11_COMPARISON_LESS;
-    case CompareFunc::kEqual: return D3D11_COMPARISON_EQUAL;
-    case CompareFunc::kLessEqual: return D3D11_COMPARISON_LESS_EQUAL;
-    case CompareFunc::kGreater: return D3D11_COMPARISON_GREATER;
-    case CompareFunc::kNotEqueal: return D3D11_COMPARISON_NOT_EQUAL;
-    case CompareFunc::kGreaterEqua: return D3D11_COMPARISON_GREATER_EQUAL; 
-    case CompareFunc::kAlways: return D3D11_COMPARISON_ALWAYS;
+    case kCompareFuncNever: return D3D11_COMPARISON_NEVER;
+    case kCompareFuncLess: return D3D11_COMPARISON_LESS;
+    case kCompareFuncEqual: return D3D11_COMPARISON_EQUAL;
+    case kCompareFuncLessEqual: return D3D11_COMPARISON_LESS_EQUAL;
+    case kCompareFuncGreater: return D3D11_COMPARISON_GREATER;
+    case kCompareFuncNotEqueal: return D3D11_COMPARISON_NOT_EQUAL;
+    case kCompareFuncGreaterEqua: return D3D11_COMPARISON_GREATER_EQUAL; 
+    case kCompareFuncAlways: return D3D11_COMPARISON_ALWAYS;
     default: CHECK(false); return (D3D11_COMPARISON_FUNC)0;
   }
 }

@@ -130,18 +130,26 @@ class GraphicBuffer {
   };
 };
 
-class CompareFunc {
- public:
-  enum Type {
-    kNever = 1,
-    kLess,
-    kEqual,
-    kLessEqual,
-    kGreater,
-    kNotEqueal,
-    kGreaterEqua,
-    kAlways,
-  };
+enum CompareFunc {
+  kCompareFuncNever = 1,
+  kCompareFuncLess,
+  kCompareFuncEqual,
+  kCompareFuncLessEqual,
+  kCompareFuncGreater,
+  kCompareFuncNotEqueal,
+  kCompareFuncGreaterEqua,
+  kCompareFuncAlways,
+};
+
+enum DepthStencilOper {
+  kDepthStencilOperKeep,
+  kDepthStencilOperZero,
+  kDepthStencilOperReplace,
+  kDepthStencilOperIncrSat,
+  kDepthStencilOperDecrSat,
+  kDepthStencilOperInvert,
+  kDepthStencilOperIncr,
+  kDepthStencilOperDecr;
 };
 
 enum MapType {
