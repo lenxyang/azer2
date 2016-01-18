@@ -563,10 +563,10 @@ EntityPtr CreatePlaneEntity(VertexDesc* desc, const GeoPlaneParams& params,
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
   EntityPtr entity(new Entity(desc, vb, ib));
-  Vector4 vmin = mat * Vector4(-params.column_width * 0.5f,  0.00f, 
-                               -params.row_width * 0.5f, 1.0f);
-  Vector4 vmax = mat * Vector4( params.column_width * 0.5f,  0.01f,  
-                                params.row_width * 0.5f, 1.0f);
+  Vector4 vmin = mat * Vector4(-params.column_width * params.column * 0.5f,  0.00f, 
+                               -params.row_width * params.row * 0.5f, 1.0f);
+  Vector4 vmax = mat * Vector4( params.column_width * params.column * 0.5f,  0.01f,  
+                                params.row_width * params.row * 0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_topology(kTriangleList);
