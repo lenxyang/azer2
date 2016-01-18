@@ -492,16 +492,15 @@ SlotVertexDataPtr CreatePlaneVertexData(VertexDesc* desc, const Matrix4& matrix,
   const bool kHasNormalIndex = GetSemanticIndex("normal", 0, desc, &npos);
   const bool kHasTexcoordIndex = GetSemanticIndex("texcoord", 0, desc, &tpos);
 
-  float row_width = 2.0f / (params.row - 1);
-  float column_width = 2.0f / (params.column - 1);
-  SlotVertexDataPtr vdata(new SlotVertexData(desc, params.row * params.column));
+  int32 kVertexCount = (params.row + 1) * (params.column + 1);
+  SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexCount));
   VertexPack vpack(vdata.get());
   vpack.first();
   
   int beginx = -params.column * params.column_width * 0.5;
   int beginz = -params.row * params.row_width * 0.5;
-  for (int i = 0; i < params.row; ++i) {
-    for (int j = 0; j < params.column; ++j) {
+  for (int i = 0; i < params.row + 1; ++i) {
+    for (int j = 0; j < params.column + 1; ++j) {
       float x = beginx + j * params.column_width;
       float z = beginz + i * params.row_width;
       vpack.WriteVector4(matrix * Vector4(x,    0.0f, z, 1.0f), VertexPos(0, 0));
@@ -517,13 +516,13 @@ SlotVertexDataPtr CreatePlaneVertexData(VertexDesc* desc, const Matrix4& matrix,
 }
 
 IndicesDataPtr CreatePlaneIndicesData(const GeoPlaneParams& params) {
-  const int32 kIndexNum = (params.row - 1) * (params.column - 1) * 2 * 3;
+  const int32 kIndexNum = params.row * params.column * 2 * 3;
   IndicesDataPtr idata(new IndicesData(kIndexNum));
   IndexPack ipack(idata.get());
-  for (int i = 0; i < params.row - 1; ++i) {
-    for (int j = 0; j < params.column - 1; ++j) {
-      int cur_line = i * params.column;
-      int next_line = (i + 1) * params.column;
+  for (int i = 0; i < params.row; ++i) {
+    for (int j = 0; j < params.column; ++j) {
+      int cur_line = i * (params.column + 1);
+      int next_line = (i + 1) * (params.column + 1);
       CHECK(ipack.WriteAndAdvance(cur_line  + j));
       CHECK(ipack.WriteAndAdvance(next_line + j));
       CHECK(ipack.WriteAndAdvance(next_line + j + 1));
@@ -536,19 +535,19 @@ IndicesDataPtr CreatePlaneIndicesData(const GeoPlaneParams& params) {
 }
 
 IndicesDataPtr CreatePlaneFrameIndicesData(const GeoPlaneParams& params) {
-  int32 count = params.row * 2 + params.column * 2;
+  int32 count = (params.row + 1) * 2 + (params.column + 1) * 2;
   IndicesDataPtr idata(new IndicesData(count));
   IndexPack ipack(idata.get());
   for (uint32 i = 0; i < params.row; ++i) {
-    int32 index1 = i * params.column;
-    int32 index2 = (i  + 1) * params.column - 1;
+    int32 index1 = i * (params.column + 1);
+    int32 index2 = (i  + 1) * (params.column + 1) - 1;
     CHECK(ipack.WriteAndAdvance(index1));
     CHECK(ipack.WriteAndAdvance(index2));
   }
 
   for (uint32 i = 0; i < params.column; ++i) {
     int32 index1 = i;
-    int32 index2 = (params.row  - 1) * params.column + i;
+    int32 index2 = (params.row + 1) * params.column + i;
     CHECK(ipack.WriteAndAdvance(index1));
     CHECK(ipack.WriteAndAdvance(index2));
   }
