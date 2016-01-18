@@ -68,6 +68,14 @@ bool D3DDepthStencilState::IsDepthTestEnabled() {
   return desc.DepthEnable == TRUE;
 }
 
+void D3DDepthStencilState::EnableWriteDepthBuffer(bool enable) {
+  D3D11_DEPTH_STENCIL_DESC desc;  
+  depth_state_->GetDesc(&desc);
+  desc.DepthWriteMask = (enable ? D3D11_DEPTH_WRITE_MASK_ALL :
+                         D3D11_DEPTH_WRITE_MASK_ZERO);
+  SetDepthStencilState(desc);
+}
+
 void D3DDepthStencilState::SetDepthCompareFunc(CompareFunc func) {
   D3D11_DEPTH_STENCIL_DESC desc;  
   depth_state_->GetDesc(&desc);

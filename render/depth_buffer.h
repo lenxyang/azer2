@@ -23,6 +23,7 @@ class AZER_EXPORT DepthStencilState : public ::base::RefCounted<DepthStencilStat
   // depth buffer state
   virtual void EnableDepthTest(bool enable) = 0;
   virtual bool IsDepthTestEnabled() = 0;
+  virtual void EnableWriteDepthBuffer(bool enable) = 0;
   virtual void SetDepthCompareFunc(CompareFunc func) = 0;
   // stencil
   virtual void EnableStencil(bool enable) = 0;
