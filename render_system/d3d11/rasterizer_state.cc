@@ -15,7 +15,8 @@ ID3D11Device* GetDevice() {
 }
 }
 
-D3DRasterizerState::D3DRasterizerState() {
+D3DRasterizerState::D3DRasterizerState()
+    : raster_state_(NULL) {
   D3D11_RASTERIZER_DESC raster_desc;
   memset(&raster_desc, 0, sizeof(raster_desc));
   raster_desc.FillMode = D3D11_FILL_SOLID;
@@ -40,7 +41,6 @@ FillMode D3DRasterizerState::GetFillMode(void) {
 void D3DRasterizerState::SetFillMode(FillMode mode) {
   D3D11_RASTERIZER_DESC desc;
   raster_state_->GetDesc(&desc);
-  SAFE_RELEASE(raster_state_);
   desc.FillMode = TranslateFillMode(mode);
   SetRasterizerState(desc);
 }
