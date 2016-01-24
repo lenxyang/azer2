@@ -12,10 +12,10 @@ namespace azer {
 class AZER_EXPORT Image : public base::RefCounted<Image> {
  public:
   enum Type {
-    k1D = Texture::k1D,
-    k2D = Texture::k2D,
-    k3D = Texture::k3D,
-    kCubemap = Texture::kCubemap,
+    k1D = kTex1D,
+    k2D = kTex2D,
+    k3D = kTex3D,
+    kCubemap = kTexCubemap,
   };
 
   Image(ImageDataPtr& image, Type type);

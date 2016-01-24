@@ -8,13 +8,13 @@
 #include "azer/render/canvas2d.h"
 
 namespace azer {
-Texture::SamplerState::SamplerState()
-    : wrap_u(Texture::kWrap)
-    , wrap_v(Texture::kWrap)
-    , wrap_w(Texture::kWrap)
-    , mag_filter(Texture::kLinear)
-    , min_filter(Texture::kLinear)
-    , mip_filter(Texture::kLinear)
+SamplerState::SamplerState()
+    : wrap_u(kTexAddrModeWrap)
+    , wrap_v(kTexAddrModeWrap)
+    , wrap_w(kTexAddrModeWrap)
+    , mag_filter(kFilterModeLinear)
+    , min_filter(kFilterModeLinear)
+    , mip_filter(kFilterModeLinear)
     , compare_func(kCompareFuncNever)
     , border_color(0.0f, 0.0f, 0.0f, 0.0f)
     , mip_level(1)
@@ -27,8 +27,8 @@ Texture::Options::Options()
     : format(kRGBAn8),
       usage(GraphicBuffer::kDefault),
       cpu_access(kCPUNoAccess),
-      target(Texture::kUnknown),
-      type(k2D),
+      target(kBindTargetUnknown),
+      type(kTex2D),
       diminison(1),
       genmipmap(false) {
 }
@@ -67,9 +67,8 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   opt.size = size;
   opt.genmipmap = true;
   opt.format = kRGBAn8;
-  opt.target = (Texture::BindTarget)(Texture::kRenderTarget
-                                     | Texture::kShaderResource);
-  opt.type = Texture::k2D;
+  opt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
+  opt.type = kTex2D;
   // opt.sampler.mip_level = -1;
   opt.sampler.mip_level = 1;
   return opt;

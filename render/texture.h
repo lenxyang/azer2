@@ -40,7 +40,7 @@ class AZER_EXPORT Texture : public Resource {
     DataFormat format;            // default: kRGBAn8
     GraphicBuffer::Usage usage;   // default: GraphicBuffer::kDefault
     CPUAccess cpu_access;         // default: kCPUNoAccess
-    BindTarget target;
+    uint32 target;
     TexType type;
     int32 diminison;
     bool genmipmap;
