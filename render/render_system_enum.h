@@ -167,6 +167,37 @@ enum VisibleState {
   
 };
 
+enum TexType {
+  kTex1D,
+  kTex1DArray,
+  kTex2D,
+  kTex2DArray,
+  kTex3D,
+  kTexCubemap,
+  kTexCubemapArray,
+};
+
+enum AddressMode {
+  kTexAddrModeWrap,
+  kTexAddrModeMirror,
+  kTexAddrModeClamp,
+  kTexAddrModeBorder,
+  kTexAddrMirrorOnce,
+};
+
+enum FilterMode {
+  kFilterModePoint = 1,
+  kFilterModeLinear,
+};
+
+enum BindTarget {
+  kBindTargetUnknown        = 0,
+  kBindTargetShaderResource = 0x8L,
+  kBindTargetRenderTarget   = 0x20L,
+  kBindTargetDepthStencil   = 0x40L,
+};
+
+
 AZER_EXPORT const char* RenderStageName(RenderPipelineStage stage);
 AZER_EXPORT uint32 SizeofDataFormat(DataFormat format);
 }  // namespace azer

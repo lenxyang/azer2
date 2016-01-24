@@ -15,65 +15,33 @@ namespace azer {
 class RenderSystem;
 class Image;
 
-class AZER_EXPORT Texture : public Resource {
-public:
-  enum BindTarget {
-    kUnknown        = 0,
-    kShaderResource = 0x8L,
-    kRenderTarget   = 0x20L,
-    kDepthStencil   = 0x40L,
-  };
-
-  enum WrapMode {
-    kWrap = 1,
-    kMirror,
-    kClamp,
-    kBorder,
-    kMirrorOnce,
-  };
-
-  enum FilterMode {
-    kPoint = 1,
-    kLinear,
-  };
-
-  enum Type {
-    k1D,
-    k1DArray,
-    k2D,
-    k2DArray,
-    k2DMultiSample,
-    k2DArrayMultiSample,
-    k3D,
-    kCubemap,
-    kCubemapArray,
-  };
-
-  struct AZER_EXPORT SamplerState {
-    Texture::WrapMode wrap_u;
-    Texture::WrapMode wrap_v;
-    Texture::WrapMode wrap_w;
-    Texture::FilterMode mag_filter;
-    Texture::FilterMode min_filter;
-    Texture::FilterMode mip_filter;
-    CompareFunc compare_func;
-    Vector4 border_color;
-    int mip_level;
-    int max_anisotropy;
-    int sample_level;
-    int sample_quality;
+struct AZER_EXPORT SamplerState {
+  AddressMode wrap_u;
+  AddressMode wrap_v;
+  AddressMode wrap_w;
+  FilterMode mag_filter;
+  FilterMode min_filter;
+  FilterMode mip_filter;
+  CompareFunc compare_func;
+  Vector4 border_color;
+  int mip_level;
+  int max_anisotropy;
+  int sample_level;
+  int sample_quality;
  
-    SamplerState();
-  };
+  SamplerState();
+};
 
+class AZER_EXPORT Texture : public Resource {
+ public:
   struct AZER_EXPORT Options {
     gfx::Size size;
     SamplerState sampler;
     DataFormat format;            // default: kRGBAn8
     GraphicBuffer::Usage usage;   // default: GraphicBuffer::kDefault
     CPUAccess cpu_access;         // default: kCPUNoAccess
-    Texture::BindTarget target;
-    Type type;
+    BindTarget target;
+    TexType type;
     int32 diminison;
     bool genmipmap;
     Options();
