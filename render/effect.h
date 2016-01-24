@@ -27,7 +27,7 @@ typedef scoped_refptr<Technique> TechniquePtr;
  */
 class AZER_EXPORT Effect : public Resource {
  public:
-  typedef std::vector<GpuProgram::ShaderInfo> ShaderPrograms;
+  typedef std::vector<ShaderInfo> ShaderPrograms;
   Effect();
   ~Effect() override;
 

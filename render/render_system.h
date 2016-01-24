@@ -23,6 +23,7 @@ namespace azer {
 
 class Canvas2D;
 class Context2D;
+class GpuComputeTask;
 class GpuConstantsTable;
 class Image;
 class Overlay;
@@ -32,6 +33,7 @@ class SlotVertexBuffer;
 class RasterizerState;
 
 typedef scoped_refptr<Blending> BlendingPtr;
+typedef scoped_refptr<GpuComputeTask> GpuComputeTaskPtr;
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTpablePtr;;
 typedef scoped_refptr<Overlay> OverlayPtr;
 typedef scoped_refptr<Renderer> RendererPtr;
@@ -79,9 +81,10 @@ class AZER_EXPORT RenderSystem {
   // Vertex Gpu Program need to help check "Vertex Layout"
   //
   virtual VertexGpuProgramPtr CreateVertexGpuProgram(
-      VertexDescPtr desc, const GpuProgram::ShaderInfo& info) = 0;
+      VertexDescPtr desc, const ShaderInfo& info) = 0;
   virtual GpuProgramPtr CreateGpuProgram(RenderPipelineStage stage,
-                                         const GpuProgram::ShaderInfo& info) = 0;
+                                         const ShaderInfo& info) = 0;
+  virtual GpuComputeTaskPtr CreateGpuComputeTask(const ShaderInfo& info) = 0;
   virtual OverlayPtr CreateOverlay() = 0;
 
   virtual bool reset() = 0;

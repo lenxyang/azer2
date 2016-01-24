@@ -20,21 +20,21 @@ enum ShaderType {
   kBinaryShader,
 };
 
-class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
- public:
-  virtual ~GpuProgram();
+struct AZER_EXPORT ShaderInfo {
+  ShaderInfo();
+  int32 stage;
+  int32 format;
+  std::string code;
+  std::string path;
+  std::string version;
+  std::string entry;
+  std::string defines;
+  std::string includes;
+};
 
-  struct AZER_EXPORT ShaderInfo {
-    ShaderInfo();
-    int32 stage;
-    int32 format;
-    std::string code;
-    std::string path;
-    std::string version;
-    std::string entry;
-    std::string defines;
-    std::string includes;
-  };
+class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
+public:
+  virtual ~GpuProgram();
 
   std::string error_msg() const { return error_msg_;}
   RenderPipelineStage stage() const { return stage_;}
@@ -47,7 +47,7 @@ class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
    */
   virtual VertexDescPtr GetInputDesc() { return NULL;}
   virtual VertexDescPtr GetOutputDesc() { return NULL;}
- protected:
+protected:
   GpuProgram(RenderPipelineStage stage, const ShaderInfo& info);
 
   RenderPipelineStage stage_;
@@ -57,9 +57,9 @@ class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
 };
 
 class AZER_EXPORT VertexGpuProgram : public GpuProgram {
- public:
+public:
   virtual VertexDescPtr GetInputDesc() { return desc_ptr_;}
- protected:
+protected:
   VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info);
 
   VertexDescPtr desc_ptr_;

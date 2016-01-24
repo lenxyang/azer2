@@ -38,7 +38,7 @@ class D3DVertexGpuProgram : public VertexGpuProgram {
 
 class D3DPixelGpuProgram : public GpuProgram {
  public:
-  D3DPixelGpuProgram(const GpuProgram::ShaderInfo& info)
+  D3DPixelGpuProgram(const ShaderInfo& info)
       : GpuProgram(kPixelStage, info)
       , shader_(NULL) {
   }
@@ -54,7 +54,7 @@ class D3DPixelGpuProgram : public GpuProgram {
 
 class D3DGeometryGpuProgram : public GpuProgram {
  public:
-  D3DGeometryGpuProgram(const GpuProgram::ShaderInfo& info)
+  D3DGeometryGpuProgram(const ShaderInfo& info)
       : GpuProgram(kGeometryStage, info)
       , shader_(NULL) {
   }
@@ -69,7 +69,7 @@ class D3DGeometryGpuProgram : public GpuProgram {
 
 class D3DHullGpuProgram : public GpuProgram {
  public:
-  D3DHullGpuProgram(const GpuProgram::ShaderInfo& info)
+  D3DHullGpuProgram(const ShaderInfo& info)
       : GpuProgram(kHullStage, info)
       , shader_(NULL) {
   }
@@ -84,7 +84,7 @@ class D3DHullGpuProgram : public GpuProgram {
 
 class D3DDomainGpuProgram : public GpuProgram {
  public:
-  D3DDomainGpuProgram(const GpuProgram::ShaderInfo& info)
+  D3DDomainGpuProgram(const ShaderInfo& info)
       : GpuProgram(kDomainStage, info)
       , shader_(NULL) {
   }

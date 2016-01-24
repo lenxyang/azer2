@@ -7,6 +7,7 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/base/image.h"
+#include "azer/render/gpu_compute_task.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/blending.h"
@@ -98,7 +99,7 @@ IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
 }
 
 GpuProgramPtr D3DRenderSystem::CreateGpuProgram(
-    RenderPipelineStage stage, const GpuProgram::ShaderInfo& info) {
+    RenderPipelineStage stage, const ShaderInfo& info) {
   GpuProgramPtr gpu_program;
   switch (stage) {
     case kPixelStage:
@@ -128,7 +129,7 @@ GpuProgramPtr D3DRenderSystem::CreateGpuProgram(
 }
 
 VertexGpuProgramPtr D3DRenderSystem::CreateVertexGpuProgram(
-    VertexDescPtr desc, const GpuProgram::ShaderInfo& info) {
+    VertexDescPtr desc, const ShaderInfo& info) {
   VertexGpuProgramPtr gpu_program(new D3DVertexGpuProgram(desc, info));
   if (gpu_program->Init(this)) {
     return gpu_program;
@@ -186,6 +187,10 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   } else {
     return TexturePtr();
   }
+}
+
+GpuComputeTaskPtr D3DRenderSystem::CreateGpuComputeTask(const ShaderInfo& info) {
+  return NULL;
 }
 
 OverlayPtr D3DRenderSystem::CreateOverlay() {

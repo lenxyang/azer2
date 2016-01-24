@@ -3,9 +3,7 @@
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
-GpuProgram::ShaderInfo::ShaderInfo()
-    : stage(kStageNotSpec) {
-}
+ShaderInfo::ShaderInfo() : stage(kStageNotSpec) {}
   
 GpuProgram::GpuProgram(RenderPipelineStage stage, const ShaderInfo& info)
     : stage_(stage)
