@@ -145,7 +145,7 @@ D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o,
   Texture::Options opt;
   opt = o;
   opt.format = kDepth24Stencil8;
-  opt.target = Texture::kDepthStencil;
+  opt.target = kBindTargetDepthStencil;
   opt.genmipmap = false;
   std::unique_ptr<D3DDepthBuffer> ptr(new D3DDepthBuffer(opt, rs));
   if (!ptr->Init(rs)) {

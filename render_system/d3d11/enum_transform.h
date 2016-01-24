@@ -25,7 +25,7 @@ D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(PrimitiveTopology topology);
 
 DXGI_FORMAT TranslateIndexType(IndicesData::IndexType type);
 
-D3D11_BIND_FLAG TranslateBindTarget(Texture::BindTarget target);
+D3D11_BIND_FLAG TranslateBindTarget(uint32 target);
 
 D3D11_FILL_MODE TranslateFillMode(FillMode mode);
 FillMode TranslateD3DFillMode(D3D11_FILL_MODE mode);
@@ -33,15 +33,15 @@ FillMode TranslateD3DFillMode(D3D11_FILL_MODE mode);
 D3D11_CULL_MODE TranslateCullingMode(CullingMode mode);
 CullingMode TranslateD3DCullingMode(D3D11_CULL_MODE mode);
 
-D3D11_TEXTURE_ADDRESS_MODE TranslateTexWrapMode(Texture::WrapMode mode);
+D3D11_TEXTURE_ADDRESS_MODE TranslateTexWrapMode(AddressMode mode);
 
 D3D11_BLEND TranslateBlending(Blending::Blend type);
 D3D11_BLEND_OP TranslateBlendingOper(Blending::Oper oper);
 D3D11_COLOR_WRITE_ENABLE TranslateWriteMask(Blending::WriteMask mask);
-D3D11_SRV_DIMENSION  GetViewDimensionFromTextureType(Texture::Type type);
+D3D11_SRV_DIMENSION  GetViewDimensionFromTextureType(TexType type);
 D3D11_MAP TranslateMapType(MapType type);
 D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc type);
 D3D11_STENCIL_OP TranslateStencilOper(StencilOper oper);
-D3D11_FILTER TranslateSamplerState(const Texture::SamplerState& state);
+D3D11_FILTER TranslateSamplerState(const SamplerState& state);
 }  // namespace d3d11
 }  // namespace azer

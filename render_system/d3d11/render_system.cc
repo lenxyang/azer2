@@ -158,11 +158,11 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
   Texture::Options texopt = opt;
   texopt.size = gfx::Size(image->width(), image->height());
   texopt.format = image->format();
-  texopt.type = (Texture::Type)img->type();
+  texopt.type = (TexType)img->type();
   scoped_refptr<D3DTexture> tex;
-  if (texopt.type == Texture::k2D) {
+  if (texopt.type == kTex2D) {
     tex = new D3DTexture2D(texopt, this);
-  } else if (texopt.type == Texture::kCubemap) {
+  } else if (texopt.type == kTexCubemap) {
     tex = new D3DTextureCubeMap(texopt, this);
   } else {
     NOTREACHED();
@@ -176,7 +176,7 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
 }
 
 TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
-  if (opt.type == Texture::k2D) {
+  if (opt.type == kTex2D) {
     scoped_refptr<D3DTexture2D> ptr(new D3DTexture2D(opt, this));
     if (ptr->Init(NULL, 1)) {
       return ptr;
@@ -232,7 +232,7 @@ RendererPtrVec D3DRenderSystem::CreateRendererVec(const Texture::Options& opt,
   std::vector<RenderTargetPtr> targets;
   std::vector<DepthBufferPtr> depthes;
   // create texture and create render target for event level
-  if (opt.type == Texture::kCubemap) {
+  if (opt.type == kTexCubemap) {
     if (!D3D2DArrayRenderTarget::Create(opt, this, &targets)) {
       LOG(ERROR) << "Failed to create RendererVec.";
       return vec;

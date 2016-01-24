@@ -71,8 +71,7 @@ void ImageProcessing::Init() {
   RenderSystem* rs = RenderSystem::Current();
   Texture::Options rdopt;
   rdopt.size = output_->options().size;
-  rdopt.target = (Texture::BindTarget)
-      (Texture::kRenderTarget | Texture::kShaderResource);
+  rdopt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
   renderer_ = rs->CreateRenderer(rdopt);
   Viewport viewport;
   viewport.bounds = gfx::Rect(rdopt.size);

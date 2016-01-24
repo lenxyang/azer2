@@ -172,6 +172,8 @@ enum TexType {
   kTex1DArray,
   kTex2D,
   kTex2DArray,
+  kTex2DMultiSample,
+  kTex2DArrayMultiSample,
   kTex3D,
   kTexCubemap,
   kTexCubemapArray,
@@ -182,7 +184,7 @@ enum AddressMode {
   kTexAddrModeMirror,
   kTexAddrModeClamp,
   kTexAddrModeBorder,
-  kTexAddrMirrorOnce,
+  kTexAddrModeMirrorOnce,
 };
 
 enum FilterMode {

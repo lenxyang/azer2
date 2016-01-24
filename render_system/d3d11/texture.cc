@@ -56,11 +56,11 @@ bool ValidTextureFlags(const Texture::Options& opt) {
       return false;
     }
 
-    if (opt.target & Texture::kRenderTarget) {
+    if (opt.target & kBindTargetRenderTarget) {
       return false;
     }
 
-    if (opt.target & Texture::kShaderResource) {
+    if (opt.target & kBindTargetShaderResource) {
       return false;
     }
   }
@@ -98,7 +98,7 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
 
   resource_ = tex;
-  if (options_.target & Texture::kShaderResource) {
+  if (options_.target & kBindTargetShaderResource) {
     return InitResourceView();
   } else {
     return true;
@@ -367,7 +367,7 @@ D3DTexture2DShared::D3DTexture2DShared(const Texture::Options& opt,
                                        D3DRenderSystem* rs)
     : D3DTexture2D(opt, rs)
     , shared_handle_(NULL) {
-  DCHECK(opt.target & azer::Texture::kRenderTarget);
+  DCHECK(opt.target & kBindTargetRenderTarget);
   DCHECK_EQ(opt.usage, GraphicBuffer::kDefault);
 }
 

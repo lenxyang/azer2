@@ -55,7 +55,7 @@ D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
                                          D3DRenderSystem* rs) {
   Texture::Options opt;
   opt = o;
-  opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
+  opt.target = (kBindTargetRenderTarget | o.target);
   std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, rs));
   if (!target->Init()) {
     return NULL;
@@ -104,12 +104,12 @@ bool D3D2DArrayRenderTarget::Init(int index) {
 
 bool D3D2DArrayRenderTarget::Create(const Texture::Options& o, D3DRenderSystem* rs,
                                     std::vector<RenderTargetPtr>* vec) {
-  DCHECK_EQ(o.type, Texture::kCubemap);
+  DCHECK_EQ(o.type, kTexCubemap);
   Texture::Options opt;
   opt = o;
-  opt.target = (Texture::BindTarget)(Texture::kRenderTarget | o.target);
+  opt.target = (kBindTargetRenderTarget | o.target);
   std::unique_ptr<D3DTexture> tex;
-  if (o.type == Texture::kCubemap) {
+  if (o.type == kTexCubemap) {
     tex.reset(new D3DTextureCubeMap(opt, rs));
     if (!tex->Init(NULL, 6)) {
       return false;
@@ -163,7 +163,7 @@ D3DRenderTarget* D3DSurfaceRenderTarget::Create(D3DEnvSwapChain* swapchain,
   Surface* surface = swapchain->GetSurface();
   Texture::Options opt;
   opt.size = gfx::Size(surface->GetBounds().size());
-  opt.target = (Texture::BindTarget)(Texture::kRenderTarget);
+  opt.target = (kBindTargetRenderTarget);
   std::unique_ptr<D3DSurfaceRenderTarget> target(
       new D3DSurfaceRenderTarget(opt, swapchain, rs));
   if (!target->Init()) {
