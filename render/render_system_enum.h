@@ -193,10 +193,11 @@ enum FilterMode {
 };
 
 enum BindTarget {
-  kBindTargetUnknown        = 0,
-  kBindTargetShaderResource = 0x8L,
-  kBindTargetRenderTarget   = 0x20L,
-  kBindTargetDepthStencil   = 0x40L,
+  kBindTargetUnknown           = 0,
+  kBindTargetShaderResource    = 0x8L,
+  kBindTargetRenderTarget      = 0x20L,
+  kBindTargetDepthStencil      = 0x40L,
+  kBindTargetUnorderedAccess   = 0x80L,
 };
 
 

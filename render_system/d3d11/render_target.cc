@@ -152,7 +152,7 @@ bool D3DSurfaceRenderTarget::Init() {
 
   ID3D11Texture2D* buffer = swapchain_->GetSwapTexture();
   ptr->Attach(buffer);
-  hr = d3d_device->CreateRenderTargetView(ptr->resource_, NULL, &target_);
+  hr = d3d_device->CreateRenderTargetView(ptr->GetResource(), NULL, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateRenderTargetView failed ");
   texture_ = ptr.release();
   return true;

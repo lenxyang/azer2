@@ -143,6 +143,8 @@ D3D11_BIND_FLAG TranslateBindTarget(uint32 target) {
   
   if (target & kBindTargetDepthStencil)
     flags |= D3D11_BIND_DEPTH_STENCIL;
+  if (target & kBindTargetUnorderedAccess)
+    flags |= D3D11_BIND_UNORDERED_ACCESS;
   return (D3D11_BIND_FLAG)flags;
 }
 

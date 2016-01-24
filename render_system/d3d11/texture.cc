@@ -22,61 +22,26 @@ namespace d3d11 {
 
 D3DTexture::D3DTexture(const Texture::Options& opt, D3DRenderSystem* rs)
     : Texture(opt)
+    , texres_(NULL)
     , render_system_(rs)
-    , view_(NULL)
-    , resource_(NULL)
-    , sampler_state_(NULL) {
+    , sampler_state_(NULL)
+    , res_view_(NULL),
+      uav_view_(NULL) {
 #ifdef DEBUG
   mapped_ = false;
 #endif
 }
 
 D3DTexture::~D3DTexture() {
-  SAFE_RELEASE(resource_);
-  SAFE_RELEASE(view_);
+  SAFE_RELEASE(texres_);
+  SAFE_RELEASE(res_view_);
   SAFE_RELEASE(sampler_state_);
-}
-
-
-ID3D11Resource* D3DTexture2DShared::GetSharedResource() {
-  DCHECK(shared_resource_ != NULL);
-  return shared_resource_;
-}
-
-HANDLE D3DTexture2DShared::GetSharedHanle() {
-  DCHECK(shared_handle_ != NULL);
-  return shared_handle_;
-}
-
-bool ValidTextureFlags(const Texture::Options& opt) {
-  // cpu access require for Usage
-  // reference D3D11_CPU_ACCESS_FLAG enumeration
-  if (opt.cpu_access & kCPURead) {
-    if (!(opt.usage & GraphicBuffer::kStaging)) {
-      return false;
-    }
-
-    if (opt.target & kBindTargetRenderTarget) {
-      return false;
-    }
-
-    if (opt.target & kBindTargetShaderResource) {
-      return false;
-    }
-  }
-  if (opt.cpu_access & kCPUWrite) {
-    if (!(opt.usage & GraphicBuffer::kStaging
-          && opt.usage & GraphicBuffer::kDynamic)) {
-      return false;
-    }
-  }
-
-  return true;
+  SAFE_RELEASE(uav_view_);
 }
 
 bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   HRESULT hr;
-  DCHECK(NULL == resource_);
+  DCHECK(NULL == texres_);
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ZeroMemory(&tex_desc_, sizeof(D3D11_TEXTURE2D_DESC));
   tex_desc_.Width     = options_.size.width();
@@ -97,7 +62,11 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   hr = d3d_device->CreateTexture2D(&tex_desc_, data, &tex);
   HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
 
-  resource_ = tex;
+  if (options_.target & kBindTargetUnorderedAccess) {
+    InitUnorderedAccessView();
+  }
+
+  texres_ = tex;
   if (options_.target & kBindTargetShaderResource) {
     return InitResourceView();
   } else {
@@ -106,10 +75,10 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
 }
 
 void D3DTexture::SetPSSampler(int index, D3DRenderer* renderer) {
-  DCHECK(NULL != view_);
+  DCHECK(NULL != res_view_);
   DCHECK_GE(index, 0);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
-  d3d_context->PSSetShaderResources(index, 1, &view_);
+  d3d_context->PSSetShaderResources(index, 1, &res_view_);
   if (sampler_state_) {
     d3d_context->PSSetSamplers(index, 1, &sampler_state_);
   } else {
@@ -118,10 +87,10 @@ void D3DTexture::SetPSSampler(int index, D3DRenderer* renderer) {
 }
 
 void D3DTexture::SetVSSampler(int index, D3DRenderer* renderer) {
-  DCHECK(NULL != view_);
+  DCHECK(NULL != res_view_);
   DCHECK_GE(index, 0);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
-  d3d_context->VSSetShaderResources(index, 1, &view_);
+  d3d_context->VSSetShaderResources(index, 1, &res_view_);
   if (sampler_state_) {
     d3d_context->VSSetSamplers(index, 1, &sampler_state_);
   } else {
@@ -130,10 +99,10 @@ void D3DTexture::SetVSSampler(int index, D3DRenderer* renderer) {
 }
 
 void D3DTexture::SetHSSampler(int index, D3DRenderer* renderer) {
-  DCHECK(NULL != view_);
+  DCHECK(NULL != res_view_);
   DCHECK_GE(index, 0);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
-  d3d_context->HSSetShaderResources(index, 1, &view_);
+  d3d_context->HSSetShaderResources(index, 1, &res_view_);
   if (sampler_state_) {
     d3d_context->HSSetSamplers(index, 1, &sampler_state_);
   } else {
@@ -142,10 +111,10 @@ void D3DTexture::SetHSSampler(int index, D3DRenderer* renderer) {
 }
 
 void D3DTexture::SetDSSampler(int index, D3DRenderer* renderer) {
-  DCHECK(NULL != view_);
+  DCHECK(NULL != res_view_);
   DCHECK_GE(index, 0);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
-  d3d_context->DSSetShaderResources(index, 1, &view_);
+  d3d_context->DSSetShaderResources(index, 1, &res_view_);
   if (sampler_state_) {
     d3d_context->DSSetSamplers(index, 1, &sampler_state_);
   } else {
@@ -154,10 +123,10 @@ void D3DTexture::SetDSSampler(int index, D3DRenderer* renderer) {
 }
 
 void D3DTexture::SetGSSampler(int index, D3DRenderer* renderer) {
-  DCHECK(NULL != view_);
+  DCHECK(NULL != res_view_);
   DCHECK_GE(index, 0);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
-  d3d_context->GSSetShaderResources(index, 1, &view_);
+  d3d_context->GSSetShaderResources(index, 1, &res_view_);
   if (sampler_state_) {
     d3d_context->GSSetSamplers(index, 1, &sampler_state_);
   } else {
@@ -169,17 +138,17 @@ void D3DTexture::GenerateMips(int level) {
   // attention:
   // resource must be specified bind with Resource and RenderTarget
   // and misc flags must be with D3D11_RESOURCE_MISC_GENERATE_MIPS
-  DCHECK(view_ != NULL);
+  DCHECK(res_view_ != NULL);
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  d3d_context->GenerateMips(view_);
+  d3d_context->GenerateMips(res_view_);
 }
 
 bool D3DTexture::InitResourceView() {
   ID3D11Device* d3d_device = render_system_->GetDevice();
-  InitResourceDesc(&res_view_desc_);
-  HRESULT hr = d3d_device->CreateShaderResourceView(resource_, &res_view_desc_,
-                                                    &view_);
+  D3D11_SHADER_RESOURCE_VIEW_DESC view_desc;
+  InitResourceDesc(&view_desc);
+  HRESULT hr = d3d_device->CreateShaderResourceView(texres_, &view_desc, &res_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
   return SetSamplerState(options_.sampler);
 }
@@ -232,14 +201,14 @@ void D3DTexture::UseForStage(RenderPipelineStage stage, int index,
 
 // reference: MSDN "How to: Use dynamic resources"
 Texture::MapData D3DTexture::map(MapType maptype) {
-  DCHECK(NULL != resource_);
+  DCHECK(NULL != texres_);
   MapData mapdata;
   ZeroMemory(&mapdata, sizeof(mapdata));
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
 
   D3D11_MAPPED_SUBRESOURCE mapped;
   ZeroMemory(&mapped, sizeof(D3D11_MAPPED_SUBRESOURCE));
-  HRESULT hr = d3d_context->Map(resource_, 0, TranslateMapType(maptype), 0, &mapped);
+  HRESULT hr = d3d_context->Map(texres_, 0, TranslateMapType(maptype), 0, &mapped);
   if (FAILED(hr)) {
     LOG(ERROR) << "Map Texture failed.";
     return mapdata;
@@ -261,9 +230,9 @@ void D3DTexture::unmap() {
   DCHECK(mapped_);
   mapped_ = false;
 #endif
-  DCHECK(NULL != resource_);
+  DCHECK(NULL != texres_);
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  d3d_context->Unmap(resource_, 0);
+  d3d_context->Unmap(texres_, 0);
 }
 
 bool D3DTexture::CopyTo(Texture* texture) {
@@ -279,7 +248,45 @@ bool D3DTexture::CopyTo(Texture* texture) {
   }
 
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  d3d_context->CopyResource(tex->resource_, resource_);
+  d3d_context->CopyResource(tex->texres_, texres_);
+  return true;
+}
+
+
+// class D3DTexture2DShared
+ID3D11Resource* D3DTexture2DShared::GetSharedResource() {
+  DCHECK(shared_texres_ != NULL);
+  return shared_texres_;
+}
+
+HANDLE D3DTexture2DShared::GetSharedHanle() {
+  DCHECK(shared_handle_ != NULL);
+  return shared_handle_;
+}
+
+bool ValidTextureFlags(const Texture::Options& opt) {
+  // cpu access require for Usage
+  // reference D3D11_CPU_ACCESS_FLAG enumeration
+  if (opt.cpu_access & kCPURead) {
+    if (!(opt.usage & GraphicBuffer::kStaging)) {
+      return false;
+    }
+
+    if (opt.target & kBindTargetRenderTarget) {
+      return false;
+    }
+
+    if (opt.target & kBindTargetShaderResource) {
+      return false;
+    }
+  }
+  if (opt.cpu_access & kCPUWrite) {
+    if (!(opt.usage & GraphicBuffer::kStaging
+          && opt.usage & GraphicBuffer::kDynamic)) {
+      return false;
+    }
+  }
+
   return true;
 }
 
@@ -307,8 +314,18 @@ bool D3DTexture2D::InitFromImage(const Image* image) {
   return Init(&subres, 1);
 }
 
+void D3DTexture2D::InitUnorderedAccessView() {
+  ID3D11Device* d3d_device = render_system_->GetDevice();
+  D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
+  desc.Format = tex_desc_.Format;
+  desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+  desc.Texture2D.MipSlice = 0;
+  HRESULT hr = d3d_device->CreateUnorderedAccessView(texres_, &desc, &uav_view_);
+  CHECK(hr == S_OK);
+}
+
 void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
-  DCHECK(resource_ != NULL);
+  DCHECK(texres_ != NULL);
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURE2D);
   desc->Format = tex_desc_.Format;
@@ -352,7 +369,7 @@ bool D3DTextureCubeMap::InitFromImage(const Image* image) {
 }
 
 void D3DTextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
-  DCHECK(resource_ != NULL);
+  DCHECK(texres_ != NULL);
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURECUBE);
   memset(desc, 0, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
@@ -402,9 +419,9 @@ bool D3DTexture2DShared::InitSharedResource() {
   ID3D11Device* d3d_device = render_system_->GetDevice();
   hr = d3d_device->OpenSharedResource(shared_handle_,
                                       __uuidof(ID3D11Texture2D),
-                                      (void**)&shared_resource_);
+                                      (void**)&shared_texres_);
   if (FAILED(hr)) {
-    SAFE_RELEASE(shared_resource_);
+    SAFE_RELEASE(shared_texres_);
     return false;
   }
 

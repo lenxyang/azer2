@@ -173,7 +173,7 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
     return false;
   }
 
-  ID3D11Resource* resource = ((D3DTexture2D*)texture_.get())->resource_;
+  ID3D11Resource* resource = tex->GetResource();
   DCHECK_EQ(TranslateBindTarget(options_.target), D3D11_BIND_DEPTH_STENCIL);
 
   hr = d3d_device->CreateDepthStencilView(resource, NULL, &target_);

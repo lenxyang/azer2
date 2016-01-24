@@ -18,11 +18,11 @@ class D3DTexture: public Texture {
 
   virtual ~D3DTexture();
   virtual bool Init(const D3D11_SUBRESOURCE_DATA* data, int num);
-  virtual void GenerateMips(int level) override;
-  virtual bool SetSamplerState(const SamplerState& sampler_state) override;
+  void GenerateMips(int level) override;
+  bool SetSamplerState(const SamplerState& sampler_state) override;
 
-  virtual MapData map(MapType type) override;
-  virtual void unmap() override;
+  MapData map(MapType type) override;
+  void unmap() override;
 
   void UseForStage(RenderPipelineStage stage, int index, D3DRenderer* renderer);
   void SetVSSampler(int index, D3DRenderer* renderer);
@@ -31,25 +31,27 @@ class D3DTexture: public Texture {
   void SetGSSampler(int index, D3DRenderer* renderer);
   void SetPSSampler(int index, D3DRenderer* renderer);
 
-  bool Initialized() const { return NULL != resource_;}
-  void Attach(ID3D11Texture2D* tex) { resource_ = tex;}
-  void Detach() { resource_ = NULL; }
+  bool Initialized() const { return NULL != texres_;}
+  void Attach(ID3D11Texture2D* tex) { texres_ = tex;}
+  void Detach() { texres_ = NULL; }
 
-  ID3D11ShaderResourceView* GetResourceView() { return view_;}
-  ID3D11Resource* GetResource() { return resource_;}
+  ID3D11ShaderResourceView* GetResourceView() { return res_view_;}
+  ID3D11UnorderedAccessView* GetUnorderedAccessView() { return uav_view_;}
+  ID3D11Resource* GetResource() { return texres_;}
 
-  virtual bool CopyTo(Texture* texture) override;
+  bool CopyTo(Texture* texture) override;
  protected:
   virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) = 0;
   virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) = 0;
+  virtual void InitUnorderedAccessView() {};
   bool InitResourceView();
 
-  ID3D11Resource* resource_;
+  ID3D11Resource* texres_;
   D3DRenderSystem* render_system_;
-  ID3D11ShaderResourceView* view_;
-  ID3D11SamplerState* sampler_state_;
-  D3D11_SHADER_RESOURCE_VIEW_DESC res_view_desc_;
   D3D11_TEXTURE2D_DESC tex_desc_;
+  ID3D11SamplerState* sampler_state_;
+  ID3D11ShaderResourceView* res_view_;
+  ID3D11UnorderedAccessView* uav_view_;
 
 #ifdef DEBUG
   bool mapped_;
@@ -63,13 +65,11 @@ class D3DTexture2D : public D3DTexture {
       : D3DTexture(opt, rs) {
   }
 
-  virtual bool InitFromImage(const Image* image) override;
+  bool InitFromImage(const Image* image) override;
  protected:
-  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
-  virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
-  friend class D3DRenderTarget;
-  friend class D3DSurfaceRenderTarget;
-  friend class D3DDepthBuffer;
+  void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
+  void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
+  void InitUnorderedAccessView() override;
   DISALLOW_COPY_AND_ASSIGN(D3DTexture2D);
 };
 
@@ -78,19 +78,19 @@ class D3DTexture2D : public D3DTexture {
 class D3DTexture2DShared : public D3DTexture2D {
  public:
   D3DTexture2DShared(const Texture::Options& opt, D3DRenderSystem* rs);
-  virtual ~D3DTexture2DShared();
+  ~D3DTexture2DShared() override;
 
   // create a resource for other device using
-  virtual bool Init(const D3D11_SUBRESOURCE_DATA* data, int num);
+  bool Init(const D3D11_SUBRESOURCE_DATA* data, int num) override;
   ID3D11Resource* GetSharedResource();
   HANDLE GetSharedHanle();
  protected:
-  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
-  virtual bool InitFromImage(const Image* image) { return false;}
+  void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
+  bool InitFromImage(const Image* image) override { return false;}
 
   bool InitSharedResource();
   HANDLE shared_handle_;
-  ID3D11Resource* shared_resource_;
+  ID3D11Resource* shared_texres_;
   DISALLOW_COPY_AND_ASSIGN(D3DTexture2DShared);
 };
 
@@ -103,19 +103,19 @@ class D3DTexture2DExtern : public D3DTexture2D {
   static D3DTexture2DExtern* Create(HANDLE handle, D3DRenderSystem* rs);
  private:
   void Attach(ID3D11Texture2D* tex);
-  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
-  virtual bool InitFromImage(const Image* image) { return false;}
+  void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
+  bool InitFromImage(const Image* image) override { return false;}
   DISALLOW_COPY_AND_ASSIGN(D3DTexture2DExtern);
 };
 
 class D3DTextureCubeMap : public D3DTexture {
  public:
   D3DTextureCubeMap(const Texture::Options& opt, D3DRenderSystem* rs);
-  virtual bool InitFromImage(const Image* image) override;
+  bool InitFromImage(const Image* image) override;
   bool InitTexture();
  protected:
-  virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
-  virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
+  void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
+  void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
   DISALLOW_COPY_AND_ASSIGN(D3DTextureCubeMap);
 };
 }  // namespace d3d11
