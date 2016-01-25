@@ -23,7 +23,7 @@ namespace azer {
 
 class Canvas2D;
 class Context2D;
-class GpuComputeTask;
+class GpuComputeTaskDispatcher;
 class GpuConstantsTable;
 class Image;
 class Overlay;
@@ -33,7 +33,7 @@ class SlotVertexBuffer;
 class RasterizerState;
 
 typedef scoped_refptr<Blending> BlendingPtr;
-typedef scoped_refptr<GpuComputeTask> GpuComputeTaskPtr;
+typedef scoped_refptr<GpuComputeTaskDispatcher> GpuComputeTaskDispatcherPtr;
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTpablePtr;;
 typedef scoped_refptr<Overlay> OverlayPtr;
 typedef scoped_refptr<Renderer> RendererPtr;
@@ -84,7 +84,7 @@ class AZER_EXPORT RenderSystem {
       VertexDescPtr desc, const ShaderInfo& info) = 0;
   virtual GpuProgramPtr CreateGpuProgram(RenderPipelineStage stage,
                                          const ShaderInfo& info) = 0;
-  virtual GpuComputeTaskPtr CreateGpuComputeTask(const ShaderInfo& info) = 0;
+  virtual GpuComputeTaskDispatcherPtr CreateDispatcher() = 0;
   virtual OverlayPtr CreateOverlay() = 0;
 
   virtual bool reset() = 0;

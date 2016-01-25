@@ -189,6 +189,11 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   }
 }
 
+GpuComputeTaskDispatcherPtr D3DRenderSystem::CreateDispatcher() {
+  GpuComputeTaskDispatcherPtr ptr(new D3DGpuComputeTaskDispatcher);
+  return ptr;
+}
+
 OverlayPtr D3DRenderSystem::CreateOverlay() {
   scoped_refptr<D3DOverlay> surface_ptr(new D3DOverlay(this));
   if (surface_ptr->Init(this)) {
@@ -278,15 +283,6 @@ RendererPtr D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt)
     return renderer;
   } else {
     return RendererPtr();
-  }
-}
-
-GpuComputeTaskPtr D3DRenderSystem::CreateGpuComputeTask(const ShaderInfo& info) {
-  scoped_refptr<D3DGpuComputeTask> task(new D3DGpuComputeTask(info));
-  if (task->Init()) {
-    return task;
-  } else {
-    return scoped_refptr<D3DGpuComputeTask>();
   }
 }
 }  // namespace d3d11

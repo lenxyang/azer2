@@ -5,19 +5,14 @@
 
 namespace azer {
 namespace d3d11 {
-class AZER_EXPORT D3DGpuComputeTask : public GpuComputeTask {
+
+class D3DGpuComputeTaskDispatcher : public GpuComputeTaskDispatcher
  public:
-  explicit D3DGpuComputeTask(const ShaderInfo& info);
-  ~D3DGpuComputeTask() override;
-
-  bool Init();
-
-  void SetInputTexture(int32 index, Texture* tex) override;
-  void SetOutputTexture(int32 index, Texture* tex) override;
-  void Dispatch(uint32 thread_group_x, uint32 thread_group_y, uint32 thread_group_z)
-      override; 
+  D3DGpuComputeTaskDispatcher();
+  void Reset() override;
+  void Dispatch(GpuComputeTask* task, TaskParams params) override;
  private:
-  DISALLOW_COPY_AND_ASSIGN(D3DGpuComputeTask);
+  DISALLOW_COPY_AND_ASSIGN(D3DGpuComputeTaskDispatcher);
 };
 }  // namespace d3d11
 }  // namespace azer
