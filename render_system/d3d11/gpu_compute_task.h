@@ -12,6 +12,9 @@ class D3DGpuComputeTaskDispatcher : public GpuComputeTaskDispatcher {
   void Reset() override;
   void Dispatch(GpuComputeTask* task, const GpuTaskParams params) override;
  private:
+  //
+  ID3D11ShaderResourceView* resview_[GpuComputeTask::kMaxInput];
+  ID3D11ShaderResourceView* uavview_[GpuComputeTask::kMaxOutput];
   DISALLOW_COPY_AND_ASSIGN(D3DGpuComputeTaskDispatcher);
 };
 }  // namespace d3d11
