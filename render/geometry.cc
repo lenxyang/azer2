@@ -78,6 +78,9 @@ inline int32 CalcSphereVertexNum(int32 stack_num, int32 slice_num) {
 
 SlotVertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
                                        float radius, int32 stack, int32 slice) {
+  VertexPos texpos;
+  bool hastex = GetSemanticIndex("texcoord", 0, desc, &texpos);
+
   const int32 kVertexNum = CalcSphereVertexNum(stack, slice);
   SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
   VertexPack vpack(vdata.get());
@@ -85,6 +88,9 @@ SlotVertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
   int num = 0;
   CHECK(vpack.first());
   vpack.WriteVector4(matrix * Vector4(0.0f, radius, 0.0f, 1.0f), VertexPos(0, 0));
+  if (hastex) {
+    vpack.WriteVector2(Vector2(0.0f, 0.0f), texpos);
+  }
   num++;
 
   for (int i = 1; i < stack - 1; ++i) {
@@ -95,6 +101,12 @@ SlotVertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
       float x = radius * slice_radius * cos(Degree(degree));
       float z = radius * slice_radius * sin(Degree(degree));
 
+      if (hastex) {
+        float tu = j * 1.0f / slice;
+        float tv = i * 1.0f / (stack - 1);
+        vpack.WriteVector2(Vector2(tu, tv), texpos);
+      }
+
       CHECK(vpack.next(1));
       Vector4 pos = std::move(matrix * Vector4(x, y, z, 1.0f));
       vpack.WriteVector4(pos, VertexPos(0, 0));
@@ -104,6 +116,9 @@ SlotVertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
 
   CHECK(vpack.next(1));
   vpack.WriteVector4(matrix * Vector4(0.0f, -radius, 0.0f, 1.0f), VertexPos(0, 0));
+  if (hastex) {
+    vpack.WriteVector2(Vector2(1.0f, 1.0f), texpos);
+  }
   num++;
   DCHECK_EQ(num, kVertexNum);
   return vdata;
