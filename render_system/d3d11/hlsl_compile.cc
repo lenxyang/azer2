@@ -69,6 +69,7 @@ const char* DefaultShaderEntryForStage(RenderPipelineStage stage) {
     case kDomainStage: return "ds_main";
     case kGeometryStage: return "gs_main";
     case kPixelStage: return "ps_main";
+    case kComputeStage: return "cs_main";
     default: CHECK(false); return "";
   }
 }
@@ -81,6 +82,7 @@ const char* DefaultShaderVersionForStage(RenderPipelineStage stage) {
     case kDomainStage: return "ds_5_0";
     case kGeometryStage: return "gs_5_0";
     case kPixelStage: return "ps_5_0";
+    case kComputeStage: return "cs_5_0";
     default: CHECK(false); return "";
   }
 }

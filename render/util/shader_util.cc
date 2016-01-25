@@ -18,6 +18,7 @@ bool LoadShaderAtStage(int stage, const std::string& path,
 
   shader->at(stage).code = code;
   shader->at(stage).path = path;;
+  shader->at(stage).stage = stage;
   return true;
 }
 
