@@ -62,16 +62,16 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
   hr = d3d_device->CreateTexture2D(&tex_desc_, data, &tex);
   HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
 
-  if (options_.target & kBindTargetUnorderedAccess) {
-    InitUnorderedAccessView();
-  }
-
   texres_ = tex;
   if (options_.target & kBindTargetShaderResource) {
-    return InitResourceView();
-  } else {
-    return true;
+    if (!InitResourceView()) 
+      return false;
   }
+
+  if (options_.target & kBindTargetUnorderedAccess) {
+    return InitUnorderedAccessView();
+  }
+  return true;
 }
 
 void D3DTexture::SetPSSampler(int index, D3DRenderer* renderer) {
@@ -314,14 +314,15 @@ bool D3DTexture2D::InitFromImage(const Image* image) {
   return Init(&subres, 1);
 }
 
-void D3DTexture2D::InitUnorderedAccessView() {
+bool D3DTexture2D::InitUnorderedAccessView() {
   ID3D11Device* d3d_device = render_system_->GetDevice();
   D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
   desc.Format = tex_desc_.Format;
   desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
   desc.Texture2D.MipSlice = 0;
   HRESULT hr = d3d_device->CreateUnorderedAccessView(texres_, &desc, &uav_view_);
-  CHECK(hr == S_OK);
+  HRESULT_HANDLE(hr, ERROR, "CreateUnorderedAccessView failed ");
+  return true;
 }
 
 void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {

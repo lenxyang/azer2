@@ -43,7 +43,7 @@ class D3DTexture: public Texture {
  protected:
   virtual void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) = 0;
   virtual void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) = 0;
-  virtual void InitUnorderedAccessView() {};
+  virtual bool InitUnorderedAccessView() {return false;};
   bool InitResourceView();
 
   ID3D11Resource* texres_;
@@ -69,7 +69,7 @@ class D3DTexture2D : public D3DTexture {
  protected:
   void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
   void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
-  void InitUnorderedAccessView() override;
+  bool InitUnorderedAccessView() override;
   DISALLOW_COPY_AND_ASSIGN(D3DTexture2D);
 };
 
