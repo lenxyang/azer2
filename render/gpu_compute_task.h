@@ -43,17 +43,18 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
 
 typedef scoped_refptr<GpuComputeTask> GpuComputeTaskPtr;
 
+struct GpuTaskParams {
+  uint32 thread_group_x;
+  uint32 thread_group_y;
+  uint32 thread_group_z;
+};
+
 class AZER_EXPORT GpuComputeTaskDispatcher :
       public ::base::RefCounted<GpuComputeTaskDispatcher> {
  public:
   GpuComputeTaskDispatcher();
   virtual void Reset() = 0;
-  struct TaskParams {
-    uint32 thread_group_x;
-    uint32 thread_group_y;
-    uint32 thread_group_z;
-  };
-  virtual void Dispatch(GpuComputeTask* task, const TaskParams params) = 0;
+  virtual void Dispatch(GpuComputeTask* task, const GpuTaskParams params) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTaskDispatcher);
 };

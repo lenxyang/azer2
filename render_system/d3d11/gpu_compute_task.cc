@@ -19,7 +19,7 @@ void D3DGpuComputeTaskDispatcher::Reset() {
 }
 
 void D3DGpuComputeTaskDispatcher::Dispatch(GpuComputeTask* task,
-                                           const TaskParams params) {
+                                           const GpuTaskParams params) {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   ID3D11DeviceContext* context = rs->GetContext();
   context->Dispatch(params.thread_group_x, params.thread_group_y,

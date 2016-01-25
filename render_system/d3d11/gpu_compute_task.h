@@ -10,7 +10,7 @@ class D3DGpuComputeTaskDispatcher : public GpuComputeTaskDispatcher {
  public:
   D3DGpuComputeTaskDispatcher();
   void Reset() override;
-  void Dispatch(GpuComputeTask* task, const TaskParams params) override;
+  void Dispatch(GpuComputeTask* task, const GpuTaskParams params) override;
  private:
   DISALLOW_COPY_AND_ASSIGN(D3DGpuComputeTaskDispatcher);
 };
