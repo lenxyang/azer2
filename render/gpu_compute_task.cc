@@ -2,6 +2,10 @@
 
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/gpu_program.h"
+#include "azer/render/vertex_buffer.h"
 
-GpuComputeTask::GpuComputeTask() {}
-~GpuComputeTask::GpuComputeTask() {}
+namespace azer {
+GpuComputeTask::GpuComputeTask(const ShaderInfo& info)
+    : shader_info_(info) {}
+GpuComputeTask::~GpuComputeTask() {}
+}  // namespace azer

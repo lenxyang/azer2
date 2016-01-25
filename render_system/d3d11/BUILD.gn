@@ -14,6 +14,8 @@ shared_library("d3d11") {
     "depth_buffer.h",
     "enum_transform.cc",
     "enum_transform.h",
+    "gpu_compute_task.cc",
+    "gpu_compute_task.h",
     "gpu_constants_table.cc",
     "gpu_constants_table.h",
     "gpu_program.cc",

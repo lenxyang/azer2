@@ -7,12 +7,12 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/base/image.h"
-#include "azer/render/gpu_compute_task.h"
 #include "azer/render/render_system_enum.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
+#include "azer/render_system/d3d11/gpu_compute_task.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/gpu_program.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
@@ -189,10 +189,6 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   }
 }
 
-GpuComputeTaskPtr D3DRenderSystem::CreateGpuComputeTask(const ShaderInfo& info) {
-  return NULL;
-}
-
 OverlayPtr D3DRenderSystem::CreateOverlay() {
   scoped_refptr<D3DOverlay> surface_ptr(new D3DOverlay(this));
   if (surface_ptr->Init(this)) {
@@ -285,6 +281,14 @@ RendererPtr D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt)
   }
 }
 
+GpuComputeTaskPtr D3DRenderSystem::CreateGpuComputeTask(const ShaderInfo& info) {
+  scoped_refptr<D3DGpuComputeTask> task(new D3DGpuComputeTask(info));
+  if (task->Init()) {
+    return task;
+  } else {
+    return scoped_refptr<D3DGpuComputeTask>();
+  }
+}
 }  // namespace d3d11
 }  // namespace azer
 
