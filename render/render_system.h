@@ -82,8 +82,7 @@ class AZER_EXPORT RenderSystem {
   //
   virtual VertexGpuProgramPtr CreateVertexGpuProgram(
       VertexDescPtr desc, const ShaderInfo& info) = 0;
-  virtual GpuProgramPtr CreateGpuProgram(RenderPipelineStage stage,
-                                         const ShaderInfo& info) = 0;
+  virtual GpuProgramPtr CreateGpuProgram(const ShaderInfo& info) = 0;
   virtual GpuComputeTaskDispatcherPtr CreateDispatcher() = 0;
   virtual OverlayPtr CreateOverlay() = 0;
 

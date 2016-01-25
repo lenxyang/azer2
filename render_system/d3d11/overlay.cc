@@ -96,13 +96,15 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
 
   ShaderInfo vsinfo, psinfo;
   vsinfo.code = kVertexShaderProg;
+  vsinfo.stage = kVertexStage;
   psinfo.code = kPixelShaderProg;
+  psinfo.stage = kPixelStage;
   
   const char* overlay_vs = "azer_overlay_vs";
   const char* overlay_ps = "azer_overlay_ps";
   
   GpuProgramPtr vs(rs->CreateVertexGpuProgram(desc, vsinfo));
-  GpuProgramPtr ps(rs->CreateGpuProgram(kPixelStage, psinfo));
+  GpuProgramPtr ps(rs->CreateGpuProgram(psinfo));
   if (vs.get() && ps.get()) {
     technique_->AddGpuProgram(vs);
     technique_->AddGpuProgram(ps);

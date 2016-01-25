@@ -1,12 +1,13 @@
 #include "azer/render/gpu_program.h"
 
+#include "base/logging.h"
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
 ShaderInfo::ShaderInfo() : stage(kStageNotSpec) {}
   
-GpuProgram::GpuProgram(RenderPipelineStage stage, const ShaderInfo& info)
-    : stage_(stage)
+GpuProgram::GpuProgram(const ShaderInfo& info)
+    : stage_((RenderPipelineStage)info.stage)
     , info_(info) {
 }
 
@@ -14,8 +15,9 @@ GpuProgram::~GpuProgram() {
 }
 
 VertexGpuProgram::VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info)
-    : GpuProgram(kVertexStage, info)
+    : GpuProgram(info)
     , desc_ptr_(desc) {
+  DCHECK_EQ(kVertexStage, info.stage);
 }
 
 CharType* ShaderSuffix(ShaderType type) {

@@ -18,29 +18,29 @@ void D3DTechnique::Use(Renderer* renderer) {
   DCHECK_EQ(ps->stage(), kPixelStage);
 
   ID3D11DeviceContext* d3d_context = ((D3DRenderer*)renderer)->GetContext();
-  d3d_context->VSSetShader(vs->shader_, 0, 0);
-  d3d_context->PSSetShader(ps->shader_, 0, 0);
+  d3d_context->VSSetShader(vs->resource(), 0, 0);
+  d3d_context->PSSetShader(ps->resource(), 0, 0);
 
   if (gs) {
-    DCHECK(gs->shader_ != NULL);
+    DCHECK(gs->resource() != NULL);
     DCHECK_EQ(gs->stage(), kGeometryStage);
-    d3d_context->GSSetShader(gs->shader_, 0, 0);
+    d3d_context->GSSetShader(gs->resource(), 0, 0);
   } else {
     d3d_context->GSSetShader(NULL, 0, 0);
   }
 
   if (hs) {
-    DCHECK(hs->shader_ != NULL);
+    DCHECK(hs->resource() != NULL);
     DCHECK_EQ(hs->stage(), kHullStage);
-    d3d_context->HSSetShader(hs->shader_, 0, 0);
+    d3d_context->HSSetShader(hs->resource(), 0, 0);
   } else {
     d3d_context->HSSetShader(NULL, 0, 0);
   }
 
   if (ds) {
-    DCHECK(ds->shader_ != NULL);
+    DCHECK(ds->resource() != NULL);
     DCHECK_EQ(ds->stage(), kDomainStage);
-    d3d_context->DSSetShader(ds->shader_, 0, 0);
+    d3d_context->DSSetShader(ds->resource(), 0, 0);
   } else {
     d3d_context->DSSetShader(NULL, 0, 0);
   }

@@ -98,10 +98,9 @@ IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
   }
 }
 
-GpuProgramPtr D3DRenderSystem::CreateGpuProgram(
-    RenderPipelineStage stage, const ShaderInfo& info) {
+GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const ShaderInfo& info) {
   GpuProgramPtr gpu_program;
-  switch (stage) {
+  switch (info.stage) {
     case kPixelStage:
       gpu_program = (new D3DPixelGpuProgram(info));
       break;
@@ -117,8 +116,11 @@ GpuProgramPtr D3DRenderSystem::CreateGpuProgram(
     case kDomainStage:
       gpu_program = new D3DDomainGpuProgram(info);
       break;
+    case kComputeStage:
+      gpu_program = new D3DComputeGpuProgram(info);
+      break;
     default:
-      CHECK(false) << "No such GpuProgram Type: " << (int32)stage;
+      CHECK(false) << "No such GpuProgram Type: " << (int32)info.stage;
       return NULL;
   }
   if (gpu_program->Init(this)) {

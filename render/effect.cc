@@ -70,7 +70,7 @@ void Effect::InitShaders(const ShaderPrograms& sources) {
   for (uint32 i = (uint32)(kVertexStage + 1); i < sources.size(); ++i) {
     auto info = sources[i];
     if (!info.code.empty()) {
-      GpuProgramPtr gpup_ptr(rs->CreateGpuProgram((RenderPipelineStage)i, info));
+      GpuProgramPtr gpup_ptr(rs->CreateGpuProgram(info));
       CHECK(gpup_ptr.get() != NULL);
       technique_->AddGpuProgram(gpup_ptr);
     }

@@ -48,7 +48,7 @@ public:
   virtual VertexDescPtr GetInputDesc() { return NULL;}
   virtual VertexDescPtr GetOutputDesc() { return NULL;}
 protected:
-  GpuProgram(RenderPipelineStage stage, const ShaderInfo& info);
+  GpuProgram(const ShaderInfo& info);
 
   RenderPipelineStage stage_;
   ShaderInfo info_;
@@ -57,9 +57,9 @@ protected:
 };
 
 class AZER_EXPORT VertexGpuProgram : public GpuProgram {
-public:
+ public:
   virtual VertexDescPtr GetInputDesc() { return desc_ptr_;}
-protected:
+ protected:
   VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info);
 
   VertexDescPtr desc_ptr_;
