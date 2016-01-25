@@ -2,8 +2,9 @@
 
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/gpu_program.h"
-#include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/gpu_program.h"
+#include "azer/render_system/d3d11/render_system.h"
+#include "azer/render_system/d3d11/texture.h"
 
 namespace azer {
 namespace d3d11 {
@@ -27,10 +28,18 @@ void D3DGpuComputeTaskDispatcher::Dispatch(GpuComputeTask* task,
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   ID3D11DeviceContext* context = rs->GetContext();
   D3DComputeGpuProgram* program = (D3DComputeGpuProgram*)task->gpu_program();
+  for (int32 i = 0; i < task->input_count(); ++i) {
+    resview_[i] = ((D3DTexture*)task->GetInputAt(i))->GetResourceView();
+    DCHECK(resview_[i] != NULL);
+  }
+
+  for (int32 i = 0; i < task->output_count(); ++i) {
+    uavview_[i] = ((D3DTexture*)task->GetOutputAt(i))->GetUnorderedAccessView();
+    DCHECK(uavview_[i] != NULL);
+  }
   context->CSSetShader(program->resource(), 0, 0);
-  context->CSSetShaderResources(0, task->input_count(), task->GetInput());
-  context->CSSetUnorderedAccessViews(0, 1, task->output_count(), 
-                                     task->GetOutput(), 0);
+  context->CSSetShaderResources(0, task->input_count(), resview_);
+  context->CSSetUnorderedAccessViews(0, task->output_count(), uavview_, 0);
   context->Dispatch(params.thread_group_x, params.thread_group_y,
                     params.thread_group_z);
   Reset();

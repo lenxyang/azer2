@@ -14,7 +14,7 @@ class D3DGpuComputeTaskDispatcher : public GpuComputeTaskDispatcher {
  private:
   //
   ID3D11ShaderResourceView* resview_[GpuComputeTask::kMaxInput];
-  ID3D11ShaderResourceView* uavview_[GpuComputeTask::kMaxOutput];
+  ID3D11UnorderedAccessView* uavview_[GpuComputeTask::kMaxOutput];
   DISALLOW_COPY_AND_ASSIGN(D3DGpuComputeTaskDispatcher);
 };
 }  // namespace d3d11

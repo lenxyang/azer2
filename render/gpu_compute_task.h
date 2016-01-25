@@ -26,8 +26,8 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   void SetOutputTexture(int32 index, Texture* tex);
   void Reset();
 
-  Texture** GetInput() { return input_;}
-  Texture** GetOutput() { return output_;}
+  Texture* GetInputAt(int32 index);
+  Texture* GetOutputAt(int32 index);
   GpuProgram* gpu_program() { return gpu_program_;}
   GpuConstantsTable* constants_table() { return constants_table_;}
 

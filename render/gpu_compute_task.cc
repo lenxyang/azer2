@@ -32,5 +32,13 @@ void GpuComputeTask::SetOutputTexture(int32 index, Texture* tex) {
   output_[index] = tex;
 }
 
+Texture* GpuComputeTask::GetInputAt(int32 index) {
+  return input_[index];
+}
+
+Texture* GpuComputeTask::GetOutputAt(int32 index) {
+  return output_[index];
+}
+
 GpuComputeTaskDispatcher::GpuComputeTaskDispatcher() {}
 }  // namespace azer
