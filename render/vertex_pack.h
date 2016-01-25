@@ -4,7 +4,7 @@
 
 #include "base/basictypes.h"
 #include "azer/math/math.h"
-#include "azer/render/render_system_enum.h"
+#include "azer/render/common.h"
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {

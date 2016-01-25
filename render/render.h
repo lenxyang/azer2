@@ -10,7 +10,7 @@
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/rasterizer_state.h"
-#include "azer/render/render_system_enum.h"
+#include "azer/render/common.h"
 #include "azer/render/render_target.h"
 #include "azer/render/render_system.h"
 #include "azer/render/renderer.h"

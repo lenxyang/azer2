@@ -26,9 +26,11 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   void SetOutputTexture(int32 index, Texture* tex);
   void Reset();
 
-  Texture* GetInput() { return input_;}
-  Texture* GetOutput() { return output_;}
+  Texture** GetInput() { return input_;}
+  Texture** GetOutput() { return output_;}
  protected:
+  static const int32 kMaxInputTexture = 1024;
+  static const int32 kMaxOutputTexture = 1024;
   scoped_refptr<GpuProgram> gpu_program_;
   scoped_refptr<GpuConstantsTable> constants_table_;
   Texture* input_[kMaxInputTexture];
@@ -36,8 +38,6 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   int32 input_count_;
   int32 output_count_;
   ShaderInfo shader_info_;
-  const int32 kMaxInputTexture = 1024;
-  const int32 kMaxOutputTexture = 1024;
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTask);
 };
 
@@ -53,7 +53,7 @@ class AZER_EXPORT GpuComputeTaskDispatcher :
     uint32 thread_group_y;
     uint32 thread_group_z;
   };
-  virtual void Dispatch(GpuComputeTask* task, TaskParams params) = 0;
+  virtual void Dispatch(GpuComputeTask* task, const TaskParams params) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTaskDispatcher);
 };

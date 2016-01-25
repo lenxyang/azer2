@@ -4,7 +4,7 @@
 
 #include "azer/math/math.h"
 #include "azer/base/export.h"
-#include "azer/render/render_system_enum.h"
+#include "azer/render/common.h"
 #include "base/logging.h"
 
 namespace azer {

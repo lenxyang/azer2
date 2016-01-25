@@ -8,7 +8,7 @@
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
 #include "azer/base/string.h"
-#include "azer/render/render_system_enum.h"
+#include "azer/render/common.h"
 
 namespace azer {
 

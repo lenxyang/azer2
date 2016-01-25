@@ -9,7 +9,7 @@
 namespace azer {
 GpuComputeTask::GpuComputeTask(const ShaderInfo& info)
     : shader_info_(info) {
-  gpu_program_ = RenderSystem::Current()->CreateGpuProgram(info);
+  gpu_program_ = RenderSystem::Current()->CreateGpuProgram(kComputeStage, info);
   Reset();
 }
 
@@ -27,7 +27,7 @@ void GpuComputeTask::SetInputTexture(int32 index, Texture* tex) {
   input_[index] = tex;
 }
 void GpuComputeTask::SetOutputTexture(int32 index, Texture* tex) {
-  DCHECK_LT(output, output_count_);
+  DCHECK_LT(index, output_count_);
   output_[index] = tex;
 }
 

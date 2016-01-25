@@ -6,11 +6,11 @@
 namespace azer {
 namespace d3d11 {
 
-class D3DGpuComputeTaskDispatcher : public GpuComputeTaskDispatcher
+class D3DGpuComputeTaskDispatcher : public GpuComputeTaskDispatcher {
  public:
   D3DGpuComputeTaskDispatcher();
   void Reset() override;
-  void Dispatch(GpuComputeTask* task, TaskParams params) override;
+  void Dispatch(GpuComputeTask* task, const TaskParams params) override;
  private:
   DISALLOW_COPY_AND_ASSIGN(D3DGpuComputeTaskDispatcher);
 };

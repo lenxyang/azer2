@@ -1,4 +1,4 @@
-#include "azer/render/render_system_enum.h" 
+#include "azer/render/common.h" 
 
 #include "base/logging.h"
 #include "base/basictypes.h"

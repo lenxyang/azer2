@@ -3,7 +3,7 @@
 #include "base/logging.h"
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/render_system.h"
-#include "azer/render/render_system_enum.h"
+#include "azer/render/common.h"
 #include "azer/render/renderer.h"
 #include "azer/render/technique.h"
 

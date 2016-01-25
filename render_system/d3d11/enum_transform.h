@@ -8,7 +8,7 @@
 #include "azer/render/indices_buffer.h"
 #include "azer/render/blending.h"
 #include "azer/render/depth_buffer.h"
-#include "azer/render/render_system_enum.h"
+#include "azer/render/common.h"
 #include "azer/render/render_target.h"
 #include "azer/render/vertex_buffer.h"
 

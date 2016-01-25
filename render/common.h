@@ -110,6 +110,7 @@ enum RenderPipelineStage {
   kHullStage,
   kTessellatorStage,
   kDomainStage,
+  kComputeStage,
   kGeometryStage,
   kRasterizerStage,
   kPixelStage,
