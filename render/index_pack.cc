@@ -4,7 +4,7 @@
 #include "base/logging.h"
 
 namespace azer {
-IndexPack::IndexPack(uint8* data, int32 data_size, IndicesData::IndexType type)
+IndexPack::IndexPack(uint8* data, int32 data_size, IndexType type)
     : data_(data),
       current_(data_),
       data_size_(data_size),
@@ -20,13 +20,13 @@ IndexPack::IndexPack(IndicesData* data)
 
 bool IndexPack::advance() const {
   switch (type()) {
-    case IndicesData::kUint16:
+    case kIndexUint16:
       current_ += sizeof(uint16);
       break;
-    case IndicesData::kUint32:
+    case kIndexUint32:
       current_ += sizeof(uint32);
       break;
-    case IndicesData::kUint8:
+    case kIndexUint8:
       current_++;
       break;
     default:
@@ -38,14 +38,14 @@ bool IndexPack::advance() const {
 
 void IndexPack::write(int32 value) {
   switch (type()) {
-    case IndicesData::kUint16:
+    case kIndexUint16:
       DCHECK(value < std::numeric_limits<uint16>::max());
       *(uint16*)(current_) = value;
       break;
-    case IndicesData::kUint32:
+    case kIndexUint32:
       *(uint32*)(current_) = value;
       break;
-    case IndicesData::kUint8:
+    case kIndexUint8:
       DCHECK(value < std::numeric_limits<uint8>::max());
       *(uint8*)(current_) = value;
       break;
@@ -58,13 +58,13 @@ uint32 IndexPack::value() const {
   CHECK(current_ < data_ + data_size_);
   uint32 value;
   switch (type()) {
-    case IndicesData::kUint16:
+    case kIndexUint16:
       value = *(uint16*)(current_);
       break;
-    case IndicesData::kUint32:
+    case kIndexUint32:
       value = *(uint32*)(current_);
       break;
-    case IndicesData::kUint8:
+    case kIndexUint8:
       value = *(uint8*)(current_);
       break;
     default:
@@ -103,11 +103,11 @@ bool IndexPack::ReadAndAdvance(uint32* value) const {
 
 int32 IndexPack::count() const {
   switch (type()) {
-    case IndicesData::kUint16:
+    case kIndexUint16:
       return data_size_ / sizeof(uint16);
-    case IndicesData::kUint32:
+    case kIndexUint32:
       return data_size_ / sizeof(uint32);
-    case IndicesData::kUint8:
+    case kIndexUint8:
       return data_size_ / sizeof(uint8);
     default:
       NOTREACHED();

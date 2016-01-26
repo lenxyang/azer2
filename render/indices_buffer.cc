@@ -6,18 +6,18 @@
 
 namespace azer {
 
-IndicesData::IndexType IndicesData::CalcFixType(int num) {
+IndexType IndicesData::CalcFixType(int num) {
   // directX donnot support kUint8
   /*if (num < std::numeric_limits<uint8>::max()) {
     return kUint8;
     } else */
   if (num < std::numeric_limits<uint16>::max()) {
-    return kUint16;
+    return kIndexUint16;
   } else if (num < std::numeric_limits<uint32>::max()) {
-    return kUint32;
+    return kIndexUint32;
   } else {
     NOTIMPLEMENTED();
-    return kUint32;
+    return kIndexUint32;
   }
 }
 
@@ -39,20 +39,20 @@ IndicesData::IndicesData(int num, IndexType type)
 
 int32 IndicesData::unit_size() const {
   switch (type()) {
-    case kUint8: return (int32)sizeof(uint8);
-    case kUint16: return (int32)sizeof(uint16);
-    case kUint32: return (int32)sizeof(uint32);
+    case kIndexUint8: return (int32)sizeof(uint8);
+    case kIndexUint16: return (int32)sizeof(uint16);
+    case kIndexUint32: return (int32)sizeof(uint32);
     default: CHECK(false); return 0;
   }
 }
 
 int32 IndicesData::index_value(int idx) const {
   switch (type()) {
-    case kUint8: 
+    case kIndexUint8: 
       return *(uint8*)(data_.get() + idx);
-    case kUint16: 
+    case kIndexUint16: 
       return *(int16*)(data_.get() + idx * sizeof(int16));
-    case kUint32: 
+    case kIndexUint32: 
       return *(int32*)(data_.get() + idx * sizeof(uint32));
     default: CHECK(false); return 0;
   }
@@ -71,7 +71,7 @@ uint8* IndicesData::pointer() {
 IndicesBuffer::IndicesBuffer(const Options& opt)
     : options_(opt)
     , indices_num_(-1)
-    , type_(IndicesData::kUndefined) {
+    , type_(kIndexUndefined) {
 }
 
 IndicesBuffer::~IndicesBuffer() {

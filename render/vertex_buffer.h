@@ -163,10 +163,11 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
 
-  int32 vertex_count() const { return vertex_count_;}
-  int32 buffer_size() const { return vertex_count_;}
-  int32 element_size() const { return element_size_;}
-  VertexLayout* vertex_layout() { return layout_.get();}
+  int32 vertex_count() const;
+  int32 buffer_size() const;
+  int32 element_size() const;
+  VertexDesc* vertex_desc();
+  VertexLayout* vertex_layout();
  protected:
   const Options options_;
   VertexLayoutPtr layout_;

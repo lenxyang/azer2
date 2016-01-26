@@ -23,7 +23,7 @@ DataFormat TranslateD3DFormat(DXGI_FORMAT type);
 
 D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(PrimitiveTopology topology);
 
-DXGI_FORMAT TranslateIndexType(IndicesData::IndexType type);
+DXGI_FORMAT TranslateIndexType(IndexType type);
 
 D3D11_BIND_FLAG TranslateBindTarget(uint32 target);
 

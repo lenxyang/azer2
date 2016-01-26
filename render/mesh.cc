@@ -11,33 +11,43 @@ namespace azer {
 
 // class Entity
 Entity::Entity(VertexDesc* desc)
-    : topology_(kTriangleList) {
+    : primitive_(kTriangleList),
+      vertex_base_(0),
+      start_index_(0) {
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(desc);
 }
 
-Entity::Entity(VertexDesc* desc, VertexBuffer* vb)
-    : topology_(kTriangleList) {
+Entity::Entity(VertexBuffer* vb)
+    : primitive_(kTriangleList),
+      vertex_base_(0),
+      start_index_(0) {
   RenderSystem* rs = RenderSystem::Current();
-  vbg_ = rs->CreateVertexBufferGroup(desc);
+  vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
   SetVertexBuffer(vb, 0);
 }
 
 Entity::Entity(VertexBufferGroup* vbg)
-    : topology_(kTriangleList) {
+    : primitive_(kTriangleList),
+      vertex_base_(0),
+      start_index_(0) {
   vbg_ = vbg;
 }
 
-Entity::Entity(VertexDesc* desc, VertexBuffer* vb, IndicesBuffer* ib)
-    : topology_(kTriangleList) {
+Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
+    : primitive_(kTriangleList),
+      vertex_base_(0),
+      start_index_(0) {
   RenderSystem* rs = RenderSystem::Current();
-  vbg_ = rs->CreateVertexBufferGroup(desc);
+  vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
   SetVertexBuffer(vb, 0);
   ib_ = ib;
 }
 
 Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib)
-    : topology_(kTriangleList) {
+    : primitive_(kTriangleList),
+      vertex_base_(0),
+      start_index_(0) {
   vbg_ = vbg;
   ib_ = ib;
 }
@@ -49,7 +59,7 @@ VertexBuffer* Entity::vertex_buffer_at(int32 index) {
 /*
 Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
     : ib_(ib),
-      topology_(kTriangleList) {
+      primitive_(kTriangleList) {
   vbg_ = new VertexBufferGroup;
   SetVertexBuffer(vb, 0);
   vbg_->add_vertex_buffer(vb.get());
@@ -84,16 +94,16 @@ void Entity::Draw(Renderer* renderer) {
   DCHECK(vbg_.get() && vbg_->validate());
   renderer->UseVertexBufferGroup(vbg_.get());
   renderer->UseIndicesBuffer(NULL);
-  renderer->SetPrimitiveTopology(topology());
-  renderer->Draw(vbg_->vertex_count(), 0);
+  renderer->SetPrimitiveTopology(primitive_type());
+  renderer->Draw(vbg_->vertex_count(), vertex_base_);
 }
 
 void Entity::DrawIndex(Renderer* renderer) {
   DCHECK(vbg_.get() && vbg_->validate());
   renderer->UseVertexBufferGroup(vbg_.get());
   renderer->UseIndicesBuffer(ib_.get());
-  renderer->SetPrimitiveTopology(topology());
-  renderer->DrawIndex(ib_->indices_num(), 0, 0);
+  renderer->SetPrimitiveTopology(primitive_type());
+  renderer->DrawIndex(ib_->indices_num(), vertex_base_, start_index_);
 }
 
 // class EntityVec

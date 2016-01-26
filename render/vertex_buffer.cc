@@ -257,8 +257,13 @@ VertexBuffer::VertexBuffer(const Options &opt)
     , vertex_count_(-1) {
 }
 
-VertexBuffer::~VertexBuffer() {
-}
+VertexBuffer::~VertexBuffer() {}
+
+int32 VertexBuffer::vertex_count() const { return vertex_count_;}
+int32 VertexBuffer::buffer_size() const { return vertex_count_;}
+int32 VertexBuffer::element_size() const { return element_size_;}
+VertexDesc* VertexBuffer::vertex_desc() { return layout_->desc();}
+VertexLayout* VertexBuffer::vertex_layout() { return layout_.get();}
 
 int32 VertexTypeSize(DataFormat type) {
   switch (type) {

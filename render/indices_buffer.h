@@ -9,15 +9,14 @@
 #include "azer/render/hardware_buffer.h"
 
 namespace azer {
+enum IndexType {
+  kIndexUndefined = 0,
+  kIndexUint8,
+  kIndexUint16,
+  kIndexUint32,
+};
 class AZER_EXPORT IndicesData : public Resource {
  public:
-  enum IndexType {
-    kUndefined = 0,
-    kUint8,
-    kUint16,
-    kUint32,
-  };
-
   static IndexType CalcFixType(int num);
 
   explicit IndicesData(int num);
@@ -64,14 +63,14 @@ public:
 
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
-  IndicesData::IndexType type() const { return type_;}
+  IndexType type() const { return type_;}
 
   const Options& options() const { return options_;}
   int32 indices_num() const { return indices_num_;}
  protected:
   const Options options_;
   int32 indices_num_;
-  IndicesData::IndexType type_;
+  IndexType type_;
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);
 };
 

@@ -122,11 +122,11 @@ D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(
   }
 }
 
-DXGI_FORMAT TranslateIndexType(IndicesData::IndexType type) {
+DXGI_FORMAT TranslateIndexType(IndexType type) {
   switch(type) {
-    case IndicesData::kUint8: return DXGI_FORMAT_R8_UINT;
-    case IndicesData::kUint16: return DXGI_FORMAT_R16_UINT;
-    case IndicesData::kUint32: return DXGI_FORMAT_R32_UINT;
+    case kIndexUint8: return DXGI_FORMAT_R8_UINT;
+    case kIndexUint16: return DXGI_FORMAT_R16_UINT;
+    case kIndexUint32: return DXGI_FORMAT_R32_UINT;
     default:
       DCHECK(false) << "Unsupport IndexType: " << (int32)type;
       return DXGI_FORMAT_UNKNOWN;

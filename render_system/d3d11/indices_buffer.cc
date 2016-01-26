@@ -25,7 +25,7 @@ D3DIndicesBuffer::~D3DIndicesBuffer() {
 bool D3DIndicesBuffer::Init(const IndicesData* data) {
   DCHECK(NULL == buffer_);
   DCHECK(data != NULL);
-  DCHECK(indices_num_ == -1 && type_ == IndicesData::kUndefined);
+  DCHECK(indices_num_ == -1 && type_ == kIndexUndefined);
 
   ID3D11Device* d3d_device = render_system_->GetDevice();
 

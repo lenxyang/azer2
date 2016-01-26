@@ -30,8 +30,8 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
  public:
   explicit Entity(VertexDesc* desc);
   explicit Entity(VertexBufferGroup* vb);
-  Entity(VertexDesc* desc, VertexBuffer* vb);
-  Entity(VertexDesc* desc, VertexBuffer* vb, IndicesBuffer* ib);
+  Entity(VertexBuffer* vb);
+  Entity(VertexBuffer* vb, IndicesBuffer* ib);
   Entity(VertexBufferGroup* vb, IndicesBuffer* ib);
   ~Entity();
   
@@ -51,13 +51,19 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   const Vector3& vmax() { return vmax_;}
   void set_vmin(const Vector3& v) { vmin_ = v;}
   void set_vmax(const Vector3& v) { vmax_ = v;}
+  void set_vertex_base(int32 v) { vertex_base_ = v;}
+  void set_start_index(int32 v) { start_index_ = v;}
+  int32 vertex_base() const { return vertex_base_;}
+  int32 start_index() const { return start_index_;}
 
-  PrimitiveTopology topology() const { return topology_;}
-  void set_topology(PrimitiveTopology top) { topology_ = top;}
+  PrimitiveTopology primitive_type() const { return primitive_;}
+  void set_primitive(PrimitiveTopology top) { primitive_ = top;}
  private:
   VertexBufferGroupPtr vbg_;
   IndicesBufferPtr ib_;
-  PrimitiveTopology topology_;
+  PrimitiveTopology primitive_;
+  int32 vertex_base_;
+  int32 start_index_;
   Vector3 vmin_;
   Vector3 vmax_;
   DISALLOW_COPY_AND_ASSIGN(Entity);

@@ -298,12 +298,12 @@ EntityPtr CreateSphereEntity(VertexDesc* desc,const GeoSphereParams& params,
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kTriangleList);
+  entity->set_primitive(kTriangleList);
   return entity;
 }
 
@@ -321,10 +321,10 @@ EntityPtr CreateSphereFrameEntity(VertexDesc* desc, const GeoSphereParams& param
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), iedata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
-  entity->set_topology(kLineList);
+  entity->set_primitive(kLineList);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   return entity;
@@ -463,12 +463,12 @@ EntityPtr CreateBoxEntity(VertexDesc* desc, const Matrix4& mat) {
   RenderSystem* rs = RenderSystem::Current();
   SlotVertexDataPtr vdata = CreateBoxVertexData(desc);;
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
-  EntityPtr entity(new Entity(desc, vb));
+  EntityPtr entity(new Entity(vb));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kTriangleList);
+  entity->set_primitive(kTriangleList);
   return entity;
 }
 
@@ -478,12 +478,12 @@ EntityPtr CreateBoxFrameEntity(VertexDesc* desc, const Matrix4& mat) {
   IndicesDataPtr idata = CreateBoxFrameIndicesData();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kLineList);
+  entity->set_primitive(kLineList);
   return entity;
 }
 
@@ -577,14 +577,14 @@ EntityPtr CreatePlaneEntity(VertexDesc* desc, const GeoPlaneParams& params,
   IndicesDataPtr idata = CreatePlaneIndicesData(params);
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   Vector4 vmin = mat * Vector4(-params.column_width * params.column * 0.5f,  0.00f, 
                                -params.row_width * params.row * 0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( params.column_width * params.column * 0.5f,  0.01f,  
                                 params.row_width * params.row * 0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kTriangleList);
+  entity->set_primitive(kTriangleList);
   return entity;
 }
 
@@ -595,14 +595,14 @@ EntityPtr CreatePlaneFrameEntity(VertexDesc* desc, const GeoPlaneParams& params,
   IndicesDataPtr idata = CreatePlaneFrameIndicesData(params);
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   Vector4 vmin = mat * Vector4(-params.column_width * 0.5f,  0.00f, 
                                -params.row_width * 0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( params.column_width * 0.5f,  0.01f,  
                                 params.row_width * 0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kLineList);
+  entity->set_primitive(kLineList);
   return entity;
 }
 
@@ -677,12 +677,12 @@ SlotVertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   Vector4 vmin = mat * Vector4(-radius, -0.00f, -radius, 1.0f);
   Vector4 vmax = mat * Vector4( radius,  0.01f,  radius, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kTriangleList);
+  entity->set_primitive(kTriangleList);
   return entity;
 }
 
@@ -693,12 +693,12 @@ SlotVertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   Vector4 vmin = mat * Vector4(-radius, -0.00f, -radius, 1.0f);
   Vector4 vmax = mat * Vector4( radius,  0.01f,  radius, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kLineList);
+  entity->set_primitive(kLineList);
   return entity;
 }
 MeshPartPtr CreateRoundMeshPart(Effect* e, float radius, int slice, 
@@ -740,13 +740,13 @@ EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params,
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   Vector4 vmin = mat * Vector4(-params.radius, 0.0f, -params.radius, 1.0f);
   Vector4 vmax = mat * Vector4( params.radius, params.height,  
                                 params.radius, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kTriangleList);
+  entity->set_primitive(kTriangleList);
   return entity;
 }
 MeshPartPtr CreateTaperMeshPart(Effect* e, const GeoConeParams& params,
@@ -836,13 +836,13 @@ const int kVertexNum = CalcCylinderVertexNum(params.stack, params.slice);
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
   IndicesBufferPtr ib = rs->CreateIndicesBuffer(IndicesBuffer::Options(), idata);
-  EntityPtr entity(new Entity(desc, vb, ib));
+  EntityPtr entity(new Entity(vb, ib));
   float rad = std::max(params.top_radius, params.bottom_radius);
   Vector4 vmin = mat * Vector4(-rad,  0.0f,          -rad, 1.0f);
   Vector4 vmax = mat * Vector4( rad,  params.height,  rad, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->set_topology(kTriangleList);
+  entity->set_primitive(kTriangleList);
   return entity;
 }
 
@@ -924,7 +924,7 @@ MeshPartPtr CreateLineAxisMeshPart(Effect* e, const GeoAxisParams& params,
       points, (int)arraysize(points), e->vertex_desc(), matrix);
   entity->set_vmin(points[0]);
   entity->set_vmax(points[1] + Vector3(0.0f, 0.0f, 0.01f));
-  entity->set_topology(kLineList);
+  entity->set_primitive(kLineList);
   part->AddEntity(entity);
   return part;
 }
@@ -945,7 +945,7 @@ EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
 
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferPtr vb = rs->CreateVertexBuffer(VertexBuffer::Options(), vdata);
-  EntityPtr entity(new Entity(desc, vb));
+  EntityPtr entity(new Entity(vb));
   entity->set_vmin(vmin);
   entity->set_vmax(vmax);
   return entity;
