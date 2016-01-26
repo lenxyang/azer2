@@ -1,7 +1,8 @@
 #include "azer/render/vertex_buffer.h"
 
-#include "base/logging.h"
+#include <sstream>
 
+#include "base/logging.h"
 #include "azer/math/math.h"
 #include "azer/render/render_system.h"
 
@@ -326,4 +327,17 @@ void VertexBufferGroup::remove_vertex_buffer_at(int32 index) {
   vector_.erase(vector_.begin() + index);
   OnVertexBufferChanged();
 }
+
+std::string DumpVertexDesc(const VertexDesc* desc) {
+  std::stringstream ss;
+  for (uint32 i = 0; i < desc->element_count(); ++i) {
+    const VertexDesc::Desc* d = desc->descs() + i;
+    ss << d->name << d->semantic_index
+       << " type: " << GetDataFormatName(d->type)
+       <<" slot: " << d->input_slot;
+    ss << std::endl;
+  }
+  return ss.str();
+}
+
 }  // namespace azer

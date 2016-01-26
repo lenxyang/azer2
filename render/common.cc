@@ -20,6 +20,41 @@ const char* RenderStageName(RenderPipelineStage stage) {
   }
 }
 
+const char* GetDataFormatName(DataFormat format) {
+  switch (format) {
+    case kFloat: return "float";
+    case kVec2: return "vec2";
+    case kVec3: return "vec3";
+    case kVec4: return "vec4";
+    case kMat2: return "mat2";
+    case kMat3: return "mat3";
+    case kMat4: return "mat4";
+    case kInt: return "int";
+    case kIntVec2: return "intvec2";
+    case kIntVec3: return "intvec3";
+    case kIntVec4: return "intvec4";
+    case kUint: return "uint";
+    case kUintVec2: return "uintvec2";
+    case kUintVec3: return "uintvec3";
+    case kUintVec4: return "uintvec4";
+    case kBool: return "bool";
+    case kBoolVec2: return "boolvec2";
+    case kBoolVec3: return "boolvec3";
+    case kBoolVec4: return "boolvec4";
+    case kRGBA8: return "rgba(8)";
+    case kRGBAn8: return "rgba(n8)";
+    case kRGBA32: return "rgba(32)";
+    case kRGBAn32:return "rgba(n32)";
+    case kRGBAf: return "rgba(f)";
+    case kDepth24Stencil8: return "depth24stencil8";
+      // case kRGBA: return sizeof(float) * 4;
+    default:
+      NOTREACHED();
+      return "";
+  }
+}
+
+
 uint32 SizeofDataFormat(DataFormat format) {
   switch (format) {
     case kFloat: return sizeof(float);

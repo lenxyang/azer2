@@ -202,5 +202,6 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
   DISALLOW_COPY_AND_ASSIGN(VertexBufferGroup);
 };
 
-int32 AZER_EXPORT VertexTypeSize(DataFormat type);
+AZER_EXPORT int32 VertexTypeSize(DataFormat type);
+AZER_EXPORT std::string DumpVertexDesc(const VertexDesc* desc);
 }  // namespace azer
