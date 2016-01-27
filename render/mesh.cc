@@ -77,6 +77,10 @@ void Entity::SetIndicesBuffer(IndicesBuffer* ib) {
   ib_ = ib;
 }
 
+const VertexDesc* Entity::vertex_desc() const {
+  return vbg_->vertex_desc();
+}
+
 EntityPtr Entity::DeepCopy() {
   NOTIMPLEMENTED();
   return EntityPtr();

@@ -25,7 +25,7 @@ void CoordinateGrid::Init() {
   vec.resize(kRenderPipelineStageNum);
   CoordinateGridEffect* effect = new CoordinateGridEffect();
   effect_ptr_ = effect;
-  data_ = new SlotVertexData(effect->GetVertexDesc(), (kNum + 1) * 4);
+  data_ = new SlotVertexData(effect->vertex_desc(), (kNum + 1) * 4);
   CoordinateGridEffect::Vertex* vertex =
       (CoordinateGridEffect::Vertex*)data_->pointer();
   float total_width = kWidth * kNum;

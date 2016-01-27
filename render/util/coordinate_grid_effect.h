@@ -34,13 +34,11 @@ class CoordinateGridEffect : public Effect {
 
   void SetPVW(const Matrix4& value);
   void SetGridDiffuse(const Vector4& value);
-
-  VertexDescPtr GetVertexDesc() { return technique_->GetVertexDesc();}
   static const int kVertexDescNum;
   static const VertexDesc::Desc kVertexDesc[];
  protected:
   void InitEffect();
-  bool Init(VertexDesc* desc, const ShaderPrograms& prog) override { return true;}
+  bool Init(VertexDesc* desc, const ShaderPrograms& prog) override {return true;}
   void ApplyGpuConstantTable(Renderer* renderer) override;
 
   vs_cbuffer vs_data_;

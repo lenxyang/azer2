@@ -138,8 +138,8 @@ class AZER_EXPORT VertexLayout : public ::base::RefCounted<VertexLayout> {
   virtual ~VertexLayout() {}
   // just for cannot be init
   virtual bool Init(RenderSystem* rs) = 0;
-  VertexDesc* desc() { return desc_.get();}
-  const VertexDesc* desc() const { return desc_.get();}
+  VertexDesc* vertex_desc() { return desc_.get();}
+  const VertexDesc* vertex_desc() const { return desc_.get();}
  protected:
   VertexDescPtr desc_;
   DISALLOW_COPY_AND_ASSIGN(VertexLayout);
@@ -167,6 +167,7 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   int32 buffer_size() const;
   int32 element_size() const;
   VertexDesc* vertex_desc();
+  const VertexDesc* vertex_desc() const;
   VertexLayout* vertex_layout();
  protected:
   const Options options_;
@@ -189,9 +190,12 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
   void add_vertex_buffer(VertexBuffer* vb);
   void add_vertex_buffer_at(VertexBuffer* vb, int32 index);
   void remove_vertex_buffer_at(int32 index);
+  std::vector<VertexBufferPtr>* get_vb_vector();
 
-  VertexLayout* vertex_layout() { return layout_.get();}
-  std::vector<VertexBufferPtr>* get_vb_vector() { return &vector_;}
+  VertexDesc* vertex_desc();
+  const VertexDesc* vertex_desc() const;
+  VertexLayout* vertex_layout();
+  const VertexLayout* vertex_layout() const;
  protected:
   virtual void OnVertexBufferChanged() = 0;
   VertexLayoutPtr layout_;

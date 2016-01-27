@@ -263,7 +263,8 @@ VertexBuffer::~VertexBuffer() {}
 int32 VertexBuffer::vertex_count() const { return vertex_count_;}
 int32 VertexBuffer::buffer_size() const { return vertex_count_;}
 int32 VertexBuffer::element_size() const { return element_size_;}
-VertexDesc* VertexBuffer::vertex_desc() { return layout_->desc();}
+const VertexDesc* VertexBuffer::vertex_desc() const { return layout_->vertex_desc();}
+VertexDesc* VertexBuffer::vertex_desc() { return layout_->vertex_desc();}
 VertexLayout* VertexBuffer::vertex_layout() { return layout_.get();}
 
 int32 VertexTypeSize(DataFormat type) {
@@ -326,6 +327,26 @@ void VertexBufferGroup::add_vertex_buffer_at(VertexBuffer* vb, int32 index) {
 void VertexBufferGroup::remove_vertex_buffer_at(int32 index) {
   vector_.erase(vector_.begin() + index);
   OnVertexBufferChanged();
+}
+
+const VertexDesc* VertexBufferGroup::vertex_desc() const {
+  return vertex_layout()->vertex_desc();
+}
+
+VertexDesc* VertexBufferGroup::vertex_desc() {
+  return vertex_layout()->vertex_desc();
+}
+
+const VertexLayout* VertexBufferGroup::vertex_layout() const { 
+  return layout_.get(); 
+}
+
+VertexLayout* VertexBufferGroup::vertex_layout() { 
+  return layout_.get(); 
+}
+
+std::vector<VertexBufferPtr>* VertexBufferGroup::get_vb_vector() { 
+  return &vector_; 
 }
 
 std::string DumpVertexDesc(const VertexDesc* desc) {
