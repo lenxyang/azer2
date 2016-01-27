@@ -29,7 +29,6 @@ class Image;
 class Overlay;
 class RenderTarget;
 class Technique;
-class SlotVertexBuffer;
 class RasterizerState;
 
 typedef scoped_refptr<Blending> BlendingPtr;
@@ -41,7 +40,6 @@ typedef scoped_refptr<RenderTarget> RenderTargetPtr;
 typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
 typedef scoped_refptr<SwapChain> SwapChainPtr;
 typedef scoped_refptr<Technique> TechniquePtr;
-typedef scoped_refptr<SlotVertexBuffer> SlotVertexBufferPtr;
 
 class AZER_EXPORT RenderSystem {
  public:

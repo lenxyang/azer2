@@ -1,10 +1,12 @@
 #pragma once
 
+#include "azer/base/file_system.h"
 #include "azer/render/axis_aligned_box.h"
 #include "azer/render/blending.h"
 #include "azer/render/camera.h"
 #include "azer/render/common.h"
 #include "azer/render/effect.h"
+#include "azer/render/effect_creator.h"
 #include "azer/render/effect_params_adapter.h"
 #include "azer/render/effect_params_provider.h"
 #include "azer/render/mesh.h"
