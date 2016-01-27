@@ -87,7 +87,7 @@ SlotVertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
 
   int num = 0;
   CHECK(vpack.first());
-  vpack.WriteVector4(matrix * Vector4(0.0f, radius, 0.0f, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector3Or4(matrix * Vector4(0.0f, radius, 0.0f, 1.0f), VertexPos(0, 0));
   if (hastex) {
     vpack.WriteVector2(Vector2(0.0f, 0.0f), texpos);
   }
@@ -109,13 +109,13 @@ SlotVertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
 
       CHECK(vpack.next(1));
       Vector4 pos = std::move(matrix * Vector4(x, y, z, 1.0f));
-      vpack.WriteVector4(pos, VertexPos(0, 0));
+      vpack.WriteVector3Or4(pos, VertexPos(0, 0));
       num++;
     }
   }
 
   CHECK(vpack.next(1));
-  vpack.WriteVector4(matrix * Vector4(0.0f, -radius, 0.0f, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector3Or4(matrix * Vector4(0.0f, -radius, 0.0f, 1.0f), VertexPos(0, 0));
   if (hastex) {
     vpack.WriteVector2(Vector2(1.0f, 1.0f), texpos);
   }
@@ -189,7 +189,7 @@ void CalcIndexedTriangleNormal(SlotVertexData* vbd, IndicesData* idata) {
   vpack.first();
   for (int i = 0; i < vbd->vertex_count(); ++i) {
     DCHECK(!vpack.end());
-    vpack.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), npos);
+    vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), npos);
     vpack.next(1);
     used[i] = 0.0f;
     normals[i] = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -201,13 +201,13 @@ void CalcIndexedTriangleNormal(SlotVertexData* vbd, IndicesData* idata) {
     uint32 idx1 = ipack.ReadAndAdvanceOrDie();
     uint32 idx2 = ipack.ReadAndAdvanceOrDie();
     uint32 idx3 = ipack.ReadAndAdvanceOrDie();
-    Vector4 p1, p2, p3;
+    Vector3 p1, p2, p3;
     CHECK(vpack.move(idx1));
-    vpack.ReadVector4(&p1, VertexPos(0, 0));
+    vpack.ReadVector3Or4(&p1, VertexPos(0, 0));
     CHECK(vpack.move(idx2));
-    vpack.ReadVector4(&p2, VertexPos(0, 0));
+    vpack.ReadVector3Or4(&p2, VertexPos(0, 0));
     CHECK(vpack.move(idx3));
-    vpack.ReadVector4(&p3, VertexPos(0, 0));
+    vpack.ReadVector3Or4(&p3, VertexPos(0, 0));
     used[idx1] += 1.0f;
     used[idx2] += 1.0f;
     used[idx3] += 1.0f;
@@ -222,7 +222,7 @@ void CalcIndexedTriangleNormal(SlotVertexData* vbd, IndicesData* idata) {
   for (int i = 0; i < normals.size(); ++i) {
     Vector4 normal = normals[i] / used[i];
     normal.Normalize();
-    vpack.WriteVector4(normal, npos);
+    vpack.WriteVector3Or4(normal, npos);
     vpack.next(1);
   }
 }
@@ -241,7 +241,7 @@ void CalcTriangleListNormal(SlotVertexData* vbd, int* indices) {
   VertexPack vpack(vbd);
   vpack.first();
   for (int i = 0; i < vbd->vertex_count(); ++i) {
-    vpack.WriteVector4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), npos);
+    vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), npos);
     vpack.next(1);
     used[i] = 0.0f;
     normals[i] = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -252,13 +252,13 @@ void CalcTriangleListNormal(SlotVertexData* vbd, int* indices) {
     int idx1 = *(indices + i);
     int idx2 = *(indices + i + 1);
     int idx3 = *(indices + i + 2);
-    Vector4 p1, p2, p3;
+    Vector3 p1, p2, p3;
     CHECK(vpack.move(idx1));
-    vpack.ReadVector4(&p1, VertexPos(0, 0));
+    vpack.ReadVector3Or4(&p1, VertexPos(0, 0));
     CHECK(vpack.move(idx2));
-    vpack.ReadVector4(&p2, VertexPos(0, 0));
+    vpack.ReadVector3Or4(&p2, VertexPos(0, 0));
     CHECK(vpack.move(idx3));
-    vpack.ReadVector4(&p3, VertexPos(0, 0));
+    vpack.ReadVector3Or4(&p3, VertexPos(0, 0));
     used[idx1] += 1.0f;
     used[idx2] += 1.0f;
     used[idx3] += 1.0f;
@@ -277,7 +277,7 @@ void CalcTriangleListNormal(SlotVertexData* vbd, int* indices) {
   for (int i = 0; i < normals.size(); ++i) {
     Vector4 normal = normals[i] / used[i];
     normal.Normalize();
-    vpack.WriteVector4(normal, npos);
+    vpack.WriteVector3Or4(normal, npos);
     vpack.next(1);
   }
 }
@@ -426,7 +426,7 @@ SlotVertexDataPtr CreateBoxVertexData(VertexDesc* desc) {
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
     int index = indices[i];
     DCHECK(!vpack.end());
-    vpack.WriteVector4(position[index], VertexPos(0, 0));
+    vpack.WriteVector3Or4(position[index], VertexPos(0, 0));
     vpack.WriteVector2(texcoord0[index], tex0_pos);
     vpack.next(1);
   }
@@ -437,7 +437,7 @@ SlotVertexDataPtr CreateBoxVertexData(VertexDesc* desc) {
     for (int i = 0; i < static_cast<int>(arraysize(indices)); i += 6) {
       int index = i / arraysize(normal);
       for (int j = 0; j < 6; ++j) { 
-        vpack.WriteVector4(normal[index], normal_pos);
+        vpack.WriteVector3Or4(normal[index], normal_pos);
         vpack.next(1);
       }
     }
@@ -518,8 +518,8 @@ SlotVertexDataPtr CreatePlaneVertexData(VertexDesc* desc, const Matrix4& matrix,
     for (int j = 0; j < params.column + 1; ++j) {
       float x = beginx + j * params.column_width;
       float z = beginz + i * params.row_width;
-      vpack.WriteVector4(matrix * Vector4(x,    0.0f, z, 1.0f), VertexPos(0, 0));
-      vpack.WriteVector4(matrix * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
+      vpack.WriteVector3Or4(matrix * Vector4(x,    0.0f, z, 1.0f), VertexPos(0, 0));
+      vpack.WriteVector3Or4(matrix * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
 
       float tu = (x + 1.0) * 0.5;
       float tv = (z + 1.0) * 0.5;
@@ -631,14 +631,14 @@ SlotVertexDataPtr CreateRoundVertexData(VertexDesc* desc, const Matrix4& mat,
   SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
   VertexPack vpack(vdata);
   vpack.first();
-  vpack.WriteVector4(mat * Vector4(0, 0, 0, 1.0f), VertexPos(0, 0));
-  vpack.WriteVector4(mat * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
+  vpack.WriteVector3Or4(mat * Vector4(0, 0, 0, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector3Or4(mat * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
   vpack.next(1);
   for (int i = 1; i < kVertexNum; ++i) {
     float x = cos(Degree(i * degree)) * radius;
     float z = sin(Degree(i * degree)) * radius;
-    vpack.WriteVector4(mat * Vector4(x, 0, z, 1.0f), VertexPos(0, 0));
-    vpack.WriteVector4(mat * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
+    vpack.WriteVector3Or4(mat * Vector4(x, 0, z, 1.0f), VertexPos(0, 0));
+    vpack.WriteVector3Or4(mat * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
     vpack.next(1);
   }
   CHECK(vpack.end());
@@ -724,13 +724,13 @@ EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params,
   SlotVertexDataPtr vdata(new SlotVertexData(desc, kVertexNum));
   VertexPack vpack(vdata);
   vpack.first();
-  vpack.WriteVector4(mat * Vector4(0, params.height, 0, 1.0f), 
+  vpack.WriteVector3Or4(mat * Vector4(0, params.height, 0, 1.0f), 
                      VertexPos(0, 0));
   vpack.next(1);
   for (int i = 1; i < kVertexNum; ++i) {
     float x = cos(Degree(i * degree)) * params.radius;
     float z = sin(Degree(i * degree)) * params.radius;
-    vpack.WriteVector4(mat * Vector4(x, 0, z, 1.0f), VertexPos(0, 0));
+    vpack.WriteVector3Or4(mat * Vector4(x, 0, z, 1.0f), VertexPos(0, 0));
     vpack.next(1);
   }
   CHECK(vpack.end());
@@ -804,7 +804,7 @@ const int kVertexNum = CalcCylinderVertexNum(params.stack, params.slice);
       float x = slice_radius * cos(Degree(degree));
       float z = slice_radius * sin(Degree(degree));
 
-      vpack.WriteVector4(mat * Vector4(x, y, z, 1.0f), VertexPos(0, 0));
+      vpack.WriteVector3Or4(mat * Vector4(x, y, z, 1.0f), VertexPos(0, 0));
       float u = j * tex_u_unit;
       float v = (i + 1) * tex_v_unit;
       vpack.WriteVector2(Vector2(0.0f, 0.0f), tpos); 
