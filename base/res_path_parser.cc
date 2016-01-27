@@ -281,6 +281,8 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
         vec.resize(vec.size() - 1);
         break;
       case ResPathParser::kDirSplitter:
+		vec.push_back(token);
+		break;
       case ResPathParser::kCurrentDir:
         break;
       case ResPathParser::kRoot:
@@ -303,12 +305,6 @@ bool ResPathNormalizer::Normalize(ResPath* path) {
 
   StringType filepath;
   for (size_t i = 0; i < vec.size(); ++i) {
-    if (i > 1) {
-      filepath.append(FILE_PATH_LITERAL("/"));
-    } else if (i == 1 && path_type != ResPath::kAbsolutePath) {
-      filepath.append(FILE_PATH_LITERAL("/"));
-    }
-
     filepath.append(vec[i]);
   }
 
