@@ -110,7 +110,7 @@ RepositoryNodePtr RepositoryNode::FindOrCreateRecusive(const StringType& name) {
       ptr = root();
     }
   }
-  Slice filename = path.filename();
+  Slice filename = path.BaseName();
   if (!filename.empty()) {
     ptr->FindOrCreate(filename.as_string());
   }

@@ -48,7 +48,8 @@ class AZER_EXPORT ResPath {
   Slice filepath() const;
 
   // file name: the last part of dirs
-  Slice filename() const;
+  Slice BaseName() const;
+  Slice DirName() const;
 
   // proto: the proto header, like "http://"
   Slice proto() const;

@@ -170,7 +170,13 @@ ResPath ResPath::parent() const {
 void ResPath::Normalize() {
 }
 
-Slice ResPath::filename() const {
+Slice ResPath::DirName() const {
+  Slice filepath = this->filepath();
+  Slice base = BaseName();
+  return Slice(filepath.data(), base.data() - filepath.data());
+}
+
+Slice ResPath::BaseName() const {
   Slice slice = fullpath_;
   int32 component_pos = fullpath_.find(kComponentSeperatorStr);
   if (component_pos != -1) {
@@ -193,7 +199,7 @@ Slice ResPath::component_name() const {
     DCHECK(component.data()[0] == FILE_PATH_LITERAL(':'));
     return component.substr(1);
   } else {
-    Slice name = filename();
+    Slice name = BaseName();
     uint32 pos = name.rfind(FILE_PATH_LITERAL("."));
     if (pos != StringType::npos)
       name = name.substr(0, pos);
