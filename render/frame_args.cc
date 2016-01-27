@@ -5,7 +5,8 @@
 namespace azer {
 
 FrameArgs::FrameArgs() 
-    : which_(0),
+    : timef_(0.0),
+      which_(0),
       frame_cnt_(0),
       frame_id_(0),
       extra_(NULL),
