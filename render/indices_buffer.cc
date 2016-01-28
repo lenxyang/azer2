@@ -70,7 +70,7 @@ uint8* IndicesData::pointer() {
 
 IndicesBuffer::IndicesBuffer(const Options& opt)
     : options_(opt)
-    , indices_num_(-1)
+    , indices_count_(-1)
     , type_(kIndexUndefined) {
 }
 

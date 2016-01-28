@@ -66,10 +66,10 @@ public:
   IndexType type() const { return type_;}
 
   const Options& options() const { return options_;}
-  int32 indices_num() const { return indices_num_;}
+  int32 indices_count() const { return indices_count_;}
  protected:
   const Options options_;
-  int32 indices_num_;
+  int32 indices_count_;
   IndexType type_;
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);
 };

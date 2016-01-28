@@ -13,7 +13,9 @@ namespace azer {
 Entity::Entity(VertexDesc* desc)
     : primitive_(kTriangleList),
       vertex_base_(0),
-      start_index_(0) {
+      vertex_count_(0),
+      index_base_(0),
+      index_count_(0) {
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(desc);
 }
@@ -21,7 +23,9 @@ Entity::Entity(VertexDesc* desc)
 Entity::Entity(VertexBuffer* vb)
     : primitive_(kTriangleList),
       vertex_base_(0),
-      start_index_(0) {
+      vertex_count_(0),
+      index_base_(0),
+      index_count_(0) {
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
   SetVertexBuffer(vb, 0);
@@ -30,14 +34,18 @@ Entity::Entity(VertexBuffer* vb)
 Entity::Entity(VertexBufferGroup* vbg)
     : primitive_(kTriangleList),
       vertex_base_(0),
-      start_index_(0) {
+      vertex_count_(0),
+      index_base_(0),
+      index_count_(0) {
   vbg_ = vbg;
 }
 
 Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
     : primitive_(kTriangleList),
       vertex_base_(0),
-      start_index_(0) {
+      vertex_count_(0),
+      index_base_(0),
+      index_count_(0) {
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
   SetVertexBuffer(vb, 0);
@@ -47,7 +55,9 @@ Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
 Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib)
     : primitive_(kTriangleList),
       vertex_base_(0),
-      start_index_(0) {
+      vertex_count_(0),
+      index_base_(0),
+      index_count_(0) {
   vbg_ = vbg;
   ib_ = ib;
 }
@@ -99,7 +109,8 @@ void Entity::Draw(Renderer* renderer) {
   renderer->UseVertexBufferGroup(vbg_.get());
   renderer->UseIndicesBuffer(NULL);
   renderer->SetPrimitiveTopology(primitive_type());
-  renderer->Draw(vbg_->vertex_count(), vertex_base_);
+  int32 count = (vertex_count_ > 0) ? vertex_count_ : vbg_->vertex_count();
+  renderer->Draw(count, vertex_base_);
 }
 
 void Entity::DrawIndex(Renderer* renderer) {
@@ -107,7 +118,8 @@ void Entity::DrawIndex(Renderer* renderer) {
   renderer->UseVertexBufferGroup(vbg_.get());
   renderer->UseIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(primitive_type());
-  renderer->DrawIndex(ib_->indices_num(), vertex_base_, start_index_);
+  int32 count = (index_count_ > 0) ? index_count_ : ib_->indices_count();
+  renderer->DrawIndex(count, vertex_base_, index_base_);
 }
 
 // class EntityVec

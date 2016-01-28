@@ -53,9 +53,13 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   void set_vmin(const Vector3& v) { vmin_ = v;}
   void set_vmax(const Vector3& v) { vmax_ = v;}
   void set_vertex_base(int32 v) { vertex_base_ = v;}
-  void set_start_index(int32 v) { start_index_ = v;}
+  void set_index_base(int32 v) { index_base_ = v;}
+  void set_vertex_count(int32 v) { vertex_count_ = v;}
+  void set_index_count(int32 v) { index_count_ = v;}
   int32 vertex_base() const { return vertex_base_;}
-  int32 start_index() const { return start_index_;}
+  int32 index_base() const { return index_base_;}
+  int32 vertex_count() const { return vertex_count_;}
+  int32 index_count() const { return index_count_;}
 
   PrimitiveTopology primitive_type() const { return primitive_;}
   void set_primitive(PrimitiveTopology top) { primitive_ = top;}
@@ -64,7 +68,9 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   IndicesBufferPtr ib_;
   PrimitiveTopology primitive_;
   int32 vertex_base_;
-  int32 start_index_;
+  int32 vertex_count_;
+  int32 index_base_;
+  int32 index_count_;
   Vector3 vmin_;
   Vector3 vmax_;
   DISALLOW_COPY_AND_ASSIGN(Entity);

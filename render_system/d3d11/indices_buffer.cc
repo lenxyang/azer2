@@ -25,7 +25,7 @@ D3DIndicesBuffer::~D3DIndicesBuffer() {
 bool D3DIndicesBuffer::Init(const IndicesData* data) {
   DCHECK(NULL == buffer_);
   DCHECK(data != NULL);
-  DCHECK(indices_num_ == -1 && type_ == kIndexUndefined);
+  DCHECK(indices_count_ == -1 && type_ == kIndexUndefined);
 
   ID3D11Device* d3d_device = render_system_->GetDevice();
 
@@ -44,7 +44,7 @@ bool D3DIndicesBuffer::Init(const IndicesData* data) {
   hr = d3d_device->CreateBuffer(&indices_buffer_desc, &d3d_vdata, &buffer_);
   HRESULT_HANDLE(hr, ERROR, "D3D11: CreateIndexBuffer failed ");
 
-  indices_num_ = data->num();
+  indices_count_ = data->num();
   type_ = data->type();
 
   return true;
