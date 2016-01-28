@@ -48,7 +48,7 @@ D3DBlobPtr D3DGpuProgram::CompileShader(ID3D11Device* d3ddevice) {
   std::string msg;
   D3DBlobPtr blob(CompileShaderForStage(stage(), info_.code, info_.path, &msg));
   if (NULL == blob) {
-    LOG(ERROR) << "Failed to compiler pixel shader: " << msg;
+    LOG(ERROR) << "Failed to shader("  << RenderStageName(stage()) << "): " << msg;
     return D3DBlobPtr();
   }
   return blob;
