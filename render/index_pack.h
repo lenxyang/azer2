@@ -13,7 +13,7 @@ class AZER_EXPORT IndexPack {
   uint32 ReadAndAdvanceOrDie() const;
 
   void write(int32 value);
-  bool advance() const;
+  bool advance(int32 step = 1) const;
   uint32 value() const;
   IndexType type() const { return type_;}
 

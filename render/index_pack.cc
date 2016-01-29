@@ -18,21 +18,23 @@ IndexPack::IndexPack(IndicesData* data)
       type_(data->type()) {
 }
 
-bool IndexPack::advance() const {
+bool IndexPack::advance(int32 step) const {
+  uint32 unit_size = 0;
   switch (type()) {
     case kIndexUint16:
-      current_ += sizeof(uint16);
+      unit_size = sizeof(uint16);
       break;
     case kIndexUint32:
-      current_ += sizeof(uint32);
+      uint_size = sizeof(uint32);
       break;
     case kIndexUint8:
-      current_++;
+      uint_size = sizeof(uint8);
       break;
     default:
       NOTREACHED();
   }
 
+  current_ += (uint_size * step);
   return current_ < data_ + data_size_;
 }
 
