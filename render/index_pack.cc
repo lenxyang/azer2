@@ -25,16 +25,16 @@ bool IndexPack::advance(int32 step) const {
       unit_size = sizeof(uint16);
       break;
     case kIndexUint32:
-      uint_size = sizeof(uint32);
+      unit_size = sizeof(uint32);
       break;
     case kIndexUint8:
-      uint_size = sizeof(uint8);
+      unit_size = sizeof(uint8);
       break;
     default:
       NOTREACHED();
   }
 
-  current_ += (uint_size * step);
+  current_ += (unit_size * step);
   return current_ < data_ + data_size_;
 }
 
