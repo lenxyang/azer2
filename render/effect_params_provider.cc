@@ -23,7 +23,7 @@ const char* EffectParamsAdapter::GetAdapterName() const {
 // class EffectParamsProvider
 const char EffectParamsProvider::kEffectParamsProviderName[] =
     "azer::EffectParamsProvider";
-EffectParamsProvider::EffectParamsProvider() {}
+EffectParamsProvider::EffectParamsProvider() : args_(NULL) {}
 EffectParamsProvider::~EffectParamsProvider() {}
 
 
@@ -42,7 +42,7 @@ EffectParamsProviderContainer::~EffectParamsProviderContainer() {
 
 void EffectParamsProviderContainer::RebuildCache() {
   if (context_) {
-    cached_.reset(new EffectAdapterCache(context_, &vector_));
+    cached_.reset(new EffectAdapterCache(context_, &providers_));
   } else {
     cached_.reset();
   }
@@ -55,23 +55,23 @@ void EffectParamsProviderContainer::SetEffectAdapterContext(
 }
 
 int32 EffectParamsProviderContainer::provider_count() const {
-  return static_cast<int32>(vector_.size());
+  return static_cast<int32>(providers_.size());
 }
 
 EffectParamsProviderPtr EffectParamsProviderContainer::provider_at(int32 index) {
-  return vector_.at(index);
+  return providers_.at(index);
 }
 
 void EffectParamsProviderContainer::AddProvider(EffectParamsProviderPtr provider) {
-  vector_.push_back(provider);
+  providers_.push_back(provider);
   RebuildCache();
 }
 
 void EffectParamsProviderContainer::RemoveProvider(EffectParamsProviderPtr provider) {
   int index = 0;
-  for (auto iter = vector_.begin(); iter != vector_.end(); ++iter, ++index) {
+  for (auto iter = providers_.begin(); iter != providers_.end(); ++iter, ++index) {
     if (iter->get() == provider) {
-      vector_.erase(iter);
+      providers_.erase(iter);
       break;
     }
   }
@@ -80,15 +80,15 @@ void EffectParamsProviderContainer::RemoveProvider(EffectParamsProviderPtr provi
 }
 
 void EffectParamsProviderContainer::ResetProvider() {
-  vector_.clear();
+  providers_.clear();
   RebuildCache();
 }
 
 void EffectParamsProviderContainer::ApplyParams(Effect* effect) {
-  if (vector_.size() > 0u) {
+  if (providers_.size() > 0u) {
     DCHECK(cached_.get());
     cached_->ApplyParams(effect);
   }
 }
 
-}
+}  // namespace azer

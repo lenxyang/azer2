@@ -176,7 +176,7 @@ MeshPart& MeshPart::operator = (const MeshPart& part) {
 }
 
 void MeshPart::Render(Renderer* renderer) {
-  DCHECK(context_ || vector_.size() == 0u);
+  DCHECK(context_ || providers_.size() == 0u);
   if (!blending_.get()) {
     RenderPart(renderer);
   } else {
@@ -234,7 +234,7 @@ void Mesh::ClearMeshPart() {
 }
 
 void Mesh::Render(Renderer* renderer) {
-  DCHECK(context_ || vector_.size() == 0u);
+  DCHECK(context_ || providers_.size() == 0u);
   for (auto iter = part_.begin(); iter != part_.end(); ++iter) {
     MeshPart* part = iter->get();
     ApplyParams(part->effect());

@@ -40,6 +40,8 @@ EffectAdapterCache::EffectAdapterCache(
     const EffectParamsProviderVector* provider)
     : providers_(provider),
       context_(context) {
+  // cache will be initialized in EffectParamsProviderContainer
+  // usually, initialize at first time used
 }
 
 EffectAdapterCache::~EffectAdapterCache() {
@@ -54,8 +56,7 @@ EffectAdapterCache::AdapterVector* EffectAdapterCache::GetAdapter(Effect* effect
     scoped_ptr<AdapterVector> adapters(new AdapterVector);
     for (auto iter = providers_->begin(); iter != providers_->end(); ++iter) {
       std::string provider_name = typeid(*((*iter).get())).name();
-      adapters->push_back(context_->LookupAdapter(effect_name, provider_name));
-      
+      adapters->push_back(context_->LookupAdapter(effect_name, provider_name));   
     }
     cached_.insert(std::make_pair(effect_name, adapters.Pass()));
     return GetAdapter(effect);
@@ -67,11 +68,9 @@ void EffectAdapterCache::ApplyParams(Effect* effect) {
   for (uint32 i = 0; i < adapter_vec->size(); ++i) {
     const EffectParamsAdapter* adapter = (*adapter_vec)[i];
     const EffectParamsProvider* provider = (*providers_)[i].get();
-    /*
-    CHECK(adapter) << " No Adapter for Effect[" 
+    LOG_IF(ERROR, NULL == adapter) << " No Adapter for Effect[" 
                    << effect->GetEffectName() << "] and "
                    << "Provider[" << provider->GetProviderName() << "]";
-    */
     if (adapter)
       adapter->Apply(effect, provider);
   }

@@ -51,7 +51,7 @@ class AZER_EXPORT EffectParamsProviderContainer :
   void ApplyParams(Effect* effect);
  protected:
   void RebuildCache();
-  EffectParamsProviderVector vector_;
+  EffectParamsProviderVector providers_;
   scoped_ptr<EffectAdapterCache> cached_;
   EffectAdapterContext* context_;
   DISALLOW_COPY_AND_ASSIGN(EffectParamsProviderContainer);
