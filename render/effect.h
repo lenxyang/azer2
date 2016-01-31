@@ -10,7 +10,6 @@
 #include "azer/render/gpu_program.h"
 
 namespace azer {
-
 class GpuConstantsTable;
 class Renderer;
 class RenderSystem;
@@ -27,12 +26,11 @@ typedef scoped_refptr<Technique> TechniquePtr;
  */
 class AZER_EXPORT Effect : public Resource {
  public:
-  typedef std::vector<ShaderInfo> ShaderPrograms;
   Effect();
   ~Effect() override;
 
   virtual const char* GetEffectName() const = 0;
-  virtual bool Init(VertexDesc* desc, const ShaderPrograms& programs) = 0;
+  virtual bool Init(VertexDesc* desc, const Shaders& programs) = 0;
   void Apply(Renderer* renderer);
   VertexDesc* vertex_desc() { return vertex_desc_.get();}
   void SetVertexDesc(VertexDesc* desc);
@@ -42,7 +40,7 @@ class AZER_EXPORT Effect : public Resource {
  protected:
   virtual void UseTexture(Renderer* renderer);
   virtual void ApplyGpuConstantTable(Renderer* renderer) = 0;
-  void InitShaders(const ShaderPrograms& sources);
+  void InitShaders(const Shaders& sources);
   void UseConstantsTable(Renderer* renderer);
   void UseTechnique(Renderer* renderer);
 

@@ -15,6 +15,7 @@ const char* RenderStageName(RenderPipelineStage stage) {
     case kRasterizerStage: return "RasterizerStage";
     case kPixelStage: return "PixelStage";
     case kOutputMergerStage: return "OutputMergerStage";
+    case kComputeStage: return "ComputeStage";
     case kRenderPipelineStageNum: return "RenderPipelineStageNum";
     default: NOTREACHED(); return "";
   }

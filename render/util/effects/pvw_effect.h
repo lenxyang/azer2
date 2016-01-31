@@ -12,7 +12,7 @@ class PVWEffect: public Effect {
   ~PVWEffect();
 
   const char* GetEffectName() const override;
-  bool Init(VertexDesc* desc, const ShaderPrograms& source) override;
+  bool Init(VertexDesc* desc, const Shaders& source) override;
 
 #pragma pack(push, 4)
   struct vs_cbuffer {

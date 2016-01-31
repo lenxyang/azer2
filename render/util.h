@@ -7,5 +7,4 @@
 #include "azer/render/util/effects/vertex_desc.h"
 #include "azer/render/util/light.h"
 #include "azer/render/util/image_processing.h"
-#include "azer/render/util/shader_util.h"
 #include "azer/render/util/tile.h"

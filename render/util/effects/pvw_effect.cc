@@ -6,7 +6,6 @@
 #include "base/logging.h"
 
 #include "azer/render/render.h"
-#include "azer/render/util/shader_util.h"
 #include "azer/render/util/effects/vertex_desc.h"
 
 namespace azer {
@@ -18,7 +17,7 @@ PVWEffect::~PVWEffect() {}
 const char* PVWEffect::GetEffectName() const {
   return kEffectName;
 }
-bool PVWEffect::Init(VertexDesc* desc, const ShaderPrograms& sources) {
+bool PVWEffect::Init(VertexDesc* desc, const Shaders& sources) {
   vertex_desc_ = desc;
   RenderSystem* rs = RenderSystem::Current();
   DCHECK(sources.size() == kRenderPipelineStageNum);
@@ -54,13 +53,13 @@ void PVWEffect::ApplyGpuConstantTable(Renderer* renderer) {
 }
 
 PVWEffectPtr CreatePVWEffect() {
-  Effect::ShaderPrograms shaders;
-  CHECK(LoadShaderAtStage(kVertexStage,
-                          "azer/render/util/effects/hlsl/pvw.hlsl.vs",
-                          &shaders));
-  CHECK(LoadShaderAtStage(kPixelStage,
-                          "azer/render/util/effects/hlsl/pvw.hlsl.ps",
-                          &shaders));
+  Shaders shaders;
+  CHECK(LoadStageShader(kVertexStage,
+                        "azer/render/util/effects/hlsl/pvw.hlsl.vs",
+                        &shaders));
+  CHECK(LoadStageShader(kPixelStage,
+                        "azer/render/util/effects/hlsl/pvw.hlsl.ps",
+                        &shaders));
   PVWEffectPtr ptr(new PVWEffect);
   ptr->Init(PositionVertex::CreateVertexDesc(), shaders);
   return ptr;

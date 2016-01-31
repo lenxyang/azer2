@@ -38,7 +38,7 @@ class CoordinateGridEffect : public Effect {
   static const VertexDesc::Desc kVertexDesc[];
  protected:
   void InitEffect();
-  bool Init(VertexDesc* desc, const ShaderPrograms& prog) override {return true;}
+  bool Init(VertexDesc* desc, const Shaders& prog) override {return true;}
   void ApplyGpuConstantTable(Renderer* renderer) override;
 
   vs_cbuffer vs_data_;

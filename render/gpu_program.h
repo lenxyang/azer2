@@ -2,6 +2,8 @@
 
 #include <memory>
 #include <string>
+#include <vector>
+
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "base/memory/ref_counted.h"
@@ -10,7 +12,8 @@
 #include "azer/render/common.h"
 
 namespace azer {
-
+class ResPath;
+class FileSystem;
 class RenderSystem;
 class VertexDesc;
 typedef scoped_refptr<VertexDesc> VertexDescPtr;
@@ -31,6 +34,8 @@ struct AZER_EXPORT ShaderInfo {
   std::string defines;
   std::string includes;
 };
+
+typedef std::vector<ShaderInfo> Shaders;
 
 class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
 public:
@@ -71,4 +76,12 @@ CharType* ShaderSuffix(ShaderType type);
 
 typedef scoped_refptr<GpuProgram> GpuProgramPtr;
 typedef scoped_refptr<VertexGpuProgram> VertexGpuProgramPtr;
+
+AZER_EXPORT bool LoadStageShader(int stage, const std::string& path, 
+                                 ShaderInfo* shader);
+AZER_EXPORT bool LoadStageShaderOnFS(int stage, const ResPath& path, 
+                                     ShaderInfo* info, FileSystem* fs);
+AZER_EXPORT bool LoadStageShader(int stage, const std::string& path, Shaders*);
+AZER_EXPORT bool LoadStageShaderOnFS(int stage, const ResPath& path, 
+                                     Shaders* info, FileSystem* fs);
 }  // namespace azer

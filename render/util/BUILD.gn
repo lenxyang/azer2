@@ -18,8 +18,6 @@ static_library("util") {
     "fps_camera_controller.h",
     "image_processing.cc",
     "image_processing.h",
-    "shader_util.cc",
-    "shader_util.h",
     "tile.cc",
     "tile.h",
   ]

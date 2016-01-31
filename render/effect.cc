@@ -58,7 +58,7 @@ void Effect::UseConstantsTable(Renderer* renderer) {
   }
 }
 
-void Effect::InitShaders(const ShaderPrograms& sources) {
+void Effect::InitShaders(const Shaders& sources) {
   CHECK(vertex_desc_.get());
   RenderSystem* rs = RenderSystem::Current();
   auto vs_shader_src = sources[kVertexStage];
@@ -76,4 +76,5 @@ void Effect::InitShaders(const ShaderPrograms& sources) {
     }
   }
 }
+
 }  // namespace azer

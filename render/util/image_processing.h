@@ -14,7 +14,7 @@ class SimpleImageProcessingEffect : public Effect {
   SimpleImageProcessingEffect();
 
   const char* GetEffectName() const override;
-  bool Init(VertexDesc* desc, const ShaderPrograms& source) override;
+  bool Init(VertexDesc* desc, const Shaders& source) override;
   void SetInputTex(TexturePtr texture) { texture_ = texture;}
 
   struct Vertex {
