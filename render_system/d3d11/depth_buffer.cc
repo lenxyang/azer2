@@ -108,7 +108,7 @@ void D3DDepthStencilState::SetFrontFaceOper(const StencilOperStruct& oper) {
   D3D11_DEPTH_STENCIL_DESC desc;  
   depth_state_->GetDesc(&desc);
   desc.FrontFace.StencilFunc = TranslateCompareFunc(oper.stencil_func);
-  desc.FrontFace.StencilDepthFailOp = TranslateStencilOper(oper.depth_pass_op);
+  desc.FrontFace.StencilDepthFailOp = TranslateStencilOper(oper.depth_failed_op);
   desc.FrontFace.StencilPassOp = TranslateStencilOper(oper.pass_op);
   desc.FrontFace.StencilFailOp = TranslateStencilOper(oper.failed_op);
   SetDepthStencilState(desc);
@@ -118,7 +118,7 @@ void D3DDepthStencilState::SetBackFaceOper(const StencilOperStruct& oper) {
   D3D11_DEPTH_STENCIL_DESC desc;  
   depth_state_->GetDesc(&desc);
   desc.BackFace.StencilFunc = TranslateCompareFunc(oper.stencil_func);
-  desc.BackFace.StencilDepthFailOp = TranslateStencilOper(oper.depth_pass_op);
+  desc.BackFace.StencilDepthFailOp = TranslateStencilOper(oper.depth_failed_op);
   desc.BackFace.StencilPassOp = TranslateStencilOper(oper.pass_op);
   desc.BackFace.StencilFailOp = TranslateStencilOper(oper.failed_op);
   SetDepthStencilState(desc);
