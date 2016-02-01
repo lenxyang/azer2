@@ -20,7 +20,7 @@ class D3DDepthStencilState : public DepthStencilState {
   
   void EnableDepthTest(bool enable) override;
   bool IsDepthTestEnabled()  override;
-  void EnableWriteDepthBuffer(bool enable) override;
+  void SetDepthWriteMask(uint32 mask) override;
   void SetDepthCompareFunc(CompareFunc func) override;
 
   void EnableStencil(bool enable) override;

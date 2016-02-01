@@ -68,11 +68,11 @@ bool D3DDepthStencilState::IsDepthTestEnabled() {
   return desc.DepthEnable == TRUE;
 }
 
-void D3DDepthStencilState::EnableWriteDepthBuffer(bool enable) {
+void D3DDepthStencilState::SetDepthWriteMask(uint32 mask) {
   D3D11_DEPTH_STENCIL_DESC desc;  
   depth_state_->GetDesc(&desc);
-  desc.DepthWriteMask = (enable ? D3D11_DEPTH_WRITE_MASK_ALL :
-                         D3D11_DEPTH_WRITE_MASK_ZERO);
+  desc.DepthWriteMask = (mask == 0 ? D3D11_DEPTH_WRITE_MASK_ZERO:
+                         D3D11_DEPTH_WRITE_MASK_ALL);
   SetDepthStencilState(desc);
 }
 

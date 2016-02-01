@@ -12,7 +12,7 @@ namespace azer {
 struct StencilOperStruct {
   StencilOper failed_op;
   StencilOper pass_op;
-  StencilOper depth_pass_op;
+  StencilOper depth_failed_op;
   CompareFunc stencil_func;
 };
 
@@ -23,7 +23,7 @@ class AZER_EXPORT DepthStencilState : public ::base::RefCounted<DepthStencilStat
   // depth buffer state
   virtual void EnableDepthTest(bool enable) = 0;
   virtual bool IsDepthTestEnabled() = 0;
-  virtual void EnableWriteDepthBuffer(bool enable) = 0;
+  virtual void SetDepthWriteMask(uint32 mask) = 0;
   virtual void SetDepthCompareFunc(CompareFunc func) = 0;
   // stencil
   virtual void EnableStencil(bool enable) = 0;
