@@ -28,7 +28,7 @@ class D3DDepthStencilState : public DepthStencilState {
   void SetStencilMask(uint8 read_mask, uint8 write_mask) override;
   void SetFrontFaceOper(const StencilOperStruct& oper) override;
   void SetBackFaceOper(const StencilOperStruct& oper) override;
-  void Apply(Renderer* renderer) override;
+  void Apply(Renderer* renderer, uint32 stencilref) override;
  private:
   void SetDepthStencilState(const D3D11_DEPTH_STENCIL_DESC& desc);
   ID3D11DepthStencilState* depth_state_;

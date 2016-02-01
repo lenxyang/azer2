@@ -41,8 +41,9 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   void SetRasterizerState(RasterizerState* render_state);
   RasterizerState* GetRasterizerState();
 
+  uint32 stencilref() { return stencilref_;}
   void ResetDepthStencilState();
-  void SetDepthStencilState(DepthStencilState* render_state);
+  void SetDepthStencilState(DepthStencilState* render_state, uint32 stencilref);
   DepthStencilState* GetDepthStencilState();
 
   virtual void Use() = 0;
@@ -97,6 +98,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   RasterizerStatePtr default_rasterizer_state_;
   DepthStencilStatePtr current_depth_state_;
   DepthStencilStatePtr default_depth_state_;
+  uint32 stencilref_;
   DISALLOW_COPY_AND_ASSIGN(Renderer);
 };
 

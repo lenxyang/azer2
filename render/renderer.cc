@@ -8,7 +8,8 @@
 
 namespace azer {
 Renderer::Renderer(RenderSystem* rs) :
-    render_system_(rs) {
+    render_system_(rs),
+    stencilref_(0) {
   default_rasterizer_state_ = rs->CreateRasterizerState();
   default_depth_state_ = rs->CreateDepthStencilState();
 }
@@ -36,12 +37,14 @@ RasterizerState* Renderer::GetRasterizerState() {
 
 void Renderer::ResetDepthStencilState() {
   DCHECK(default_depth_state_.get());
-  SetDepthStencilState(default_depth_state_);
+  SetDepthStencilState(default_depth_state_, 0);
 }
 
-void Renderer::SetDepthStencilState(DepthStencilState* state) {
+void Renderer::SetDepthStencilState(DepthStencilState* state,
+                                    uint32 stencilref) {
+  stencilref_ = stencilref;
   current_depth_state_ = state;
-  current_depth_state_->Apply(this);
+  current_depth_state_->Apply(this, stencilref);
 }
 
 DepthStencilState* Renderer::GetDepthStencilState() {

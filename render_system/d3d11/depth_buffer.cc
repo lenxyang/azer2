@@ -124,9 +124,9 @@ void D3DDepthStencilState::SetBackFaceOper(const StencilOperStruct& oper) {
   SetDepthStencilState(desc);
 }
 
-void D3DDepthStencilState::Apply(Renderer* r) {
+void D3DDepthStencilState::Apply(Renderer* r, uint32 stencilref) {
   D3DRenderer* renderer = dynamic_cast<D3DRenderer*>(r);
-  renderer->GetContext()->OMSetDepthStencilState(depth_state_, 0.0f);
+  renderer->GetContext()->OMSetDepthStencilState(depth_state_, stencilref);
 }
 
 // class D3DDepthBuffer 

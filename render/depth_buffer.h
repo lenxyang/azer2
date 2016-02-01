@@ -18,8 +18,8 @@ struct StencilOperStruct {
 
 class AZER_EXPORT DepthStencilState : public ::base::RefCounted<DepthStencilState> {
  public:
-  DepthStencilState() {}
-  virtual ~DepthStencilState() {}
+  DepthStencilState();
+  virtual ~DepthStencilState();
   // depth buffer state
   virtual void EnableDepthTest(bool enable) = 0;
   virtual bool IsDepthTestEnabled() = 0;
@@ -31,7 +31,7 @@ class AZER_EXPORT DepthStencilState : public ::base::RefCounted<DepthStencilStat
   virtual void SetStencilMask(uint8 read_mask, uint8 write_mask) = 0;
   virtual void SetFrontFaceOper(const StencilOperStruct& oper) = 0;
   virtual void SetBackFaceOper(const StencilOperStruct& oper) = 0;
-  virtual void Apply(Renderer* renderer) = 0;
+  virtual void Apply(Renderer* renderer, uint32 stencilref) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(DepthStencilState);
 };
@@ -55,17 +55,18 @@ typedef scoped_refptr<DepthBuffer> DepthBufferPtr;
 
 class ScopedDepthStencilState {
  public:
-  ScopedDepthStencilState(Renderer* renderer, DepthStencilState* new_state)
+  ScopedDepthStencilState(Renderer* renderer)
       : renderer_(renderer) {
     prev_state_ = renderer->GetDepthStencilState();;
-    renderer->SetDepthStencilState(new_state);
+    stencilref_ = renderer->stencilref();
   }
   ~ScopedDepthStencilState() {
-    renderer_->SetDepthStencilState(prev_state_);
+    renderer_->SetDepthStencilState(prev_state_, stencilref_);
   }
  private:
   DepthStencilStatePtr prev_state_;
   Renderer* renderer_;
+  uint32 stencilref_;
   DISALLOW_COPY_AND_ASSIGN(ScopedDepthStencilState);
 };
 }  // namespace azer

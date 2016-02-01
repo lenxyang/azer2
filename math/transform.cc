@@ -80,7 +80,7 @@ Matrix4 LookAtLH(const Vector3& eye, const Vector3& lookat, const Vector3& up) {
 
 #define SQR(x) ((x) * (x))
 
-Matrix4 MirrorTrans(const Plane& plane) {
+Matrix4 ReflectTrans(const Plane& plane) {
   // reference http://en.wikipedia.org/wiki/Transformation_matrix
   Matrix4 mat = Matrix4::kIdentity;
   mat[0][0] = 1 - 2 * SQR(plane.normal().x);

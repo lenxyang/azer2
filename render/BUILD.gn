@@ -29,6 +29,8 @@ source_set("render") {
     "camera.h",
     "create_object_util.cc",
     "create_object_util.h",
+    "depth_buffer.cc",
+    "depth_buffer.h",
     "effect.cc",
     "effect.h",
     "effect_params_adapter.cc",

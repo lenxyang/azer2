@@ -33,10 +33,9 @@ typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
 
 class ScopedRasterizerState {
  public:
-  ScopedRasterizerState(Renderer* renderer, RasterizerState* new_state)
+  ScopedRasterizerState(Renderer* renderer)
       : renderer_(renderer) {
     prev_state_ = renderer->GetRasterizerState();;
-    renderer->SetRasterizerState(new_state);
   }
   ~ScopedRasterizerState() {
     renderer_->SetRasterizerState(prev_state_);

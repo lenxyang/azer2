@@ -106,5 +106,5 @@ inline Matrix4 LookAtRH(const Vector3& eye, const Vector3& lookat,
   return LookDirRH(eye, -camera_z, up);
 }
 
-Matrix4 MirrorTrans(const Plane& plane);
+Matrix4 ReflectTrans(const Plane& plane);
 }  // namespace azer
