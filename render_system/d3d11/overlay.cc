@@ -171,7 +171,8 @@ void D3DOverlay::Render(Renderer* renderer) {
   azer::Vector2 texcoord[4];
   
   DCHECK (effect_.get() != NULL);
-  ScopedRasterizerState(renderer, rasterizer_state_);
+  ScopedRasterizerState scoped_rasterizer_state(renderer);
+  renderer->SetRasterizerState(rasterizer_state_);
   effect_->SetTransform(transform_);
   effect_->SetVertex(vertex_);
   effect_->SetTexcoord(texcoord_);
