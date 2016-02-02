@@ -193,6 +193,15 @@ void D3DRenderer::UseConstantsTable(RenderPipelineStage stage,
 inline void D3DRenderer::ResetTexture(RenderPipelineStage stage, int index) {
   DCHECK(NULL != d3d_context_);
   switch (stage) {
+    case kVertexStage:
+      d3d_context_->VSSetShaderResources(index, 0, NULL);
+      break;
+    case kHullStage:
+      d3d_context_->HSSetShaderResources(index, 0, NULL);
+      break;
+    case kDomainStage:
+      d3d_context_->DSSetShaderResources(index, 0, NULL);
+      break;
     case kPixelStage:
       d3d_context_->PSSetShaderResources(index, 0, NULL);
       break;
