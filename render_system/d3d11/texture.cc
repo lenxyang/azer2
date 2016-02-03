@@ -503,8 +503,7 @@ bool D3DTexture2DArray::InitFromImage(const Image* image) {
   for (int i = 0; i < image->depth(); ++i) {
     const ImageDataPtr& data = image->data(i);
     subres[i].pSysMem = data->data();
-    subres[i].SysMemPitch = options_.size.width()
-        * SizeofDataFormat(options_.format);
+    subres[i].SysMemPitch = data->width() * SizeofDataFormat(options_.format);
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
   return Init(subres, image->depth());

@@ -21,6 +21,7 @@ class AZER_EXPORT ImageData : public ::base::RefCounted<ImageData> {
  public:
   ImageData(int width, int height, DataFormat format = kRGBAn8);
 
+  int miplevels() const { return miplevels_;}
   int width() const;
   int height() const;
   uint8* data();
@@ -46,6 +47,7 @@ class AZER_EXPORT ImageData : public ::base::RefCounted<ImageData> {
   const int32 width_;
   const int32 height_;
   const DataFormat format_;
+  int32 miplevels_;
   DISALLOW_COPY_AND_ASSIGN(ImageData);
 };
 

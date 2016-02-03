@@ -2,9 +2,10 @@
 
 namespace azer {
 ImageData::ImageData(int32 width, int32 height, DataFormat format)
-    : width_(width)
-    , height_(height)
-    , format_(format) {
+    : width_(width),
+      height_(height),
+      format_(format),
+      miplevels_(0) {
   uint32 size = data_size();
   data_.reset(new uint8[size]);
 }
