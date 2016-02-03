@@ -50,12 +50,11 @@ bool D3DVertexLayout::Init(RenderSystem* rs) {
   return Init(rs, blob.get());
 }
 
-scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> D3DVertexLayout::CreateInputDesc(
-    VertexDesc* vertex_desc) {
+void D3DVertexLayout::CreateInputDesc(VertexDesc* vertex_desc, 
+                                      D3D11_INPUT_ELEMENT_DESC* d3ddesc) {
   const VertexDesc::Desc* desc = vertex_desc->descs();
-  scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]>
-      layout_ptr(new D3D11_INPUT_ELEMENT_DESC[vertex_desc->element_count()]);
-  D3D11_INPUT_ELEMENT_DESC* curr_layout = layout_ptr.get();
+  DCHECK_LT(vertex_desc->element_count(), kMaxInputElementDesc);
+  D3D11_INPUT_ELEMENT_DESC* curr_layout = d3ddesc;
   for (int i = 0; i < vertex_desc->element_count(); ++i, ++curr_layout, ++desc) {
     curr_layout->SemanticName = desc->name;
     curr_layout->SemanticIndex = desc->semantic_index;
@@ -69,7 +68,6 @@ scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> D3DVertexLayout::CreateInputDesc(
       curr_layout->InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
     }
   }
-  return layout_ptr.Pass();
 }
 
 bool D3DVertexLayout::ValidateShaderLayout(RenderSystem* rs, ID3DBlob* blob) {
@@ -77,8 +75,9 @@ bool D3DVertexLayout::ValidateShaderLayout(RenderSystem* rs, ID3DBlob* blob) {
   DCHECK(typeid(*rs) == typeid(D3DRenderSystem));
   D3DRenderSystem* render_system = static_cast<D3DRenderSystem*>(rs);
   ID3D11Device* d3d_device = render_system->GetDevice();
-  scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> layout_ptr = CreateInputDesc(desc_).Pass();
-  hr = d3d_device->CreateInputLayout(layout_ptr.get(),
+  D3D11_INPUT_ELEMENT_DESC d3ddesc[kMaxInputElementDesc] = {0};
+  CreateInputDesc(desc_, d3ddesc);
+  hr = d3d_device->CreateInputLayout(d3ddesc,
                                      desc_->element_count(),
                                      (blob ? blob->GetBufferPointer() : NULL),
                                      (blob ? blob->GetBufferSize() : NULL),
@@ -92,8 +91,9 @@ bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
   DCHECK(typeid(*rs) == typeid(D3DRenderSystem));
   D3DRenderSystem* render_system = static_cast<D3DRenderSystem*>(rs);
   ID3D11Device* d3d_device = render_system->GetDevice();
-  scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> layout_ptr = CreateInputDesc(desc_).Pass();
-  hr = d3d_device->CreateInputLayout(layout_ptr.get(),
+  D3D11_INPUT_ELEMENT_DESC d3ddesc[kMaxInputElementDesc] = {0};
+  CreateInputDesc(desc_, d3ddesc);
+  hr = d3d_device->CreateInputLayout(d3ddesc,
                                      desc_->element_count(),
                                      (blob ? blob->GetBufferPointer() : NULL),
                                      (blob ? blob->GetBufferSize() : NULL),

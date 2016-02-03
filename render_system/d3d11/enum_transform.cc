@@ -39,7 +39,7 @@ DXGI_FORMAT TranslateFormat(DataFormat type) {
     case kRGBA32: NOTREACHED(); return DXGI_FORMAT_R32G32B32A32_UINT;
     case kRGBAn32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kDepth24Stencil8: return DXGI_FORMAT_D24_UNORM_S8_UINT;
-    case kScalar: return DXGI_FORMAT_D32_FLOAT;
+    case kScalar: return DXGI_FORMAT_R32_FLOAT;
     case kVec2: return DXGI_FORMAT_R32G32_FLOAT;
     case kVec3: return DXGI_FORMAT_R32G32B32_FLOAT;
     case kVec4: return DXGI_FORMAT_R32G32B32A32_FLOAT;

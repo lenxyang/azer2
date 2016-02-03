@@ -19,9 +19,10 @@ class D3DVertexLayout : public VertexLayout {
   ID3D11InputLayout* input_layout() { return input_layout_;}
   bool ValidateShaderLayout(RenderSystem* rs, ID3DBlob* blob);
  private:
-  scoped_ptr<D3D11_INPUT_ELEMENT_DESC[]> CreateInputDesc(VertexDesc* desc);
+  void CreateInputDesc(VertexDesc* desc, D3D11_INPUT_ELEMENT_DESC* d3ddesc);
   std::string GenVSForDesc(VertexDesc* desc);
   ID3D11InputLayout *input_layout_;
+  static const int32 kMaxInputElementDesc = 256;
   DISALLOW_COPY_AND_ASSIGN(D3DVertexLayout);
 };
 

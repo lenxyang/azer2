@@ -98,6 +98,13 @@ const char* HLSLTypeName(DataFormat format) {
     case kMat3: return "float3x3";
     case kMat4: return "float4x4";
     case kInt: return "int";
+    case kIntVec2: return "int2";
+    case kIntVec3: return "int3";
+    case kIntVec4: return "int4";
+    case kUint: return "uint";
+    case kUintVec2: return "uint2";
+    case kUintVec3: return "uint3";
+    case kUintVec4: return "uint4";
     default: 
       CHECK(false) << " not support :" << format;
       return "";
