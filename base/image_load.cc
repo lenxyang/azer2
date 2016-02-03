@@ -13,21 +13,16 @@
 #include "azer/base/string.h"
 
 namespace azer {
-ImageDataPtr ImageData::LoadFromFile(const ::base::FilePath& path, TexType type) {
+ImageDataPtr ImageData::Load2DFromFile(const ::base::FilePath& path) {
   std::string contents;
   if (!base::ReadFileToString(path, &contents)) {
     LOG(ERROR) << "Failed to read contents from \"" << path.value() << "\"";
     return ImageDataPtr();
   }
 
-  if (type == kTex2D) {
-    return Load2D(contents.c_str(), contents.length());
-  } else if (type == kTexCubemap) {
-    return LoadCubemap(contents.c_str(), contents.length());
-  } else {
-    return ImageDataPtr();
-  }
+  return Load2D(contents.c_str(), contents.length());
 }
+  
 ImageDataPtr ImageData::Load2D(const char* rawdata, int32 length) {
   int width = 0, height = 0, channels = 0;
   uint32 force_channel = SOIL_LOAD_RGBA;
@@ -43,6 +38,16 @@ ImageDataPtr ImageData::Load2D(const char* rawdata, int32 length) {
   std::unique_ptr<ImageData> imgdata(new ImageData(width, height, kRGBAn8));
   memcpy(imgdata->data(), data.get(), datasize);
   return ImageDataPtr(imgdata.release());
+}
+
+ImageDataPtrVec ImageData::LoadCubemapFromFile(const ::base::FilePath& path)  {
+  std::string contents;
+  if (!base::ReadFileToString(path, &contents)) {
+    LOG(ERROR) << "Failed to read contents from \"" << path.value() << "\"";
+    return ImageDataPtrVec();
+  }
+
+  return LoadCubemap(contents.c_str(), contents.length());
 }
 
 ImageDataPtrVec ImageData::LoadCubemap(const char* data, int32 length) {
@@ -84,7 +89,7 @@ ImageDataPtrVec ImageData::LoadCubemap(const char* data, int32 length) {
 }
 
 ImagePtr LoadFromFile(const std::vector<::base::FilePath>& path, TexType type) {
-  TexType item_type;
+  TexType item_type = kTex2D;
   if (type == kTex2DArray) {
     item_type = kTex2D;
   } else if (type == kTexCubemap) {
@@ -96,12 +101,17 @@ ImagePtr LoadFromFile(const std::vector<::base::FilePath>& path, TexType type) {
 
   ImageDataPtrVec vec;
   for (auto iter = path.begin(); iter != path.end(); ++iter) {
-    if (imem_type == kTex2D) {
-      ImageDataPtr ptr(ImageData::Load2D(*iter));
+    ImageDataPtr ptr;
+    if (item_type == kTex2D) {
+      ptr = ImageData::Load2DFromFile(*iter);
     } else {
       NOTREACHED();
     }
-    vec.push_back(ptr);
+    if (ptr.get()) {
+      vec.push_back(ptr);
+    } else {
+      return ImagePtr();
+    }
   }
 
   return ImagePtr(new Image(vec, type));
@@ -134,11 +144,11 @@ ImagePtr Image::LoadFromFile(const StringType& path, TexType type) {
 
 ImagePtr Image::LoadFromFile(const ::base::FilePath& path, TexType type) {
   std::string rawdata;
-  if (!ReadFileToString(path, &rawdata)) {
+  if (!::base::ReadFileToString(path, &rawdata)) {
     LOG(ERROR) << "Failed to load image file: \"" << path.value() << "\"";
     return NULL;
   }
 
-  return LoadFromData(rawdata.c_str(), rawdata.length(), type);
+  return LoadFromMemory(rawdata.c_str(), rawdata.length(), type);
 }
 }  // namespace azer

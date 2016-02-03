@@ -36,9 +36,10 @@ class AZER_EXPORT ImageData : public ::base::RefCounted<ImageData> {
   // tu and tv [0, 1)
   Vector4 BoxSample(float tu, float tv) const;
 
-  static ImageDataPtr LoadFromFile(const ::base::FilePath& path, TexType type);
   static ImageDataPtr Load2D(const char* data, int32 length);
+  static ImageDataPtr Load2DFromFile(const ::base::FilePath& path);
   static ImageDataPtrVec LoadCubemap(const char* data, int32 length);
+  static ImageDataPtrVec LoadCubemapFromFile(const ::base::FilePath& path);
  private:
   int32 sizeof_dataformat(DataFormat format) const;
   std::unique_ptr<uint8> data_;

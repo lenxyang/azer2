@@ -1,6 +1,8 @@
 #pragma once
 
 #include "azer/base/file_system.h"
+#include "azer/base/image.h"
+#include "azer/base/image_data.h"
 #include "azer/render/axis_aligned_box.h"
 #include "azer/render/blending.h"
 #include "azer/render/camera.h"
