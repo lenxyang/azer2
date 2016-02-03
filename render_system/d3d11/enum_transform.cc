@@ -135,16 +135,29 @@ DXGI_FORMAT TranslateIndexType(IndexType type) {
 
 D3D11_BIND_FLAG TranslateBindTarget(uint32 target) {
   DWORD flags = 0;
-  if (target & kBindTargetShaderResource)
+  if (target & kBindTargetShaderResource) {
     flags |= D3D11_BIND_SHADER_RESOURCE;
+  }
   
-  if (target & kBindTargetRenderTarget)
+  if (target & kBindTargetRenderTarget) {
     flags |= D3D11_BIND_RENDER_TARGET;
+  }
   
-  if (target & kBindTargetDepthStencil)
+  if (target & kBindTargetDepthStencil) {
     flags |= D3D11_BIND_DEPTH_STENCIL;
-  if (target & kBindTargetUnorderedAccess)
+  }
+
+  if (target & kBindTargetUnorderedAccess) {
     flags |= D3D11_BIND_UNORDERED_ACCESS;
+  }
+
+  if (target & kBindTargetVertexBuffer) {
+    flags |= D3D11_BIND_VERTEX_BUFFER;
+  }
+
+  if (target & kBindTargetStreamOut) {
+    flags |= D3D11_BIND_STREAM_OUTPUT;
+  }
   return (D3D11_BIND_FLAG)flags;
 }
 

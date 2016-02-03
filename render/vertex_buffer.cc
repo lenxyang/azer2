@@ -246,8 +246,9 @@ VertexDesc* VertexData::vertex_desc() {
 
 // class VertexBuffer
 VertexBuffer::Options::Options()
-    : usage(GraphicBuffer::kDefault)
-    , cpu_access(kCPUNoAccess) {
+    : usage(GraphicBuffer::kDefault),
+      cpu_access(kCPUNoAccess),
+      target(kBindTargetVertexBuffer) {
   memset(name, 0, sizeof(name));
 }
 

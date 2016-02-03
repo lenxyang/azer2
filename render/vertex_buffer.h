@@ -151,6 +151,7 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
     char name[128];
     GraphicBuffer::Usage usage;
     CPUAccess cpu_access;  // defined render_system
+    uint32 target;
     Options();
   };
 

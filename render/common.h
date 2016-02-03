@@ -195,10 +195,12 @@ enum FilterMode {
 
 enum BindTarget {
   kBindTargetUnknown           = 0,
-  kBindTargetShaderResource    = 0x8L,
-  kBindTargetRenderTarget      = 0x20L,
-  kBindTargetDepthStencil      = 0x40L,
-  kBindTargetUnorderedAccess   = 0x80L,
+  kBindTargetShaderResource    = 0x0008L,
+  kBindTargetRenderTarget      = 0x0020L,
+  kBindTargetDepthStencil      = 0x0040L,
+  kBindTargetUnorderedAccess   = 0x0080L,
+  kBindTargetVertexBuffer      = 0x0100L,
+  kBindTargetStreamOut         = 0x0200L,
 };
 
 
