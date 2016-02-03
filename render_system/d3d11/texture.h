@@ -118,5 +118,17 @@ class D3DTextureCubeMap : public D3DTexture {
   void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
   DISALLOW_COPY_AND_ASSIGN(D3DTextureCubeMap);
 };
+
+class D3DTexture2DArray : public D3DTexture {
+ public:
+  D3DTexture2DArray(const Texture::Options& opt, D3DRenderSystem* rs);
+  bool InitFromImage(const Image* image) override;
+  bool InitTexture();
+ protected:
+  void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
+  void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
+  int32 diminison_;
+  DISALLOW_COPY_AND_ASSIGN(D3DTexture2DArray);
+};
 }  // namespace d3d11
 }  // namespace azer

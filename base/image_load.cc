@@ -88,7 +88,8 @@ ImageDataPtrVec ImageData::LoadCubemap(const char* data, int32 length) {
   return vec;
 }
 
-ImagePtr LoadFromFile(const std::vector<::base::FilePath>& path, TexType type) {
+ImagePtr Image::LoadFromFile(const std::vector<::base::FilePath>& path, 
+                             TexType type) {
   TexType item_type = kTex2D;
   if (type == kTex2DArray) {
     item_type = kTex2D;

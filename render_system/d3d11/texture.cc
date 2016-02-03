@@ -12,6 +12,7 @@
 #include "base/logging.h"
 #include "base/strings/string16.h"
 #include "azer/base/image.h"
+#include "azer/render_system/d3d11/common.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
@@ -335,51 +336,6 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   desc->Texture2D.MostDetailedMip = 0;
 }
 
-// class D3D11TextureCubeMap
-D3DTextureCubeMap::D3DTextureCubeMap(const Texture::Options& opt, 
-                                     D3DRenderSystem* rs)
-    : D3DTexture(opt, rs) {
-}
-
-void D3DTextureCubeMap::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
-  DCHECK_EQ(desc->Width, desc->Height) << "Cubemap's width must equal height.";
-  desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
-} 
-
-bool D3DTextureCubeMap::InitFromImage(const Image* image) {
-  // [reference] MSDN: How to: Initialize a Texture Programmatically
-  const ImageDataPtr& data = image->data(0);
-  uint32 expect_size = SizeofDataFormat(options_.format)
-      * options_.size.width() * options_.size.height();
-  if (data->data_size() != static_cast<int32>(expect_size)) {
-    LOG(ERROR) << "unexpected size: " << data->data_size()
-               << " expected: " << expect_size;
-    return false;
-  }
-  
-  D3D11_SUBRESOURCE_DATA subres[6];
-  for (int i = 0; i < 6; ++i) {
-    const ImageDataPtr& data = image->data(i);
-
-    subres[i].pSysMem = data->data();
-    subres[i].SysMemPitch = options_.size.width()
-        * SizeofDataFormat(options_.format);
-    subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
-  }
-  return Init(subres, 6);
-}
-
-void D3DTextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
-  DCHECK(texres_ != NULL);
-  DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
-            D3D11_SRV_DIMENSION_TEXTURECUBE);
-  memset(desc, 0, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-  desc->Format = tex_desc_.Format;
-  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-  desc->TextureCube.MipLevels = tex_desc_.MipLevels;
-  desc->TextureCube.MostDetailedMip = 0;
-}
-
 // reference: MSDN, Surface Sharing Between Windows Graphics APIs
 D3DTexture2DShared::D3DTexture2DShared(const Texture::Options& opt,
                                        D3DRenderSystem* rs)
@@ -471,5 +427,101 @@ void D3DTexture2DExtern::Attach(ID3D11Texture2D* tex) {
 void D3DTexture2DExtern::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
   desc->MiscFlags      = D3D11_RESOURCE_MISC_SHARED;
 }
+
+// class D3D11TextureCubeMap
+D3DTextureCubeMap::D3DTextureCubeMap(const Texture::Options& opt, 
+                                     D3DRenderSystem* rs)
+    : D3DTexture(opt, rs) {
+}
+
+void D3DTextureCubeMap::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
+  DCHECK_EQ(desc->Width, desc->Height) << "Cubemap's width must equal height.";
+  desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
+} 
+
+bool D3DTextureCubeMap::InitFromImage(const Image* image) {
+  // [reference] MSDN: How to: Initialize a Texture Programmatically
+  const ImageDataPtr& data = image->data(0);
+  uint32 expect_size = SizeofDataFormat(options_.format)
+      * options_.size.width() * options_.size.height();
+  if (data->data_size() != static_cast<int32>(expect_size)) {
+    LOG(ERROR) << "unexpected size: " << data->data_size()
+               << " expected: " << expect_size;
+    return false;
+  }
+  
+  D3D11_SUBRESOURCE_DATA subres[6];
+  for (int i = 0; i < 6; ++i) {
+    const ImageDataPtr& data = image->data(i);
+
+    subres[i].pSysMem = data->data();
+    subres[i].SysMemPitch = options_.size.width()
+        * SizeofDataFormat(options_.format);
+    subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
+  }
+  return Init(subres, 6);
+}
+
+void D3DTextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
+  DCHECK(texres_ != NULL);
+  DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
+            D3D11_SRV_DIMENSION_TEXTURECUBE);
+  memset(desc, 0, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+  desc->Format = tex_desc_.Format;
+  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+  desc->TextureCube.MipLevels = tex_desc_.MipLevels;
+  desc->TextureCube.MostDetailedMip = 0;
+}
+
+
+// class D3D11TextureCubeMap
+D3DTexture2DArray::D3DTexture2DArray(const Texture::Options& opt, 
+                                     D3DRenderSystem* rs)
+    : D3DTexture(opt, rs),
+      diminison_(-1) {
+}
+
+void D3DTexture2DArray::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
+  DCHECK_EQ(desc->Width, desc->Height) << "Cubemap's width must equal height.";
+  desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
+} 
+
+bool D3DTexture2DArray::InitFromImage(const Image* image) {
+  // [reference] MSDN: How to: Initialize a Texture Programmatically
+  const ImageDataPtr& data = image->data(0);
+  uint32 expect_size = SizeofDataFormat(options_.format)
+      * options_.size.width() * options_.size.height();
+  if (data->data_size() != static_cast<int32>(expect_size)) {
+    LOG(ERROR) << "unexpected size: " << data->data_size()
+               << " expected: " << expect_size;
+    return false;
+  }
+  
+  D3D11_SUBRESOURCE_DATA subres[kTex2DArrayMaxDepth] = { 0 };
+  CHECK_LT(image->depth(), kTex2DArrayMaxDepth);
+  diminison_ = image->depth();
+  for (int i = 0; i < image->depth(); ++i) {
+    const ImageDataPtr& data = image->data(i);
+    subres[i].pSysMem = data->data();
+    subres[i].SysMemPitch = options_.size.width()
+        * SizeofDataFormat(options_.format);
+    subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
+  }
+  return Init(subres, image->depth());
+}
+
+void D3DTexture2DArray::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
+  DCHECK(texres_ != NULL);
+  DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
+    D3D11_SRV_DIMENSION_TEXTURE2DARRAY);
+  memset(desc, 0, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+  desc->Format = tex_desc_.Format;
+  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+  desc->Texture2DArray.MipLevels = tex_desc_.MipLevels;
+  desc->Texture2DArray.MostDetailedMip = 0;
+  desc->Texture2DArray.FirstArraySlice = 0;
+  desc->Texture2DArray.ArraySize = diminison_;
+}
+
 }  // namespace d3d11
 }  // namespace azer
