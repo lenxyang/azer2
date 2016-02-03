@@ -149,6 +149,10 @@ void D3DRenderer::SetVertexLayout(VertexLayout* layout) {
   d3d_context_->IASetInputLayout(d3dlayout->input_layout());
 }
 
+void D3DRenderer::DrawAuto() {
+  d3d_context_->DrawAuto();
+}
+
 void D3DRenderer::Draw(int vertices_num, int32 start_vertex) {
   d3d_context_->Draw(vertices_num, start_vertex);
 }

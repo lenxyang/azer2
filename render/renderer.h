@@ -72,6 +72,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void ResetShader(RenderPipelineStage stage) = 0;
   virtual void SetVertexLayout(VertexLayout* layout) = 0;
   virtual void SetPrimitiveTopology(PrimitiveTopology primitive) = 0;
+  virtual void DrawAuto() = 0;
   virtual void Draw(int32 num_of_vertices = -1, int32 first_vertex = 0) = 0;
   virtual void DrawIndex(int32 num_of_indices, int32 first_indices = 0, 
                          int32 index_base = 0) = 0;
