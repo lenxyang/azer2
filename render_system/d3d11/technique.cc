@@ -12,14 +12,22 @@ void D3DTechnique::Use(Renderer* renderer) {
   D3DGeometryGpuProgram* gs = (D3DGeometryGpuProgram*)pline_[kGeometryStage].get();
   D3DHullGpuProgram* hs = (D3DHullGpuProgram*)pline_[kHullStage].get();
   D3DDomainGpuProgram* ds = (D3DDomainGpuProgram*)pline_[kDomainStage].get();
-  DCHECK(vs != NULL);
-  DCHECK(ps != NULL);
-  DCHECK_EQ(vs->stage(), kVertexStage);
-  DCHECK_EQ(ps->stage(), kPixelStage);
 
   ID3D11DeviceContext* d3d_context = ((D3DRenderer*)renderer)->GetContext();
   d3d_context->VSSetShader(vs->resource(), 0, 0);
-  d3d_context->PSSetShader(ps->resource(), 0, 0);
+  
+  if (vs) {
+	DCHECK_EQ(vs->stage(), kVertexStage);
+    d3d_context->VSSetShader(vs->resource(), 0, 0);
+  } else {
+    d3d_context->VSSetShader(NULL, 0, 0);
+  }
+  if (ps) {
+	  DCHECK_EQ(ps->stage(), kPixelStage);
+    d3d_context->PSSetShader(ps->resource(), 0, 0);
+  } else {
+    d3d_context->PSSetShader(NULL, 0, 0);
+  }
 
   if (gs) {
     DCHECK(gs->resource() != NULL);
