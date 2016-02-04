@@ -28,8 +28,9 @@ void Effect::SetVertexDesc(VertexDesc* desc) {
 void Effect::Apply(Renderer* renderer) {
   UseTexture(renderer);
   ApplyGpuConstantTable(renderer);
-  UseConstantsTable(renderer);
-  UseTechnique(renderer);
+  BindConstantsTable(renderer);
+  BindTechnique(renderer);
+  
 }
 
 void Effect::flush(Renderer* renderer) {
@@ -42,18 +43,18 @@ void Effect::flush(Renderer* renderer) {
   }
 }
 
-void Effect::UseTechnique(Renderer* renderer) {
+void Effect::BindTechnique(Renderer* renderer) {
   DCHECK(technique_.get() != NULL);
   technique_->Use(renderer);
 }
 
-void Effect::UseConstantsTable(Renderer* renderer) {
+void Effect::BindConstantsTable(Renderer* renderer) {
   for (int i = (int)kVertexStage; i <= (int)kPixelStage; ++i) {
     GpuConstantsTable* table = gpu_table_[i].get();
     RenderPipelineStage stage = (RenderPipelineStage)i;
     if (table != NULL) {
       table->flush(renderer);
-      renderer->UseConstantsTable(stage, table);
+      renderer->BindConstantsTable(stage, table);
     }
   }
 }

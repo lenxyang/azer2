@@ -8,6 +8,7 @@
 #include "azer/math/math.h"
 #include "azer/base/export.h"
 #include "azer/render/common.h"
+#include "azer/render/hardware_buffer.h"
 
 namespace azer {
 
@@ -45,7 +46,7 @@ class GpuConstantsType {
 
 AZER_EXPORT int32 GpuTableItemTypeSize(const GpuConstantsType::Type type);
 
-class AZER_EXPORT GpuConstantsTable : public ::base::RefCounted<GpuConstantsTable> {
+class AZER_EXPORT GpuConstantsTable : public HardwareBuffer {
  public:
   struct Desc {
     char name[64];
@@ -89,6 +90,8 @@ class AZER_EXPORT GpuConstantsTable : public ::base::RefCounted<GpuConstantsTabl
   int32 size() const { return size_;}
  protected:
   GpuConstantsTable(int32 num, const Desc* desc);
+  HardwareBufferDataPtr map(MapType flags) override;
+  void unmap() override;
 
   struct Variable {
     Desc desc;
@@ -110,33 +113,6 @@ class AZER_EXPORT GpuConstantsTable : public ::base::RefCounted<GpuConstantsTabl
   DISALLOW_COPY_AND_ASSIGN(GpuConstantsTable);
 };
 
-inline int32 GpuConstantsTable::offset(int32 index) const {
-  DCHECK_GE(index, 0);
-  DCHECK_LT(index, constants_.size());
-  return constants_[index].offset;
-}
-
-inline void GpuConstantsTable::SetValue(int32 idx, const void* value, int32 size) {
-  return SetValueWithOffset(idx, 0, value, size);
-}
-
-inline void GpuConstantsTable::SetMatrix(int32 idx, const Matrix4* matrices,
-                                         int num) {
-  return SetValue(idx, (const void*)matrices, sizeof(Matrix4) * num);
-}
-
-inline void GpuConstantsTable::SetData(int offset, const void* value, int32 size) {
-  memcpy(data_.get() + offset, value, size);
-}
-
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
-
-inline int32 GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
-  if (desc.type == GpuConstantsType::kSelfDefined) {
-    DCHECK_NE(desc.element_size, -1);
-    return desc.element_size;
-  } else {
-    return GpuTableItemTypeSize(desc.type);
-  }
-}
+AZER_EXPORT int32 GpuTableItemDescSize(const GpuConstantsTable::Desc& desc);
 }  // namespace

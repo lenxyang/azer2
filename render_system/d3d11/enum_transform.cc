@@ -5,12 +5,12 @@
 namespace azer {
 namespace d3d11 {
 
-D3D11_USAGE TranslateUsage(GraphicBuffer::Usage usage) {
+D3D11_USAGE TranslateUsage(BufferUsage usage) {
   switch(usage) {
-    case GraphicBuffer::kDefault: return  D3D11_USAGE_DEFAULT;
-    case GraphicBuffer::kGPUReayOnly: return D3D11_USAGE_IMMUTABLE;
-    case GraphicBuffer::kDynamic: return D3D11_USAGE_DYNAMIC;
-    case GraphicBuffer::kStaging: return D3D11_USAGE_STAGING;
+    case kBufferDefault: return  D3D11_USAGE_DEFAULT;
+    case kBufferGPUReayOnly: return D3D11_USAGE_IMMUTABLE;
+    case kBufferDynamic: return D3D11_USAGE_DYNAMIC;
+    case kBufferStaging: return D3D11_USAGE_STAGING;
     default:
       DCHECK(false) << "Unsupport usage: " << (int32)usage;
       return D3D11_USAGE_DEFAULT;

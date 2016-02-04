@@ -3,7 +3,36 @@
 
 namespace azer {
 
-GpuConstantsTable::GpuConstantsTable(int32 num, const Desc* desc) {
+int32 GpuConstantsTable::offset(int32 index) const {
+  DCHECK_GE(index, 0);
+  DCHECK_LT(index, constants_.size());
+  return constants_[index].offset;
+}
+
+void GpuConstantsTable::SetValue(int32 idx, const void* value, int32 size) {
+  return SetValueWithOffset(idx, 0, value, size);
+}
+
+void GpuConstantsTable::SetMatrix(int32 idx, const Matrix4* matrices,
+                                  int num) {
+  return SetValue(idx, (const void*)matrices, sizeof(Matrix4) * num);
+}
+
+void GpuConstantsTable::SetData(int offset, const void* value, int32 size) {
+  memcpy(data_.get() + offset, value, size);
+}
+
+int32 GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
+  if (desc.type == GpuConstantsType::kSelfDefined) {
+    DCHECK_NE(desc.element_size, -1);
+    return desc.element_size;
+  } else {
+    return GpuTableItemTypeSize(desc.type);
+  }
+}
+
+GpuConstantsTable::GpuConstantsTable(int32 num, const Desc* desc)
+    : HardwareBuffer(kShaderConstsTableBufferOpt()) {
   int32 offset = 0;
   const Desc* curr = desc;
   for (int32 i = 0; i < num; ++i, ++curr) {
@@ -45,6 +74,14 @@ void GpuConstantsTable::SetValueWithOffset(int32 idx, int32 offset,
   const Variable& variable = constants_[idx];
   DCHECK_LE(size, variable.size);
   SetData(variable.offset + offset, value, size);
+}
+
+HardwareBufferDataPtr GpuConstantsTable::map(MapType flags) {
+  NOTIMPLEMENTED();
+  return HardwareBufferDataPtr();
+}
+void GpuConstantsTable::unmap() {
+  NOTIMPLEMENTED();
 }
 
 int32 GpuTableItemTypeSize(const GpuConstantsType::Type type) {

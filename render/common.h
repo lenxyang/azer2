@@ -112,6 +112,7 @@ enum RenderPipelineStage {
   kDomainStage,
   kComputeStage,
   kGeometryStage,
+  kStreamOutStage,
   kRasterizerStage,
   kPixelStage,
   kOutputMergerStage,
@@ -121,14 +122,11 @@ enum RenderPipelineStage {
 /**
  *
  */
-class GraphicBuffer {
- public:
-  enum Usage {
-    kDefault,      //  require read and write acceed by th GPU
-    kGPUReayOnly,  // can only read by GPU, 
-    kDynamic,      // GPU(read only), CPU(write only)
-    kStaging,      // supports transform resource from GPU to CPU
-  };
+enum BufferUsage {
+  kBufferDefault = 1,  //  require read and write acceed by th GPU
+  kBufferGPUReayOnly,  // can only read by GPU, 
+  kBufferDynamic,      // GPU(read only), CPU(write only)
+  kBufferStaging,      // supports transform resource from GPU to CPU
 };
 
 enum CompareFunc {
@@ -200,7 +198,9 @@ enum BindTarget {
   kBindTargetDepthStencil      = 0x0040L,
   kBindTargetUnorderedAccess   = 0x0080L,
   kBindTargetVertexBuffer      = 0x0100L,
-  kBindTargetStreamOut         = 0x0200L,
+  kBindTargetIndicesBuffer     = 0x0200L,
+  kBindTargetStreamOut         = 0x0400L,
+  kBindTargetContantBuffer     = 0x0800L,
 };
 
 

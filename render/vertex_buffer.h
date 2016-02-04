@@ -147,15 +147,7 @@ class AZER_EXPORT VertexLayout : public ::base::RefCounted<VertexLayout> {
 
 class AZER_EXPORT VertexBuffer : public HardwareBuffer {
  public:
-  struct AZER_EXPORT Options {
-    char name[128];
-    GraphicBuffer::Usage usage;
-    CPUAccess cpu_access;  // defined render_system
-    uint32 target;
-    Options();
-  };
-
-  explicit VertexBuffer(const Options &opt);
+  explicit VertexBuffer(const HBufferOptions &opt);
   virtual ~VertexBuffer();
 
   /**
@@ -171,7 +163,6 @@ class AZER_EXPORT VertexBuffer : public HardwareBuffer {
   const VertexDesc* vertex_desc() const;
   VertexLayout* vertex_layout();
  protected:
-  const Options options_;
   VertexLayoutPtr layout_;
   int32 element_size_;
   int32 buffer_size_;
@@ -209,4 +200,6 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
 
 AZER_EXPORT int32 VertexTypeSize(DataFormat type);
 AZER_EXPORT std::string DumpVertexDesc(const VertexDesc* desc);
+AZER_EXPORT VertexBufferGroupPtr CreateVertexBufferGroup(
+    const HBufferOptions& opt, VertexData* vdata);
 }  // namespace azer

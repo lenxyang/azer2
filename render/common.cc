@@ -12,6 +12,7 @@ const char* RenderStageName(RenderPipelineStage stage) {
     case kTessellatorStage: return "TessellatorStage";
     case kDomainStage: return "DomainStage";
     case kGeometryStage: return "GeometryStage";
+    case kStreamOutStage: return "StreamOutStage";
     case kRasterizerStage: return "RasterizerStage";
     case kPixelStage: return "PixelStage";
     case kOutputMergerStage: return "OutputMergerStage";

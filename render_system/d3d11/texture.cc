@@ -269,7 +269,7 @@ bool ValidTextureFlags(const Texture::Options& opt) {
   // cpu access require for Usage
   // reference D3D11_CPU_ACCESS_FLAG enumeration
   if (opt.cpu_access & kCPURead) {
-    if (!(opt.usage & GraphicBuffer::kStaging)) {
+    if (!(opt.usage & kBufferStaging)) {
       return false;
     }
 
@@ -282,8 +282,8 @@ bool ValidTextureFlags(const Texture::Options& opt) {
     }
   }
   if (opt.cpu_access & kCPUWrite) {
-    if (!(opt.usage & GraphicBuffer::kStaging
-          && opt.usage & GraphicBuffer::kDynamic)) {
+    if (!(opt.usage & kBufferStaging
+          && opt.usage & kBufferDynamic)) {
       return false;
     }
   }
@@ -342,7 +342,7 @@ D3DTexture2DShared::D3DTexture2DShared(const Texture::Options& opt,
     : D3DTexture2D(opt, rs)
     , shared_handle_(NULL) {
   DCHECK(opt.target & kBindTargetRenderTarget);
-  DCHECK_EQ(opt.usage, GraphicBuffer::kDefault);
+  DCHECK_EQ(opt.usage, kBufferDefault);
 }
 
 D3DTexture2DShared::~D3DTexture2DShared() {

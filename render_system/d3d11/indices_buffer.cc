@@ -10,8 +10,7 @@
 
 namespace azer {
 namespace d3d11 {
-D3DIndicesBuffer::D3DIndicesBuffer(const IndicesBuffer::Options& opt,
-                                   D3DRenderSystem* rs)
+D3DIndicesBuffer::D3DIndicesBuffer(const HBufferOptions& opt, D3DRenderSystem* rs)
     : IndicesBuffer(opt)
     , locked_(false)
     , buffer_(NULL)
@@ -51,8 +50,8 @@ bool D3DIndicesBuffer::Init(const IndicesData* data) {
 }
 
 HardwareBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
-  DCHECK(options_.usage & GraphicBuffer::kDynamic
-         || options_.usage & GraphicBuffer::kStaging);
+  DCHECK(options_.usage & kBufferDynamic
+         || options_.usage & kBufferStaging);
   DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
   HRESULT hr;
   DCHECK(!locked_) << "Indices Buffer("") has been locked";

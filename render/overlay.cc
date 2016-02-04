@@ -38,7 +38,7 @@ bool Overlay::Init(RenderSystem* rs) {
 
 void Overlay::SetBlending(Renderer* renderer) {
   if (blending_.get()) {
-    renderer->UseBlending(blending_.get(), 0);
+    renderer->SetBlending(blending_.get(), 0, 0xffffffff);
   }
 }
 

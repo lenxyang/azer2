@@ -38,7 +38,7 @@ class AZER_EXPORT Texture : public Resource {
     gfx::Size size;
     SamplerState sampler;
     DataFormat format;            // default: kRGBAn8
-    GraphicBuffer::Usage usage;   // default: GraphicBuffer::kDefault
+    BufferUsage usage;   // default: GraphicBuffer::kDefault
     CPUAccess cpu_access;         // default: kCPUNoAccess
     uint32 target;
     TexType type;

@@ -16,7 +16,7 @@
 namespace azer {
 namespace d3d11 {
 
-D3D11_USAGE TranslateUsage(GraphicBuffer::Usage usage);
+D3D11_USAGE TranslateUsage(BufferUsage usage);
 D3D11_CPU_ACCESS_FLAG TranslateCPUAccess(CPUAccess access);
 DXGI_FORMAT TranslateFormat(DataFormat type);
 DataFormat TranslateD3DFormat(DXGI_FORMAT type);

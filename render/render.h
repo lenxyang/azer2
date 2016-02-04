@@ -24,7 +24,6 @@
 #include "azer/render/technique.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/vertex_pack.h"
-#include "azer/render/create_object_util.h"
 
 #include "azer/render/scoped_render_target.h"
 #include "azer/render/render_system_loader.h"

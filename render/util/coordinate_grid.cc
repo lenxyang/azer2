@@ -45,17 +45,17 @@ void CoordinateGrid::Init() {
     vertex->position = Vector4(x, 0.0f, total_height / 2.0f, 1.0f);
     vertex++;
   }
-  vb_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data_.get());
+  vb_ = rs->CreateVertexBuffer(kVertexBufferOpt(), data_.get());
 }
 
 void CoordinateGrid::Render(Renderer* renderer) {
   effect_ptr_->SetGridDiffuse(x_color_);
-  renderer->UseEffect(effect_ptr_.get());
-  renderer->UseVertexBuffer(vb_.get());
+  renderer->BindEffect(effect_ptr_.get());
+  renderer->BindVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kLineList);
   renderer->Draw((kNum + 1) * 2, (kNum + 1) * 2);
   effect_ptr_->SetGridDiffuse(z_color_);
-  renderer->UseEffect(effect_ptr_.get());
+  renderer->BindEffect(effect_ptr_.get());
   renderer->Draw((kNum + 1) * 2, 0);
 }
 

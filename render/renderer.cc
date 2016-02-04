@@ -17,7 +17,7 @@ Renderer::Renderer(RenderSystem* rs) :
 Renderer::~Renderer() {
 }
 
-void Renderer::UseEffect(Effect* effect) {
+void Renderer::BindEffect(Effect* effect) {
   effect->Apply(this);
 }
 

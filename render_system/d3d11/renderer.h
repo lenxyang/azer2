@@ -30,17 +30,15 @@ class D3DRenderer : public Renderer {
   void Use() override;
   const std::string& name() const override;
 
-  void UseVertexBuffer(VertexBuffer* vb) override;
-  void UseVertexBufferGroup(VertexBufferGroup* vbg) override;
-  void UseIndicesBuffer(IndicesBuffer* ib) override;
-  void UseBlending(Blending* blending, float* factor, uint32 mask) override;
+  void SetBlending(Blending* blending, float* factor, uint32 mask) override;
   void ResetBlending() override;
-
-  void UseConstantsTable(RenderPipelineStage stage, 
+  void BindVertexBuffer(VertexBuffer* vb) override;
+  void BindVertexBufferGroup(VertexBufferGroup* vbg) override;
+  void BindIndicesBuffer(IndicesBuffer* ib) override;
+  void BindConstantsTable(RenderPipelineStage stage, 
                          GpuConstantsTable* table) override;
-
-  // texutre functions
-  void UseTexture(RenderPipelineStage stage, int index, Texture* texture) override;
+  void BindTexture(RenderPipelineStage stage, int index, Texture* texture) override;
+  void SetStreamOutTarget(HardwareBuffer* buffer, int count, int offset) override;
   void ResetShader(RenderPipelineStage stage) override;
 
   void Clear(const azer::Vector4& color) override;

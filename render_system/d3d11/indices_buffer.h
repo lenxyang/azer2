@@ -11,7 +11,7 @@ class D3DRenderSystem;
 
 class D3DIndicesBuffer : public IndicesBuffer {
  public:
-  D3DIndicesBuffer(const IndicesBuffer::Options& opt, D3DRenderSystem* rs);
+  D3DIndicesBuffer(const HBufferOptions& opt, D3DRenderSystem* rs);
   ~D3DIndicesBuffer() override;
 
   HardwareBufferDataPtr map(MapType flags) override;

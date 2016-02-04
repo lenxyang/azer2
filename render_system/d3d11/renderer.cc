@@ -64,7 +64,7 @@ void D3DRenderer::ResetBlending() {
   d3d_context_->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
 
-void D3DRenderer::UseVertexBuffer(VertexBuffer* vvb) {
+void D3DRenderer::BindVertexBuffer(VertexBuffer* vvb) {
   if (vvb) {
     DCHECK(typeid(*vvb) == typeid(D3DVertexBuffer));
     D3DVertexBuffer* vb = static_cast<D3DVertexBuffer*>(vvb);
@@ -79,7 +79,7 @@ void D3DRenderer::UseVertexBuffer(VertexBuffer* vvb) {
   }
 }
 
-void D3DRenderer::UseVertexBufferGroup(VertexBufferGroup* vbg) {
+void D3DRenderer::BindVertexBufferGroup(VertexBufferGroup* vbg) {
   DCHECK(typeid(*vbg) == typeid(D3DVertexBufferGroup));
   D3DVertexBufferGroup* vg = static_cast<D3DVertexBufferGroup*>(vbg);
   D3DVertexLayout* layout = static_cast<D3DVertexLayout*>(vg->vertex_layout());
@@ -88,7 +88,7 @@ void D3DRenderer::UseVertexBufferGroup(VertexBufferGroup* vbg) {
                                    vg->buffer(), vg->strides(), vg->offsets());
 }
 
-void D3DRenderer::UseIndicesBuffer(IndicesBuffer* vib) {
+void D3DRenderer::BindIndicesBuffer(IndicesBuffer* vib) {
   if (vib) {
     DCHECK(typeid(*vib) == typeid(D3DIndicesBuffer));
     D3DIndicesBuffer* ib = static_cast<D3DIndicesBuffer*>(vib);
@@ -98,7 +98,10 @@ void D3DRenderer::UseIndicesBuffer(IndicesBuffer* vib) {
   }
 }
 
-void D3DRenderer::UseBlending(Blending* vblending, float* factor, uint32 mask) {
+void D3DRenderer::SetStreamOutTarget(HardwareBuffer* buffer, int count, int offset) {
+}
+
+void D3DRenderer::SetBlending(Blending* vblending, float* factor, uint32 mask) {
   DCHECK(NULL != d3d_context_);
   D3DBlending* blending = (D3DBlending*)vblending;
   DCHECK(NULL != blending->blending_state_);
@@ -176,8 +179,8 @@ void D3DRenderer::DrawIndexInstanced(int32 instance_num, int32 indices_num,
                                      instance_start_index);
 }
 
-void D3DRenderer::UseConstantsTable(RenderPipelineStage stage,
-                                    GpuConstantsTable* table) {
+void D3DRenderer::BindConstantsTable(RenderPipelineStage stage,
+                                     GpuConstantsTable* table) {
   D3DGpuConstantsTable* constants = (D3DGpuConstantsTable*)table;
   if (stage == kVertexStage) {
     d3d_context_->VSSetConstantBuffers(0, 1, &(constants->buffer_));
@@ -214,7 +217,7 @@ inline void D3DRenderer::ResetTexture(RenderPipelineStage stage, int index) {
   }
 }
 
-void D3DRenderer::UseTexture(RenderPipelineStage stage, int index,
+void D3DRenderer::BindTexture(RenderPipelineStage stage, int index,
                              Texture* texture) {
   D3DTexture2D* tex = (D3DTexture2D*)texture;
   if (tex) {

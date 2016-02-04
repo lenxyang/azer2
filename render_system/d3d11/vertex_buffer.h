@@ -28,7 +28,7 @@ class D3DVertexLayout : public VertexLayout {
 
 class D3DVertexBuffer : public VertexBuffer {
  public:
-  D3DVertexBuffer(const Options &opt, D3DRenderSystem* rs);
+  D3DVertexBuffer(const HBufferOptions &opt, D3DRenderSystem* rs);
   virtual ~D3DVertexBuffer();
   bool Init(SlotVertexData* dataptr);
 

@@ -48,18 +48,16 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
 
   virtual void Use() = 0;
 
-  void UseEffect(Effect* effect); 
-  virtual void UseVertexBuffer(VertexBuffer* vb) = 0;
-  virtual void UseVertexBufferGroup(VertexBufferGroup* vbg) = 0;
-  virtual void UseIndicesBuffer(IndicesBuffer* ib) = 0;
-  virtual void UseBlending(Blending* blending, float* factor,
-                           uint32 mask = 0xffffffff) = 0;
-  virtual void ResetBlending() = 0;
-
-  virtual void UseTexture(RenderPipelineStage stage, int index, Texture* texture) = 0;
-
-  virtual void UseConstantsTable(RenderPipelineStage stage,
+  void BindEffect(Effect* effect); 
+  virtual void BindVertexBuffer(VertexBuffer* vb) = 0;
+  virtual void BindVertexBufferGroup(VertexBufferGroup* vbg) = 0;
+  virtual void BindIndicesBuffer(IndicesBuffer* ib) = 0;
+  virtual void BindTexture(RenderPipelineStage stage, int index, Texture* texture) = 0;
+  virtual void BindConstantsTable(RenderPipelineStage stage,
                                  GpuConstantsTable* table) = 0;
+  virtual void SetStreamOutTarget(HardwareBuffer* buffer, int count, int offset) = 0;
+  virtual void SetBlending(Blending* blending, float* factor, uint32 mask) = 0;
+  virtual void ResetBlending() = 0;
   virtual void Reset() = 0;
 
   virtual void Clear(const azer::Vector4& color) = 0;

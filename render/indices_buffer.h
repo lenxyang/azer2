@@ -9,6 +9,11 @@
 #include "azer/render/hardware_buffer.h"
 
 namespace azer {
+class IndicesData;
+class IndicesBuffer;
+typedef scoped_refptr<IndicesData> IndicesDataPtr;
+typedef scoped_refptr<IndicesBuffer> IndicesBufferPtr;
+
 enum IndexType {
   kIndexUndefined = 0,
   kIndexUint8,
@@ -41,34 +46,17 @@ class AZER_EXPORT IndicesData : public Resource {
   DISALLOW_COPY_AND_ASSIGN(IndicesData);
 };
 
-typedef scoped_refptr<IndicesData> IndicesDataPtr;
-
-class IndicesBuffer;
-typedef scoped_refptr<IndicesBuffer> IndicesBufferPtr;
-
 class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
-public:
-  struct AZER_EXPORT Options {
-    GraphicBuffer::Usage usage;
-    CPUAccess cpu_access;  // defined render_system
-    Options();
-  };
-
-  static IndicesBufferPtr CreateDefaultIndicesBuffer(RenderSystem* rs,
-                                                     IndicesData* data);
-
-  IndicesBuffer(const Options& opt);
+ public:
+  IndicesBuffer(const HBufferOptions& opt);
 
   virtual ~IndicesBuffer();
 
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
   IndexType type() const { return type_;}
-
-  const Options& options() const { return options_;}
   int32 indices_count() const { return indices_count_;}
  protected:
-  const Options options_;
   int32 indices_count_;
   IndexType type_;
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);

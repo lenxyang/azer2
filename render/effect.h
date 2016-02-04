@@ -41,8 +41,8 @@ class AZER_EXPORT Effect : public Resource {
   virtual void UseTexture(Renderer* renderer);
   virtual void ApplyGpuConstantTable(Renderer* renderer) = 0;
   void InitShaders(const Shaders& sources);
-  void UseConstantsTable(Renderer* renderer);
-  void UseTechnique(Renderer* renderer);
+  void BindConstantsTable(Renderer* renderer);
+  void BindTechnique(Renderer* renderer);
 
   TechniquePtr technique_;
   std::vector<scoped_refptr<GpuConstantsTable> > gpu_table_;

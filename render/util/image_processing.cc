@@ -40,7 +40,7 @@ void SimpleImageProcessingEffect::ApplyGpuConstantTable(Renderer* renderer) {
 }
 
 void SimpleImageProcessingEffect::UseTexture(azer::Renderer* renderer) {
-  renderer->UseTexture(azer::kPixelStage, 0, texture_.get());
+  renderer->BindTexture(azer::kPixelStage, 0, texture_.get());
 }
 
 EffectPtr CreateSimpleImageProcessingEffect() {

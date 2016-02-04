@@ -54,7 +54,7 @@ const char* D3DOverlayEffect::GetEffectName() const {
 }
 
 void D3DOverlayEffect::UseTexture(Renderer* renderer) {
-  renderer->UseTexture(azer::kPixelStage, 0, texture_.get());
+  renderer->BindTexture(azer::kPixelStage, 0, texture_.get());
 }
 
 void D3DOverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
@@ -158,7 +158,7 @@ bool D3DOverlay::InitVertex(RenderSystem* rs) {
   scoped_refptr<SlotVertexData> data(new SlotVertexData(vertex_desc_ptr_, kVertexNum));
   int32* ptr = (int32*)data->pointer();
   memcpy(ptr, indices, sizeof(indices));
-  vb_ptr_ = rs->CreateVertexBuffer(VertexBuffer::Options(), data.get());
+  vb_ptr_ = rs->CreateVertexBuffer(kVertexBufferOpt(), data.get());
   if (!vb_ptr_.get()) {
     return false;
   }
@@ -177,8 +177,8 @@ void D3DOverlay::Render(Renderer* renderer) {
   effect_->SetVertex(vertex_);
   effect_->SetTexcoord(texcoord_);
   effect_->SetTexture(tex_);
-  renderer->UseEffect(effect_.get());
-  renderer->UseVertexBuffer(vb_ptr_.get());
+  renderer->BindEffect(effect_.get());
+  renderer->BindVertexBuffer(vb_ptr_.get());
   renderer->SetPrimitiveTopology(azer::kTriangleList);
   renderer->Draw(6, 0);
   ResetBlending(renderer);

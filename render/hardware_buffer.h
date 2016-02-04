@@ -10,13 +10,13 @@
 namespace azer {
 
 class Renderer;
+class HardwareBufferData;
+class HardwareBuffer;
+typedef scoped_refptr<HardwareBufferData> HardwareBufferDataPtr;
 
-class AZER_EXPORT HardwareBufferData 
-    : public ::base::RefCounted<HardwareBufferData> {
+class AZER_EXPORT HardwareBufferData: public ::base::RefCounted<HardwareBufferData> {
  public:
-  HardwareBufferData() : data_(0), row_size_(-1), size_(-1) {
-  }
-
+  HardwareBufferData();
   uint8* data_ptr() const { return data_;}
   int32 row_size() const { return row_size_;}
   int32 column_num() const { return column_num_;}
@@ -30,11 +30,17 @@ class AZER_EXPORT HardwareBufferData
   DISALLOW_COPY_AND_ASSIGN(HardwareBufferData);
 };
 
-typedef scoped_refptr<HardwareBufferData> HardwareBufferDataPtr;
+struct AZER_EXPORT HBufferOptions {
+  char name[128];
+  BufferUsage usage;
+  CPUAccess cpu_access;  // defined render_system
+  uint32 target;
+  HBufferOptions();
+};
 
 class AZER_EXPORT HardwareBuffer : public ::base::RefCounted<HardwareBuffer> {
  public:
-  HardwareBuffer() {}
+  HardwareBuffer(const HBufferOptions& opt) {}
   virtual ~HardwareBuffer() {}
 
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
@@ -49,7 +55,10 @@ class AZER_EXPORT HardwareBuffer : public ::base::RefCounted<HardwareBuffer> {
   void SetLockDataColumnNum(int32 num, HardwareBufferData* data) {
     data->column_num_ = num;
   }
- private:
+
+  const HBufferOptions& options() const { return options_;}
+ protected:
+  const HBufferOptions options_;
   DISALLOW_COPY_AND_ASSIGN(HardwareBuffer);
 };
 
@@ -69,4 +78,8 @@ class AZER_EXPORT AutoBufferLock {
   HardwareBuffer* hbuffer_;
   DISALLOW_COPY_AND_ASSIGN(AutoBufferLock);
 };
+
+AZER_EXPORT const HBufferOptions& kVertexBufferOpt();
+AZER_EXPORT const HBufferOptions& kIndicesBufferOpt();
+AZER_EXPORT const HBufferOptions& kShaderConstsTableBufferOpt();
 }  // namespace azer

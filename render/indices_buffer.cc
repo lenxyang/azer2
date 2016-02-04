@@ -68,8 +68,9 @@ uint8* IndicesData::pointer() {
   return data_.get();
 }
 
-IndicesBuffer::IndicesBuffer(const Options& opt)
-    : options_(opt)
+// class IndicesBuffer
+IndicesBuffer::IndicesBuffer(const HBufferOptions& opt)
+    : HardwareBuffer(opt)
     , indices_count_(-1)
     , type_(kIndexUndefined) {
 }
@@ -77,13 +78,4 @@ IndicesBuffer::IndicesBuffer(const Options& opt)
 IndicesBuffer::~IndicesBuffer() {
 }
 
-IndicesBuffer::Options::Options()
-    : usage(GraphicBuffer::kDefault)
-    , cpu_access(kCPUNoAccess) {
-}
-
-IndicesBufferPtr IndicesBuffer::CreateDefaultIndicesBuffer(RenderSystem* rs,
-                                                           IndicesData* data) {
-  return rs->CreateIndicesBuffer(Options(), data);
-}
 }  // namespace azer

@@ -244,16 +244,8 @@ VertexDesc* VertexData::vertex_desc() {
   return desc_.get();
 }
 
-// class VertexBuffer
-VertexBuffer::Options::Options()
-    : usage(GraphicBuffer::kDefault),
-      cpu_access(kCPUNoAccess),
-      target(kBindTargetVertexBuffer) {
-  memset(name, 0, sizeof(name));
-}
-
-VertexBuffer::VertexBuffer(const Options &opt)
-    : options_(opt)
+VertexBuffer::VertexBuffer(const HBufferOptions &opt)
+    : HardwareBuffer(opt)
     , element_size_(-1)
     , buffer_size_(-1)
     , vertex_count_(-1) {
@@ -362,4 +354,17 @@ std::string DumpVertexDesc(const VertexDesc* desc) {
   return ss.str();
 }
 
+
+VertexBufferGroupPtr CreateVertexBufferGroup(const HBufferOptions& opt,
+                                             VertexData* vdata) {
+  RenderSystem* rs = RenderSystem::Current();
+  VertexBufferGroupPtr group(rs->CreateVertexBufferGroup(vdata->vertex_desc()));
+  int32 slot_count = vdata->vertex_desc()->slot_count();
+  for (int32 i = 0; i < slot_count; ++i) {
+    SlotVertexData* slot_data = vdata->vertex_data_at(i);
+    VertexBufferPtr vb = rs->CreateVertexBuffer(opt, slot_data);
+    group->add_vertex_buffer(vb.get());
+  }
+  return group;
+}
 }  // namespace azer

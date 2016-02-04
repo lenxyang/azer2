@@ -25,7 +25,7 @@ SamplerState::SamplerState()
 
 Texture::Options::Options()
     : format(kRGBAn8),
-      usage(GraphicBuffer::kDefault),
+      usage(kBufferDefault),
       cpu_access(kCPUNoAccess),
       target(kBindTargetUnknown),
       type(kTex2D),

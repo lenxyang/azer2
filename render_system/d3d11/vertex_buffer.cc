@@ -103,7 +103,7 @@ bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
 }
 
 // class D3DVertexBuffer
-D3DVertexBuffer::D3DVertexBuffer(const Options &opt, D3DRenderSystem* rs)
+D3DVertexBuffer::D3DVertexBuffer(const HBufferOptions &opt, D3DRenderSystem* rs)
     : VertexBuffer(opt)
     , locked_(false)
     , buffer_(NULL)
@@ -147,8 +147,8 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr) {
 }
 
 HardwareBufferDataPtr D3DVertexBuffer::map(MapType flags) {
-  DCHECK(options_.usage & GraphicBuffer::kDynamic
-         || options_.usage & GraphicBuffer::kStaging);
+  DCHECK(options_.usage & kBufferDynamic
+         || options_.usage & kBufferStaging);
   DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
 
   HRESULT hr;

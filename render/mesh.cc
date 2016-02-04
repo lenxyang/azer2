@@ -106,8 +106,8 @@ void Entity::Render(Renderer* renderer) {
 
 void Entity::Draw(Renderer* renderer) {
   DCHECK(vbg_.get() && vbg_->validate());
-  renderer->UseVertexBufferGroup(vbg_.get());
-  renderer->UseIndicesBuffer(NULL);
+  renderer->BindVertexBufferGroup(vbg_.get());
+  renderer->BindIndicesBuffer(NULL);
   renderer->SetPrimitiveTopology(primitive_type());
   int32 count = (vertex_count_ > 0) ? vertex_count_ : vbg_->vertex_count();
   renderer->Draw(count, vertex_base_);
@@ -115,8 +115,8 @@ void Entity::Draw(Renderer* renderer) {
 
 void Entity::DrawIndex(Renderer* renderer) {
   DCHECK(vbg_.get() && vbg_->validate());
-  renderer->UseVertexBufferGroup(vbg_.get());
-  renderer->UseIndicesBuffer(ib_.get());
+  renderer->BindVertexBufferGroup(vbg_.get());
+  renderer->BindIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(primitive_type());
   int32 count = (index_count_ > 0) ? index_count_ : ib_->indices_count();
   renderer->DrawIndex(count, vertex_base_, index_base_);
@@ -182,7 +182,7 @@ void MeshPart::Render(Renderer* renderer) {
   } else {
     scoped_ptr<ScopedResetBlending> autoblending_;
     autoblending_.reset(new ScopedResetBlending(renderer));
-    renderer->UseBlending(blending_.get(), 0);
+    renderer->SetBlending(blending_.get(), 0, 0xffffffff);
     RenderPart(renderer);
   }
 }
@@ -190,7 +190,7 @@ void MeshPart::Render(Renderer* renderer) {
 void MeshPart::RenderPart(Renderer* renderer) {
   DCHECK(effect_.get()) << "MeshPart Entity cannot be NULL";
   ApplyParams(effect_.get());
-  renderer->UseEffect(effect_.get());
+  renderer->BindEffect(effect_.get());
   for (int32 i = 0; i < vecptr_->entity_count(); ++i) {
     Entity* entity = vecptr_->entity_at(i);
     entity->Render(renderer);
