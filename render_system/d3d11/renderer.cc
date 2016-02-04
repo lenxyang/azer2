@@ -98,7 +98,17 @@ void D3DRenderer::BindIndicesBuffer(IndicesBuffer* vib) {
   }
 }
 
-void D3DRenderer::SetStreamOutTarget(HardwareBuffer* buffer, int count, int offset) {
+void D3DRenderer::SetStreamOutTargets(HardwareBuffer** buffer, int count, 
+                                      int offset) {
+  DCHECK_GT(offset, count);
+  ID3D11Buffer* buffers[1024];
+  for (int i = 0; i < count; ++i) {
+    DCHECK(dynamic_cast<D3DVertexBuffer*>(*(buffer + i)));
+    D3DVertexBuffer* vb = static_cast<D3DVertexBuffer*>(*(buffer + i));
+    buffers[i] = vb->buffer();
+  }
+
+  d3d_context_->SOSetTargets(count, buffers, NULL);
 }
 
 void D3DRenderer::SetBlending(Blending* vblending, float* factor, uint32 mask) {

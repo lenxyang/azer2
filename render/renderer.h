@@ -15,10 +15,11 @@ namespace azer {
 
 class Blending;
 class Effect;
-class IndicesBuffer;
 class DepthBuffer;
 class DepthStencilState;
 class GpuConstantsTable;
+class HardwareBuffer;
+class IndicesBuffer;
 class RenderSystem;
 class RasterizerState;
 class Texture;
@@ -55,7 +56,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void BindTexture(RenderPipelineStage stage, int index, Texture* texture) = 0;
   virtual void BindConstantsTable(RenderPipelineStage stage,
                                  GpuConstantsTable* table) = 0;
-  virtual void SetStreamOutTarget(HardwareBuffer* buffer, int count, int offset) = 0;
+  virtual void SetStreamOutTargets(HardwareBuffer** buffer, int count, int off) = 0;
   virtual void SetBlending(Blending* blending, float* factor, uint32 mask) = 0;
   virtual void ResetBlending() = 0;
   virtual void Reset() = 0;

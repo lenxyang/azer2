@@ -38,7 +38,7 @@ class D3DRenderer : public Renderer {
   void BindConstantsTable(RenderPipelineStage stage, 
                          GpuConstantsTable* table) override;
   void BindTexture(RenderPipelineStage stage, int index, Texture* texture) override;
-  void SetStreamOutTarget(HardwareBuffer* buffer, int count, int offset) override;
+  void SetStreamOutTargets(HardwareBuffer** buffer, int count, int offset) override;
   void ResetShader(RenderPipelineStage stage) override;
 
   void Clear(const azer::Vector4& color) override;
