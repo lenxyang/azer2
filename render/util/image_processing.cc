@@ -22,23 +22,23 @@ SimpleImageProcessingEffect::SimpleImageProcessingEffect() {
 const char* SimpleImageProcessingEffect::GetEffectName() const {
    return kEffectName;
 }
-bool SimpleImageProcessingEffect::Init(VertexDesc* desc,
-                                       const TechSource& sources) {
+
+bool SimpleImageProcessingEffect::Init(VertexDesc* desc, const TechSource& sources) {
   if (desc) {
     vertex_desc_ = desc;
   } else {
     vertex_desc_ = new azer::VertexDesc(kVertexDesc, kVertexDescNum);
   }
 
+  RenderSystem* rs = RenderSystem::Current();
   DCHECK(sources.size() == azer::kRenderPipelineStageNum);
   DCHECK(!sources[azer::kVertexStage].code.empty());
   DCHECK(!sources[azer::kPixelStage].code.empty());
-  InitShaders(sources);
+  technique_ = CreateTechnique(sources, rs);
   return true;
 }
 
-void SimpleImageProcessingEffect::ApplyGpuConstantTable(Renderer* renderer) {
-}
+void SimpleImageProcessingEffect::ApplyGpuConstantTable(Renderer* renderer) {}
 
 void SimpleImageProcessingEffect::UseTexture(azer::Renderer* renderer) {
   renderer->BindTexture(azer::kPixelStage, 0, texture_.get());
@@ -49,12 +49,12 @@ EffectPtr CreateSimpleImageProcessingEffect() {
       SimpleImageProcessingEffect::kVertexDesc,
       SimpleImageProcessingEffect::kVertexDescNum);
   TechSource shaders(vertex_desc);
-  CHECK(LoadShaderInfo(kVertexStage,
-                        "azer/render/util/effects/hlsl/rgba2bgra.hlsl.vs",
-                        &shaders));
-  CHECK(LoadShaderInfo(kPixelStage, 
-                        "azer/render/util/effects/hlsl/rgba2bgra.hlsl.ps",
-                        &shaders));
+  CHECK(LoadShader(kVertexStage,
+                   "azer/render/util/effects/hlsl/rgba2bgra.hlsl.vs",
+                   &shaders));
+  CHECK(LoadShader(kPixelStage, 
+                   "azer/render/util/effects/hlsl/rgba2bgra.hlsl.ps",
+                   &shaders));
   EffectPtr ptr(new SimpleImageProcessingEffect);
   ptr->Init(vertex_desc, shaders);
   return ptr;

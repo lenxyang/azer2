@@ -65,7 +65,7 @@ void CoordinateGridEffect::InitEffect() {
   shader.code = GetCommonShaderProgram(kEffectName, "", kPixelStage, NULL);
   shader.path = kEffectName;
   sources.SetStage(kPixelStage, shader);
-  InitShaders(sources);
+  technique_ = CreateTechnique(sources, rs);
 }
 
 }  // namespace azer

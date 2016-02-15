@@ -9,14 +9,15 @@
 
 namespace azer {
 
-class Renderer;
-
-class VertexDesc;
 class GpuProgram;
+class Technique;
+class Renderer;
+class VertexDesc;
 class VertexGpuProgram;
 typedef scoped_refptr<GpuProgram> GpuProgramPtr;
 typedef scoped_refptr<VertexGpuProgram> VertexGpuProgramPtr;
 typedef scoped_refptr<VertexDesc> VertexDescPtr;
+typedef scoped_refptr<Technique> TechniquePtr;
 
 class AZER_EXPORT TechSource {
  public:
@@ -33,6 +34,7 @@ class AZER_EXPORT TechSource {
 
   const Options& options() const { return options_;}
   const ShaderInfo& operator[](const int32 index) const;
+  const ShaderInfo& GetStage(const int32 index) const;
   int32 size() const { return kRenderPipelineStageNum;}
   VertexDesc* vertex_desc() const { return vertex_desc_;}
   VertexDesc* streamout_vertex_desc() const { return streamout_desc_;}
@@ -50,7 +52,6 @@ class AZER_EXPORT Technique : public ::base::RefCounted<Technique> {
  public:
   virtual ~Technique();
   void AddShader(ShaderPtr& gpu);
-  void AddShader(VertexShaderPtr& gpu);
 
   virtual void Use(Renderer*) = 0;
   VertexDesc* GetVertexDesc();
@@ -61,6 +62,5 @@ class AZER_EXPORT Technique : public ::base::RefCounted<Technique> {
   DISALLOW_COPY_AND_ASSIGN(Technique);
 };
 
-typedef scoped_refptr<Technique> TechniquePtr;
-
+AZER_EXPORT TechniquePtr CreateTechnique(const TechSource& source, RenderSystem* rs);
 }  // namespace azer

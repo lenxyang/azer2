@@ -24,7 +24,7 @@ bool PVWEffect::Init(VertexDesc* desc, const TechSource& sources) {
   DCHECK(!sources[kVertexStage].code.empty());
   DCHECK(!sources[kPixelStage].code.empty());
 
-  InitShaders(sources);
+  technique_ = CreateTechnique(sources, rs);
 
   // generate GpuTable init for stage kVertexStage
   GpuConstantsTable::Desc vs_table_desc[] = {
@@ -54,12 +54,12 @@ void PVWEffect::ApplyGpuConstantTable(Renderer* renderer) {
 
 PVWEffectPtr CreatePVWEffect() {
   TechSource shaders(PositionVertex::CreateVertexDesc());
-  CHECK(LoadShaderInfo(kVertexStage,
-                        "azer/render/util/effects/hlsl/pvw.hlsl.vs",
-                        &shaders));
-  CHECK(LoadShaderInfo(kPixelStage,
-                        "azer/render/util/effects/hlsl/pvw.hlsl.ps",
-                        &shaders));
+  CHECK(LoadShader(kVertexStage,
+                   "azer/render/util/effects/hlsl/pvw.hlsl.vs",
+                   &shaders));
+  CHECK(LoadShader(kPixelStage,
+                   "azer/render/util/effects/hlsl/pvw.hlsl.ps",
+                   &shaders));
   PVWEffectPtr ptr(new PVWEffect);
   ptr->Init(PositionVertex::CreateVertexDesc(), shaders);
   return ptr;

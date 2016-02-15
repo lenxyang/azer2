@@ -48,7 +48,8 @@ void ColoredDiffuseEffect::InitGpuConstantTable() {
       arraysize(ps_table_desc), ps_table_desc);
 }
 void ColoredDiffuseEffect::InitTechnique(const TechSource& sources) {
-  InitShaders(sources);
+  RenderSystem* rs = RenderSystem::Current();
+  technique_ = CreateTechnique(sources, rs);
 }
 
 void ColoredDiffuseEffect::ApplyGpuConstantTable(Renderer* renderer) {
@@ -78,12 +79,12 @@ void ColoredDiffuseEffect::SetDirLight(const DirLight& value) {
 
 ColoredDiffuseEffectPtr CreateColoredDiffuseEffect() {
   TechSource shaders(PosNormalVertex::CreateVertexDesc());
-  CHECK(LoadShaderInfo(kVertexStage, 
-                          "azer/render/util/effects/hlsl/colored_diffuse.hlsl.vs",
-                          &shaders));
-  CHECK(LoadShaderInfo(kPixelStage, 
-                          "azer/render/util/effects/hlsl/colored_diffuse.hlsl.ps",
-                          &shaders));
+  CHECK(LoadShader(kVertexStage, 
+                   "azer/render/util/effects/hlsl/colored_diffuse.hlsl.vs",
+                   &shaders));
+  CHECK(LoadShader(kPixelStage, 
+                   "azer/render/util/effects/hlsl/colored_diffuse.hlsl.ps",
+                   &shaders));
   ColoredDiffuseEffectPtr ptr(new ColoredDiffuseEffect());
   ptr->Init(PosNormalVertex::CreateVertexDesc(), shaders);
   return ptr;

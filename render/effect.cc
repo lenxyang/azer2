@@ -14,11 +14,9 @@ Effect::Effect()
   gpu_table_.resize(kRenderPipelineStageNum);
 }
 
-Effect::~Effect() {
-}
+Effect::~Effect() {}
 
-void Effect::UseTexture(Renderer* renderer) {
-}
+void Effect::UseTexture(Renderer* renderer) {}
 
 void Effect::SetVertexDesc(VertexDesc* desc) {
   DCHECK(vertex_desc_ == NULL);
@@ -58,24 +56,4 @@ void Effect::BindConstantsTable(Renderer* renderer) {
     }
   }
 }
-
-void Effect::InitShaders(const TechSource& sources) {
-  CHECK(vertex_desc_.get());
-  RenderSystem* rs = RenderSystem::Current();
-  auto vs_shader_src = sources[kVertexStage];
-  ShaderPtr vs_gpup_ptr(rs->CreateVertexShader(vertex_desc_, vs_shader_src));
-  CHECK(vs_gpup_ptr.get() != NULL);
-  CHECK(!technique_.get());
-  technique_ = rs->CreateTechnique();
-  technique_->AddShader(vs_gpup_ptr);
-  for (uint32 i = (uint32)(kVertexStage + 1); i < sources.size(); ++i) {
-    auto info = sources[i];
-    if (!info.code.empty()) {
-      ShaderPtr gpup_ptr(rs->CreateShader(info));
-      CHECK(gpup_ptr.get() != NULL);
-      technique_->AddShader(gpup_ptr);
-    }
-  }
-}
-
 }  // namespace azer

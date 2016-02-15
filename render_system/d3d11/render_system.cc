@@ -130,13 +130,13 @@ ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info) {
   }
 }
 
-VertexShaderPtr D3DRenderSystem::CreateVertexShader(
-    VertexDesc* desc, const ShaderInfo& info) {
-  VertexShaderPtr gpu_program(new D3DVertexShader(desc, info));
+ShaderPtr D3DRenderSystem::CreateVertexShader(VertexDesc* desc,
+                                              const ShaderInfo& info) {
+  ShaderPtr gpu_program(new D3DVertexShader(desc, info));
   if (gpu_program->Init(this)) {
     return gpu_program;
   } else {
-    return VertexShaderPtr();
+    return ShaderPtr();
   }
 }
 

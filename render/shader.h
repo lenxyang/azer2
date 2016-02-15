@@ -17,7 +17,9 @@ class FileSystem;
 class RenderSystem;
 class VertexDesc;
 class TechSource;
+class Shader;
 typedef scoped_refptr<VertexDesc> VertexDescPtr;
+typedef scoped_refptr<Shader> ShaderPtr;
 
 enum ShaderType {
   kStringShader,
@@ -38,48 +40,28 @@ struct AZER_EXPORT ShaderInfo {
 
 class AZER_EXPORT Shader : public ::base::RefCounted<Shader> {
  public:
+  explicit Shader(const ShaderInfo& info);
+  Shader(VertexDesc* desc, const ShaderInfo& info);
   virtual ~Shader();
 
   std::string error_msg() const { return error_msg_;}
-  RenderPipelineStage stage() const { return stage_;}
+  RenderPipelineStage stage() const;
 
   virtual bool Init(RenderSystem* rs) = 0;
-
-  /**
-   * 每一个 shader 都有对应的输入输出格式，通过以下接口可以检查
-   * Render Pipeline 的过程当中各阶段输入输出是否匹配
-   */
-  virtual VertexDescPtr GetInputDesc() { return NULL;}
+  VertexDesc* vertex_desc() { return desc_;}
  protected:
-  Shader(const ShaderInfo& info);
-
-  RenderPipelineStage stage_;
+  VertexDescPtr desc_;
   ShaderInfo info_;
   std::string error_msg_;
   DISALLOW_COPY_AND_ASSIGN(Shader);
 };
 
-class AZER_EXPORT VertexShader : public Shader {
- public:
-  virtual VertexDescPtr GetInputDesc() { return desc_ptr_;}
- protected:
-  VertexShader(VertexDescPtr& desc, const ShaderInfo& info);
-
-  VertexDescPtr desc_ptr_;
-  DISALLOW_COPY_AND_ASSIGN(VertexShader);
-};
 
 CharType* ShaderSuffix(ShaderType type);
-
-
-typedef scoped_refptr<Shader> ShaderPtr;
-typedef scoped_refptr<VertexShader> VertexShaderPtr;
-
-AZER_EXPORT bool LoadShaderInfo(int stage, const std::string& path, 
-                                 ShaderInfo* shader);
-AZER_EXPORT bool LoadShaderInfoOnFS(int stage, const ResPath& path, 
-                                     ShaderInfo* info, FileSystem* fs);
-AZER_EXPORT bool LoadShaderInfo(int stage, const std::string& path, TechSource*);
-AZER_EXPORT bool LoadShaderInfoOnFS(int stage, const ResPath& path, 
-                                     TechSource* info, FileSystem* fs);
+AZER_EXPORT bool LoadShader(int stage, const std::string& path, ShaderInfo* shader);
+AZER_EXPORT bool LoadShaderOnFS(int stage, const ResPath& path, 
+                                ShaderInfo* info, FileSystem* fs);
+AZER_EXPORT bool LoadShader(int stage, const std::string& path, TechSource*);
+AZER_EXPORT bool LoadShaderOnFS(int stage, const ResPath& path, TechSource* info, 
+                                FileSystem* fs);
 }  // namespace azer

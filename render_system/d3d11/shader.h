@@ -15,32 +15,34 @@
 
 namespace azer {
 namespace d3d11 {
-
 class D3DRenderSystem;
-class D3DVertexShader : public VertexShader {
- public:
-  D3DVertexShader(VertexDescPtr desc, const ShaderInfo& info);
-  ~D3DVertexShader() override;
-  bool Init(RenderSystem* rs) override;
-  ID3D11VertexShader* resource() { return resource_;}
- private:
-  ID3D11VertexShader* resource_;
-
-  friend class D3DRenderer;
-  friend class D3DTechnique;
-  DISALLOW_COPY_AND_ASSIGN(D3DVertexShader);
-};
 
 class D3DShader : public Shader {
  public:
   D3DShader(const ShaderInfo& info);
-  ~D3DShader();
+  D3DShader(VertexDesc* desc, const ShaderInfo& info);
+  ~D3DShader() override;
 
   bool Init(RenderSystem* rs) override;
  private:
   D3DBlobPtr CompileShader(ID3D11Device* d3d_device);
   virtual bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) = 0;
   DISALLOW_COPY_AND_ASSIGN(D3DShader);
+};
+
+class D3DVertexShader : public D3DShader {
+ public:
+  D3DVertexShader(VertexDesc* desc, const ShaderInfo& info);
+  ~D3DVertexShader() override;
+  bool Init(RenderSystem* rs) override;
+  ID3D11VertexShader* resource() { return resource_;}
+ private:
+  bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override { return true;}
+  ID3D11VertexShader* resource_;
+
+  friend class D3DRenderer;
+  friend class D3DTechnique;
+  DISALLOW_COPY_AND_ASSIGN(D3DVertexShader);
 };
 
 class D3DPixelShader : public D3DShader {

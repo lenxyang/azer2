@@ -12,19 +12,14 @@ namespace azer {
 ShaderInfo::ShaderInfo() : stage(kStageNotSpec) {}
   
 // class Shader
-Shader::Shader(const ShaderInfo& info)
-    : stage_((RenderPipelineStage)info.stage)
-    , info_(info) {
+Shader::Shader(const ShaderInfo& info) : info_(info) {}
+Shader::Shader(VertexDesc* desc, const ShaderInfo& info)
+    : info_(info),
+      desc_(desc) {
 }
 
-Shader::~Shader() {
-}
-
-VertexShader::VertexShader(VertexDescPtr& desc, const ShaderInfo& info)
-    : Shader(info)
-    , desc_ptr_(desc) {
-  DCHECK_EQ(kVertexStage, info.stage);
-}
+Shader::~Shader() {}
+RenderPipelineStage Shader::stage() const { return (RenderPipelineStage)info_.stage;}
 
 CharType* ShaderSuffix(ShaderType type) {
   switch (type) {
@@ -34,7 +29,7 @@ CharType* ShaderSuffix(ShaderType type) {
   }
 }
 
-bool LoadShaderInfo(int stage, const std::string& path, ShaderInfo* shader) {
+bool LoadShader(int stage, const std::string& path, ShaderInfo* shader) {
   ::base::FilePath fpath(::base::UTF8ToUTF16(path));
   DCHECK(shader != NULL);
   std::string code;
@@ -48,7 +43,7 @@ bool LoadShaderInfo(int stage, const std::string& path, ShaderInfo* shader) {
   return true;
 }
 
-bool LoadShaderInfoOnFS(int stage, const ResPath& path, 
+bool LoadShaderOnFS(int stage, const ResPath& path, 
                         ShaderInfo* shader, FileSystem* fs) {
   FileContents contents;
   if (!LoadFileContents(path, &contents, fs)) {
@@ -61,9 +56,9 @@ bool LoadShaderInfoOnFS(int stage, const ResPath& path,
   return true;
 }
 
-bool LoadShaderInfo(int stage, const std::string& path, TechSource* shaders) {
+bool LoadShader(int stage, const std::string& path, TechSource* shaders) {
   ShaderInfo shader;
-  if (!LoadShaderInfo(stage, path, &shader)) {
+  if (!LoadShader(stage, path, &shader)) {
     return false;
   }
 
@@ -71,10 +66,10 @@ bool LoadShaderInfo(int stage, const std::string& path, TechSource* shaders) {
   return true;
 }
 
-bool LoadShaderInfoOnFS(int stage, const ResPath& path, 
-                        TechSource* shaders, FileSystem* fs) {
+bool LoadShaderOnFS(int stage, const ResPath& path, TechSource* shaders, 
+                    FileSystem* fs) {
   ShaderInfo shader;
-  if (!LoadShaderInfoOnFS(stage, path, &shader, fs)) {
+  if (!LoadShaderOnFS(stage, path, &shader, fs)) {
     return false;
   }
 

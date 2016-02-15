@@ -7,42 +7,10 @@
 
 namespace azer {
 namespace d3d11 {
-D3DVertexShader::D3DVertexShader(VertexDescPtr desc, const ShaderInfo& info)
-    : VertexShader(desc, info)
-    , resource_(NULL) {
-}
-
-D3DVertexShader::~D3DVertexShader() { SAFE_RELEASE(resource_);}
-bool D3DVertexShader::Init(RenderSystem* vrs) {
-  D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
-  std::string msg;
-  ID3D11Device* d3d_device = rs->GetDevice();
-
-  // D3DBlobPtr blob(CompilePixelShader(program_, &msg));
-  D3DBlobPtr blob(CompileShaderForStage(stage(), info_.code, info_.path, &msg));
-  if (NULL == blob) {
-    LOG(ERROR) << "Failed to compile vertex shader: " << msg;
-    return false;
-  }
-
-  DCHECK(NULL == resource_);
-  HRESULT hr = d3d_device->CreateVertexShader(blob->GetBufferPointer(),
-                                              blob->GetBufferSize(),
-                                              NULL,
-                                              &resource_);
-  HRESULT_HANDLE(hr, ERROR, "CreateVertexShader failed ");
-
-  // check layout is validate for shader
-  scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_ptr_));
-  if (!layout->ValidateShaderLayout(vrs, blob.get())) {
-    return false;
-  }
-
-  return true;
-}
-
-// clsas 
+// clsas D3DShader
 D3DShader::D3DShader(const ShaderInfo& info) : Shader(info) {}
+D3DShader::D3DShader(VertexDesc* desc, const ShaderInfo& info) 
+    : Shader(desc, info) {}
 D3DShader::~D3DShader() {}
 D3DBlobPtr D3DShader::CompileShader(ID3D11Device* d3ddevice) {
   std::string msg;
@@ -62,6 +30,40 @@ bool D3DShader::Init(RenderSystem* vrs) {
     return false;
   }
   return InitResource(d3ddevice, blob.get());
+}
+
+// class D3DVertexShader
+D3DVertexShader::D3DVertexShader(VertexDesc* desc, const ShaderInfo& info)
+    : D3DShader(desc, info)
+    , resource_(NULL) {
+}
+
+D3DVertexShader::~D3DVertexShader() { SAFE_RELEASE(resource_);}
+bool D3DVertexShader::Init(RenderSystem* vrs) {
+  D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
+  std::string msg;
+  ID3D11Device* d3d_device = rs->GetDevice();
+
+  D3DBlobPtr blob(CompileShaderForStage(stage(), info_.code, info_.path, &msg));
+  if (NULL == blob) {
+    LOG(ERROR) << "Failed to compile vertex shader: " << msg;
+    return false;
+  }
+
+  DCHECK(NULL == resource_);
+  HRESULT hr = d3d_device->CreateVertexShader(blob->GetBufferPointer(),
+                                              blob->GetBufferSize(),
+                                              NULL,
+                                              &resource_);
+  HRESULT_HANDLE(hr, ERROR, "CreateVertexShader failed ");
+
+  // check layout is validate for shader
+  scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_));
+  if (!layout->ValidateShaderLayout(vrs, blob.get())) {
+    return false;
+  }
+
+  return true;
 }
 
 // class 

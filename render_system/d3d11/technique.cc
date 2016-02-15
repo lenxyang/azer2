@@ -14,8 +14,6 @@ void D3DTechnique::Use(Renderer* renderer) {
   D3DDomainShader* ds = (D3DDomainShader*)pline_[kDomainStage].get();
 
   ID3D11DeviceContext* d3d_context = ((D3DRenderer*)renderer)->GetContext();
-  d3d_context->VSSetShader(vs->resource(), 0, 0);
-  
   if (vs) {
     DCHECK_EQ(vs->stage(), kVertexStage);
     d3d_context->VSSetShader(vs->resource(), 0, 0);

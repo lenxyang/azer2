@@ -40,7 +40,6 @@ class AZER_EXPORT Effect : public Resource {
  protected:
   virtual void UseTexture(Renderer* renderer);
   virtual void ApplyGpuConstantTable(Renderer* renderer) = 0;
-  void InitShaders(const TechSource& sources);
   void BindConstantsTable(Renderer* renderer);
   void BindTechnique(Renderer* renderer);
 
