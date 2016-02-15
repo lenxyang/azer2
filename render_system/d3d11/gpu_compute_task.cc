@@ -1,8 +1,8 @@
 #include "azer/render_system/d3d11/gpu_compute_task.h"
 
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/gpu_program.h"
-#include "azer/render_system/d3d11/gpu_program.h"
+#include "azer/render/shader.h"
+#include "azer/render_system/d3d11/shader.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/texture.h"
 
@@ -27,7 +27,7 @@ void D3DGpuComputeTaskDispatcher::Dispatch(GpuComputeTask* task,
                                            const GpuTaskParams params) {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   ID3D11DeviceContext* context = rs->GetContext();
-  D3DComputeGpuProgram* program = (D3DComputeGpuProgram*)task->gpu_program();
+  D3DComputeShader* program = (D3DComputeShader*)task->gpu_program();
   for (int32 i = 0; i < task->input_count(); ++i) {
     resview_[i] = ((D3DTexture*)task->GetInputAt(i))->GetResourceView();
     DCHECK(resview_[i] != NULL);

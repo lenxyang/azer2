@@ -5,17 +5,17 @@
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 
 namespace azer {
 class GpuProgram;
 class GpuConstantsTable;
 class Texture;
-struct StageShader;
+struct ShaderInfo;
 
 class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
  public:
-  explicit GpuComputeTask(const StageShader& info);
+  explicit GpuComputeTask(const ShaderInfo& info);
   virtual ~GpuComputeTask();
 
   int input_count() const { return input_count_;}
@@ -40,7 +40,7 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   Texture* output_[kMaxOutput];
   int32 input_count_;
   int32 output_count_;
-  StageShader shader_info_;
+  ShaderInfo shader_info_;
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTask);
 };
 

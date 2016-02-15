@@ -2,12 +2,12 @@
 
 #include "azer/render/render_system.h"
 #include "azer/render/gpu_constants_table.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 #include "azer/render/texture.h"
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
-GpuComputeTask::GpuComputeTask(const StageShader& info)
+GpuComputeTask::GpuComputeTask(const ShaderInfo& info)
     : shader_info_(info) {
   DCHECK_EQ(info.stage, kComputeStage);
   gpu_program_ = RenderSystem::Current()->CreateGpuProgram(info);

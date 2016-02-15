@@ -24,8 +24,8 @@ enum ShaderType {
   kBinaryShader,
 };
 
-struct AZER_EXPORT StageShader {
-  StageShader();
+struct AZER_EXPORT ShaderInfo {
+  ShaderInfo();
   int32 stage;
   int32 format;
   std::string code;
@@ -51,10 +51,10 @@ class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
    */
   virtual VertexDescPtr GetInputDesc() { return NULL;}
  protected:
-  GpuProgram(const StageShader& info);
+  GpuProgram(const ShaderInfo& info);
 
   RenderPipelineStage stage_;
-  StageShader info_;
+  ShaderInfo info_;
   std::string error_msg_;
   DISALLOW_COPY_AND_ASSIGN(GpuProgram);
 };
@@ -63,7 +63,7 @@ class AZER_EXPORT VertexGpuProgram : public GpuProgram {
  public:
   virtual VertexDescPtr GetInputDesc() { return desc_ptr_;}
  protected:
-  VertexGpuProgram(VertexDescPtr& desc, const StageShader& info);
+  VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info);
 
   VertexDescPtr desc_ptr_;
   DISALLOW_COPY_AND_ASSIGN(VertexGpuProgram);
@@ -75,11 +75,11 @@ CharType* ShaderSuffix(ShaderType type);
 typedef scoped_refptr<GpuProgram> GpuProgramPtr;
 typedef scoped_refptr<VertexGpuProgram> VertexGpuProgramPtr;
 
-AZER_EXPORT bool LoadStageShader(int stage, const std::string& path, 
-                                 StageShader* shader);
-AZER_EXPORT bool LoadStageShaderOnFS(int stage, const ResPath& path, 
-                                     StageShader* info, FileSystem* fs);
-AZER_EXPORT bool LoadStageShader(int stage, const std::string& path, TechSource*);
-AZER_EXPORT bool LoadStageShaderOnFS(int stage, const ResPath& path, 
+AZER_EXPORT bool LoadShaderInfo(int stage, const std::string& path, 
+                                 ShaderInfo* shader);
+AZER_EXPORT bool LoadShaderInfoOnFS(int stage, const ResPath& path, 
+                                     ShaderInfo* info, FileSystem* fs);
+AZER_EXPORT bool LoadShaderInfo(int stage, const std::string& path, TechSource*);
+AZER_EXPORT bool LoadShaderInfoOnFS(int stage, const ResPath& path, 
                                      TechSource* info, FileSystem* fs);
 }  // namespace azer

@@ -9,9 +9,9 @@
 
 #include "base/logging.h"
 #include "azer/render/render_system.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 #include "azer/render_system/d3d11/render_system.h"
-#include "azer/render_system/d3d11/gpu_program.h"
+#include "azer/render_system/d3d11/shader.h"
 
 namespace azer {
 

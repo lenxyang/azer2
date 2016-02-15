@@ -10,13 +10,13 @@
 #include "azer/base/string.h"
 #include "azer/render/blending.h"
 #include "azer/render/gpu_constants_table.h"
-#include "azer/render/gpu_program.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/render_capability.h"
 #include "azer/render/renderer.h"
+#include "azer/render/shader.h"
+#include "azer/render/swap_chain.h"
 #include "azer/render/surface.h"
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/swap_chain.h"
 #include "ui/gfx/geometry/rect.h"
 
 namespace azer {
@@ -79,8 +79,8 @@ class AZER_EXPORT RenderSystem {
   // Vertex Gpu Program need to help check "Vertex Layout"
   //
   virtual VertexGpuProgramPtr CreateVertexGpuProgram(
-      VertexDesc* desc, const StageShader& info) = 0;
-  virtual GpuProgramPtr CreateGpuProgram(const StageShader& info) = 0;
+      VertexDesc* desc, const ShaderInfo& info) = 0;
+  virtual GpuProgramPtr CreateGpuProgram(const ShaderInfo& info) = 0;
   virtual GpuComputeTaskDispatcherPtr CreateDispatcher() = 0;
   virtual OverlayPtr CreateOverlay() = 0;
 

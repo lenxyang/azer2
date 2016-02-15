@@ -8,7 +8,7 @@
 
 #include "base/basictypes.h"
 #include "base/logging.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/hlsl_compile.h"
@@ -17,10 +17,10 @@ namespace azer {
 namespace d3d11 {
 
 class D3DRenderSystem;
-class D3DVertexGpuProgram : public VertexGpuProgram {
+class D3DVertexShader : public VertexGpuProgram {
  public:
-  D3DVertexGpuProgram(VertexDescPtr desc, const StageShader& info);
-  ~D3DVertexGpuProgram() override;
+  D3DVertexShader(VertexDescPtr desc, const ShaderInfo& info);
+  ~D3DVertexShader() override;
   bool Init(RenderSystem* rs) override;
   ID3D11VertexShader* resource() { return resource_;}
  private:
@@ -28,79 +28,79 @@ class D3DVertexGpuProgram : public VertexGpuProgram {
 
   friend class D3DRenderer;
   friend class D3DTechnique;
-  DISALLOW_COPY_AND_ASSIGN(D3DVertexGpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(D3DVertexShader);
 };
 
-class D3DGpuProgram : public GpuProgram {
+class D3DShader : public GpuProgram {
  public:
-  D3DGpuProgram(const StageShader& info);
-  ~D3DGpuProgram();
+  D3DShader(const ShaderInfo& info);
+  ~D3DShader();
 
   bool Init(RenderSystem* rs) override;
  private:
   D3DBlobPtr CompileShader(ID3D11Device* d3d_device);
   virtual bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) = 0;
-  DISALLOW_COPY_AND_ASSIGN(D3DGpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(D3DShader);
 };
 
-class D3DPixelGpuProgram : public D3DGpuProgram {
+class D3DPixelShader : public D3DShader {
  public:
-  D3DPixelGpuProgram(const StageShader& info);
-  ~D3DPixelGpuProgram() override;
+  D3DPixelShader(const ShaderInfo& info);
+  ~D3DPixelShader() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11PixelShader* resource() { return resource_;}
  private:
   ID3D11PixelShader* resource_;
   friend class D3DTechnique;
-  DISALLOW_COPY_AND_ASSIGN(D3DPixelGpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(D3DPixelShader);
 };
 
-class D3DGeometryGpuProgram : public D3DGpuProgram {
+class D3DGeometryShader : public D3DShader {
  public:
-  D3DGeometryGpuProgram(const StageShader& info);
-  virtual ~D3DGeometryGpuProgram();
+  D3DGeometryShader(const ShaderInfo& info);
+  virtual ~D3DGeometryShader();
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11GeometryShader* resource() { return resource_;}
  private:
   ID3D11GeometryShader* resource_;
   friend class D3DTechnique;
-  DISALLOW_COPY_AND_ASSIGN(D3DGeometryGpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(D3DGeometryShader);
 };
 
-class D3DHullGpuProgram : public D3DGpuProgram {
+class D3DHullShader : public D3DShader {
  public:
-  D3DHullGpuProgram(const StageShader& info);
-  ~D3DHullGpuProgram() override;
+  D3DHullShader(const ShaderInfo& info);
+  ~D3DHullShader() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11HullShader* resource() { return resource_;}
  private:
   ID3D11HullShader* resource_;
   friend class D3DTechnique;
-  DISALLOW_COPY_AND_ASSIGN(D3DHullGpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(D3DHullShader);
 };
 
-class D3DDomainGpuProgram : public D3DGpuProgram {
+class D3DDomainShader : public D3DShader {
  public:
-  D3DDomainGpuProgram(const StageShader& info);
-  ~D3DDomainGpuProgram() override;
+  D3DDomainShader(const ShaderInfo& info);
+  ~D3DDomainShader() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11DomainShader* resource() { return resource_;}
  private:
   ID3D11DomainShader* resource_;
   friend class D3DTechnique;
-  DISALLOW_COPY_AND_ASSIGN(D3DDomainGpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(D3DDomainShader);
 };
 
-class D3DComputeGpuProgram : public D3DGpuProgram {
+class D3DComputeShader : public D3DShader {
  public:
-  D3DComputeGpuProgram(const StageShader& info);
-  ~D3DComputeGpuProgram() override;
+  D3DComputeShader(const ShaderInfo& info);
+  ~D3DComputeShader() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11ComputeShader* resource() { return resource_;}
  private:
   ID3D11ComputeShader* resource_;
   friend class D3DTechnique;
-  DISALLOW_COPY_AND_ASSIGN(D3DComputeGpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(D3DComputeShader);
 };
 
 }  // namespace d3d11

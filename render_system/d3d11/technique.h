@@ -2,7 +2,7 @@
 
 #include "base/basictypes.h"
 #include "azer/render/technique.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 
 namespace azer {
 namespace d3d11 {

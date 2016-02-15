@@ -5,7 +5,7 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/base/export.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 
 namespace azer {
 
@@ -32,15 +32,16 @@ class AZER_EXPORT TechSource {
           const Options& options);
 
   const Options& options() const { return options_;}
-  const StageShader& operator[](const int32 index) const;
+  const ShaderInfo& operator[](const int32 index) const;
   int32 size() const { return kRenderPipelineStageNum;}
   VertexDesc* vertex_desc() const { return vertex_desc_;}
   VertexDesc* streamout_vertex_desc() const { return streamout_desc_;}
-  void SetStageShader(int32 stage, const StageShader& shader);
+  void SetStage(int32 stage, const ShaderInfo& shader);
+  void AddShader(const ShaderInfo& shader);
  private:
   VertexDescPtr vertex_desc_;
   VertexDescPtr streamout_desc_;
-  StageShader shaders_[kRenderPipelineStageNum];
+  ShaderInfo shaders_[kRenderPipelineStageNum];
   const Options options_;
   DISALLOW_COPY_AND_ASSIGN(TechSource);
 };

@@ -14,12 +14,12 @@
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/gpu_compute_task.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
-#include "azer/render_system/d3d11/gpu_program.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
+#include "azer/render_system/d3d11/overlay.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/rasterizer_state.h"
 #include "azer/render_system/d3d11/renderer.h"
-#include "azer/render_system/d3d11/overlay.h"
+#include "azer/render_system/d3d11/shader.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/vertex_buffer.h"
@@ -98,29 +98,29 @@ IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
   }
 }
 
-GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const StageShader& info) {
+GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const ShaderInfo& info) {
   GpuProgramPtr gpu_program;
   switch (info.stage) {
     case kPixelStage:
-      gpu_program = (new D3DPixelGpuProgram(info));
+      gpu_program = (new D3DPixelShader(info));
       break;
     case kGeometryStage:
-      gpu_program = (new D3DGeometryGpuProgram(info));
+      gpu_program = (new D3DGeometryShader(info));
       break;
     case kVertexStage:
-      CHECK(false) << "Vertex GpuProgram has its own ";
+      CHECK(false) << "Vertex Shader has its own ";
       break;
     case kHullStage:
-      gpu_program = new D3DHullGpuProgram(info);
+      gpu_program = new D3DHullShader(info);
       break;
     case kDomainStage:
-      gpu_program = new D3DDomainGpuProgram(info);
+      gpu_program = new D3DDomainShader(info);
       break;
     case kComputeStage:
-      gpu_program = new D3DComputeGpuProgram(info);
+      gpu_program = new D3DComputeShader(info);
       break;
     default:
-      CHECK(false) << "No such GpuProgram Type: " << (int32)info.stage;
+      CHECK(false) << "No such Shader Type: " << (int32)info.stage;
       return NULL;
   }
   if (gpu_program->Init(this)) {
@@ -131,8 +131,8 @@ GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const StageShader& info) {
 }
 
 VertexGpuProgramPtr D3DRenderSystem::CreateVertexGpuProgram(
-    VertexDesc* desc, const StageShader& info) {
-  VertexGpuProgramPtr gpu_program(new D3DVertexGpuProgram(desc, info));
+    VertexDesc* desc, const ShaderInfo& info) {
+  VertexGpuProgramPtr gpu_program(new D3DVertexShader(desc, info));
   if (gpu_program->Init(this)) {
     return gpu_program;
   } else {

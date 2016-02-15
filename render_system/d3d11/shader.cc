@@ -1,4 +1,4 @@
-#include "azer/render_system/d3d11/gpu_program.h"
+#include "azer/render_system/d3d11/shader.h"
 
 #include "azer/base/string.h"
 #include "azer/render_system/d3d11/enum_transform.h"
@@ -7,13 +7,13 @@
 
 namespace azer {
 namespace d3d11 {
-D3DVertexGpuProgram::D3DVertexGpuProgram(VertexDescPtr desc, const StageShader& info)
+D3DVertexShader::D3DVertexShader(VertexDescPtr desc, const ShaderInfo& info)
     : VertexGpuProgram(desc, info)
     , resource_(NULL) {
 }
 
-D3DVertexGpuProgram::~D3DVertexGpuProgram() { SAFE_RELEASE(resource_);}
-bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
+D3DVertexShader::~D3DVertexShader() { SAFE_RELEASE(resource_);}
+bool D3DVertexShader::Init(RenderSystem* vrs) {
   D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
   std::string msg;
   ID3D11Device* d3d_device = rs->GetDevice();
@@ -42,9 +42,9 @@ bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
 }
 
 // clsas 
-D3DGpuProgram::D3DGpuProgram(const StageShader& info) : GpuProgram(info) {}
-D3DGpuProgram::~D3DGpuProgram() {}
-D3DBlobPtr D3DGpuProgram::CompileShader(ID3D11Device* d3ddevice) {
+D3DShader::D3DShader(const ShaderInfo& info) : GpuProgram(info) {}
+D3DShader::~D3DShader() {}
+D3DBlobPtr D3DShader::CompileShader(ID3D11Device* d3ddevice) {
   std::string msg;
   D3DBlobPtr blob(CompileShaderForStage(stage(), info_.code, info_.path, &msg));
   if (NULL == blob) {
@@ -54,7 +54,7 @@ D3DBlobPtr D3DGpuProgram::CompileShader(ID3D11Device* d3ddevice) {
   return blob;
 }
 
-bool D3DGpuProgram::Init(RenderSystem* vrs) {
+bool D3DShader::Init(RenderSystem* vrs) {
   D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
   ID3D11Device* d3ddevice = rs->GetDevice();
   D3DBlobPtr blob = CompileShader(d3ddevice);
@@ -65,10 +65,10 @@ bool D3DGpuProgram::Init(RenderSystem* vrs) {
 }
 
 // class 
-D3DPixelGpuProgram::D3DPixelGpuProgram(const StageShader& info)
-    : D3DGpuProgram(info), resource_(NULL) {}
-D3DPixelGpuProgram::~D3DPixelGpuProgram() { SAFE_RELEASE(resource_);}
-bool D3DPixelGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
+D3DPixelShader::D3DPixelShader(const ShaderInfo& info)
+    : D3DShader(info), resource_(NULL) {}
+D3DPixelShader::~D3DPixelShader() { SAFE_RELEASE(resource_);}
+bool D3DPixelShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   DCHECK(NULL == resource_);
   HRESULT hr = d3ddevice->CreatePixelShader(blob->GetBufferPointer(),
                                             blob->GetBufferSize(),
@@ -78,10 +78,10 @@ bool D3DPixelGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   return true;
 }
 
-D3DGeometryGpuProgram::D3DGeometryGpuProgram(const StageShader& info) 
-    : D3DGpuProgram(info), resource_(NULL) {}
-D3DGeometryGpuProgram::~D3DGeometryGpuProgram() {SAFE_RELEASE(resource_);}
-bool D3DGeometryGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
+D3DGeometryShader::D3DGeometryShader(const ShaderInfo& info) 
+    : D3DShader(info), resource_(NULL) {}
+D3DGeometryShader::~D3DGeometryShader() {SAFE_RELEASE(resource_);}
+bool D3DGeometryShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   HRESULT hr = d3ddevice->CreateGeometryShader(blob->GetBufferPointer(),
                                                blob->GetBufferSize(),
                                                NULL,
@@ -90,10 +90,10 @@ bool D3DGeometryGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob
   return true;
 }
 
-D3DHullGpuProgram::D3DHullGpuProgram(const StageShader& info) 
-    : D3DGpuProgram(info), resource_(NULL) {}
-D3DHullGpuProgram::~D3DHullGpuProgram() {SAFE_RELEASE(resource_);}
-bool D3DHullGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
+D3DHullShader::D3DHullShader(const ShaderInfo& info) 
+    : D3DShader(info), resource_(NULL) {}
+D3DHullShader::~D3DHullShader() {SAFE_RELEASE(resource_);}
+bool D3DHullShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   HRESULT hr = d3ddevice->CreateHullShader(blob->GetBufferPointer(),
                                            blob->GetBufferSize(),
                                            NULL,
@@ -102,10 +102,10 @@ bool D3DHullGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   return true;
 }
 
-D3DDomainGpuProgram::D3DDomainGpuProgram(const StageShader& info) 
-    : D3DGpuProgram(info), resource_(NULL) {}
-D3DDomainGpuProgram::~D3DDomainGpuProgram() {SAFE_RELEASE(resource_);}
-bool D3DDomainGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
+D3DDomainShader::D3DDomainShader(const ShaderInfo& info) 
+    : D3DShader(info), resource_(NULL) {}
+D3DDomainShader::~D3DDomainShader() {SAFE_RELEASE(resource_);}
+bool D3DDomainShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   HRESULT hr = d3ddevice->CreateDomainShader(blob->GetBufferPointer(),
                                              blob->GetBufferSize(),
                                              NULL,
@@ -114,10 +114,10 @@ bool D3DDomainGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) 
   return true;
 }
 
-D3DComputeGpuProgram::D3DComputeGpuProgram(const StageShader& info) 
-    : D3DGpuProgram(info), resource_(NULL) {}
-D3DComputeGpuProgram::~D3DComputeGpuProgram() {SAFE_RELEASE(resource_);}
-bool D3DComputeGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
+D3DComputeShader::D3DComputeShader(const ShaderInfo& info) 
+    : D3DShader(info), resource_(NULL) {}
+D3DComputeShader::~D3DComputeShader() {SAFE_RELEASE(resource_);}
+bool D3DComputeShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   HRESULT hr = d3ddevice->CreateComputeShader(blob->GetBufferPointer(),
                                               blob->GetBufferSize(),
                                               NULL,

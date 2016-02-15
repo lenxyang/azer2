@@ -49,10 +49,10 @@ EffectPtr CreateSimpleImageProcessingEffect() {
       SimpleImageProcessingEffect::kVertexDesc,
       SimpleImageProcessingEffect::kVertexDescNum);
   TechSource shaders(vertex_desc);
-  CHECK(LoadStageShader(kVertexStage,
+  CHECK(LoadShaderInfo(kVertexStage,
                         "azer/render/util/effects/hlsl/rgba2bgra.hlsl.vs",
                         &shaders));
-  CHECK(LoadStageShader(kPixelStage, 
+  CHECK(LoadShaderInfo(kPixelStage, 
                         "azer/render/util/effects/hlsl/rgba2bgra.hlsl.ps",
                         &shaders));
   EffectPtr ptr(new SimpleImageProcessingEffect);

@@ -54,10 +54,10 @@ void PVWEffect::ApplyGpuConstantTable(Renderer* renderer) {
 
 PVWEffectPtr CreatePVWEffect() {
   TechSource shaders(PositionVertex::CreateVertexDesc());
-  CHECK(LoadStageShader(kVertexStage,
+  CHECK(LoadShaderInfo(kVertexStage,
                         "azer/render/util/effects/hlsl/pvw.hlsl.vs",
                         &shaders));
-  CHECK(LoadStageShader(kPixelStage,
+  CHECK(LoadShaderInfo(kPixelStage,
                         "azer/render/util/effects/hlsl/pvw.hlsl.ps",
                         &shaders));
   PVWEffectPtr ptr(new PVWEffect);

@@ -1,7 +1,7 @@
 #include "azer/render/technique.h"
 
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 
 namespace azer {
 TechSource::Options::Options() 
@@ -20,12 +20,16 @@ TechSource::TechSource(VertexDesc* vertex_desc, VertexDesc* streamout_desc,
       streamout_desc_(streamout_desc) {
 }
 
-const StageShader& TechSource::operator[](const int32 index) const {
+const ShaderInfo& TechSource::operator[](const int32 index) const {
   DCHECK_LT(index, kRenderPipelineStageNum);
   return shaders_[index];
 }
 
-void TechSource::SetStageShader(int32 stage, const StageShader& shader) {
+void TechSource::AddShader(const ShaderInfo& shader) {
+  SetStage(shader.stage, shader);
+}
+
+void TechSource::SetStage(int32 stage, const ShaderInfo& shader) {
   DCHECK_LT(stage, kRenderPipelineStageNum);
   shaders_[stage] = shader;
   shaders_[stage].stage = stage;

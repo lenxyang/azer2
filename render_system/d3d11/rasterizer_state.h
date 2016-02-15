@@ -9,7 +9,7 @@
 
 #include "base/logging.h"
 #include "azer/render/rasterizer_state.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 
 namespace azer {
 namespace d3d11 {

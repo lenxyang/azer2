@@ -78,10 +78,10 @@ void ColoredDiffuseEffect::SetDirLight(const DirLight& value) {
 
 ColoredDiffuseEffectPtr CreateColoredDiffuseEffect() {
   TechSource shaders(PosNormalVertex::CreateVertexDesc());
-  CHECK(LoadStageShader(kVertexStage, 
+  CHECK(LoadShaderInfo(kVertexStage, 
                           "azer/render/util/effects/hlsl/colored_diffuse.hlsl.vs",
                           &shaders));
-  CHECK(LoadStageShader(kPixelStage, 
+  CHECK(LoadShaderInfo(kPixelStage, 
                           "azer/render/util/effects/hlsl/colored_diffuse.hlsl.ps",
                           &shaders));
   ColoredDiffuseEffectPtr ptr(new ColoredDiffuseEffect());

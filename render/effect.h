@@ -7,7 +7,7 @@
 #include "azer/base/export.h"
 #include "azer/base/resource.h"
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 
 namespace azer {
 class GpuConstantsTable;

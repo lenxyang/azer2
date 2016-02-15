@@ -9,7 +9,7 @@
 
 #include "base/logging.h"
 #include "azer/render/render_system.h"
-#include "azer/render/gpu_program.h"
+#include "azer/render/shader.h"
 #include "azer/render_system/d3d11/swap_chain.h"
 #include "azer/render_system/d3d11/d3denv.h"
 
@@ -55,8 +55,8 @@ class D3DRenderSystem : public RenderSystem {
   // DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
 
   VertexGpuProgramPtr CreateVertexGpuProgram(
-      VertexDesc* desc, const StageShader& info) override;
-  GpuProgramPtr CreateGpuProgram(const StageShader& info) override;
+      VertexDesc* desc, const ShaderInfo& info) override;
+  GpuProgramPtr CreateGpuProgram(const ShaderInfo& info) override;
   GpuComputeTaskDispatcherPtr CreateDispatcher() override;
   OverlayPtr CreateOverlay() override;
   TechniquePtr CreateTechnique() override;
