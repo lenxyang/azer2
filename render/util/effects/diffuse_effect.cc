@@ -16,7 +16,7 @@ ColoredDiffuseEffect::~ColoredDiffuseEffect() {}
 const char* ColoredDiffuseEffect::GetEffectName() const {
    return kEffectName;
 }
-bool ColoredDiffuseEffect::Init(VertexDesc* desc, const Shaders& sources) {
+bool ColoredDiffuseEffect::Init(VertexDesc* desc, const TechSource& sources) {
   vertex_desc_ = desc;
   DCHECK(sources.size() == kRenderPipelineStageNum);
   DCHECK(!sources[kVertexStage].code.empty());
@@ -47,7 +47,7 @@ void ColoredDiffuseEffect::InitGpuConstantTable() {
   gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc);
 }
-void ColoredDiffuseEffect::InitTechnique(const Shaders& sources) {
+void ColoredDiffuseEffect::InitTechnique(const TechSource& sources) {
   InitShaders(sources);
 }
 
@@ -77,7 +77,7 @@ void ColoredDiffuseEffect::SetDirLight(const DirLight& value) {
 }
 
 ColoredDiffuseEffectPtr CreateColoredDiffuseEffect() {
-  Shaders shaders(PosNormalVertex::CreateVertexDesc());
+  TechSource shaders(PosNormalVertex::CreateVertexDesc());
   CHECK(LoadStageShader(kVertexStage, 
                           "azer/render/util/effects/hlsl/colored_diffuse.hlsl.vs",
                           &shaders));

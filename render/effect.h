@@ -30,7 +30,7 @@ class AZER_EXPORT Effect : public Resource {
   ~Effect() override;
 
   virtual const char* GetEffectName() const = 0;
-  virtual bool Init(VertexDesc* desc, const Shaders& programs) = 0;
+  virtual bool Init(VertexDesc* desc, const TechSource& programs) = 0;
   void Apply(Renderer* renderer);
   VertexDesc* vertex_desc() { return vertex_desc_.get();}
   void SetVertexDesc(VertexDesc* desc);
@@ -40,7 +40,7 @@ class AZER_EXPORT Effect : public Resource {
  protected:
   virtual void UseTexture(Renderer* renderer);
   virtual void ApplyGpuConstantTable(Renderer* renderer) = 0;
-  void InitShaders(const Shaders& sources);
+  void InitShaders(const TechSource& sources);
   void BindConstantsTable(Renderer* renderer);
   void BindTechnique(Renderer* renderer);
 

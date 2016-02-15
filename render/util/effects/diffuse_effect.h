@@ -15,7 +15,7 @@ class ColoredDiffuseEffect : public Effect {
   ~ColoredDiffuseEffect();
 
   const char* GetEffectName() const override;
-  bool Init(VertexDesc* desc, const Shaders& source) override;
+  bool Init(VertexDesc* desc, const TechSource& source) override;
 
 #pragma pack(push, 4)
   struct vs_cbuffer {
@@ -34,7 +34,7 @@ class ColoredDiffuseEffect : public Effect {
   void SetColor(const Vector4& value);
   void SetDirLight(const DirLight& value);
  protected:
-  void InitTechnique(const Shaders& source);
+  void InitTechnique(const TechSource& source);
   void InitGpuConstantTable();
   void ApplyGpuConstantTable(Renderer* renderer) override;
 

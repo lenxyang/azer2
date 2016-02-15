@@ -4,6 +4,34 @@
 #include "azer/render/gpu_program.h"
 
 namespace azer {
+TechSource::Options::Options() 
+    : use_streamout(false) {
+}
+
+TechSource::TechSource(VertexDesc* desc) 
+    : options_(Options()),
+      vertex_desc_(desc) {
+}
+
+TechSource::TechSource(VertexDesc* vertex_desc, VertexDesc* streamout_desc, 
+                 const Options& options) 
+    : options_(options),
+      vertex_desc_(vertex_desc),
+      streamout_desc_(streamout_desc) {
+}
+
+const StageShader& TechSource::operator[](const int32 index) const {
+  DCHECK_LT(index, kRenderPipelineStageNum);
+  return shaders_[index];
+}
+
+void TechSource::SetStageShader(int32 stage, const StageShader& shader) {
+  DCHECK_LT(stage, kRenderPipelineStageNum);
+  shaders_[stage] = shader;
+  shaders_[stage].stage = stage;
+}
+
+// class Technique
 Technique::Technique() {
   pline_.resize(kRenderPipelineStageNum);
 }

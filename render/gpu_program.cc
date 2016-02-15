@@ -5,37 +5,11 @@
 #include "base/files/file_util.h"
 #include "azer/base/file_system.h"
 #include "azer/base/res_path.h"
+#include "azer/render/technique.h"
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
 StageShader::StageShader() : stage(kStageNotSpec) {}
-
-Shaders::Options::Options() 
-    : use_streamout(false) {
-}
-
-Shaders::Shaders(VertexDesc* desc) 
-    : options_(Options()),
-      vertex_desc_(desc) {
-}
-
-Shaders::Shaders(VertexDesc* vertex_desc, VertexDesc* streamout_desc, 
-                 const Options& options) 
-    : options_(options),
-      vertex_desc_(vertex_desc),
-      streamout_desc_(streamout_desc) {
-}
-
-const StageShader& Shaders::operator[](const int32 index) const {
-  DCHECK_LT(index, kRenderPipelineStageNum);
-  return shaders_[index];
-}
-
-void Shaders::SetStageShader(int32 stage, const StageShader& shader) {
-  DCHECK_LT(stage, kRenderPipelineStageNum);
-  shaders_[stage] = shader;
-  shaders_[stage].stage = stage;
-}
   
 // class GpuProgram
 GpuProgram::GpuProgram(const StageShader& info)
@@ -87,7 +61,7 @@ bool LoadStageShaderOnFS(int stage, const ResPath& path,
   return true;
 }
 
-bool LoadStageShader(int stage, const std::string& path, Shaders* shaders) {
+bool LoadStageShader(int stage, const std::string& path, TechSource* shaders) {
   StageShader shader;
   if (!LoadStageShader(stage, path, &shader)) {
     return false;
@@ -98,7 +72,7 @@ bool LoadStageShader(int stage, const std::string& path, Shaders* shaders) {
 }
 
 bool LoadStageShaderOnFS(int stage, const ResPath& path, 
-                         Shaders* shaders, FileSystem* fs) {
+                         TechSource* shaders, FileSystem* fs) {
   StageShader shader;
   if (!LoadStageShaderOnFS(stage, path, &shader, fs)) {
     return false;

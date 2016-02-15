@@ -1,8 +1,9 @@
 #include "azer/render/util/image_processing.h"
 
+#include "azer/render/geometry.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
-#include "azer/render/geometry.h"
+#include "azer/render/technique.h"
 
 namespace azer {
 const char SimpleImageProcessingEffect::kEffectName[] = 
@@ -22,7 +23,7 @@ const char* SimpleImageProcessingEffect::GetEffectName() const {
    return kEffectName;
 }
 bool SimpleImageProcessingEffect::Init(VertexDesc* desc,
-                                       const Shaders& sources) {
+                                       const TechSource& sources) {
   if (desc) {
     vertex_desc_ = desc;
   } else {
@@ -47,7 +48,7 @@ EffectPtr CreateSimpleImageProcessingEffect() {
   VertexDescPtr vertex_desc = new VertexDesc(
       SimpleImageProcessingEffect::kVertexDesc,
       SimpleImageProcessingEffect::kVertexDescNum);
-  Shaders shaders(vertex_desc);
+  TechSource shaders(vertex_desc);
   CHECK(LoadStageShader(kVertexStage,
                         "azer/render/util/effects/hlsl/rgba2bgra.hlsl.vs",
                         &shaders));

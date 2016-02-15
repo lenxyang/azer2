@@ -17,7 +17,7 @@ PVWEffect::~PVWEffect() {}
 const char* PVWEffect::GetEffectName() const {
   return kEffectName;
 }
-bool PVWEffect::Init(VertexDesc* desc, const Shaders& sources) {
+bool PVWEffect::Init(VertexDesc* desc, const TechSource& sources) {
   vertex_desc_ = desc;
   RenderSystem* rs = RenderSystem::Current();
   DCHECK(sources.size() == kRenderPipelineStageNum);
@@ -53,7 +53,7 @@ void PVWEffect::ApplyGpuConstantTable(Renderer* renderer) {
 }
 
 PVWEffectPtr CreatePVWEffect() {
-  Shaders shaders(PositionVertex::CreateVertexDesc());
+  TechSource shaders(PositionVertex::CreateVertexDesc());
   CHECK(LoadStageShader(kVertexStage,
                         "azer/render/util/effects/hlsl/pvw.hlsl.vs",
                         &shaders));

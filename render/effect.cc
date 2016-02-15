@@ -59,7 +59,7 @@ void Effect::BindConstantsTable(Renderer* renderer) {
   }
 }
 
-void Effect::InitShaders(const Shaders& sources) {
+void Effect::InitShaders(const TechSource& sources) {
   CHECK(vertex_desc_.get());
   RenderSystem* rs = RenderSystem::Current();
   auto vs_shader_src = sources[kVertexStage];
