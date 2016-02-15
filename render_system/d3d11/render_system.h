@@ -55,8 +55,8 @@ class D3DRenderSystem : public RenderSystem {
   // DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
 
   VertexGpuProgramPtr CreateVertexGpuProgram(
-      VertexDescPtr desc, const ShaderInfo& info) override;
-  GpuProgramPtr CreateGpuProgram(const ShaderInfo& info) override;
+      VertexDescPtr desc, const StageShader& info) override;
+  GpuProgramPtr CreateGpuProgram(const StageShader& info) override;
   GpuComputeTaskDispatcherPtr CreateDispatcher() override;
   OverlayPtr CreateOverlay() override;
   TechniquePtr CreateTechnique() override;

@@ -94,7 +94,7 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
   technique_ = rs->CreateTechnique();
   VertexDescPtr& desc = overlay->GetVertexDesc();
 
-  ShaderInfo vsinfo, psinfo;
+  StageShader vsinfo, psinfo;
   vsinfo.code = kVertexShaderProg;
   vsinfo.stage = kVertexStage;
   psinfo.code = kPixelShaderProg;

@@ -98,7 +98,7 @@ IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
   }
 }
 
-GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const ShaderInfo& info) {
+GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const StageShader& info) {
   GpuProgramPtr gpu_program;
   switch (info.stage) {
     case kPixelStage:
@@ -131,7 +131,7 @@ GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const ShaderInfo& info) {
 }
 
 VertexGpuProgramPtr D3DRenderSystem::CreateVertexGpuProgram(
-    VertexDescPtr desc, const ShaderInfo& info) {
+    VertexDescPtr desc, const StageShader& info) {
   VertexGpuProgramPtr gpu_program(new D3DVertexGpuProgram(desc, info));
   if (gpu_program->Init(this)) {
     return gpu_program;
@@ -156,7 +156,7 @@ GpuConstantsTablePtr D3DRenderSystem::CreateGpuConstantsTable(
 }
 
 TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
-                                        const Image* img) {
+                                          const Image* img) {
   const ImageDataPtr& image = img->data(0);
   Texture::Options texopt = opt;
   texopt.size = gfx::Size(image->width(), image->height());

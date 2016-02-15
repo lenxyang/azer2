@@ -7,7 +7,7 @@
 
 namespace azer {
 namespace d3d11 {
-D3DVertexGpuProgram::D3DVertexGpuProgram(VertexDescPtr desc, const ShaderInfo& info)
+D3DVertexGpuProgram::D3DVertexGpuProgram(VertexDescPtr desc, const StageShader& info)
     : VertexGpuProgram(desc, info)
     , resource_(NULL) {
 }
@@ -42,7 +42,7 @@ bool D3DVertexGpuProgram::Init(RenderSystem* vrs) {
 }
 
 // clsas 
-D3DGpuProgram::D3DGpuProgram(const ShaderInfo& info) : GpuProgram(info) {}
+D3DGpuProgram::D3DGpuProgram(const StageShader& info) : GpuProgram(info) {}
 D3DGpuProgram::~D3DGpuProgram() {}
 D3DBlobPtr D3DGpuProgram::CompileShader(ID3D11Device* d3ddevice) {
   std::string msg;
@@ -65,7 +65,7 @@ bool D3DGpuProgram::Init(RenderSystem* vrs) {
 }
 
 // class 
-D3DPixelGpuProgram::D3DPixelGpuProgram(const ShaderInfo& info)
+D3DPixelGpuProgram::D3DPixelGpuProgram(const StageShader& info)
     : D3DGpuProgram(info), resource_(NULL) {}
 D3DPixelGpuProgram::~D3DPixelGpuProgram() { SAFE_RELEASE(resource_);}
 bool D3DPixelGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
@@ -78,7 +78,7 @@ bool D3DPixelGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   return true;
 }
 
-D3DGeometryGpuProgram::D3DGeometryGpuProgram(const ShaderInfo& info) 
+D3DGeometryGpuProgram::D3DGeometryGpuProgram(const StageShader& info) 
     : D3DGpuProgram(info), resource_(NULL) {}
 D3DGeometryGpuProgram::~D3DGeometryGpuProgram() {SAFE_RELEASE(resource_);}
 bool D3DGeometryGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
@@ -90,7 +90,7 @@ bool D3DGeometryGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob
   return true;
 }
 
-D3DHullGpuProgram::D3DHullGpuProgram(const ShaderInfo& info) 
+D3DHullGpuProgram::D3DHullGpuProgram(const StageShader& info) 
     : D3DGpuProgram(info), resource_(NULL) {}
 D3DHullGpuProgram::~D3DHullGpuProgram() {SAFE_RELEASE(resource_);}
 bool D3DHullGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
@@ -102,7 +102,7 @@ bool D3DHullGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   return true;
 }
 
-D3DDomainGpuProgram::D3DDomainGpuProgram(const ShaderInfo& info) 
+D3DDomainGpuProgram::D3DDomainGpuProgram(const StageShader& info) 
     : D3DGpuProgram(info), resource_(NULL) {}
 D3DDomainGpuProgram::~D3DDomainGpuProgram() {SAFE_RELEASE(resource_);}
 bool D3DDomainGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
@@ -114,7 +114,7 @@ bool D3DDomainGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) 
   return true;
 }
 
-D3DComputeGpuProgram::D3DComputeGpuProgram(const ShaderInfo& info) 
+D3DComputeGpuProgram::D3DComputeGpuProgram(const StageShader& info) 
     : D3DGpuProgram(info), resource_(NULL) {}
 D3DComputeGpuProgram::~D3DComputeGpuProgram() {SAFE_RELEASE(resource_);}
 bool D3DComputeGpuProgram::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {

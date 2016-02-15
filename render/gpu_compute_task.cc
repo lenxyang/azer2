@@ -7,7 +7,7 @@
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
-GpuComputeTask::GpuComputeTask(const ShaderInfo& info)
+GpuComputeTask::GpuComputeTask(const StageShader& info)
     : shader_info_(info) {
   DCHECK_EQ(info.stage, kComputeStage);
   gpu_program_ = RenderSystem::Current()->CreateGpuProgram(info);

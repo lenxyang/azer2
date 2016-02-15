@@ -23,8 +23,8 @@ enum ShaderType {
   kBinaryShader,
 };
 
-struct AZER_EXPORT ShaderInfo {
-  ShaderInfo();
+struct AZER_EXPORT StageShader {
+  StageShader();
   int32 stage;
   int32 format;
   std::string code;
@@ -35,10 +35,30 @@ struct AZER_EXPORT ShaderInfo {
   std::string includes;
 };
 
-typedef std::vector<ShaderInfo> Shaders;
+class AZER_EXPORT Shaders {
+ public:
+  struct AZER_EXPORT Options {
+    bool use_streamout;
+    std::string version;
+    Options();
+  };
+
+  Shaders();
+  explicit Shaders(const Options& options);
+
+  const Options& options() const { return options_;}
+  const StageShader& operator[](const int32 index) const;
+  int32 size() const { return kRenderPipelineStageNum;}
+
+  void SetStageShader(int32 stage, const StageShader& shader);
+ private:
+  StageShader shaders_[kRenderPipelineStageNum];
+  const Options options_;
+  DISALLOW_COPY_AND_ASSIGN(Shaders);
+};
 
 class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
-public:
+ public:
   virtual ~GpuProgram();
 
   std::string error_msg() const { return error_msg_;}
@@ -51,12 +71,11 @@ public:
    * Render Pipeline 的过程当中各阶段输入输出是否匹配
    */
   virtual VertexDescPtr GetInputDesc() { return NULL;}
-  virtual VertexDescPtr GetOutputDesc() { return NULL;}
-protected:
-  GpuProgram(const ShaderInfo& info);
+ protected:
+  GpuProgram(const StageShader& info);
 
   RenderPipelineStage stage_;
-  ShaderInfo info_;
+  StageShader info_;
   std::string error_msg_;
   DISALLOW_COPY_AND_ASSIGN(GpuProgram);
 };
@@ -65,7 +84,7 @@ class AZER_EXPORT VertexGpuProgram : public GpuProgram {
  public:
   virtual VertexDescPtr GetInputDesc() { return desc_ptr_;}
  protected:
-  VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info);
+  VertexGpuProgram(VertexDescPtr& desc, const StageShader& info);
 
   VertexDescPtr desc_ptr_;
   DISALLOW_COPY_AND_ASSIGN(VertexGpuProgram);
@@ -78,9 +97,9 @@ typedef scoped_refptr<GpuProgram> GpuProgramPtr;
 typedef scoped_refptr<VertexGpuProgram> VertexGpuProgramPtr;
 
 AZER_EXPORT bool LoadStageShader(int stage, const std::string& path, 
-                                 ShaderInfo* shader);
+                                 StageShader* shader);
 AZER_EXPORT bool LoadStageShaderOnFS(int stage, const ResPath& path, 
-                                     ShaderInfo* info, FileSystem* fs);
+                                     StageShader* info, FileSystem* fs);
 AZER_EXPORT bool LoadStageShader(int stage, const std::string& path, Shaders*);
 AZER_EXPORT bool LoadStageShaderOnFS(int stage, const ResPath& path, 
                                      Shaders* info, FileSystem* fs);

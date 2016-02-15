@@ -19,7 +19,7 @@ namespace d3d11 {
 class D3DRenderSystem;
 class D3DVertexGpuProgram : public VertexGpuProgram {
  public:
-  D3DVertexGpuProgram(VertexDescPtr desc, const ShaderInfo& info);
+  D3DVertexGpuProgram(VertexDescPtr desc, const StageShader& info);
   ~D3DVertexGpuProgram() override;
   bool Init(RenderSystem* rs) override;
   ID3D11VertexShader* resource() { return resource_;}
@@ -33,7 +33,7 @@ class D3DVertexGpuProgram : public VertexGpuProgram {
 
 class D3DGpuProgram : public GpuProgram {
  public:
-  D3DGpuProgram(const ShaderInfo& info);
+  D3DGpuProgram(const StageShader& info);
   ~D3DGpuProgram();
 
   bool Init(RenderSystem* rs) override;
@@ -45,7 +45,7 @@ class D3DGpuProgram : public GpuProgram {
 
 class D3DPixelGpuProgram : public D3DGpuProgram {
  public:
-  D3DPixelGpuProgram(const ShaderInfo& info);
+  D3DPixelGpuProgram(const StageShader& info);
   ~D3DPixelGpuProgram() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11PixelShader* resource() { return resource_;}
@@ -57,7 +57,7 @@ class D3DPixelGpuProgram : public D3DGpuProgram {
 
 class D3DGeometryGpuProgram : public D3DGpuProgram {
  public:
-  D3DGeometryGpuProgram(const ShaderInfo& info);
+  D3DGeometryGpuProgram(const StageShader& info);
   virtual ~D3DGeometryGpuProgram();
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11GeometryShader* resource() { return resource_;}
@@ -69,7 +69,7 @@ class D3DGeometryGpuProgram : public D3DGpuProgram {
 
 class D3DHullGpuProgram : public D3DGpuProgram {
  public:
-  D3DHullGpuProgram(const ShaderInfo& info);
+  D3DHullGpuProgram(const StageShader& info);
   ~D3DHullGpuProgram() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11HullShader* resource() { return resource_;}
@@ -81,7 +81,7 @@ class D3DHullGpuProgram : public D3DGpuProgram {
 
 class D3DDomainGpuProgram : public D3DGpuProgram {
  public:
-  D3DDomainGpuProgram(const ShaderInfo& info);
+  D3DDomainGpuProgram(const StageShader& info);
   ~D3DDomainGpuProgram() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11DomainShader* resource() { return resource_;}
@@ -93,7 +93,7 @@ class D3DDomainGpuProgram : public D3DGpuProgram {
 
 class D3DComputeGpuProgram : public D3DGpuProgram {
  public:
-  D3DComputeGpuProgram(const ShaderInfo& info);
+  D3DComputeGpuProgram(const StageShader& info);
   ~D3DComputeGpuProgram() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11ComputeShader* resource() { return resource_;}

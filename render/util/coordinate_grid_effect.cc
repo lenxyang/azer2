@@ -56,14 +56,15 @@ void CoordinateGridEffect::InitEffect() {
   gpu_table_[kPixelStage] = (rs->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc));
 
+  StageShader shader;
   Shaders sources;
-  sources.resize(kRenderPipelineStageNum);
-  sources[kVertexStage].code = GetCommonShaderProgram(kEffectName, "", kVertexStage, 
-                                                    NULL);
-  sources[kVertexStage].path = kEffectName;
-  sources[kPixelStage].code = GetCommonShaderProgram(kEffectName, "", kPixelStage, 
-                                                   NULL);
-  sources[kPixelStage].path = kEffectName;
+  shader.code = GetCommonShaderProgram(kEffectName, "", kVertexStage, NULL);
+  shader.path = kEffectName;
+  sources.SetStageShader(kVertexStage, shader);
+  
+  shader.code = GetCommonShaderProgram(kEffectName, "", kPixelStage, NULL);
+  shader.path = kEffectName;
+  sources.SetStageShader(kPixelStage, shader);
   InitShaders(sources);
 }
 

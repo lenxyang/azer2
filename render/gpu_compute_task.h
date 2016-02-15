@@ -11,11 +11,11 @@ namespace azer {
 class GpuProgram;
 class GpuConstantsTable;
 class Texture;
-struct ShaderInfo;
+struct StageShader;
 
 class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
  public:
-  explicit GpuComputeTask(const ShaderInfo& info);
+  explicit GpuComputeTask(const StageShader& info);
   virtual ~GpuComputeTask();
 
   int input_count() const { return input_count_;}
@@ -40,7 +40,7 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   Texture* output_[kMaxOutput];
   int32 input_count_;
   int32 output_count_;
-  ShaderInfo shader_info_;
+  StageShader shader_info_;
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTask);
 };
 

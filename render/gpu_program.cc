@@ -8,9 +8,33 @@
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
-ShaderInfo::ShaderInfo() : stage(kStageNotSpec) {}
+StageShader::StageShader() : stage(kStageNotSpec) {}
+
+Shaders::Options::Options() 
+    : use_streamout(false) {
+}
+
+Shaders::Shaders() 
+    : options_(Options()) {
+}
+
+Shaders::Shaders(const Options& options) 
+    : options_(options) {
+}
+
+const StageShader& Shaders::operator[](const int32 index) const {
+  DCHECK_LT(index, kRenderPipelineStageNum);
+  return shaders_[index];
+}
+
+void Shaders::SetStageShader(int32 stage, const StageShader& shader) {
+  DCHECK_LT(stage, kRenderPipelineStageNum);
+  shaders_[stage] = shader;
+  shaders_[stage].stage = stage;
+}
   
-GpuProgram::GpuProgram(const ShaderInfo& info)
+// class GpuProgram
+GpuProgram::GpuProgram(const StageShader& info)
     : stage_((RenderPipelineStage)info.stage)
     , info_(info) {
 }
@@ -18,7 +42,7 @@ GpuProgram::GpuProgram(const ShaderInfo& info)
 GpuProgram::~GpuProgram() {
 }
 
-VertexGpuProgram::VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info)
+VertexGpuProgram::VertexGpuProgram(VertexDescPtr& desc, const StageShader& info)
     : GpuProgram(info)
     , desc_ptr_(desc) {
   DCHECK_EQ(kVertexStage, info.stage);
@@ -32,7 +56,7 @@ CharType* ShaderSuffix(ShaderType type) {
   }
 }
 
-bool LoadStageShader(int stage, const std::string& path, ShaderInfo* shader) {
+bool LoadStageShader(int stage, const std::string& path, StageShader* shader) {
   ::base::FilePath fpath(::base::UTF8ToUTF16(path));
   DCHECK(shader != NULL);
   std::string code;
@@ -47,7 +71,7 @@ bool LoadStageShader(int stage, const std::string& path, ShaderInfo* shader) {
 }
 
 bool LoadStageShaderOnFS(int stage, const ResPath& path, 
-                         ShaderInfo* shader, FileSystem* fs) {
+                         StageShader* shader, FileSystem* fs) {
   FileContents contents;
   if (!LoadFileContents(path, &contents, fs)) {
     return false;
@@ -59,14 +83,24 @@ bool LoadStageShaderOnFS(int stage, const ResPath& path,
   return true;
 }
 
-bool LoadStageShader(int stage, const std::string& path, Shaders* shader) {
-  shader->resize(kRenderPipelineStageNum);
-  return LoadStageShader(stage, path, &(shader->at(stage)));
+bool LoadStageShader(int stage, const std::string& path, Shaders* shaders) {
+  StageShader shader;
+  if (!LoadStageShader(stage, path, &shader)) {
+    return false;
+  }
+
+  shaders->SetStageShader(stage, shader);
+  return true;
 }
 
 bool LoadStageShaderOnFS(int stage, const ResPath& path, 
-                         Shaders* shader, FileSystem* fs) {
-  shader->resize(kRenderPipelineStageNum);
-  return LoadStageShaderOnFS(stage, path, &(shader->at(stage)), fs);
+                         Shaders* shaders, FileSystem* fs) {
+  StageShader shader;
+  if (!LoadStageShaderOnFS(stage, path, &shader, fs)) {
+    return false;
+  }
+
+  shaders->SetStageShader(stage, shader);
+  return true;
 }
 }  // namespace azer
