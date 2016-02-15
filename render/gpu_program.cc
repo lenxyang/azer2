@@ -18,8 +18,14 @@ Shaders::Shaders()
     : options_(Options()) {
 }
 
-Shaders::Shaders(const Options& options) 
-    : options_(options) {
+Shaders::Shaders(VertexDesc* desc) 
+    : options_(Options()),
+      desc_(desc) {
+}
+
+Shaders::Shaders(VertexDesc* desc, const Options& options) 
+    : options_(options),
+      desc_(desc) {
 }
 
 const StageShader& Shaders::operator[](const int32 index) const {

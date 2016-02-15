@@ -17,13 +17,13 @@ void D3DTechnique::Use(Renderer* renderer) {
   d3d_context->VSSetShader(vs->resource(), 0, 0);
   
   if (vs) {
-	DCHECK_EQ(vs->stage(), kVertexStage);
+    DCHECK_EQ(vs->stage(), kVertexStage);
     d3d_context->VSSetShader(vs->resource(), 0, 0);
   } else {
     d3d_context->VSSetShader(NULL, 0, 0);
   }
   if (ps) {
-	  DCHECK_EQ(ps->stage(), kPixelStage);
+    DCHECK_EQ(ps->stage(), kPixelStage);
     d3d_context->PSSetShader(ps->resource(), 0, 0);
   } else {
     d3d_context->PSSetShader(NULL, 0, 0);

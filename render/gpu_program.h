@@ -44,14 +44,16 @@ class AZER_EXPORT Shaders {
   };
 
   Shaders();
-  explicit Shaders(const Options& options);
+  explicit Shaders(VertexDesc* desc);
+  Shaders(VertexDesc* desc, const Options& options);
 
   const Options& options() const { return options_;}
   const StageShader& operator[](const int32 index) const;
   int32 size() const { return kRenderPipelineStageNum;}
-
+  VertexDesc* desc() const { return desc_;}
   void SetStageShader(int32 stage, const StageShader& shader);
  private:
+  VertexDescPtr desc_;
   StageShader shaders_[kRenderPipelineStageNum];
   const Options options_;
   DISALLOW_COPY_AND_ASSIGN(Shaders);
