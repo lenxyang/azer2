@@ -44,15 +44,18 @@ void SimpleImageProcessingEffect::UseTexture(azer::Renderer* renderer) {
 }
 
 EffectPtr CreateSimpleImageProcessingEffect() {
-  Shaders shaders;
-  CHECK(LoadStageShader(kVertexStage, 
-                          "azer/render/util/effects/hlsl/rgba2bgra.hlsl.vs",
-                          &shaders));
+  VertexDescPtr vertex_desc = new VertexDesc(
+      SimpleImageProcessingEffect::kVertexDesc,
+      SimpleImageProcessingEffect::kVertexDescNum);
+  Shaders shaders(vertex_desc);
+  CHECK(LoadStageShader(kVertexStage,
+                        "azer/render/util/effects/hlsl/rgba2bgra.hlsl.vs",
+                        &shaders));
   CHECK(LoadStageShader(kPixelStage, 
-                          "azer/render/util/effects/hlsl/rgba2bgra.hlsl.ps",
-                          &shaders));
+                        "azer/render/util/effects/hlsl/rgba2bgra.hlsl.ps",
+                        &shaders));
   EffectPtr ptr(new SimpleImageProcessingEffect);
-  ptr->Init(NULL, shaders);
+  ptr->Init(vertex_desc, shaders);
   return ptr;
 }
 

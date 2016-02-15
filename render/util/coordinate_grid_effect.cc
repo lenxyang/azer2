@@ -57,7 +57,7 @@ void CoordinateGridEffect::InitEffect() {
       arraysize(ps_table_desc), ps_table_desc));
 
   StageShader shader;
-  Shaders sources;
+  Shaders sources(vertex_desc_);
   shader.code = GetCommonShaderProgram(kEffectName, "", kVertexStage, NULL);
   shader.path = kEffectName;
   sources.SetStageShader(kVertexStage, shader);

@@ -14,18 +14,16 @@ Shaders::Options::Options()
     : use_streamout(false) {
 }
 
-Shaders::Shaders() 
-    : options_(Options()) {
-}
-
 Shaders::Shaders(VertexDesc* desc) 
     : options_(Options()),
-      desc_(desc) {
+      vertex_desc_(desc) {
 }
 
-Shaders::Shaders(VertexDesc* desc, const Options& options) 
+Shaders::Shaders(VertexDesc* vertex_desc, VertexDesc* streamout_desc, 
+                 const Options& options) 
     : options_(options),
-      desc_(desc) {
+      vertex_desc_(vertex_desc),
+      streamout_desc_(streamout_desc) {
 }
 
 const StageShader& Shaders::operator[](const int32 index) const {

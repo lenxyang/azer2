@@ -131,7 +131,7 @@ GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const StageShader& info) {
 }
 
 VertexGpuProgramPtr D3DRenderSystem::CreateVertexGpuProgram(
-    VertexDescPtr desc, const StageShader& info) {
+    VertexDesc* desc, const StageShader& info) {
   VertexGpuProgramPtr gpu_program(new D3DVertexGpuProgram(desc, info));
   if (gpu_program->Init(this)) {
     return gpu_program;
