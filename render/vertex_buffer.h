@@ -37,7 +37,7 @@ class AZER_EXPORT VertexDesc : public Resource {
     char name[64];             // semantic_name
     int semantic_index;        // semantic_index
     DataFormat type;           // type
-    int32 input_slot;         // input slot
+    int32 input_slot;          // input slot
     int32 instance_data_step;  // step
     bool aligned;              // aligned
   };

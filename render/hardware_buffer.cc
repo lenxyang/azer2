@@ -9,6 +9,14 @@ HBufferOptions::HBufferOptions()
     : usage(kBufferDefault),
       cpu_access(kCPUNoAccess),
       target(kBindTargetUnknown) {
+  memset(name, 0, sizeof(name));
+}
+
+HardwareBuffer::HardwareBuffer(const HBufferOptions& opt) 
+    : options_(opt) {
+}
+
+HardwareBuffer::~HardwareBuffer() {
 }
 
 const HBufferOptions& kVertexBufferOpt() {

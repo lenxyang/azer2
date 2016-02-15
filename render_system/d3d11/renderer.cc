@@ -75,7 +75,7 @@ void D3DRenderer::BindVertexBuffer(VertexBuffer* vvb) {
     d3d_context_->IASetInputLayout(layout->input_layout());
     d3d_context_->IASetVertexBuffers(0, 1, &buf, &stride, &offset);
   } else {
-    // d3d_context_->IASetVertexBuffers(0, 0, NULL, NULL, NULL);
+    d3d_context_->IASetVertexBuffers(0, 0, NULL, NULL, NULL);
   }
 }
 

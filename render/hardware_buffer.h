@@ -40,8 +40,8 @@ struct AZER_EXPORT HBufferOptions {
 
 class AZER_EXPORT HardwareBuffer : public ::base::RefCounted<HardwareBuffer> {
  public:
-  HardwareBuffer(const HBufferOptions& opt) {}
-  virtual ~HardwareBuffer() {}
+  HardwareBuffer(const HBufferOptions& opt);
+  virtual ~HardwareBuffer();
 
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
