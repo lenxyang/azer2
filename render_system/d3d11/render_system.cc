@@ -98,8 +98,8 @@ IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
   }
 }
 
-GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const ShaderInfo& info) {
-  GpuProgramPtr gpu_program;
+ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info) {
+  ShaderPtr gpu_program;
   switch (info.stage) {
     case kPixelStage:
       gpu_program = (new D3DPixelShader(info));
@@ -126,17 +126,17 @@ GpuProgramPtr D3DRenderSystem::CreateGpuProgram(const ShaderInfo& info) {
   if (gpu_program->Init(this)) {
     return gpu_program;
   } else {
-    return GpuProgramPtr();
+    return ShaderPtr();
   }
 }
 
-VertexGpuProgramPtr D3DRenderSystem::CreateVertexGpuProgram(
+VertexShaderPtr D3DRenderSystem::CreateVertexShader(
     VertexDesc* desc, const ShaderInfo& info) {
-  VertexGpuProgramPtr gpu_program(new D3DVertexShader(desc, info));
+  VertexShaderPtr gpu_program(new D3DVertexShader(desc, info));
   if (gpu_program->Init(this)) {
     return gpu_program;
   } else {
-    return VertexGpuProgramPtr();
+    return VertexShaderPtr();
   }
 }
 

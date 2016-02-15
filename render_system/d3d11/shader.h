@@ -17,7 +17,7 @@ namespace azer {
 namespace d3d11 {
 
 class D3DRenderSystem;
-class D3DVertexShader : public VertexGpuProgram {
+class D3DVertexShader : public VertexShader {
  public:
   D3DVertexShader(VertexDescPtr desc, const ShaderInfo& info);
   ~D3DVertexShader() override;
@@ -31,7 +31,7 @@ class D3DVertexShader : public VertexGpuProgram {
   DISALLOW_COPY_AND_ASSIGN(D3DVertexShader);
 };
 
-class D3DShader : public GpuProgram {
+class D3DShader : public Shader {
  public:
   D3DShader(const ShaderInfo& info);
   ~D3DShader();

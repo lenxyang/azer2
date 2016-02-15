@@ -63,17 +63,17 @@ void Effect::InitShaders(const TechSource& sources) {
   CHECK(vertex_desc_.get());
   RenderSystem* rs = RenderSystem::Current();
   auto vs_shader_src = sources[kVertexStage];
-  GpuProgramPtr vs_gpup_ptr(rs->CreateVertexGpuProgram(vertex_desc_, vs_shader_src));
+  ShaderPtr vs_gpup_ptr(rs->CreateVertexShader(vertex_desc_, vs_shader_src));
   CHECK(vs_gpup_ptr.get() != NULL);
   CHECK(!technique_.get());
   technique_ = rs->CreateTechnique();
-  technique_->AddGpuProgram(vs_gpup_ptr);
+  technique_->AddShader(vs_gpup_ptr);
   for (uint32 i = (uint32)(kVertexStage + 1); i < sources.size(); ++i) {
     auto info = sources[i];
     if (!info.code.empty()) {
-      GpuProgramPtr gpup_ptr(rs->CreateGpuProgram(info));
+      ShaderPtr gpup_ptr(rs->CreateShader(info));
       CHECK(gpup_ptr.get() != NULL);
-      technique_->AddGpuProgram(gpup_ptr);
+      technique_->AddShader(gpup_ptr);
     }
   }
 }

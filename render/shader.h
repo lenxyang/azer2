@@ -36,9 +36,9 @@ struct AZER_EXPORT ShaderInfo {
   std::string includes;
 };
 
-class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
+class AZER_EXPORT Shader : public ::base::RefCounted<Shader> {
  public:
-  virtual ~GpuProgram();
+  virtual ~Shader();
 
   std::string error_msg() const { return error_msg_;}
   RenderPipelineStage stage() const { return stage_;}
@@ -51,29 +51,29 @@ class AZER_EXPORT GpuProgram : public ::base::RefCounted<GpuProgram> {
    */
   virtual VertexDescPtr GetInputDesc() { return NULL;}
  protected:
-  GpuProgram(const ShaderInfo& info);
+  Shader(const ShaderInfo& info);
 
   RenderPipelineStage stage_;
   ShaderInfo info_;
   std::string error_msg_;
-  DISALLOW_COPY_AND_ASSIGN(GpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(Shader);
 };
 
-class AZER_EXPORT VertexGpuProgram : public GpuProgram {
+class AZER_EXPORT VertexShader : public Shader {
  public:
   virtual VertexDescPtr GetInputDesc() { return desc_ptr_;}
  protected:
-  VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info);
+  VertexShader(VertexDescPtr& desc, const ShaderInfo& info);
 
   VertexDescPtr desc_ptr_;
-  DISALLOW_COPY_AND_ASSIGN(VertexGpuProgram);
+  DISALLOW_COPY_AND_ASSIGN(VertexShader);
 };
 
 CharType* ShaderSuffix(ShaderType type);
 
 
-typedef scoped_refptr<GpuProgram> GpuProgramPtr;
-typedef scoped_refptr<VertexGpuProgram> VertexGpuProgramPtr;
+typedef scoped_refptr<Shader> ShaderPtr;
+typedef scoped_refptr<VertexShader> VertexShaderPtr;
 
 AZER_EXPORT bool LoadShaderInfo(int stage, const std::string& path, 
                                  ShaderInfo* shader);

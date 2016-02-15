@@ -10,7 +10,7 @@ namespace azer {
 GpuComputeTask::GpuComputeTask(const ShaderInfo& info)
     : shader_info_(info) {
   DCHECK_EQ(info.stage, kComputeStage);
-  gpu_program_ = RenderSystem::Current()->CreateGpuProgram(info);
+  gpu_program_ = RenderSystem::Current()->CreateShader(info);
   Reset();
 }
 

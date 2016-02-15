@@ -43,8 +43,8 @@ Technique::Technique() {
 Technique::~Technique() {
 }
 
-VertexDescPtr Technique::GetVertexDesc() {
-  GpuProgramPtr& ptr = pline_[kVertexStage];
+VertexDesc* Technique::GetVertexDesc() {
+  ShaderPtr& ptr = pline_[kVertexStage];
   if (ptr.get()) {
     return ptr->GetInputDesc();
   } else {
@@ -52,12 +52,12 @@ VertexDescPtr Technique::GetVertexDesc() {
   }
 }
 
-void Technique::AddGpuProgram(GpuProgramPtr& gpu) {
+void Technique::AddShader(ShaderPtr& gpu) {
   DCHECK_LT(gpu->stage(), kRenderPipelineStageNum);
   pline_[gpu->stage()] = gpu;
 }
 
-void Technique::AddGpuProgram(VertexGpuProgramPtr& gpu) {
+void Technique::AddShader(VertexShaderPtr& gpu) {
   DCHECK_EQ(gpu->stage(), kVertexStage);
   pline_[gpu->stage()] = gpu;
 }

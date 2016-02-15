@@ -8,7 +8,7 @@
 #include "azer/render/shader.h"
 
 namespace azer {
-class GpuProgram;
+class Shader;
 class GpuConstantsTable;
 class Texture;
 struct ShaderInfo;
@@ -28,13 +28,13 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
 
   Texture* GetInputAt(int32 index);
   Texture* GetOutputAt(int32 index);
-  GpuProgram* gpu_program() { return gpu_program_;}
+  Shader* gpu_program() { return gpu_program_;}
   GpuConstantsTable* constants_table() { return constants_table_;}
 
   static const int32 kMaxInput = 1024;
   static const int32 kMaxOutput = 1024;
  protected:
-  scoped_refptr<GpuProgram> gpu_program_;
+  scoped_refptr<Shader> gpu_program_;
   scoped_refptr<GpuConstantsTable> constants_table_;
   Texture* input_[kMaxInput];
   Texture* output_[kMaxOutput];

@@ -8,7 +8,7 @@
 namespace azer {
 namespace d3d11 {
 D3DVertexShader::D3DVertexShader(VertexDescPtr desc, const ShaderInfo& info)
-    : VertexGpuProgram(desc, info)
+    : VertexShader(desc, info)
     , resource_(NULL) {
 }
 
@@ -42,7 +42,7 @@ bool D3DVertexShader::Init(RenderSystem* vrs) {
 }
 
 // clsas 
-D3DShader::D3DShader(const ShaderInfo& info) : GpuProgram(info) {}
+D3DShader::D3DShader(const ShaderInfo& info) : Shader(info) {}
 D3DShader::~D3DShader() {}
 D3DBlobPtr D3DShader::CompileShader(ID3D11Device* d3ddevice) {
   std::string msg;

@@ -49,15 +49,15 @@ class AZER_EXPORT TechSource {
 class AZER_EXPORT Technique : public ::base::RefCounted<Technique> {
  public:
   virtual ~Technique();
-  void AddGpuProgram(GpuProgramPtr& gpu);
-  void AddGpuProgram(VertexGpuProgramPtr& gpu);
+  void AddShader(ShaderPtr& gpu);
+  void AddShader(VertexShaderPtr& gpu);
 
   virtual void Use(Renderer*) = 0;
-  VertexDescPtr GetVertexDesc();
+  VertexDesc* GetVertexDesc();
  protected:
   Technique();
 
-  std::vector<GpuProgramPtr> pline_;
+  std::vector<ShaderPtr> pline_;
   DISALLOW_COPY_AND_ASSIGN(Technique);
 };
 

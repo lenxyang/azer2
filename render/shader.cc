@@ -11,17 +11,17 @@
 namespace azer {
 ShaderInfo::ShaderInfo() : stage(kStageNotSpec) {}
   
-// class GpuProgram
-GpuProgram::GpuProgram(const ShaderInfo& info)
+// class Shader
+Shader::Shader(const ShaderInfo& info)
     : stage_((RenderPipelineStage)info.stage)
     , info_(info) {
 }
 
-GpuProgram::~GpuProgram() {
+Shader::~Shader() {
 }
 
-VertexGpuProgram::VertexGpuProgram(VertexDescPtr& desc, const ShaderInfo& info)
-    : GpuProgram(info)
+VertexShader::VertexShader(VertexDescPtr& desc, const ShaderInfo& info)
+    : Shader(info)
     , desc_ptr_(desc) {
   DCHECK_EQ(kVertexStage, info.stage);
 }
@@ -49,7 +49,7 @@ bool LoadShaderInfo(int stage, const std::string& path, ShaderInfo* shader) {
 }
 
 bool LoadShaderInfoOnFS(int stage, const ResPath& path, 
-                         ShaderInfo* shader, FileSystem* fs) {
+                        ShaderInfo* shader, FileSystem* fs) {
   FileContents contents;
   if (!LoadFileContents(path, &contents, fs)) {
     return false;
@@ -72,7 +72,7 @@ bool LoadShaderInfo(int stage, const std::string& path, TechSource* shaders) {
 }
 
 bool LoadShaderInfoOnFS(int stage, const ResPath& path, 
-                         TechSource* shaders, FileSystem* fs) {
+                        TechSource* shaders, FileSystem* fs) {
   ShaderInfo shader;
   if (!LoadShaderInfoOnFS(stage, path, &shader, fs)) {
     return false;
