@@ -66,12 +66,16 @@ void Technique::AddShader(ShaderPtr& gpu) {
 TechniquePtr CreateTechnique(const TechSource& source, RenderSystem* rs) {
   TechniquePtr tech = rs->CreateTechnique();  
   const ShaderInfo& vsinfo = source.GetStage(kVertexStage);
-  ShaderPtr vs_shader(rs->CreateVertexShader(source.vertex_desc(), vsinfo));
+  ShaderPtr vs_shader(rs->CreateShader(vsinfo, source.vertex_desc()));
   tech->AddShader(vs_shader);
   for (uint32 i = (uint32)(kVertexStage + 1); i < source.size(); ++i) {
     const ShaderInfo& info = source.GetStage(i);
     if (!info.code.empty()) {
-      ShaderPtr ptr(rs->CreateShader(info));
+      VertexDesc* desc = NULL;
+      if (info.stage == kGeometryStage) {
+        desc = source.streamout_vertex_desc();
+      }
+      ShaderPtr ptr(rs->CreateShader(info, desc));
       CHECK(ptr.get() != NULL);
       tech->AddShader(ptr);
     }

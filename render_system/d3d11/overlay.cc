@@ -103,8 +103,8 @@ bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
   const char* overlay_vs = "azer_overlay_vs";
   const char* overlay_ps = "azer_overlay_ps";
   
-  ShaderPtr vs(rs->CreateVertexShader(desc, vsinfo));
-  ShaderPtr ps(rs->CreateShader(psinfo));
+  ShaderPtr vs(rs->CreateShader(vsinfo, desc));
+  ShaderPtr ps(rs->CreateShader(psinfo, NULL));
   if (vs.get() && ps.get()) {
     technique_->AddShader(vs);
     technique_->AddShader(ps);

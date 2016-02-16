@@ -98,41 +98,36 @@ IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
   }
 }
 
-ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info) {
+ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc) {
   ShaderPtr gpu_program;
   switch (info.stage) {
     case kPixelStage:
+      DCHECK(NULL == desc);
       gpu_program = (new D3DPixelShader(info));
       break;
     case kGeometryStage:
       gpu_program = (new D3DGeometryShader(info));
       break;
     case kVertexStage:
-      CHECK(false) << "Vertex Shader has its own ";
+      gpu_program = new D3DVertexShader(desc, info);
       break;
     case kHullStage:
+      DCHECK(NULL == desc);
       gpu_program = new D3DHullShader(info);
       break;
     case kDomainStage:
+      DCHECK(NULL == desc);
       gpu_program = new D3DDomainShader(info);
       break;
     case kComputeStage:
+      DCHECK(NULL == desc);
       gpu_program = new D3DComputeShader(info);
       break;
     default:
       CHECK(false) << "No such Shader Type: " << (int32)info.stage;
       return NULL;
   }
-  if (gpu_program->Init(this)) {
-    return gpu_program;
-  } else {
-    return ShaderPtr();
-  }
-}
 
-ShaderPtr D3DRenderSystem::CreateVertexShader(VertexDesc* desc,
-                                              const ShaderInfo& info) {
-  ShaderPtr gpu_program(new D3DVertexShader(desc, info));
   if (gpu_program->Init(this)) {
     return gpu_program;
   } else {
