@@ -45,17 +45,7 @@ D3DVertexShader::D3DVertexShader(VertexDesc* desc, const ShaderInfo& info)
 }
 
 D3DVertexShader::~D3DVertexShader() { SAFE_RELEASE(resource_);}
-bool D3DVertexShader::Init(RenderSystem* vrs) {
-  D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
-  std::string msg;
-  ID3D11Device* d3d_device = rs->GetDevice();
-
-  D3DBlobPtr blob(CompileShaderForStage(stage(), info_.code, info_.path, &msg));
-  if (NULL == blob) {
-    LOG(ERROR) << "Failed to compile vertex shader: " << msg;
-    return false;
-  }
-
+bool D3DVertexShader::InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) {
   DCHECK(NULL == resource_);
   HRESULT hr = d3d_device->CreateVertexShader(blob->GetBufferPointer(),
                                               blob->GetBufferSize(),
@@ -65,7 +55,7 @@ bool D3DVertexShader::Init(RenderSystem* vrs) {
 
   // check layout is validate for shader
   scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_));
-  if (!layout->ValidateShaderLayout(vrs, blob.get())) {
+  if (!layout->ValidateShaderLayout(RenderSystem::Current(), blob)) {
     return false;
   }
 
@@ -75,29 +65,89 @@ bool D3DVertexShader::Init(RenderSystem* vrs) {
 // class D3DGeometryShader
 D3DGeometryShader::D3DGeometryShader(const ShaderInfo& info) 
     : D3DShader(info), resource_(NULL) {}
+D3DGeometryShader::D3DGeometryShader(VertexDesc* desc, const ShaderInfo& info) 
+    : D3DShader(desc, info), resource_(NULL) {}
 D3DGeometryShader::~D3DGeometryShader() {SAFE_RELEASE(resource_);}
 
 bool D3DGeometryShader::Init(RenderSystem* vrs)  {
   D3DRenderSystem* rs = (D3DRenderSystem*)vrs;
   ID3D11Device* d3ddevice = rs->GetDevice();
   D3DBlobPtr blob;
-  if (!vertex_desc()) {
-    blob = CompileShader(d3ddevice);
-    if (!blob.get()) {
-      return false;
-    }
-  } else {
-    
+  blob = CompileShader(d3ddevice);
+  if (!blob.get()) {
+    return false;
   }
 
   return InitResource(d3ddevice, blob.get());
 }
+
+namespace {
+int32 ComponentCount(DataFormat type) {
+  switch (type) {
+    case kFloat: return 1;
+    case kVec2: return 2;
+    case kVec3: return 3;
+    case kVec4: return 4;
+    case kMat2: return 4;
+    case kMat3: return 9;
+    case kMat4: return 16;
+    case kInt: return 1;
+    case kIntVec2: return 2;
+    case kIntVec3: return 3;
+    case kIntVec4: return 4;
+    case kUint: return 1;
+    case kUintVec2: return 2;
+    case kUintVec3: return 3;
+    case kUintVec4: return 4;
+    case kBool: return 1;
+    case kBoolVec2: return 2;
+    case kBoolVec3: return 3;
+    case kBoolVec4: return 4;
+    case kRGBA8:
+    case kRGBAn8:
+    case kRGBA32:
+    case kRGBAn32:
+    case kRGBAf:
+    case kBGRA8:
+    case kBGRAn8:
+    case kBGRA32:
+    case kBGRAn32:
+    case kBGRAnf: return 4;
+    default: CHECK(false); return -1;
+  }
+}
+}
+
 bool D3DGeometryShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
-  HRESULT hr = d3ddevice->CreateGeometryShader(blob->GetBufferPointer(),
-                                               blob->GetBufferSize(),
-                                               NULL,
-                                               &resource_);
-  HRESULT_HANDLE(hr, ERROR, "CreateGeometryShader failed ");
+  HRESULT hr;
+  if (!vertex_desc()) {
+    hr = d3ddevice->CreateGeometryShader(blob->GetBufferPointer(),
+                                         blob->GetBufferSize(),
+                                         NULL,
+                                         &resource_);
+    HRESULT_HANDLE(hr, ERROR, "CreateGeometryShader failed ");
+  } else {
+    const int32 kMaxEntry = 64;
+    D3D11_SO_DECLARATION_ENTRY pDecl[kMaxEntry];
+    memset(pDecl, 0, sizeof(pDecl));
+    DCHECK_LT(vertex_desc()->element_count(), sizeof(pDecl));
+    for (int32 i = 0; i < vertex_desc()->element_count(); ++i) {
+      const VertexDesc::Desc* desc = vertex_desc()->descs() + i;
+      pDecl[i].SemanticName = desc->name;
+      pDecl[i].Stream = 0;
+      pDecl[i].SemanticIndex = desc->semantic_index;
+      pDecl[i].StartComponent = 0;
+      pDecl[i].ComponentCount = ComponentCount(desc->type);
+      pDecl[i].OutputSlot = desc->input_slot;
+    }
+
+    scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_));
+    hr = d3ddevice->CreateGeometryShaderWithStreamOutput(
+        blob->GetBufferPointer(), blob->GetBufferSize(),
+        pDecl, vertex_desc()->element_count(),
+        NULL, 0, 0, NULL, &resource_);
+    HRESULT_HANDLE(hr, ERROR, "CreateGeometryShader failed ");
+  }
   return true;
 }
 

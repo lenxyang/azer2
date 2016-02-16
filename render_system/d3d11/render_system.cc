@@ -106,7 +106,7 @@ ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc
       gpu_program = (new D3DPixelShader(info));
       break;
     case kGeometryStage:
-      gpu_program = (new D3DGeometryShader(info));
+      gpu_program = (new D3DGeometryShader(desc, info));
       break;
     case kVertexStage:
       gpu_program = new D3DVertexShader(desc, info);

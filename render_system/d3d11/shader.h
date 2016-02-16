@@ -11,7 +11,6 @@
 #include "azer/render/shader.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
-#include "azer/render_system/d3d11/hlsl_compile.h"
 
 namespace azer {
 namespace d3d11 {
@@ -24,7 +23,7 @@ class D3DShader : public Shader {
   ~D3DShader() override;
 
   bool Init(RenderSystem* rs) override;
- private:
+ protected:
   D3DBlobPtr CompileShader(ID3D11Device* d3d_device);
   virtual bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) = 0;
   DISALLOW_COPY_AND_ASSIGN(D3DShader);
@@ -34,10 +33,9 @@ class D3DVertexShader : public D3DShader {
  public:
   D3DVertexShader(VertexDesc* desc, const ShaderInfo& info);
   ~D3DVertexShader() override;
-  bool Init(RenderSystem* rs) override;
   ID3D11VertexShader* resource() { return resource_;}
  private:
-  bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override { return true;}
+  bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11VertexShader* resource_;
 
   friend class D3DRenderer;
@@ -60,6 +58,7 @@ class D3DPixelShader : public D3DShader {
 class D3DGeometryShader : public D3DShader {
  public:
   D3DGeometryShader(const ShaderInfo& info);
+  D3DGeometryShader(VertexDesc* desc, const ShaderInfo& info);
   virtual ~D3DGeometryShader();
   bool Init(RenderSystem* rs) override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
