@@ -61,6 +61,7 @@ class D3DGeometryShader : public D3DShader {
  public:
   D3DGeometryShader(const ShaderInfo& info);
   virtual ~D3DGeometryShader();
+  bool Init(RenderSystem* rs) override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11GeometryShader* resource() { return resource_;}
  private:
@@ -105,5 +106,12 @@ class D3DComputeShader : public D3DShader {
   DISALLOW_COPY_AND_ASSIGN(D3DComputeShader);
 };
 
+
+ID3DBlob* CompileShaderForStage(RenderPipelineStage stage, 
+                                const std::string& shader, 
+                                const std::string& path, 
+                                std::string* error_msg);
+const char* HLSLTypeName(DataFormat format);
+const char* DefaultShaderEntryForStage(RenderPipelineStage stage);
 }  // namespace d3d11
 }  // namespace azer
