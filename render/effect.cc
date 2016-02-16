@@ -16,6 +16,16 @@ Effect::Effect()
 
 Effect::~Effect() {}
 
+bool Effect::Init(VertexDesc* desc, const TechSource& sources) {
+  if (desc) {
+    vertex_desc_ = desc;
+  }
+
+  DCHECK(vertex_desc_);
+  technique_ = CreateTechnique(sources, RenderSystem::Current());
+  InitGpuConstantTable();
+  return true;
+}
 void Effect::UseTexture(Renderer* renderer) {}
 
 void Effect::SetVertexDesc(VertexDesc* desc) {
@@ -28,7 +38,6 @@ void Effect::Apply(Renderer* renderer) {
   ApplyGpuConstantTable(renderer);
   BindConstantsTable(renderer);
   BindTechnique(renderer);
-  
 }
 
 void Effect::flush(Renderer* renderer) {

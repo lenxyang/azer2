@@ -27,4 +27,3 @@
 
 #include "azer/render/scoped_render_target.h"
 #include "azer/render/render_system_loader.h"
-#include "azer/render/util/coordinate_grid.h"

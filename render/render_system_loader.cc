@@ -11,10 +11,7 @@ namespace azer {
 
 namespace {
 typedef azer::RenderSystem* (*CreateRenderSystemFunc)();
-typedef const char* (*AzerGetShaderProgramFunc)(
-    const char* name, const char* version, int32 stage, const void* extra);
 
-AzerGetShaderProgramFunc s_GetShaderProgramFunc  = NULL;
 AutoRenderSystemInit *s_render_system_env = NULL;
 }  // namespace
 
@@ -49,13 +46,6 @@ bool AutoRenderSystemInit::Init() {
   }
  
   LOG(ERROR) << "RenderSystem(" << current_->name() << ") Created";
-  s_GetShaderProgramFunc = (AzerGetShaderProgramFunc)
-      dynlib_.GetSymbol("AzerGetShaderProgram");
-  if (NULL == s_GetShaderProgramFunc) {
-    LOG(ERROR) << "Cannot find AzerGetShaderProgram";
-    return false;
-  }
-
   return true;
 }
 
@@ -80,11 +70,5 @@ void UnloadRenderSystem() {
 
 bool IsRenderSystemLoaded() {
   return RenderSystem::Current() != NULL;
-}
-
-const char* GetCommonShaderProgram(const char* name, 
-                                   const char* version, 
-                                   int32 stage, const void* extra) {
-  return (*s_GetShaderProgramFunc)(name, version, stage, extra);
 }
 }  // namespace azer

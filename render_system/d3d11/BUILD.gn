@@ -35,9 +35,6 @@ shared_library("d3d11") {
     "renderer.h",
     "shader.cc",
     "shader.h",
-    "shader/coordinate_effect.cc",
-    "shader/coordinate_effect.h",
-    "shader/shader.cc",
     "swap_chain.cc",
     "swap_chain.h",
     "technique.cc",
@@ -51,8 +48,7 @@ shared_library("d3d11") {
   ]
   deps = [
     "//azer",
-    "//azer/render/util",
-    "//base:base",
+    "//base",
     "//ui/gfx",
     "//ui/gl",
     "//skia",
