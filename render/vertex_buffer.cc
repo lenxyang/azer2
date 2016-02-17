@@ -168,10 +168,6 @@ uint8* SlotVertexData::next(const uint8* cur) {
 const uint8* SlotVertexData::vertex_data_at(int32 index) const {
   int32 pindex = index;
   const VertexDesc::Desc* d = desc_->descs();
-  if (d->instance_data_step > 1) {
-    pindex = static_cast<int32>(
-        (index + d->instance_data_step - 1) / d->instance_data_step);
-  }
   return pointer() + desc_->vertex_size() * pindex;
 }
 
@@ -221,8 +217,7 @@ void VertexData::InitSlotFromDesc() {
   for (int32 i = 0; i < desc_->slot_count(); ++i) {
     VertexDescPtr desc = desc_->gen_slot_desc(i);
     const VertexDesc::Desc* d = desc->descs();
-    int32 vertex_count = d->instance_data_step == 0 ? vertex_count_
-        : (vertex_count_ + d->instance_data_step - 1) / d->instance_data_step;
+    int32 vertex_count = vertex_count_;
     SlotVertexDataPtr data = new SlotVertexData(desc, vertex_count);
     vector_[i] = data;
   }
