@@ -261,6 +261,9 @@ int32 VertexTypeSize(DataFormat type) {
     case kVec2: return sizeof(azer::Vector2);
     case kVec3: return sizeof(azer::Vector3);
     case kVec4: return sizeof(azer::Vector4);
+    // case kMat2: return sizeof(azer::Matrix2);
+    case kMat3: return sizeof(azer::Matrix3);
+    case kMat4: return sizeof(azer::Matrix4);
     case kInt: return sizeof(int);
     case kIntVec2: return sizeof(int) * 2;
     case kIntVec3: return sizeof(int) * 3;
@@ -306,7 +309,8 @@ void VertexBufferGroup::add_vertex_buffer(VertexBuffer* vb) {
 
 void VertexBufferGroup::add_vertex_buffer_at(VertexBuffer* vb, int32 index) {
   DCHECK(vertex_buffer_count() <= vdesc_->slot_count());
-  DCHECK(vertex_count_ == -1 || vertex_count_ == vb->vertex_count());
+  DCHECK(vertex_count_ == -1 || vb->vertex_desc()->descs()[0].instance_data_step > 0
+     || vertex_count_ == vb->vertex_count());
   vertex_count_ = vb->vertex_count();
   vector_.insert(vector_.begin() + index, vb);
   OnVertexBufferChanged();
@@ -343,7 +347,7 @@ std::string DumpVertexDesc(const VertexDesc* desc) {
     const VertexDesc::Desc* d = desc->descs() + i;
     ss << d->name << d->semantic_index
        << " type: " << GetDataFormatName(d->type)
-       <<" slot: " << d->input_slot;
+       << " slot: " << d->input_slot;
     ss << std::endl;
   }
   return ss.str();

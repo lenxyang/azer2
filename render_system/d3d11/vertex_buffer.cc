@@ -30,8 +30,8 @@ std::string D3DVertexLayout::GenVSForDesc(VertexDesc* vertex_desc) {
     const VertexDesc::Desc* desc = vertex_desc->descs() + i;
      std::string name(desc->name);
      ss << HLSLTypeName(desc->type) << " "
-        << ::base::StringToLowerASCII(name) << ":" 
-        << StringToUpperASCII(name) << desc->semantic_index
+        << ::base::StringToLowerASCII(name) << desc->semantic_index << ":" 
+        << StringToUpperASCII(name) << desc->semantic_index 
         << ";" << std::endl;
   }
   ss << "};\n";

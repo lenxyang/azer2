@@ -204,18 +204,17 @@ bool D3DComputeShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   return true;
 }
 
+const DWORD kCommflags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR 
+    | D3DCOMPILE_ENABLE_STRICTNESS;
+
 #if defined(_DEBUG)
 const DWORD kCompileFlags =
     D3DCOMPILE_DEBUG
-    | D3DCOMPILE_ENABLE_STRICTNESS
-    | D3DCOMPILE_OPTIMIZATION_LEVEL0
     | D3DCOMPILE_PREFER_FLOW_CONTROL
-    | D3DCOMPILE_SKIP_OPTIMIZATION;
+    | D3DCOMPILE_SKIP_OPTIMIZATION
+    | kCommflags;
 #else
-const DWORD kCompileFlags =
-    D3DCOMPILE_ENABLE_STRICTNESS
-    | D3DCOMPILE_SKIP_VALIDATION
-    ;
+const DWORD kCompileFlags = D3DCOMPILE_SKIP_VALIDATION | kCommflags;
 #endif
 
 namespace {
