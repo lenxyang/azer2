@@ -16,11 +16,8 @@ Effect::Effect()
 
 Effect::~Effect() {}
 
-bool Effect::Init(VertexDesc* desc, const TechSource& sources) {
-  if (desc) {
-    vertex_desc_ = desc;
-  }
-
+bool Effect::Init(const TechSource& sources) {
+  vertex_desc_ = sources.vertex_desc();
   DCHECK(vertex_desc_);
   technique_ = CreateTechnique(sources, RenderSystem::Current());
   InitGpuConstantTable();
