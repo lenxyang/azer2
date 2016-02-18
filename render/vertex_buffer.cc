@@ -203,10 +203,17 @@ int32 SlotVertexData::stride() const {
 }
 
 // class VertexData
+VertexData::VertexData(VertexDesc* desc)
+    : desc_(desc),
+      vertex_count_(-1) {
+  vector_.resize(desc->slot_count());
+}
+
 VertexData::VertexData(VertexDesc* desc, int32 vertex_count)
     : desc_(desc),
       vertex_count_(vertex_count) {
   vector_.resize(desc->slot_count());
+  InitSlotFromDesc();
 }
 
 VertexData::~VertexData() {
@@ -225,6 +232,8 @@ void VertexData::InitSlotFromDesc() {
 
 void VertexData::set_slot_vertex_data(SlotVertexData* data, int32 slot_index) {
   vector_[slot_index] = data;
+  if (slot_index == 0)
+    vertex_count_ = data->vertex_count();
 }
 
 SlotVertexData* VertexData::vertex_data_at(int32 index) {

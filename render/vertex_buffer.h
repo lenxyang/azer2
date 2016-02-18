@@ -115,10 +115,10 @@ class AZER_EXPORT SlotVertexData : public Resource {
 
 class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
  public:
+  VertexData(VertexDesc* desc);
   VertexData(VertexDesc* desc, int32 vertex_count);
   ~VertexData();
 
-  void InitSlotFromDesc();
   void set_slot_vertex_data(SlotVertexData* data, int32 slot_index);
   SlotVertexData* vertex_data_at(int32 index);
 
@@ -126,6 +126,7 @@ class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
   const VertexDesc* vertex_desc() const;
   VertexDesc* vertex_desc();
  private:
+  void InitSlotFromDesc();
   VertexDescPtr desc_;
   int32 vertex_count_;
   std::vector<SlotVertexDataPtr> vector_;

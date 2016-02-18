@@ -10,7 +10,7 @@ class Effect;
 class Entity;
 class MeshPart;
 class IndicesData;
-class SlotVertexData;
+class VertexData;
 class Vector3;
 class VertexDesc;
 
@@ -130,6 +130,6 @@ AZER_EXPORT EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
                                           VertexDesc* desc, const Matrix4& mat);
 
 // util
-AZER_EXPORT void CalcIndexedTriangleNormal(SlotVertexData* vbd, IndicesData* idata);
-AZER_EXPORT void CalcTriangleNormal(SlotVertexData* vbd, int* indices);
+AZER_EXPORT void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata);
+AZER_EXPORT void CalcTriangleNormal(VertexData* vbd, int* indices);
 }  // namespace azer
