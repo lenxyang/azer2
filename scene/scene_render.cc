@@ -1,13 +1,13 @@
-#include "lordaeron/scene/scene_render.h"
+#include "azer/scene/scene_render.h"
 
 #include "base/logging.h"
 #include "azer/render/render.h"
-#include "lordaeron/scene/render_node.h"
-#include "lordaeron/scene/render_env_node.h"
-#include "lordaeron/scene/scene_node.h"
+#include "azer/scene/render_node.h"
+#include "azer/scene/render_env_node.h"
+#include "azer/scene/scene_node.h"
 
-namespace lord {
-using namespace azer;
+namespace azer {
+
 SceneRender::SceneRender() : camera_(NULL) {}
 
 void SceneRender::SetTreeBuildDelegate(scoped_ptr<RenderTreeBuilderDelegate> delegate) {
@@ -109,4 +109,4 @@ void SceneRender::DoFrameRenderEnd(Renderer* renderer) {
                     observers_, 
                     OnFrameRenderEnd(this, renderer));
 }
-}  // namespace lord
+}  // namespace azer

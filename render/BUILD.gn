@@ -21,10 +21,10 @@ source_set("render2d") {
 
 source_set("render") {
   sources = [
-    "axis_aligned_box.cc",
-    "axis_aligned_box.h",
     "blending.cc",
     "blending.h",
+    "bounding_volumn.cc",
+    "bounding_volumn.h",
     "camera.cc",
     "camera.h",
     "common.cc",

@@ -6,11 +6,11 @@
 #include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/render/render.h"
-#include "lordaeron/effect/light.h"
-#include "lordaeron/scene/scene_node_traverse.h"
-#include "lordaeron/scene/scene_node.h"
+#include "azer/render/light.h"
+#include "azer/scene/scene_node_traverse.h"
+#include "azer/scene/scene_node.h"
 
-namespace lord {
+namespace azer {
 class RenderEnvNodeDelegate;
 class RenderEnvNode;
 class RenderNode;
@@ -21,8 +21,8 @@ typedef scoped_refptr<RenderNode> RenderNodePtr;
 class RenderNodeDelegate {
  public:
   explicit RenderNodeDelegate(RenderNode* node);
-  virtual void Update(const azer::FrameArgs& args) = 0;
-  virtual void Render(azer::Renderer* renderer) = 0;
+  virtual void Update(const FrameArgs& args) = 0;
+  virtual void Render(Renderer* renderer) = 0;
   SceneNode* GetSceneNode();
   const SceneNode* GetSceneNode() const;
   RenderNode* GetRenderNode();
@@ -32,7 +32,7 @@ class RenderNodeDelegate {
   DISALLOW_COPY_AND_ASSIGN(RenderNodeDelegate);
 };
 
-class RenderNode : public azer::EffectParamsProvider {
+class RenderNode : public EffectParamsProvider {
  public:
   explicit RenderNode(SceneNode* node);
   virtual ~RenderNode();
@@ -44,16 +44,16 @@ class RenderNode : public azer::EffectParamsProvider {
   const RenderEnvNode* GetEnvNode() const { return envnode_;}
   void  SetEnvNode(RenderEnvNode* node);
 
-  const azer::Matrix4& GetWorld() const { return world_;}
-  const azer::Matrix4& GetPVW() const { return pvw_;}
-  const azer::Matrix4& GetPV() const { return pv_;}
-  const azer::Camera* camera() const;
-  void SetCamera(const azer::Camera* camera);
+  const Matrix4& GetWorld() const { return world_;}
+  const Matrix4& GetPVW() const { return pvw_;}
+  const Matrix4& GetPV() const { return pv_;}
+  const Camera* camera() const;
+  void SetCamera(const Camera* camera);
 
   // virtual function;
   bool Init();
-  void Update(const azer::FrameArgs& args);
-  void Render(azer::Renderer* renderer);
+  void Update(const FrameArgs& args);
+  void Render(Renderer* renderer);
 
   RenderNode* root();
   const RenderNode* root() const {
@@ -75,17 +75,17 @@ class RenderNode : public azer::EffectParamsProvider {
   std::string DumpTree() const;
   std::string DumpNode(const RenderNode* node, int32 depth) const;
  protected:
-  void CalcParams(const azer::FrameArgs& args);
+  void CalcParams(const FrameArgs& args);
   RenderNode* parent_;
   std::vector<RenderNodePtr> children_;
 
   SceneNode* node_;
   scoped_ptr<RenderNodeDelegate> delegate_;
   RenderEnvNodePtr envnode_;
-  const azer::Camera* camera_;
-  azer::Matrix4 world_;
-  azer::Matrix4 pvw_;
-  azer::Matrix4 pv_;
+  const Camera* camera_;
+  Matrix4 world_;
+  Matrix4 pvw_;
+  Matrix4 pv_;
   DISALLOW_COPY_AND_ASSIGN(RenderNode);
 };
 
@@ -102,7 +102,7 @@ class RenderTreeBuilder : public SceneNodeTraverseDelegate {
   explicit RenderTreeBuilder(RenderTreeBuilderDelegate* delegate);
   ~RenderTreeBuilder();
 
-  RenderNodePtr Build(SceneNode* node, const azer::Camera* camera);
+  RenderNodePtr Build(SceneNode* node, const Camera* camera);
 
   // override from SceneNodeTraverseDelegate
   void OnTraverseBegin(SceneNode* root) override;
@@ -115,4 +115,4 @@ class RenderTreeBuilder : public SceneNodeTraverseDelegate {
   RenderTreeBuilderDelegate* delegate_;
   DISALLOW_COPY_AND_ASSIGN(RenderTreeBuilder);
 };
-}  // namespace lord
+}  // namespace azer

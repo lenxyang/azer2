@@ -13,8 +13,6 @@ static_library("scene") {
     "scene_node_traverse.h",
     "scene_node_picking.cc",
     "scene_node_picking.h",
-    "scene_tree_model.cc",
-    "scene_tree_model.h",
   ]
   deps = [
     "//base",

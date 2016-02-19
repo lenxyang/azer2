@@ -1,8 +1,8 @@
-#include "lordaeron/scene/scene_node_traverse.h"
+#include "azer/scene/scene_node_traverse.h"
 
-#include "lordaeron/scene/scene_node.h"
+#include "azer/scene/scene_node.h"
 
-namespace lord {
+namespace azer {
 SceneNodeTraverse::SceneNodeTraverse(SceneNodeTraverseDelegate* delegate) 
     : delegate_(delegate) {
 }
@@ -25,4 +25,4 @@ void SceneNodeTraverse::TraverseNode(SceneNode* node) {
   }
   delegate_->OnTraverseNodeExit(node);
 }
-}  // namespace lord
+}  // namespace azer

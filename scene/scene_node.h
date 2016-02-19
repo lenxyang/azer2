@@ -5,7 +5,8 @@
 
 #include "base/memory/ref_counted.h"
 #include "base/observer_list.h"
-#include "azer/render/render.h"
+#include "azer/math/math.h"
+#include "azer/render/light.h"
 #include "azer/scene/scene_node_observer.h"
 
 namespace azer {

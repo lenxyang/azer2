@@ -1,12 +1,12 @@
-#include "lordaeron/scene/scene_node_picking.h"
+#include "azer/scene/scene_node_picking.h"
 
 #include "azer/math/math.h"
 #include "azer/render/render.h"
-#include "lordaeron/scene/scene_node.h"
-#include "lordaeron/util/axis_aligned_bounding_box.h"
+#include "azer/scene/scene_node.h"
+#include "azer/render/bounding_volumn.h"
 
-namespace lord {
-SceneNodePickHelper::SceneNodePickHelper(azer::Ray* ray)
+namespace azer {
+SceneNodePickHelper::SceneNodePickHelper(Ray* ray)
     : ray_(ray),
       picking_node_(NULL) {
 }
@@ -18,7 +18,7 @@ SceneNode* SceneNodePickHelper::GetPickingNode() {
 }
 
 void SceneNodePickHelper::OnTraverseBegin(SceneNode* root) {
-  worlds_.push(azer::Matrix4::kIdentity);
+  worlds_.push(Matrix4::kIdentity);
 }
 
 bool SceneNodePickHelper::OnTraverseNodeEnter(SceneNode* node) {
@@ -59,4 +59,4 @@ void SceneNodePickHelper::OnTraverseEnd() {
   DCHECK_EQ(worlds_.size(), 1u);
 }
 
-}  // namespace lord
+}  // namespace azer

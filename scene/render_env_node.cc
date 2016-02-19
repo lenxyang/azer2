@@ -1,14 +1,12 @@
-#include "lordaeron/scene/render_env_node.h"
+#include "azer/scene/render_env_node.h"
 
 #include <sstream>
 #include "base/logging.h"
-#include "lordaeron/interactive/light_controller.h"
-#include "lordaeron/scene/render_node.h"
-#include "lordaeron/scene/scene_node.h"
-#include "lordaeron/scene/scene_render.h"
+#include "azer/scene/render_node.h"
+#include "azer/scene/scene_node.h"
+#include "azer/scene/scene_render.h"
 
-namespace lord {
-using namespace azer;
+namespace azer {
 
 // class
 RenderEnvNodeDelegate::RenderEnvNodeDelegate(RenderEnvNode* envnode)
@@ -111,4 +109,4 @@ void RenderEnvNode::UpdateRecusive(const FrameArgs& args) {
   }
 }
 
-}  // namespace lord
+}  // namespace azer

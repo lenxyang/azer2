@@ -1,4 +1,4 @@
-#include "azer/base/light.h"
+#include "azer/render/light.h"
 
 #include "base/logging.h"
 #include "azer/render/light_observer.h"
@@ -26,13 +26,6 @@ const Vector3 none_dir(0.0f, 0.0f, 0.0f);
 }
 
 Light::Light() {memset(&data_, 0, sizeof(data_));}
-Light::Light(const Light& light) {
-  *this = light;
-}
-Light& Light::operator = (const Light& light) {
-  memset(&this->data_, &light->data_, sizeof(data_));
-  return *this;
-}
 Light::Light(const DirLight& light) { SetLight(light);}
 Light::Light(const PointLight& light) { SetLight(light);}
 Light::Light(const SpotLight& light) { SetLight(light); }
@@ -182,57 +175,5 @@ void Light::set_range(float v) {
 void Light::set_attenuation(const Vector3& v) {
   DCHECK(type() == kPointLight);
   memcpy(data_.attenuation.coeff, &v, sizeof(v));
-}
-
-// ObserverableLight
-ObserverableLight::ObserverableLight() {
-}
-
-ObserverableLight::ObserverableLight(const Light& l) {
-  SetLight(l);
-}
-
-void ObserverableLight::set_factor(bool v) {
-  light_.set_factor(v);
-}
-
-void ObserverableLight::set_diffuse(const Vector4& color) {
-  light_.set_diffuse(v);
-}
-
-void ObserverableLight::set_ambient(const Vector4& color) {
-  light_.set_ambient(v);
-}
-
-void ObserverableLight::set_specular(const Vector4& color) {
-  light_.set_specular(v);
-}
-
-void ObserverableLight::set_position(const Vector3& pos) {
-  light_.set_position(v);
-}
-
-void ObserverableLight::set_directional(const Vector3& dir) {
-  light_.set_directional(v);
-}
-
-void ObserverableLight::set_phi(float v) {
-  light_.set_phi(v);
-}
-
-void ObserverableLight::set_theta(float v) {
-  light_.set_theta(v);
-}
-
-void ObserverableLight::set_falloff(float v) {
-  light_.set_falloff(v);
-}
-
-void ObserverableLight::set_range(float v) {
-  light_.set_range(v);
-}
-
-void ObserverableLight::set_attenuation(const Vector3& v) {
-  light_.set_attenuation(v);
 }
 }  // namespace azer

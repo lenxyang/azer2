@@ -2,13 +2,13 @@
 
 #include <stack>
 #include "azer/render/render.h"
-#include "lordaeron/scene/scene_node_traverse.h"
+#include "azer/scene/scene_node_traverse.h"
 
-namespace lord {
+namespace azer {
 class SceneNode;
 class SceneNodePickHelper : public SceneNodeTraverseDelegate {
  public:
-  SceneNodePickHelper(azer::Ray* ray);
+  SceneNodePickHelper(Ray* ray);
   ~SceneNodePickHelper();
 
   SceneNode* GetPickingNode();
@@ -18,9 +18,9 @@ class SceneNodePickHelper : public SceneNodeTraverseDelegate {
   void OnTraverseNodeExit(SceneNode* node) override;
   void OnTraverseEnd() override;
  private:
-  const azer::Ray* ray_;
+  const Ray* ray_;
   SceneNode* picking_node_;
-  std::stack<azer::Matrix4> worlds_;
+  std::stack<Matrix4> worlds_;
   DISALLOW_COPY_AND_ASSIGN(SceneNodePickHelper);
 };
-}  // namespace lord
+}  // namespace azer

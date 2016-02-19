@@ -2,7 +2,7 @@
 
 #include "base/basictypes.h"
 
-namespace lord {
+namespace azer {
 
 class SceneNode;
 
@@ -30,4 +30,4 @@ class SceneNodeTraverse {
   SceneNodeTraverseDelegate* delegate_;
   DISALLOW_COPY_AND_ASSIGN(SceneNodeTraverse);
 };
-}  // namespace lord
+}  // namespace azer

@@ -1,14 +1,13 @@
-#include "lordaeron/scene/render_node.h"
+#include "azer/scene/render_node.h"
 
 #include <sstream>
 #include "base/logging.h"
-#include "lordaeron/interactive/light_controller.h"
-#include "lordaeron/scene/render_env_node.h"
-#include "lordaeron/scene/scene_node.h"
-#include "lordaeron/scene/scene_render.h"
+#include "azer/scene/render_env_node.h"
+#include "azer/scene/scene_node.h"
+#include "azer/scene/scene_render.h"
 
-namespace lord {
-using namespace azer;
+namespace azer {
+
 // class RenderNodeDelegate
 RenderNodeDelegate::RenderNodeDelegate(RenderNode* node)
     : node_(node) {
@@ -53,7 +52,7 @@ const Camera* RenderNode::camera() const {
   return root()->camera_;
 }
 
-void RenderNode::SetCamera(const azer::Camera* camera) {
+void RenderNode::SetCamera(const Camera* camera) {
   DCHECK(!camera_);
   DCHECK(!parent());
   camera_ = camera;
@@ -141,18 +140,18 @@ bool RenderNode::Init() {
   return true;
 }
 
-void RenderNode::Update(const azer::FrameArgs& args) {
+void RenderNode::Update(const FrameArgs& args) {
   CalcParams(args);
   if(delegate_.get())
     delegate_->Update(args);
 }
 
-void RenderNode::Render(azer::Renderer* renderer) {
+void RenderNode::Render(Renderer* renderer) {
   if (delegate_.get())
     delegate_->Render(renderer);
 }
 
-void RenderNode::CalcParams(const azer::FrameArgs& args) {
+void RenderNode::CalcParams(const FrameArgs& args) {
   // will be called on traverse the RenderTree
   // if put the code into UpdateParams, the params will be calculated multily time
   // when RenderNode used by multiple objects
@@ -240,4 +239,4 @@ void RenderTreeBuilder::OnTraverseNodeExit(SceneNode* node) {
 void RenderTreeBuilder::OnTraverseEnd() {
   DCHECK(cur_ == NULL);
 }
-}  // namespace lord
+}  // namespace azer

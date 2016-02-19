@@ -1,7 +1,9 @@
 #pragma once
 
 #include <vector>
+#include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
+#include "base/observer_list.h"
 #include "azer/render/render.h"
 
 namespace azer {
@@ -92,8 +94,6 @@ class AZER_EXPORT Light : public ::base::RefCounted<Light> {
   explicit Light(const DirLight& light);
   explicit Light(const PointLight& light);
   explicit Light(const SpotLight& light);
-
-  const Light& operator = (const Light& light);
 
   int32 type() const;
   const UniverseLight& data() const { return data_;}

@@ -6,18 +6,18 @@
 #include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/render/render.h"
-#include "lordaeron/effect/light.h"
-#include "lordaeron/scene/scene_node_traverse.h"
-#include "lordaeron/scene/scene_node.h"
+#include "azer/render/light.h"
+#include "azer/scene/scene_node_traverse.h"
+#include "azer/scene/scene_node.h"
 
-namespace lord {
+namespace azer {
 class RenderNode;
 class RenderEnvNode;
 class RenderEnvNodeDelegate;
 typedef scoped_refptr<RenderEnvNode> RenderEnvNodePtr;
 typedef scoped_refptr<RenderEnvNodeDelegate> RenderEnvNodeDelegatePtr;
 
-class RenderEnvNodeDelegate : public azer::EffectParamsProvider {
+class RenderEnvNodeDelegate : public EffectParamsProvider {
  public:
   explicit RenderEnvNodeDelegate(RenderEnvNode* envnode);
 
@@ -25,7 +25,7 @@ class RenderEnvNodeDelegate : public azer::EffectParamsProvider {
   const RenderEnvNode* node() const { return envnode_;}
 
   virtual void Init(SceneNode* node, RenderNode* render_node) = 0;
-  virtual void OnUpdateNode(const azer::FrameArgs& args) = 0;
+  virtual void OnUpdateNode(const FrameArgs& args) = 0;
  private:
   RenderEnvNode* envnode_;
   DISALLOW_COPY_AND_ASSIGN(RenderEnvNodeDelegate);
@@ -35,7 +35,7 @@ class FakeEnvNode : RenderEnvNodeDelegate {
  public:
   FakeEnvNode(RenderEnvNode* envnode) :  RenderEnvNodeDelegate(envnode) {}
   void Init(SceneNode* node, RenderNode* render_node) override {}
-  void OnUpdateNode(const azer::FrameArgs& args) override {}
+  void OnUpdateNode(const FrameArgs& args) override {}
 };
 
 class RenderEnvNode : public ::base::RefCounted<RenderEnvNode> {
@@ -59,7 +59,7 @@ class RenderEnvNode : public ::base::RefCounted<RenderEnvNode> {
         const_cast<RenderEnvNode*>(this)->parent());
   }
 
-  void UpdateRecusive(const azer::FrameArgs& args);
+  void UpdateRecusive(const FrameArgs& args);
   int32 child_count() const;
   RenderEnvNode* child_at(int32 index);
   void AddChild(RenderEnvNode* child);
@@ -75,4 +75,4 @@ class RenderEnvNode : public ::base::RefCounted<RenderEnvNode> {
   DISALLOW_COPY_AND_ASSIGN(RenderEnvNode);
 };
 
-}  // namespace lord
+}  // namespace azer
