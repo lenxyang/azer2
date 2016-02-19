@@ -6,14 +6,17 @@
 #include "base/memory/ref_counted.h"
 #include "base/observer_list.h"
 #include "azer/math/math.h"
-#include "azer/render/light.h"
+#include "azer/render/transform_holder.h"
 #include "azer/scene/scene_node_observer.h"
 
 namespace azer {
 class Light;
+class Mesh;
 class SceneNode;
 class SceneNodeData;
 class SceneNodeObserver;
+typedef scoped_refptr<Light> LightPtr;
+typedef scoped_refptr<Mesh> MeshPtr;
 typedef scoped_refptr<SceneNode> SceneNodePtr;
 typedef std::vector<SceneNodePtr> SceneNodes;
 

@@ -33,5 +33,6 @@ test("unittests") {
     "//base",
     "//azer",
     "//azer/scene",
+    "//azer/resource",
   ]
 }

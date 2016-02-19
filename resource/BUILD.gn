@@ -1,0 +1,46 @@
+
+source_set("mesh_load_util") {
+  sources = [
+    "mesh_load_util.cc",
+    "mesh_load_util.h",
+  ]
+
+  deps = [
+    "//azer",
+    "//azer/third_party/assimp",
+  ]
+}
+
+
+static_library("resource") {
+  sources = [
+    "effect_loader.cc",
+    "effect_loader.h",
+    "geometry_loader.cc",
+    "geometry_loader.h",
+    "light_loader.cc",
+    "light_loader.h",
+    "material_loader.cc",
+    "material_loader.h",
+    "mesh_loader.cc",
+    "mesh_loader.h",
+    "resource.h",
+    "resource_util.cc",
+    "resource_util.h",
+    "resource_loader.cc",
+    "resource_loader.h",
+    "scene_loader.cc",
+    "scene_loader.h",
+    "vertex_desc_loader.cc",
+    "vertex_desc_loader.h",
+    "xml_util.cc",
+    "xml_util.cc",
+  ]
+  deps = [
+    "//azer",
+    "//azer/scene",
+    "//base",
+    "//azer/util/xml",
+    ":mesh_load_util",
+  ]
+}

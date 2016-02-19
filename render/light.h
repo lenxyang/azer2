@@ -3,8 +3,9 @@
 #include <vector>
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
+#include "azer/base/export.h"
+#include "azer/math/math.h"
 #include "base/observer_list.h"
-#include "azer/render/render.h"
 
 namespace azer {
 class Light;
@@ -98,6 +99,7 @@ class AZER_EXPORT Light : public ::base::RefCounted<Light> {
   int32 type() const;
   const UniverseLight& data() const { return data_;}
 
+  void SetLightData(const UniverseLight& data);
   void SetLight(const DirLight& light);
   void SetLight(const PointLight& light);
   void SetLight(const SpotLight& light);
@@ -109,6 +111,12 @@ class AZER_EXPORT Light : public ::base::RefCounted<Light> {
   const Vector4& specular() const;
 
   float factor() const;
+  float phi() const;
+  float theta() const;
+  float falloff() const;
+  float range() const;
+  const Vector3& attenuation();
+
   void set_factor(bool v);
   void set_diffuse(const Vector4& color);
   void set_ambient(const Vector4& color);

@@ -1,11 +1,12 @@
 #pragma once
 
 #include "base/basictypes.h"
-#include "azer/render/render.h"
-
 namespace azer {
-
+class Quaternion;
 class SceneNode;
+class Vector3;
+
+
 class SceneNodeObserver {
  public:
   virtual void OnNodeLocationChanged(SceneNode* n, const Vector3& prev) {}

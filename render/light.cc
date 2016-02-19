@@ -30,6 +30,10 @@ Light::Light(const DirLight& light) { SetLight(light);}
 Light::Light(const PointLight& light) { SetLight(light);}
 Light::Light(const SpotLight& light) { SetLight(light); }
 
+void Light::SetLightData(const UniverseLight& data) {
+  memcpy(&data_, &data, sizeof(data));
+}
+
 void Light::SetLight(const DirLight& light) {
   memcpy(&data_, &light, sizeof(light));
 }
@@ -116,6 +120,67 @@ void Light::set_directional(const Vector3& dir) {
 
 int Light::type() const {
   return data_.type;
+}
+
+float Light::phi() const {
+  switch (type()) {
+    case kSpotLight:
+      return data_.spotarg.phi;
+    case kPointLight:
+    case kDirectionalLight:
+    default:
+      CHECK(false);
+      return 0.0f;
+  }
+}
+
+float Light::theta() const {
+  switch (type()) {
+    case kSpotLight:
+      return data_.spotarg.theta;
+    case kPointLight:
+    case kDirectionalLight:
+    default:
+      CHECK(false);
+      return 0.0f;
+  }
+}
+
+float Light::falloff() const {
+  switch (type()) {
+    case kSpotLight:
+      return data_.spotarg.falloff;
+    case kPointLight:
+    case kDirectionalLight:
+    default:
+      CHECK(false);
+      return 0.0f;
+  }
+}
+
+const Vector3& Light::attenuation() {
+  switch (type()) {
+    case kPointLight:
+      return *(Vector3*)(&data_.attenuation.coeff);
+    case kSpotLight:
+    case kDirectionalLight:
+    default:
+      CHECK(false);
+      return none_dir;
+  }
+}
+
+float Light::range() const {
+  switch (type()) {
+    case kPointLight:
+      return data_.attenuation.range;
+    case kSpotLight:
+      return data_.spotarg.range;
+    case kDirectionalLight:
+    default:
+      CHECK(false);
+      return 0.0f;
+  }
 }
 
 float Light::factor() const {

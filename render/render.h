@@ -13,6 +13,7 @@
 #include "azer/render/mesh.h"
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/gpu_compute_task.h"
+#include "azer/render/light.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/rasterizer_state.h"
 #include "azer/render/geometry.h"
@@ -26,3 +27,10 @@
 
 #include "azer/render/scoped_render_target.h"
 #include "azer/render/render_system_loader.h"
+
+#include "azer/resource/resource_loader.h"
+#include "azer/scene/render_node.h"
+#include "azer/scene/scene_node_picking.h"
+#include "azer/scene/render_env_node.h"
+#include "azer/scene/scene_node_traverse.h"
+#include "azer/scene/scene_render.h"
