@@ -8,11 +8,10 @@
 #include "base/strings/string_tokenizer.h"
 #include "azer/render/render.h"
 #include "azer/math/math.h"
-#include "lordaeron/interactive/light_controller.h"
-#include "lordaeron/scene/scene_node_observer.h"
+#include "azer/render/light.h"
+#include "azer/scene/scene_node_observer.h"
 
-namespace lord {
-using namespace azer;
+namespace azer {
 
 namespace {
 void CalcSceneOrientForZDirection(const Vector3& d, Quaternion* orient) {
@@ -513,4 +512,4 @@ void GetSceneNodeBounds(SceneNode* node, Vector3* vmin, Vector3* vmax) {
   *vmin = mat * Vector4(node->local_vmin(), 1.0);
   *vmax = mat * Vector4(node->local_vmax(), 1.0);
 }
-}  // namespace lord
+}  // namespace azer

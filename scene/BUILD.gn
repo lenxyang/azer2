@@ -1,0 +1,23 @@
+
+static_library("scene") {
+  sources = [
+    "render_env_node.cc",
+    "render_env_node.h",
+    "render_node.cc",
+    "render_node.h",
+    "scene_render.cc",
+    "scene_render.h",
+    "scene_node.cc",
+    "scene_node.h",
+    "scene_node_traverse.cc",
+    "scene_node_traverse.h",
+    "scene_node_picking.cc",
+    "scene_node_picking.h",
+    "scene_tree_model.cc",
+    "scene_tree_model.h",
+  ]
+  deps = [
+    "//base",
+    "//azer",
+  ]
+}

@@ -6,10 +6,9 @@
 #include "base/memory/ref_counted.h"
 #include "base/observer_list.h"
 #include "azer/render/render.h"
-#include "lordaeron/effect/light.h"
-#include "lordaeron/scene/scene_node_observer.h"
+#include "azer/scene/scene_node_observer.h"
 
-namespace lord {
+namespace azer {
 class Light;
 class SceneNode;
 class SceneNodeData;
@@ -32,8 +31,8 @@ class SceneNodeData : public SceneNodeObserver {
   ~SceneNodeData();
 
   void reset();
-  void AttachMesh(azer::MeshPtr mesh);
-  azer::Mesh* GetMesh();
+  void AttachMesh(MeshPtr mesh);
+  Mesh* GetMesh();
 
   void AttachLight(Light* light);
   Light* light();
@@ -41,9 +40,9 @@ class SceneNodeData : public SceneNodeObserver {
   void SetSceneNode(SceneNode* node);
  private:
   // override SceneNodeObserver
-  void OnNodeOrientChanged(SceneNode* node, const azer::Quaternion& prev) override;
-  void OnNodeLocationChanged(SceneNode* node, const azer::Vector3& prev) override;
-  azer::MeshPtr mesh_;
+  void OnNodeOrientChanged(SceneNode* node, const Quaternion& prev) override;
+  void OnNodeLocationChanged(SceneNode* node, const Vector3& prev) override;
+  MeshPtr mesh_;
   LightPtr light_;
   SceneNode* node_;
   DISALLOW_COPY_AND_ASSIGN(SceneNodeData);
@@ -75,9 +74,9 @@ class SceneNode: public ::base::RefCounted<SceneNode> {
   void set_shadow_caster(bool v) {shadow_caster_ = v;}
   bool shadow_caster() const { return shadow_caster_;}
 
-  const azer::Vector3& local_vmin() const { return local_vmin_;}
-  const azer::Vector3& local_vmax() const { return local_vmax_;}
-  void SetLocalBounds(const azer::Vector3& vmin, const azer::Vector3& vmax);
+  const Vector3& local_vmin() const { return local_vmin_;}
+  const Vector3& local_vmax() const { return local_vmax_;}
+  void SetLocalBounds(const Vector3& vmin, const Vector3& vmax);
 
   void AddChild(SceneNode* child);
   void RemoveChild(SceneNode* child);
@@ -106,24 +105,24 @@ class SceneNode: public ::base::RefCounted<SceneNode> {
   SceneNodes& children() { return children_;}
 
   // tranform
-  const azer::TransformHolder& holder() const { return holder_;}
-  void SetPosition(const azer::Vector3& pos);
-  const azer::Vector3& position() const { return holder().position();}
-  azer::Vector3 GetWorldPosition() const;
+  const TransformHolder& holder() const { return holder_;}
+  void SetPosition(const Vector3& pos);
+  const Vector3& position() const { return holder().position();}
+  Vector3 GetWorldPosition() const;
   
-  void SetScale(const azer::Vector3& v);
-  const azer::Vector3& scale() const { return holder().scale();}
+  void SetScale(const Vector3& v);
+  const Vector3& scale() const { return holder().scale();}
 
-  void set_orientation(const azer::Quaternion& q);
-  const azer::Quaternion& orientation() const { return holder().orientation();}
-  void pitch(const azer::Radians angle);
-  void pitch(const azer::Degree angle);
-  void yaw(const azer::Radians angle);
-  void yaw(const azer::Degree angle);
-  void roll(const azer::Radians angle);
-  void roll(const azer::Degree angle);
-  void rotate(const azer::Vector3& axis, const azer::Degree angle);
-  void rotate(const azer::Vector3& axis, const azer::Radians angle);
+  void set_orientation(const Quaternion& q);
+  const Quaternion& orientation() const { return holder().orientation();}
+  void pitch(const Radians angle);
+  void pitch(const Degree angle);
+  void yaw(const Radians angle);
+  void yaw(const Degree angle);
+  void roll(const Radians angle);
+  void roll(const Degree angle);
+  void rotate(const Vector3& axis, const Degree angle);
+  void rotate(const Vector3& axis, const Radians angle);
 
   std::string print_info();
 
@@ -143,13 +142,13 @@ class SceneNode: public ::base::RefCounted<SceneNode> {
   bool HasObserver(SceneNodeObserver* observer);
  protected:
   void InitMember();
-  void BoundsChanged(const azer::Vector3& orgmin, const azer::Vector3& orgmax);
-  void ScaleChanged(const azer::Vector3& org_scale);
-  void LocationChanged(const azer::Vector3& orgpos);
-  void OrientationChanged(const azer::Quaternion& origin_orient);
+  void BoundsChanged(const Vector3& orgmin, const Vector3& orgmax);
+  void ScaleChanged(const Vector3& org_scale);
+  void LocationChanged(const Vector3& orgpos);
+  void OrientationChanged(const Quaternion& origin_orient);
   void NotifyParentBoundsChanged();
   void UpdateBoundsByChildren();
-  azer::TransformHolder* mutable_holder() { return &holder_;}
+  TransformHolder* mutable_holder() { return &holder_;}
 
   SceneNode* GetLocalChild(const std::string& name);
   void print_info(std::string* str, int depth, SceneNode* node);
@@ -165,12 +164,12 @@ class SceneNode: public ::base::RefCounted<SceneNode> {
   SceneNodeType type_;
   void* user_data_;
   scoped_ptr<SceneNodeData> data_;
-  azer::TransformHolder holder_;
+  TransformHolder holder_;
   std::map<std::string, std::string> attributes_;
 
   // bounding
-  azer::Vector3 local_vmin_;
-  azer::Vector3 local_vmax_;
+  Vector3 local_vmin_;
+  Vector3 local_vmax_;
   ObserverList<SceneNodeObserver> observers_;
   int32 id_;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
@@ -188,6 +187,6 @@ class SceneNodeManager {
 };
 
 const char* SceneNodeName(int32 type);
-azer::Matrix4 GenWorldMatrixForSceneNode(SceneNode* node);
-void GetSceneNodeBounds(SceneNode* node, azer::Vector3* vmin, azer::Vector3* vmax);
-}  // namespace lord
+Matrix4 GenWorldMatrixForSceneNode(SceneNode* node);
+void GetSceneNodeBounds(SceneNode* node, Vector3* vmin, Vector3* vmax);
+}  // namespace azer

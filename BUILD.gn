@@ -32,5 +32,6 @@ test("unittests") {
     "//base/test:run_all_unittests",
     "//base",
     "//azer",
+    "//azer/scene",
   ]
 }
