@@ -1,27 +1,19 @@
-#include "samples/base/textured_effect.h"
+#include "azer/effect/diffusemap_effect.h"
 
 #include "base/strings/utf_string_conversions.h"
-#include "lordaeron/env.h"
+#include "azer/render/render.h"
+
 
 namespace azer {
 using base::UTF8ToUTF16;
 
-IMPLEMENT_EFFECT_DYNCREATE(TexturedEffect);
-const char TexturedEffect::kEffectName[] = "TexturedEffect";
-TexturedEffect::TexturedEffect()
-    : ambient_scalar_(0.01f),
-      specular_scalar_(1.0f),
-      alpha_(1.0f) {
-}
+IMPLEMENT_EFFECT_DYNCREATE(DiffuseMapEffect);
+const char DiffuseMapEffect::kEffectName[] = "DiffuseMapEffect";
+DiffuseMapEffect::DiffuseMapEffect() : light_count_(0) {}
+DiffuseMapEffect::~DiffuseMapEffect() {}
+const char* DiffuseMapEffect::GetEffectName() const { return kEffectName;}
 
-TexturedEffect::~TexturedEffect() {
-}
-
-const char* TexturedEffect::GetEffectName() const {
-  return kEffectName;
-}
-
-void TexturedEffect::InitGpuConstantTable() {
+void DiffuseMapEffect::InitGpuConstantTable() {
   RenderSystem* rs = RenderSystem::Current();
   // generate GpuTable init for stage kVertexStage
   GpuConstantsTable::Desc vs_table_desc[] = {
@@ -42,8 +34,8 @@ void TexturedEffect::InitGpuConstantTable() {
                             offsetof(ps_cbuffer, specular_scalar), 1),
     GpuConstantsTable::Desc("alpha", GpuConstantsType::kFloat,
                             offsetof(ps_cbuffer, alpha), 1),
-    GpuConstantsTable::Desc("pad2", GpuConstantsType::kFloat,
-                            offsetof(ps_cbuffer, pad2), 1),
+    GpuConstantsTable::Desc("light_count", GpuConstantsType::kInt,
+                            offsetof(ps_cbuffer, light_count), 1),
     GpuConstantsTable::Desc("lights", offsetof(ps_cbuffer, lights),
                             sizeof(UniverseLight), 4),
   };
@@ -51,25 +43,16 @@ void TexturedEffect::InitGpuConstantTable() {
       arraysize(ps_table_desc), ps_table_desc);
 }
 
-void TexturedEffect::SetPV(const Matrix4& value) {
-  pv_ = value;
-}
-void TexturedEffect::SetWorld(const Matrix4& value) {
-  world_ = value;
-}
-void TexturedEffect::SetCameraPos(const Vector4& value) {
-  camerapos_ = value;
-}
-
-void TexturedEffect::SetLights(const LightPtr* value, int32 count) {
+void DiffuseMapEffect::SetLights(const LightPtr* value, int32 count) {
   DCHECK_LT(count, sizeof(lights_));
+  light_count_ = count;
   for (int32 i = 0; i < count; ++i) {
     Light* light = (value + i)->get();
     memcpy(lights_ + i, &light->data(), sizeof(UniverseLight));
   }
 }
 
-void TexturedEffect::ApplyGpuConstantTable(Renderer* renderer) {
+void DiffuseMapEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
     DCHECK(tb != NULL);
@@ -80,16 +63,15 @@ void TexturedEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
     DCHECK(tb != NULL);
-    tb->SetValue(0, &ambient_scalar_, sizeof(float));
-    tb->SetValue(1, &specular_scalar_, sizeof(float));
-    tb->SetValue(2, &alpha_, sizeof(float));
-    tb->SetValue(3, &specular_scalar_, sizeof(float));
+    tb->SetValue(0, &mtrl_.ambient_scalar, sizeof(float));
+    tb->SetValue(1, &mtrl_.specular_scalar, sizeof(float));
+    tb->SetValue(2, &mtrl_.alpha, sizeof(float));
+    tb->SetValue(3, &light_count_, sizeof(light_count_));
     tb->SetValue(4, lights_, sizeof(lights_));
   }
 }
 
-void TexturedEffect::UseTexture(Renderer* renderer) {
-  renderer->BindTexture(kPixelStage, 0, diffuse_map_.get());
+void DiffuseMapEffect::UseTexture(Renderer* renderer) {
+  renderer->BindTexture(kPixelStage, 0, mtrl_.diffusemap.get());
 }
-
 }  // namespace azer

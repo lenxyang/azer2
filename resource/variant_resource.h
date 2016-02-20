@@ -2,7 +2,7 @@
 
 #include "azer/render/mesh.h"
 #include "azer/effect/light.h"
-#include "azer/effect/material.h"
+#include "azer/effect/base_material.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/scene/scene_node.h"
 
@@ -21,7 +21,7 @@ struct VariantResource {
   MeshPtr mesh;
   EffectPtr effect;
   VertexDescPtr vertex_desc;
-  MaterialPtr material;
+  BaseMaterialPtr material;
   LightPtr light;
   SceneNodePtr scene;
   int32 type;

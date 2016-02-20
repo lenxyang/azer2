@@ -1,7 +1,7 @@
 #pragma once
 
-#include "azer/base/config_node.h"
-#include "azer/render/render.h"
+#include "base/memory/ref_counted.h"
+#include "azer/effect/effect_params_provider.h"
 
 namespace azer {
 class ConfigNode;
@@ -13,7 +13,7 @@ class AZER_EXPORT BaseMaterial : public EffectParamsProvider {
 
   virtual bool Init(const ConfigNode* node, ResourceLoadContext* ctx) = 0;
  private:
-  DISALLOW_COPY_AND_ASSIGN(Material);
+  DISALLOW_COPY_AND_ASSIGN(BaseMaterial);
 };
 
 typedef scoped_refptr<BaseMaterial> BaseMaterialPtr;

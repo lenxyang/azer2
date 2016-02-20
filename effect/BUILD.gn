@@ -11,6 +11,7 @@ source_set("effect") {
     "light_observer.h",
     "light.cc",
     "light.h",
+    "base_material.h"
   ]
 
   deps = [
@@ -29,11 +30,12 @@ source_set("effect") {
   configs += ["//azer/base:build_render_config"]
 }
 
-
 static_library("effectlib") {
   sources = [
-    "textured_effect.cc",
-    "textured_effect.h",
+    "diffusemap_effect.cc",
+    "diffusemap_effect.h",
+    "material.cc",
+    "material.h",
   ]
 
   deps = [
