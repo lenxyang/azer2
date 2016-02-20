@@ -8,13 +8,13 @@
 
 namespace azer {
 
-SceneRender::SceneRender() : camera_(NULL) {}
+SceneTreeRender::SceneTreeRender() : camera_(NULL) {}
 
-void SceneRender::SetTreeBuildDelegate(scoped_ptr<RenderTreeBuilderDelegate> delegate) {
+void SceneTreeRender::SetTreeBuildDelegate(scoped_ptr<RenderTreeBuilderDelegate> delegate) {
   delegate_ = delegate.Pass();
 }
 
-void SceneRender::Init(SceneNode* root, const Camera* camera) {
+void SceneTreeRender::Init(SceneNode* root, const Camera* camera) {
   DCHECK(delegate_.get());
   CHECK(root_ == NULL);
   camera_ = camera;
@@ -22,20 +22,20 @@ void SceneRender::Init(SceneNode* root, const Camera* camera) {
   root_ = builder.Build(root, camera);
 }
 
-void SceneRender::Update(const FrameArgs& args) {
+void SceneTreeRender::Update(const FrameArgs& args) {
   root_->GetEnvNode()->UpdateRecusive(args);
   DoFrameUpdateBegin(args);
   UpdateNodeRecusive(root_, args);
   DoFrameUpdateEnd(args);
 }
 
-void SceneRender::Render(Renderer* renderer) {
+void SceneTreeRender::Render(Renderer* renderer) {
   DoFrameRenderBegin(renderer);
   RenderNodeRecusive(root_, renderer);
   DoFrameRenderEnd(renderer);
 }
 
-bool SceneRender::OnUpdateNode(RenderNode* node, const FrameArgs& args) {
+bool SceneTreeRender::OnUpdateNode(RenderNode* node, const FrameArgs& args) {
   if (!node->GetSceneNode()->visible()) {
     return false;
   }
@@ -43,7 +43,7 @@ bool SceneRender::OnUpdateNode(RenderNode* node, const FrameArgs& args) {
   return true;
 }
 
-bool SceneRender::OnRenderNode(RenderNode* node, Renderer* renderer) {
+bool SceneTreeRender::OnRenderNode(RenderNode* node, Renderer* renderer) {
   if (!node->GetSceneNode()->visible()) {
     return false;
   }
@@ -52,7 +52,7 @@ bool SceneRender::OnRenderNode(RenderNode* node, Renderer* renderer) {
   return true;
 }
 
-void SceneRender::UpdateNodeRecusive(RenderNode* node, const FrameArgs& args) {
+void SceneTreeRender::UpdateNodeRecusive(RenderNode* node, const FrameArgs& args) {
   if (OnUpdateNode(node, args)) {
     for (auto iter = node->children().begin(); 
          iter != node->children().end(); ++iter) {
@@ -61,7 +61,7 @@ void SceneRender::UpdateNodeRecusive(RenderNode* node, const FrameArgs& args) {
   }
 }
 
-void SceneRender::RenderNodeRecusive(RenderNode* node, Renderer* renderer) {
+void SceneTreeRender::RenderNodeRecusive(RenderNode* node, Renderer* renderer) {
   if (OnRenderNode(node, renderer)) {
     for (auto iter = node->children().begin(); 
          iter != node->children().end(); ++iter) {
@@ -70,42 +70,42 @@ void SceneRender::RenderNodeRecusive(RenderNode* node, Renderer* renderer) {
   }
 }
 
-void SceneRender::AddObserver(SceneRenderObserver* observer) {
+void SceneTreeRender::AddObserver(SceneTreeRenderObserver* observer) {
   observers_.AddObserver(observer);
 }
 
-void SceneRender::RemoveObserver(SceneRenderObserver* observer) {
+void SceneTreeRender::RemoveObserver(SceneTreeRenderObserver* observer) {
   observers_.RemoveObserver(observer);
 }
 
-bool SceneRender::HasObserver(SceneRenderObserver* observer) const {
+bool SceneTreeRender::HasObserver(SceneTreeRenderObserver* observer) const {
   return observers_.HasObserver(observer);
 }
 
-void SceneRender::DoFrameUpdateBegin(const FrameArgs& args) {
+void SceneTreeRender::DoFrameUpdateBegin(const FrameArgs& args) {
   OnFrameUpdateBegin(args);
-  FOR_EACH_OBSERVER(SceneRenderObserver, 
+  FOR_EACH_OBSERVER(SceneTreeRenderObserver, 
                     observers_, 
                     OnFrameUpdateBegin(this, args));
 }
 
-void SceneRender::DoFrameUpdateEnd(const FrameArgs& args) {
+void SceneTreeRender::DoFrameUpdateEnd(const FrameArgs& args) {
   OnFrameUpdateEnd(args);
-  FOR_EACH_OBSERVER(SceneRenderObserver, 
+  FOR_EACH_OBSERVER(SceneTreeRenderObserver, 
                     observers_, 
                     OnFrameUpdateEnd(this, args));
 }
 
-void SceneRender::DoFrameRenderBegin(Renderer* renderer) {
+void SceneTreeRender::DoFrameRenderBegin(Renderer* renderer) {
   OnFrameRenderBegin(renderer);
-  FOR_EACH_OBSERVER(SceneRenderObserver, 
+  FOR_EACH_OBSERVER(SceneTreeRenderObserver, 
                     observers_, 
                     OnFrameRenderBegin(this, renderer));
 }
 
-void SceneRender::DoFrameRenderEnd(Renderer* renderer) {
+void SceneTreeRender::DoFrameRenderEnd(Renderer* renderer) {
   OnFrameRenderEnd(renderer);
-  FOR_EACH_OBSERVER(SceneRenderObserver, 
+  FOR_EACH_OBSERVER(SceneTreeRenderObserver, 
                     observers_, 
                     OnFrameRenderEnd(this, renderer));
 }

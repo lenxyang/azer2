@@ -9,20 +9,20 @@ class RenderTreeBuilderDelegate;
 class RenderNode;
 class RenderEnvNode;
 class SceneNode;
-class SceneRender;
+class SceneTreeRender;
 typedef scoped_refptr<RenderNode> RenderNodePtr;
 
-class SceneRenderObserver {
+class SceneTreeRenderObserver {
  public:
-  virtual void OnFrameUpdateBegin(SceneRender* sr, const FrameArgs& args) {}
-  virtual void OnFrameUpdateEnd(SceneRender* sr, const FrameArgs& args) {}
-  virtual void OnFrameRenderBegin(SceneRender* sr, Renderer* renderer) {}
-  virtual void OnFrameRenderEnd(SceneRender* sr, Renderer* renderer) {}
+  virtual void OnFrameUpdateBegin(SceneTreeRender* sr, const FrameArgs& args) {}
+  virtual void OnFrameUpdateEnd(SceneTreeRender* sr, const FrameArgs& args) {}
+  virtual void OnFrameRenderBegin(SceneTreeRender* sr, Renderer* renderer) {}
+  virtual void OnFrameRenderEnd(SceneTreeRender* sr, Renderer* renderer) {}
 };
 
-class SceneRender {
+class SceneTreeRender {
  public:
-  SceneRender();
+  SceneTreeRender();
 
   RenderNode* root() { return root_.get();}
   const Camera* camera() const { return camera_;}
@@ -43,7 +43,6 @@ class SceneRender {
   virtual bool OnRenderNode(RenderNode* node, Renderer* renderer);
   virtual void OnFrameRenderEnd(Renderer* renderer) {};
  protected:
-  
   void DoFrameUpdateBegin(const FrameArgs& args);
   void DoFrameUpdateEnd(const FrameArgs& args);
   void DoFrameRenderBegin(Renderer* renderer);
@@ -55,6 +54,6 @@ class SceneRender {
   scoped_ptr<RenderTreeBuilderDelegate> delegate_;
   const Camera* camera_;
   ObserverList<SceneRenderObserver> observers_;
-  DISALLOW_COPY_AND_ASSIGN(SceneRender);
+  DISALLOW_COPY_AND_ASSIGN(SceneTreeRender);
 };
 }  // namespace azer

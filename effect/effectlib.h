@@ -18,7 +18,7 @@ class EffectLib {
   EffectLib();
   bool Load(const base::FilePath& filepath);
   Effect* GetEffect(const std::string& name);
-  EffectAdapterContext* adapter_context() { return context_;}
+  EffectAdapterContext* adapter_context() { return adapter_context_.get();}
  private:
   Effect* LoadEffect(const std::string& name);
   bool InitAdapterContext();
