@@ -1,11 +1,11 @@
 #include "azer/render/mesh.h"
 
 #include "base/logging.h"
+#include "azer/effect/effect_params_adapter.h"
 #include "azer/render/blending.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/effect_params_adapter.h"
 
 namespace azer {
 

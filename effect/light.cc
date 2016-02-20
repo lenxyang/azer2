@@ -1,7 +1,7 @@
-#include "azer/render/light.h"
+#include "azer/effect/light.h"
 
 #include "base/logging.h"
-#include "azer/render/light_observer.h"
+#include "azer/effect/light_observer.h"
 
 namespace azer {
 DirLight::DirLight()

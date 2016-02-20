@@ -5,8 +5,8 @@
 
 #include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
+#include "azer/effect/light.h"
 #include "azer/render/render.h"
-#include "azer/render/light.h"
 #include "azer/scene/scene_node_traverse.h"
 #include "azer/scene/scene_node.h"
 

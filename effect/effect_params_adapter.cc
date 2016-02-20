@@ -1,7 +1,7 @@
-#include "azer/render/effect_params_adapter.h"
+#include "azer/effect/effect_params_adapter.h"
 
-#include "azer/render/effect.h"
-#include "azer/render/effect_params_provider.h"
+#include "azer/effect/effect.h"
+#include "azer/effect/effect_params_provider.h"
 
 namespace azer {
 // EffectAdapterContext

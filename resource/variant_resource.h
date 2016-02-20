@@ -1,10 +1,10 @@
 #pragma once
 
 #include "azer/render/mesh.h"
+#include "azer/effect/light.h"
+#include "azer/effect/material.h"
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/light.h"
 #include "azer/scene/scene_node.h"
-#include "azer/render/material.h"
 
 namespace azer {
 enum {

@@ -4,8 +4,8 @@
 #include "base/bind.h"
 #include "base/callback.h"
 #include "azer/base/class_creator.h"
-#include "azer/render/effect.h"
-#include "azer/render/effect_params_provider.h"
+#include "azer/effect/effect.h"
+#include "azer/effect/effect_params_provider.h"
 
 namespace azer {
 template<class T>

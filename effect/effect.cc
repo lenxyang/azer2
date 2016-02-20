@@ -1,4 +1,4 @@
-#include "azer/render/effect.h"
+#include "azer/effect/effect.h"
 
 #include "base/logging.h"
 #include "azer/render/gpu_constants_table.h"

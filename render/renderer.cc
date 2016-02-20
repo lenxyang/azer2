@@ -1,7 +1,7 @@
 #include "azer/render/renderer.h"
 
 #include "base/logging.h"
-#include "azer/render/effect.h"
+#include "azer/effect/effect.h"
 #include "azer/render/render_system.h"
 #include "azer/render/rasterizer_state.h"
 #include "azer/render/depth_buffer.h"

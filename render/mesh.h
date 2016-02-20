@@ -3,8 +3,8 @@
 #include <vector>
 #include "base/memory/ref_counted.h"
 #include "azer/math/vector3.h"
-#include "azer/render/effect.h"
-#include "azer/render/effect_params_provider.h"
+#include "azer/effect/effect.h"
+#include "azer/effect/effect_params_provider.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/vertex_buffer.h"
 

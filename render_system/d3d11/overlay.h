@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/basictypes.h"
-#include "azer/render/effect.h"
+#include "azer/effect/effect.h"
 #include "azer/render/overlay.h"
 #include "azer/render/rasterizer_state.h"
 
@@ -41,9 +41,9 @@ class D3DOverlay : public Overlay {
   void Render(Renderer* renderer) override;
 
   static const int kVertexDescNum;
-  static const azer::VertexDesc::Desc kVertexDesc[];
+  static const VertexDesc::Desc kVertexDesc[];
  protected:
-  bool Init(azer::RenderSystem* rs);
+  bool Init(RenderSystem* rs);
   bool InitEffect();
   bool InitVertex(RenderSystem* rs);
   D3DRenderSystem* render_system_;

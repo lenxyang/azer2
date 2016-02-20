@@ -1,8 +1,8 @@
-#include "azer/render/effect_params_adapter.h"
+#include "azer/effect/effect_params_adapter.h"
 
 #include "base/logging.h"
+#include "azer/effect/effect_params_provider.h"
 #include "azer/render/frame_args.h"
-#include "azer/render/effect_params_provider.h"
 
 namespace azer {
 

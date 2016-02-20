@@ -54,41 +54,41 @@ const char* D3DOverlayEffect::GetEffectName() const {
 }
 
 void D3DOverlayEffect::UseTexture(Renderer* renderer) {
-  renderer->BindTexture(azer::kPixelStage, 0, texture_.get());
+  renderer->BindTexture(kPixelStage, 0, texture_.get());
 }
 
 void D3DOverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
 }
 
 void D3DOverlayEffect::SetTransform(const Matrix4& matrix) {
-  azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+  GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
   DCHECK(tb != NULL);
-  tb->SetValue(0, &matrix, sizeof(azer::Matrix4));
+  tb->SetValue(0, &matrix, sizeof(Matrix4));
 }
 
 void D3DOverlayEffect::SetVertex(const Vector4 vertex[4]) {
-  azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+  GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
   DCHECK(tb != NULL);
   tb->SetValue(1, vertex, sizeof(Vector4) * 4);
 }
 
 void D3DOverlayEffect::SetTexcoord(const Vector4 texcoord[4]) {
-  azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+  GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
   DCHECK(tb != NULL);
   tb->SetValue(2, texcoord, sizeof(Vector4) * 4);
 }
 
 bool D3DOverlayEffect::Init(Overlay* overlay, D3DRenderSystem* rs) {
-  // generate GpuTable init for stage azer::kVertexStage
-  azer::GpuConstantsTable::Desc vs_table_desc[] = {
-    azer::GpuConstantsTable::Desc("transform", azer::GpuConstantsType::kMatrix4,
+  // generate GpuTable init for stage kVertexStage
+  GpuConstantsTable::Desc vs_table_desc[] = {
+    GpuConstantsTable::Desc("transform", GpuConstantsType::kMatrix4,
                                   offsetof(vs_cbuffer, transform), 1),
-    azer::GpuConstantsTable::Desc("vertex", azer::GpuConstantsType::kVector4,
+    GpuConstantsTable::Desc("vertex", GpuConstantsType::kVector4,
                                   offsetof(vs_cbuffer, vertex), 4),
-    azer::GpuConstantsTable::Desc("texcoord", azer::GpuConstantsType::kVector4,
+    GpuConstantsTable::Desc("texcoord", GpuConstantsType::kVector4,
                                   offsetof(vs_cbuffer, texcoord), 4),
   };
-  gpu_table_[azer::kVertexStage] = rs->CreateGpuConstantsTable(
+  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
       arraysize(vs_table_desc), vs_table_desc);
 
   technique_ = rs->CreateTechnique();
@@ -133,7 +133,7 @@ bool D3DOverlay::InitEffect() {
   }
 }
 
-bool D3DOverlay::Init(azer::RenderSystem* rs) {
+bool D3DOverlay::Init(RenderSystem* rs) {
   if (!InitVertex(rs)) {
     return false;
   }
@@ -168,7 +168,7 @@ bool D3DOverlay::InitVertex(RenderSystem* rs) {
 
 void D3DOverlay::Render(Renderer* renderer) {
   SetBlending(renderer);
-  azer::Vector2 texcoord[4];
+  Vector2 texcoord[4];
   
   DCHECK (effect_.get() != NULL);
   ScopedRasterizerState scoped_rasterizer_state(renderer);
@@ -179,7 +179,7 @@ void D3DOverlay::Render(Renderer* renderer) {
   effect_->SetTexture(tex_);
   renderer->BindEffect(effect_.get());
   renderer->BindVertexBuffer(vb_ptr_.get());
-  renderer->SetPrimitiveTopology(azer::kTriangleList);
+  renderer->SetPrimitiveTopology(kTriangleList);
   renderer->Draw(6, 0);
   ResetBlending(renderer);
 }
