@@ -1,5 +1,3 @@
-#pragma pack_matrix(row_major)
-
 struct VsOutput {
   float4 position:SV_POSITION;
   float3 worldpos: WPOS;

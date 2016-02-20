@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<grit latest_public_release="0" current_release="1">
+  <outputs>
+    <output filename="grit/shaderlib.hlsl.h" type="rc_header">
+      <emit emit_type='prepend'></emit>
+    </output>
+    <output filename="shaderlib.hlsl.pak" type="data_package"/>
+  </outputs>
+  <release seq="1">
+    <structures first_id="1000">
+        <structure type="txt" name="HLSL_DIFFUSEMAP_PS" file="hlsl/tex.ps.hlsl" />
+        <structure type="txt" name="HLSL_DIFFUSEMAP_VS" file="hlsl/tex.vs.hlsl" />
+        <structure type="txt" name="HLSL_DIFFUSEMAP_INSTVS" file="hlsl/inst_tex.vs.hlsl" />
+    </structures>
+  </release>
+</grit>

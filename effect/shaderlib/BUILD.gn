@@ -5,17 +5,17 @@ grit("hlsl") {
   source = "shaderlib.hlsl.grd"
   resource_ids = ""
   outputs = [
-    "grit/common.h",
-    "shaderlib.pak",
+    "grit/shaderlib.hlsl.h",
+    "shaderlib.hlsl.pak",
   ]
 }
 
 repack("shaderlib") {
   sources = [
-    "$root_gen_dir/azer/effect/shaderlib/shaderlib.pak",
+    "$root_gen_dir/azer/effect/shaderlib/shaderlib.hlsl.pak",
   ]
 
-  output = "$root_out_dir/shaderlib.pak"
+  output = "$root_out_dir/shaderlib.hlsl.pak"
   deps = [
     "//ui/resources",
     "//ui/strings",

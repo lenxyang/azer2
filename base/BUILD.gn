@@ -60,6 +60,8 @@ source_set("base") {
     "repository_node.cc",
     "repository_node.h",
     "resource.h",
+    "resource_bundle.cc",
+    "resource_bundle.h",
     "string.cc",
     "string.h",
     "tree_node.h",
@@ -68,6 +70,7 @@ source_set("base") {
     "//base",
     "//base:i18n",
     "//azer/util/xml",
+    "//ui/base",
     ":image_load",
   ]
 

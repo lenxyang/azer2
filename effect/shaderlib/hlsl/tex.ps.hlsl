@@ -1,7 +1,4 @@
-// using row_major
-#pragma pack_matrix(row_major)
-
-#include "samples/shaderlib/hlsl/light.h.hlsl"
+#include "azer/effect/shaderlib/hlsl/light.h.hlsl"
 
 struct VsOutput {
   float4 position:SV_POSITION;

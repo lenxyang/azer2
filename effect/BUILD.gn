@@ -35,6 +35,8 @@ static_library("effectlib") {
   sources = [
     "diffusemap_effect.cc",
     "diffusemap_effect.h",
+    "effectlib.cc",
+    "effectlib.h",
     "material.cc",
     "material.h",
   ]
