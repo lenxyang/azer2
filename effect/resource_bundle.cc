@@ -31,7 +31,6 @@ gfx::Image ResourceBundle::GetImageNamed(int resource_id) {
     }
   }
 
-  
   ::base::RefCountedStaticMemory* memory = datapack_->GetStaticMemory(resource_id);
   if (memory) {
     using gfx::Image;
@@ -57,7 +56,7 @@ gfx::Image ResourceBundle::GetNativeImageNamed(int resource_id,
 base::RefCountedStaticMemory* ResourceBundle::LoadDataResourceBytes(
     int resource_id,
     ui::ScaleFactor scale_factor) {
-  return NULL;
+  return datapack_->GetStaticMemory(resource_id);
 }
 
 bool ResourceBundle::GetRawDataResource(int resource_id,
