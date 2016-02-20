@@ -1,5 +1,4 @@
 
-
 source_set("effect") {
   sources = [
     "effect.cc",
@@ -30,6 +29,8 @@ source_set("effect") {
   configs += ["//azer/base:build_render_config"]
 }
 
+
+
 static_library("effectlib") {
   sources = [
     "diffusemap_effect.cc",
@@ -40,5 +41,7 @@ static_library("effectlib") {
 
   deps = [
     "//azer",
+    "shaderlib",
   ]
 }
+

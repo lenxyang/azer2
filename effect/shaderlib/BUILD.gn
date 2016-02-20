@@ -1,0 +1,24 @@
+import("//tools/grit/grit_rule.gni")
+import("//tools/grit/repack.gni")
+
+grit("hlsl") {
+  source = "shaderlib.hlsl.grd"
+  resource_ids = ""
+  outputs = [
+    "grit/common.h",
+    "shaderlib.pak",
+  ]
+}
+
+repack("shaderlib") {
+  sources = [
+    "$root_gen_dir/azer/effect/shaderlib/shaderlib.pak",
+  ]
+
+  output = "$root_out_dir/shaderlib.pak"
+  deps = [
+    "//ui/resources",
+    "//ui/strings",
+    ":hlsl",
+  ]
+}
