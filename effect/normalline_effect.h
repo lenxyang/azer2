@@ -15,7 +15,7 @@ class NormalLineEffect : public Effect {
 
 #pragma pack(push, 4)
   struct vs_cbuffer {
-    Matrix4 pvw;
+    Matrix4 pv;
     Matrix4 world;
     float linelength;
   };
@@ -25,9 +25,9 @@ class NormalLineEffect : public Effect {
   };
 #pragma pack(pop)
 
-  void SetPV(const Matrix4& value);
-  void SetWorld(const Matrix4& value);
-  void SetColor(const Vector4& value);
+  void SetPV(const Matrix4& value) { pv_ = value;}
+  void SetWorld(const Matrix4& value) { world_ = value;}
+  void SetColor(const Vector4& value) {color_ = value;}
   void SetNormalLineLength(float len) { line_length_ = len;}
   static Effect* CreateObject() { return new NormalLineEffect;}
  protected:

@@ -13,19 +13,15 @@ namespace azer {
 IMPLEMENT_EFFECT_DYNCREATE(NormalLineEffect);
 const char NormalLineEffect::kEffectName[] = "azer::NormalLineEffect";
 NormalLineEffect::NormalLineEffect() : line_length_(1.0f) {}
-
 NormalLineEffect::~NormalLineEffect() {}
-
-const char* NormalLineEffect::GetEffectName() const {
-  return kEffectName;
-}
+const char* NormalLineEffect::GetEffectName() const { return kEffectName; }
 
 void NormalLineEffect::InitGpuConstantTable() {
   RenderSystem* rs = RenderSystem::Current();
   // generate GpuTable init for stage kVertexStage
   GpuConstantsTable::Desc vs_table_desc[] = {
-    GpuConstantsTable::Desc("pvw", GpuConstantsType::kMatrix4,
-                            offsetof(vs_cbuffer, pvw), 1),
+    GpuConstantsTable::Desc("pv", GpuConstantsType::kMatrix4,
+                            offsetof(vs_cbuffer, pv), 1),
     GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
                             offsetof(vs_cbuffer, world), 1),
     GpuConstantsTable::Desc("linelength", GpuConstantsType::kFloat,
@@ -43,24 +39,11 @@ void NormalLineEffect::InitGpuConstantTable() {
       arraysize(ps_table_desc), ps_table_desc);
 }
 
-void NormalLineEffect::SetPV(const Matrix4& value) {
-  pv_ = value;
-}
-
-void NormalLineEffect::SetWorld(const Matrix4& value) {
-  world_ = value;
-}
-
-void NormalLineEffect::SetColor(const Vector4& value) {
-  color_ = value;
-}
-
 void NormalLineEffect::ApplyGpuConstantTable(Renderer* renderer) {
-  Matrix4 pvw = std::move(pv_ * world_);
   {
     GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
     DCHECK(tb != NULL);
-    tb->SetValue(0, &pvw, sizeof(Matrix4));
+    tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
     tb->SetValue(2, &line_length_, sizeof(float));
   }

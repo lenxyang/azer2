@@ -7,6 +7,7 @@
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/diffusemap_effect.h"
+#include "azer/effect/normalline_effect.h"
 #include "azer/effect/shaderlib/grit/shaderlib.hlsl.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/technique.h"
@@ -36,6 +37,8 @@ struct EffectData {
 EffectData effect_data[] = {
   {"DiffuseMapEffect", DiffuseMapEffect::kEffectName, 0, 
    HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_DIFFUSEMAP_PS},
+  {"NormalLineEffect", NormalLineEffect::kEffectName, 0, 
+   HLSL_NORMALLINE_VS, 0, 0, HLSL_NORMALLINE_GS, HLSL_NORMALLINE_PS},
 };
 }  // namespace effect
 

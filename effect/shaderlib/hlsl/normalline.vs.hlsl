@@ -6,19 +6,23 @@ struct VsOutput {
 };
 
 struct VSInput {
-  float4 position : POSITION;
-  float4 normal   : NORMAL;
+  float3 position:POSITION;
+  float3 normal:NORMAL;
+  float2 texcoord: TEXCOORD0;
 };
 
 cbuffer c_buffer {
-   float4x4 pvw;
+   float4x4 pv;
    float4x4 world;
    float linelength;
 };
 
 VsOutput vs_main(VSInput input) {
   VsOutput o;
-  o.position = mul(pvw, input.position);
-  o.npos = mul(pvw, input.position + input.normal * 0.1);
+  float4 worldpos = mul(world, float4(input.position, 1.0));
+  float4 normal = mul(world, float4(input.normal, 0.0));
+  o.npos = worldpos + float4(normalize(normal.xyz) * 0.1, 0.0);
+  o.position = mul(pv, worldpos);
+  o.npos = mul(pv, o.npos);
   return o;
 }
