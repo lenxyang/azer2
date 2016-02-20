@@ -27,4 +27,17 @@ struct TextureMaterialData {
   TexturePtr alphamap;
   TexturePtr normalmap;
 };
+
+class DiffuseMapMaterial : public BaseMaterial {
+ public:
+  DiffuseMapMaterial();
+  ~DiffuseMapMaterial() override;
+
+  DiffuseMapMaterialData* mutable_data() { return &data_;}
+  const DiffuseMapMaterialData& data() const { return data_;}
+  bool Init(const ConfigNode* node, ResourceLoadContext* ctx) override;
+ private:
+  DiffuseMapMaterialData data_;
+  DISALLOW_COPY_AND_ASSIGN(DiffuseMapMaterial);
+};
 }  // namespace azer

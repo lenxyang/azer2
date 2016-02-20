@@ -6,4 +6,8 @@ DiffuseMapMaterialData::DiffuseMapMaterialData()
       specular_scalar(1.0f), 
       alpha(1.0f) {
 }
+
+bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) {
+  return false;
+}
 }  // namespace azer

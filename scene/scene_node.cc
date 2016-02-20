@@ -158,19 +158,10 @@ SceneNode::SceneNode(const std::string& name) {
   name_ = name;
 }
 
-SceneNode::SceneNode(const std::string& name, SceneNode* parent) {
-  DCHECK(parent != this);
-  InitMember();
-  name_ = name;
-  parent->AddChild(this);
-}
-
-SceneNode::SceneNode(const std::string& name, SceneNodeType type,
-                     SceneNode* parent) {
+SceneNode::SceneNode(const std::string& name, SceneNodeType type) {
   InitMember();
   name_ = name;
   type_ = type;
-  parent->AddChild(this);
 }
 
 void SceneNode::InitMember() {
@@ -191,11 +182,12 @@ SceneNode::~SceneNode() {
   scene_node_mgr.Pointer()->Unregister(this);
 }
 
-void SceneNode::AddChild(SceneNode* child) {
+SceneNode* SceneNode::AddChild(SceneNode* child) {
   DCHECK(child != this);
   DCHECK(child->parent() == NULL);
   child->parent_ = this;
   children_.push_back(child);
+  return child;
 }
 
 void SceneNode::RemoveChild(SceneNode* child) {

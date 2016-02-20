@@ -7,6 +7,7 @@
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/diffusemap_effect.h"
+#include "azer/effect/diffusemap_effect_adapter.h"
 #include "azer/effect/normalline_effect.h"
 #include "azer/effect/shaderlib/grit/shaderlib.hlsl.h"
 #include "azer/render/vertex_buffer.h"
@@ -44,6 +45,7 @@ EffectData effect_data[] = {
 
 EffectLib::EffectLib() {}
 bool EffectLib::Load(const base::FilePath& filepath) {
+  InitAdapterContext();
   resource_bundle_.reset(new effectlib::ResourceBundle);
   return resource_bundle_->Load(filepath);
 }
@@ -129,6 +131,13 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
 
   LOG(ERROR) << "No such effect \"" << name << "\" in effectlib";
   return NULL;
+}
+
+bool EffectLib::InitAdapterContext() {
+  adapter_context_.reset(new EffectAdapterContext);
+  adapter_context_->RegisteAdapter(new DiffuseMapEffect_DiffuseMapMaterial_Adapter);
+  adapter_context_->RegisteAdapter(new DiffuseMapEffect_RenderNode_Adapter);
+  return true;
 }
 
 bool LoadEffectLib(EffectLib* lib) {

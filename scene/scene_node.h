@@ -57,9 +57,8 @@ typedef scoped_refptr<SceneNodeData> SceneNodeDataPtr;
 class SceneNode: public ::base::RefCounted<SceneNode> {
  public:
   SceneNode();
-  explicit SceneNode(const std::string& name);
-  SceneNode(const std::string& name, SceneNode* parent);
-  SceneNode(const std::string& name, SceneNodeType type, SceneNode* parent);
+  SceneNode(const std::string& name);
+  SceneNode(const std::string& name, SceneNodeType type);
   ~SceneNode();
   
   // attributes
@@ -82,7 +81,7 @@ class SceneNode: public ::base::RefCounted<SceneNode> {
   const Vector3& local_vmax() const { return local_vmax_;}
   void SetLocalBounds(const Vector3& vmin, const Vector3& vmax);
 
-  void AddChild(SceneNode* child);
+  SceneNode* AddChild(SceneNode* child);
   void RemoveChild(SceneNode* child);
   bool has_child() const { return !children_.empty();}
   int32 child_count() const { return children_.size();}

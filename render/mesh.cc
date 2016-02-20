@@ -126,10 +126,11 @@ void Entity::DrawIndex(Renderer* renderer) {
 EntityVec::EntityVec() {
 }
 
-void EntityVec::AddEntity(EntityPtr ptr) {
+Entity* EntityVec::AddEntity(Entity* ptr) {
   vec_.push_back(ptr);
   UpdateVMinAndVMax(ptr->vmin(), &vmin_, &vmax_);
   UpdateVMinAndVMax(ptr->vmax(), &vmin_, &vmax_);
+  return ptr;
 }
 
 void EntityVec::RemoveEntityAt(int32 index) {
@@ -210,12 +211,13 @@ Mesh::Mesh(EffectAdapterContext* context)
 Mesh::~Mesh() {
 }
 
-void Mesh::AddMeshPart(MeshPart* ptr) {
+MeshPart* Mesh::AddMeshPart(MeshPart* ptr) {
   ptr->SetEffectAdapterContext(context_);
   part_.push_back(MeshPartPtr(ptr));
   UpdateVMinAndVMax(ptr->entity_vector()->vmin(), &vmin_, &vmax_);
   UpdateVMinAndVMax(ptr->entity_vector()->vmax(), &vmin_, &vmax_);
   blending_count_ += (ptr->blending() != NULL) ? 1 : 0;
+  return ptr;
 }
 
 MeshPartPtr Mesh::RemoveMeshPartAt(int32 index) {

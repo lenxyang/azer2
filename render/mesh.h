@@ -81,7 +81,7 @@ class AZER_EXPORT EntityVec : public ::base::RefCounted<EntityVec> {
  public:
   EntityVec();
 
-  void AddEntity(EntityPtr ptr);
+  Entity* AddEntity(Entity* ptr);
   void RemoveEntityAt(int32 index);
   Entity* entity_at(int32 index) { return vec_[index].get();}
   int32 entity_count() { return static_cast<int32>(vec_.size());}
@@ -131,7 +131,7 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   explicit Mesh(EffectAdapterContext* context);
   ~Mesh();
 
-  void AddMeshPart(MeshPart* entity);
+  MeshPart* AddMeshPart(MeshPart* entity);
   MeshPartPtr RemoveMeshPartAt(int32 index);
   void ClearMeshPart();
   int32 part_count() const { return static_cast<int32>(part_.size());}
