@@ -16,6 +16,8 @@ class EffectLoader : public ResourceSpecialLoader {
   VariantResource Load(const ConfigNode* node, ResourceLoadContext* ctx) override;
   bool CouldLoad(ConfigNode* node) const override;
  private:
+  VariantResource LoadFromLib(const ConfigNode* node, ResourceLoadContext* ctx);
+  VariantResource LoadSource(const ConfigNode* node, ResourceLoadContext* ctx);
   DISALLOW_COPY_AND_ASSIGN(EffectLoader);
 };
 

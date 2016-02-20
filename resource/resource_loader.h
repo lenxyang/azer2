@@ -20,6 +20,7 @@ struct ResourceLoadContext {
   ResPath path;
   RepositoryNodePtr root;
   FileSystem* filesystem;
+  EffectLib* effectlib;
 };
 
 class ResourceSpecialLoader : public ::base::RefCounted<ResourceSpecialLoader> {

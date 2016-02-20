@@ -30,12 +30,15 @@ struct TextureMaterialData {
 
 class DiffuseMapMaterial : public BaseMaterial {
  public:
+  static const char kEffectProviderName[];
+  const char* GetProviderName() const override { return kEffectProviderName;}
   DiffuseMapMaterial();
   ~DiffuseMapMaterial() override;
 
   DiffuseMapMaterialData* mutable_data() { return &data_;}
   const DiffuseMapMaterialData& data() const { return data_;}
   bool Init(const ConfigNode* node, ResourceLoadContext* ctx) override;
+  static EffectParamsProvider* CreateObject() { return new DiffuseMapMaterialData;}
  private:
   DiffuseMapMaterialData data_;
   DISALLOW_COPY_AND_ASSIGN(DiffuseMapMaterial);

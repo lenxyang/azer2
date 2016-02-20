@@ -36,8 +36,32 @@ int GetStageFromName(const std::string& name) {
 }
 }
 
-VariantResource EffectLoader::Load(const ConfigNode* node,
+VariantResource EffectLoader::Load(const ConfigNode* node, 
                                    ResourceLoadContext* ctx) {
+  const std::string& type = node->GetAttr("type");
+  if (type == "effectlib") {
+    return LoadFromLib(node, ctx);
+  } else if (type == "effect") {
+    return LoadSource(node, ctx);
+  } else {
+    NOTREACHED();
+    VariantResource resource;
+    return resource;
+  }
+}
+
+VariantResource EffectLoader::LoadFromLib(const ConfigNode* node, 
+                                          ResourceLoadContext* ctx) {
+  const std::string& name = node->GetAttr("name");
+  VariantResource resource;
+  resource.effect = ctx->effectlib->GetEffect(name);
+  resource.type = kResTypeEffect;
+  resource.retcode = 0;
+  return effect;
+}
+
+VariantResource EffectLoader::LoadSource(const ConfigNode* node,
+                                         ResourceLoadContext* ctx) {
   ResPath vertex_desc_path(UTF8ToUTF16(node->GetAttr("vertex_desc")));
   DCHECK(!vertex_desc_path.empty());
   VertexDescPtr vertex_desc = LoadVertexDesc(vertex_desc_path, ctx);
