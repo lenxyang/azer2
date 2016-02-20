@@ -9,9 +9,12 @@
   </outputs>
   <release seq="1">
     <includes first_id="1000">
-      <include type="txt" name="HLSL_DIFFUSEMAP_PS" file="hlsl/tex.ps.hlsl" />
-      <include type="txt" name="HLSL_DIFFUSEMAP_VS" file="hlsl/tex.vs.hlsl" />
-      <include type="txt" name="HLSL_DIFFUSEMAP_INSTVS" file="hlsl/inst_tex.vs.hlsl" />
+      <include type="txt" name="HLSL_DIFFUSEMAP_PS" file="hlsl/diffusemap.ps.hlsl" />
+      <include type="txt" name="HLSL_DIFFUSEMAP_VS" file="hlsl/diffusemap.vs.hlsl" />
+      <include type="txt" name="HLSL_DIFFUSEMAP_INSTVS" file="hlsl/inst_diffusemap.vs.hlsl" />
+      <include type="txt" name="HLSL_NORMALLINE_VS" file="hlsl/normalline.vs.hlsl" />
+      <include type="txt" name="HLSL_NORMALLINE_GS" file="hlsl/normalline.gs.hlsl" />
+      <include type="txt" name="HLSL_NORMALLINE_PS" file="hlsl/normalline.ps.hlsl" />
     </includes>
   </release>
 </grit>
