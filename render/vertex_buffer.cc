@@ -21,7 +21,7 @@ VertexDesc::VertexDesc(const Desc* desc)
       slot_count_(0) {
   int desc_num = 0;
   const Desc* cur = desc;
-  while (cur->name) {
+  while (cur->name != '\0') {
     desc_num++;
     cur++;
   }

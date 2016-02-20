@@ -1,7 +1,9 @@
 #include "azer/effect/effectlib.h"
 
 #include "base/logging.h"
+#include "base/files/file_path.h"
 #include "base/files/file_util.h"
+#include "base/strings/utf_string_conversions.h"
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/diffusemap_effect.h"
@@ -32,7 +34,7 @@ struct EffectData {
 };
 
 EffectData effect_data[] = {
-  {"DiffuseMapEffect", "DiffuseMapEffect", 0, 
+  {"DiffuseMapEffect", DiffuseMapEffect::kEffectName, 0, 
    HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_DIFFUSEMAP_PS},
 };
 }  // namespace effect
@@ -58,8 +60,7 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
       EffectData* data = effect_data + i;
       EffectPtr effect(CreateEffectByName(data->effect_name));
       int32 vdindex = data->vertex_desc_index;
-      VertexDescPtr desc(
-          new VertexDesc(kVertexDesc[vdindex], arraysize(kVertexDesc[vdindex])));
+      VertexDescPtr desc(new VertexDesc(kVertexDesc[vdindex]));
       TechSource tech(desc);
       CHECK(effect->Init(tech)) << "Effect \"" << name << "\" init failed";
       effects_.insert(std::make_pair(name, effect));
@@ -69,5 +70,11 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
 
   LOG(ERROR) << "No such effect \"" << name << "\" in effectlib";
   return NULL;
+}
+
+bool LoadEffectLib(EffectLib* lib) {
+  using base::UTF8ToUTF16;
+  base::FilePath path(UTF8ToUTF16("out/dbg/shaderlib.hlsl.pak"));
+  return lib->Load(path);
 }
 }  // namespace azer

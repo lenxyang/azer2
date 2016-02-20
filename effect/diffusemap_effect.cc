@@ -8,7 +8,7 @@ namespace azer {
 using base::UTF8ToUTF16;
 
 IMPLEMENT_EFFECT_DYNCREATE(DiffuseMapEffect);
-const char DiffuseMapEffect::kEffectName[] = "DiffuseMapEffect";
+const char DiffuseMapEffect::kEffectName[] = "azer::DiffuseMapEffect";
 DiffuseMapEffect::DiffuseMapEffect() : light_count_(0) {}
 DiffuseMapEffect::~DiffuseMapEffect() {}
 const char* DiffuseMapEffect::GetEffectName() const { return kEffectName;}

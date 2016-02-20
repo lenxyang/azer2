@@ -23,4 +23,6 @@ class EffectLib {
   scoped_ptr<effectlib::ResourceBundle> resource_bundle_;
   DISALLOW_COPY_AND_ASSIGN(EffectLib);
 };
+
+bool LoadEffectLib(EffectLib* lib);
 }  // namespace azer

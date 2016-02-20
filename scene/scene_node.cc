@@ -6,9 +6,11 @@
 #include "base/strings/stringprintf.h"
 #include "base/strings/string_util.h"
 #include "base/strings/string_tokenizer.h"
-#include "azer/render/render.h"
 #include "azer/math/math.h"
-#include "azer/render/light.h"
+#include "azer/effect/light.h"
+#include "azer/render/blending.h"
+#include "azer/render/camera.h"
+#include "azer/render/mesh.h"
 #include "azer/scene/scene_node_observer.h"
 
 namespace azer {
