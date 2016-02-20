@@ -28,3 +28,15 @@ source_set("effect") {
   configs += ["//azer/build/config:utf8src"]
   configs += ["//azer/base:build_render_config"]
 }
+
+
+static_library("effectlib") {
+  sources = [
+    "textured_effect.cc",
+    "textured_effect.h",
+  ]
+
+  deps = [
+    "//azer",
+  ]
+}
