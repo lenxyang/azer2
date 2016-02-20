@@ -30,7 +30,7 @@ VariantResource MeshLoader::Load(const ConfigNode* node, ResourceLoadContext* ct
   ConfigNode* effect_node = GetTypedReferNode("effect", node);
   EffectPtr effect = LoadReferEffect(effect_node, ctx);
   ConfigNode* material_node = GetTypedReferNode("material", node);
-  MaterialPtr material;
+  BaseMaterialPtr material;
   if (material_node) {
     material = LoadReferMaterial(material_node, ctx);
   }

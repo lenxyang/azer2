@@ -10,7 +10,8 @@
 #include "azer/base/export.h"
 
 namespace azer {
-class AZER_EXPORT ResourceBundle : public ui::ResourceBundle::Delegate {
+namespace effectlib {
+class ResourceBundle : public ui::ResourceBundle::Delegate {
  public:
   ResourceBundle();
   ~ResourceBundle();
@@ -44,4 +45,5 @@ class AZER_EXPORT ResourceBundle : public ui::ResourceBundle::Delegate {
   scoped_ptr< ::base::Lock> image_lock_;
   DISALLOW_COPY_AND_ASSIGN(ResourceBundle);
 };
+}  // namespace effectlib
 }  // namespace azer

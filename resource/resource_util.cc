@@ -73,12 +73,12 @@ VertexDescPtr LoadReferVertexDesc(const ConfigNode* node,
   }
 }
 
-MaterialPtr LoadReferMaterial(const ConfigNode* node, ResourceLoadContext* ctx) {
+BaseMaterialPtr LoadReferMaterial(const ConfigNode* node, ResourceLoadContext* ctx) {
   VariantResource ret = LoadReferResource(node, ctx);
   if (ret.type == kResTypeMaterial) {
     return ret.material;
   } else {
-    return MaterialPtr();
+    return BaseMaterialPtr();
   }
 }
 

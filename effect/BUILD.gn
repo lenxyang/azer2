@@ -37,6 +37,8 @@ static_library("effectlib") {
     "effectlib.h",
     "material.cc",
     "material.h",
+    "resource_bundle.cc",
+    "resource_bundle.h",
   ]
 
   deps = [

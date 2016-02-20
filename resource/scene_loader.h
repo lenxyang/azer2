@@ -2,8 +2,7 @@
 
 #include "azer/base/config_node.h"
 #include "azer/base/file_system.h"
-#include "azer/render/render.h"
-#include "azer/render/light.h"
+#include "azer/effect/light.h"
 #include "azer/scene/scene_node.h"
 #include "azer/resource/resource_loader.h"
 

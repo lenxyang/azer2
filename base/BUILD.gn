@@ -60,8 +60,6 @@ source_set("base") {
     "repository_node.cc",
     "repository_node.h",
     "resource.h",
-    "resource_bundle.cc",
-    "resource_bundle.h",
     "string.cc",
     "string.h",
     "tree_node.h",

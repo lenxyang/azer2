@@ -6,7 +6,7 @@
 #include "base/basictypes.h"
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
-#include "azer/base/resource_bundle.h"
+#include "azer/effect/resource_bundle.h"
 
 namespace azer {
 
@@ -20,7 +20,7 @@ class EffectLib {
  private:
   Effect* LoadEffect(const std::string& name);
   std::map<std::string, scoped_refptr<Effect> > effects_;
-  scoped_ptr<ResourceBundle> resource_bundle_;
+  scoped_ptr<effectlib::ResourceBundle> resource_bundle_;
   DISALLOW_COPY_AND_ASSIGN(EffectLib);
 };
 }  // namespace azer

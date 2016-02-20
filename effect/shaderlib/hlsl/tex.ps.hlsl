@@ -12,7 +12,7 @@ cbuffer c_buffer {
    float      ambient_scalar;
    float      specular_scalar;
    float      alpha;
-   float      padding;
+   int        light_count;
    Light      lights[4];
 };
 
@@ -30,7 +30,8 @@ float4 ps_main(VsOutput o):SV_TARGET {
   mtrl.power    = 4;
   mtrl.alpha    = alpha;
   float3 color = float3(0, 0, 0);
-  color += CalcLight(lights[0], o.normal, o.viewin, o.worldpos, mtrl);
-  color += CalcLight(lights[1], o.normal, o.viewin, o.worldpos, mtrl);
+  for (int i = 0; i < light_count; ++i) {
+    color += CalcLight(lights[i], o.normal, o.viewin, o.worldpos, mtrl);
+  }
   return float4(color, mtrl.alpha);
 }

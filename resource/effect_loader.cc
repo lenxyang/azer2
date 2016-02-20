@@ -4,8 +4,9 @@
 #include "base/strings/string_util.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
-#include "azer/render/render.h"
-#include "azer/render/effect_creator.h"
+#include "azer/effect/effect_creator.h"
+#include "azer/render/blending.h"
+#include "azer/render/technique.h"
 #include "azer/resource/resource_util.h"
 
 namespace azer {

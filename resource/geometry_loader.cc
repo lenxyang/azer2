@@ -1,7 +1,6 @@
 #include "azer/resource/geometry_loader.h"
 
 #include "azer/resource/mesh_loader.h"
-
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
 #include "azer/render/render.h"
@@ -26,7 +25,7 @@ VariantResource GeometryLoader::Load(const ConfigNode* node,
   ConfigNode* effect_node = GetTypedReferNode("effect", node);
   EffectPtr effect = LoadReferEffect(effect_node, ctx);
   ConfigNode* material_node = GetTypedReferNode("material", node);
-  MaterialPtr material;
+  BaseMaterialPtr material;
   if (material_node) {
     material = LoadReferMaterial(material_node, ctx);
   }

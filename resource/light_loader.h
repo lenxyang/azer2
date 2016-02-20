@@ -1,7 +1,7 @@
 #pragma once
 
 #include "azer/render/render.h"
-#include "azer/render/light.h"
+#include "azer/effect/light.h"
 #include "azer/resource/scene_loader.h"
 
 namespace azer {

@@ -3,6 +3,7 @@
 #include "base/logging.h"
 #include "base/strings/utf_string_conversions.h"
 #include "azer/base/file_system.h"
+#include "azer/render/blending.h"
 #include "azer/resource/xml_util.h"
 #include "azer/resource/resource_util.h"
 

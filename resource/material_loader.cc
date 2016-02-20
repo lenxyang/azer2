@@ -1,9 +1,9 @@
 #include "azer/resource/material_loader.h"
 
 #include "base/strings/utf_string_conversions.h"
-#include "azer/render/render.h"
-#include "azer/render/effect_creator.h"
-#include "azer/render/material.h"
+#include "azer/effect/effect_creator.h"
+#include "azer/effect/material.h"
+#include "azer/render/blending.h"
 
 namespace azer {
 
@@ -22,7 +22,7 @@ VariantResource MaterialLoader::Load(const ConfigNode* node,
                                      ResourceLoadContext* ctx) {
   EffectParamsProviderPtr provider = 
       CreateEffectProviderByName(node->GetAttr("provider_name"));
-  Material* mtrl = dynamic_cast<Material*>(provider.get());
+  BaseMaterial* mtrl = dynamic_cast<BaseMaterial*>(provider.get());
   if (!mtrl || !mtrl->Init(node, ctx)) {
     return VariantResource();
   }

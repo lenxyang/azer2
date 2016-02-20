@@ -1,10 +1,11 @@
-#include "azer/base/resource_bundle.h"
+#include "azer/effect/resource_bundle.h"
 
 #include "base/memory/ref_counted_memory.h"
 #include "base/files/file_path.h"
 #include "azer/base/string.h"
 
 namespace azer {
+namespace effectlib {
 ResourceBundle::ResourceBundle() {
   image_lock_.reset(new ::base::Lock());
 }
@@ -77,4 +78,5 @@ bool ResourceBundle::Load(const ::base::FilePath& path) {
   datapack_.reset(new ui::DataPack(ui::ScaleFactor(1)));
   return datapack_->LoadFromPath(path);
 }
+}  // namespace effectlib
 }  // namespace azer
