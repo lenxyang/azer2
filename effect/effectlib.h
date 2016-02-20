@@ -16,10 +16,11 @@ class EffectLib {
  public:
   EffectLib();
   bool Load(const base::FilePath& filepath);
-  Effect* GetEffect(int32 id);
+  Effect* GetEffect(const std::string& name);
  private:
-  Effect* LoadEffect(int32 id);
-  std::map<int32, scoped_refptr<Effect> > effects_;
+  Effect* LoadEffect(const std::string& name);
+  std::map<std::string, scoped_refptr<Effect> > effects_;
+  scoped_ptr<ResourceBundle> resource_bundle_;
   DISALLOW_COPY_AND_ASSIGN(EffectLib);
 };
 }  // namespace azer
