@@ -19,8 +19,8 @@ void SceneNodeTraverse::Traverse(SceneNode* root) {
 void SceneNodeTraverse::TraverseNode(SceneNode* node) {
   if (delegate_->OnTraverseNodeEnter(node)) {
     for (int32 i = 0; i < node->child_count(); ++i) {
-      SceneNodePtr child = node->child_at(i);
-      TraverseNode(child.get());
+      SceneNode* child = node->child_at(i);
+      TraverseNode(child);
     }
   }
   delegate_->OnTraverseNodeExit(node);

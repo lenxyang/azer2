@@ -31,9 +31,9 @@ class SceneTreeRender {
   void Update(const FrameArgs& args);
   void Render(Renderer* renderer);
 
-  void AddObserver(SceneRenderObserver* observer);
-  void RemoveObserver(SceneRenderObserver* observer);
-  bool HasObserver(SceneRenderObserver* observer) const;
+  void AddObserver(SceneTreeRenderObserver* observer);
+  void RemoveObserver(SceneTreeRenderObserver* observer);
+  bool HasObserver(SceneTreeRenderObserver* observer) const;
 
   virtual void OnFrameUpdateBegin(const FrameArgs& args) {};
   virtual bool OnUpdateNode(RenderNode* node, const FrameArgs& args);
@@ -53,7 +53,7 @@ class SceneTreeRender {
   RenderNodePtr root_;
   scoped_ptr<RenderTreeBuilderDelegate> delegate_;
   const Camera* camera_;
-  ObserverList<SceneRenderObserver> observers_;
+  ObserverList<SceneTreeRenderObserver> observers_;
   DISALLOW_COPY_AND_ASSIGN(SceneTreeRender);
 };
 }  // namespace azer

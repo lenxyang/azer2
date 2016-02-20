@@ -33,6 +33,7 @@ void DiffuseMapEffect_RenderNode_Adapter::Apply(
   DiffuseMapEffect* effect = dynamic_cast<DiffuseMapEffect*>(e);
   effect->SetWorld(provider->GetWorld());
   effect->SetPV(provider->camera()->GetProjViewMatrix());
+  effect->SetCameraPos(Vector4(provider->camera()->position(), 1.0));
 }
 
 }  // namespace azer

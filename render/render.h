@@ -34,4 +34,4 @@
 #include "azer/scene/scene_node_picking.h"
 #include "azer/scene/render_env_node.h"
 #include "azer/scene/scene_node_traverse.h"
-#include "azer/scene/scene_render.h"
+#include "azer/scene/scene_tree_render.h"

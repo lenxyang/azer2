@@ -1,4 +1,4 @@
-#include "azer/scene/scene_render.h"
+#include "azer/scene/scene_tree_render.h"
 
 #include "base/logging.h"
 #include "azer/render/render.h"

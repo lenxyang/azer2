@@ -37,11 +37,18 @@ void DiffuseMapEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("light_count", GpuConstantsType::kInt,
                             offsetof(ps_cbuffer, light_count), 1),
     GpuConstantsTable::Desc("lights", offsetof(ps_cbuffer, lights),
-                            sizeof(UniverseLight), 4),
+                            sizeof(UniverseLight), arraysize(lights_)),
   };
   gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc);
 }
+
+void DiffuseMapEffect::SetPV(const Matrix4& value) { pv_ = value;}
+void DiffuseMapEffect::SetWorld(const Matrix4& value) { world_ = value;}
+void DiffuseMapEffect::SetCameraPos(const Vector4& pos) { camerapos_ = pos;}
+void DiffuseMapEffect::SetLights(const LightPtr* value, int32 count);
+void DiffuseMapEffect::SetLightData(const UniverseLight* value, int32 count);
+void DiffuseMapEffect::SetMaterial(const DiffuseMapMaterialData& mtrl) { mtrl_ = mtrl;}
 
 void DiffuseMapEffect::SetLights(const LightPtr* value, int32 count) {
   DCHECK_LT(count, sizeof(lights_));
@@ -50,6 +57,10 @@ void DiffuseMapEffect::SetLights(const LightPtr* value, int32 count) {
     Light* light = (value + i)->get();
     memcpy(lights_ + i, &light->data(), sizeof(UniverseLight));
   }
+}
+
+void DiffuseMapEffect::SetLightData(const UniverseLight* value, int32 count) {
+  memcpy(lights_, value, sizeof(UniverseLight) * std::min(count, kMaxLightCount));
 }
 
 void DiffuseMapEffect::ApplyGpuConstantTable(Renderer* renderer) {

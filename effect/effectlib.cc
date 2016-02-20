@@ -10,6 +10,7 @@
 #include "azer/effect/diffusemap_effect_adapter.h"
 #include "azer/effect/normalline_effect.h"
 #include "azer/effect/shaderlib/grit/shaderlib.hlsl.h"
+#include "azer/render/blending.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/technique.h"
 

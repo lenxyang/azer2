@@ -29,11 +29,12 @@ class DiffuseMapEffect : public Effect {
   };
 #pragma pack(pop)
 
-  void SetPV(const Matrix4& value) { pv_ = value;}
-  void SetWorld(const Matrix4& value) { world_ = value;}
-  void SetCameraPos(const Vector4& pos) { camerapos_ = pos;}
+  void SetPV(const Matrix4& value);
+  void SetWorld(const Matrix4& value);
+  void SetCameraPos(const Vector4& pos);
   void SetLights(const LightPtr* value, int32 count);
-  void SetMaterial(const DiffuseMapMaterialData& mtrl) { mtrl_ = mtrl;}
+  void SetLightData(const UniverseLight* value, int32 count);
+  void SetMaterial(const DiffuseMapMaterialData& mtrl);
   static Effect* CreateObject() { return new DiffuseMapEffect;}
  protected:
   void UseTexture(Renderer* renderer) override;
@@ -44,7 +45,8 @@ class DiffuseMapEffect : public Effect {
   Matrix4 world_;
   Vector4 camerapos_;
   int32 light_count_;
-  UniverseLight lights_[4];
+  static const int32 kMaxLightCount = 8;
+  UniverseLight lights_[kMaxLightCount];
   DiffuseMapMaterialData mtrl_;
   DECLARE_EFFECT_DYNCREATE(DiffuseMapEffect);
   DISALLOW_COPY_AND_ASSIGN(DiffuseMapEffect);
