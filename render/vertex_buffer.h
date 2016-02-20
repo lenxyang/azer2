@@ -42,6 +42,7 @@ class AZER_EXPORT VertexDesc : public Resource {
     bool aligned;              // aligned
   };
 
+  explicit VertexDesc(const Desc* desc);
   VertexDesc(const Desc* desc, int desc_count);
   ~VertexDesc();
 

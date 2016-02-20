@@ -15,6 +15,19 @@ VertexDesc::VertexDesc(const Desc* desc, int desc_num)
   init(desc, desc_num);
 }
 
+VertexDesc::VertexDesc(const Desc* desc) 
+    : Resource(kVertexDesc),
+      vertex_size_(0),
+      slot_count_(0) {
+  int desc_num = 0;
+  const Desc* cur = desc;
+  while (cur->name) {
+    desc_num++;
+    cur++;
+  }
+  init(desc, desc_num);
+}
+
 VertexDesc::~VertexDesc() {
 }
 
