@@ -11,6 +11,7 @@
 #include "azer/resource/variant_resource.h"
 
 namespace azer {
+class EffectLib;
 class ResourceLoader;
 class ResourceSpecialLoader;
 typedef scoped_refptr<ResourceSpecialLoader> ResourceSpecialLoaderPtr;
@@ -19,8 +20,11 @@ struct ResourceLoadContext {
   ResourceLoader* loader;
   ResPath path;
   RepositoryNodePtr root;
-  FileSystem* filesystem;
+  FileSystem* file_system;
   EffectLib* effectlib;
+  EffectAdapterContext* effect_adapter_context;
+
+  ResourceLoadContext();
 };
 
 class ResourceSpecialLoader : public ::base::RefCounted<ResourceSpecialLoader> {
@@ -33,17 +37,17 @@ class ResourceSpecialLoader : public ::base::RefCounted<ResourceSpecialLoader> {
 
 class ResourceLoader {
  public:
-  explicit ResourceLoader(FileSystem* fs);
+  explicit ResourceLoader(ResourceLoadContext* ctx);
   ~ResourceLoader();
 
   void RegisterSpecialLoader(ResourceSpecialLoader* loader);
   ResourceSpecialLoader* GetLoader(ConfigNode *node);
 
-  FileSystem* file_system() { return filesystem_;}
+  FileSystem* file_system();
   VariantResource Load(const ResPath& path);
  private:
   std::map<std::string, ResourceSpecialLoaderPtr> dict_;
-  FileSystem* filesystem_;
+  ResourceLoadContext context_;
   DISALLOW_COPY_AND_ASSIGN(ResourceLoader);
 };
 }  // namespace azer

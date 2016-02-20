@@ -27,12 +27,20 @@ bool LoadContents(const ResPath& path, FileContents* contents, FileSystem* fs) {
 }
 }
 
-ResourceLoader::ResourceLoader(FileSystem* fs)
-    : filesystem_(fs) {
+ResourceLoadContext::ResourceLoadContext() 
+    : loader(NULL),
+      file_system(NULL),
+      effectlib(NULL),
+      effect_adapter_context(NULL) {
 }
 
-ResourceLoader::~ResourceLoader() {
+ResourceLoader::ResourceLoader(ResourceLoadContext* ctx)
+    : context_(*ctx) {
+  context_.loader = this;
 }
+
+ResourceLoader::~ResourceLoader() {}
+FileSystem* ResourceLoader::file_system() { return context_.file_system;}
 
 void ResourceLoader::RegisterSpecialLoader(ResourceSpecialLoader* loader){
   auto iter = dict_.find(loader->GetLoaderName());
@@ -54,16 +62,15 @@ ResourceSpecialLoader* ResourceLoader::GetLoader(ConfigNode *node) {
 
 VariantResource ResourceLoader::Load(const ResPath& path) {
   FileContents contents;
-  if (!LoadContents(path, &contents, filesystem_)) {
+  if (!LoadContents(path, &contents, file_system())) {
     LOG(ERROR) << "Failed to Load contents from file: " << path.fullpath();
     return VariantResource();
   }
 
   CHECK(path.IsAbsolutePath());
-  ResourceLoadContext ctx;
+  ResourceLoadContext ctx = context_;
   ctx.path = path;
   ctx.loader = this;
-  ctx.filesystem = filesystem_;
   std::string strcontents((const char*)&contents.front(), contents.size());
   ConfigNodePtr croot = ConfigNode::InitFromXMLStr(strcontents);
 

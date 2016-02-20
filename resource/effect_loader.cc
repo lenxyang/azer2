@@ -5,6 +5,7 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
 #include "azer/effect/effect_creator.h"
+#include "azer/effect/effectlib.h"
 #include "azer/render/blending.h"
 #include "azer/render/technique.h"
 #include "azer/resource/resource_util.h"
@@ -57,7 +58,7 @@ VariantResource EffectLoader::LoadFromLib(const ConfigNode* node,
   resource.effect = ctx->effectlib->GetEffect(name);
   resource.type = kResTypeEffect;
   resource.retcode = 0;
-  return effect;
+  return resource;
 }
 
 VariantResource EffectLoader::LoadSource(const ConfigNode* node,
@@ -80,7 +81,7 @@ VariantResource EffectLoader::LoadSource(const ConfigNode* node,
     info.version = n->GetAttr("version");
     info.path = n->GetAttr("path");
     ResPath respath(UTF8ToUTF16(info.path));
-    if (!LoadFileContents(respath, &contents, ctx->filesystem)) {
+    if (!LoadFileContents(respath, &contents, ctx->file_system)) {
       LOG(ERROR) << "Failed to loader path: " << info.path;
       return VariantResource();
     }

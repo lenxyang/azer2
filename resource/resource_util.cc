@@ -5,6 +5,7 @@
 #include "azer/base/file_system.h"
 #include "azer/resource/xml_util.h"
 #include "azer/resource/effect_loader.h"
+#include "azer/resource/geometry_loader.h"
 #include "azer/resource/light_loader.h"
 #include "azer/resource/material_loader.h"
 #include "azer/resource/mesh_loader.h"
@@ -34,6 +35,7 @@ void InitDefaultLoader(ResourceLoader* loader) {
   loader->RegisterSpecialLoader(new LightLoader);
   loader->RegisterSpecialLoader(new SceneLoader);
   loader->RegisterSpecialLoader(new MaterialLoader);
+  loader->RegisterSpecialLoader(new GeometryLoader);
 }
 
 MeshPtr LoadReferMesh(const ConfigNode* node, ResourceLoadContext* ctx) {
@@ -98,7 +100,7 @@ VariantResource LoadResource(const azer::ResPath& path, int type,
   ResourceLoadContext ctx;
   ctx.path = path;
   ctx.loader = loader;
-  ctx.filesystem = loader->file_system();
+  ctx.file_system = loader->file_system();
   return LoadResource(path, type, &ctx);
 }
 

@@ -59,7 +59,7 @@ MeshPtr MeshLoader::LoadMeshData(const ConfigNode* node,
   }
 
   ResPath mesh_path(::base::UTF8ToUTF16(mesh_node->GetAttr("path")));
-  MeshLoadUtil loader(ctx->filesystem);
+  MeshLoadUtil loader(ctx->file_system);
   return loader.Load(mesh_path, desc);
 }
 

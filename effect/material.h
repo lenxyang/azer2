@@ -38,7 +38,7 @@ class DiffuseMapMaterial : public BaseMaterial {
   DiffuseMapMaterialData* mutable_data() { return &data_;}
   const DiffuseMapMaterialData& data() const { return data_;}
   bool Init(const ConfigNode* node, ResourceLoadContext* ctx) override;
-  static EffectParamsProvider* CreateObject() { return new DiffuseMapMaterialData;}
+  static EffectParamsProvider* CreateObject() { return new DiffuseMapMaterial;}
  private:
   DiffuseMapMaterialData data_;
   DISALLOW_COPY_AND_ASSIGN(DiffuseMapMaterial);

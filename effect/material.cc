@@ -29,23 +29,24 @@ TexturePtr Load2DTexture(const ResPath& path, FileSystem* fs) {
 }
 }  // namespace
 
-const char DiffuseMapMaterialData::kEffectProviderName[] = "azer::DiffuseMapMaterialData";;
 DiffuseMapMaterialData::DiffuseMapMaterialData() 
     : ambient_scalar(0.1f),
       specular_scalar(1.0f), 
       alpha(1.0f) {
 }
 
+const char DiffuseMapMaterial::kEffectProviderName[] = "azer::DiffuseMapMaterial";;
 DiffuseMapMaterial::DiffuseMapMaterial() {}
 DiffuseMapMaterial::~DiffuseMapMaterial() {}
 bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) {
-  if (!node->GetChildText("ambient_scalar", &mutable_data()->ambient_scalar)) {
+  DiffuseMapMaterialData* data = mutable_data();
+  if (!node->GetChildTextAsFloat("ambient_scalar", &data->ambient_scalar)) {
     return false;
   }
-  if (!node->GetChildText("specular_scalar", &mutable_data()->specular_scalar)) {
+  if (!node->GetChildTextAsFloat("specular_scalar", &data->specular_scalar)) {
     return false;
   }
-  if (!node->GetChildText("alpha", &mutable_data()->alpha)) {
+  if (!node->GetChildTextAsFloat("alpha", &data->alpha)) {
     return false;
   }
 
@@ -55,7 +56,7 @@ bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) 
   }
   
   ResPath texpath(ResPath(::base::UTF8ToUTF16(path)));
-  mutable_data()->diffusemap = Load2DTexture(texpath, ctx->file_system());
+  mutable_data()->diffusemap = Load2DTexture(texpath, ctx->filesystem);
   return (mutable_data()->diffusemap != NULL);
 }
 }  // namespace azer
