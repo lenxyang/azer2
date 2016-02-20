@@ -1,0 +1,30 @@
+
+
+source_set("effect") {
+  sources = [
+    "effect.cc",
+    "effect.h",
+    "effect_params_adapter.cc",
+    "effect_params_adapter.h",
+    "effect_params_provider.cc",
+    "effect_params_provider.h",
+    "light_observer.h",
+    "light.cc",
+    "light.h",
+  ]
+
+  deps = [
+    "//azer/math",
+    "//base",
+    "//ui/events",
+    "//ui/events/platform",
+    "//ui/events:events_base",
+    "//ui/gl",
+    "//ui/gfx",
+    "//ui/gfx/geometry",
+    "//ui/views",    
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+}

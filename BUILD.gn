@@ -2,6 +2,7 @@
 shared_library("azer") {
   deps = [
     "base",
+    "effect",
     "render",
     "render/layers",
     "render:render2d",
