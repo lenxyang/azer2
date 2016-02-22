@@ -4,6 +4,7 @@ static_library("images") {
     "color.cc",
     "color.h",
     "dds_load.cc",
+    "image.cc",
     "image.h",
   ]
 

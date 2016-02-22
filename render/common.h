@@ -61,6 +61,18 @@ enum DataFormat {
   kBGRAnf,
   kDepth24Stencil8,
   kRGBA = kRGBAf,
+  kDXBC1n,
+  kDXBC1nSRGB,
+  kDXBC4n,
+  kDXBC4nSRGB,
+  kDXBC2n,
+  kDXBC2nSRGB,
+  kDXBC3n,
+  kDXBC3nSRGB,
+  kDXBC5n,
+  kDXBC5nSRGB,
+  kDXBC7n,
+  kDXBC7nSRGB,
 };
 
 enum PrimitiveTopology {
@@ -167,7 +179,8 @@ enum VisibleState {
 };
 
 enum TexType {
-  kTex1D,
+  kUnkonwnTexType = -1,
+  kTex1D = 1,
   kTex1DArray,
   kTex2D,
   kTex2DArray,
