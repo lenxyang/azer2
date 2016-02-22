@@ -1,0 +1,10 @@
+
+static_library("images") {
+  sources = [
+
+  ]
+
+  deps = [
+    "//base",
+  ]
+}
