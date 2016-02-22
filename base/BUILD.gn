@@ -68,6 +68,7 @@ source_set("base") {
     "//base",
     "//base:i18n",
     "//azer/util/xml",
+    "//azer/util/images",
     "//ui/base",
     ":image_load",
   ]

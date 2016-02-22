@@ -1,10 +1,17 @@
-#include "azer/util/images/dr_color.h"
+#include "azer/util/images/color.h"
 
+#include <algorithm>
 #include "base/logging.h"
+#include "azer/util/images/block_compress.h"
 
 namespace azer {
+
+extern const int g_aWeights2[4];
+extern const int g_aWeights3[8];
+extern const int g_aWeights4[16];
+
 // class LDRColorA
-void LRDColorA::InterpolateRGB(const LDRColorA& c0, const LDRColorA& c1, size_t wc, 
+void LDRColorA::InterpolateRGB(const LDRColorA& c0, const LDRColorA& c1, size_t wc, 
                                size_t wcprec, LDRColorA* out) {
   const int* aWeights = nullptr;
   switch(wcprec)
@@ -223,14 +230,9 @@ int& INTColor::operator [] (uint8 i)  {
 }
 
 void INTColor::Set(const HDRColorA& c, bool bSigned) {
-  PackedVector::XMHALF4 aF16;
-
-  XMVECTOR v = XMLoadFloat4((const XMFLOAT4*)& c);
-  XMStoreHalf4(&aF16, v);
-
-  r = F16ToINT(aF16.x, bSigned);
-  g = F16ToINT(aF16.y, bSigned);
-  b = F16ToINT(aF16.z, bSigned);
+  r = F16ToINT(c.r, bSigned);
+  g = F16ToINT(c.g, bSigned);
+  b = F16ToINT(c.b, bSigned);
 }
 
 INTColor& INTColor::Clamp(int iMin, int iMax) {
@@ -247,40 +249,13 @@ INTColor& INTColor::SignExtend(const LDRColorA& Prec) {
   return *this;
 }
 
-void INTColor::ToF16(PackedVector::HALF aF16[3], bool bSigned) const
-{
+void INTColor::ToF16(uint16 aF16[3], bool bSigned) const {
   aF16[0] = INT2F16(r, bSigned);
   aF16[1] = INT2F16(g, bSigned);
   aF16[2] = INT2F16(b, bSigned);
 }
 
-int INTColor::F16ToINT(const PackedVector::HALF& f, bool bSigned) {
-  uint16 input = *((const uint16*) &f);
-  int out, s;
-  if(bSigned) {
-    s = input & F16S_MASK;
-    input &= F16EM_MASK;
-    if(input > F16MAX) 
-      out = F16MAX;
-    else 
-      out = input;
-    out = s ? -out : out;
-  } else {
-    if(input & F16S_MASK) 
-      out = 0;
-    else 
-      out = input;
-  }
-  return out;
-}
-
-namespace {
-const uint16 F16S_MASK    = 0x8000;   // f16 sign mask
-const uint16 F16EM_MASK   = 0x7fff;   // f16 exp & mantissa mask
-const uint16 F16MAX       = 0x7bff;   // MAXFLT bit pattern for XMHALF
-}
-
-int INTColor::F16ToINT(const uint16& input, bool bSigned) {
+int INTColor::F16ToINT(uint16 input, bool bSigned) {
   int out, s;
   if(bSigned) {
     s = input & F16S_MASK;

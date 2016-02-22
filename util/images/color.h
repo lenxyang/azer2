@@ -3,6 +3,7 @@
 #include "azer/math/math.h"
 
 namespace azer {
+class HDRColorA;
 class LDRColorA {
  public:
   uint8 r, g, b, a;
@@ -11,8 +12,8 @@ class LDRColorA {
   LDRColorA(uint8 _r, uint8 _g, uint8 _b, uint8 _a) 
       : r(_r), g(_g), b(_b), a(_a) {}
 
-  const uint8& operator [] (range_(0,3) size_t ele) const;
-  uint8& operator [] (range_(0,3) size_t ele);
+  const uint8& operator [] (size_t ele) const;
+  uint8& operator [] (size_t ele);
 
   LDRColorA operator = (const HDRColorA& c);
   static void InterpolateRGB(const LDRColorA& c0, const LDRColorA& c1, size_t wc, 
@@ -36,7 +37,7 @@ class HDRColorA {
   // binary operators
   HDRColorA operator + (const HDRColorA& c) const;
   HDRColorA operator - (const HDRColorA& c) const;
-  HDRColorA operator * (float f const);
+  HDRColorA operator * (float f) const;
   HDRColorA operator / (float f) const;
   float operator * (const HDRColorA& c) const;
 
@@ -69,9 +70,9 @@ class INTColor {
   void Set(const HDRColorA& c,  bool bSigned);
   INTColor& Clamp(int iMin,  int iMax);
   INTColor& SignExtend( const LDRColorA& Prec);
-  void ToF16(PackedVector::HALF aF16[3],  bool bSigned) const;
+  void ToF16(uint16 aF16[3],  bool bSigned) const;
  private:    
-  static int F16ToINT(const uint16 f  bool bSigned);
-  static uint16 INT2F16(int input,  bool bSigned);
+  static int F16ToINT(const uint16 f, bool bsigned);
+  static uint16 INT2F16(int input,  bool bsigned);
 };
 }  // namespace azer
