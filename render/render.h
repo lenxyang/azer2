@@ -2,7 +2,6 @@
 
 #include "azer/base/file_system.h"
 #include "azer/base/image.h"
-#include "azer/base/image_data.h"
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/effect_params_adapter.h"

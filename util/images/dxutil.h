@@ -125,7 +125,7 @@ enum DXGI_FORMAT {
   DXGI_FORMAT_FORCE_UINT                  = 0xffffffff
 };
 
-uint32 TranslateFormat(DXGI_FORMAT type);
+uint32 TranslateFormat(int32 type);
 }  // namespace detail
 }  // namespace azer
 

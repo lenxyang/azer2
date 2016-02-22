@@ -28,12 +28,6 @@ config("build_render_config") {
   defines = ["BUILD_AZER_RENDER"]
 }
 
-source_set("image_load") {
-  sources = ["image_load.cc"]
-  deps = ["//base", "//azer/third_party/soil"]
-  configs += [":build_render_config"]
-}
-
 source_set("base") {
   sources = [
     "align.h",
@@ -49,8 +43,6 @@ source_set("base") {
     "native_file_system.h",
     "file_util.cc",
     "file_util.h",
-    "image_data.cc",
-    "image_data.h",
     "image.cc",
     "image.h",
     "res_path.cc",
@@ -70,7 +62,6 @@ source_set("base") {
     "//azer/util/xml",
     "//azer/util/images",
     "//ui/base",
-    ":image_load",
   ]
 
   visibility = ["//azer"]

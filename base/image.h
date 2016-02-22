@@ -3,82 +3,57 @@
 #include <memory>
 #include <vector>
 
-#include "azer/base/image_data.h"
 #include "azer/base/string.h"
 #include "azer/render/texture.h"
 #include "azer/render/common.h"
 
 namespace azer {
-class Image;
-typedef scoped_refptr<Image> ImagePtr;
+class ImageLevelData;
+typedef scoped_refptr<ImageLevelData> ImageLevelDataPtr;
 
-class AZER_EXPORT Image : public base::RefCounted<Image> {
+class ImageLevelData : public ::base::RefCounted<ImageLevelData> {
  public:
-  Image(ImageDataPtr& image, TexType type);
-  Image(const ImageDataPtrVec& image, TexType type);
+  ImageLevelData(int32 width, int32 height, int32 depth, uint8* data, 
+                 int32 data_size, int32 row_bytes, int32 format);
+
+  const uint8* data() const { return data_.get();}
+  int32 data_size() const { return data_size_;}
+  int32 pixel_size() const { return pixel_size(data_format());}
+  int32 width() const { return width_;}
+  int32 height() const { return height_;}
+  int32 depth() const { return depth_;}
+  int32 row_bytes() const { return row_bytes_;}
+  int32 data_format() const { return data_format_;}
+
+  static uint32 pixel_size(int32 format); 
+ private:
+  bool valid_params();
+  int32 width_;
+  int32 height_;
+  int32 depth_;
+  int32 row_bytes_;
+  int32 data_format_;
+  int32 data_size_;
+  scoped_ptr<uint8> data_;
+  DISALLOW_COPY_AND_ASSIGN(ImageLevelData);
+};
+
+class ImageData : public ::base::RefCounted<ImageData> {
+ public:
+  explicit ImageData(int textype) : textype_(textype) {}
 
   int32 width() const;
   int32 height() const;
   int32 depth() const;
-  TexType type() const { return type_;}
 
-  DataFormat format() const;
-
-  ImageDataPtr& data(int index);
-  const ImageDataPtr& data(int index) const;
-
-  static ImagePtr LoadFromFile(const ::base::FilePath& path, TexType type);
-  static ImagePtr LoadFromFile(const StringType& path, TexType type);
-  static ImagePtr LoadFromFile(const std::vector<::base::FilePath>& path,
-                             TexType type);
-  static ImagePtr LoadFromMemory(const char* data, int length, TexType type);
+  int32 textype() const { return textype_;}
+  void AppendData(ImageLevelData* data);
+  int32 level_count() const { static_cast<int32>(levels_.size());}
+  const ImageLevelData* GetLevelData(int32 level) const;
  private:
-  ImageDataPtrVec data_;
-  TexType type_;
-  DISALLOW_COPY_AND_ASSIGN(Image);
+  int32 textype_;
+  std::vector<ImageLevelDataPtr> levels_;
+  DISALLOW_COPY_AND_ASSIGN(ImageData);
 };
-
-inline Image::Image(ImageDataPtr& image, TexType type)
-    : type_(type) {
-  DCHECK(type == kTex2D || type == kTex1D);
-  data_.push_back(image);
-}
-
-inline Image::Image(const ImageDataPtrVec& image, TexType type)
-    : type_(type) {
-  data_ = image;
-}
-
-inline int32 Image::width() const {
-  DCHECK_GT(data_.size(), 0u);
-  return data_[0]->width();
-}
-
-inline int32 Image::height() const {
-  DCHECK_GT(data_.size(), 0u);
-  return data_[0]->height();
-}
-
-inline int32 Image::depth() const {
-  DCHECK_GT(data_.size(), 0u);
-  return static_cast<int32>(data_.size());
-}
-
-inline DataFormat Image::format() const {
-  DCHECK_GT(data_.size(), 0u);
-  return data_[0]->format();
-}
-
-inline ImageDataPtr& Image::data(int index) {
-  DCHECK_GT(data_.size(), 0u);
-  DCHECK_LT(index, data_.size());
-  return data_[index];
-}
-
-inline const ImageDataPtr& Image::data(int index) const {
-  DCHECK_GT(data_.size(), 0u);
-  DCHECK_LT(index, data_.size());
-  return data_[index];
-}
 
 }  // namespace azer

@@ -401,7 +401,7 @@ int32 GetDDSDetail(const DDS_HEADER& head, int32* height, int32* depth,
     }
   } else {
     *format = GetDXGIFormat(head.ddspf);
-    if (format == detail::DXGI_FORMAT_UNKNOWN) {
+    if (*format == detail::DXGI_FORMAT_UNKNOWN) {
       // return HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
       return kUnkonwnTexType;
     }
@@ -427,8 +427,9 @@ int32 GetDDSDetail(const DDS_HEADER& head, int32* height, int32* depth,
   }
 }
 
-void GetSurfaceInfo(uint32 width, uint32 height, DXGI_FORMAT fmt,
+void GetSurfaceInfo(uint32 width, uint32 height, uint32 fmt,
                     uint32* outNumBytes, uint32* outRowBytes, uint32* outNumRows) {
+  using namespace detail;
   uint32 numBytes = 0;
   uint32 rowBytes = 0;
   uint32 numRows = 0;
@@ -565,10 +566,10 @@ ImageDataPtr LoadDDSImageFromMemory(const std::string& contents) {
     int32 d = depth;
     int32 row_width = 0;
     for (int32 mip = 0; mip < mipcount; ++mip) {
-      int32 bytes, row_bytes;
-      GetSurfaceInfo(w, h, format, &bytes, row_bytes);
+      uint32 bytes, row_bytes, rows_num;
+      GetSurfaceInfo(w, h, format, &bytes, &row_bytes, &rows_num);
       ImageLevelDataPtr leveldata(new ImageLevelData(
-          w, h, d, ptr, bytes,  row_bytes, TranslateFormat(format)));
+          w, h, d, ptr, bytes,  row_bytes, detail::TranslateFormat(format)));
       data->AppendData(leveldata);
       w = w >> 1;
       h = h >> 1;

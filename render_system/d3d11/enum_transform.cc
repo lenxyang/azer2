@@ -56,9 +56,9 @@ DXGI_FORMAT TranslateFormat(DataFormat type) {
     case kBoolVec3: return DXGI_FORMAT_R32G32B32_SINT;
     case kBoolVec4: return DXGI_FORMAT_R32G32B32A32_SINT;
     case kDXBC1n: return DXGI_FORMAT_BC1_UNORM;
-    case kDXBC1nSRGB: return DXGI_FORMAT_BC1_UNORM_SRGB;
+    case kDXBC1nSRGB: return DXGI_FORMAT_BC1_SRGB;
     case kDXBC4n: return DXGI_FORMAT_BC4_UNORM;
-    case kDXBC4nSRGB: return DXGI_FORMAT_BC4_UNORM_SRGB;
+    case kDXBC4nSRGB: return DXGI_FORMAT_BC4_SRGB;
     case kDXBC2n: return DXGI_FORMAT_BC2_UNORM;
     case kDXBC2nSRGB: return DXGI_FORMAT_BC2_UNORM_SRGB;
     case kDXBC3n: return DXGI_FORMAT_BC3_UNORM;
