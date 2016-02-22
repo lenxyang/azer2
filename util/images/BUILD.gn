@@ -1,7 +1,8 @@
 
 static_library("images") {
   sources = [
-
+    "dr_color.cc",
+    "dr_color.h",
   ]
 
   deps = [

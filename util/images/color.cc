@@ -1,0 +1,319 @@
+#include "azer/util/images/dr_color.h"
+
+#include "base/logging.h"
+
+namespace azer {
+// class LDRColorA
+void LRDColorA::InterpolateRGB(const LDRColorA& c0, const LDRColorA& c1, size_t wc, 
+                               size_t wcprec, LDRColorA* out) {
+  const int* aWeights = nullptr;
+  switch(wcprec)
+  {
+    case 2: 
+      aWeights = g_aWeights2; 
+      DCHECK(wc < 4); 
+      _Analysis_assume_(wc < 4); 
+      break;
+    case 3: 
+      aWeights = g_aWeights3;
+      DCHECK(wc < 8);
+      _Analysis_assume_(wc < 8); 
+      break;
+    case 4: aWeights = g_aWeights4;
+      DCHECK(wc < 16); 
+      _Analysis_assume_(wc < 16); 
+      break;
+    default: 
+      NOTREACHED(); 
+      out->r = out->g = out->b = 0; 
+      return;
+  }
+  out->r = uint8((uint32(c0.r) * uint32(BC67_WEIGHT_MAX - aWeights[wc]) 
+                  + uint32(c1.r) * uint32(aWeights[wc]) 
+                  + BC67_WEIGHT_ROUND) >> BC67_WEIGHT_SHIFT);
+  out->g = uint8((uint32(c0.g) * uint32(BC67_WEIGHT_MAX - aWeights[wc]) 
+                  + uint32(c1.g) * uint32(aWeights[wc]) 
+                  + BC67_WEIGHT_ROUND) >> BC67_WEIGHT_SHIFT);
+  out->b = uint8((uint32(c0.b) * uint32(BC67_WEIGHT_MAX - aWeights[wc]) 
+                  + uint32(c1.b) * uint32(aWeights[wc]) 
+                  + BC67_WEIGHT_ROUND) >> BC67_WEIGHT_SHIFT);
+}
+
+void LDRColorA::InterpolateA(const LDRColorA& c0, const LDRColorA& c1, size_t wa, 
+                             size_t waprec, LDRColorA* out) {
+  const int* aWeights = nullptr;
+  switch(waprec) {
+    case 2: 
+      aWeights = g_aWeights2;
+      DCHECK(wa < 4); 
+      _Analysis_assume_(wa < 4); break;
+    case 3: 
+      aWeights = g_aWeights3;
+      DCHECK(wa < 8);
+      _Analysis_assume_(wa < 8);
+      break;
+    case 4:
+      aWeights = g_aWeights4;
+      DCHECK(wa < 16);
+      _Analysis_assume_(wa < 16);
+      break;
+    default: 
+      NOTREACHED(); 
+      out->a = 0; 
+      return;
+  }
+  out->a = uint8((uint32(c0.a) * uint32(BC67_WEIGHT_MAX - aWeights[wa])
+                  + uint32(c1.a) * uint32(aWeights[wa]) 
+                  + BC67_WEIGHT_ROUND) >> BC67_WEIGHT_SHIFT);
+}
+
+void LDRColorA::Interpolate(const LDRColorA& c0, const LDRColorA& c1, 
+                            size_t wc, size_t wa, size_t wcprec, size_t waprec, 
+                            LDRColorA* out) {
+  InterpolateRGB(c0, c1, wc, wcprec, out);
+  InterpolateA(c0, c1, wa, waprec, out);
+}
+
+const uint8& LDRColorA::operator [] (size_t ele) const {
+  switch(ele) {
+    case 0: return r;
+    case 1: return g;
+    case 2: return b;
+    case 3: return a;
+    default: NOTREACHED(); return r;
+  }
+}
+
+uint8& LDRColorA::operator [] (size_t ele) {
+  switch(ele) {
+    case 0: return r;
+    case 1: return g;
+    case 2: return b;
+    case 3: return a;
+    default: NOTREACHED(); return r;
+  }
+}
+
+LDRColorA LDRColorA::operator = (const HDRColorA& c) {
+  LDRColorA ret;
+  HDRColorA tmp(c);
+  tmp = tmp.Clamp(0.0f, 1.0f) * 255.0f;
+  ret.r = uint8(tmp.r + 0.001f);
+  ret.g = uint8(tmp.g + 0.001f);
+  ret.b = uint8(tmp.b + 0.001f);
+  ret.a = uint8(tmp.a + 0.001f);
+  return ret;
+}
+
+// class HDRColorA
+HDRColorA::HDRColorA(const LDRColorA& c) {
+  r = float(c.r) * (1.0f/255.0f);
+  g = float(c.g) * (1.0f/255.0f);
+  b = float(c.b) * (1.0f/255.0f);
+  a = float(c.a) * (1.0f/255.0f);
+}
+
+// binary operators
+HDRColorA HDRColorA::operator + (const HDRColorA& c) const {
+  return HDRColorA(r + c.r, g + c.g, b + c.b, a + c.a);
+}
+
+HDRColorA HDRColorA::operator - (const HDRColorA& c) const {
+  return HDRColorA(r - c.r, g - c.g, b - c.b, a - c.a);
+}
+
+HDRColorA HDRColorA::operator * (float f) const {
+  return HDRColorA(r * f, g * f, b * f, a * f);
+}
+
+HDRColorA HDRColorA::operator / (float f) const {
+  float fInv = 1.0f / f;
+  return HDRColorA(r * fInv, g * fInv, b * fInv, a * fInv);
+}
+
+float HDRColorA::operator * (const HDRColorA& c) const {
+  return r * c.r + g * c.g + b * c.b + a * c.a;
+}
+
+// assignment operators
+HDRColorA& HDRColorA::operator += (const HDRColorA& c) {
+  r += c.r;
+  g += c.g;
+  b += c.b;
+  a += c.a;
+  return *this;
+}
+
+HDRColorA& HDRColorA::operator -= (const HDRColorA& c) {
+  r -= c.r;
+  g -= c.g;
+  b -= c.b;
+  a -= c.a;
+  return *this;
+}
+
+HDRColorA& HDRColorA::operator *= (float f) {
+  r *= f;
+  g *= f;
+  b *= f;
+  a *= f;
+  return *this;
+}
+
+HDRColorA& HDRColorA::operator /= (float f) {
+  float fInv = 1.0f / f;
+  r *= fInv;
+  g *= fInv;
+  b *= fInv;
+  a *= fInv;
+  return *this;
+}
+
+HDRColorA& HDRColorA::operator = (const LDRColorA& c) {
+  r = (float) c.r;
+  g = (float) c.g;
+  b = (float) c.b;
+  a = (float) c.a;
+  return *this;
+}
+
+HDRColorA& HDRColorA::Clamp(float fMin,  float fMax) {
+  r = std::min<float>(fMax, std::max<float>(fMin, r));
+  g = std::min<float>(fMax, std::max<float>(fMin, g));
+  b = std::min<float>(fMax, std::max<float>(fMin, b));
+  a = std::min<float>(fMax, std::max<float>(fMin, a));
+  return *this;
+}
+
+LDRColorA HDRColorA::ToLDRColorA() const {
+  return LDRColorA((uint8) (r + 0.01f), (uint8) (g + 0.01f), 
+                   (uint8) (b + 0.01f), (uint8) (a + 0.01f));
+}
+
+// INT Color
+INTColor INTColor::operator - (const INTColor& c) const {
+  return INTColor(r - c.r, g - c.g, b - c.b);
+}
+
+INTColor& INTColor::operator += (const INTColor& c) {
+  r += c.r;
+  g += c.g;
+  b += c.b;
+  return *this;
+}
+
+INTColor& INTColor::operator -= (const INTColor& c) {
+  r -= c.r;
+  g -= c.g;
+  b -= c.b;
+  return *this;
+}
+
+INTColor& INTColor::operator &= (const INTColor& c) {
+  r &= c.r;
+  g &= c.g;
+  b &= c.b;
+  return *this;
+}
+
+int& INTColor::operator [] (uint8 i)  {
+  DCHECK(i < sizeof(INTColor) / sizeof(int));
+  _Analysis_assume_(i < sizeof(INTColor) / sizeof(int));
+  return ((int*) this)[i];
+}
+
+void INTColor::Set(const HDRColorA& c, bool bSigned) {
+  PackedVector::XMHALF4 aF16;
+
+  XMVECTOR v = XMLoadFloat4((const XMFLOAT4*)& c);
+  XMStoreHalf4(&aF16, v);
+
+  r = F16ToINT(aF16.x, bSigned);
+  g = F16ToINT(aF16.y, bSigned);
+  b = F16ToINT(aF16.z, bSigned);
+}
+
+INTColor& INTColor::Clamp(int iMin, int iMax) {
+  r = std::min<int>(iMax, std::max<int>(iMin, r));
+  g = std::min<int>(iMax, std::max<int>(iMin, g));
+  b = std::min<int>(iMax, std::max<int>(iMin, b));
+  return *this;
+}
+
+INTColor& INTColor::SignExtend(const LDRColorA& Prec) {
+  r = SIGN_EXTEND(r, Prec.r);
+  g = SIGN_EXTEND(g, Prec.g);
+  b = SIGN_EXTEND(b, Prec.b);
+  return *this;
+}
+
+void INTColor::ToF16(PackedVector::HALF aF16[3], bool bSigned) const
+{
+  aF16[0] = INT2F16(r, bSigned);
+  aF16[1] = INT2F16(g, bSigned);
+  aF16[2] = INT2F16(b, bSigned);
+}
+
+int INTColor::F16ToINT(const PackedVector::HALF& f, bool bSigned) {
+  uint16 input = *((const uint16*) &f);
+  int out, s;
+  if(bSigned) {
+    s = input & F16S_MASK;
+    input &= F16EM_MASK;
+    if(input > F16MAX) 
+      out = F16MAX;
+    else 
+      out = input;
+    out = s ? -out : out;
+  } else {
+    if(input & F16S_MASK) 
+      out = 0;
+    else 
+      out = input;
+  }
+  return out;
+}
+
+namespace {
+const uint16 F16S_MASK    = 0x8000;   // f16 sign mask
+const uint16 F16EM_MASK   = 0x7fff;   // f16 exp & mantissa mask
+const uint16 F16MAX       = 0x7bff;   // MAXFLT bit pattern for XMHALF
+}
+
+int INTColor::F16ToINT(const uint16& input, bool bSigned) {
+  int out, s;
+  if(bSigned) {
+    s = input & F16S_MASK;
+    input &= F16EM_MASK;
+    if(input > F16MAX) 
+      out = F16MAX;
+    else 
+      out = input;
+    out = s ? -out : out;
+  } else {
+    if(input & F16S_MASK) 
+      out = 0;
+    else 
+      out = input;
+  }
+  return out;
+}
+
+uint16 INTColor::INT2F16(int input, bool bSigned) {
+  uint16 out;
+  if(bSigned) {
+    int s = 0;
+    if(input < 0) {
+      s = F16S_MASK;
+      input = -input;
+    }
+    out = uint16(s | input);
+  } else {
+    CHECK(input >= 0 && input <= F16MAX);
+    out = (uint16) input;
+  }
+
+  return out;
+}
+
+}  // namespace azer
