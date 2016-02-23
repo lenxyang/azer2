@@ -42,7 +42,7 @@ D3DTexture::~D3DTexture() {
 
 bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, 
                       int arraysize, int mipmap) {
-  HRESULT hr;
+  HRESULT hr = S_OK;
   DCHECK(NULL == texres_);
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ZeroMemory(&tex_desc_, sizeof(D3D11_TEXTURE2D_DESC));

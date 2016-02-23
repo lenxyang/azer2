@@ -7,11 +7,11 @@
 #include "azer/util/images/image.h"
 #include "azer/resource/resource_loader.h"
 #include "azer/render/blending.h"
-#include "samples/base/resource_util.h"
+#include "azer/render/render_system.h"
 
 namespace azer {
 namespace {
-TexturePtr Load2DTexture(const ResPath& path, FileSystem* fs) {
+TexturePtr LoadTexture(const ResPath& path, FileSystem* fs) {
   FileContents contents;
   if (!azer::LoadFileContents(path, &contents, fs)) {
     return TexturePtr();
@@ -54,7 +54,7 @@ bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) 
   }
   
   ResPath texpath(ResPath(::base::UTF8ToUTF16(path)));
-  mutable_data()->diffusemap = Load2DTexture(texpath, ctx->file_system);
+  mutable_data()->diffusemap = LoadTexture(texpath, ctx->file_system);
   return (mutable_data()->diffusemap != NULL);
 }
 }  // namespace azer

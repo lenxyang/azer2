@@ -12,5 +12,6 @@ static_library("images") {
 
   deps = [
     "//base",
+    "//azer",
   ]
 }
