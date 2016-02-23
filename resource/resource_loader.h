@@ -16,7 +16,7 @@ class ResourceLoader;
 class ResourceSpecialLoader;
 typedef scoped_refptr<ResourceSpecialLoader> ResourceSpecialLoaderPtr;
 
-struct ResourceLoadContext {
+struct AZER_EXPORT ResourceLoadContext {
   ResourceLoader* loader;
   ResPath path;
   RepositoryNodePtr root;
@@ -27,7 +27,8 @@ struct ResourceLoadContext {
   ResourceLoadContext();
 };
 
-class ResourceSpecialLoader : public ::base::RefCounted<ResourceSpecialLoader> {
+class AZER_EXPORT ResourceSpecialLoader
+    : public ::base::RefCounted<ResourceSpecialLoader> {
  public:
   virtual const char* GetLoaderName() const = 0;
   virtual bool CouldLoad(ConfigNode* node) const = 0;
@@ -35,7 +36,7 @@ class ResourceSpecialLoader : public ::base::RefCounted<ResourceSpecialLoader> {
                                ResourceLoadContext* ctx) = 0;
 };
 
-class ResourceLoader {
+class AZER_EXPORT ResourceLoader {
  public:
   explicit ResourceLoader(ResourceLoadContext* ctx);
   ~ResourceLoader();

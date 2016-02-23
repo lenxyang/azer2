@@ -2,6 +2,11 @@
 
 #include <sstream>
 #include "base/logging.h"
+#include "azer/math/math.h"
+#include "azer/effect/effect.h"
+#include "azer/render/camera.h"
+#include "azer/render/blending.h"
+#include "azer/render/mesh.h"
 #include "azer/scene/render_env_node.h"
 #include "azer/scene/scene_node.h"
 #include "azer/scene/scene_tree_render.h"

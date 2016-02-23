@@ -6,18 +6,21 @@
 #include "base/memory/ref_counted.h"
 #include "base/observer_list.h"
 #include "azer/math/math.h"
+#include "azer/base/export.h"
 #include "azer/render/transform_holder.h"
 #include "azer/scene/scene_node_observer.h"
 
 namespace azer {
 class Light;
 class Mesh;
+class Renderer;
 class SceneNode;
 class SceneNodeData;
 class SceneNodeObserver;
 typedef scoped_refptr<Light> LightPtr;
 typedef scoped_refptr<Mesh> MeshPtr;
 typedef scoped_refptr<SceneNode> SceneNodePtr;
+typedef scoped_refptr<SceneNodeData> SceneNodeDataPtr;
 typedef std::vector<SceneNodePtr> SceneNodes;
 
 enum SceneNodeType {
@@ -29,7 +32,7 @@ enum SceneNodeType {
   kTerrainTileSceneNode,
 };
 
-class SceneNodeData : public SceneNodeObserver {
+class AZER_EXPORT SceneNodeData : public SceneNodeObserver {
  public:
   SceneNodeData(SceneNode* node);
   ~SceneNodeData();
@@ -52,9 +55,7 @@ class SceneNodeData : public SceneNodeObserver {
   DISALLOW_COPY_AND_ASSIGN(SceneNodeData);
 };
 
-typedef scoped_refptr<SceneNodeData> SceneNodeDataPtr;
-
-class SceneNode: public ::base::RefCounted<SceneNode> {
+class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode> {
  public:
   SceneNode();
   SceneNode(const std::string& name);
@@ -178,7 +179,7 @@ class SceneNode: public ::base::RefCounted<SceneNode> {
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };
 
-class SceneNodeManager {
+class AZER_EXPORT SceneNodeManager {
  public:
   SceneNodeManager();
   bool Register(SceneNode* node);
@@ -189,7 +190,7 @@ class SceneNodeManager {
   DISALLOW_COPY_AND_ASSIGN(SceneNodeManager);
 };
 
-const char* SceneNodeName(int32 type);
-Matrix4 GenWorldMatrixForSceneNode(SceneNode* node);
-void GetSceneNodeBounds(SceneNode* node, Vector3* vmin, Vector3* vmax);
+AZER_EXPORT const char* SceneNodeName(int32 type);
+AZER_EXPORT Matrix4 GenWorldMatrixForSceneNode(SceneNode* node);
+AZER_EXPORT void GetSceneNodeBounds(SceneNode* node, Vector3* vmin, Vector3* vmax);
 }  // namespace azer

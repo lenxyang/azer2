@@ -6,13 +6,12 @@ source_set("mesh_load_util") {
   ]
 
   deps = [
-    "//azer",
     "//azer/third_party/assimp",
   ]
 }
 
 
-static_library("resource") {
+source_set("resource") {
   sources = [
     "effect_loader.cc",
     "effect_loader.h",
@@ -24,7 +23,6 @@ static_library("resource") {
     "material_loader.h",
     "mesh_loader.cc",
     "mesh_loader.h",
-    "resource.h",
     "resource_util.cc",
     "resource_util.h",
     "resource_loader.cc",
@@ -37,10 +35,12 @@ static_library("resource") {
     "xml_util.cc",
   ]
   deps = [
-    "//azer",
-    "//azer/scene",
     "//base",
     "//azer/util/xml",
     ":mesh_load_util",
   ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+  visibility = ["//azer"]
 }

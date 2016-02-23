@@ -5,8 +5,9 @@
 
 #include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
+#include "azer/base/export.h"
 #include "azer/effect/light.h"
-#include "azer/render/render.h"
+#include "azer/effect/effect_params_provider.h"
 #include "azer/scene/scene_node_traverse.h"
 #include "azer/scene/scene_node.h"
 
@@ -17,7 +18,7 @@ class RenderEnvNodeDelegate;
 typedef scoped_refptr<RenderEnvNode> RenderEnvNodePtr;
 typedef scoped_refptr<RenderEnvNodeDelegate> RenderEnvNodeDelegatePtr;
 
-class RenderEnvNodeDelegate : public EffectParamsProvider {
+class AZER_EXPORT RenderEnvNodeDelegate : public EffectParamsProvider {
  public:
   explicit RenderEnvNodeDelegate(RenderEnvNode* envnode);
 
@@ -31,14 +32,14 @@ class RenderEnvNodeDelegate : public EffectParamsProvider {
   DISALLOW_COPY_AND_ASSIGN(RenderEnvNodeDelegate);
 };
 
-class FakeEnvNode : RenderEnvNodeDelegate {
+class AZER_EXPORT FakeEnvNode : RenderEnvNodeDelegate {
  public:
   FakeEnvNode(RenderEnvNode* envnode) :  RenderEnvNodeDelegate(envnode) {}
   void Init(SceneNode* node, RenderNode* render_node) override {}
   void OnUpdateNode(const FrameArgs& args) override {}
 };
 
-class RenderEnvNode : public ::base::RefCounted<RenderEnvNode> {
+class AZER_EXPORT RenderEnvNode : public ::base::RefCounted<RenderEnvNode> {
  public:
   RenderEnvNode();
   explicit RenderEnvNode(RenderEnvNode* parent);

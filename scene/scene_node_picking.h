@@ -1,12 +1,15 @@
 #pragma once
 
 #include <stack>
-#include "azer/render/render.h"
+#include "azer/base/export.h"
+#include "azer/math/matrix4.h"
 #include "azer/scene/scene_node_traverse.h"
 
 namespace azer {
+class Matrix4;
+class Ray;
 class SceneNode;
-class SceneNodePickHelper : public SceneNodeTraverseDelegate {
+class AZER_EXPORT SceneNodePickHelper : public SceneNodeTraverseDelegate {
  public:
   SceneNodePickHelper(Ray* ray);
   ~SceneNodePickHelper();

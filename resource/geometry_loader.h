@@ -1,10 +1,11 @@
 #pragma once
 
+#include "azer/base/export.h"
 #include "azer/effect/light.h"
 #include "azer/resource/resource_loader.h"
 
 namespace azer {
-class GeometryLoader : public ResourceSpecialLoader {
+class AZER_EXPORT GeometryLoader : public ResourceSpecialLoader {
  public:
   static const char kSpecialLoaderName[];
   GeometryLoader();

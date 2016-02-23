@@ -2,6 +2,7 @@
 
 #include "azer/base/config_node.h"
 #include "azer/base/file_system.h"
+#include "azer/base/export.h"
 #include "azer/effect/light.h"
 #include "azer/scene/scene_node.h"
 #include "azer/resource/resource_loader.h"
@@ -43,7 +44,7 @@ class SceneNode;
 class SceneNodeData;
 class SceneLoader;
 
-class SceneNodeLoader {
+class AZER_EXPORT SceneNodeLoader {
  public:
   virtual const char* node_type_name() const = 0;
   virtual bool LoadSceneNode(SceneNode* node, const ConfigNode* config, 
@@ -51,7 +52,7 @@ class SceneNodeLoader {
 };
 
 // must be stateless class
-class SceneLoader : public ResourceSpecialLoader {
+class AZER_EXPORT SceneLoader : public ResourceSpecialLoader {
  public:
   static const char kSpecialLoaderName[];
   SceneLoader();

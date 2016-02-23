@@ -2,17 +2,20 @@
 
 #include "base/memory/scoped_ptr.h"
 #include "base/observer_list.h"
-#include "azer/render/render.h"
+#include "azer/base/export.h"
 
 namespace azer {
+class Camera;
+class FrameArgs;
 class RenderTreeBuilderDelegate;
+class Renderer;
 class RenderNode;
 class RenderEnvNode;
 class SceneNode;
 class SceneTreeRender;
 typedef scoped_refptr<RenderNode> RenderNodePtr;
 
-class SceneTreeRenderObserver {
+class AZER_EXPORT SceneTreeRenderObserver {
  public:
   virtual void OnFrameUpdateBegin(SceneTreeRender* sr, const FrameArgs& args) {}
   virtual void OnFrameUpdateEnd(SceneTreeRender* sr, const FrameArgs& args) {}
@@ -20,7 +23,7 @@ class SceneTreeRenderObserver {
   virtual void OnFrameRenderEnd(SceneTreeRender* sr, Renderer* renderer) {}
 };
 
-class SceneTreeRender {
+class AZER_EXPORT SceneTreeRender {
  public:
   SceneTreeRender();
 

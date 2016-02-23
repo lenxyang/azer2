@@ -1,5 +1,5 @@
 
-static_library("scene") {
+source_set("scene") {
   sources = [
     "render_env_node.cc",
     "render_env_node.h",
@@ -16,6 +16,9 @@ static_library("scene") {
   ]
   deps = [
     "//base",
-    "//azer",
   ]
+
+  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/base:build_render_config"]
+  visibility = ["//azer"]
 }

@@ -1,13 +1,14 @@
 #pragma once
 
 #include "base/basictypes.h"
+#include "azer/base/export.h"
+
 namespace azer {
 class Quaternion;
 class SceneNode;
 class Vector3;
 
-
-class SceneNodeObserver {
+class AZER_EXPORT SceneNodeObserver {
  public:
   virtual void OnNodeLocationChanged(SceneNode* n, const Vector3& prev) {}
   virtual void OnNodeOrientChanged(SceneNode* n, const Quaternion& prev) {}

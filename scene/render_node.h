@@ -5,12 +5,15 @@
 
 #include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
+#include "azer/base/export.h"
 #include "azer/effect/light.h"
-#include "azer/render/render.h"
+#include "azer/effect/effect_params_provider.h"
 #include "azer/scene/scene_node_traverse.h"
 #include "azer/scene/scene_node.h"
 
 namespace azer {
+class Camera;
+class FrameArgs;
 class RenderEnvNodeDelegate;
 class RenderEnvNode;
 class RenderNode;
@@ -18,7 +21,7 @@ typedef scoped_refptr<RenderEnvNode> RenderEnvNodePtr;
 typedef scoped_refptr<RenderEnvNodeDelegate> RenderEnvNodeDelegatePtr;
 typedef scoped_refptr<RenderNode> RenderNodePtr;
 
-class RenderNodeDelegate {
+class AZER_EXPORT RenderNodeDelegate {
  public:
   explicit RenderNodeDelegate(RenderNode* node);
   virtual void Update(const FrameArgs& args) = 0;
@@ -32,7 +35,7 @@ class RenderNodeDelegate {
   DISALLOW_COPY_AND_ASSIGN(RenderNodeDelegate);
 };
 
-class RenderNode : public EffectParamsProvider {
+class AZER_EXPORT RenderNode : public EffectParamsProvider {
  public:
   explicit RenderNode(SceneNode* node);
   virtual ~RenderNode();
@@ -89,7 +92,7 @@ class RenderNode : public EffectParamsProvider {
   DISALLOW_COPY_AND_ASSIGN(RenderNode);
 };
 
-class RenderTreeBuilderDelegate {
+class AZER_EXPORT RenderTreeBuilderDelegate {
  public:
   virtual bool NeedRenderNode(SceneNode* node) = 0;
   virtual bool NeedRenderEnvNode(SceneNode* node);
@@ -97,7 +100,7 @@ class RenderTreeBuilderDelegate {
   virtual RenderEnvNodeDelegatePtr CreateEnvDelegate(RenderEnvNode* n) = 0;
 };
 
-class RenderTreeBuilder : public SceneNodeTraverseDelegate {
+class AZER_EXPORT RenderTreeBuilder : public SceneNodeTraverseDelegate {
  public:
   explicit RenderTreeBuilder(RenderTreeBuilderDelegate* delegate);
   ~RenderTreeBuilder();

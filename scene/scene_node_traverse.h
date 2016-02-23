@@ -1,12 +1,13 @@
 #pragma once
 
 #include "base/basictypes.h"
+#include "azer/base/export.h"
 
 namespace azer {
 
 class SceneNode;
 
-class SceneNodeTraverseDelegate {
+class AZER_EXPORT SceneNodeTraverseDelegate {
  public:
   SceneNodeTraverseDelegate() {}
   virtual ~SceneNodeTraverseDelegate() {}
@@ -19,7 +20,7 @@ class SceneNodeTraverseDelegate {
   DISALLOW_COPY_AND_ASSIGN(SceneNodeTraverseDelegate);
 };
 
-class SceneNodeTraverse {
+class AZER_EXPORT SceneNodeTraverse {
  public:
   SceneNodeTraverse(SceneNodeTraverseDelegate* delegate);
   ~SceneNodeTraverse();

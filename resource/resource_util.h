@@ -6,27 +6,31 @@
 
 namespace azer {
 
-ConfigNode* GetTypedReferNode(const std::string& type, const ConfigNode* parent);
+AZER_EXPORT ConfigNode* GetTypedReferNode(const std::string& type, 
+                                          const ConfigNode* parent);
+AZER_EXPORT VertexDescPtr LoadReferVertexDesc(const ConfigNode* node, 
+                                              ResourceLoadContext* ctx);
+AZER_EXPORT EffectPtr LoadReferEffect(const ConfigNode* node,
+                                      ResourceLoadContext* ctx);
+AZER_EXPORT LightPtr LoadReferLight(const ConfigNode* node, 
+                                    ResourceLoadContext* ctx);
+AZER_EXPORT MeshPtr LoadReferMesh(const ConfigNode* node, ResourceLoadContext* ctx);
+AZER_EXPORT BaseMaterialPtr LoadReferMaterial(const ConfigNode* node, 
+                                              ResourceLoadContext* ctx);
+AZER_EXPORT VariantResource LoadReferResource(const ConfigNode* node, 
+                                              ResourceLoadContext* ctx);
+
+AZER_EXPORT VertexDescPtr LoadVertexDesc(const ResPath& path, 
+                                         ResourceLoadContext* ctx);
+AZER_EXPORT EffectPtr LoadEffect(const ResPath& path, ResourceLoadContext* ctx);
+
+AZER_EXPORT VariantResource LoadResource(const ResPath& path, int type, 
+                                         ResourceLoadContext* );
+AZER_EXPORT VariantResource LoadResource(const ResPath& path, int type, 
+                                         ResourceLoader* loader);
 
 
-VertexDescPtr LoadReferVertexDesc(const ConfigNode* node, 
-                                        ResourceLoadContext* ctx);
-EffectPtr LoadReferEffect(const ConfigNode* node,
-                                ResourceLoadContext* ctx);
-LightPtr LoadReferLight(const ConfigNode* node, ResourceLoadContext* ctx);
-MeshPtr LoadReferMesh(const ConfigNode* node, ResourceLoadContext* ctx);
-BaseMaterialPtr LoadReferMaterial(const ConfigNode* node, ResourceLoadContext* ctx);
-VariantResource LoadReferResource(const ConfigNode* node, ResourceLoadContext* ctx);
-
-VertexDescPtr LoadVertexDesc(const ResPath& path, ResourceLoadContext* ctx);
-EffectPtr LoadEffect(const ResPath& path, ResourceLoadContext* ctx);
-
-VariantResource LoadResource(const ResPath& path, int type, ResourceLoadContext* );
-VariantResource LoadResource(const ResPath& path, int type, ResourceLoader* loader);
-
-
-bool Repath(const ResPath& path, ResPath* apath,
-            ResourceLoadContext* ctx);
-void InitDefaultLoader(ResourceLoader* loder);
-
+AZER_EXPORT bool Repath(const ResPath& path, ResPath* apath, 
+                        ResourceLoadContext* ctx);
+AZER_EXPORT void InitDefaultLoader(ResourceLoader* loder);
 }  // namespace azer
