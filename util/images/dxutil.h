@@ -1,5 +1,7 @@
 #pragma once
 
+#include "base/basictypes.h"
+
 namespace azer {
 namespace detail {
 enum DXGI_FORMAT {

@@ -56,4 +56,9 @@ int32 ImageData::depth() const {
 int32 ImageData::data_format() const {
   return levels_[0]->data_format();
 }
+
+const ImageLevelData* ImageData::GetLevelData(int32 level) const {
+  DCHECK_LT(level, static_cast<int32>(levels_.size()));
+  return levels_[level];
+}
 }  // namespace azer

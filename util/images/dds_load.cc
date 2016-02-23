@@ -536,8 +536,8 @@ void GetSurfaceInfo(uint32 width, uint32 height, uint32 fmt,
 }
 
 
-ImageDataPtr LoadDDSImageFromMemory(const std::string& contents) {
-  const DDS_HEADER* head = (const DDS_HEADER*)(contents.c_str() + sizeof(uint32));
+ImageDataPtr LoadDDSImageFromMemory(const uint8* contents, int32 contents_len) {
+  const DDS_HEADER* head = (const DDS_HEADER*)(contents + sizeof(uint32));
   int32 width = head->width;
   int32 arraysize, depth, height;
   uint32 format;
@@ -551,7 +551,7 @@ ImageDataPtr LoadDDSImageFromMemory(const std::string& contents) {
   if ((head->ddspf.flags & DDS_FOURCC) &&
       (MAKEFOURCC('D', 'X', '1', '0') == head->ddspf.fourCC)) {
     if ((sizeof(uint32) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10))
-        < contents.length()) {
+        < contents_len) {
       return ImageDataPtr();
     }
   }
@@ -559,7 +559,7 @@ ImageDataPtr LoadDDSImageFromMemory(const std::string& contents) {
   ImageDataPtr data(new ImageData(tex_type));
   ptrdiff_t offset = sizeof(uint32) + sizeof(DDS_HEADER)
       + (bDXT10Header ? sizeof(DDS_HEADER_DXT10) : 0);
-  uint8* ptr = (uint8*)(contents.c_str() + offset);
+  uint8* ptr = (uint8*)(contents + offset);
   for (int32 i = 0; i < arraysize; ++i) {
     int32 w = head->width;
     int32 h = height;
@@ -586,7 +586,7 @@ ImageDataPtr LoadDDSImageFromMemory(const std::string& contents) {
 ImageDataPtr LoadDDSImage(const base::FilePath& path) {
   std::string contents;
   if (::base::ReadFileToString(path, &contents)) {
-    return LoadDDSImageFromMemory(contents);
+    return LoadDDSImageFromMemory((const uint8*)contents.c_str(), contents.length());
   } else {
     return ImageDataPtr();
   }

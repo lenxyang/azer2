@@ -12,5 +12,5 @@
 namespace azer {
 
 ImageDataPtr LoadDDSImage(const base::FilePath& path);
-ImageDataPtr LoadDDSImageFromMemory(const std::string& contents);
+ImageDataPtr LoadDDSImageFromMemory(const uint8* data, int32 length);
 }  // namespace azer

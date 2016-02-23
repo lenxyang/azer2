@@ -4,7 +4,7 @@
 #include "base/files/file_path.h"
 #include "azer/base/config_node.h"
 #include "azer/base/image.h"
-#include "azer/base/image_data.h"
+#include "azer/util/images/image.h"
 #include "azer/resource/resource_loader.h"
 #include "azer/render/blending.h"
 #include "samples/base/resource_util.h"
@@ -17,14 +17,12 @@ TexturePtr Load2DTexture(const ResPath& path, FileSystem* fs) {
     return TexturePtr();
   }
 
-  const char* data = (char*)(&contents.front());
-  ImageDataPtr imgdata(ImageData::Load2D(data, contents.size()));
-  ImagePtr img(new Image(imgdata, kTex2D));
+  const uint8* data = (uint8*)(&contents.front());
+  ImageDataPtr imgdata(LoadDDSImageFromMemory(data, contents.size()));
   RenderSystem* rs = RenderSystem::Current();
   Texture::Options opt;
   opt.target = kBindTargetShaderResource;
-  opt.size = gfx::Size(img->width(), img->height());
-  TexturePtr tex = rs->CreateTexture(opt, img.get());
+  TexturePtr tex = rs->CreateTexture(opt, imgdata.get());
   return tex;
 }
 }  // namespace
@@ -56,7 +54,7 @@ bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) 
   }
   
   ResPath texpath(ResPath(::base::UTF8ToUTF16(path)));
-  mutable_data()->diffusemap = Load2DTexture(texpath, ctx->filesystem);
+  mutable_data()->diffusemap = Load2DTexture(texpath, ctx->file_system);
   return (mutable_data()->diffusemap != NULL);
 }
 }  // namespace azer
