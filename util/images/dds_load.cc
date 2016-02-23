@@ -571,6 +571,7 @@ ImageDataPtr LoadDDSImageFromMemory(const uint8* contents, int32 contents_len) {
       ImageLevelDataPtr leveldata(new ImageLevelData(
           w, h, d, ptr, bytes,  row_bytes, detail::TranslateFormat(format)));
       data->AppendData(leveldata);
+      ptr += bytes * d;
       w = w >> 1;
       h = h >> 1;
       d = d >> 1;

@@ -308,7 +308,7 @@ bool D3DTexture2D::InitFromImage(const ImageData* image) {
     subres[i].SysMemPitch = data->row_bytes();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
-  return Init(subres, count, image->level_count());
+  return Init(subres, image->depth(), count);
 }
 
 bool D3DTexture2D::InitUnorderedAccessView() {
