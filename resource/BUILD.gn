@@ -7,9 +7,10 @@ source_set("mesh_load_util") {
 
   deps = [
     "//azer/third_party/assimp",
+    "//skia",
+    "//azer",
   ]
 }
-
 
 source_set("resource") {
   sources = [
@@ -22,11 +23,11 @@ source_set("resource") {
     "material_loader.cc",
     "material_loader.h",
     "mesh_loader.cc",
-    "mesh_loader.h",
-    "resource_util.cc",
-    "resource_util.h",
+    "mesh_loader.cc",
     "resource_loader.cc",
     "resource_loader.h",
+    "resource_util.cc",
+    "resource_util.h",
     "scene_loader.cc",
     "scene_loader.h",
     "vertex_desc_loader.cc",
@@ -36,11 +37,10 @@ source_set("resource") {
   ]
   deps = [
     "//base",
-    "//azer/util/xml",
+    "//azer/effect:effectlib",
+    "//azer",
     ":mesh_load_util",
   ]
-
-  configs += ["//azer/build/config:utf8src"]
-  configs += ["//azer/base:build_render_config"]
-  visibility = ["//azer"]
 }
+
+

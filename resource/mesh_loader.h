@@ -5,7 +5,7 @@
 #include "azer/resource/resource_loader.h"
 
 namespace azer {
-class AZER_EXPORT MeshLoader : public ResourceSpecialLoader {
+class MeshLoader : public ResourceSpecialLoader {
  public:
   static const char kSpecialLoaderName[];
   MeshLoader();

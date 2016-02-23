@@ -7,7 +7,7 @@
 namespace azer {
 class ConfigNode;
 
-class AZER_EXPORT EffectLoader : public ResourceSpecialLoader {
+class EffectLoader : public ResourceSpecialLoader {
  public:
   static const char kSpecialLoaderName[];
   EffectLoader();
