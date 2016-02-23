@@ -39,7 +39,7 @@ bool D3DRenderTarget::Init() {
   DCHECK(texture_.get() == NULL);
   D3DTexture2D* tex = new D3DTexture2D(options_, render_system_);
   texture_ = tex;
-  if (!tex->Init(NULL, 1)) {
+  if (!tex->Init(NULL, 1, 1)) {
     return false;
   }
 
@@ -111,7 +111,7 @@ bool D3D2DArrayRenderTarget::Create(const Texture::Options& o, D3DRenderSystem* 
   std::unique_ptr<D3DTexture> tex;
   if (o.type == kTexCubemap) {
     tex.reset(new D3DTextureCubeMap(opt, rs));
-    if (!tex->Init(NULL, 6)) {
+    if (!tex->Init(NULL, 6, 1)) {
       return false;
     }
   } else {

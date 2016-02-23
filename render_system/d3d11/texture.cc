@@ -40,15 +40,16 @@ D3DTexture::~D3DTexture() {
   SAFE_RELEASE(uav_view_);
 }
 
-bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
+bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, 
+                      int arraysize, int mipmap) {
   HRESULT hr;
   DCHECK(NULL == texres_);
   ID3D11Device* d3d_device = render_system_->GetDevice();
   ZeroMemory(&tex_desc_, sizeof(D3D11_TEXTURE2D_DESC));
   tex_desc_.Width     = options_.size.width();
   tex_desc_.Height    = options_.size.height();
-  tex_desc_.MipLevels = options_.sampler.mip_level;
-  tex_desc_.ArraySize = num;
+  tex_desc_.MipLevels = mipmap;
+  tex_desc_.ArraySize = arraysize;
   tex_desc_.Format    = TranslateFormat(options_.format);
   tex_desc_.SampleDesc.Count   = options_.sampler.sample_level;
   tex_desc_.SampleDesc.Quality = options_.sampler.sample_quality;
@@ -296,23 +297,17 @@ bool ValidTextureFlags(const Texture::Options& opt) {
 void D3DTexture2D::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
 }
 
-bool D3DTexture2D::InitFromImage(const Image* image) {
+bool D3DTexture2D::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  const ImageDataPtr& data = image->data(0);
-  uint32 expect_size = SizeofDataFormat(options_.format)
-      * options_.size.width() * options_.size.height();
-  if (data->data_size() != static_cast<int32>(expect_size)) {
-    LOG(ERROR) << "unexpected size: " << data->data_size()
-               << " expected: " << expect_size;
-    return false;
+  int32 count = 0;
+  D3D11_SUBRESOURCE_DATA subres[1024];
+  for (int32 i = 0; i < image->level_count(); ++i, ++count) {
+    const ImageLevelData* data = image->GetLevelData(i);
+    subres[i].pSysMem = data->dim_data(0);
+    subres[i].SysMemPitch = data->dim_data_size();
+    subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
-  
-  
-  D3D11_SUBRESOURCE_DATA subres;
-  subres.pSysMem = data->data();
-  subres.SysMemPitch = options_.size.width() * SizeofDataFormat(options_.format);
-  subres.SysMemSlicePitch = 0;  // no meaning for 2D
-  return Init(&subres, 1);
+  return Init(subres, count, image->level_count());
 }
 
 bool D3DTexture2D::InitUnorderedAccessView() {
@@ -385,16 +380,16 @@ bool D3DTexture2DShared::InitSharedResource() {
   return true;
 }
 
-bool D3DTexture2DShared::Init(const D3D11_SUBRESOURCE_DATA* data, int num) {
-  if (!D3DTexture::Init(data, num)) {
+bool D3DTexture2DShared::Init(const D3D11_SUBRESOURCE_DATA* data, int arraysize, 
+                              int32 mipmap) {
+  if (!D3DTexture::Init(data, arraysize, mipmap)) {
     return false;
   }
 
   return InitSharedResource();
 }
 
-D3DTexture2DExtern* D3DTexture2DExtern::Create(HANDLE handle,
-                                               D3DRenderSystem* rs) {
+D3DTexture2DExtern* D3DTexture2DExtern::Create(HANDLE handle, D3DRenderSystem* rs) {
   ID3D11Texture2D* shared_tex = NULL;
   ID3D11Device* d3d_device = rs->GetDevice();
   HRESULT hr = d3d_device->OpenSharedResource(handle, __uuidof(ID3D11Texture2D),
@@ -439,27 +434,17 @@ void D3DTextureCubeMap::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
   desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
 } 
 
-bool D3DTextureCubeMap::InitFromImage(const Image* image) {
+bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  const ImageDataPtr& data = image->data(0);
-  uint32 expect_size = SizeofDataFormat(options_.format)
-      * options_.size.width() * options_.size.height();
-  if (data->data_size() != static_cast<int32>(expect_size)) {
-    LOG(ERROR) << "unexpected size: " << data->data_size()
-               << " expected: " << expect_size;
-    return false;
-  }
-  
   D3D11_SUBRESOURCE_DATA subres[6];
   for (int i = 0; i < 6; ++i) {
-    const ImageDataPtr& data = image->data(i);
+    const ImageLevelData* data = image->GetLevelData(i);
 
-    subres[i].pSysMem = data->data();
-    subres[i].SysMemPitch = options_.size.width()
-        * SizeofDataFormat(options_.format);
+    subres[i].pSysMem = data->dim_data(0);
+    subres[i].SysMemPitch = data->dim_data_size();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
-  return Init(subres, 6);
+  return Init(subres, 6, 1);
 }
 
 void D3DTextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
@@ -486,27 +471,18 @@ void D3DTexture2DArray::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
   desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
 } 
 
-bool D3DTexture2DArray::InitFromImage(const Image* image) {
+bool D3DTexture2DArray::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  const ImageDataPtr& data = image->data(0);
-  uint32 expect_size = SizeofDataFormat(options_.format)
-      * options_.size.width() * options_.size.height();
-  if (data->data_size() != static_cast<int32>(expect_size)) {
-    LOG(ERROR) << "unexpected size: " << data->data_size()
-               << " expected: " << expect_size;
-    return false;
-  }
-  
   D3D11_SUBRESOURCE_DATA subres[kTex2DArrayMaxDepth] = { 0 };
   CHECK_LT(image->depth(), kTex2DArrayMaxDepth);
   diminison_ = image->depth();
   for (int i = 0; i < image->depth(); ++i) {
-    const ImageDataPtr& data = image->data(i);
-    subres[i].pSysMem = data->data();
-    subres[i].SysMemPitch = data->width() * SizeofDataFormat(options_.format);
+    const ImageLevelData* data = image->GetLevelData(0);
+    subres[i].pSysMem = data->dim_data(i);
+    subres[i].SysMemPitch = data->dim_data_size();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
-  return Init(subres, image->depth());
+  return Init(subres, image->depth(), 1);
 }
 
 void D3DTexture2DArray::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {

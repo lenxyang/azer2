@@ -51,14 +51,14 @@ const char* GetDataFormatName(DataFormat format) {
     case kDepth24Stencil8: return "depth24stencil8";
     case kDXBC1n: return "DXBC1n";
     case kDXBC1nSRGB: return "DXBC1nSRGB";
+    case kDXBC4s: return "DXBC4s";
     case kDXBC4n: return "DXBC4n";
-    case kDXBC4nSRGB: return "DXBC4nSRGB";
     case kDXBC2n: return "DXBC2n";
     case kDXBC2nSRGB: return "DXBC2nSRGB";
     case kDXBC3n: return "DXBC3n";
     case kDXBC3nSRGB: return "DXBC3nSRGB";
+    case kDXBC5s: return "DXBC5s";
     case kDXBC5n: return "DXBC5n";
-    case kDXBC5nSRGB: return "DXBC5nSRGB";
     case kDXBC7n: return "DXBC7n";
     case kDXBC7nSRGB: return "DXBC7nSRGB";
       // case kRGBA: return sizeof(float) * 4;
@@ -97,18 +97,20 @@ uint32 SizeofDataFormat(DataFormat format) {
     case kRGBAf: return sizeof(float) * 4;
     case kDepth24Stencil8: return sizeof(uint32);
       // case kRGBA: return sizeof(float) * 4;
-    case kDXBC1n: return 4;
-    case kDXBC1nSRGB: return 4;
-    case kDXBC4n: return 4;
-    case kDXBC4nSRGB: return 4;
-    case kDXBC2n: return 8;
-    case kDXBC2nSRGB: return 8;
-    case kDXBC3n: return 8;
-    case kDXBC3nSRGB: return 8;
-    case kDXBC5n: return 8;
-    case kDXBC5nSRGB: return 8;
-    case kDXBC7n: return 8;
-    case kDXBC7nSRGB: return 8;
+    case kDXBC1n:
+    case kDXBC1nSRGB:
+    case kDXBC4n:
+    case kDXBC4s:
+      return 4;
+    case kDXBC2n:
+    case kDXBC2nSRGB:
+    case kDXBC3n:
+    case kDXBC3nSRGB:
+    case kDXBC5s:
+    case kDXBC5n:
+    case kDXBC7n:
+    case kDXBC7nSRGB:
+      return 8;
     default:
       NOTREACHED();
       return 0;

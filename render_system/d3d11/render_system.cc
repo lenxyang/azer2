@@ -151,12 +151,11 @@ GpuConstantsTablePtr D3DRenderSystem::CreateGpuConstantsTable(
 }
 
 TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
-                                          const Image* img) {
-  const ImageDataPtr& image = img->data(0);
+                                          const ImageData* img) {
   Texture::Options texopt = opt;
-  texopt.size = gfx::Size(image->width(), image->height());
-  texopt.format = image->format();
-  texopt.type = (TexType)img->type();
+  texopt.size = gfx::Size(img->width(), img->height());
+  texopt.format = (DataFormat)img->data_format();
+  texopt.type = (TexType)img->textype();
   scoped_refptr<D3DTexture> tex;
   if (texopt.type == kTex2D) {
     tex = new D3DTexture2D(texopt, this);
@@ -178,7 +177,7 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
 TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   if (opt.type == kTex2D) {
     scoped_refptr<D3DTexture2D> ptr(new D3DTexture2D(opt, this));
-    if (ptr->Init(NULL, 1)) {
+    if (ptr->Init(NULL, 1, opt.sampler.mip_level)) {
       return ptr;
     } else {
       return TexturePtr();

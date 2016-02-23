@@ -13,7 +13,7 @@
 namespace azer {
 
 class RenderSystem;
-class Image;
+class ImageData;
 
 struct AZER_EXPORT SamplerState {
   AddressMode wrap_u;
@@ -67,7 +67,7 @@ class AZER_EXPORT Texture : public Resource {
 
   virtual MapData map(MapType maptype) = 0;
   virtual void unmap() = 0;
-  virtual bool InitFromImage(const Image* image) = 0;
+  virtual bool InitFromImage(const ImageData* image) = 0;
 
   virtual bool CopyTo(Texture* texture) = 0;
   

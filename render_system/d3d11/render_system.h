@@ -50,7 +50,8 @@ class D3DRenderSystem : public RenderSystem {
 
   // texutre functions
   TexturePtr CreateTexture(const Texture::Options& opt) override;
-  TexturePtr CreateTexture(const Texture::Options& opt, const Image* image) override;
+  TexturePtr CreateTexture(const Texture::Options& opt,
+                           const ImageData* image) override;
   // RenderTarget* CreateRenderTarget(const Texture::Options& opt);
   // DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
 

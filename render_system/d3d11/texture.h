@@ -17,7 +17,7 @@ class D3DTexture: public Texture {
   D3DTexture(const Texture::Options& opt, D3DRenderSystem* rs);
 
   virtual ~D3DTexture();
-  virtual bool Init(const D3D11_SUBRESOURCE_DATA* data, int num);
+  virtual bool Init(const D3D11_SUBRESOURCE_DATA* data, int arraysize, int mipmap);
   void GenerateMips(int level) override;
   bool SetSamplerState(const SamplerState& sampler_state) override;
 
@@ -65,7 +65,7 @@ class D3DTexture2D : public D3DTexture {
       : D3DTexture(opt, rs) {
   }
 
-  bool InitFromImage(const Image* image) override;
+  bool InitFromImage(const ImageData* image) override;
  protected:
   void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
   void InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) override;
@@ -81,12 +81,12 @@ class D3DTexture2DShared : public D3DTexture2D {
   ~D3DTexture2DShared() override;
 
   // create a resource for other device using
-  bool Init(const D3D11_SUBRESOURCE_DATA* data, int num) override;
+  bool Init(const D3D11_SUBRESOURCE_DATA* data, int arraysize, int mipmap) override;
   ID3D11Resource* GetSharedResource();
   HANDLE GetSharedHanle();
  protected:
   void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
-  bool InitFromImage(const Image* image) override { return false;}
+  bool InitFromImage(const ImageData* image) override { return false;}
 
   bool InitSharedResource();
   HANDLE shared_handle_;
@@ -104,14 +104,14 @@ class D3DTexture2DExtern : public D3DTexture2D {
  private:
   void Attach(ID3D11Texture2D* tex);
   void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
-  bool InitFromImage(const Image* image) override { return false;}
+  bool InitFromImage(const ImageData* image) override { return false;}
   DISALLOW_COPY_AND_ASSIGN(D3DTexture2DExtern);
 };
 
 class D3DTextureCubeMap : public D3DTexture {
  public:
   D3DTextureCubeMap(const Texture::Options& opt, D3DRenderSystem* rs);
-  bool InitFromImage(const Image* image) override;
+  bool InitFromImage(const ImageData* image) override;
   bool InitTexture();
  protected:
   void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;
@@ -122,7 +122,7 @@ class D3DTextureCubeMap : public D3DTexture {
 class D3DTexture2DArray : public D3DTexture {
  public:
   D3DTexture2DArray(const Texture::Options& opt, D3DRenderSystem* rs);
-  bool InitFromImage(const Image* image) override;
+  bool InitFromImage(const ImageData* image) override;
   bool InitTexture();
  protected:
   void ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) override;

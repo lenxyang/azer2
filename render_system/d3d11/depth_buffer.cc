@@ -169,7 +169,7 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
   DCHECK(texture_.get() == NULL);
   D3DTexture2D* tex = new D3DTexture2D(options_, rs);
   texture_ = tex;
-  if (!tex->Init(NULL, 1)) {
+  if (!tex->Init(NULL, 1, 1)) {
     return false;
   }
 

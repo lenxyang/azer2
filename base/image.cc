@@ -7,9 +7,7 @@
 namespace azer {
 
 uint32 ImageLevelData::pixel_size(int32 format) {
-  switch (format) {
-  }
-  return 0;
+  return SizeofDataFormat((DataFormat)format);
 }
 
 ImageLevelData::ImageLevelData(int32 width, int32 height, int32 depth, 
@@ -30,6 +28,14 @@ bool ImageLevelData::valid_params() {
   return true;
 }
 
+int32 ImageLevelData::dim_data_size() const {
+  return row_bytes() * height();
+}
+
+const uint8* ImageLevelData::dim_data(int32 depth) const {
+  return data() + depth * dim_data_size();
+}
+
 // class ImageData
 void ImageData::AppendData(ImageLevelData* data) {
   levels_.push_back(data);
@@ -47,4 +53,7 @@ int32 ImageData::depth() const {
   return levels_[0]->depth();
 }
 
+int32 ImageData::data_format() const {
+  return levels_[0]->data_format();
+}
 }  // namespace azer

@@ -25,7 +25,7 @@ class Canvas2D;
 class Context2D;
 class GpuComputeTaskDispatcher;
 class GpuConstantsTable;
-class Image;
+class ImageData;
 class Overlay;
 class RenderTarget;
 class Technique;
@@ -73,7 +73,8 @@ class AZER_EXPORT RenderSystem {
 
   // textures functions
   virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;
-  virtual TexturePtr CreateTexture(const Texture::Options& opt, const Image* image) = 0;
+  virtual TexturePtr CreateTexture(const Texture::Options& opt,
+                                   const ImageData* image) = 0;
 
   // create Shader
   // Vertex Gpu Program need to help check "Vertex Layout"
