@@ -6,6 +6,7 @@
 #include "base/strings/utf_string_conversions.h"
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
+#include "azer/effect/color_effect.h"
 #include "azer/effect/diffusemap_effect.h"
 #include "azer/effect/texture_effect.h"
 #include "azer/effect/diffusemap_effect_adapter.h"
@@ -45,7 +46,9 @@ struct EffectData {
 };
 
 EffectData effect_data[] = {
-  {"DiffuseMapEffect", DiffuseMapEffect::kEffectName, 0, 
+  {"ColorEffect", ColorEffect::kEffectName, 0, 
+   HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_DIFFUSEMAP_PS},
+  {"ColorEffect", ColorEffect::kEffectName, 0, 
    HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_DIFFUSEMAP_PS},
   {"NormalLineEffect", NormalLineEffect::kEffectName, 0, 
    HLSL_NORMALLINE_VS, 0, 0, HLSL_NORMALLINE_GS, HLSL_NORMALLINE_PS},

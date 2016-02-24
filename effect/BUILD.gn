@@ -31,6 +31,8 @@ source_set("effect") {
 
 static_library("effectlib") {
   sources = [
+    "color_effect.cc",
+    "color_effect.h",
     "diffusemap_effect.cc",
     "diffusemap_effect.h",
     "diffusemap_effect_adapter.cc",

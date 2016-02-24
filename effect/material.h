@@ -6,10 +6,14 @@
 
 namespace azer {
 struct ColorMaterialData {
-  Vector4 diffusemap;
-  float ambient_scalar;
-  float specular_scalar;
-  float alpha;
+  Vector4  diffuse;
+  Vector4  ambient;
+  Vector4  specular;
+  Vector4  emission;
+  float    specular_power;
+  float    alpha;
+  float    padding1;
+  float    padding2;
 };
 
 struct DiffuseMapMaterialData {

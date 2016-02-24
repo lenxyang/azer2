@@ -9,6 +9,8 @@
   </outputs>
   <release seq="1">
     <includes first_id="1000">
+      <include type="txt" name="HLSL_COLOR_PS" file="hlsl/color.ps.hlsl" />
+      <include type="txt" name="HLSL_COLOR_VS" file="hlsl/color.vs.hlsl" />
       <include type="txt" name="HLSL_DIFFUSEMAP_PS" file="hlsl/diffusemap.ps.hlsl" />
       <include type="txt" name="HLSL_DIFFUSEMAP_VS" file="hlsl/diffusemap.vs.hlsl" />
       <include type="txt" name="HLSL_DIFFUSEMAP_INSTVS" file="hlsl/inst_diffusemap.vs.hlsl" />

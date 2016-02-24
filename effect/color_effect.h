@@ -6,11 +6,11 @@
 #include "azer/effect/material.h"
 
 namespace azer {
-class TextureEffect : public Effect {
+class ColorEffect : public Effect {
  public:
   static const char kEffectName[];
-  TextureEffect();
-  ~TextureEffect();
+  ColorEffect();
+  ~ColorEffect();
 
   const char* GetEffectName() const override;
 #pragma pack(push, 4)
@@ -21,10 +21,8 @@ class TextureEffect : public Effect {
   };
 
   struct ps_cbuffer {
-    float ambient_scalar;
-    float specular_scalar;
-    float alpha;
-    int   light_count;
+    ColorMaterialData mtrl;
+    int    light_count;
     UniverseLight lights[4];
   };
 #pragma pack(pop)
@@ -34,8 +32,8 @@ class TextureEffect : public Effect {
   void SetCameraPos(const Vector4& pos);
   void SetLights(const LightPtr* value, int32 count);
   void SetLightData(const UniverseLight* value, int32 count);
-  void SetMaterial(const TextureMaterialData& mtrl);
-  static Effect* CreateObject() { return new TextureEffect;}
+  void SetMaterial(const ColorMaterialData& mtrl);
+  static Effect* CreateObject() { return new ColorEffect;}
  protected:
   void UseTexture(Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
@@ -47,9 +45,9 @@ class TextureEffect : public Effect {
   int32 light_count_;
   static const int32 kMaxLightCount = 8;
   UniverseLight lights_[kMaxLightCount];
-  TextureMaterialData mtrl_;
-  DECLARE_EFFECT_DYNCREATE(TextureEffect);
-  DISALLOW_COPY_AND_ASSIGN(TextureEffect);
+  ColorMaterialData mtrl_;
+  DECLARE_EFFECT_DYNCREATE(ColorEffect);
+  DISALLOW_COPY_AND_ASSIGN(ColorEffect);
 };
 
 
