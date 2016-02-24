@@ -35,6 +35,8 @@ static_library("effectlib") {
     "diffusemap_effect.h",
     "diffusemap_effect_adapter.cc",
     "diffusemap_effect_adapter.h",
+    "texture_effect.cc",
+    "texture_effect.h",
     "effectlib.cc",
     "effectlib.h",
     "material.cc",

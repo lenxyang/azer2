@@ -58,6 +58,11 @@ bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) 
   return (mutable_data()->diffusemap != NULL);
 }
 
+TextureMaterialData::TextureMaterialData()
+    : ambient_scalar(0.1f),
+      specular_scalar(1.0f), 
+      alpha(1.0f) {
+}
 const char TextureMaterial::kEffectProviderName[] = "azer::TextureMaterial";
 TextureMaterial::TextureMaterial() {}
 TextureMaterial::~TextureMaterial() {}

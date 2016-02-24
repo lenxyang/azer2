@@ -27,9 +27,11 @@ struct TextureMaterialData {
   TexturePtr emissionmap;
   TexturePtr alphamap;
   TexturePtr normalmap;
-  float      alpha;
-  float      spepower;
-  float      ambecoff;
+  float ambient_scalar;
+  float specular_scalar;
+  float alpha;
+
+  TextureMaterialData();
 };
 
 class DiffuseMapMaterial : public BaseMaterial {
@@ -55,6 +57,7 @@ class TextureMaterial : public BaseMaterial {
   TextureMaterial();
   ~TextureMaterial() override;
 
+  void SetData(const TextureMaterialData& data) { data_ = data;}
   TextureMaterialData* mutable_data() { return &data_;}
   const TextureMaterialData& data() const { return data_;}
   bool Init(const ConfigNode* node, ResourceLoadContext* ctx) override;
