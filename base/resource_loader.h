@@ -54,7 +54,9 @@ class AZER_EXPORT ResourceLoader {
 
 AZER_EXPORT VariantResource LoadReferResource(const ConfigNode* node,
                                               ResourceLoadContext* ctx);
-AZER_EXPORT VariantResource LoadResource(const azer::ResPath& path, int type,
+AZER_EXPORT VariantResource LoadResource(const ResPath& path, int type,
+                                         ResourceLoadContext* ctx);
+AZER_EXPORT VariantResource LoadResource(const ResPath& path, int type,
                                          ResourceLoader* loader);
 AZER_EXPORT ConfigNode* GetTypedReferNode(const std::string& type_name,
                                           const ConfigNode* parent);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "azer/effect/light.h"
-#include "azer/resource/resource_loader.h"
+#include "azer/base/resource_loader.h"
 
 namespace azer {
 class VertexDescLoader : public ResourceSpecialLoader {

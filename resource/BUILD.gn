@@ -24,8 +24,6 @@ static_library("resource") {
     "material_loader.h",
     "mesh_loader.cc",
     "mesh_loader.cc",
-    "resource_loader.cc",
-    "resource_loader.h",
     "resource_util.cc",
     "resource_util.h",
     "scene_loader.cc",

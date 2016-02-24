@@ -2,6 +2,7 @@
 
 #include "base/logging.h"
 #include "azer/effect/diffusemap_effect.h"
+#include "azer/render/camera.h"
 #include "azer/scene/scene_node.h"
 #include "azer/scene/render_node.h"
 

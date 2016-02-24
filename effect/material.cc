@@ -4,8 +4,8 @@
 #include "base/files/file_path.h"
 #include "azer/base/config_node.h"
 #include "azer/base/image.h"
+#include "azer/base/resource_loader.h"
 #include "azer/util/images/image.h"
-#include "azer/resource/resource_loader.h"
 #include "azer/render/blending.h"
 #include "azer/render/render_system.h"
 

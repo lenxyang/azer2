@@ -4,7 +4,7 @@
 #include "azer/base/file_system.h"
 #include "azer/effect/light.h"
 #include "azer/scene/scene_node.h"
-#include "azer/resource/resource_loader.h"
+#include "azer/base/resource_loader.h"
 
 // xml
 // <scene name="scene_name">
@@ -51,7 +51,7 @@ class SceneNodeLoader {
 };
 
 // must be stateless class
-class AZER_EXPORT SceneLoader : public ResourceSpecialLoader {
+class SceneLoader : public ResourceSpecialLoader {
  public:
   static const char kSpecialLoaderName[];
   SceneLoader();

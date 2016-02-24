@@ -1,6 +1,7 @@
 #include "azer/resource/material_loader.h"
 
 #include "base/strings/utf_string_conversions.h"
+#include "azer/base/config_node.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/material.h"
 #include "azer/render/blending.h"

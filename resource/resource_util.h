@@ -12,8 +12,6 @@ EffectPtr LoadReferEffect(const ConfigNode* node, ResourceLoadContext* ctx);
 LightPtr LoadReferLight(const ConfigNode* node, ResourceLoadContext* ctx);
 MeshPtr LoadReferMesh(const ConfigNode* node, ResourceLoadContext* ctx);
 BaseMaterialPtr LoadReferMaterial(const ConfigNode* node, ResourceLoadContext* ctx);
-VariantResource LoadReferResource(const ConfigNode* node, ResourceLoadContext* ctx);
-
 VertexDescPtr LoadVertexDesc(const ResPath& path, ResourceLoadContext* ctx);
 EffectPtr LoadEffect(const ResPath& path, ResourceLoadContext* ctx);
 

@@ -2,7 +2,7 @@
 
 #include "azer/base/export.h"
 #include "azer/effect/light.h"
-#include "azer/resource/resource_loader.h"
+#include "azer/base/resource_loader.h"
 
 namespace azer {
 class MeshLoader : public ResourceSpecialLoader {
