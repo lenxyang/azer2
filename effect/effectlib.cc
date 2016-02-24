@@ -17,11 +17,18 @@
 
 namespace azer {
 namespace {
-const VertexDesc::Desc kVertexDesc[1][10] = {
+const VertexDesc::Desc kVertexDesc[][10] = {
   {
     {"POSITION", 0, kVec3},
     {"NORMAL", 0, kVec3},
     {"TEXCOORD", 0, kVec2},
+    {NULL, 0, kVec3}
+  },
+  {
+    {"POSITION", 0, kVec3},
+    {"NORMAL", 0, kVec3},
+    {"TEXCOORD", 0, kVec2},
+    {"TANGENT", 0, kVec3},
     {NULL, 0, kVec3}
   },
 };
@@ -42,7 +49,7 @@ EffectData effect_data[] = {
    HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_DIFFUSEMAP_PS},
   {"NormalLineEffect", NormalLineEffect::kEffectName, 0, 
    HLSL_NORMALLINE_VS, 0, 0, HLSL_NORMALLINE_GS, HLSL_NORMALLINE_PS},
-  {"TextureEffect0", TextureEffect::kEffectName, 0, 
+  {"TextureEffect0", TextureEffect::kEffectName, 1, 
    HLSL_TEXTURE0_VS, 0, 0, 0, HLSL_TEXTURE0_PS},
 };
 }  // namespace effect

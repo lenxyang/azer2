@@ -11,9 +11,9 @@ struct VsOutput {
 
 
 cbuffer c_buffer {
+   float      ambient_scalar;
+   float      specular_scalar;
    float      alpha;
-   float      spepower;
-   float      ambecoff;
    int        light_count;
    Light      lights[4];
 };
@@ -25,13 +25,13 @@ Texture2D normalmap:   register(t4);
 SamplerState texsampler;
 
 float4 ps_main(VsOutput o):SV_TARGET {
-  float4 texcolor = diffuse_map.Sample(texsampler, o.texcoord);
-  float4 specolor = specular_map.Sample(texsampler, o.texcoord);
-  float4 emicolor = emission_map.Sample(texsampler, o.texcoord);
+  float4 texcolor = diffusemap.Sample(texsampler, o.texcoord);
+  float4 specolor = specularmap.Sample(texsampler, o.texcoord);
+  float4 emicolor = emissionmap.Sample(texsampler, o.texcoord);
   float3 normal = o.normal;
   Material mtrl;
-  mtrl.ambient  = texcolor * 0.1;
-  mtrl.diffuse  = texcolor;
+  mtrl.ambient  = texcolor * ambient_scalar;
+  mtrl.diffuse  = texcolor * specular_scalar;
   mtrl.specular = specolor;
   mtrl.emission = emicolor;
   mtrl.power    = 4;
