@@ -23,9 +23,13 @@ struct DiffuseMapMaterialData {
 
 struct TextureMaterialData {
   TexturePtr diffusemap;
+  TexturePtr specularmap;
   TexturePtr emissionmap;
   TexturePtr alphamap;
   TexturePtr normalmap;
+  float      alpha;
+  float      spepower;
+  float      ambecoff;
 };
 
 class DiffuseMapMaterial : public BaseMaterial {
@@ -43,4 +47,21 @@ class DiffuseMapMaterial : public BaseMaterial {
   DiffuseMapMaterialData data_;
   DISALLOW_COPY_AND_ASSIGN(DiffuseMapMaterial);
 };
+
+class TextureMaterial : public BaseMaterial {
+ public:
+  static const char kEffectProviderName[];
+  const char* GetProviderName() const override { return kEffectProviderName;}
+  TextureMaterial();
+  ~TextureMaterial() override;
+
+  TextureMaterialData* mutable_data() { return &data_;}
+  const TextureMaterialData& data() const { return data_;}
+  bool Init(const ConfigNode* node, ResourceLoadContext* ctx) override;
+  static EffectParamsProvider* CreateObject() { return new TextureMaterial;}
+ private:
+  TextureMaterialData data_;
+  DISALLOW_COPY_AND_ASSIGN(TextureMaterial);
+};
+
 }  // namespace azer

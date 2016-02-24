@@ -57,4 +57,11 @@ bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) 
   mutable_data()->diffusemap = LoadTexture(texpath, ctx->file_system);
   return (mutable_data()->diffusemap != NULL);
 }
+
+const char TextureMaterial::kEffectProviderName[] = "azer::TextureMaterial";
+TextureMaterial::TextureMaterial() {}
+TextureMaterial::~TextureMaterial() {}
+bool TextureMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) {
+  return false;
+}
 }  // namespace azer
