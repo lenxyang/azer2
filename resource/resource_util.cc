@@ -14,20 +14,6 @@
 #include "azer/resource/vertex_desc_loader.h"
 
 namespace azer {
-bool Repath(const ResPath& path, ResPath* apath, ResourceLoadContext* ctx) {
-  CHECK(!path.empty());
-  CHECK(!ctx->path.empty());
-  if (path.IsAbsolutePath()) {
-    *apath = path;
-  } else if (!path.component().empty() && path.filepath().empty()) {
-    *apath = ResPath(ctx->path.filepath().as_string());
-    CHECK(apath->Append(ResPath(path.component().as_string())));
-  } else {
-    *apath = ResPath(ctx->path.filepath().as_string());
-    CHECK(apath->Append(ResPath(path.fullpath())));
-  }
-  return !apath->empty();
-}
 
 void InitDefaultLoader(ResourceLoader* loader) {
   loader->RegisterSpecialLoader(new EffectLoader);
@@ -93,74 +79,5 @@ VertexDescPtr LoadVertexDesc(const ResPath& path, ResourceLoadContext* ctx) {
 EffectPtr LoadEffect(const ResPath& path, ResourceLoadContext* ctx) {
   VariantResource res = LoadResource(path, kResTypeEffect, ctx);
   return res.effect;
-}
-
-VariantResource LoadResource(const azer::ResPath& path, int type,
-                             ResourceLoader* loader) {
-  CHECK(path.IsAbsolutePath());
-  ResourceLoadContext ctx;
-  ctx.path = path;
-  ctx.loader = loader;
-  ctx.file_system = loader->file_system();
-  return LoadResource(path, type, &ctx);
-}
-
-VariantResource LoadResource(const ResPath& path, int type, ResourceLoadContext* ctx) {
-  CHECK(!path.empty());
-  ResPath npath;
-  CHECK(Repath(path, &npath, ctx));
-  VariantResource ret = ctx->loader->Load(npath);
-  if (ret.retcode != 0) {
-    LOG(ERROR) << "Load Effect failed for path: " << npath.fullpath();
-    return VariantResource();
-  }
-  if (ret.type != type) {
-    LOG(ERROR) << "Not Effect for path: " << npath.fullpath();
-    return VariantResource();
-  }
-
-  return ret;
-}
-
-int32 GetTypeFromString(const std::string& str) {
-  if (str == "mesh") {
-    return kResTypeMesh;
-  } else if (str == "material") {
-    return kResTypeMaterial;
-  } else if (str == "effect") {
-    return kResTypeEffect;
-  } else if (str == "light") {
-    return kResTypeLight;
-  } else if (str == "scene") {
-    return kResTypeScene;
-  } else if (str == "vertex_desc") {
-    return kResTypeVertexDesc;
-  } else {
-    NOTREACHED() << "unknown type: " << str;
-    return kResTypeNone;
-  }
-}
-
-VariantResource LoadReferResource(const ConfigNode* node, ResourceLoadContext* ctx) {
-  if (!node) {
-    return VariantResource();
-  }
-  DCHECK(node->tagname() == "refer");
-  ResPath path(::base::UTF8ToUTF16(node->GetAttr("path")));
-  CHECK(!path.empty());
-  int type = GetTypeFromString(node->GetAttr("type"));
-  return LoadResource(path, type, ctx);
-}
-
-ConfigNode* GetTypedReferNode(const std::string& type_name,
-                              const ConfigNode* parent) {
-  ConfigNodes nodes = parent->GetTaggedChildren("refer");
-  for (auto iter = nodes.begin(); iter != nodes.end(); ++iter) {
-    if ((*iter)->GetAttr("type") == type_name) {
-      return (*iter).get();
-    }
-  }
-
-  return NULL;
 }
 }  // namespace azer

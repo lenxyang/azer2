@@ -12,7 +12,7 @@ source_set("mesh_load_util") {
   ]
 }
 
-source_set("resource") {
+static_library("resource") {
   sources = [
     "effect_loader.cc",
     "effect_loader.h",

@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "azer/base/export.h"
-#include "azer/base/resource.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/shader.h"
 
@@ -24,10 +23,10 @@ typedef scoped_refptr<Technique> TechniquePtr;
  * afxcompile 程序生成的
  * 子类会生成如何初始化 shader 及 如何与常量表交互的代码
  */
-class AZER_EXPORT Effect : public Resource {
+class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
  public:
   Effect();
-  ~Effect() override;
+  virtual ~Effect();
 
   virtual const char* GetEffectName() const = 0;
   virtual bool Init(const TechSource& programs);

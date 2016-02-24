@@ -4,9 +4,9 @@
 
 #include "ui/gfx/geometry/size.h"
 #include "base/files/file_path.h"
+#include "base/memory/ref_counted.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"
-#include "azer/base/resource.h"
 #include "azer/base/string.h"
 #include "azer/render/common.h"
 
@@ -32,7 +32,7 @@ struct AZER_EXPORT SamplerState {
   SamplerState();
 };
 
-class AZER_EXPORT Texture : public Resource {
+class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
  public:
   struct AZER_EXPORT Options {
     gfx::Size size;

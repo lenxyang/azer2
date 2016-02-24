@@ -33,10 +33,7 @@ Texture::Options::Options()
       genmipmap(false) {
 }
 
-Texture::Texture(const Options& opt) 
-    : Resource(kTexture),
-      options_(opt) {
-}
+Texture::Texture(const Options& opt) : options_(opt) {}
 
 bool Texture::Save(const ::base::FilePath& path) {
   SkBitmap bitmap;

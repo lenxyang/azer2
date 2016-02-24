@@ -1,11 +1,10 @@
 #pragma once
 
-#include "azer/base/export.h"
 #include "azer/effect/light.h"
 #include "azer/resource/resource_loader.h"
 
 namespace azer {
-class AZER_EXPORT VertexDescLoader : public ResourceSpecialLoader {
+class VertexDescLoader : public ResourceSpecialLoader {
  public:
   static const char kSpecialLoaderName[];
   VertexDescLoader();

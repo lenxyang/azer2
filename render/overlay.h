@@ -13,7 +13,7 @@
 namespace azer {
 class Renderer;
 
-class AZER_EXPORT Overlay : public ::base::RefCounted<Resource> {
+class AZER_EXPORT Overlay : public ::base::RefCounted<Overlay> {
  public:
   /**
    * overlay 的坐标与 3D 坐标系一致

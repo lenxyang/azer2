@@ -45,10 +45,10 @@ public:
   const RepositoryNode* parent() const { return parent_;}
 
   // get resource
-  bool AddLocalResource(const StringType& name, ResourcePtr& resource);
-  bool AddResource(const ResPath& path, ResourcePtr& resource);
-  ResourcePtr GetLocalResource(const StringType& path);
-  ResourcePtr GetResource(const ResPath& path);
+  bool AddLocalResource(const StringType& name, VariantResource resource);
+  bool AddResource(const ResPath& path, VariantResource resource);
+  VariantResource GetLocalResource(const StringType& path);
+  VariantResource GetResource(const ResPath& path);
   RepositoryNodePtr GetResourceParent(const ResPath& path);
 
   // get nodes
@@ -69,7 +69,7 @@ private:
   RepositoryNode* parent_;
   void* user_data_;
   RepositoryNodeDicts children_;
-  std::map<StringType, ResourcePtr> resource_dict_;
+  std::map<StringType, VariantResource> resource_dict_;
   DISALLOW_COPY_AND_ASSIGN(RepositoryNode);
 };
 

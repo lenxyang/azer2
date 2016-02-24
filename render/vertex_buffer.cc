@@ -9,15 +9,13 @@
 namespace azer {
 
 VertexDesc::VertexDesc(const Desc* desc, int desc_num)
-    : Resource(kVertexDesc),
-      vertex_size_(0),
+    : vertex_size_(0),
       slot_count_(0) {
   init(desc, desc_num);
 }
 
 VertexDesc::VertexDesc(const Desc* desc) 
-    : Resource(kVertexDesc),
-      vertex_size_(0),
+    : vertex_size_(0),
       slot_count_(0) {
   int desc_num = 0;
   const Desc* cur = desc;
@@ -148,9 +146,8 @@ VertexDescPtr VertexDesc::gen_slot_desc(int32 sindex) const {
 
 // class SlotVertexData
 SlotVertexData::SlotVertexData(VertexDesc* desc, int vertex_count)
-    : Resource(kVertexData)
-    , desc_(desc)
-    , vertex_count_(vertex_count) {
+    : desc_(desc),
+      vertex_count_(vertex_count) {
   DCHECK(desc->slot_count() == 1);
   int capability = vertex_count_ * stride();
   data_.reset(new uint8[capability]);

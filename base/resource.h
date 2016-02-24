@@ -7,38 +7,37 @@
 #include "base/memory/ref_counted.h"
 #include "base/values.h"
 #include "azer/base/export.h"
+#include "azer/effect/base_material.h"
+#include "azer/effect/effect.h"
+#include "azer/effect/light.h"
+#include "azer/render/blending.h"
+#include "azer/render/vertex_buffer.h"
+#include "azer/scene/scene_node.h"
+#include "azer/render/mesh.h"
 
 namespace azer {
-
-class RenderSystem;
-
-/**
- * all resource can be load from resource manger should 
- * from this class
- */
-class AZER_EXPORT Resource : public ::base::RefCounted<Resource> {
- public:
-  enum Type {
-    kTexture,
-    kEffect,
-    kScript,
-    kScene,
-    kVertexDesc,
-    kVertexData,
-    kIndicesData,
-    kRenderableObject,
-    kConfig,
-    kData,
-  };
-
-  Resource(Type type) : type_(type) {}
-  virtual ~Resource() {}
-
-  Type type() const { return type_;}
- private:
-  const Type type_;
-  DISALLOW_COPY_AND_ASSIGN(Resource);
+enum {
+  kResTypeNone,
+  kResTypeMesh,
+  kResTypeMaterial,
+  kResTypeEffect,
+  kResTypeLight,
+  kResTypeScene,
+  kResTypeVertexDesc,
 };
 
-typedef scoped_refptr<Resource> ResourcePtr;
+struct AZER_EXPORT VariantResource {
+  MeshPtr mesh;
+  EffectPtr effect;
+  VertexDescPtr vertex_desc;
+  BaseMaterialPtr material;
+  LightPtr light;
+  SceneNodePtr scene;
+  int32 type;
+  int32 retcode;
+
+  VariantResource();
+};
+
+AZER_EXPORT int32 GetTypeFromString(const std::string& str);
 }  // namespace azer

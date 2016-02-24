@@ -5,8 +5,6 @@
 
 #include "base/memory/ref_counted.h"
 #include "base/strings/string16.h"
-
-#include "azer/base/resource.h"
 #include "azer/base/res_path.h"
 #include "azer/math/math.h"
 #include "azer/util/xml/xml.h"
@@ -16,7 +14,7 @@ class ConfigNode;
 typedef scoped_refptr<ConfigNode> ConfigNodePtr;
 typedef std::vector<ConfigNodePtr> ConfigNodes;
 
-class AZER_EXPORT ConfigNode : public Resource {
+class AZER_EXPORT ConfigNode : public ::base::RefCounted<ConfigNode> {
  public:
   typedef std::pair<std::string, std::string> Attribute;
   typedef std::vector<Attribute> Attributes;

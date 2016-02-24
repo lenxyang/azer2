@@ -132,17 +132,17 @@ bool RepositoryNode::HasAncestor(RepositoryNode* node) const {
 }
 
 
-bool RepositoryNode::AddLocalResource(const StringType& name, ResourcePtr& resource) {
+bool RepositoryNode::AddLocalResource(const StringType& name, VariantResource res) {
   auto iter = resource_dict_.find(name);
   if (iter != resource_dict_.end()) {
     return false;
   }
 
-  resource_dict_.insert(std::make_pair(name, resource));
+  resource_dict_.insert(std::make_pair(name, res));
   return true;
 }
 
-bool RepositoryNode::AddResource(const ResPath& path, ResourcePtr& resource) {
+bool RepositoryNode::AddResource(const ResPath& path, VariantResource res) {
   RepositoryNodePtr node = GetNode(ResPath(path.filepath().as_string()));
   if (node.get()) {
     if (path.IsAbsolutePath()) {
@@ -154,26 +154,26 @@ bool RepositoryNode::AddResource(const ResPath& path, ResourcePtr& resource) {
     DCHECK(node.get());
   }
 
-  node->AddLocalResource(path.component().as_string(), resource);
+  node->AddLocalResource(path.component().as_string(), res);
   return true;
 }
 
-ResourcePtr RepositoryNode::GetLocalResource(const StringType& path) {
+VariantResource RepositoryNode::GetLocalResource(const StringType& path) {
   auto iter = resource_dict_.find(path);
   if (iter != resource_dict_.end()) {
     return iter->second;
   } else {
-    return ResourcePtr();
+    return VariantResource();
   }
 }
 
-ResourcePtr RepositoryNode::GetResource(const ResPath& path) {
+VariantResource RepositoryNode::GetResource(const ResPath& path) {
   DCHECK_NE(path.type(), ResPath::kInvalidPath);
   RepositoryNodePtr node = GetNode(ResPath(path.filepath().as_string()));
   if (node.get()) {
     return node->GetLocalResource(path.component().as_string());
   } else {
-    return ResourcePtr();
+    return VariantResource();
   }
 }
 

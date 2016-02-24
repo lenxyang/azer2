@@ -4,7 +4,6 @@
 
 #include "base/basictypes.h"
 #include "azer/base/export.h"
-#include "azer/base/resource.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/hardware_buffer.h"
 
@@ -20,13 +19,13 @@ enum IndexType {
   kIndexUint16,
   kIndexUint32,
 };
-class AZER_EXPORT IndicesData : public Resource {
+class AZER_EXPORT IndicesData : public ::base::RefCounted<IndicesData> {
  public:
   static IndexType CalcFixType(int num);
 
   explicit IndicesData(int num);
   IndicesData(int num, IndexType type);
-  ~IndicesData() override {}
+  virtual ~IndicesData() {}
 
   int32 size() const { return size_;}
   const uint8* pointer() const;

@@ -9,8 +9,7 @@
 
 
 namespace azer {
-Effect::Effect()
-    : Resource(kEffect) {
+Effect::Effect() {
   gpu_table_.resize(kRenderPipelineStageNum);
 }
 

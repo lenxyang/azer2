@@ -5,14 +5,15 @@
 #include <vector>
 
 #include "base/basictypes.h"
+#include "base/memory/scoped_ptr.h"
 #include "azer/base/export.h"
-#include "azer/base/resource.h"
 #include "azer/render/common.h"
 #include "azer/render/hardware_buffer.h"
 
 namespace azer {
 
 class Renderer;
+class RenderSystem;
 class SlotVertexData;
 class VertexData;
 class VertexDesc;
@@ -26,7 +27,7 @@ typedef scoped_refptr<VertexBuffer> VertexBufferPtr;
 typedef scoped_refptr<VertexBufferGroup> VertexBufferGroupPtr;
 typedef scoped_refptr<VertexLayout> VertexLayoutPtr;
 
-class AZER_EXPORT VertexDesc : public Resource {
+class AZER_EXPORT VertexDesc : public ::base::RefCounted<VertexDesc> {
  public:
   /**
    * 对定点结构的定义
@@ -69,11 +70,6 @@ class AZER_EXPORT VertexDesc : public Resource {
  private:
   void init(const Desc* desc, int desc_count);
 
-  /**
-   * 此函数用于根据 strip 跟新 VertexDesc
-   * 当用户调用 Map 时，GPU 的数据与 CPU 的数据，内存很有可能是
-   * 不匹配的，此函数将根据 GPU 返回的长度重新计算 Desc
-   */
   void ReCalc(int strip);
   scoped_ptr<Desc[]> desc_;
   int32 vertex_size_;
@@ -88,7 +84,7 @@ class AZER_EXPORT VertexDesc : public Resource {
   DISALLOW_COPY_AND_ASSIGN(VertexDesc);
 };
 
-class AZER_EXPORT SlotVertexData : public Resource {
+class AZER_EXPORT SlotVertexData : public ::base::RefCounted<SlotVertexData> {
  public:
   SlotVertexData(VertexDesc* desc, int32 vertex_count);
 

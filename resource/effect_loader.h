@@ -1,6 +1,5 @@
 #pragma once
 
-#include "azer/base/export.h"
 #include "azer/effect/light.h"
 #include "azer/resource/scene_loader.h"
 

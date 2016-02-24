@@ -53,10 +53,7 @@ ConfigNodePtr ConfigNode::InitFromXMLStr(const std::string& xml_text) {
   return ConfigNode::InitFromXML(root);
 }
 
-ConfigNode::ConfigNode()
-    : Resource(kConfig),
-      parent_(NULL) {
-}
+ConfigNode::ConfigNode() : parent_(NULL) {}
 
 ConfigNode* ConfigNode::root() {
   return const_cast<ConfigNode*>(const_cast<const ConfigNode*>(this)->root());

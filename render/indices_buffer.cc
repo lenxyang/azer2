@@ -22,16 +22,14 @@ IndexType IndicesData::CalcFixType(int num) {
 }
 
 IndicesData::IndicesData(int num)
-    : Resource(kIndicesData)
-    , type_(CalcFixType(num)), size_(0) {
+    : type_(CalcFixType(num)), size_(0) {
   size_ = num * unit_size();
   num_ = num;
   data_.reset(new uint8[size_]);
 }
 
 IndicesData::IndicesData(int num, IndexType type)
-    : Resource(kIndicesData)
-    , type_(type), size_(0) {
+    : type_(type), size_(0) {
   size_ = num * unit_size();
   num_ = num;
   data_.reset(new uint8[size_]);

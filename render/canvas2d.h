@@ -16,7 +16,7 @@ namespace azer {
 class Context2D;
 class Device2D;
 
-class AZER_EXPORT Canvas2D : public ::base::RefCounted<Resource> {
+class AZER_EXPORT Canvas2D : public ::base::RefCounted<Canvas2D> {
  public:
   virtual ~Canvas2D();
 
