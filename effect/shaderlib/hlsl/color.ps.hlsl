@@ -9,25 +9,25 @@ struct VsOutput {
 };
 
 cbuffer c_buffer {
-   float4     color;
-   float      ambient_scalar;
-   float      specular_scalar;
+   float4     diffuse;
+   float4     ambient;
+   float4     specular;
+   float4     emission;
+   float      specular_power;
    float      alpha;
+   float2     padding;
    int        light_count;
    Light      lights[4];
 };
 
-Texture2D diffuse_map: register(t0);
-SamplerState texsampler;
-
 float4 ps_main(VsOutput o):SV_TARGET {
   float3 normal = o.normal;
   Material mtrl;
-  mtrl.ambient  = (ambient_scalar) * color;
-  mtrl.specular = specular_scalar * color;
-  mtrl.diffuse  = color;
-  mtrl.emission = float4(0.0f, 0.0f, 0.0f, 0.0f);
-  mtrl.power    = 4;
+  mtrl.ambient  = ambient;
+  mtrl.specular = specular;
+  mtrl.diffuse  = diffuse;
+  mtrl.emission = emission;
+  mtrl.power    = specular_power;
   mtrl.alpha    = alpha;
   float3 color = float3(0, 0, 0);
   for (int i = 0; i < light_count; ++i) {
