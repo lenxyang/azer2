@@ -119,7 +119,7 @@ void Entity::DrawIndex(Renderer* renderer) {
   renderer->BindIndicesBuffer(ib_.get());
   renderer->SetPrimitiveTopology(primitive_type());
   int32 count = (index_count_ > 0) ? index_count_ : ib_->indices_count();
-  renderer->DrawIndex(count, vertex_base_, index_base_);
+  renderer->DrawIndex(count, index_base_, vertex_base_);
 }
 
 // class EntityVec

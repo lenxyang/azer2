@@ -172,9 +172,9 @@ void D3DRenderer::Draw(int vertices_num, int32 start_vertex) {
   d3d_context_->Draw(vertices_num, start_vertex);
 }
 
-void D3DRenderer::DrawIndex(int indices_num, int32 first_indices, 
-                            int32 index_base) {
-  d3d_context_->DrawIndexed(indices_num, first_indices, index_base);
+void D3DRenderer::DrawIndex(int indices_num, int32 start_indices, 
+                            int32 vertex_base) {
+  d3d_context_->DrawIndexed(indices_num, start_indices, vertex_base);
 }
 
 void D3DRenderer::DrawInstanced(int32 instance_num, int32 vertices_num, 
