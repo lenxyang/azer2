@@ -46,6 +46,10 @@ struct EffectData {
 };
 
 EffectData effect_data[] = {
+  {"AmbientColorEffect", AmbientColorEffect::kEffectName, 0, 
+   HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_AMBIENT_PS},
+  {"AmbientColorEffect", AmbientColorEffect::kEffectName, 0, 
+   HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_AMBIENT_PS},
   {"ColorEffect", ColorEffect::kEffectName, 0, 
    HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_DIFFUSEMAP_PS},
   {"ColorEffect", ColorEffect::kEffectName, 0, 

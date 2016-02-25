@@ -27,6 +27,13 @@ TexturePtr LoadTexture(const ResPath& path, FileSystem* fs) {
 }
 }  // namespace
 
+ColorMaterialData::ColorMaterialData() 
+    : specular_power(1.0f), 
+      alpha(1.0f),
+      padding1(0.0f),
+      padding2(0.0f) {
+}
+
 DiffuseMapMaterialData::DiffuseMapMaterialData() 
     : ambient_scalar(0.1f),
       specular_scalar(1.0f), 

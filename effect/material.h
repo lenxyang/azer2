@@ -14,6 +14,8 @@ struct ColorMaterialData {
   float    alpha;
   float    padding1;
   float    padding2;
+
+  ColorMaterialData();
 };
 
 struct DiffuseMapMaterialData {

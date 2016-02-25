@@ -9,25 +9,24 @@ namespace azer {
 class AmbientColorEffect : public Effect {
  public:
   static const char kEffectName[];
-  AmbientColorEffect();
-  ~AmbientColorEffect();
+  AmbientColor();
+  ~AmbientColor();
 
   const char* GetEffectName() const override;
 #pragma pack(push, 4)
   struct vs_cbuffer {
     Matrix4 pv;
     Matrix4 world;
-    Vector4 camerapos;
   };
 
   struct ps_cbuffer {
-    Vector4 ambient;
+    Vector4 color;
   };
 #pragma pack(pop)
 
   void SetPV(const Matrix4& value) { pv_ = value;}
-  void SetWorld(const Matrix4& value) { world_ = value;}
-  void SetAmbient(const Vector4& c) { ambient_ = c;}
+  void SetWorld(const Matrix4& value) { world_  = value;}
+  void SetColor(const Vector4& color) { color_ = color;}
   static Effect* CreateObject() { return new AmbientColorEffect;}
  protected:
   void UseTexture(Renderer* renderer) override;
@@ -36,7 +35,6 @@ class AmbientColorEffect : public Effect {
 
   Matrix4 pv_;
   Matrix4 world_;
-  Vector4 ambient_;
   DECLARE_EFFECT_DYNCREATE(AmbientColorEffect);
   DISALLOW_COPY_AND_ASSIGN(AmbientColorEffect);
 };
@@ -85,5 +83,6 @@ class ColorEffect : public Effect {
   DECLARE_EFFECT_DYNCREATE(ColorEffect);
   DISALLOW_COPY_AND_ASSIGN(ColorEffect);
 };
+
 
 }  // namespace azer
