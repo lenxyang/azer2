@@ -295,6 +295,8 @@ int32 VertexTypeSize(DataFormat type) {
     case kBoolVec2: return sizeof(bool) * 2;
     case kBoolVec3: return sizeof(bool) * 3;
     case kBoolVec4: return sizeof(bool) * 4;
+    case kRGBA8:
+    case kRGBAn8: return sizeof(uint32);
     case kRGBA: return sizeof(azer::Vector4);
     default:
       DCHECK(false) <<" No VertexDesc::Type: " << type;
