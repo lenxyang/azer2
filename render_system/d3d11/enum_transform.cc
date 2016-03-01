@@ -33,9 +33,9 @@ D3D11_CPU_ACCESS_FLAG TranslateCPUAccess(CPUAccess access) {
 DXGI_FORMAT TranslateFormat(DataFormat type) {
   switch (type) {
     case kRGBAn8: return DXGI_FORMAT_R8G8B8A8_UNORM;
-    case kRGBAf: return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kBGRAn8: return DXGI_FORMAT_B8G8R8A8_UNORM;
     case kRGBA8:  return DXGI_FORMAT_R8G8B8A8_UINT;
+    case kRGBAf: return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kRGBA32: return DXGI_FORMAT_R32G32B32A32_UINT;
     case kRGBAn32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kDepth24Stencil8: return DXGI_FORMAT_D24_UNORM_S8_UINT;

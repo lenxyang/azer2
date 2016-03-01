@@ -23,13 +23,40 @@ D3DVertexLayout::~D3DVertexLayout() {
   SAFE_RELEASE(input_layout_);
 }
 
+namespace {
+const char* DeclHLSLTypeName(DataFormat format) {
+  switch (format) {
+    case kFloat: return "float";
+    case kVec2: return "float2";
+    case kVec3: return "float3";
+    case kVec4: return "float4";
+    case kMat2: return "float2x2";
+    case kMat3: return "float3x3";
+    case kMat4: return "float4x4";
+    case kInt: return "int";
+    case kIntVec2: return "int2";
+    case kIntVec3: return "int3";
+    case kIntVec4: return "int4";
+    case kUint: return "uint";
+    case kUintVec2: return "uint2";
+    case kUintVec3: return "uint3";
+    case kUintVec4: return "uint4";
+    case kRGBAn8:   return "uint4";
+    case kRGBA8:    return "float4";
+    default:
+      CHECK(false) << " not support :" << format;
+      return "";
+  }
+}
+}
+
 std::string D3DVertexLayout::GenVSForDesc(VertexDesc* vertex_desc) {
   std::stringstream ss;
   ss << "\nstruct VSInput {\n";
   for (int32 i = 0; i < vertex_desc->element_count(); ++i) {
     const VertexDesc::Desc* desc = vertex_desc->descs() + i;
      std::string name(desc->name);
-     ss << HLSLTypeName(desc->type) << " "
+     ss << DeclHLSLTypeName(desc->type) << " "
         << ::base::StringToLowerASCII(name) << desc->semantic_index << ":" 
         << StringToUpperASCII(name) << desc->semantic_index 
         << ";" << std::endl;

@@ -280,7 +280,7 @@ int32 VertexTypeSize(DataFormat type) {
     case kVec2: return sizeof(azer::Vector2);
     case kVec3: return sizeof(azer::Vector3);
     case kVec4: return sizeof(azer::Vector4);
-    // case kMat2: return sizeof(azer::Matrix2);
+      // case kMat2: return sizeof(azer::Matrix2);
     case kMat3: return sizeof(azer::Matrix3);
     case kMat4: return sizeof(azer::Matrix4);
     case kInt: return sizeof(int);
