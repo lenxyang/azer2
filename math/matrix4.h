@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <utility>
+#include <vector>
 #include <ostream>
 
 namespace azer {
@@ -11,6 +12,8 @@ class Radians;
 class Degree;
 class Vector3;
 class Vector4;
+class Matrix4;
+typedef std::vector<Matrix4> Matrix4Vec;
 
 // layout consistent with common
 class Matrix4 {
