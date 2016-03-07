@@ -31,12 +31,20 @@ class AZER_EXPORT VertexPack {
   bool end();
   int32 index() const;
 
+  void Writeint(int32 v, const VertexPos& pos);
+  void WriteIntVec2(const IntVec2& v, const VertexPos& pos);
+  void WriteIntVec3(const IntVec3& v, const VertexPos& pos);
+  void WriteIntVec4(const IntVec4& v, const VertexPos& pos);
   void WriteFloat(float v, const VertexPos& pos);
   void WriteVector2(const Vector2& v, const VertexPos& pos);
   void WriteVector3(const Vector3& v, const VertexPos& pos);
   void WriteVector4(const Vector4& v, const VertexPos& pos);
   void WriteVector3Or4(const Vector4& v, const VertexPos& pos) const;
 
+  void ReadInt(int32* v, const VertexPos& pos) const;
+  void ReadIntVec2(IntVec2* v, const VertexPos& pos) const;
+  void ReadIntVec3(IntVec3* v, const VertexPos& pos) const;
+  void ReadIntVec4(IntVec4* v, const VertexPos& pos) const;
   void ReadFloat(float* v, const VertexPos& pos) const;
   void ReadVector2(Vector2* v, const VertexPos& pos) const;
   void ReadVector3(Vector3* v, const VertexPos& pos) const;

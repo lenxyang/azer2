@@ -2,14 +2,14 @@
 
 namespace azer {
 struct IntVec2 {
-  float x, y;
+  int x, y;
 };
 
 struct IntVec3 {
-  float x, y, z;
+  int x, y, z;
 };
 
 struct IntVec4 {
-  float x, y, z, w;
+  int x, y, z, w;
 };
 }  // namespace azer
