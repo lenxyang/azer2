@@ -43,6 +43,8 @@ class Matrix4 {
 
   Matrix4& operator = (const Matrix4& matrix);
 
+  friend Matrix4 operator + (const Matrix4& m1, const Matrix4& m2);
+  friend Matrix4 operator - (const Matrix4& m1, const Matrix4& m2);
   friend Vector4 operator * (const float v[4], const Matrix4& mat);
   friend Vector4 operator * (const Vector4& v, const Matrix4& mat);
   friend Vector4 operator * (const Matrix4& mat, const Vector4& vec);
