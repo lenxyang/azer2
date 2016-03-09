@@ -56,6 +56,8 @@ EffectData effect_data[] = {
    HLSL_NORMALLINE_VS, 0, 0, HLSL_NORMALLINE_GS, HLSL_NORMALLINE_PS},
   {"TextureEffect0", TextureEffect::kEffectName, 1, 
    HLSL_TEXTURE0_VS, 0, 0, 0, HLSL_TEXTURE0_PS},
+  {"TextureEffect1", TextureEffect::kEffectName, 1, 
+   HLSL_TEXTURE1_VS, 0, 0, 0, HLSL_TEXTURE1_PS},
 };
 }  // namespace effect
 
@@ -90,7 +92,7 @@ void LoadEffectData(EffectData* data, TechSource* source,
 
   if (data->hull_shader_id > 0) {
     ShaderInfo shader;
-    shader.path = std::string(data->name) + ".ds.hlsl";
+    shader.path = std::string(data->name) + ".hs.hlsl";
     shader.stage = kHullStage;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(
         data->hull_shader_id, ui::ScaleFactor(1));
@@ -110,7 +112,7 @@ void LoadEffectData(EffectData* data, TechSource* source,
 
   if (data->geometry_shader_id > 0) {
     ShaderInfo shader;
-    shader.path = std::string(data->name) + ".ds.hlsl";
+    shader.path = std::string(data->name) + ".gs.hlsl";
     shader.stage = kGeometryStage;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(
         data->geometry_shader_id, ui::ScaleFactor(1));
@@ -120,7 +122,7 @@ void LoadEffectData(EffectData* data, TechSource* source,
 
   if (data->pixel_shader_id > 0) {
     ShaderInfo shader;
-    shader.path = std::string(data->name) + ".ds.hlsl";
+    shader.path = std::string(data->name) + ".ps.hlsl";
     shader.stage = kPixelStage;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(
         data->pixel_shader_id, ui::ScaleFactor(1));

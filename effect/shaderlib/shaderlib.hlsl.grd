@@ -21,6 +21,8 @@
       <include type="txt" name="HLSL_NORMALLINE_PS" file="hlsl/normalline.ps.hlsl" />
       <include type="txt" name="HLSL_TEXTURE0_VS" file="hlsl/texture0.vs.hlsl" />
       <include type="txt" name="HLSL_TEXTURE0_PS" file="hlsl/texture0.ps.hlsl" />
+      <include type="txt" name="HLSL_TEXTURE1_VS" file="hlsl/texture1.vs.hlsl" />
+      <include type="txt" name="HLSL_TEXTURE1_PS" file="hlsl/texture1.ps.hlsl" />
     </includes>
   </release>
 </grit>
