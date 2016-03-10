@@ -83,10 +83,21 @@ void VertexPack::WriteIntVec4(const IntVec4& v, const VertexPos& pos) {
   if (pos.slot == -1 || pos.index == -1)
     return;
 
-  DCHECK(get_data_type(pos) == kIntVec4);
-  uint8* ptr = get_data_ptr(pos);
-  IntVec4* vec = (IntVec4*)ptr;
-  *vec = v;
+  if (get_data_type(pos) == kIntVec4) {
+    uint8* ptr = get_data_ptr(pos);
+    IntVec4* vec = (IntVec4*)ptr;
+    *vec = v;
+  } else if (get_data_type(pos) == kIntVec4
+             || get_data_type(pos) == kUintVec4) {
+    uint32* ptr = (uint32*)get_data_ptr(pos);
+    int32 nv = (v.x & 0x000000FF);
+    nv |= (v.y & 0x0000FF00) >> 8;
+    nv |= (v.z & 0x00FF0000) >> 16;
+    nv |= (v.w & 0xFF000000) >> 24;
+    *ptr = nv;
+  } else {
+    CHECK(false);
+  }
 }
 
 void VertexPack::WriteFloat(float v, const VertexPos& pos) {
@@ -121,10 +132,21 @@ void VertexPack::WriteVector4(const Vector4& v, const VertexPos& pos) {
   if (pos.slot == -1 || pos.index == -1)
     return;
 
-  DCHECK(get_data_type(pos) == kVec4);
-  uint8* ptr = get_data_ptr(pos);
-  Vector4* vec = (Vector4*)ptr;
-  *vec = v;
+  if (get_data_type(pos) == kVec4) {
+    uint8* ptr = get_data_ptr(pos);
+    Vector4* vec = (Vector4*)ptr;
+
+    *vec = v;
+  } else if (get_data_type(pos) == kRGBAn8) {
+    uint32* ptr = (uint32*)get_data_ptr(pos);
+    uint32 x = ((uint32)(v.x * 255));
+    uint32 y = ((uint32)(v.y * 255)) >> 8;
+    uint32 z = ((uint32)(v.z * 255)) >> 16;
+    uint32 w = ((uint32)(v.w * 255)) >> 24;
+    *ptr = x | y | z | w;
+  } else {
+    CHECK(false);
+  }
 }
 
 void VertexPack::WriteVector3Or4(const Vector4& v, const VertexPos& pos) const {
