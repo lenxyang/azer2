@@ -1,4 +1,5 @@
 #include "azer/effect/shaderlib/hlsl/light.h.hlsl"
+#include "azer/effect/shaderlib/hlsl/nmap.h.hlsl"
 
 struct VsOutput {
   float4 position:SV_POSITION;
@@ -26,21 +27,12 @@ Texture2D normalmap:   register(t4);
 SamplerState texsampler;
 
 
-float3 NormalSampleToWorldSpace(float3 normal_sample, float3 T, float3 N, float3 B) {
-  float3 n = normal_sample.xyz * 2.0 - 1.0f;
-  float3 r = float3(0.0f, 0.0, 0.0);
-  r.x = dot(T, n);
-  r.y = dot(B, n);
-  r.z = dot(N, n);
-  return r;
-}
-
 float4 ps_main(VsOutput o):SV_TARGET {
   float4 texcolor = diffusemap.Sample(texsampler, o.texcoord);
   float4 specolor = specularmap.Sample(texsampler, o.texcoord);
   float4 emicolor = emissionmap.Sample(texsampler, o.texcoord);
   float3 normal =   normalmap.Sample(texsampler, o.texcoord).xyz;
-  normal = NormalSampleToWorldSpace(normal.xyz, o.tang, o.normal, o.binormal);
+  normal = TBNToWorldSpace(normal.xyz, o.tang, o.normal, o.binormal);
   Material mtrl;
   mtrl.ambient  = texcolor * ambient_scalar;
   mtrl.diffuse  = texcolor * specular_scalar;
