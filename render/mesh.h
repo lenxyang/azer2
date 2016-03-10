@@ -25,6 +25,15 @@ typedef scoped_refptr<EntityVec> EntityVecPtr;
 typedef scoped_refptr<MeshPart> MeshPartPtr;
 typedef scoped_refptr<Mesh> MeshPtr;
 
+struct Subset {
+  int32 vertex_base;
+  int32 vertex_count;
+  int32 index_base;
+  int32 index_count;
+  Vector3 vmin;
+  Vector3 vmax;
+};
+
 // class Entity
 class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
  public:
@@ -47,32 +56,19 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   virtual void Render(Renderer* renderer);
 
   EntityPtr DeepCopy();
-
   const Vector3& vmin() { return vmin_;}
   const Vector3& vmax() { return vmax_;}
   void set_vmin(const Vector3& v) { vmin_ = v;}
   void set_vmax(const Vector3& v) { vmax_ = v;}
-  void set_vertex_base(int32 v) { vertex_base_ = v;}
-  void set_index_base(int32 v) { index_base_ = v;}
-  void set_vertex_count(int32 v) { vertex_count_ = v;}
-  void set_index_count(int32 v) { index_count_ = v;}
-  int32 vertex_base() const { return vertex_base_;}
-  int32 index_base() const { return index_base_;}
-  int32 vertex_count() const { return vertex_count_;}
-  int32 index_count() const { return index_count_;}
-
   PrimitiveTopology primitive_type() const { return primitive_;}
   void set_primitive(PrimitiveTopology top) { primitive_ = top;}
  private:
   VertexBufferGroupPtr vbg_;
   IndicesBufferPtr ib_;
   PrimitiveTopology primitive_;
-  int32 vertex_base_;
-  int32 vertex_count_;
-  int32 index_base_;
-  int32 index_count_;
   Vector3 vmin_;
   Vector3 vmax_;
+  std::vector<Subset> subset_;
   DISALLOW_COPY_AND_ASSIGN(Entity);
 };
 

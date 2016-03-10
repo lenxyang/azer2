@@ -87,8 +87,7 @@ void VertexPack::WriteIntVec4(const IntVec4& v, const VertexPos& pos) {
     uint8* ptr = get_data_ptr(pos);
     IntVec4* vec = (IntVec4*)ptr;
     *vec = v;
-  } else if (get_data_type(pos) == kIntVec4
-             || get_data_type(pos) == kUintVec4) {
+  } else if (get_data_type(pos) == kRGBA8) {
     uint32* ptr = (uint32*)get_data_ptr(pos);
     int32 nv = (v.x & 0x000000FF);
     nv |= (v.y & 0x0000FF00) >> 8;
