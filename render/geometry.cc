@@ -986,8 +986,8 @@ MeshPartPtr CreateLineAxisMeshPart(Effect* e, const GeoAxisParams& params,
   return part;
 }
 
-EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
-                              VertexDesc* desc, const Matrix4& mat) {
+EntityPtr CreateGeoPointsList(PrimitiveTopology primitive, const Vector3* points,
+                              int32 count, VertexDesc* desc, const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, count));
   VertexPack vpack(vdata);
   vpack.first();
@@ -1005,7 +1005,9 @@ EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
   EntityPtr entity(new Entity(vb));
   entity->set_vmin(vmin);
   entity->set_vmax(vmax);
-  entity->AddSubset(Subset(0, vb->vertex_count(), 0, 0));
+  Subset subset(0, vb->vertex_count(), 0, 0);
+  subset.primitive = primitive;
+  entity->AddSubset(subset);
   return entity;
 }
 

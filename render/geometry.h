@@ -4,6 +4,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/math/matrix4.h"
+#include "azer/render/common.h"
 
 namespace azer {
 class Effect;
@@ -126,7 +127,8 @@ AZER_EXPORT MeshPartPtr CreateAxisMeshPart(
 AZER_EXPORT MeshPartPtr CreateLineAxisMeshPart(
     Effect* e, const GeoAxisParams& params, const Matrix4& transform);
 
-AZER_EXPORT EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
+AZER_EXPORT EntityPtr CreateGeoPointsList(PrimitiveTopology primitive,
+                                          const Vector3* points, int32 count,
                                           VertexDesc* desc, const Matrix4& mat);
 
 // util
