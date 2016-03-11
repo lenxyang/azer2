@@ -1,7 +1,7 @@
 #include "azer/effect/texture_effect.h"
 
 #include "base/strings/utf_string_conversions.h"
-#include "azer/render/render.h"
+#include "azer/azer.h"
 
 
 namespace azer {

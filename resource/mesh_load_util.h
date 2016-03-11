@@ -1,6 +1,6 @@
 #pragma once
 
-#include "azer/render/render.h"
+#include "azer/azer.h"
 #include "azer/base/file_system.h"
 
 struct aiScene;

@@ -5,7 +5,7 @@
 #include "base/basictypes.h"
 #include "base/logging.h"
 
-#include "azer/render/render.h"
+#include "azer/azer.h"
 #include "azer/scene/render_node.h"
 #include "azer/scene/scene_node.h"
 
