@@ -15,6 +15,14 @@ Subset::Subset()
   InitMinAndVMax(&vmin, &vmax);
 }
 
+Subset::Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount) 
+    : vertex_base(vbase),
+      vertex_count(vcount),
+      index_base(ibase),
+      index_count(icount) {
+  InitMinAndVMax(&vmin, &vmax);
+}
+
 // class Entity
 Entity::Entity(VertexDesc* desc)
     : primitive_(kTriangleList) {

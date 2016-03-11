@@ -34,8 +34,9 @@ MeshPart& MeshPart::operator = (const MeshPart& part) {
 
 void MeshPart::AddEntity(EntityPtr ptr) { vecptr_->AddEntity(ptr);}
 void MeshPart::RemoveEntityAt(int32 index) { vecptr_->RemoveEntityAt(index);}
+Entity* MeshPart::entity_at(int32 index) { return vecptr_->entity_at(index);}
 const Entity* MeshPart::entity_at(int32 index) const {
-  return vecptr_->entity_at(index);
+    return vecptr_->entity_at(index);
 }
 int32 MeshPart::entity_count() const  { return vecptr_->entity_count();}
 

@@ -21,6 +21,7 @@ struct AZER_EXPORT Subset {
   Vector3 vmax;
 
   Subset();
+  Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount);
 };
 typedef std::vector<Subset> Subsets;
 

@@ -346,6 +346,7 @@ EntityPtr CreateSphereEntity(VertexDesc* desc,const GeoSphereParams& params,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kTriangleList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 
@@ -369,6 +370,7 @@ EntityPtr CreateSphereFrameEntity(VertexDesc* desc, const GeoSphereParams& param
   entity->set_primitive(kLineList);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 
@@ -511,6 +513,7 @@ EntityPtr CreateBoxEntity(VertexDesc* desc, const Matrix4& mat) {
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kTriangleList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, 0));
   return entity;
 }
 
@@ -526,6 +529,7 @@ EntityPtr CreateBoxFrameEntity(VertexDesc* desc, const Matrix4& mat) {
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kLineList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 
@@ -629,6 +633,7 @@ EntityPtr CreatePlaneEntity(VertexDesc* desc, const GeoPlaneParams& params,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kTriangleList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 
@@ -647,6 +652,7 @@ EntityPtr CreatePlaneFrameEntity(VertexDesc* desc, const GeoPlaneParams& params,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kLineList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 
@@ -728,6 +734,7 @@ EntityPtr CreateRoundEntity(VertexDesc* desc, float radius, int32 slice,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kTriangleList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 
@@ -744,6 +751,7 @@ EntityPtr CreateCircleEntity(VertexDesc* desc, float radius, int32 slice,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kLineList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 MeshPartPtr CreateRoundMeshPart(Effect* e, float radius, int slice, 
@@ -794,6 +802,7 @@ EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kTriangleList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 MeshPartPtr CreateTaperMeshPart(Effect* e, const GeoConeParams& params,
@@ -890,6 +899,7 @@ EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params,
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
   entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
   entity->set_primitive(kTriangleList);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
   return entity;
 }
 
@@ -972,6 +982,7 @@ MeshPartPtr CreateLineAxisMeshPart(Effect* e, const GeoAxisParams& params,
   entity->set_vmin(points[0]);
   entity->set_vmax(points[1] + Vector3(0.0f, 0.0f, 0.01f));
   entity->set_primitive(kLineList);
+  entity->AddSubset(Subset(0, entity->vertex_buffer_at(0)->vertex_count(), 0, 0));
   part->AddEntity(entity);
   return part;
 }
@@ -995,6 +1006,7 @@ EntityPtr CreateGeoPointsList(const Vector3* points, int32 count,
   EntityPtr entity(new Entity(vb));
   entity->set_vmin(vmin);
   entity->set_vmax(vmax);
+  entity->AddSubset(Subset(0, vb->vertex_count(), 0, 0));
   return entity;
 }
 
