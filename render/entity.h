@@ -17,6 +17,7 @@ struct AZER_EXPORT Subset {
   int32 vertex_count;
   int32 index_base;
   int32 index_count;
+  PrimitiveTopology primitive;
   Vector3 vmin;
   Vector3 vmax;
 
@@ -69,15 +70,12 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   const Vector3& vmax() { return vmax_;}
   void set_vmin(const Vector3& v) { vmin_ = v;}
   void set_vmax(const Vector3& v) { vmax_ = v;}
-  PrimitiveTopology primitive_type() const { return primitive_;}
-  void set_primitive(PrimitiveTopology top) { primitive_ = top;}
   void UpdateBounds();
  private:
   void DrawSubset(Renderer* renderer, const Subset& subset) const;
   void DrawIndexSubset(Renderer* renderer, const Subset& subset) const;
   VertexBufferGroupPtr vbg_;
   IndicesBufferPtr ib_;
-  PrimitiveTopology primitive_;
   Vector3 vmin_;
   Vector3 vmax_;
   std::vector<Subset> subset_;

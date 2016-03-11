@@ -7,7 +7,7 @@
 #include "assimp/scene.h"
 #include "assimp/anim.h"
 #include "azer/render/util.h"
-#include "azer/render/render.h"
+#include "azer/azer.h"
 #include "azer/render/bounding_volumn.h"
 
 namespace azer {
@@ -48,7 +48,7 @@ void CalcTriangleListTangentAndBinormal(VertexData* vd) {
     pickle.ReadVector3Or4(&p3, ppos);
     pickle.ReadVector2(&t3, tpos);
 
-    CalcTBN(p1, t1, p2, t2, p3, t3, &tangent, &normal, &binormal);
+    CalcTriangleTBN(p1, t1, p2, t2, p3, t3, &tangent, &normal, &binormal);
     for (int j = 0; j < 3; ++j) {
       pickle.move(i + j);
       pickle.WriteVector3Or4(Vector4(binormal, 0.0f), binpos);
@@ -91,7 +91,7 @@ void CalcIndexedTriangleListTangentAndBinormal(VertexData* vd, IndicesData* id) 
     pickle.ReadVector3Or4(&p3, ppos);
     pickle.ReadVector2(&t3, tpos);
 
-    CalcTBN(p1, t1, p2, t2, p3, t3, &tangent, &normal, &binormal);
+    CalcTriangleTBN(p1, t1, p2, t2, p3, t3, &tangent, &normal, &binormal);
     for (int j = 0; j < 3; ++j) {
       pickle.move(index[j]);
       pickle.WriteVector3Or4(Vector4(binormal, 0.0f), binpos);

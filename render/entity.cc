@@ -11,7 +11,8 @@ Subset::Subset()
     : vertex_base(0),
       vertex_count(0),
       index_base(0),
-      index_count(0) {
+      index_count(0),
+      primitive(kTriangleList) {
   InitMinAndVMax(&vmin, &vmax);
 }
 
@@ -19,7 +20,8 @@ Subset::Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount)
     : vertex_base(vbase),
       vertex_count(vcount),
       index_base(ibase),
-      index_count(icount) {
+      index_count(icount),
+      primitive(kTriangleList) {
   InitMinAndVMax(&vmin, &vmax);
 }
 
@@ -130,9 +132,12 @@ void Entity::DrawIndexSubset(Renderer* renderer, const Subset& subset)  const {
 void Entity::Draw(Renderer* renderer) const {
   DCHECK(vbg_.get() && vbg_->validate());
   renderer->BindVertexBufferGroup(vbg_.get());
-  renderer->BindIndicesBuffer(NULL);
-  renderer->SetPrimitiveTopology(primitive_type());
+  renderer->BindIndicesBuffer(ib_.get());
   for (auto iter = subset_.begin(); iter != subset_.end(); ++iter) {
+    if (iter->primitive != primitive) {
+      primitive = iter->primitive;
+      renderer->SetPrimitiveTopology(primitive);
+    }
     if (iter->index_count > 0) {
       DrawIndexSubset(renderer, *iter);
     } else {

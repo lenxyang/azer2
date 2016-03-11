@@ -5,7 +5,7 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
 #include "azer/base/config_node.h"
-#include "azer/render/render.h"
+#include "azer/azer.h"
 
 namespace azer {
 const char VertexDescLoader::kSpecialLoaderName[] = "azer::VertexDescLoader";

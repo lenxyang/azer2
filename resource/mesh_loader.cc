@@ -1,7 +1,7 @@
 #include "azer/resource/mesh_loader.h"
 
 #include "base/strings/utf_string_conversions.h"
-#include "azer/render/render.h"
+#include "azer/azer.h"
 #include "azer/resource/mesh_load_util.h"
 #include "azer/resource/resource_util.h"
 

@@ -1,6 +1,6 @@
 #include "azer/resource/light_loader.h"
 
-#include "azer/render/render.h"
+#include "azer/azer.h"
 
 namespace azer {
 
