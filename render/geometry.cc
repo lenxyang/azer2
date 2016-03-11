@@ -975,12 +975,11 @@ MeshPartPtr CreateLineAxisMeshPart(Effect* e, const GeoAxisParams& params,
     Vector3(0.0f, params.axis_length, 0.0f),
   };
 
-  EntityPtr entity = CreateGeoPointsList(
-      points, (int)arraysize(points), e->vertex_desc(), matrix);
+  EntityPtr entity = CreateGeoPointsList(kLineList, points, (int)arraysize(points),
+                                         e->vertex_desc(), matrix);
   entity->set_vmin(points[0]);
   entity->set_vmax(points[1] + Vector3(0.0f, 0.0f, 0.01f));
   Subset subset(0, entity->vertex_buffer_at(0)->vertex_count(), 0, 0);
-  subset.primitive = kLineList;
   entity->AddSubset(subset);
   part->AddEntity(entity);
   return part;
