@@ -24,7 +24,7 @@ class SkyboxEffect : public Effect {
   void SetPV(const Matrix4& value) { pv_ = value;}
   void SetWorld(const Matrix4& value) { world_ = value;}
   void SetTexture(Texture* texture) { cubemap_ = texture;}
-  static Effect* CreateObject() { return new SkyEffect;}
+  static Effect* CreateObject() { return new SkyboxEffect;}
  protected:
   void UseTexture(Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;

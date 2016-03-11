@@ -1,7 +1,9 @@
 #include "azer/effect/sky_effect.h"
 
 #include "base/strings/utf_string_conversions.h"
+#include "azer/render/gpu_constants_table.h"
 #include "azer/render/renderer.h"
+#include "azer/render/render_system.h"
 
 
 namespace azer {

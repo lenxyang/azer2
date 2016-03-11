@@ -59,8 +59,8 @@ EffectData effect_data[] = {
    HLSL_TEXTURE0_VS, 0, 0, 0, HLSL_TEXTURE0_PS},
   {"TextureEffect1", TextureEffect::kEffectName, 1, 
    HLSL_TEXTURE1_VS, 0, 0, 0, HLSL_TEXTURE1_PS},
-  {"SkyEffect", SkyEffect::kEffectName, 1, 
-   HLSL_SKYEFFECT_VS, 0, 0, 0, HLSL_SKYEFFECT_PS},
+  {"SkyboxEffect", SkyboxEffect::kEffectName, 1, 
+   HLSL_SKYBOX_VS, 0, 0, 0, HLSL_SKYBOX_PS},
 };
 }  // namespace effect
 

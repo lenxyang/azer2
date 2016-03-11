@@ -23,8 +23,8 @@
       <include type="txt" name="HLSL_TEXTURE0_PS" file="hlsl/texture0.ps.hlsl" />
       <include type="txt" name="HLSL_TEXTURE1_VS" file="hlsl/texture1.vs.hlsl" />
       <include type="txt" name="HLSL_TEXTURE1_PS" file="hlsl/texture1.ps.hlsl" />
-      <include type="txt" name="HLSL_SKYEFFECT_VS" file="hlsl/sky.vs.hlsl" />
-      <include type="txt" name="HLSL_SKYEFFECT_PS" file="hlsl/sky.ps.hlsl" />
+      <include type="txt" name="HLSL_SKYBOX_VS" file="hlsl/skybox.vs.hlsl" />
+      <include type="txt" name="HLSL_SKYBOX_PS" file="hlsl/skybox.ps.hlsl" />
     </includes>
   </release>
 </grit>
