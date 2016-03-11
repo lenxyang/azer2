@@ -4,17 +4,18 @@
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
 #include "base/strings/utf_string_conversions.h"
+#include "azer/render/blending.h"
+#include "azer/render/vertex_buffer.h"
+#include "azer/render/technique.h"
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/color_effect.h"
 #include "azer/effect/diffusemap_effect.h"
 #include "azer/effect/texture_effect.h"
 #include "azer/effect/diffusemap_effect_adapter.h"
+#include "azer/effect/sky_effect.h"
 #include "azer/effect/normalline_effect.h"
 #include "azer/effect/shaderlib/grit/shaderlib.hlsl.h"
-#include "azer/render/blending.h"
-#include "azer/render/vertex_buffer.h"
-#include "azer/render/technique.h"
 
 namespace azer {
 namespace {
@@ -58,6 +59,8 @@ EffectData effect_data[] = {
    HLSL_TEXTURE0_VS, 0, 0, 0, HLSL_TEXTURE0_PS},
   {"TextureEffect1", TextureEffect::kEffectName, 1, 
    HLSL_TEXTURE1_VS, 0, 0, 0, HLSL_TEXTURE1_PS},
+  {"SkyEffect", SkyEffect::kEffectName, 1, 
+   HLSL_SKYEFFECT_VS, 0, 0, 0, HLSL_SKYEFFECT_PS},
 };
 }  // namespace effect
 

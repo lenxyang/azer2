@@ -49,6 +49,8 @@ static_library("effectlib") {
     "normalline_effect.h",
     "resource_bundle.cc",
     "resource_bundle.h",
+    "sky_effect.cc",
+    "sky_effect.h",
   ]
 
   deps = [
