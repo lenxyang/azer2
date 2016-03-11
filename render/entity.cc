@@ -26,23 +26,20 @@ Subset::Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount)
 }
 
 // class Entity
-Entity::Entity(VertexDesc* desc)
-    : primitive_(kTriangleList) {
+Entity::Entity(VertexDesc* desc) {
   InitMinAndVMax(&vmin_, &vmax_);
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(desc);
 }
 
-Entity::Entity(VertexBuffer* vb)
-    : primitive_(kTriangleList) {
+Entity::Entity(VertexBuffer* vb) {
   InitMinAndVMax(&vmin_, &vmax_);
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
   SetVertexBuffer(vb, 0);
 }
 
-Entity::Entity(VertexBufferGroup* vbg)
-    : primitive_(kTriangleList) {
+Entity::Entity(VertexBufferGroup* vbg) {
   InitMinAndVMax(&vmin_, &vmax_);
   vbg_ = vbg;
 }
@@ -51,8 +48,7 @@ Entity::Entity(const EntityData& data) {
   InitMinAndVMax(&vmin_, &vmax_);
 }
 
-Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
-    : primitive_(kTriangleList) {
+Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib) {
   InitMinAndVMax(&vmin_, &vmax_);
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
@@ -60,8 +56,7 @@ Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
   ib_ = ib;
 }
 
-Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib)
-    : primitive_(kTriangleList) {
+Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib) {
   InitMinAndVMax(&vmin_, &vmax_);
   vbg_ = vbg;
   ib_ = ib;
@@ -133,6 +128,7 @@ void Entity::Draw(Renderer* renderer) const {
   DCHECK(vbg_.get() && vbg_->validate());
   renderer->BindVertexBufferGroup(vbg_.get());
   renderer->BindIndicesBuffer(ib_.get());
+  PrimitiveTopology primitive = kTriangleList;
   for (auto iter = subset_.begin(); iter != subset_.end(); ++iter) {
     if (iter->primitive != primitive) {
       primitive = iter->primitive;
