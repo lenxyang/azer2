@@ -1,5 +1,6 @@
 #include "azer/render/bounding_volumn.h"
 
+#include <limits>
 #include "base/logging.h"
 
 namespace azer {
@@ -59,11 +60,11 @@ void UpdateVMinAndVMax(const Vector3 pos, Vector3* vmin, Vector3* vmax) {
 }
 
 void InitMinAndVMax(Vector3* vmin, Vector3* vmax) {
-  vmin->x = std::numeric_limit<float>::max();
-  vmin->y = std::numeric_limit<float>::max();
-  vmin->z = std::numeric_limit<float>::max();
-  vmax->x = std::numeric_limit<float>::min();
-  vmax->y = std::numeric_limit<float>::min();
-  vmax->z = std::numeric_limit<float>::min();
+  vmin->x = std::numeric_limits<float>::max();
+  vmin->y = std::numeric_limits<float>::max();
+  vmin->z = std::numeric_limits<float>::max();
+  vmax->x = std::numeric_limits<float>::min();
+  vmax->y = std::numeric_limits<float>::min();
+  vmax->z = std::numeric_limits<float>::min();
 }
 }  // namespace azer

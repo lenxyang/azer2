@@ -3,6 +3,7 @@
 #include "azer/math/math.h"
 #include "azer/render/mesh.h"
 #include "azer/render/index_pack.h"
+#include "azer/render/bounding_volumn.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/render_system.h"
 #include "azer/render/vertex_pack.h"
@@ -314,7 +315,7 @@ void CalcIndexedTriangleListTangentAndBinormal(VertexData* vd, IndicesData* id) 
     pickle.ReadVector3Or4(&p3, ppos);
     pickle.ReadVector2(&t3, tpos);
 
-    CalcTBN(p1, t1, p2, t2, p3, t3, &tangent, &normal, &binormal);
+    CalcTriangleTBN(p1, t1, p2, t2, p3, t3, &tangent, &normal, &binormal);
     for (int j = 0; j < 3; ++j) {
       pickle.move(index[j]);
       pickle.WriteVector3Or4(Vector4(tangent, 0.0f), tagentpos);

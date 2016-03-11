@@ -1,5 +1,4 @@
 #include "azer/render/camera.h"
-#include "azer/render/render.h"
 #include "azer/math/math.h"
 
 #include <iostream>

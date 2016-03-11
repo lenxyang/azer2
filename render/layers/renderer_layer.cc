@@ -1,7 +1,6 @@
 #include "azer/render/layers/renderer_layer.h"
 
 #include "third_party/skia/include/core/SkColor.h"
-#include "azer/render/render.h"
 #include "base/logging.h"
 
 namespace azer {

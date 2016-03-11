@@ -1,5 +1,8 @@
 #include "azer/render/overlay.h"
-#include "azer/render/render.h"
+
+#include "azer/render/blending.h"
+#include "azer/render/renderer.h"
+#include "azer/render/render_system.h"
 
 namespace azer {
 Overlay::Overlay() {

@@ -6,7 +6,6 @@
 #include "base/logging.h"
 
 #include "azer/render/layers/layer_tree_host.h"
-#include "azer/render/render.h"
 
 namespace azer {
 namespace layers {

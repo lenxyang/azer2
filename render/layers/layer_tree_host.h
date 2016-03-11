@@ -8,12 +8,13 @@
 #include "ui/gfx/geometry/rect.h"
 
 #include "azer/base/export.h"
-#include "azer/render/render.h"
 #include "azer/render/render_system_observer.h"
 #include "azer/render/layers/layer_delegate.h"
 #include "azer/render/layers/layer_observer.h"
 #include "azer/render/layers/layer.h"
-
+#include "azer/render/overlay.h"
+#include "azer/render/renderer.h"
+#include "azer/render/texture.h"
 
 namespace azer {
 

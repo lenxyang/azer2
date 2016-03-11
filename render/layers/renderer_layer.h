@@ -2,8 +2,8 @@
 
 #include "base/basictypes.h"
 #include "azer/base/export.h"
-#include "azer/render/render.h"
 #include "azer/render/layers/texture_layer.h"
+#include "azer/render/renderer.h"
 
 namespace azer {
 namespace layers {

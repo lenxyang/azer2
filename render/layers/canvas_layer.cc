@@ -1,12 +1,12 @@
 #include "azer/render/layers/canvas_layer.h"
 
 #include "base/logging.h"
-#include "ui/gfx/canvas.h"
-#include "azer/render/render.h"
-#include "azer/render/context2d.h"
-#include "azer/render/layers/layer_delegate.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
+#include "ui/gfx/canvas.h"
+#include "azer/render/render_system.h"
+#include "azer/render/context2d.h"
+#include "azer/render/layers/layer_delegate.h"
 
 
 namespace azer {

@@ -3,7 +3,7 @@
 #include "base/logging.h"
 #include "azer/effect/effect_params_adapter.h"
 #include "azer/render/blending.h"
-#include "azer/render/bound_volumn.h"
+#include "azer/render/bounding_volumn.h"
 #include "azer/render/entity.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
@@ -34,8 +34,10 @@ MeshPart& MeshPart::operator = (const MeshPart& part) {
 
 void MeshPart::AddEntity(EntityPtr ptr) { vecptr_->AddEntity(ptr);}
 void MeshPart::RemoveEntityAt(int32 index) { vecptr_->RemoveEntityAt(index);}
-Entity* MeshPart::entity_at(int32 index) const { return vecptr_->entity_at(index);}
-int32 MeshPart::entity_count() { return vecptr_->entity_count();}
+const Entity* MeshPart::entity_at(int32 index) const {
+  return vecptr_->entity_at(index);
+}
+int32 MeshPart::entity_count() const  { return vecptr_->entity_count();}
 
 void MeshPart::Render(Renderer* renderer) {
   DCHECK(context_ || providers_.size() == 0u);
@@ -55,7 +57,7 @@ void MeshPart::RenderPart(Renderer* renderer) {
   renderer->BindEffect(effect_.get());
   for (int32 i = 0; i < vecptr_->entity_count(); ++i) {
     Entity* entity = vecptr_->entity_at(i);
-    entity->Render(renderer);
+    entity->Draw(renderer);
   }
 }
 

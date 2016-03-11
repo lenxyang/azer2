@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "base/memory/ref_counted.h"
+#include "azer/math/vector3.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/vertex_buffer.h"
 
@@ -71,8 +72,8 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   void set_primitive(PrimitiveTopology top) { primitive_ = top;}
   void UpdateBounds();
  private:
-  void DrawSubset(Renderer* renderer, const Subset& subset);
-  void DrawIndexSubset(Renderer* renderer, const Subset& subset);
+  void DrawSubset(Renderer* renderer, const Subset& subset) const;
+  void DrawIndexSubset(Renderer* renderer, const Subset& subset) const;
   VertexBufferGroupPtr vbg_;
   IndicesBufferPtr ib_;
   PrimitiveTopology primitive_;

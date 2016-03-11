@@ -2,7 +2,6 @@
 
 #include "base/basictypes.h"
 #include "azer/base/export.h"
-#include "azer/render/render.h"
 #include "azer/render/blending.h"
 #include "azer/render/texture.h"
 #include "azer/render/layers/layer.h"

@@ -5,7 +5,7 @@
 #include "base/lazy_instance.h"
 #include "base/strings/utf_string_conversions.h"
 #include "azer/base/dynlib.h"
-#include "azer/render/render.h"
+#include "azer/render/render_system.h"
 
 namespace azer {
 

@@ -1,7 +1,7 @@
 #include "azer/render_system/d3d11/overlay.h"
 
-#include "azer/render/render.h"
 #include "azer/render_system/d3d11/render_system.h"
+#include "azer/render/technique.h"
 
 namespace azer {
 namespace d3d11 {

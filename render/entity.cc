@@ -2,6 +2,8 @@
 
 #include "base/logging.h"
 #include "azer/effect/effect_params_adapter.h"
+#include "azer/render/bounding_volumn.h"
+#include "azer/render/render_system.h"
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
@@ -10,17 +12,20 @@ Subset::Subset()
       vertex_count(0),
       index_base(0),
       index_count(0) {
+  InitMinAndVMax(&vmin, &vmax);
 }
 
 // class Entity
 Entity::Entity(VertexDesc* desc)
     : primitive_(kTriangleList) {
+  InitMinAndVMax(&vmin_, &vmax_);
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(desc);
 }
 
 Entity::Entity(VertexBuffer* vb)
     : primitive_(kTriangleList) {
+  InitMinAndVMax(&vmin_, &vmax_);
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
   SetVertexBuffer(vb, 0);
@@ -28,14 +33,17 @@ Entity::Entity(VertexBuffer* vb)
 
 Entity::Entity(VertexBufferGroup* vbg)
     : primitive_(kTriangleList) {
+  InitMinAndVMax(&vmin_, &vmax_);
   vbg_ = vbg;
 }
 
 Entity::Entity(const EntityData& data) {
+  InitMinAndVMax(&vmin_, &vmax_);
 }
 
 Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
     : primitive_(kTriangleList) {
+  InitMinAndVMax(&vmin_, &vmax_);
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
   SetVertexBuffer(vb, 0);
@@ -44,6 +52,7 @@ Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
 
 Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib)
     : primitive_(kTriangleList) {
+  InitMinAndVMax(&vmin_, &vmax_);
   vbg_ = vbg;
   ib_ = ib;
 }
@@ -55,17 +64,14 @@ VertexBuffer* Entity::vertex_buffer_at(int32 index) {
 }
 
 void Entity::AddSubset(const Subset& subset) {
-  UpdateVMinAndVMax(subset->vmin, &vmin_, &vmax_);
-  UpdateVMinAndVMax(subset->vmax, &vmin_, &vmax_);
+  UpdateVMinAndVMax(subset.vmin, &vmin_, &vmax_);
+  UpdateVMinAndVMax(subset.vmax, &vmin_, &vmax_);
   subset_.push_back(subset);
 }
 
 void Entity::RemoveSubset(int32 index) {
-  DCHECK(index, static_cast<int32>(subset_.size()));
+  DCHECK_LT(index, static_cast<int32>(subset_.size()));
   subset_.erase(subset_.begin() + index);
-}
-
-void Entity::UpdateBounds() {
 }
 
 int32 Entity::subset_count() const {
@@ -73,7 +79,7 @@ int32 Entity::subset_count() const {
 }
 
 const Subset& Entity::subset_at(int32 index) const {
-  DCHECK(index, static_cast<int32>(subset_.size()));
+  DCHECK_LT(index, static_cast<int32>(subset_.size()));
   return subset_[index];
 }
 
@@ -94,26 +100,26 @@ EntityPtr Entity::DeepCopy() {
   return EntityPtr();
 }
 
-void Entity::Draw(Renderer* renderer) const {
-  if (ib_.get()) {
-    DrawIndex(renderer);
-  } else {
-    Draw(renderer);
+void Entity::UpdateBounds() {
+  InitMinAndVMax(&vmin_, &vmax_);
+  for (auto iter = subset_.begin(); iter != subset_.end(); ++iter) {
+    UpdateVMinAndVMax(iter->vmin, &vmin_, &vmax_);
+    UpdateVMinAndVMax(iter->vmax, &vmin_, &vmax_);
   }
 }
 
-void Entity::DrawSubset(Renderer* renderer, const Subset& subset) {
+void Entity::DrawSubset(Renderer* renderer, const Subset& subset) const {
   DCHECK_EQ(subset.index_count, 0);
   renderer->Draw(subset.vertex_count, subset.vertex_base);
 }
 
-void Entity::DrawIndexSubset(Renderer* renderer, const Subset& subset) {
+void Entity::DrawIndexSubset(Renderer* renderer, const Subset& subset)  const {
   DCHECK_GT(subset.index_count, 0);
-  DCHECK(ib_.get() && ib_.indices_count() > 0);
+  DCHECK(ib_.get() && ib_->indices_count() > 0);
   renderer->DrawIndex(subset.index_count, subset.index_base, subset.vertex_base);
 }
 
-void Entity::Draw(Renderer* renderer) {
+void Entity::Draw(Renderer* renderer) const {
   DCHECK(vbg_.get() && vbg_->validate());
   renderer->BindVertexBufferGroup(vbg_.get());
   renderer->BindIndicesBuffer(NULL);
