@@ -15,7 +15,7 @@ struct VSInput {
 };
 
 cbuffer c_buffer {
-   float4x4 pvw;
+   float4x4 pv;
    float4x4 world;
    float4   camerapos;
 };
