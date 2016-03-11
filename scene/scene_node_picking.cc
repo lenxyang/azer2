@@ -1,7 +1,6 @@
 #include "azer/scene/scene_node_picking.h"
 
 #include "azer/math/math.h"
-#include "azer/render/render.h"
 #include "azer/scene/scene_node.h"
 #include "azer/render/bounding_volumn.h"
 

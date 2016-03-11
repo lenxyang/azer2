@@ -17,10 +17,10 @@ Vector3 CalcTangent(const Vector3& p1, const Vector2& tex1,
   return Vector3(x, y, z);
 }
 
-void CalcTBN(const Vector3& p1, const Vector2& tex1,
-             const Vector3& p2, const Vector2& tex2,
-             const Vector3& p3, const Vector2& tex3,
-             Vector3* tangent, Vector3* normal, Vector3* binormal) {
+void CalcTriangleTBN(const Vector3& p1, const Vector2& tex1,
+                     const Vector3& p2, const Vector2& tex2,
+                     const Vector3& p3, const Vector2& tex3,
+                     Vector3* tangent, Vector3* normal, Vector3* binormal) {
   Vector3 t, b;
   azer::Vector3 n = std::move(CalcPlaneNormal(p1, p2, p3));
   n.Normalize();

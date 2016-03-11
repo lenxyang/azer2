@@ -31,6 +31,8 @@ source_set("render") {
     "common.h",
     "depth_buffer.cc",
     "depth_buffer.h",
+    "entity.cc",
+    "entity.h",
     "frame_args.cc",
     "frame_args.h",
     "frustum.cc",

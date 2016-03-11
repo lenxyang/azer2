@@ -47,4 +47,23 @@ bool AxisAlignedBoundingBox::IsIntersect(const Ray& ray) const {
   return false;
 }
 
+
+//
+void UpdateVMinAndVMax(const Vector3 pos, Vector3* vmin, Vector3* vmax) {
+  if (pos.x < vmin->x) vmin->x = pos.x;
+  if (pos.y < vmin->y) vmin->y = pos.y;
+  if (pos.z < vmin->z) vmin->z = pos.z;
+  if (pos.x > vmax->x) vmax->x = pos.x;
+  if (pos.y > vmax->y) vmax->y = pos.y;
+  if (pos.z > vmax->z) vmax->z = pos.z;
+}
+
+void InitMinAndVMax(Vector3* vmin, Vector3* vmax) {
+  vmin->x = std::numeric_limit<float>::max();
+  vmin->y = std::numeric_limit<float>::max();
+  vmin->z = std::numeric_limit<float>::max();
+  vmax->x = std::numeric_limit<float>::min();
+  vmax->y = std::numeric_limit<float>::min();
+  vmax->z = std::numeric_limit<float>::min();
+}
 }  // namespace azer

@@ -1,7 +1,6 @@
 #include "azer/scene/scene_tree_render.h"
 
 #include "base/logging.h"
-#include "azer/render/render.h"
 #include "azer/scene/render_node.h"
 #include "azer/scene/render_env_node.h"
 #include "azer/scene/scene_node.h"

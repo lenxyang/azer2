@@ -9,6 +9,7 @@
 #include "azer/effect/effect_params_provider.h"
 #include "azer/effect/light.h"
 #include "azer/effect/material.h"
+#include "azer/render/entity.h"
 #include "azer/render/blending.h"
 #include "azer/render/camera.h"
 #include "azer/render/common.h"

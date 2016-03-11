@@ -8,6 +8,7 @@
 #include "base/strings/string_tokenizer.h"
 #include "azer/math/math.h"
 #include "azer/effect/light.h"
+#include "azer/render/bounding_volumn.h"
 #include "azer/render/blending.h"
 #include "azer/render/camera.h"
 #include "azer/render/mesh.h"

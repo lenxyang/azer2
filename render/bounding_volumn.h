@@ -42,4 +42,7 @@ class AZER_EXPORT AxisAlignedBoundingBox : public BoundingVolumn {
   TrianglePlane subplane_[12];
   DISALLOW_COPY_AND_ASSIGN(AxisAlignedBoundingBox);
 };
+
+void AZER_EXPORT InitMinAndVMax(Vector3* vmin, Vector3* vmax);
+void AZER_EXPORT UpdateVMinAndVMax(const Vector3 pos, Vector3* vmin, Vector3* vmax);
 }  // namespace azer

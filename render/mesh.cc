@@ -3,157 +3,13 @@
 #include "base/logging.h"
 #include "azer/effect/effect_params_adapter.h"
 #include "azer/render/blending.h"
+#include "azer/render/bound_volumn.h"
+#include "azer/render/entity.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
-
-// class Entity
-Entity::Entity(VertexDesc* desc)
-    : primitive_(kTriangleList),
-      vertex_base_(0),
-      vertex_count_(0),
-      index_base_(0),
-      index_count_(0) {
-  RenderSystem* rs = RenderSystem::Current();
-  vbg_ = rs->CreateVertexBufferGroup(desc);
-}
-
-Entity::Entity(VertexBuffer* vb)
-    : primitive_(kTriangleList),
-      vertex_base_(0),
-      vertex_count_(0),
-      index_base_(0),
-      index_count_(0) {
-  RenderSystem* rs = RenderSystem::Current();
-  vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
-  SetVertexBuffer(vb, 0);
-}
-
-Entity::Entity(VertexBufferGroup* vbg)
-    : primitive_(kTriangleList),
-      vertex_base_(0),
-      vertex_count_(0),
-      index_base_(0),
-      index_count_(0) {
-  vbg_ = vbg;
-}
-
-Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
-    : primitive_(kTriangleList),
-      vertex_base_(0),
-      vertex_count_(0),
-      index_base_(0),
-      index_count_(0) {
-  RenderSystem* rs = RenderSystem::Current();
-  vbg_ = rs->CreateVertexBufferGroup(vb->vertex_desc());
-  SetVertexBuffer(vb, 0);
-  ib_ = ib;
-}
-
-Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib)
-    : primitive_(kTriangleList),
-      vertex_base_(0),
-      vertex_count_(0),
-      index_base_(0),
-      index_count_(0) {
-  vbg_ = vbg;
-  ib_ = ib;
-}
-
-VertexBuffer* Entity::vertex_buffer_at(int32 index) { 
-  return vbg_->vertex_buffer_at(index);
-}
-
-/*
-Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib)
-    : ib_(ib),
-      primitive_(kTriangleList) {
-  vbg_ = new VertexBufferGroup;
-  SetVertexBuffer(vb, 0);
-  vbg_->add_vertex_buffer(vb.get());
-}
-*/
-
-Entity::~Entity() {
-}
-
-void Entity::SetVertexBuffer(VertexBuffer* vb, int32 index) {
-  vbg_->add_vertex_buffer_at(vb, index);
-}
-
-void Entity::SetIndicesBuffer(IndicesBuffer* ib) {
-  ib_ = ib;
-}
-
-const VertexDesc* Entity::vertex_desc() const {
-  return vbg_->vertex_desc();
-}
-
-EntityPtr Entity::DeepCopy() {
-  NOTIMPLEMENTED();
-  return EntityPtr();
-}
-
-void Entity::Render(Renderer* renderer) {
-  if (ib_.get()) {
-    DrawIndex(renderer);
-  } else {
-    Draw(renderer);
-  }
-}
-
-void Entity::Draw(Renderer* renderer) {
-  DCHECK(vbg_.get() && vbg_->validate());
-  renderer->BindVertexBufferGroup(vbg_.get());
-  renderer->BindIndicesBuffer(NULL);
-  renderer->SetPrimitiveTopology(primitive_type());
-  int32 count = (vertex_count_ > 0) ? vertex_count_ : vbg_->vertex_count();
-  renderer->Draw(count, vertex_base_);
-}
-
-void Entity::DrawIndex(Renderer* renderer) {
-  DCHECK(vbg_.get() && vbg_->validate());
-  renderer->BindVertexBufferGroup(vbg_.get());
-  renderer->BindIndicesBuffer(ib_.get());
-  renderer->SetPrimitiveTopology(primitive_type());
-  int32 count = (index_count_ > 0) ? index_count_ : ib_->indices_count();
-  renderer->DrawIndex(count, index_base_, vertex_base_);
-}
-
-// class EntityVec
-EntityVec::EntityVec() {
-}
-
-Entity* EntityVec::AddEntity(Entity* ptr) {
-  vec_.push_back(ptr);
-  UpdateVMinAndVMax(ptr->vmin(), &vmin_, &vmax_);
-  UpdateVMinAndVMax(ptr->vmax(), &vmin_, &vmax_);
-  return ptr;
-}
-
-void EntityVec::RemoveEntityAt(int32 index) {
-  DCHECK(index < static_cast<int32>(vec_.size()));
-  vec_.erase(vec_.begin() + index);
-  UpdateMinAndMax();
-}
-
-EntityVecPtr EntityVec::DeepCopy() {
-  EntityVecPtr ptr = new EntityVec;
-  for (uint32 i = 0; i < vec_.size(); ++i) {
-    ptr->AddEntity(vec_[i]->DeepCopy());
-  }
-  return ptr;
-}
-
-void EntityVec::UpdateMinAndMax() {
-  for (auto iter = vec_.begin(); iter != vec_.end(); ++iter) {
-    Entity* entity = iter->get();
-    UpdateVMinAndVMax(entity->vmin(), &vmin_, &vmax_);
-    UpdateVMinAndVMax(entity->vmax(), &vmin_, &vmax_);
-  }
-}
 
 // MeshPart
 MeshPart::MeshPart(Effect* effect)
@@ -175,6 +31,11 @@ MeshPart& MeshPart::operator = (const MeshPart& part) {
   vecptr_ = part.vecptr_;
   return *this;
 }
+
+void MeshPart::AddEntity(EntityPtr ptr) { vecptr_->AddEntity(ptr);}
+void MeshPart::RemoveEntityAt(int32 index) { vecptr_->RemoveEntityAt(index);}
+Entity* MeshPart::entity_at(int32 index) const { return vecptr_->entity_at(index);}
+int32 MeshPart::entity_count() { return vecptr_->entity_count();}
 
 void MeshPart::Render(Renderer* renderer) {
   DCHECK(context_ || providers_.size() == 0u);
@@ -252,13 +113,4 @@ void Mesh::UpdateMinAndMax() {
   }
 }
 
-//
-void UpdateVMinAndVMax(const Vector3 pos, Vector3* vmin, Vector3* vmax) {
-  if (pos.x < vmin->x) vmin->x = pos.x;
-  if (pos.y < vmin->y) vmin->y = pos.y;
-  if (pos.z < vmin->z) vmin->z = pos.z;
-  if (pos.x > vmax->x) vmax->x = pos.x;
-  if (pos.y > vmax->y) vmax->y = pos.y;
-  if (pos.z > vmax->z) vmax->z = pos.z;
-}
 }  // namespace azer
