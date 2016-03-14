@@ -4,6 +4,10 @@ static_library("scene") {
   sources = [
     "interactive/interactive_controller.h",
     "interactive/interactive_controller.cc",
+    "interactive/rotate_controller.h",
+    "interactive/rotate_controller.cc",
+    "interactive/translate_controller.h",
+    "interactive/translate_controller.cc",
   ]
   deps = [
     "//base",
