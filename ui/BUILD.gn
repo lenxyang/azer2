@@ -1,0 +1,16 @@
+
+
+static_library("scene") {
+  sources = [
+    "interactive/interactive_controller.h",
+    "interactive/interactive_controller.cc",
+  ]
+  deps = [
+    "//base",
+    "//azer",
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  # configs += ["//azer/base:build_render_config"]
+  # visibility = ["//azer"]
+}
