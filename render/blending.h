@@ -71,12 +71,18 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
   };
 
  public:
-  virtual ~Blending() {}
+  explicit Blending(const Desc& desc);
+  virtual ~Blending();
   const Desc& desc() const { return desc_;}
+  void EnableAlphaToConverage(bool enable);
+  void EnableIndependentBlend(bool enable);
  protected:
-  Blending(const Desc& desc) : desc_(desc) {}
-  virtual bool Init() = 0;
+  virtual bool OnDescChanged() = 0;
+
+  bool enable_alpha_to_converage_;
+  bool enable_independent_blending_;
   Desc desc_;
+  DISALLOW_COPY_AND_ASSIGN(Blending);
 };
 
 typedef scoped_refptr<Blending> BlendingPtr;

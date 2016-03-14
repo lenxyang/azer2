@@ -35,7 +35,8 @@ bool D3DBlending::Init() {
   rtbd.BlendOpAlpha = TranslateBlendingOper(desc_.alpha_oper);
   rtbd.RenderTargetWriteMask = TranslateWriteMask(desc_.mask);
 
-  blend_desc.AlphaToCoverageEnable = false;
+  blend_desc.AlphaToCoverageEnable = enable_alpha_to_converage_;
+  blend_desc.IndependentBlendEnable = enable_independent_blending_;
   blend_desc.RenderTarget[0] = rtbd;
   
   ID3D11Device* d3d_device = render_system_->GetDevice();
@@ -44,6 +45,12 @@ bool D3DBlending::Init() {
   HRESULT hr = d3d_device->CreateBlendState(&blend_desc, &blending_state_);
   HRESULT_HANDLE(hr, ERROR, "CreateBlendState failed ");
   
+  return true;
+}
+
+bool D3DBlending::OnDescChanged() {
+  if (blending_state_) {
+  }
   return true;
 }
 }  // namespace d3d11

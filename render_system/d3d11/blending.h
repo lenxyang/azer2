@@ -16,6 +16,7 @@ class D3DBlending : public Blending {
   ~D3DBlending() override;
 
   bool Init();
+  bool OnDescChanged() override;
  protected:
   ID3D11BlendState* blending_state_;
   D3DRenderSystem* render_system_;
