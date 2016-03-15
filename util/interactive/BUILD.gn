@@ -1,0 +1,20 @@
+
+
+static_library("interactive") {
+  sources = [
+    "interactive_controller.h",
+    "interactive_controller.cc",
+    "rotate_controller.h",
+    "rotate_controller.cc",
+    "translate_controller.h",
+    "translate_controller.cc",
+  ]
+  deps = [
+    "//base",
+    "//azer",
+  ]
+
+  configs += ["//azer/build/config:utf8src"]
+  # configs += ["//azer/base:build_render_config"]
+  # visibility = ["//azer"]
+}
