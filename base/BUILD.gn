@@ -55,6 +55,8 @@ source_set("base") {
     "resource.h",
     "resource_loader.cc",
     "resource_loader.h",
+    "resource_bundler.cc",
+    "resource_bundler.h",
     "string.cc",
     "string.h",
     "tree_node.h",

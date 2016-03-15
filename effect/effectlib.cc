@@ -11,8 +11,8 @@
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/color_effect.h"
 #include "azer/effect/diffusemap_effect.h"
-#include "azer/effect/texture_effect.h"
 #include "azer/effect/diffusemap_effect_adapter.h"
+#include "azer/effect/texture_effect.h"
 #include "azer/effect/sky_effect.h"
 #include "azer/effect/normalline_effect.h"
 #include "azer/effect/shaderlib/grit/shaderlib.hlsl.h"
@@ -67,7 +67,7 @@ EffectData effect_data[] = {
 EffectLib::EffectLib() {}
 bool EffectLib::Load(const base::FilePath& filepath) {
   InitAdapterContext();
-  resource_bundle_.reset(new effectlib::ResourceBundle);
+  resource_bundle_.reset(new base::ResourceBundle);
   return resource_bundle_->Load(filepath);
 }
 

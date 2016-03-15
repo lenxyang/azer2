@@ -2,6 +2,8 @@
 
 static_library("interactive") {
   sources = [
+    "env.cc",
+    "env.h",
     "interactive_controller.h",
     "interactive_controller.cc",
     "rotate_controller.h",
@@ -12,6 +14,7 @@ static_library("interactive") {
   deps = [
     "//base",
     "//azer",
+    "//azer/effect:effectlib",
   ]
 
   configs += ["//azer/build/config:utf8src"]

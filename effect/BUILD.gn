@@ -47,8 +47,6 @@ static_library("effectlib") {
     "material.h",
     "normalline_effect.cc",
     "normalline_effect.h",
-    "resource_bundle.cc",
-    "resource_bundle.h",
     "sky_effect.cc",
     "sky_effect.h",
   ]

@@ -5,7 +5,7 @@
 #include "azer/base/string.h"
 
 namespace azer {
-namespace effectlib {
+namespace base {
 ResourceBundle::ResourceBundle() {
   image_lock_.reset(new ::base::Lock());
 }
@@ -77,5 +77,5 @@ bool ResourceBundle::Load(const ::base::FilePath& path) {
   datapack_.reset(new ui::DataPack(ui::ScaleFactor(1)));
   return datapack_->LoadFromPath(path);
 }
-}  // namespace effectlib
+}  // namespace base
 }  // namespace azer

@@ -10,8 +10,8 @@
 #include "azer/base/export.h"
 
 namespace azer {
-namespace effectlib {
-class ResourceBundle : public ui::ResourceBundle::Delegate {
+namespace base {
+class AZER_EXPORT ResourceBundle : public ui::ResourceBundle::Delegate {
  public:
   ResourceBundle();
   ~ResourceBundle();
@@ -19,7 +19,8 @@ class ResourceBundle : public ui::ResourceBundle::Delegate {
   bool Load(const ::base::FilePath& path);
 
   const gfx::ImageSkia* GetImageSkiaNamed(int resource_id);
-
+  bool GetRawDataResource(int resource_id, base::StringPiece* value);
+private:
   base::FilePath GetPathForResourcePack(const base::FilePath& pack_path,
                                         ui::ScaleFactor scale_factor) override;
 
@@ -36,7 +37,7 @@ class ResourceBundle : public ui::ResourceBundle::Delegate {
                           base::StringPiece* value) override;
   bool GetLocalizedString(int message_id, base::string16* value) override;
   scoped_ptr<gfx::Font> GetFont(ui::ResourceBundle::FontStyle style) override;
- private:
+
   std::unique_ptr<ui::DataPack> datapack_;
   typedef std::map<int, gfx::Image> ImageMap;
   ImageMap images_;
@@ -44,5 +45,5 @@ class ResourceBundle : public ui::ResourceBundle::Delegate {
   scoped_ptr< ::base::Lock> image_lock_;
   DISALLOW_COPY_AND_ASSIGN(ResourceBundle);
 };
-}  // namespace effectlib
+}  // namespace base
 }  // namespace azer
