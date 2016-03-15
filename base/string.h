@@ -50,6 +50,6 @@ inline std::ostream& operator << (std::ostream& os, const ::base::FilePath& path
 }
 
 namespace azer {
-typedef base::BasicStringPiece<StringType> Slice;
+typedef ::base::BasicStringPiece<StringType> Slice;
 }  // namespace azer
 

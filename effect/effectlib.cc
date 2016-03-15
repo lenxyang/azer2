@@ -67,8 +67,8 @@ EffectData effect_data[] = {
 EffectLib::EffectLib() {}
 bool EffectLib::Load(const base::FilePath& filepath) {
   InitAdapterContext();
-  resource_bundle_.reset(new base::ResourceBundle);
-  return resource_bundle_->Load(filepath);
+  resource_pack_.reset(new ResourcePack);
+  return resource_pack_->Load(filepath);
 }
 
 Effect* EffectLib::GetEffect(const std::string& name) {
@@ -81,14 +81,13 @@ Effect* EffectLib::GetEffect(const std::string& name) {
 }
 
 namespace {
-void LoadEffectData(EffectData* data, TechSource* source,
-                    effectlib::ResourceBundle* res) {
+void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
   if (data->vertex_shader_id > 0) {
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".vs.hlsl";
     shader.stage = kVertexStage;
-    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(
-        data->vertex_shader_id, ui::ScaleFactor(1));
+    int32 id = data->vertex_shader_id;
+    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
@@ -97,8 +96,8 @@ void LoadEffectData(EffectData* data, TechSource* source,
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".hs.hlsl";
     shader.stage = kHullStage;
-    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(
-        data->hull_shader_id, ui::ScaleFactor(1));
+    int32 id = data->hull_shader_id;
+    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
@@ -107,8 +106,8 @@ void LoadEffectData(EffectData* data, TechSource* source,
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".ds.hlsl";
     shader.stage = kDomainStage;
-    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(
-        data->domain_shader_id, ui::ScaleFactor(1));
+    int32 id = data->domain_shader_id;
+    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
@@ -117,8 +116,8 @@ void LoadEffectData(EffectData* data, TechSource* source,
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".gs.hlsl";
     shader.stage = kGeometryStage;
-    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(
-        data->geometry_shader_id, ui::ScaleFactor(1));
+    int32 id = data->geometry_shader_id;
+    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
@@ -127,8 +126,8 @@ void LoadEffectData(EffectData* data, TechSource* source,
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".ps.hlsl";
     shader.stage = kPixelStage;
-    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(
-        data->pixel_shader_id, ui::ScaleFactor(1));
+    int32 id = data->pixel_shader_id;
+    base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
@@ -143,7 +142,7 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
       int32 vdindex = data->vertex_desc_index;
       VertexDescPtr desc(new VertexDesc(kVertexDesc[vdindex]));
       TechSource tech(desc);
-      LoadEffectData(data, &tech, resource_bundle_.get());
+      LoadEffectData(data, &tech, resource_pack_.get());
       CHECK(effect->Init(tech)) << "Effect \"" << name << "\" init failed";
       effects_.insert(std::make_pair(name, effect));
       return effect.get();
