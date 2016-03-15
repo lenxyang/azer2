@@ -78,10 +78,8 @@ struct AZER_EXPORT GeoConeParams {
 };
 AZER_EXPORT EntityDataPtr CreateTaperEntity(
     VertexDesc* desc, const GeoConeParams& params, const Matrix4& mat);
-AZER_EXPORT MeshPartPtr CreateConeMeshPart(
-    Effect* e, const GeoConeParams& params, const Matrix4& mat);
-AZER_EXPORT MeshPartPtr CreateTaperMeshPart(
-    Effect* e, const GeoConeParams& params, const Matrix4& mat);
+AZER_EXPORT EntityDataPtr CreateConeEntity(
+    VertexDesc* desc, const GeoConeParams& params, const Matrix4& mat);
 
 struct AZER_EXPORT GeoBarrelParams {
   GeoBarrelParams() : top_radius(1.0f), bottom_radius(1.0f), height(1.0f), 
