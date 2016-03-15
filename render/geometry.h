@@ -76,7 +76,7 @@ struct AZER_EXPORT GeoConeParams {
   float radius;
   int slice;
 };
-AZER_EXPORT EntityPtr CreateTaperEntity(
+AZER_EXPORT EntityDataPtr CreateTaperEntity(
     VertexDesc* desc, const GeoConeParams& params, const Matrix4& mat);
 AZER_EXPORT MeshPartPtr CreateConeMeshPart(
     Effect* e, const GeoConeParams& params, const Matrix4& mat);

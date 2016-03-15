@@ -172,4 +172,17 @@ void EntityVec::UpdateMinAndMax() {
     UpdateVMinAndVMax(entity->vmax(), &vmin_, &vmax_);
   }
 }
+
+EntityPtr CreateEntityFromData(EntityData* data) {
+  RenderSystem* rs = RenderSystem::Current();
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(
+      kVertexBufferOpt(), data->vdata());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(
+      kIndicesBufferOpt(), data->idata());
+  EntityPtr entity(new Entity(vb, ib));
+  for (auto iter = data->subset().begin(); iter != data->subset().end(); ++iter) {
+    entity->AddSubset(*iter);
+  }
+  return entity;
+}
 }  // namespace azer

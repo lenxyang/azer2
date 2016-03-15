@@ -737,6 +737,19 @@ EntityPtr CreateRoundEntity(VertexDesc* desc, float radius, int32 slice,
   return entity;
 }
 
+EntityDataPtr CreateRoundEntity(VertexDesc* desc, float radius, int32 slice, 
+                                const Matrix4& mat) {
+  VertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
+  IndicesDataPtr idata = CreateRoundInidcesData(slice);
+  CalcIndexedTriangleListTangentAndBinormal(vdata, idata);
+  EntityDataPtr entity(new EntityData(vdata, idata));
+  Subset subset(0, vdata->vertex_count(), 0, idata->indices_count());
+  subset.vmin = mat * Vector4(-radius, -0.00f, -radius, 1.0f);
+  subset.vmax = mat * Vector4( radius,  0.01f,  radius, 1.0f);
+  entity->AddSubset(subset);
+  return entity;
+}
+
 EntityPtr CreateCircleEntity(VertexDesc* desc, float radius, int32 slice, 
                              const Matrix4& mat) {
   VertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
@@ -770,8 +783,8 @@ MeshPartPtr CreateCircleMeshPart(Effect* e, float radius, int slice,
 }
 
 // cone
-EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params, 
-                            const Matrix4& mat) {
+EntityDataPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params, 
+                                const Matrix4& mat) {
   const int32 kVertexNum = 1 + params.slice + 1;
   float degree = 360.0f / (float)params.slice;
   VertexDataPtr vdata(new VertexData(desc, kVertexNum));
@@ -792,17 +805,18 @@ EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params,
   CalcIndexedTriangleNormal(vdata, idata);
   CalcIndexedTriangleListTangentAndBinormal(vdata, idata);
 
-  RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
-  Vector4 vmin = mat * Vector4(-params.radius, 0.0f, -params.radius, 1.0f);
-  Vector4 vmax = mat * Vector4( params.radius, params.height,  
-                                params.radius, 1.0f);
-  entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
-  entity->set_vmax(Vector3(vmax.x, vmax.y, vmax.z));
-  entity->AddSubset(Subset(0, vb->vertex_count(), 0, ib->indices_count()));
-  return entity;
+  scoped_refptr<EntityData> data(new EntityData(vdata, idata));
+  Subset subset;
+  subset.vertex_base = 0;
+  subset.vertex_count = vdata->vertex_count();
+  subset.index_base = 0;
+  subset.index_count = idata->index_count();
+  subset.vmin = mat * Vector4(-params.radius, 0.0f, -params.radius, 1.0f);
+  subset.vmax = mat * Vector4( params.radius, params.height,  
+                               params.radius, 1.0f);
+  
+  data->AddSubset(subset);
+  return data;
 }
 MeshPartPtr CreateTaperMeshPart(Effect* e, const GeoConeParams& params,
                                 const Matrix4& mat) {
@@ -815,11 +829,11 @@ MeshPartPtr CreateTaperMeshPart(Effect* e, const GeoConeParams& params,
 MeshPartPtr CreateConeMeshPart(Effect* e, const GeoConeParams& params, 
                                const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  EntityPtr taper = CreateTaperEntity(e->vertex_desc(), params, mat);
-
+  EntityDataPtr taper = CreateTaperEntity(e->vertex_desc(), params, mat);
+  
   Matrix4 round_mat = std::move(mat * RotateX(Degree(180.0)));
-  EntityPtr round = CreateRoundEntity(e->vertex_desc(), params.radius, params.slice,
-                                      round_mat);
+  EntityDataPtr = CreateRoundEntity(e->vertex_desc(), params.radius, params.slice,
+                                    round_mat);
   
   part->AddEntity(round);
   part->AddEntity(taper);

@@ -7,8 +7,10 @@
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
+class EntityData;
 class Entity;
 class EntityVec;
+typedef scoped_refptr<EntityData> EntityDataPtr;
 typedef scoped_refptr<Entity> EntityPtr;
 typedef scoped_refptr<EntityVec> EntityVecPtr;
 
@@ -30,7 +32,8 @@ class AZER_EXPORT EntityData : public ::base::RefCounted<Entity> {
  public:
   explicit EntityData(VertexData* vdata);
   EntityData(VertexData* vdata, IndicesData* idata);
-
+  
+  void AddSubset(const Subsets& sub) { subset_.push_back(sub);}
   VertexData* vdata() const { return vdata_.get();}
   IndicesData* idata() const { return idata_.get();}
   const Subsets& subset() const { return subset_;}
@@ -102,4 +105,6 @@ class AZER_EXPORT EntityVec : public ::base::RefCounted<EntityVec> {
   Vector3 vmax_;
   DISALLOW_COPY_AND_ASSIGN(EntityVec);
 };
+
+EntityPtr CreateEntityFromData(EntityData* data);
 }  // namespace azer
