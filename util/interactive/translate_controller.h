@@ -2,7 +2,7 @@
 
 #include "base/basictypes.h"
 #include "azer/math/vector3.h" 
-#include "azer/ui/interactive/interactive_controller.h"
+#include "azer/util/interactive/interactive_controller.h"
 
 namespace azer {
 

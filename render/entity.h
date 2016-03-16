@@ -25,6 +25,7 @@ struct AZER_EXPORT Subset {
 
   Subset();
   Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount);
+  Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount, PrimitiveTopology type);
 };
 typedef std::vector<Subset> Subsets;
 
@@ -32,6 +33,7 @@ class AZER_EXPORT EntityData : public ::base::RefCounted<Entity> {
  public:
   explicit EntityData(VertexData* vdata);
   EntityData(VertexData* vdata, IndicesData* idata);
+  EntityData(VertexDesc* desc, int32 count);
   
   void AddSubset(const Subset& sub) { subset_.push_back(sub);}
   VertexData* vdata() const { return vdata_.get();}
@@ -49,7 +51,7 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
  public:
   explicit Entity(VertexDesc* desc);
   explicit Entity(VertexBufferGroup* vb);
-  explicit Entity(const EntityData& data);
+  explicit Entity(EntityData* data);
   Entity(VertexBuffer* vb);
   Entity(VertexBuffer* vb, IndicesBuffer* ib);
   Entity(VertexBufferGroup* vb, IndicesBuffer* ib);

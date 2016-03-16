@@ -2,7 +2,8 @@
 
 #include "base/observer_list.h"
 #include "azer/base/export.h"
-
+#include "azer/math/ray.h"
+#include "azer/math/vector3.h"
 
 namespace azer {
 
@@ -42,7 +43,7 @@ class InteractiveController {
   virtual ~InteractiveController();
   virtual int32 GetPicking(const Ray& ray, Vector3* pos) = 0;
   virtual void UpdateFrame(const FrameArgs& args) = 0;
-  virtual RenderFrame(Renderer* renderer) = 0;
+  virtual void RenderFrame(Renderer* renderer) = 0;
 
   void set_state(int32 state);
   int32 state() const { return state_;}

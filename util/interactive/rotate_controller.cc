@@ -1,10 +1,10 @@
-#include "azer/ui/interactive/rotate_controller.h"
+#include "azer/util/interactive/rotate_controller.h"
 
 #include "base/logging.h"
 
 namespace azer {
-RotateController::RotateController(const Vector3& orientation) 
-    : init_orientation_(initorientation) {
+RotateController::RotateController(const Quaternion& orientation) 
+    : init_orientation_(orientation) {
 }
 
 RotateController::~RotateController() {

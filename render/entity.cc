@@ -25,6 +25,28 @@ Subset::Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount)
   InitMinAndVMax(&vmin, &vmax);
 }
 
+Subset::Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount, 
+               PrimitiveTopology type)
+    : vertex_base(vbase),
+      vertex_count(vcount),
+      index_base(ibase),
+      index_count(icount),
+      primitive(type) {
+  InitMinAndVMax(&vmin, &vmax);
+}
+
+EntityData::EntityData(VertexData* vdata)
+    : vdata_(vdata) {
+}
+
+EntityData::EntityData(VertexData* vdata, IndicesData* idata)
+    : vdata_(vdata),
+      idata_(idata) {
+}
+EntityData::EntityData(VertexDesc* desc, int32 count) {
+  vdata_ = new VertexData(desc, count);
+}
+
 // class Entity
 Entity::Entity(VertexDesc* desc) {
   InitMinAndVMax(&vmin_, &vmax_);
@@ -44,8 +66,11 @@ Entity::Entity(VertexBufferGroup* vbg) {
   vbg_ = vbg;
 }
 
-Entity::Entity(const EntityData& data) {
+Entity::Entity(EntityData* data) {
   InitMinAndVMax(&vmin_, &vmax_);
+  RenderSystem* rs = RenderSystem::Current();
+  vbg_ = CreateVertexBufferGroup(kVertexBufferOpt(), data->vdata());
+  ib_ = rs->CreateIndicesBuffer(kIndicesBufferOpt(), data->idata());
 }
 
 Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib) {

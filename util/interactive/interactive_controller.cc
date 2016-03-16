@@ -1,4 +1,4 @@
-#include "azer/ui/interactive/interactive_controller.h"
+#include "azer/util/interactive/interactive_controller.h"
 
 namespace azer {
 InteractiveController::InteractiveController() {}
@@ -28,7 +28,7 @@ void InteractiveController::Removebserver(InteractiveControllerObserver* obs) {
 }
 
 bool InteractiveController::HasObserver(InteractiveControllerObserver* obs) {
-  observer_list.HasObserver(obs);
+  return observer_list_.HasObserver(obs);
 }
 
 void InteractiveController::set_state(int32 state) { 
