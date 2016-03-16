@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<grit latest_public_release="0" current_release="1">
+  <outputs>
+    <output filename="grit/hlsllib.h" type="rc_header"/>
+    <output filename="hlsllib.pak" type="data_package"/>
+  </outputs>
+  <release seq="1">
+    <includes first_id="60000">
+      <include type="txt" name="HLSLLIB_TEXBILLBORD_VS" file="hlsllib/text_billborard.vs.hlsl" />
+      <include type="txt" name="HLSLLIB_TEXBILLBORD_GS" file="hlsllib/text_billborard.gs.hlsl" />
+      <include type="txt" name="HLSLLIB_TEXBILLBORD_PS" file="hlsllib/text_billborard.ps.hlsl" />
+    </includes>
+  </release>
+</grit>

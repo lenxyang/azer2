@@ -17,6 +17,7 @@ static_library("interactive") {
     "//base",
     "//azer",
     "//azer/effect:effectlib",
+    "//azer/res",
   ]
 
   configs += ["//azer/build/config:utf8src"]

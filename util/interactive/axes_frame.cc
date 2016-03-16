@@ -6,9 +6,12 @@
 #include "azer/render/entity.h"
 #include "azer/render/renderer.h"
 #include "azer/render/vertex_pack.h"
+#include "azer/util/interactive/env.h"
 
 namespace azer {
 AxesFrame::AxesFrame() {
+  InteractiveEnv* env = InteractiveEnv::GetInstance();
+  effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
   EntityDataPtr data(new EntityData(effect_->vertex_desc(), 6));
   VertexPack vpack(data->vdata());
@@ -34,7 +37,8 @@ AxesFrame::AxesFrame() {
 
 void AxesFrame::Update(const Camera* camera, const Vector3& position) {
   effect_->SetPV(camera->GetProjViewMatrix());
-  Matrix4 mat = std::move(std::move(Translate(position)) * scale_);
+  Matrix4 mat = std::move(Scale(scale_));
+  mat = std::move(std::move(Translate(position)) * mat);
   effect_->SetWorld(mat);
 }
 

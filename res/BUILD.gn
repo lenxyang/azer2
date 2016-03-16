@@ -1,0 +1,34 @@
+import("//tools/grit/grit_rule.gni")
+import("//tools/grit/repack.gni")
+
+grit("common") {
+  source = "common.grd"
+  resource_ids = ""
+  outputs = [
+    "grit/common.h",
+    "common.pak",
+  ]
+}
+
+grit("hlsllib") {
+  source = "hlsllib.grd"
+  resource_ids = ""
+  outputs = [
+    "grit/hlsllib.h",
+    "hlsllib.pak",
+  ]
+}
+
+repack("res") {
+  sources = [
+    "$root_gen_dir/azer/res/common.pak",
+    "$root_gen_dir/azer/res/hlsllib.pak",
+  ]
+
+  output = "$root_out_dir/azer.pak"
+  deps = [
+    "//ui/resources",
+    "//ui/strings",
+    ":common",
+  ]
+}
