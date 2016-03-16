@@ -16,8 +16,8 @@ class AxesFrame {
   AxesFrame();
   ~AxesFrame();
   
-  void Update(const Camera* camera, const Vector3& position);
   void SetColor(int32 index, const Vector4& color);
+  void Update(const Camera* camera, const Vector3& position);
   void Render(Renderer* renderer);
  private:
   Vector3 scale_;
