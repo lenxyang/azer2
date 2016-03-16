@@ -153,6 +153,14 @@ SlotVertexData::SlotVertexData(VertexDesc* desc, int vertex_count)
   data_.reset(new uint8[capability]);
 }
 
+void SlotVertexData::extend(int32 count) {
+  int capability = (count + vertex_count_) * stride();
+  uint8* data(new uint8[capability]);
+  memcpy(data, data_.get(), vertex_count_ * stride());
+  data_.reset(data);
+  vertex_count_ += count;
+}
+
 const VertexDesc* SlotVertexData::vertex_desc() const {
   DCHECK(desc_.get() != NULL);
   return desc_.get();
@@ -226,7 +234,13 @@ VertexData::VertexData(VertexDesc* desc, int32 vertex_count)
   InitSlotFromDesc();
 }
 
-VertexData::~VertexData() {
+VertexData::~VertexData() {}
+
+void VertexData::extend(int32 count) {
+  for (auto iter = vector_.begin(); iter != vector_.end(); ++iter) {
+    (*iter)->extend(count);
+  }
+  vertex_count_ += count;
 }
 
 void VertexData::InitSlotFromDesc() {

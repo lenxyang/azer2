@@ -4,57 +4,37 @@
 #include "base/logging.h"
 
 namespace azer {
-IndexPack::IndexPack(uint8* data, int32 data_size, IndexType type)
-    : data_(data),
-      current_(data_),
-      data_size_(data_size),
-      type_(type) {
-}
-
 IndexPack::IndexPack(IndicesData* data) 
-    : data_(data->pointer()), 
-      current_(data_),
-      data_size_(data->size()),
-      type_(data->type()) {
-}
-
-int32 IndexPack::step_size() const {
-  uint32 unit_size = 0;
-  switch (type()) {
-    case kIndexUint16:
-      return sizeof(uint16);
-    case kIndexUint32:
-      return sizeof(uint32);
-    case kIndexUint8:
-      return sizeof(uint8);
-    default:
-      NOTREACHED();
-      return 0;
-  }
+    : idata_(data),
+      offset_(0) {
 }
 
 void IndexPack::move(int32 step) {
-  current_ = data_ + (step_size() * step);
-  DCHECK(current_ < data_ + data_size_);
+  offset_ = step * step_size();
+  DCHECK(current() < data() + idata_->size());
 }
 
 bool IndexPack::advance(int32 step) const {
-  current_ += (step_size() * step);
-  return current_ < data_ + data_size_;
+  offset_ += step * step_size();
+  return current() < data() + idata_->size();
+}
+
+int32 IndexPack::index() const {
+  return offset_ / step_size();
 }
 
 void IndexPack::write(int32 value) {
   switch (type()) {
     case kIndexUint16:
       DCHECK(value < std::numeric_limits<uint16>::max());
-      *(uint16*)(current_) = value;
+      *(uint16*)(current()) = value;
       break;
     case kIndexUint32:
-      *(uint32*)(current_) = value;
+      *(uint32*)(current()) = value;
       break;
     case kIndexUint8:
       DCHECK(value < std::numeric_limits<uint8>::max());
-      *(uint8*)(current_) = value;
+      *(uint8*)(current()) = value;
       break;
     default:
       NOTREACHED();
@@ -62,7 +42,7 @@ void IndexPack::write(int32 value) {
 }
 
 uint32 IndexPack::value(int32 index) const {
-  uint8* ptr = data_ + (step_size() * index);
+  const uint8* ptr = data() + (step_size() * index);
   uint32 value;
   switch (type()) {
     case kIndexUint16:
@@ -82,17 +62,17 @@ uint32 IndexPack::value(int32 index) const {
 }
 
 uint32 IndexPack::value() const {
-  CHECK(current_ < data_ + data_size_);
+  CHECK(current() < data() + idata_->size());
   uint32 value;
   switch (type()) {
     case kIndexUint16:
-      value = *(uint16*)(current_);
+      value = *(uint16*)(current());
       break;
     case kIndexUint32:
-      value = *(uint32*)(current_);
+      value = *(uint32*)(current());
       break;
     case kIndexUint8:
-      value = *(uint8*)(current_);
+      value = *(uint8*)(current());
       break;
     default:
       NOTREACHED();
@@ -102,7 +82,7 @@ uint32 IndexPack::value() const {
 }
 
 bool IndexPack::WriteAndAdvance(int32 value) {
-  if (current_ - data_ < data_size_) {
+  if (current() - data() < idata_->size()) {
     write(value);
     advance();
     return true;
@@ -112,33 +92,19 @@ bool IndexPack::WriteAndAdvance(int32 value) {
 }
 
 uint32 IndexPack::ReadAndAdvanceOrDie() const {
-  DCHECK(current_ - data_ < data_size_);
+  DCHECK(current() - data() < idata_->size());
   uint32 value = this->value();
   advance();
   return value;
 }
 
 bool IndexPack::ReadAndAdvance(uint32* value) const {
-  if (current_ - data_ < data_size_) {
+  if (current() - data() < idata_->size()) {
     *value = this->value();
     advance();
     return true;
   } else {
     return false;
-  }
-}
-
-int32 IndexPack::count() const {
-  switch (type()) {
-    case kIndexUint16:
-      return data_size_ / sizeof(uint16);
-    case kIndexUint32:
-      return data_size_ / sizeof(uint32);
-    case kIndexUint8:
-      return data_size_ / sizeof(uint8);
-    default:
-      NOTREACHED();
-      return 0;
   }
 }
 }  // namespace azer

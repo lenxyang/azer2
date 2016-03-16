@@ -6,7 +6,6 @@ namespace azer {
 class AZER_EXPORT IndexPack {
  public:
   IndexPack(IndicesData* data);
-  IndexPack(uint8* data, int32 data_size, IndexType type);
 
   bool WriteAndAdvance(int32 value);
   bool ReadAndAdvance(uint32 *value) const;
@@ -17,17 +16,18 @@ class AZER_EXPORT IndexPack {
   bool advance(int32 step = 1) const;
   uint32 value() const;
   uint32 value(int32 index) const;
-  IndexType type() const { return type_;}
 
-  uint8* current() { return current_;}
-  const uint8* current() const { return current_;}
-  int32 count() const;
+  IndexType type() const { return idata_->type();}
+  int32 index() const;
+  uint8* data() { return idata_->pointer();}
+  const uint8* data() const { return idata_->pointer();}
+  uint8* current() { return idata_->pointer() + offset_;}
+  const uint8* current() const { return idata_->pointer() + offset_;}
+  int32 count() const { return idata_->count();}
+  int32 step_size() const { return idata_->unit_size();}
  private:
-  int32 step_size() const;
-  uint8* data_;
-  mutable uint8* current_;
-  int32 data_size_;
-  IndexType type_;
+  IndicesData* idata_;
+  mutable uint64 offset_;
   DISALLOW_COPY_AND_ASSIGN(IndexPack);
 };
 }  // namespace azer

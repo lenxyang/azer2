@@ -43,7 +43,7 @@ bool D3DIndicesBuffer::Init(const IndicesData* data) {
   hr = d3d_device->CreateBuffer(&indices_buffer_desc, &d3d_vdata, &buffer_);
   HRESULT_HANDLE(hr, ERROR, "D3D11: CreateIndexBuffer failed ");
 
-  indices_count_ = data->num();
+  indices_count_ = data->count();
   type_ = data->type();
 
   return true;

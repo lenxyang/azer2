@@ -87,6 +87,7 @@ class AZER_EXPORT VertexDesc : public ::base::RefCounted<VertexDesc> {
 class AZER_EXPORT SlotVertexData : public ::base::RefCounted<SlotVertexData> {
  public:
   SlotVertexData(VertexDesc* desc, int32 vertex_count);
+  void extend(int32 count);
 
   uint8* next(const uint8* cur);
   const uint8* next(const uint8* cur) const;
@@ -116,6 +117,7 @@ class AZER_EXPORT VertexData : public ::base::RefCounted<VertexData> {
   VertexData(VertexDesc* desc, int32 vertex_count);
   ~VertexData();
 
+  void extend(int32 count);
   void set_slot_vertex_data(SlotVertexData* data, int32 slot_index);
   SlotVertexData* vertex_data_at(int32 index);
 

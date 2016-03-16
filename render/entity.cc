@@ -124,6 +124,19 @@ void Entity::DrawIndexSubset(Renderer* renderer, const Subset& subset)  const {
   renderer->DrawIndex(subset.index_count, subset.index_base, subset.vertex_base);
 }
 
+void Entity::DrawSub(int32 index, Renderer* renderer) const {
+  DCHECK(vbg_.get() && vbg_->validate());
+  renderer->BindVertexBufferGroup(vbg_.get());
+  renderer->BindIndicesBuffer(ib_.get());
+  const Subset& subset = subset_[index];
+  renderer->SetPrimitiveTopology(subset.primitive);
+  if (subset.index_count > 0) {
+    DrawIndexSubset(renderer, subset);
+  } else {
+    DrawSubset(renderer, subset);
+  }
+}
+
 void Entity::Draw(Renderer* renderer) const {
   DCHECK(vbg_.get() && vbg_->validate());
   renderer->BindVertexBufferGroup(vbg_.get());
@@ -171,18 +184,5 @@ void EntityVec::UpdateMinAndMax() {
     UpdateVMinAndVMax(entity->vmin(), &vmin_, &vmax_);
     UpdateVMinAndVMax(entity->vmax(), &vmin_, &vmax_);
   }
-}
-
-EntityPtr CreateEntityFromData(EntityData* data) {
-  RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(
-      kVertexBufferOpt(), data->vdata());
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(
-      kIndicesBufferOpt(), data->idata());
-  EntityPtr entity(new Entity(vb, ib));
-  for (auto iter = data->subset().begin(); iter != data->subset().end(); ++iter) {
-    entity->AddSubset(*iter);
-  }
-  return entity;
 }
 }  // namespace azer

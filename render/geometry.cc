@@ -199,7 +199,7 @@ void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata) {
   
   vpack.first();
   IndexPack ipack(idata);
-  for (int i = 0; i < idata->num(); i+=3) {
+  for (int i = 0; i < idata->count(); i+=3) {
     uint32 idx1 = ipack.ReadAndAdvanceOrDie();
     uint32 idx2 = ipack.ReadAndAdvanceOrDie();
     uint32 idx3 = ipack.ReadAndAdvanceOrDie();

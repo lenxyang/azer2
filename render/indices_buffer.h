@@ -21,17 +21,18 @@ enum IndexType {
 };
 class AZER_EXPORT IndicesData : public ::base::RefCounted<IndicesData> {
  public:
-  static IndexType CalcFixType(int num);
+  static IndexType CalcFixType(int count);
 
-  explicit IndicesData(int num);
-  IndicesData(int num, IndexType type);
+  explicit IndicesData(int count);
+  IndicesData(int count, IndexType type);
   virtual ~IndicesData() {}
 
-  int32 size() const { return size_;}
+  void extend(int32 count);
+  int32 size() const { return unit_size() * count();}
   const uint8* pointer() const;
   uint8* pointer();
   IndexType type() const { return type_;}
-  int32 num() const { return num_;}
+  int32 count() const { return count_;}
   int32 unit_size() const;
   int32 index_value(int idx) const;
   int32 index_value(uint8* ptr) const;
@@ -39,8 +40,7 @@ class AZER_EXPORT IndicesData : public ::base::RefCounted<IndicesData> {
   void reset() { data_.reset();}
  protected:
   IndexType type_;
-  int32 size_;
-  int32 num_;
+  int32 count_;
   std::unique_ptr<uint8[]> data_;
   DISALLOW_COPY_AND_ASSIGN(IndicesData);
 };

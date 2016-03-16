@@ -13,7 +13,8 @@ class AxesFrame {
   void Render(Renderer* renderer);
  private:
   Vector4 colors_[3];
-  scoped_ptr<AxisObject> object_; 
+  scoped_refptr<ColorEffect> effect_;
+  EntityPtr entity_;
   DISALLOW_COPY_AND_ASSIGN(AxesFrame);
 };
 
@@ -26,7 +27,7 @@ class ConeAxesFrame {
   void Render(Renderer* renderer);
  private:
   Vector4 colors_[3];
-  scoped_ptr<AxisObject> object_; 
+  scoped_refptr<ColorEffect> effect_;
   DISALLOW_COPY_AND_ASSIGN(ConeAxesFrame);
 };
 }  // namespace azer

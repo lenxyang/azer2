@@ -6,14 +6,14 @@
 
 namespace azer {
 
-IndexType IndicesData::CalcFixType(int num) {
+IndexType IndicesData::CalcFixType(int count) {
   // directX donnot support kUint8
-  /*if (num < std::numeric_limits<uint8>::max()) {
+  /*if (count < std::counteric_limits<uint8>::max()) {
     return kUint8;
     } else */
-  if (num < std::numeric_limits<uint16>::max()) {
+  if (count < std::numeric_limits<uint16>::max()) {
     return kIndexUint16;
-  } else if (num < std::numeric_limits<uint32>::max()) {
+  } else if (count < std::numeric_limits<uint32>::max()) {
     return kIndexUint32;
   } else {
     NOTIMPLEMENTED();
@@ -21,18 +21,26 @@ IndexType IndicesData::CalcFixType(int num) {
   }
 }
 
-IndicesData::IndicesData(int num)
-    : type_(CalcFixType(num)), size_(0) {
-  size_ = num * unit_size();
-  num_ = num;
-  data_.reset(new uint8[size_]);
+IndicesData::IndicesData(int count)
+    : type_(CalcFixType(count)) {
+  int32 size = count * unit_size();
+  count_ = count;
+  data_.reset(new uint8[size]);
 }
 
-IndicesData::IndicesData(int num, IndexType type)
-    : type_(type), size_(0) {
-  size_ = num * unit_size();
-  num_ = num;
-  data_.reset(new uint8[size_]);
+IndicesData::IndicesData(int count, IndexType type)
+    : type_(type) {
+  int32 size = count * unit_size();
+  count_ = count;
+  data_.reset(new uint8[size]);
+}
+
+void IndicesData::extend(int32 count) {
+  int32 size = (count_ + count) * unit_size();
+  uint8* ndata = new uint8[size];
+  memcpy(ndata, data_.get(), count_ * unit_size());
+  data_.reset(ndata);
+  count_ += count;
 }
 
 int32 IndicesData::unit_size() const {

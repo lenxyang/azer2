@@ -67,6 +67,7 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   const Subset& subset_at(int32 index) const;
 
   void Draw(Renderer* renderer) const;
+  void DrawSub(int32 index, Renderer* renderer) const;
 
   EntityPtr DeepCopy();
   const Vector3& vmin() { return vmin_;}
@@ -105,6 +106,4 @@ class AZER_EXPORT EntityVec : public ::base::RefCounted<EntityVec> {
   Vector3 vmax_;
   DISALLOW_COPY_AND_ASSIGN(EntityVec);
 };
-
-EntityPtr CreateEntityFromData(EntityData* data);
 }  // namespace azer
