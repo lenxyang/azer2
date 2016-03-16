@@ -20,9 +20,9 @@ class TextBillboardEffect : public Effect {
 
   struct gs_cbuffer {
     Matrix4 pv;
-    float3  viewup;
-    float3  viewpos;
-    float2  param;
+    float4  viewup;
+    float4  viewpos;
+    float4  param;
   };
 
   struct ps_cbuffer {
@@ -47,7 +47,7 @@ class TextBillboardEffect : public Effect {
   Matrix4 world_;
   Vector3 viewpos_;
   Vector3 viewup_;
-  Vector3 param_;
+  Vector2 param_;
   Vector4 diffuse_;
   TexturePtr tex_;
   DECLARE_EFFECT_DYNCREATE(TextBillboardEffect);

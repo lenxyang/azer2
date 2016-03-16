@@ -26,11 +26,11 @@ void TextBillboardEffect::InitGpuConstantTable() {
   GpuConstantsTable::Desc gs_table_desc[] = {
     GpuConstantsTable::Desc("pv", GpuConstantsType::kMatrix4,
                             offsetof(gs_cbuffer, pv), 1),
-    GpuConstantsTable::Desc("viewup", GpuConstantsType::kVector3,
+    GpuConstantsTable::Desc("viewup", GpuConstantsType::kVector4,
                             offsetof(gs_cbuffer, viewup), 1),
-    GpuConstantsTable::Desc("viewpos", GpuConstantsType::kVector3,
+    GpuConstantsTable::Desc("viewpos", GpuConstantsType::kVector4,
                             offsetof(gs_cbuffer, viewpos), 1),
-    GpuConstantsTable::Desc("param", GpuConstantsType::kVector2,
+    GpuConstantsTable::Desc("param", GpuConstantsType::kVector4,
                             offsetof(gs_cbuffer, param), 1),
   };
   gpu_table_[kGeometryStage] = rs->CreateGpuConstantsTable(
@@ -59,9 +59,9 @@ void TextBillboardEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuConstantsTable* tb = gpu_table_[(int)kGeometryStage].get();
     tb->SetValue(0, &pv_, sizeof(pv_));
-    tb->SetValue(0, &viewup_, sizeof(viewup_));
-    tb->SetValue(0, &viewpos_, sizeof(viewpos_));
-    tb->SetValue(0, &param_, sizeof(param_));
+    tb->SetValue(1, &viewup_, sizeof(viewup_));
+    tb->SetValue(2, &viewpos_, sizeof(viewpos_));
+    tb->SetValue(3, &param_, sizeof(param_));
   }
   {
     GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();

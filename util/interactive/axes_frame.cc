@@ -34,11 +34,11 @@ AxesFrame::AxesFrame() {
   CHECK(vpack.next(1));
 
   // 
-  vpack.WriteVector3Or4(Vector4(1.2f, 0.0f, 0.0f, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector3Or4(Vector4(1.1f, 0.0f, 0.0f, 1.0f), VertexPos(0, 0));
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 1.2f, 0.0f, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector3Or4(Vector4(0.0f, 1.1f, 0.0f, 1.0f), VertexPos(0, 0));
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 1.2f, 1.0f), VertexPos(0, 0));
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 1.1f, 1.0f), VertexPos(0, 0));
 
   entity_ = new Entity(data);
   entity_->AddSubset(Subset(0, 2, 0, 0, kLineList));
@@ -68,7 +68,7 @@ void AxesFrame::Update(const Camera* camera, const Vector3& position) {
   texeffect_->SetWorld(Matrix4::kIdentity);
   texeffect_->SetViewPos(camera->position());
   texeffect_->SetViewUp(camera->up());
-  texeffect_->SetBillboard(0.1f, 0.1f);
+  texeffect_->SetBillboard(0.05f * scale_.x, 0.05f * scale_.y);
 }
 
 void AxesFrame::SetColor(int32 index, const Vector4& color) {
