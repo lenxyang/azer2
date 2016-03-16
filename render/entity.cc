@@ -47,6 +47,8 @@ EntityData::EntityData(VertexDesc* desc, int32 count) {
   vdata_ = new VertexData(desc, count);
 }
 
+EntityData::~EntityData() {}
+
 // class Entity
 Entity::Entity(VertexDesc* desc) {
   InitMinAndVMax(&vmin_, &vmax_);
@@ -70,7 +72,8 @@ Entity::Entity(EntityData* data) {
   InitMinAndVMax(&vmin_, &vmax_);
   RenderSystem* rs = RenderSystem::Current();
   vbg_ = CreateVertexBufferGroup(kVertexBufferOpt(), data->vdata());
-  ib_ = rs->CreateIndicesBuffer(kIndicesBufferOpt(), data->idata());
+  if (data->idata())
+    ib_ = rs->CreateIndicesBuffer(kIndicesBufferOpt(), data->idata());
 }
 
 Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib) {

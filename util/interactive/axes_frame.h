@@ -10,6 +10,7 @@ class Camera;
 class AxesFrame {
  public:
   AxesFrame();
+  ~AxesFrame();
   
   void Update(const Camera* camera, const Vector3& position);
   void SetColor(int32 index, const Vector4& color);

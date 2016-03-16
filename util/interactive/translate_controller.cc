@@ -1,6 +1,9 @@
 #include "azer/util/interactive/translate_controller.h"
 
 #include "base/logging.h"
+#include "azer/effect/color_effect.h"
+#include "azer/effect/effectlib.h"
+#include "azer/util/interactive/env.h"
 
 namespace azer {
 TranslateController::TranslateController(const Vector3& initpos) 

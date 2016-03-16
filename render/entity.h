@@ -34,6 +34,7 @@ class AZER_EXPORT EntityData : public ::base::RefCounted<Entity> {
   explicit EntityData(VertexData* vdata);
   EntityData(VertexData* vdata, IndicesData* idata);
   EntityData(VertexDesc* desc, int32 count);
+  ~EntityData();
   
   void AddSubset(const Subset& sub) { subset_.push_back(sub);}
   VertexData* vdata() const { return vdata_.get();}
