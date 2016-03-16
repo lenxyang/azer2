@@ -8,7 +8,7 @@ class AxesFrame {
  public:
   AxesFrame();
   
-  void Update(Camera* camera);
+  void Update(const Camera* camera);
   void SetColor(int32 index, const Vector3& color);
   void Render(Renderer* renderer);
  private:
