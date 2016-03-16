@@ -1,5 +1,5 @@
-#include "azer/effect/shaderlib/hlsl/light.h.hlsl"
-#include "azer/effect/shaderlib/hlsl/nmap.h.hlsl"
+#include "azer/res/hlsllib/light.h.hlsl"
+#include "azer/res/hlsllib/nmap.h.hlsl"
 
 struct VsOutput {
   float4 position:SV_POSITION;

@@ -37,6 +37,8 @@ static_library("effectlib") {
     "diffusemap_effect.h",
     "diffusemap_effect_adapter.cc",
     "diffusemap_effect_adapter.h",
+    "text_billboard_effect.cc",
+    "text_billboard_effect.h",
     "texture_effect.cc",
     "texture_effect.h",
     "texture_effect_adapter.cc",
@@ -53,7 +55,7 @@ static_library("effectlib") {
 
   deps = [
     "//azer",
-    "shaderlib",
+    "//azer/res",
   ]
 }
 

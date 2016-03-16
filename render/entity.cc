@@ -47,7 +47,8 @@ EntityData::EntityData(VertexDesc* desc, int32 count) {
   vdata_ = new VertexData(desc, count);
 }
 
-EntityData::~EntityData() {}
+EntityData::~EntityData() {
+}
 
 // class Entity
 Entity::Entity(VertexDesc* desc) {
@@ -90,7 +91,8 @@ Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib) {
   ib_ = ib;
 }
 
-Entity::~Entity() {}
+Entity::~Entity() {
+}
 
 VertexBuffer* Entity::vertex_buffer_at(int32 index) { 
   return vbg_->vertex_buffer_at(index);

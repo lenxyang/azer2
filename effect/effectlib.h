@@ -15,15 +15,15 @@ class EffectAdapterContext;
 
 class EffectLib {
  public:
-  EffectLib();
-  bool Load(const base::FilePath& filepath);
+  EffectLib(ResourcePack* pack);
+
   Effect* GetEffect(const std::string& name);
   EffectAdapterContext* adapter_context() { return adapter_context_.get();}
  private:
   Effect* LoadEffect(const std::string& name);
   bool InitAdapterContext();
   std::map<std::string, scoped_refptr<Effect> > effects_;
-  scoped_ptr<ResourcePack> resource_pack_;
+  ResourcePack* resource_pack_;
   scoped_ptr<EffectAdapterContext> adapter_context_;
   DISALLOW_COPY_AND_ASSIGN(EffectLib);
 };

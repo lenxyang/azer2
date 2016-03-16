@@ -3,10 +3,14 @@
 #include "azer/math/vector3.h"
 #include "azer/math/vector4.h"
 #include "azer/render/entity.h"
-#include "azer/effect/color_effect.h"
 
 namespace azer {
 class Camera;
+class ColorEffect;
+class AmbientColorEffect;
+class Texture;
+class TextBillboardEffect;
+
 class AxesFrame {
  public:
   AxesFrame();
@@ -18,7 +22,9 @@ class AxesFrame {
  private:
   Vector3 scale_;
   Vector4 colors_[3];
+  scoped_refptr<Texture> tex_[3];
   scoped_refptr<AmbientColorEffect> effect_;
+  scoped_refptr<TextBillboardEffect> texeffect_;
   EntityPtr entity_;
   DISALLOW_COPY_AND_ASSIGN(AxesFrame);
 };

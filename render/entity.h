@@ -29,7 +29,7 @@ struct AZER_EXPORT Subset {
 };
 typedef std::vector<Subset> Subsets;
 
-class AZER_EXPORT EntityData : public ::base::RefCounted<Entity> {
+class AZER_EXPORT EntityData : public ::base::RefCounted<EntityData> {
  public:
   explicit EntityData(VertexData* vdata);
   EntityData(VertexData* vdata, IndicesData* idata);

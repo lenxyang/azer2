@@ -13,9 +13,10 @@
 #include "azer/effect/diffusemap_effect.h"
 #include "azer/effect/diffusemap_effect_adapter.h"
 #include "azer/effect/texture_effect.h"
+#include "azer/effect/text_billboard_effect.h"
 #include "azer/effect/sky_effect.h"
 #include "azer/effect/normalline_effect.h"
-#include "azer/effect/shaderlib/grit/shaderlib.hlsl.h"
+#include "azer/res/grit/hlsllib.h"
 
 namespace azer {
 namespace {
@@ -48,28 +49,26 @@ struct EffectData {
 
 EffectData effect_data[] = {
   {"AmbientColorEffect", AmbientColorEffect::kEffectName, 0, 
-   HLSL_AMBIENT_VS, 0, 0, 0, HLSL_AMBIENT_PS},
+   HLSLLIB_AMBIENT_VS, 0, 0, 0, HLSLLIB_AMBIENT_PS},
+  {"TextBillboardEffect", TextBillboardEffect::kEffectName, 0, 
+   HLSLLIB_TEXTBILLBOARD_VS, 0, 0, HLSLLIB_TEXTBILLBOARD_GS,
+   HLSLLIB_TEXTBILLBOARD_PS},
   {"ColorEffect", ColorEffect::kEffectName, 0, 
-   HLSL_COLOR_VS, 0, 0, 0, HLSL_COLOR_PS},
+   HLSLLIB_COLOR_VS, 0, 0, 0, HLSLLIB_COLOR_PS},
   {"ColorEffect", ColorEffect::kEffectName, 0, 
-   HLSL_DIFFUSEMAP_VS, 0, 0, 0, HLSL_DIFFUSEMAP_PS},
+   HLSLLIB_DIFFUSEMAP_VS, 0, 0, 0, HLSLLIB_DIFFUSEMAP_PS},
   {"NormalLineEffect", NormalLineEffect::kEffectName, 0, 
-   HLSL_NORMALLINE_VS, 0, 0, HLSL_NORMALLINE_GS, HLSL_NORMALLINE_PS},
+   HLSLLIB_NORMALLINE_VS, 0, 0, HLSLLIB_NORMALLINE_GS, HLSLLIB_NORMALLINE_PS},
   {"TextureEffect0", TextureEffect::kEffectName, 1, 
-   HLSL_TEXTURE0_VS, 0, 0, 0, HLSL_TEXTURE0_PS},
+   HLSLLIB_TEXTURE0_VS, 0, 0, 0, HLSLLIB_TEXTURE0_PS},
   {"TextureEffect1", TextureEffect::kEffectName, 1, 
-   HLSL_TEXTURE1_VS, 0, 0, 0, HLSL_TEXTURE1_PS},
+   HLSLLIB_TEXTURE1_VS, 0, 0, 0, HLSLLIB_TEXTURE1_PS},
   {"SkyboxEffect", SkyboxEffect::kEffectName, 1, 
-   HLSL_SKYBOX_VS, 0, 0, 0, HLSL_SKYBOX_PS},
+   HLSLLIB_SKYBOX_VS, 0, 0, 0, HLSLLIB_SKYBOX_PS},
 };
 }  // namespace effect
 
-EffectLib::EffectLib() {}
-bool EffectLib::Load(const base::FilePath& filepath) {
-  InitAdapterContext();
-  resource_pack_.reset(new ResourcePack);
-  return resource_pack_->Load(filepath);
-}
+EffectLib::EffectLib(ResourcePack* pack) : resource_pack_(pack) {}
 
 Effect* EffectLib::GetEffect(const std::string& name) {
   auto iter = effects_.find(name);
@@ -142,7 +141,7 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
       int32 vdindex = data->vertex_desc_index;
       VertexDescPtr desc(new VertexDesc(kVertexDesc[vdindex]));
       TechSource tech(desc);
-      LoadEffectData(data, &tech, resource_pack_.get());
+      LoadEffectData(data, &tech, resource_pack_);
       CHECK(effect->Init(tech)) << "Effect \"" << name << "\" init failed";
       effects_.insert(std::make_pair(name, effect));
       return effect.get();
@@ -160,9 +159,4 @@ bool EffectLib::InitAdapterContext() {
   return true;
 }
 
-bool LoadEffectLib(EffectLib* lib) {
-  using base::UTF8ToUTF16;
-  base::FilePath path(UTF8ToUTF16("out/dbg/shaderlib.hlsl.pak"));
-  return lib->Load(path);
-}
 }  // namespace azer
