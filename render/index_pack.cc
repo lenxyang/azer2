@@ -11,12 +11,12 @@ IndexPack::IndexPack(IndicesData* data)
 
 void IndexPack::move(int32 step) {
   offset_ = step * step_size();
-  DCHECK(current() < data() + idata_->size());
+  DCHECK(current() < pointer() + idata_->size());
 }
 
 bool IndexPack::advance(int32 step) const {
   offset_ += step * step_size();
-  return current() < data() + idata_->size();
+  return current() < pointer() + idata_->size();
 }
 
 int32 IndexPack::index() const {
@@ -42,7 +42,7 @@ void IndexPack::write(int32 value) {
 }
 
 uint32 IndexPack::value(int32 index) const {
-  const uint8* ptr = data() + (step_size() * index);
+  const uint8* ptr = pointer() + (step_size() * index);
   uint32 value;
   switch (type()) {
     case kIndexUint16:
@@ -62,7 +62,7 @@ uint32 IndexPack::value(int32 index) const {
 }
 
 uint32 IndexPack::value() const {
-  CHECK(current() < data() + idata_->size());
+  CHECK(current() < pointer() + idata_->size());
   uint32 value;
   switch (type()) {
     case kIndexUint16:
@@ -82,7 +82,7 @@ uint32 IndexPack::value() const {
 }
 
 bool IndexPack::WriteAndAdvance(int32 value) {
-  if (current() - data() < idata_->size()) {
+  if (current() - pointer() < idata_->size()) {
     write(value);
     advance();
     return true;
@@ -92,14 +92,14 @@ bool IndexPack::WriteAndAdvance(int32 value) {
 }
 
 uint32 IndexPack::ReadAndAdvanceOrDie() const {
-  DCHECK(current() - data() < idata_->size());
+  DCHECK(current() - pointer() < idata_->size());
   uint32 value = this->value();
   advance();
   return value;
 }
 
 bool IndexPack::ReadAndAdvance(uint32* value) const {
-  if (current() - data() < idata_->size()) {
+  if (current() - pointer() < idata_->size()) {
     *value = this->value();
     advance();
     return true;

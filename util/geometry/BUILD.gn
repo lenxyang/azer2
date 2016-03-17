@@ -1,0 +1,16 @@
+
+
+static_library("geometry") {
+  sources = [
+    "common.cc",
+    "common.h",
+    "cone.cc",
+    "cone.h",
+    "geometry.h",
+    "normal_util.cc",
+    "normal_util.h",
+  ]
+  deps = [
+    "//azer",
+  ]
+}

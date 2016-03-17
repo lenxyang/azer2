@@ -1,5 +1,8 @@
 #include "azer/util/interactive/pick_util.h"
 
+#include "azer/math/math.h"
+#include "azer/render/camera.h"
+
 namespace azer {
 Vector4 CalcWorldPosFromScreen(const gfx::Point& pt, const gfx::Size& size, 
                                const Camera* camera) {
@@ -40,9 +43,9 @@ bool PickingPlane(const azer::Ray& ray, const azer::Plane& plane,
 }
 
 void CalcNCDVec(const Vector3& p, const Camera& camera, Vector3* ndc) {
-  Vector4 v = camera.GetProjViewMatrix() * Vector4(*p, 1.0f);
-  ndc.x = v.x / v.w;
-  ndc.y = v.x / v.w;
-  ndc.z = v.x / v.w;
+  Vector4 v = camera.GetProjViewMatrix() * Vector4(p, 1.0f);
+  ndc->x = v.x / v.w;
+  ndc->y = v.y / v.w;
+  ndc->z = v.z / v.w;
 }
 }  // namespace azer

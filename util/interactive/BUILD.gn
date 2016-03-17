@@ -20,6 +20,7 @@ static_library("interactive") {
     "//azer",
     "//azer/effect:effectlib",
     "//azer/res",
+    "//azer/util/geometry",
   ]
 
   configs += ["//azer/build/config:utf8src"]
