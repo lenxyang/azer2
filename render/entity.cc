@@ -75,6 +75,7 @@ Entity::Entity(EntityData* data) {
   vbg_ = CreateVertexBufferGroup(kVertexBufferOpt(), data->vdata());
   if (data->idata())
     ib_ = rs->CreateIndicesBuffer(kIndicesBufferOpt(), data->idata());
+  subset_ = data->subset();
 }
 
 Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib) {

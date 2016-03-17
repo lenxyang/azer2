@@ -51,7 +51,9 @@ void AppendGeoConeData(EntityData* data, const GeoConeParam& p, const Matrix4& m
 
 EntityDataPtr CreateCone(VertexDesc* desc, const GeoConeParam& p,
                          const Matrix4& mat) {
-  EntityDataPtr data(new EntityData(desc, 1));
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata, idata));
   AppendGeoConeData(data.get(), p, mat);
   return data;
 }

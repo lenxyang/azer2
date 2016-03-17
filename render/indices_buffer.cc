@@ -37,9 +37,13 @@ IndicesData::IndicesData(int count, IndexType type)
 
 void IndicesData::extend(int32 count) {
   int32 size = (count_ + count) * unit_size();
-  uint8* ndata = new uint8[size];
-  memcpy(ndata, data_.get(), count_ * unit_size());
-  data_.reset(ndata);
+  if (CalcFixType(count_ + count) == type()) {
+    uint8* ndata = new uint8[size];
+    memcpy(ndata, data_.get(), count_ * unit_size());
+    data_.reset(ndata);
+  } else {
+    CHECK(false);
+  }
   count_ += count;
 }
 

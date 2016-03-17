@@ -12,7 +12,7 @@ inline int32 CalcSphereIndexCount(int32 stack_num, int32 slice_num) {
 }
 
 inline int32 CalcSphereVertexCount(int32 stack_num, int32 slice_num) {
-  return (stack_num - 2) * slice_num + 2;
+  return (stack_num - 2) * (slice_num + 1) + 2;
 }
 
 Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
@@ -33,7 +33,7 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
       float degree = 360.0f - j * 360.0f / p.slice;
       float x = p.radius * slice_radius * cos(Degree(degree));
       float z = p.radius * slice_radius * sin(Degree(degree));
-
+      vp->WriteVector3Or4(Vector4(x, y, z, 1.0f), vpos);
       float tu = j * 1.0f / p.slice;
       vp->WriteVector2(Vector2(tu, tv), texpos);
       CHECK(vp->next(1));
@@ -43,6 +43,12 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
     vp->WriteVector2(Vector2(1.0f, tv), texpos);
     CHECK(vp->next(1));
   }
+
+  Vector4 pos = std::move(mat * Vector4(0.0F, -p.radius, 0.0f, 1.0f));
+  vp->WriteVector3Or4(pos, vpos);
+  vp->WriteVector2(Vector2(1.0f, 1.0f), texpos);
+  vp->next(1);
+  subset.vertex_count = vp->index() - subset.vertex_base;
 
   subset.index_base = ipack->index();
   AppendUpGeoTaperIndexData(subset.index_base, ipack, p.slice);
@@ -65,14 +71,18 @@ void AppendGeoSphereData(EntityData* data, const GeoSphereParam& p,
   data->idata()->extend(kIndexCount);
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  vpack.move(data->vdata()->vertex_count() - kVertexCount - 1);
-  ipack.move(data->idata()->count() - kIndexCount - 1);
+  vpack.move(data->vdata()->vertex_count() - 1 - kVertexCount);
+  ipack.move(data->idata()->count() - 1 - kIndexCount);
+  Subset subset = AppendGeoSphereSuset(&vpack, &ipack, p, mat);
+  data->AddSubset(subset);
 }
 
 EntityDataPtr CreateSphere(VertexDesc* desc, const GeoSphereParam& p,
                            const Matrix4& mat) {
-  EntityDataPtr data(new EntityData(desc, 1));
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata, idata));
   AppendGeoSphereData(data.get(), p, mat);
-return data;
+  return data;
 }
 }  // namespace azer
