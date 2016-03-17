@@ -5,6 +5,7 @@
 #include "azer/render/vertex_pack.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/util/geometry/common.h"
+#include "azer/util/geometry/normal_util.h"
 
 namespace azer {
 inline int32 CalcSphereIndexCount(int32 stack_num, int32 slice_num) {
@@ -26,10 +27,10 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
   vp->WriteVector2(Vector2(0.0f, 0.0f), texpos);
   CHECK(vp->next(1));
   for (int i = 1; i < p.stack - 1; ++i) {
-    float y = p.radius * sin(Degree(90.0f - i * 180.0f / (float)p.stack));
-    float slice_radius =  cos(Degree(90.0f - i * 180.0f / (float)p.stack));
+    float y = p.radius * sin(Degree(90.0f - i * 180.0f / (float)(p.stack - 1)));
+    float slice_radius =  cos(Degree(90.0f - i * 180.0f / (float)(p.stack - 1)));
     float tv = i * 1.0f / (p.stack - 1);
-    for (int j = 0; j < p.slice; ++j) {
+    for (int j = 0; j < p.slice + 1; ++j) {
       float degree = 360.0f - j * 360.0f / p.slice;
       float x = p.radius * slice_radius * cos(Degree(degree));
       float z = p.radius * slice_radius * sin(Degree(degree));
@@ -38,10 +39,6 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
       vp->WriteVector2(Vector2(tu, tv), texpos);
       CHECK(vp->next(1));
     }
-    Vector4 pos = std::move(mat * Vector4(slice_radius, y, 0.0f, 1.0f));
-    vp->WriteVector3Or4(pos, vpos);
-    vp->WriteVector2(Vector2(1.0f, tv), texpos);
-    CHECK(vp->next(1));
   }
 
   Vector4 pos = std::move(mat * Vector4(0.0F, -p.radius, 0.0f, 1.0f));
@@ -51,15 +48,17 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
   subset.vertex_count = vp->index() - subset.vertex_base;
 
   subset.index_base = ipack->index();
-  AppendUpGeoTaperIndexData(subset.index_base, ipack, p.slice);
+  AppendUpGeoTaperIndexData(0, ipack, p.slice);
   for (int i = 1; i < p.stack - 2; ++i) {
-    int line1 = subset.index_base + 1 + p.slice * (i - 1);
-    int line2 = subset.index_base + 1 + p.slice * i;
-    GenTriStripIndex(line1, line2, p.slice, ipack);
+    int line1 = 1 + (p.slice + 1) * (i - 1);
+    int line2 = 1 + (p.slice + 1) * i;
+    GenTriStripIndex(line1, line2, p.slice + 1, ipack);
   }
-  AppendBottomGeoTaperIndexData(subset.index_base, ipack, p.slice);
+
+  AppendBottomGeoTaperIndexData(vp->index() - p.slice - 1, ipack, p.slice);
   subset.index_count = ipack->index() - subset.index_base;
 
+  CalcIndexedTriangleNormal(vp->data(), ipack->data(), subset);
   return subset;
 }
 
@@ -71,8 +70,8 @@ void AppendGeoSphereData(EntityData* data, const GeoSphereParam& p,
   data->idata()->extend(kIndexCount);
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  vpack.move(data->vdata()->vertex_count() - 1 - kVertexCount);
-  ipack.move(data->idata()->count() - 1 - kIndexCount);
+  vpack.move(data->vdata()->vertex_count() - kVertexCount);
+  ipack.move(data->idata()->count() - kIndexCount);
   Subset subset = AppendGeoSphereSuset(&vpack, &ipack, p, mat);
   data->AddSubset(subset);
 }

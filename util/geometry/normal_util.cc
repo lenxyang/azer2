@@ -19,7 +19,7 @@ void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata,
   normals.resize(subset.vertex_count);
   
   VertexPack vpack(vbd);
-  vpack.first();
+  vpack.move(subset.vertex_base);
   for (int i = 0; i < subset.vertex_count; ++i) {
     DCHECK(!vpack.end());
     vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 0.0f), npos);

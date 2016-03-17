@@ -12,7 +12,7 @@ int32 AppendUpGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
   for (int i = 0; i < slice; ++i) {
     int index1 = 1 + (i + 1) % slice;
     int index2 = 1 + i;
-    CHECK(ipack->WriteAndAdvance(base + 0));
+    CHECK(ipack->WriteAndAdvance(base));
     CHECK(ipack->WriteAndAdvance(base + index1));
     CHECK(ipack->WriteAndAdvance(base + index2));
   }
@@ -52,15 +52,15 @@ Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius,
   }
   subset.vertex_count = vpack->index() - subset.vertex_base;
   subset.index_base = ipack->index();
-  subset.index_count = AppendUpGeoTaperIndexData(subset.index_base, ipack, slice);
+  subset.index_count = AppendUpGeoTaperIndexData(0, ipack, slice);
   subset.primitive = kTriangleList;
   return subset;
 }
 
 void GenTriStripIndex(int32 line1, int32 line2, int32 vertex_num, IndexPack* ipack) {
   for (int i = 0; i < vertex_num - 1; ++i) {
-    int index1 = i % vertex_num;
-    int index2 = (i + 1) % vertex_num;
+    int index1 = i;
+    int index2 = i + 1;
     CHECK(ipack->WriteAndAdvance(line1 + index2));
     CHECK(ipack->WriteAndAdvance(line1 + index1));
     CHECK(ipack->WriteAndAdvance(line2 + index1));
