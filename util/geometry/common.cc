@@ -7,16 +7,28 @@ namespace azer {
 int32 CalcGeoRoundIndexCount(int slice) { return slice * 3;}
 int32 CalcGeoRoundVertexCount(int slice) { return 1 + slice + 1;}
 
-void AppendGeoRoundIndexData(IndexPack* ipack, int slice, Subset* subset) {
-  subset->index_base = ipack->index();
+int32 AppendUpGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
+  int32 begin = ipack->index();
   for (int i = 0; i < slice; ++i) {
     int index1 = 1 + (i + 1) % slice;
     int index2 = 1 + i;
-    CHECK(ipack->WriteAndAdvance(0));
-    CHECK(ipack->WriteAndAdvance(index1));
-    CHECK(ipack->WriteAndAdvance(index2));
+    CHECK(ipack->WriteAndAdvance(base + 0));
+    CHECK(ipack->WriteAndAdvance(base + index1));
+    CHECK(ipack->WriteAndAdvance(base + index2));
   }
-  subset->index_count = ipack->index() - subset->index_base;
+  return ipack->index() - begin;
+}
+
+int32 AppendBottomGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
+  int32 begin = ipack->index();
+  for (int i = 0; i < slice; ++i) {
+    int index1 = (i + 1) % slice;
+    int index2 = i;
+    CHECK(ipack->WriteAndAdvance(base + slice));
+    CHECK(ipack->WriteAndAdvance(base + index2));
+    CHECK(ipack->WriteAndAdvance(base + index1));
+  }
+  return ipack->index() - begin;
 }
 
 Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius, 
@@ -39,8 +51,23 @@ Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius,
     vpack->next(1);
   }
   subset.vertex_count = vpack->index() - subset.vertex_base;
-  AppendGeoRoundIndexData(ipack, slice, &subset);
+  subset.index_base = ipack->index();
+  subset.index_count = AppendUpGeoTaperIndexData(subset.index_base, ipack, slice);
   subset.primitive = kTriangleList;
   return subset;
+}
+
+void GenTriStripIndex(int32 line1, int32 line2, int32 vertex_num, IndexPack* ipack) {
+  for (int i = 0; i < vertex_num - 1; ++i) {
+    int index1 = i % vertex_num;
+    int index2 = (i + 1) % vertex_num;
+    CHECK(ipack->WriteAndAdvance(line1 + index2));
+    CHECK(ipack->WriteAndAdvance(line1 + index1));
+    CHECK(ipack->WriteAndAdvance(line2 + index1));
+
+    CHECK(ipack->WriteAndAdvance(line1 + index2));
+    CHECK(ipack->WriteAndAdvance(line2 + index1));
+    CHECK(ipack->WriteAndAdvance(line2 + index2));
+  }
 }
 }  // namespace azer

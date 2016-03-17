@@ -15,6 +15,7 @@ struct GeoConeParam {
   int slice;
 };
 
+
 Subset AppendGeoTaperData(VertexPack* vp, IndexPack* ipack, const GeoConeParam& p, 
                           const Matrix4& mat = Matrix4::kIdentity);
 

@@ -23,8 +23,8 @@ Subset AppendGeoTaperData(VertexPack* vpack, IndexPack* ipack, const GeoConePara
     vpack->next(1);
   }
   subset.vertex_count = vpack->index() - subset.vertex_base;
-
-  AppendGeoRoundIndexData(ipack, p.slice, &subset);
+  subset.index_base = ipack->index();
+  subset.index_count = AppendUpGeoTaperIndexData(subset.index_base, ipack, p.slice);
   CalcIndexedTriangleNormal(vpack->data(), ipack->data(), subset);
   CalcIndexedTriangleListTangentAndBinormal(vpack->data(), ipack->data(), subset);
   return subset;
@@ -49,7 +49,8 @@ void AppendGeoConeData(EntityData* data, const GeoConeParam& p, const Matrix4& m
   data->AddSubset(sub);
 }
 
-EntityDataPtr CreateCone(VertexDesc* desc, const GeoConeParam& p,                         const Matrix4& mat) {
+EntityDataPtr CreateCone(VertexDesc* desc, const GeoConeParam& p,
+                         const Matrix4& mat) {
   EntityDataPtr data(new EntityData(desc, 1));
   AppendGeoConeData(data.get(), p, mat);
   return data;
