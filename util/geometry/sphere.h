@@ -17,8 +17,15 @@ struct GeoSphereParam {
 Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
                             const GeoSphereParam& p, 
                             const Matrix4& mat = Matrix4::kIdentity);
+Subset AppendGeoSphereFrameSuset(VertexPack* vp, IndexPack* ipack,
+                                 const GeoSphereParam& p, 
+                                 const Matrix4& mat = Matrix4::kIdentity);
 void AppendGeoSphereData(EntityData* data, const GeoSphereParam& p, 
                          const Matrix4& mat);
+void AppendGeoSphereFrameData(EntityData* data, const GeoSphereParam& p, 
+                              const Matrix4& mat);
 EntityDataPtr CreateSphere(VertexDesc* desc, const GeoSphereParam& p,
-                         const Matrix4& mat = Matrix4::kIdentity);
+                           const Matrix4& mat = Matrix4::kIdentity);
+EntityDataPtr CreateSphereFrame(VertexDesc* desc, const GeoSphereParam& p,
+                                const Matrix4& mat = Matrix4::kIdentity);
 }  // namespace azer

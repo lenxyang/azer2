@@ -172,7 +172,9 @@ void Entity::Draw(Renderer* renderer) const {
   DCHECK(vbg_.get() && vbg_->validate());
   renderer->BindVertexBufferGroup(vbg_.get());
   renderer->BindIndicesBuffer(ib_.get());
-  PrimitiveTopology primitive = kTriangleList;
+  PrimitiveTopology primitive = subset_.empty() ? kTriangleList : 
+      subset_[0].primitive;
+  renderer->SetPrimitiveTopology(primitive);
   for (auto iter = subset_.begin(); iter != subset_.end(); ++iter) {
     if (iter->primitive != primitive) {
       primitive = iter->primitive;
