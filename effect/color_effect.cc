@@ -76,7 +76,7 @@ void ColorEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("mtrl", offsetof(ps_cbuffer, mtrl),
                             sizeof(ColorMaterialData), 1),
     GpuConstantsTable::Desc("lights", offsetof(ps_cbuffer, lights),
-                            sizeof(UniverseLight), arraysize(lights_)),
+                            sizeof(UniverseLight), 4),
     GpuConstantsTable::Desc("light_count", GpuConstantsType::kInt,
                             offsetof(ps_cbuffer, light_count), 1),
   };
@@ -117,7 +117,7 @@ void ColorEffect::ApplyGpuConstantTable(Renderer* renderer) {
     GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &mtrl_, sizeof(mtrl_));
-    tb->SetValue(1, lights_, sizeof(lights_));
+    tb->SetValue(1, lights_, sizeof(UniverseLight) * 4);
     tb->SetValue(2, &light_count_, sizeof(light_count_));
   }
 }

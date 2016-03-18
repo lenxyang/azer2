@@ -37,7 +37,7 @@ void DiffuseMapEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("light_count", GpuConstantsType::kInt,
                             offsetof(ps_cbuffer, light_count), 1),
     GpuConstantsTable::Desc("lights", offsetof(ps_cbuffer, lights),
-                            sizeof(UniverseLight), arraysize(lights_)),
+                            sizeof(UniverseLight), 4),
   };
   gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
       arraysize(ps_table_desc), ps_table_desc);
