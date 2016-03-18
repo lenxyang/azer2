@@ -7,6 +7,7 @@
 #include "azer/render/renderer.h"
 #include "azer/render/vertex_pack.h"
 #include "azer/util/interactive/env.h"
+#include "azer/util/geometry/geometry.h"
 
 namespace azer {
 // class TranslateControlObj
@@ -15,10 +16,31 @@ TranslateControlObj::TranslateControlObj() {
   effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
   // texeffect_ = (TextBillboardEffect*)env->GetEffect("TextBillboardEffect");
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
-  scoped_refptr<EntityData> data(new EntityData(effect_->vertex_desc(), 32));
+
+  VertexDataPtr vdata(new VertexData(effect_->vertex_desc(), 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  scoped_refptr<EntityData> data(new EntityData(vdata, idata));
+  InitAxisObjects(data.get());
+  GeoConeParam p;
+  p.radius = 0.08f;
+  p.height = 0.3f;
+  Matrix4 xmat = RotateZ(Degree(-90.0f)) * Translate(0.0f, 1.0f, 0.0f);
+  Matrix4 ymat = Translate(0.0f, 1.0f, 0.0f);
+  Matrix4 zmat = RotateZ(Degree(90.0f)) * Translate(0.0f, 1.0f, 0.0f);
+  AppendGeoConeData(data.get(), p, xmat);
+  AppendGeoConeData(data.get(), p, ymat);
+  AppendGeoConeData(data.get(), p, zmat);
+
+  entity_ = new Entity(data);
+  ResetColor();
+}
+
+void TranslateControlObj::InitAxisObjects(EntityData* data) {
   VertexPack vpack(data->vdata());
-  vpack.first();
-  
+  const int32 kVertexCount = 32;
+  data->vdata()->extend(kVertexCount);
+  int32 base = data->vdata()->vertex_count() - kVertexCount;
+  vpack.move(base);
   VertexPos vpos(0, 0);
   vpack.WriteVector3Or4(Vector4(0.3f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
@@ -93,21 +115,20 @@ TranslateControlObj::TranslateControlObj() {
   vpack.WriteVector3Or4(Vector4(0.5f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
 
-  entity_ = new Entity(data);
-  entity_->AddSubset(Subset(0, 2, 0, 0, kLineList));
-  entity_->AddSubset(Subset(2, 2, 0, 0, kLineList));
-  entity_->AddSubset(Subset(4, 2, 0, 0, kLineList));
-  entity_->AddSubset(Subset(6, 2, 0, 0, kLineList));
-  entity_->AddSubset(Subset(8, 2, 0, 0, kLineList));
-  entity_->AddSubset(Subset(10, 2, 0, 0, kLineList));
-  entity_->AddSubset(Subset(12, 2, 0, 0, kLineList));
-  entity_->AddSubset(Subset(14, 2, 0, 0, kLineList));
-  entity_->AddSubset(Subset(16, 2, 0, 0, kLineList));
+  
+  data->AddSubset(Subset(base + 0, 2, 0, 0, kLineList));
+  data->AddSubset(Subset(base + 2, 2, 0, 0, kLineList));
+  data->AddSubset(Subset(base + 4, 2, 0, 0, kLineList));
+  data->AddSubset(Subset(base + 6, 2, 0, 0, kLineList));
+  data->AddSubset(Subset(base + 8, 2, 0, 0, kLineList));
+  data->AddSubset(Subset(base + 10, 2, 0, 0, kLineList));
+  data->AddSubset(Subset(base + 12, 2, 0, 0, kLineList));
+  data->AddSubset(Subset(base + 14, 2, 0, 0, kLineList));
+  data->AddSubset(Subset(base + 16, 2, 0, 0, kLineList));
 
-  entity_->AddSubset(Subset(20, 4, 0, 0, kTriangleStrip));
-  entity_->AddSubset(Subset(24, 4, 0, 0, kTriangleStrip));
-  entity_->AddSubset(Subset(28, 4, 0, 0, kTriangleStrip));
-  ResetColor();
+  data->AddSubset(Subset(base + 20, 4, 0, 0, kTriangleStrip));
+  data->AddSubset(Subset(base + 24, 4, 0, 0, kTriangleStrip));
+  data->AddSubset(Subset(base + 28, 4, 0, 0, kTriangleStrip));
 }
 
 void TranslateControlObj::ResetColor() {

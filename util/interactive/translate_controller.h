@@ -36,6 +36,8 @@ class TranslateControlObj {
   void Update(const Camera* camera, const Vector3& position);
   void Render(Renderer* renderer);
  private:
+  void InitAxisObjects(EntityData* data);
+  void AppendConeData(EntityData* data);
   Vector3 scale_;
   Vector4 colors_[kSubsetCount];
   EntityPtr entity_;
