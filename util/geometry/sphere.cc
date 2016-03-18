@@ -41,7 +41,7 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
     }
   }
 
-  Vector4 pos = std::move(mat * Vector4(0.0F, -p.radius, 0.0f, 1.0f));
+  Vector4 pos = std::move(mat * Vector4(0.0f, -p.radius, 0.0f, 1.0f));
   vp->WriteVector3Or4(pos, vpos);
   vp->WriteVector2(Vector2(1.0f, 1.0f), texpos);
   vp->next(1);
@@ -55,7 +55,7 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
     GenTriStripIndex(line1, line2, p.slice + 1, ipack);
   }
 
-  AppendBottomGeoTaperIndexData(vp->index() - p.slice - 1, ipack, p.slice);
+  AppendBottomGeoTaperIndexData(vp->index() - 1 - p.slice - 1, ipack, p.slice);
   subset.index_count = ipack->index() - subset.index_base;
 
   CalcIndexedTriangleNormal(vp->data(), ipack->data(), subset);
