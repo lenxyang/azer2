@@ -16,8 +16,8 @@ cbuffer c_buffer {
    float      specular_power;
    float      alpha;
    float2     padding;
-   int        light_count;
    Light      lights[4];
+   int        light_count;
 };
 
 float4 ps_main(VsOutput o):SV_TARGET {

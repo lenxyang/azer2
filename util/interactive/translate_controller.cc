@@ -13,29 +13,35 @@ namespace azer {
 // class TranslateControlObj
 TranslateControlObj::TranslateControlObj() {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
-  effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
-  // texeffect_ = (TextBillboardEffect*)env->GetEffect("TextBillboardEffect");
+  ambient_effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
+  color_effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
+  // color_effect__ = (TextBillboardEffect*)env->GetEffect("TextBillboardEffect");
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
-
-  VertexDataPtr vdata(new VertexData(effect_->vertex_desc(), 1));
-  IndicesDataPtr idata(new IndicesData(1));
-  scoped_refptr<EntityData> data(new EntityData(vdata, idata));
-  InitAxisObjects(data.get());
-  GeoConeParam p;
-  p.radius = 0.08f;
-  p.height = 0.3f;
-  Matrix4 xmat = RotateZ(Degree(-90.0f)) * Translate(0.0f, 1.0f, 0.0f);
-  Matrix4 ymat = Translate(0.0f, 1.0f, 0.0f);
-  Matrix4 zmat = RotateZ(Degree(90.0f)) * Translate(0.0f, 1.0f, 0.0f);
-  AppendGeoConeData(data.get(), p, xmat);
-  AppendGeoConeData(data.get(), p, ymat);
-  AppendGeoConeData(data.get(), p, zmat);
-
-  entity_ = new Entity(data);
+  entity_ = new Entity(InitAxesObjects(ambient_effect_->vertex_desc()));
+  cones_ = new Entity(InitAxesConeData(ambient_effect_->vertex_desc()));
   ResetColor();
 }
 
-void TranslateControlObj::InitAxisObjects(EntityData* data) {
+EntityDataPtr TranslateControlObj::InitAxesConeData(VertexDesc* desc) {
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata, idata));
+
+  GeoConeParam p;
+  p.radius = 0.03f;
+  p.height = 0.25f;
+  Matrix4 xmat = RotateZ(Degree(90.0f)) * Translate(0.0f, 1.0f, 0.0f);
+  Matrix4 ymat = Translate(0.0f, 1.0f, 0.0f);
+  Matrix4 zmat = RotateX(Degree(-90.0f)) * Translate(0.0f, 1.0f, 0.0f);
+  AppendGeoConeData(data.get(), p, xmat);
+  AppendGeoConeData(data.get(), p, ymat);
+  AppendGeoConeData(data.get(), p, zmat);
+  return data;
+}
+
+EntityDataPtr TranslateControlObj::InitAxesObjects(VertexDesc* desc) {
+  scoped_refptr<EntityData> data(new EntityData(desc, 1));
+
   VertexPack vpack(data->vdata());
   const int32 kVertexCount = 32;
   data->vdata()->extend(kVertexCount);
@@ -56,63 +62,64 @@ void TranslateControlObj::InitAxisObjects(EntityData* data) {
   CHECK(vpack.next(1));
 
   // XY & XZ
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.0f, 0.0f, 1.0f), vpos);
+  float begin = 0.35f;
+  vpack.WriteVector3Or4(Vector4(begin, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.5f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, begin, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.0f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.0f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, 0.0f, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // YZ & YZ
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.5f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, begin, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.5f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, begin, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.5f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, begin, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.5f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, begin, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // ZX && ZY
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.0f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, 0.0f, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.5f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, begin, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // XY
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.0f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.5f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, begin, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.5f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, begin, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // YZ
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.5f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, begin, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.5f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, begin, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // ZX
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.0f, 0.5f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, 0.0f, begin, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.5f, 0.0f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(begin, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   
@@ -129,6 +136,7 @@ void TranslateControlObj::InitAxisObjects(EntityData* data) {
   data->AddSubset(Subset(base + 20, 4, 0, 0, kTriangleStrip));
   data->AddSubset(Subset(base + 24, 4, 0, 0, kTriangleStrip));
   data->AddSubset(Subset(base + 28, 4, 0, 0, kTriangleStrip));
+  return data;
 }
 
 void TranslateControlObj::ResetColor() {
@@ -139,17 +147,34 @@ void TranslateControlObj::ResetColor() {
 }
 
 void TranslateControlObj::Update(const Camera* camera, const Vector3& position) {
-  effect_->SetPV(camera->GetProjViewMatrix());
+  InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 mat = std::move(Scale(scale_));
   mat = std::move(std::move(Translate(position)) * mat);
-  effect_->SetWorld(mat);
+  ambient_effect_->SetPV(camera->GetProjViewMatrix());
+  ambient_effect_->SetWorld(mat);
+  color_effect_->SetLightData(&env->light()->data(), 1);
+  color_effect_->SetPV(camera->GetProjViewMatrix());
+  color_effect_->SetWorld(mat);
 }
 
 void TranslateControlObj::Render(Renderer* renderer) {
   for (uint32 i = 0; i < arraysize(colors_); ++i) {
-    effect_->SetAmbient(colors_[i]);
-    renderer->BindEffect(effect_);
+    ambient_effect_->SetAmbient(colors_[i]);
+    renderer->BindEffect(ambient_effect_);
     entity_->DrawSub(i, renderer);
+  }
+
+  ColorMaterialData mtrl;
+  for (uint32 i = 0; i < cones_->subset_count() /2; ++i) {
+    mtrl.diffuse = colors_[i];
+    mtrl.ambient = colors_[i] * 0.1f;
+    mtrl.specular = colors_[i] * 0.1f;
+    mtrl.emission = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+    mtrl.ambient.w = mtrl.specular.w = 1.0f;
+    color_effect_->SetMaterial(mtrl);
+    renderer->BindEffect(color_effect_);
+    cones_->DrawSub(i * 2, renderer);
+    cones_->DrawSub(i * 2 + 1, renderer);
   }
 }
 

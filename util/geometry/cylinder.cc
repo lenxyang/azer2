@@ -69,8 +69,8 @@ void AppendGeoCylinderData(EntityData* data, const GeoCylinderParam& p,
     const int32 kIndexCount = CalcBarrelIndexCount(p.stack, p.slice);
     data->vdata()->extend(kVertexCount);
     data->idata()->extend(kIndexCount);
-    vpack.move(data->vdata()->vertex_count() - kVertexCount - 1);
-    ipack.move(data->idata()->count() - kIndexCount - 1);
+    vpack.move(data->vdata()->vertex_count() - kVertexCount);
+    ipack.move(data->idata()->count() - kIndexCount);
     Subset sub = AppendGeoBarrelData(&vpack, &ipack, p, mat);
     data->AddSubset(sub);
   }
@@ -80,8 +80,8 @@ void AppendGeoCylinderData(EntityData* data, const GeoCylinderParam& p,
     const int32 kIndexCount = CalcGeoRoundIndexCount(p.slice) * 2;
     data->vdata()->extend(kVertexCount);
     data->idata()->extend(kIndexCount);
-    vpack.move(data->vdata()->vertex_count() - kVertexCount - 1);
-    ipack.move(data->idata()->count() - kIndexCount - 1);
+    vpack.move(data->vdata()->vertex_count() - kVertexCount);
+    ipack.move(data->idata()->count() - kIndexCount);
 
     Matrix4 mat1 = std::move(mat * RotateX(Degree(180.0)));
     Subset sub = AppendGeoRoundData(&vpack, &ipack, p.bottom_radius, p.slice, mat1);

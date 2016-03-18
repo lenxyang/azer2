@@ -9,7 +9,7 @@ int32 CalcGeoRoundVertexCount(int slice) { return 1 + slice + 1;}
 
 int32 AppendUpGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
   int32 begin = ipack->index();
-  for (int i = 0; i < slice - 1; ++i) {
+  for (int i = 0; i < slice; ++i) {
     int index1 = 1 + i + 1;
     int index2 = 1 + i;
     CHECK(ipack->WriteAndAdvance(base));
@@ -21,7 +21,7 @@ int32 AppendUpGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
 
 int32 AppendBottomGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
   int32 begin = ipack->index();
-  for (int i = 0; i < slice - 1; ++i) {
+  for (int i = 0; i < slice; ++i) {
     int index1 = i;
     int index2 = i + 1;
     CHECK(ipack->WriteAndAdvance(base + slice));

@@ -22,7 +22,7 @@ InteractiveEnv::InteractiveEnv() {
   effectlib_.reset(new EffectLib(resource_pack_.get()));
 
   DirLight dir;
-  dir.diffuse = Vector4(0.5f, 0.5f, 0.4f, 1.0f);
+  dir.diffuse = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
   dir.ambient = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
   dir.specular = Vector4(0.1f, 0.1f, 0.1f, 1.0f);
   dir.directional = Vector4(1.0f, -1.0f, -1.0f, 0.0f);

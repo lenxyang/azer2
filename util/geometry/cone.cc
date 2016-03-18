@@ -43,15 +43,15 @@ void AppendGeoConeData(EntityData* data, const GeoConeParam& p, const Matrix4& m
   data->idata()->extend(kIndexCount);
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  vpack.move(data->vdata()->vertex_count() - kVertexCount - 1);
-  ipack.move(data->idata()->count() - kIndexCount - 1);
-  sub = AppendGeoRoundData(&vpack, &ipack, p.radius, p.slice, mat);
+  vpack.move(data->vdata()->vertex_count() - kVertexCount);
+  ipack.move(data->idata()->count() - kIndexCount);
+  Matrix4 round_mat = std::move(mat * RotateX(Degree(180.0)));
+  sub = AppendGeoRoundData(&vpack, &ipack, p.radius, p.slice, round_mat);
   data->AddSubset(sub);
 
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
-  Matrix4 round_mat = std::move(mat * RotateX(Degree(180.0)));
-  sub = AppendGeoTaperData(&vpack, &ipack, p, round_mat);
+  sub = AppendGeoTaperData(&vpack, &ipack, p, mat);
   data->AddSubset(sub);
 }
 

@@ -55,7 +55,7 @@ EffectData effect_data[] = {
    HLSLLIB_TEXTBILLBOARD_PS},
   {"ColorEffect", ColorEffect::kEffectName, 0, 
    HLSLLIB_COLOR_VS, 0, 0, 0, HLSLLIB_COLOR_PS},
-  {"ColorEffect", ColorEffect::kEffectName, 0, 
+  {"DiffuseMapEffect", DiffuseMapEffect::kEffectName, 0, 
    HLSLLIB_DIFFUSEMAP_VS, 0, 0, 0, HLSLLIB_DIFFUSEMAP_PS},
   {"NormalLineEffect", NormalLineEffect::kEffectName, 0, 
    HLSLLIB_NORMALLINE_VS, 0, 0, HLSLLIB_NORMALLINE_GS, HLSLLIB_NORMALLINE_PS},

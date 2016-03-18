@@ -10,6 +10,7 @@ namespace azer {
 class Camera;
 class Renderer;
 class AmbientColorEffect;
+class ColorEffect;
 
 class TranslateControlObj {
  public:
@@ -36,12 +37,14 @@ class TranslateControlObj {
   void Update(const Camera* camera, const Vector3& position);
   void Render(Renderer* renderer);
  private:
-  void InitAxisObjects(EntityData* data);
-  void AppendConeData(EntityData* data);
+  EntityDataPtr InitAxesObjects(VertexDesc* desc);
+  EntityDataPtr InitAxesConeData(VertexDesc* desc);
   Vector3 scale_;
   Vector4 colors_[kSubsetCount];
   EntityPtr entity_;
-  scoped_refptr<AmbientColorEffect> effect_;
+  EntityPtr cones_;
+  scoped_refptr<AmbientColorEffect> ambient_effect_;
+  scoped_refptr<ColorEffect> color_effect_;
   DISALLOW_COPY_AND_ASSIGN(TranslateControlObj);
 };
 

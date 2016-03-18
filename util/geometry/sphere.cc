@@ -76,7 +76,7 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
     GenTriStripIndex(line1, line2, p.slice + 1, ipack);
   }
 
-  AppendBottomGeoTaperIndexData(vp->index() - 1 - p.slice - 1, ipack, p.slice);
+  AppendBottomGeoTaperIndexData(0, ipack, p.slice);
   subset.index_count = ipack->index() - subset.index_base;
 
   CalcIndexedTriangleNormal(vp->data(), ipack->data(), subset);

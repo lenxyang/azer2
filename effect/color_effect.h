@@ -58,8 +58,8 @@ class ColorEffect : public Effect {
 
   struct ps_cbuffer {
     ColorMaterialData mtrl;
-    int    light_count;
     UniverseLight lights[4];
+    int    light_count;
   };
 #pragma pack(pop)
 
