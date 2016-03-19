@@ -6,6 +6,8 @@ static_library("interactive") {
     "axes_frame.h",
     "env.cc",
     "env.h",
+    "interactive_context.h",
+    "interactive_context.cc",
     "interactive_controller.h",
     "interactive_controller.cc",
     "rotate_controller.h",

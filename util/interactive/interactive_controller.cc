@@ -34,4 +34,8 @@ bool InteractiveController::HasObserver(InteractiveControllerObserver* obs) {
 void InteractiveController::set_state(int32 state) { 
   state_ = state; 
 }
+
+void InteractiveController::HitTest(const gfx::Point& pt) {
+  state_ = GetPicking(pt);
+}
 }

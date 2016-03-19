@@ -48,4 +48,12 @@ void CalcNCDVec(const Vector3& p, const Camera& camera, Vector3* ndc) {
   ndc->y = v.y / v.w;
   ndc->z = v.z / v.w;
 }
+
+namespace detail {
+float CalcDepthValue(const Vector3& p, const Camera& camera) {
+  Vector3 d;
+  CalcNCDVec(p, camera, &d);
+  return d.z;
+}
+}  // namespace
 }  // namespace azer

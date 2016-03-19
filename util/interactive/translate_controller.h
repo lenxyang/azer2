@@ -1,8 +1,9 @@
 #pragma once
 
 #include "base/basictypes.h"
+#include "azer/math/plane.h" 
 #include "azer/math/vector3.h"
-#include "azer/math/vector4.h" 
+#include "azer/math/vector4.h"
 #include "azer/render/entity.h"
 #include "azer/util/interactive/interactive_controller.h"
 
@@ -56,19 +57,31 @@ class TranslateControlObj {
 
 class TranslateController : public InteractiveController {
  public:
-  TranslateController(const Vector3& initpos);
+  TranslateController(const Camera* camera);
   ~TranslateController() override;
 
-  int32 GetPicking(const Ray& ray, Vector3* pos) override;
+  enum {
+    kHitNone = 0,
+    kHitAxisX,
+    kHitAxisY,
+    kHitAxisZ,
+    kHitPlaneXY,
+    kHitPlaneYZ,
+    kHitPlaneZX,
+  };
+
+  int32 GetPicking(const Ray& ray) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
 
+  void SetPosition(const Vector3& pos) { position_ = pos;}
   const Vector3& position() const { return position_;}
  private:
-  const Vector3 initpos_;
-  const Vector3 position_;
+  Vector3 position_;
   scoped_ptr<TranslateControlObj> object_;
+  const Camera* camera_;
   Plane plane_[3];
+  static const Vector4 kSelectedColor;
   DISALLOW_COPY_AND_ASSIGN(TranslateController);
 };
 

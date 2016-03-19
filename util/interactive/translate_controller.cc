@@ -191,15 +191,16 @@ void TranslateControlObj::Render(Renderer* renderer) {
 
 
 // class TranslateController
-TranslateController::TranslateController(const Vector3& initpos) 
-    : initpos_(initpos) {
+const Vector4 TranslateController::kSelectedColor = Vector4(0.0f, 1.0f, 1.0f, 1.0f);
+TranslateController::TranslateController(const Camera* camera) 
+    : camera_(camera) {
   object_.reset(new TranslateControlObj);
 }
 
 TranslateController::~TranslateController() {
 }
 
-int32 TranslateController::GetPicking(const Ray& ray, Vector3* pos) {
+int32 TranslateController::GetPicking(const Ray& ray) {
   Plane planexy(position_, position_ + Vector3(1.0f, 0.0f, 0.0f),
                 position_ + Vector3(0.0f, 1.0f, 0.0f));
   Plane planeyz(position_, position_ + Vector3(1.0f, 1.0f, 0.0f),
@@ -209,13 +210,63 @@ int32 TranslateController::GetPicking(const Ray& ray, Vector3* pos) {
   Vector3 xy, yz, zx;
   bool parall_xy = PickingPlane(ray, planexy, &xy);
   bool parall_yz = PickingPlane(ray, planeyz, &yz);
-  bool parall_zx = PickingPlane(ray, planezx+, &zx);
-  return 0;
+  bool parall_zx = PickingPlane(ray, planezx, &zx);
+  bool hit_axisx = (!parall_xy && !parall_zx)
+      && (std::abs(xy.y - position_.y) < 0.0001)
+      && (std::abs(xy.z - position_.z) < 0.0001);
+  bool hit_axisy = (!parall_yz && !parall_xy)
+      && (std::abs(xy.x - position_.x) < 0.0001)
+      && (std::abs(xy.z - position_.z) < 0.0001);
+  bool hit_axisz = (!parall_zx && !parall_yz)
+      && (std::abs(xy.x - position_.x) < 0.0001)
+      && (std::abs(xy.y - position_.y) < 0.0001);
+  bool hit_planxy = (!parall_xy)
+      && (std::abs(xy.x - position_.x) < object_->plane_width())
+      && (std::abs(xy.y - position_.y) < object_->plane_width())
+      && (std::abs(xy.x - position_.x) > 0.0f)
+      && (std::abs(xy.y - position_.y) > 0.0f)
+      && (std::abs(xy.z - position_.z) < 0.00001)
+      && (xy.y - position_.y) >= (xy.x - position_.x);
+  float depth_xy = detail::CalcDepthValue(xy, *camera_);
+  float depth_yz = detail::CalcDepthValue(yz, *camera_);
+  float depth_zx = detail::CalcDepthValue(zx, *camera_);
+  if (depth_xy <= depth_yz && depth_xy <= depth_zx) {
+    if (hit_planxy) {
+      return kHitPlaneXY;
+    }
+    if (hit_axisx) {
+      return kHitAxisX;
+    }
+  }
+  return kHitNone;
 }
 
 void TranslateController::UpdateFrame(const FrameArgs& args) {
+  object_->ResetColor();
+  switch (state()) {
+    case kHitAxisX:
+      object_->SetColor(TranslateControlObj::kAxisX, kSelectedColor);
+      break;
+    case kHitAxisY:
+      object_->SetColor(TranslateControlObj::kAxisY, kSelectedColor);
+      break;
+    case kHitAxisZ:
+      object_->SetColor(TranslateControlObj::kAxisZ, kSelectedColor);
+      break;
+    case kHitPlaneXY:
+      object_->SetColor(TranslateControlObj::kAxisX, kSelectedColor);
+      object_->SetColor(TranslateControlObj::kAxisY, kSelectedColor);
+      object_->SetColor(TranslateControlObj::kPlaneXY, kSelectedColor);
+      break;
+    case kHitPlaneYZ:
+    case kHitPlaneZX:
+    default:
+    break;
+  }
+  object_->Update(camera_, position_);
 }
 
 void TranslateController::RenderFrame(Renderer* renderer) {
+  object_->Render(renderer);
 }
 }  // namespace azer

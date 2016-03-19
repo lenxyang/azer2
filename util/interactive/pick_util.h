@@ -34,4 +34,8 @@ bool PickingPlane(const Ray& ray, const Plane& plane, Vector3* pt);
  * 
  */
 void CalcNCDVec(const Vector3& ps, const Camera& camera, Vector3* ndc);
+
+namespace detail {
+float CalcDepthValue(const Vector3& ps, const Camera& camera);
+}
 }  // namespace azer

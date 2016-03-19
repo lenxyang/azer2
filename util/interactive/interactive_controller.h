@@ -41,7 +41,13 @@ class InteractiveController {
  public:
   InteractiveController();
   virtual ~InteractiveController();
-  virtual int32 GetPicking(const Ray& ray, Vector3* pos) = 0;
+  virtual int32 GetPicking(const gfx::Point& pt) = 0;
+  virtual void OnDragBegin(const gfx::Point pt) {}
+  virtual void OnDrag(const gfx::Point pt) {};
+  virtual void OnDragEnd(const gfx::Point pt) {}
+  void HitTest(const gfx::Point& pg);
+
+  // render
   virtual void UpdateFrame(const FrameArgs& args) = 0;
   virtual void RenderFrame(Renderer* renderer) = 0;
 
