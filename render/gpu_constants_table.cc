@@ -20,7 +20,7 @@ void GpuConstantsTable::SetMatrix(int32 idx, const Matrix4* matrices,
 
 void GpuConstantsTable::SetData(int offset, const void* value, int32 size) {
   memcpy(data_.get() + offset, value, size);
-  DCHECK_LE(offset + size, this->size())
+  DCHECK_LE(offset + size, this->size());
 }
 
 int32 GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {

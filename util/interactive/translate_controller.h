@@ -7,10 +7,11 @@
 #include "azer/util/interactive/interactive_controller.h"
 
 namespace azer {
+class AmbientColorEffect;
 class Camera;
 class Renderer;
-class AmbientColorEffect;
 class ColorEffect;
+class Plane;
 
 class TranslateControlObj {
  public:
@@ -36,6 +37,9 @@ class TranslateControlObj {
   void ResetColor();
   void Update(const Camera* camera, const Vector3& position);
   void Render(Renderer* renderer);
+
+  float plane_width() const;
+  float axis_begin() const;
  private:
   EntityDataPtr InitAxesObjects(VertexDesc* desc);
   EntityDataPtr InitAxesConeData(VertexDesc* desc);
@@ -45,6 +49,8 @@ class TranslateControlObj {
   EntityPtr cones_;
   scoped_refptr<AmbientColorEffect> ambient_effect_;
   scoped_refptr<ColorEffect> color_effect_;
+  static const float kPlaneWidth;
+  static const float kAxisBegin;
   DISALLOW_COPY_AND_ASSIGN(TranslateControlObj);
 };
 
@@ -61,6 +67,8 @@ class TranslateController : public InteractiveController {
  private:
   const Vector3 initpos_;
   const Vector3 position_;
+  scoped_ptr<TranslateControlObj> object_;
+  Plane plane_[3];
   DISALLOW_COPY_AND_ASSIGN(TranslateController);
 };
 

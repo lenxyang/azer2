@@ -3,14 +3,18 @@
 #include "base/logging.h"
 #include "azer/effect/color_effect.h"
 #include "azer/effect/effectlib.h"
+#include "azer/math/plane.h"
 #include "azer/render/camera.h"
 #include "azer/render/renderer.h"
 #include "azer/render/vertex_pack.h"
 #include "azer/util/interactive/env.h"
 #include "azer/util/geometry/geometry.h"
+#include "azer/util/interactive/pick_util.h"
 
 namespace azer {
 // class TranslateControlObj
+const float TranslateControlObj::kPlaneWidth = 0.35f;
+const float TranslateControlObj::kAxisBegin = 0.27f;
 TranslateControlObj::TranslateControlObj() {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   ambient_effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
@@ -48,78 +52,77 @@ EntityDataPtr TranslateControlObj::InitAxesObjects(VertexDesc* desc) {
   int32 base = data->vdata()->vertex_count() - kVertexCount;
   vpack.move(base);
   VertexPos vpos(0, 0);
-  vpack.WriteVector3Or4(Vector4(0.3f, 0.0f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kAxisBegin, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(1.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.3f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, kAxisBegin, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, 1.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.3f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, kAxisBegin, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 1.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // XY & XZ
-  float begin = 0.35f;
-  vpack.WriteVector3Or4(Vector4(begin, 0.0f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, begin, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, 0.0f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, 0.0f, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // YZ & YZ
-  vpack.WriteVector3Or4(Vector4(0.0f, begin, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, begin, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, begin, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, begin, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // ZX && ZY
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, 0.0f, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, begin, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // XY
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, 0.0f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, begin, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, begin, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // YZ
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, begin, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, begin, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // ZX
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, 0.0f, begin, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
-  vpack.WriteVector3Or4(Vector4(begin, 0.0f, 0.0f, 1.0f), vpos);
+  vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   
@@ -137,6 +140,14 @@ EntityDataPtr TranslateControlObj::InitAxesObjects(VertexDesc* desc) {
   data->AddSubset(Subset(base + 24, 4, 0, 0, kTriangleStrip));
   data->AddSubset(Subset(base + 28, 4, 0, 0, kTriangleStrip));
   return data;
+}
+
+float TranslateControlObj::plane_width() const {
+  return kPlaneWidth * scale_.x;
+}
+
+float TranslateControlObj::axis_begin() const {
+  return kAxisBegin * scale_.x;
 }
 
 void TranslateControlObj::ResetColor() {
@@ -182,12 +193,23 @@ void TranslateControlObj::Render(Renderer* renderer) {
 // class TranslateController
 TranslateController::TranslateController(const Vector3& initpos) 
     : initpos_(initpos) {
+  object_.reset(new TranslateControlObj);
 }
 
 TranslateController::~TranslateController() {
 }
 
 int32 TranslateController::GetPicking(const Ray& ray, Vector3* pos) {
+  Plane planexy(position_, position_ + Vector3(1.0f, 0.0f, 0.0f),
+                position_ + Vector3(0.0f, 1.0f, 0.0f));
+  Plane planeyz(position_, position_ + Vector3(1.0f, 1.0f, 0.0f),
+                position_ + Vector3(0.0f, 0.0f, 1.0f));
+  Plane planezx(position_, position_ + Vector3(0.0f, 0.0f, 1.0f),
+                position_ + Vector3(1.0f, 0.0f, 0.0f));
+  Vector3 xy, yz, zx;
+  bool parall_xy = PickingPlane(ray, planexy, &xy);
+  bool parall_yz = PickingPlane(ray, planeyz, &yz);
+  bool parall_zx = PickingPlane(ray, planezx+, &zx);
   return 0;
 }
 
