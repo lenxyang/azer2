@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/observer_list.h"
+#include "ui/gfx/geometry/point.h"
 #include "azer/base/export.h"
 #include "azer/math/ray.h"
 #include "azer/math/vector3.h"
@@ -42,9 +43,9 @@ class InteractiveController {
   InteractiveController();
   virtual ~InteractiveController();
   virtual int32 GetPicking(const gfx::Point& pt) = 0;
-  virtual void OnDragBegin(const gfx::Point pt) {}
-  virtual void OnDrag(const gfx::Point pt) {};
-  virtual void OnDragEnd(const gfx::Point pt) {}
+  virtual void OnDragBegin(const gfx::Point& pt) {}
+  virtual void OnDrag(const gfx::Point& pt) {};
+  virtual void OnDragEnd(const gfx::Point& pt) {}
   void HitTest(const gfx::Point& pg);
 
   // render

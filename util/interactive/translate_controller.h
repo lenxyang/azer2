@@ -70,7 +70,7 @@ class TranslateController : public InteractiveController {
     kHitPlaneZX,
   };
 
-  int32 GetPicking(const Ray& ray) override;
+  int32 GetPicking(const gfx::Point& pt) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
 

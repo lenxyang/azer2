@@ -6,11 +6,11 @@
 
 namespace azer {
 InteractiveContext::InteractiveContext()
-    : inactived_(-1),
-      dragging_(false) {
+    : activated_(-1),
+      draging_(false) {
 }
 
-void InteractiveContext::Active(InteractiveController* controller) {
+void InteractiveContext::Activate(InteractiveController* controller) {
   int index = GetIndexOf(controller);
   DCHECK_GE(index, 0);
   activated_ = index;
@@ -24,15 +24,20 @@ void InteractiveContext::RemoveController(InteractiveController* controller) {
   int index = GetIndexOf(controller);
   DCHECK_GE(index, 0);
   controllers_.erase(controllers_.begin() + index);
+  if (index < activated_) {
+    activated_--;
+  } else if (index == activated_) {
+    activated_ = -1;
+  }
 }
 
 int InteractiveContext::GetIndexOf(InteractiveController* controller) const {
-  auto i(std::find(controllers_.begin(), controllers_.end(), view));
+  auto i(std::find(controllers_.begin(), controllers_.end(), controller));
   return i != controllers_.end() ? static_cast<int>(i - controllers_.begin()) : -1;
 }
 
 void InteractiveContext::OnMousePressed(const ui::MouseEvent& event) {
-  OnDrawBegin(event);
+  OnDragBegin(event);
 }
 
 void InteractiveContext::OnMouseDragged(const ui::MouseEvent& event) {
@@ -44,39 +49,53 @@ void InteractiveContext::OnMouseReleased(const ui::MouseEvent& event) {
 }
 
 void InteractiveContext::OnMouseMoved(const ui::MouseEvent& event) {
-  if (activated >= 0) {
+  if (activated_ >= 0) {
     InteractiveController* controller = controllers_[activated_];
     controller->HitTest(event.location());
   }
 }
 
 void InteractiveContext::OnMouseCaptureLost() {
-  OnDragEnd(event);
+  // OnDragCancel();
 }
 
-void InteractiveContext::OnDrawBegin(const ui::MouseEvent& event) {
-  if (activated >= 0) {
+void InteractiveContext::OnDragBegin(const ui::MouseEvent& event) {
+  if (activated_ >= 0) {
     InteractiveController* controller = controllers_[activated_];
     int ret = controller->GetPicking(event.location());
     if (ret > 0) {
-      drag_ = true;
-      controller_->OnDragBegin(event.location());
+      draging_ = true;
+      controller->OnDragBegin(event.location());
     }
   }
 }
 
 void InteractiveContext::OnDrag(const ui::MouseEvent& event) {
-  if (drawing_) {
+  if (draging_) {
     InteractiveController* controller = controllers_[activated_];
-    controller_->OnDrag(event.location());
+    controller->OnDrag(event.location());
   }
 }
 
 void InteractiveContext::OnDragEnd(const ui::MouseEvent& event) {
-  if (drawing_) {
+  if (draging_) {
     InteractiveController* controller = controllers_[activated_];
-    controller_->OnDragEnd(event.location());
-    drawing_ = false;
+    controller->OnDragEnd(event.location());
+    draging_ = false;
+  }
+}
+
+void InteractiveContext::Update(const FrameArgs& args) {
+  if (activated_ >= 0) {
+    InteractiveController* controller = controllers_[activated_];
+    controller->UpdateFrame(args);
+  }
+}
+
+void InteractiveContext::Render(Renderer* renderer) {
+  if (activated_ >= 0) {
+    InteractiveController* controller = controllers_[activated_];
+    controller->RenderFrame(renderer);
   }
 }
 }  // namespace azer
