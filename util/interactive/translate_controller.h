@@ -57,7 +57,7 @@ class TranslateControlObj {
 
 class TranslateController : public InteractiveController {
  public:
-  TranslateController(const Camera* camera);
+  explicit TranslateController(InteractiveContext* ctx);
   ~TranslateController() override;
 
   enum {
@@ -79,7 +79,6 @@ class TranslateController : public InteractiveController {
  private:
   Vector3 position_;
   scoped_ptr<TranslateControlObj> object_;
-  const Camera* camera_;
   Plane plane_[3];
   static const Vector4 kSelectedColor;
   DISALLOW_COPY_AND_ASSIGN(TranslateController);

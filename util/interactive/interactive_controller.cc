@@ -1,7 +1,13 @@
 #include "azer/util/interactive/interactive_controller.h"
 
+#include "azer/util/interactive/interactive_context.h"
+#include "azer/util/interactive/pick_util.h"
+
 namespace azer {
-InteractiveController::InteractiveController() {}
+InteractiveController::InteractiveController(InteractiveContext* ctx)
+    : context_(ctx) {
+}
+
 InteractiveController::~InteractiveController() {}
 
 void InteractiveController::OnControllerPicked() {

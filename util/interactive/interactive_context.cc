@@ -5,9 +5,12 @@
 #include "azer/util/interactive/pick_util.h"
 
 namespace azer {
-InteractiveContext::InteractiveContext()
-    : activated_(-1),
-      draging_(false) {
+InteractiveContext::InteractiveContext(nelf::RenderWindow* window,
+                                       const Camera* camera)
+    : window_(window),
+      activated_(-1),
+      draging_(false),
+      camera_(camera) {
 }
 
 void InteractiveContext::Activate(InteractiveController* controller) {
@@ -53,6 +56,11 @@ void InteractiveContext::OnMouseMoved(const ui::MouseEvent& event) {
     InteractiveController* controller = controllers_[activated_];
     controller->HitTest(event.location());
   }
+}
+
+Ray InteractiveContext::GetPickingRay(const gfx::Point& pt) {
+  const gfx::Size size  = window()->GetContentsBounds().size();
+  return std::move(azer::GetPickingRay(pt, size, camera_));
 }
 
 void InteractiveContext::OnMouseCaptureLost() {

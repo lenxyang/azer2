@@ -6,18 +6,19 @@
 
 namespace azer {
 
+class InteractiveContext;
+
 class RotateController : public InteractiveController {
  public:
-  RotateController(const Quaternion& orientation);
+  explicit RotateController(InteractiveContext* ctx);
   ~RotateController() override;
 
-  int32 GetPicking(const Ray& ray, Vector3* pos) override;
+  int32 GetPicking(const gfx::Point& pt) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
 
   const Quaternion& position() const { return orientation_;}
  private:
-  const Quaternion init_orientation_;
   const Quaternion orientation_;
   DISALLOW_COPY_AND_ASSIGN(RotateController);
 };

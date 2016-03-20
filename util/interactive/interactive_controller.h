@@ -29,6 +29,7 @@ enum {
 
 class FrameArgs;
 class Renderer;
+class InteractiveContext;
 class InteractiveController;
 
 class InteractiveControllerObserver {
@@ -40,13 +41,16 @@ class InteractiveControllerObserver {
 
 class InteractiveController {
  public:
-  InteractiveController();
+  explicit InteractiveController(InteractiveContext* ctx);
   virtual ~InteractiveController();
+  InteractiveContext* context() { return context_;}
+  const InteractiveContext* context() const { return context_;}
+
   virtual int32 GetPicking(const gfx::Point& pt) = 0;
   virtual void OnDragBegin(const gfx::Point& pt) {}
   virtual void OnDrag(const gfx::Point& pt) {};
   virtual void OnDragEnd(const gfx::Point& pt) {}
-  void HitTest(const gfx::Point& pg);
+  void HitTest(const gfx::Point& pt);
 
   // render
   virtual void UpdateFrame(const FrameArgs& args) = 0;
@@ -64,6 +68,7 @@ class InteractiveController {
  private:
   int32 state_;
   ObserverList<InteractiveControllerObserver> observer_list_;
+  InteractiveContext* context_;
   DISALLOW_COPY_AND_ASSIGN(InteractiveController);
 };
 

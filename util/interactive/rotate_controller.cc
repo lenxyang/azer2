@@ -3,14 +3,14 @@
 #include "base/logging.h"
 
 namespace azer {
-RotateController::RotateController(const Quaternion& orientation) 
-    : init_orientation_(orientation) {
+RotateController::RotateController(InteractiveContext* ctx) 
+    : InteractiveController(ctx) {
 }
 
 RotateController::~RotateController() {
 }
 
-int32 RotateController::GetPicking(const Ray& ray, Vector3* pos) {
+int32 RotateController::GetPicking(const gfx::Point& pt) {
   return 0;
 }
 

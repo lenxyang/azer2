@@ -9,7 +9,9 @@
 #include "azer/render/vertex_pack.h"
 #include "azer/util/interactive/env.h"
 #include "azer/util/geometry/geometry.h"
+#include "azer/util/interactive/interactive_context.h"
 #include "azer/util/interactive/pick_util.h"
+
 
 namespace azer {
 // class TranslateControlObj
@@ -192,15 +194,17 @@ void TranslateControlObj::Render(Renderer* renderer) {
 
 // class TranslateController
 const Vector4 TranslateController::kSelectedColor = Vector4(0.0f, 1.0f, 1.0f, 1.0f);
-TranslateController::TranslateController(const Camera* camera) 
-    : camera_(camera) {
+TranslateController::TranslateController(InteractiveContext* ctx)
+    : InteractiveController(ctx) {
   object_.reset(new TranslateControlObj);
 }
 
 TranslateController::~TranslateController() {
 }
 
-int32 TranslateController::GetPicking(const Ray& ray) {
+int32 TranslateController::GetPicking(const gfx::Point& screenpt) {
+  Ray ray = std::move(context()->GetPickingRay(screenpt));
+  const Camera* camera = context()->camera(); 
   Plane planexy(position_, position_ + Vector3(1.0f, 0.0f, 0.0f),
                 position_ + Vector3(0.0f, 1.0f, 0.0f));
   Plane planeyz(position_, position_ + Vector3(1.0f, 1.0f, 0.0f),
@@ -227,9 +231,9 @@ int32 TranslateController::GetPicking(const Ray& ray) {
       && (std::abs(xy.y - position_.y) > 0.0f)
       && (std::abs(xy.z - position_.z) < 0.00001)
       && (xy.y - position_.y) >= (xy.x - position_.x);
-  float depth_xy = detail::CalcDepthValue(xy, *camera_);
-  float depth_yz = detail::CalcDepthValue(yz, *camera_);
-  float depth_zx = detail::CalcDepthValue(zx, *camera_);
+  float depth_xy = detail::CalcDepthValue(xy, *camera);
+  float depth_yz = detail::CalcDepthValue(yz, *camera);
+  float depth_zx = detail::CalcDepthValue(zx, *camera);
   if (depth_xy <= depth_yz && depth_xy <= depth_zx) {
     if (hit_planxy) {
       return kHitPlaneXY;
@@ -263,7 +267,7 @@ void TranslateController::UpdateFrame(const FrameArgs& args) {
     default:
     break;
   }
-  object_->Update(camera_, position_);
+  object_->Update(context()->camera(), position_);
 }
 
 void TranslateController::RenderFrame(Renderer* renderer) {
