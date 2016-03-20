@@ -193,7 +193,7 @@ void TranslateControlObj::Render(Renderer* renderer) {
 
 
 // class TranslateController
-const Vector4 TranslateController::kSelectedColor = Vector4(0.0f, 1.0f, 1.0f, 1.0f);
+const Vector4 TranslateController::kSelectedColor = Vector4(1.0f, 1.0f, 0.0f, 1.0f);
 TranslateController::TranslateController(InteractiveContext* ctx)
     : InteractiveController(ctx) {
   object_.reset(new TranslateControlObj);
@@ -207,42 +207,55 @@ int32 TranslateController::GetPicking(const gfx::Point& screenpt) {
   const Camera* camera = context()->camera(); 
   Plane planexy(position_, position_ + Vector3(1.0f, 0.0f, 0.0f),
                 position_ + Vector3(0.0f, 1.0f, 0.0f));
-  Plane planeyz(position_, position_ + Vector3(1.0f, 1.0f, 0.0f),
+  Plane planeyz(position_, position_ + Vector3(0.0f, 1.0f, 0.0f),
                 position_ + Vector3(0.0f, 0.0f, 1.0f));
   Plane planezx(position_, position_ + Vector3(0.0f, 0.0f, 1.0f),
                 position_ + Vector3(1.0f, 0.0f, 0.0f));
   Vector3 xy, yz, zx;
-  bool parall_xy = PickingPlane(ray, planexy, &xy);
-  bool parall_yz = PickingPlane(ray, planeyz, &yz);
-  bool parall_zx = PickingPlane(ray, planezx, &zx);
+  bool parall_xy = !PickingPlane(ray, planexy, &xy);
+  bool parall_yz = !PickingPlane(ray, planeyz, &yz);
+  bool parall_zx = !PickingPlane(ray, planezx, &zx);
   bool hit_axisx = (!parall_xy && !parall_zx)
-      && (std::abs(xy.y - position_.y) < 0.0001)
-      && (std::abs(xy.z - position_.z) < 0.0001);
+      && (std::abs(xy.y - position_.y) < 0.02)
+      && (std::abs(xy.z - position_.z) < 0.02);
   bool hit_axisy = (!parall_yz && !parall_xy)
-      && (std::abs(xy.x - position_.x) < 0.0001)
-      && (std::abs(xy.z - position_.z) < 0.0001);
+      && (std::abs(xy.x - position_.x) < 0.02)
+      && (std::abs(xy.z - position_.z) < 0.02);
   bool hit_axisz = (!parall_zx && !parall_yz)
-      && (std::abs(xy.x - position_.x) < 0.0001)
-      && (std::abs(xy.y - position_.y) < 0.0001);
+      && (std::abs(xy.x - position_.x) < 0.02)
+      && (std::abs(xy.y - position_.y) < 0.02);
   bool hit_planxy = (!parall_xy)
       && (std::abs(xy.x - position_.x) < object_->plane_width())
       && (std::abs(xy.y - position_.y) < object_->plane_width())
       && (std::abs(xy.x - position_.x) > 0.0f)
       && (std::abs(xy.y - position_.y) > 0.0f)
-      && (std::abs(xy.z - position_.z) < 0.00001)
+      && (std::abs(xy.z - position_.z) < 0.02)
       && (xy.y - position_.y) >= (xy.x - position_.x);
   float depth_xy = detail::CalcDepthValue(xy, *camera);
   float depth_yz = detail::CalcDepthValue(yz, *camera);
   float depth_zx = detail::CalcDepthValue(zx, *camera);
-  if (depth_xy <= depth_yz && depth_xy <= depth_zx) {
-    if (hit_planxy) {
-      return kHitPlaneXY;
-    }
-    if (hit_axisx) {
-      return kHitAxisX;
-    }
+
+  if (hit_axisx) {
+    return kHitAxisX;
+  } else if (hit_axisy) {
+    return kHitAxisY;
+  } else if (hit_axisz) {
+    return kHitAxisZ;
+  } else if (hit_planxy) {
+    return kHitPlaneXY;
   }
   return kHitNone;
+}
+
+void TranslateController::OnDragBegin(const gfx::Point& pt) {
+  int state = GetPicking(pt);
+}
+
+void TranslateController::OnDrag(const gfx::Point& pt) {
+  int state = GetPicking(pt);
+}
+
+void TranslateController::OnDragEnd(const gfx::Point& pt) {
 }
 
 void TranslateController::UpdateFrame(const FrameArgs& args) {
