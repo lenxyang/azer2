@@ -156,8 +156,8 @@ int32 RotateController::GetPicking(const gfx::Point& screenpt) {
   const Camera* camera = context()->camera(); 
   Vector3 pxy, pyz, pzx;
   Plane planexy(Vector3(0.0f, 0.0f, 1.0f), -position_.z);
-  Plane planeyz(Vector3(0.0f, 0.0f, 1.0f), -position_.x);
-  Plane planezx(Vector3(0.0f, 0.0f, 1.0f), -position_.y);
+  Plane planeyz(Vector3(1.0f, 0.0f, 0.0f), -position_.x);
+  Plane planezx(Vector3(0.0f, 1.0f, 0.0f), -position_.y);
   bool pickxy = PickCircle(ray, position_, scale_.z, planexy, &pxy);
   bool pickyz = PickCircle(ray, position_, scale_.x, planeyz, &pyz);
   bool pickzx = PickCircle(ray, position_, scale_.y, planezx, &pzx);
