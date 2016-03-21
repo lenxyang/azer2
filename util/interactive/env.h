@@ -8,6 +8,7 @@
 #include "azer/base/export.h"
 #include "azer/effect/light.h"
 #include "azer/render/blending.h"
+#include "azer/render/rasterizer_state.h"
 #include "azer/render/texture.h"
 
 namespace azer {
@@ -26,6 +27,7 @@ class InteractiveEnv {
   Blending* blending() { return blending_.get();}
   Texture* GetTexture(int32 id);
   ResourcePack* resource_pack() { return resource_pack_.get();}
+  RasterizerState* noncull_rasterizer_state() { return noncull_rasterizer_state_;}
  private:
   InteractiveEnv();
   ~InteractiveEnv();
@@ -35,6 +37,7 @@ class InteractiveEnv {
   BlendingPtr blending_;
   std::map<int, TexturePtr> texture_;
   scoped_ptr<ResourcePack> resource_pack_;
+  RasterizerStatePtr noncull_rasterizer_state_;
   friend struct ::base::DefaultLazyInstanceTraits<InteractiveEnv>;
   DISALLOW_COPY_AND_ASSIGN(InteractiveEnv);
 };

@@ -97,6 +97,7 @@ EntityDataPtr TranslateControlObj::InitAxesObjects(VertexDesc* desc) {
   vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
 
+  // planes
   // XY
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
@@ -171,10 +172,19 @@ void TranslateControlObj::Update(const Camera* camera, const Vector3& position) 
 }
 
 void TranslateControlObj::Render(Renderer* renderer) {
-  for (uint32 i = 0; i < arraysize(colors_); ++i) {
-    ambient_effect_->SetAmbient(colors_[i]);
-    renderer->BindEffect(ambient_effect_);
-    entity_->DrawSub(i, renderer);
+  InteractiveEnv* env = InteractiveEnv::GetInstance();
+  ScopedRasterizerState scoped_noncull(renderer);
+  renderer->SetRasterizerState(env->noncull_rasterizer_state());
+  {
+    ScopedResetBlending scoped_blending(renderer);
+    for (uint32 i = 0; i < arraysize(colors_); ++i) {
+      if (i == kPlaneXY) {
+        renderer->SetBlending(env->blending(), 0, 0xffffffff);
+      }
+      ambient_effect_->SetAmbient(colors_[i]);
+      renderer->BindEffect(ambient_effect_);
+      entity_->DrawSub(i, renderer);
+    }
   }
 
   ColorMaterialData mtrl;
@@ -194,6 +204,8 @@ void TranslateControlObj::Render(Renderer* renderer) {
 
 // class TranslateController
 const Vector4 TranslateController::kSelectedColor = Vector4(1.0f, 1.0f, 0.0f, 1.0f);
+const Vector4 TranslateController::kSelectedPlaneColor = 
+    Vector4(1.0f, 1.0f, 0.0f, 0.4f);
 TranslateController::TranslateController(InteractiveContext* ctx)
     : InteractiveController(ctx) {
   object_.reset(new TranslateControlObj);
@@ -273,10 +285,18 @@ void TranslateController::UpdateFrame(const FrameArgs& args) {
     case kHitPlaneXY:
       object_->SetColor(TranslateControlObj::kAxisX, kSelectedColor);
       object_->SetColor(TranslateControlObj::kAxisY, kSelectedColor);
-      object_->SetColor(TranslateControlObj::kPlaneXY, kSelectedColor);
+      object_->SetColor(TranslateControlObj::kPlaneXY, kSelectedPlaneColor);
       break;
     case kHitPlaneYZ:
+      object_->SetColor(TranslateControlObj::kAxisY, kSelectedColor);
+      object_->SetColor(TranslateControlObj::kAxisZ, kSelectedColor);
+      object_->SetColor(TranslateControlObj::kPlaneYZ, kSelectedPlaneColor);
+      break;
     case kHitPlaneZX:
+      object_->SetColor(TranslateControlObj::kAxisZ, kSelectedColor);
+      object_->SetColor(TranslateControlObj::kAxisX, kSelectedColor);
+      object_->SetColor(TranslateControlObj::kPlaneZX, kSelectedPlaneColor);
+      break;
     default:
     break;
   }

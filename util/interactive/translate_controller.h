@@ -84,6 +84,7 @@ class TranslateController : public InteractiveController {
   scoped_ptr<TranslateControlObj> object_;
   Plane plane_[3];
   static const Vector4 kSelectedColor;
+  static const Vector4 kSelectedPlaneColor;
   DISALLOW_COPY_AND_ASSIGN(TranslateController);
 };
 

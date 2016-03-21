@@ -40,6 +40,9 @@ InteractiveEnv::InteractiveEnv() {
   blend_desc.mask = Blending::kWriteColor;
   blending_ = rs->CreateBlending(blend_desc);
   blending_->EnableAlphaToConverage(true);
+
+  noncull_rasterizer_state_ = rs->CreateRasterizerState();
+  noncull_rasterizer_state_->SetCullingMode(kCullNone);
 }
 
 InteractiveEnv::~InteractiveEnv() {}
