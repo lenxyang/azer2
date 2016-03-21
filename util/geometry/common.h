@@ -29,6 +29,8 @@ int32 AppendBottomGeoTaperIndexData(int32 base, IndexPack* ipack, int slice);
 Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius, 
                           int slice, const Matrix4& mat = Matrix4::kIdentity);
 
+void AppendGeoRoundData(EntityData* data, float radius, int slice, 
+                        const Matrix4& mat = Matrix4::kIdentity);
 
 void UpdateVertexBounds(const Vector4 pos, Vector3* vmin, Vector3* vmax);
 }  // namespace azer

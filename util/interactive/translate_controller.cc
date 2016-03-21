@@ -21,7 +21,6 @@ TranslateControlObj::TranslateControlObj() {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   ambient_effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
   color_effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
-  // color_effect__ = (TextBillboardEffect*)env->GetEffect("TextBillboardEffect");
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
   entity_ = new Entity(InitAxesObjects(ambient_effect_->vertex_desc()));
   cones_ = new Entity(InitAxesConeData(ambient_effect_->vertex_desc()));
@@ -448,9 +447,7 @@ void TranslateController::GetDragInitPos(const Ray& ray, Vector3* pos) {
       break;
     }
   }
-  pos->x = pt.x - position_.x;
-  pos->y = pt.y - position_.y;
-  pos->z = pt.z - position_.z;
+  *pos = pt;
 }
 
 void TranslateController::RenderFrame(Renderer* renderer) {

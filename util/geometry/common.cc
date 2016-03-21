@@ -34,7 +34,6 @@ int32 AppendBottomGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
 Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius, 
                           int slice, const Matrix4& mat) {
   const int32 kVertexNum = CalcGeoRoundVertexCount(slice);
-  vpack->data()->extend(kVertexNum);
   Subset subset;
   VertexPos vpos(0, 0), npos;
   GetSemanticIndex("normal", 0, vpack->desc(), &npos);
@@ -60,6 +59,20 @@ Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius,
   subset.index_count = AppendUpGeoTaperIndexData(0, ipack, slice);
   subset.primitive = kTriangleList;
   return subset;
+}
+
+void AppendGeoRoundData(EntityData* data, float radius, int slice, 
+                        const Matrix4& mat) {
+  const int32 kVertexCount = CalcGeoRoundVertexCount(slice);
+  const int32 kIndexCount = CalcGeoRoundIndexCount(slice);
+  VertexPack vpack(data->vdata());
+  IndicesPack ipack(data->idata());
+  vpack->extend(kVertexCount);
+  ipack->extend(kIndexCount);
+  vpack->move(vpack->count() - kVertexCount);
+  ipack->move(ipack->count() - kIndexCount);
+  Subset subset = AppendGeoRoundData(&vpack, &ipack, radius, slice, mat); 
+  data->AddSubset(subset);
 }
 
 void GenTriStripIndex(int32 line1, int32 line2, int32 vertex_num, IndexPack* ipack) {
