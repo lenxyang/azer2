@@ -81,10 +81,32 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
   return subset;
 }
 
+namespace {
+void UpdateSphereNormal(VertexPack* vpack, int32 stack, int32 slice, Subset subset) {
+  const int32 kIndexCount = CalcSphereIndexCount(stack, slice);
+  IndicesDataPtr ptr(new IndicesData(kIndexCount));
+  IndexPack ipack(ptr);
+  subset.index_base = ipack.index();
+  AppendUpGeoTaperIndexData(0, &ipack, slice);
+  for (int i = 1; i < stack - 2; ++i) {
+    int line1 = 1 + (slice + 1) * (i - 1);
+    int line2 = 1 + (slice + 1) * i;
+    GenTriStripIndex(line1, line2, slice + 1, &ipack);
+  }
+
+  int32 last = subset.vertex_count - 1;
+  AppendBottomGeoTaperIndexData(last, &ipack, slice);
+  subset.index_count = ipack.index() - subset.index_base;
+  CalcIndexedTriangleNormal(vpack->data(), ipack.data(), subset);
+}
+}
+
 Subset AppendGeoSphereFrameSuset(VertexPack* vp, IndexPack* ipack,
                                  const GeoSphereParam& p, const Matrix4& mat) {
   const int32 kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
   Subset subset = AppendGeoSphereVertexSuset(vp, ipack, p, mat);
+  UpdateSphereNormal(vp, p.stack, p.slice, subset);
+
   subset.index_base = ipack->index();
   for (int i = 0; i < p.slice + 1; ++i) {
     CHECK(ipack->WriteAndAdvance(0));

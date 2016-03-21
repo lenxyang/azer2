@@ -207,7 +207,6 @@ void AppendGeoBoxData(EntityData* data, const Matrix4& mat) {
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
   vpack.move(data->vdata()->vertex_count() - kVertexCount);
-  ipack.move(data->idata()->count() - kIndexCount);
   Subset sub = AppendGeoBoxSubset(&vpack, &ipack, mat);
   data->AddSubset(sub);
 }
