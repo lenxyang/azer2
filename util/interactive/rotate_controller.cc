@@ -63,6 +63,7 @@ void RotateControllerObj::AppendAxisData(EntityData* data) {
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, kAxisLength, 1.0f), vpos);
+  vpack.next(1);
 
   data->AddSubset(Subset(base, 2, 0, 0, kLineList));
   data->AddSubset(Subset(base + 2, 2, 0, 0, kLineList));

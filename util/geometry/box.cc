@@ -206,8 +206,8 @@ void AppendGeoBoxData(EntityData* data, const Matrix4& mat) {
   const int32 kIndexCount = 0;
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
-  vpack.move(data->vdata()->vertex_count() - kVertexCount - 1);
-  ipack.move(data->idata()->count() - kIndexCount - 1);
+  vpack.move(data->vdata()->vertex_count() - kVertexCount);
+  ipack.move(data->idata()->count() - kIndexCount);
   Subset sub = AppendGeoBoxSubset(&vpack, &ipack, mat);
   data->AddSubset(sub);
 }
@@ -219,8 +219,8 @@ void AppendGeoBoxFrameData(EntityData* data, const Matrix4& mat) {
   const int32 kIndexCount = CalcBoxFrameIndexCount();
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
-  vpack.move(data->vdata()->vertex_count() - kVertexCount - 1);
-  ipack.move(data->idata()->count() - kIndexCount - 1);
+  vpack.move(data->vdata()->vertex_count() - kVertexCount);
+  ipack.move(data->idata()->count() - kIndexCount);
   Subset sub = AppendGeoBoxFrameSubset(&vpack, &ipack, mat);
   data->AddSubset(sub);
 }

@@ -6,7 +6,8 @@
 #include "azer/util/geometry/normal_util.h"
 
 namespace azer {
-Subset AppendGeoTaperData(VertexPack* vpack, IndexPack* ipack, const GeoConeParam& p,
+Subset AppendGeoTaperData(VertexPack* vpack, IndexPack* ipack, 
+                          const GeoConeParam& p,
                           const Matrix4& mat) {
   const int32 kVertexNum = 1 + p.slice + 1;
   Subset subset;

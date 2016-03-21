@@ -32,7 +32,7 @@ Subset AppendGeoBarrelData(VertexPack* vpack, IndexPack* ipack,
 
   for (int i = 0; i < p.stack; ++i) {
     for (int j = 0; j < p.slice + 1; ++j) {
-      float degree = 360.0f - j * 360.0f / p.slice;
+      float degree = j * 360.0f / p.slice;
       float x = slice_radius * cos(Degree(degree));
       float z = slice_radius * sin(Degree(degree));
 

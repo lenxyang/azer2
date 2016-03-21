@@ -14,7 +14,7 @@ inline int32 CalcSphereIndexCount(int32 stack_num, int32 slice_num) {
 }
 
 inline int32 CalcSphereFrameIndexCount(int32 stack, int32 slice) {
-  return (stack - 1) * slice * 2 + (stack - 2) * (slice + 1) * 2;
+  return (stack - 1) * (slice + 1) * 2 + (stack - 2) * (slice + 1) * 2;
 }
 
 inline int32 CalcSphereVertexCount(int32 stack_num, int32 slice_num) {
@@ -29,9 +29,9 @@ Subset AppendGeoSphereVertexSuset(VertexPack* vp, IndexPack* ipack,
   Subset subset;
   subset.vertex_base = vp->index();
   Vector4 pos = mat * Vector4(0.0f, p.radius, 0.0f, 1.0f);
+  float degree_unit = 360.0f / (float)p.slice;
   vp->WriteVector3Or4(pos, vpos);
   UpdateVertexBounds(pos, &subset.vmin, &subset.vmax);
-
   vp->WriteVector2(Vector2(0.0f, 0.0f), texpos);
   CHECK(vp->next(1));
   for (int i = 1; i < p.stack - 1; ++i) {
@@ -39,7 +39,7 @@ Subset AppendGeoSphereVertexSuset(VertexPack* vp, IndexPack* ipack,
     float slice_radius =  cos(Degree(90.0f - i * 180.0f / (float)(p.stack - 1)));
     float tv = i * 1.0f / (p.stack - 1);
     for (int j = 0; j < p.slice + 1; ++j) {
-      float degree = 360.0f - j * 360.0f / p.slice;
+      float degree = degree_unit * j;
       float x = p.radius * slice_radius * cos(Degree(degree));
       float z = p.radius * slice_radius * sin(Degree(degree));
       float tu = j * 1.0f / p.slice;
@@ -65,9 +65,7 @@ Subset AppendGeoSphereVertexSuset(VertexPack* vp, IndexPack* ipack,
 
 Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
                             const GeoSphereParam& p, const Matrix4& mat) {
-
   Subset subset = AppendGeoSphereVertexSuset(vp, ipack, p, mat);
-  
   subset.index_base = ipack->index();
   AppendUpGeoTaperIndexData(0, ipack, p.slice);
   for (int i = 1; i < p.stack - 2; ++i) {
@@ -76,9 +74,9 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
     GenTriStripIndex(line1, line2, p.slice + 1, ipack);
   }
 
-  AppendBottomGeoTaperIndexData(0, ipack, p.slice);
+  int32 last = subset.vertex_count - 1;
+  AppendBottomGeoTaperIndexData(last, ipack, p.slice);
   subset.index_count = ipack->index() - subset.index_base;
-
   CalcIndexedTriangleNormal(vp->data(), ipack->data(), subset);
   return subset;
 }
@@ -88,7 +86,7 @@ Subset AppendGeoSphereFrameSuset(VertexPack* vp, IndexPack* ipack,
   const int32 kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
   Subset subset = AppendGeoSphereVertexSuset(vp, ipack, p, mat);
   subset.index_base = ipack->index();
-  for (int i = 0; i < p.slice; ++i) {
+  for (int i = 0; i < p.slice + 1; ++i) {
     CHECK(ipack->WriteAndAdvance(0));
     CHECK(ipack->WriteAndAdvance(1 + i));
   }
@@ -100,15 +98,16 @@ Subset AppendGeoSphereFrameSuset(VertexPack* vp, IndexPack* ipack,
     }
   }
 
-  for (int i = 0; i < p.slice; ++i) {
+  for (int i = 0; i < p.slice + 1; ++i) {
     CHECK(ipack->WriteAndAdvance(kVertexCount - 1));
     CHECK(ipack->WriteAndAdvance(kVertexCount - 1 - (i + 1)));
   }
 
+  // horizontal line
   for (int i = 1; i < p.stack - 1; ++i) {
-    for (int j = 0; j < p.slice; ++j) {
+    for (int j = 0; j < p.slice + 1; ++j) {
       CHECK(ipack->WriteAndAdvance(1 + (i - 1) * (p.slice + 1) + j));
-      CHECK(ipack->WriteAndAdvance(1 + (i - 1) * (p.slice + 1) + (j + 1) % p.slice));
+      CHECK(ipack->WriteAndAdvance(1 + (i - 1) * (p.slice + 1) + (j + 1)));
     }
   }
 

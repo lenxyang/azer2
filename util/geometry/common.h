@@ -24,7 +24,7 @@ int32 CalcGeoRoundVertexCount(int32 slice);
  *
  */
 int32 AppendUpGeoTaperIndexData(int32 base, IndexPack* ipack, int slice);
-int32 AppendBottomGeoTaperIndexData(int32 base, IndexPack* ipack, int slice);
+int32 AppendBottomGeoTaperIndexData(int32 last, IndexPack* ipack, int slice);
 
 Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius, 
                           int slice, const Matrix4& mat = Matrix4::kIdentity);
