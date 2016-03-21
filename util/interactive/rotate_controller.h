@@ -27,6 +27,7 @@ class RotateControllerObj {
   };
   RotateControllerObj();
 
+  float circle_radius() const;
   void SetScale(const Vector3& s) { scale_ = s;}
   const Vector3& scale() const { return scale_;}
   void SetColor(int32 index, const Vector4& c);
@@ -42,16 +43,26 @@ class RotateControllerObj {
   Vector3 scale_;
   scoped_refptr<AmbientColorEffect> ambient_effect_;
   scoped_refptr<ColorEffect> color_effect_;
+  static const float CirclekMargin;
   static const float kAxisLength; 
   DISALLOW_COPY_AND_ASSIGN(RotateControllerObj);
 };
 
 class RotateController : public InteractiveController {
  public:
+  enum {
+    kHitNone,
+    kHitAxisX,
+    kHitAxisY,
+    kHitAxisZ,
+  };
   explicit RotateController(InteractiveContext* ctx);
   ~RotateController() override;
 
   int32 GetPicking(const gfx::Point& pt) override;
+  void OnDragBegin(const gfx::Point& pt) override;
+  void OnDrag(const gfx::Point& pt) override;
+  void OnDragEnd(const gfx::Point& pt) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
 
@@ -65,6 +76,7 @@ class RotateController : public InteractiveController {
   Vector3 scale_;
   Vector3 position_;
   scoped_ptr<RotateControllerObj> object_;
+  static const Vector4 kSelectedColor;
   DISALLOW_COPY_AND_ASSIGN(RotateController);
 };
 

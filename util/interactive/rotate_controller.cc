@@ -12,7 +12,8 @@
 
 namespace azer {
 // class RotateControlerObj
-const float RotateControllerObj::kAxisLength = 0.6f;; 
+const float RotateControllerObj::kAxisLength = 0.6f;;
+const float RotateControllerObj::CirclekMargin = 0.01f;
 RotateControllerObj::RotateControllerObj() {
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
   InitEntity();
@@ -40,9 +41,9 @@ void RotateControllerObj::AppendRoundData(EntityData* data) {
   Matrix4 yroundmat = Matrix4::kIdentity;
   Matrix4 zroundmat = RotateX(Degree(-90.0f));
   AppendGeoSphereData(data, param, Matrix4::kIdentity);
-  AppendGeoCircleData(data, param.radius + 0.01f, 1024, xroundmat);
-  AppendGeoCircleData(data, param.radius + 0.01f, 1024, yroundmat);
-  AppendGeoCircleData(data, param.radius + 0.01f, 1024, zroundmat);
+  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, xroundmat);
+  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, yroundmat);
+  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, zroundmat);
 }
 
 void RotateControllerObj::AppendAxisData(EntityData* data) {
@@ -68,6 +69,10 @@ void RotateControllerObj::AppendAxisData(EntityData* data) {
   data->AddSubset(Subset(base, 2, 0, 0, kLineList));
   data->AddSubset(Subset(base + 2, 2, 0, 0, kLineList));
   data->AddSubset(Subset(base + 4, 2, 0, 0, kLineList));
+}
+
+float RotateControllerObj::circle_radius() const {
+  return 1.0f + CirclekMargin;
 }
 
 void RotateControllerObj::SetColor(int32 index, const Vector4& c) {
@@ -120,6 +125,22 @@ void RotateControllerObj::Render(Renderer* renderer) {
 }
 
 // class RotateController
+namespace {
+bool PickCircle(const Ray& ray, const Vector3& center, float radius, 
+                const Plane& plane, Vector3* pos) {
+  if (PickingPlane(ray, plane, pos)) {
+    float dist2 = (pos->x - center.x) * (pos->x - center.x)
+        + (pos->y - center.y) * (pos->y - center.y)
+        + (pos->z - center.z) * (pos->z - center.z);
+    
+    return std::abs(dist2 - radius * radius) < 0.02;
+  } else {
+    return false;
+  }
+}
+}
+
+const Vector4 RotateController::kSelectedColor = Vector4(1.0f, 1.0f, 0.0f, 1.0f);
 RotateController::RotateController(InteractiveContext* ctx) 
     : InteractiveController(ctx) {
   object_.reset(new RotateControllerObj);
@@ -130,11 +151,59 @@ RotateController::RotateController(InteractiveContext* ctx)
 RotateController::~RotateController() {
 }
 
-int32 RotateController::GetPicking(const gfx::Point& pt) {
-  return 0;
+int32 RotateController::GetPicking(const gfx::Point& screenpt) {
+  Ray ray = std::move(context()->GetPickingRay(screenpt));
+  const Camera* camera = context()->camera(); 
+  Vector3 pxy, pyz, pzx;
+  Plane planexy(Vector3(0.0f, 0.0f, 1.0f), -position_.z);
+  Plane planeyz(Vector3(0.0f, 0.0f, 1.0f), -position_.x);
+  Plane planezx(Vector3(0.0f, 0.0f, 1.0f), -position_.y);
+  bool pickxy = PickCircle(ray, position_, scale_.z, planexy, &pxy);
+  bool pickyz = PickCircle(ray, position_, scale_.x, planeyz, &pyz);
+  bool pickzx = PickCircle(ray, position_, scale_.y, planezx, &pzx);
+  if (pickxy) {
+    return kHitAxisZ;
+  } else if (pickyz) {
+    return kHitAxisX;
+  } else if (pickzx) {
+    return kHitAxisY;
+  } else {
+    return kHitNone;
+  }
+}
+
+void RotateController::OnDragBegin(const gfx::Point& screenpt) {
+  Vector3 offset;
+  int state = GetPicking(screenpt);
+  set_state(state);
+  Ray ray = std::move(context()->GetPickingRay(screenpt));
+}
+
+void RotateController::OnDrag(const gfx::Point& pt) {
+}
+
+void RotateController::OnDragEnd(const gfx::Point& pt) {
 }
 
 void RotateController::UpdateFrame(const FrameArgs& args) {
+  switch (state()) {
+    case kHitAxisX: 
+      object_->SetColor(RotateControllerObj::kAxisX, kSelectedColor);
+      object_->SetColor(RotateControllerObj::kRoundX, kSelectedColor);
+      break;
+    case kHitAxisY: 
+      object_->SetColor(RotateControllerObj::kAxisY, kSelectedColor);
+      object_->SetColor(RotateControllerObj::kRoundY, kSelectedColor);
+      break;
+    case kHitAxisZ: 
+      object_->SetColor(RotateControllerObj::kAxisZ, kSelectedColor);
+      object_->SetColor(RotateControllerObj::kRoundZ, kSelectedColor);
+      break;
+    default:
+      object_->ResetColor();
+      break;
+  }
+
   object_->SetScale(scale_);
   object_->Update(context()->camera(), position_);
 }
