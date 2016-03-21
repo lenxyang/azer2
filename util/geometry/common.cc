@@ -66,12 +66,44 @@ void AppendGeoRoundData(EntityData* data, float radius, int slice,
   const int32 kVertexCount = CalcGeoRoundVertexCount(slice);
   const int32 kIndexCount = CalcGeoRoundIndexCount(slice);
   VertexPack vpack(data->vdata());
-  IndicesPack ipack(data->idata());
-  vpack->extend(kVertexCount);
-  ipack->extend(kIndexCount);
-  vpack->move(vpack->count() - kVertexCount);
-  ipack->move(ipack->count() - kIndexCount);
+  IndexPack ipack(data->idata());
+  vpack.data()->extend(kVertexCount);
+  ipack.data()->extend(kIndexCount);
+  vpack.move(vpack.data()->vertex_count() - kVertexCount);
+  ipack.move(ipack.count() - kIndexCount);
   Subset subset = AppendGeoRoundData(&vpack, &ipack, radius, slice, mat); 
+  data->AddSubset(subset);
+}
+
+Subset AppendGeoCircleData(VertexPack* vpack, float radius, 
+                           int slice, const Matrix4& mat) {
+  Subset subset;
+  VertexPos vpos(0, 0);
+  float degree = 360.0f / (float)slice;
+  subset.vertex_base = vpack->index();
+  Vector4 pos = mat * Vector4(0, 0, 0, 1.0f);
+  for (int i = 1; i < slice + 1; ++i) {
+    float x = cos(Degree(i * degree)) * radius;
+    float z = sin(Degree(i * degree)) * radius;
+    Vector4 pos = std::move(mat * Vector4(x, 0, z, 1.0f));
+    Vector4 normal = std::move(mat * Vector4(0.0f, 1.0f, 0.0f, 0.0f));
+    vpack->WriteVector3Or4(pos, vpos);
+    UpdateVertexBounds(pos, &subset.vmin, &subset.vmax);
+    vpack->next(1);
+  }
+  subset.vertex_count = vpack->index() - subset.vertex_base;
+  subset.index_count = 0;
+  subset.primitive = kLineStrip;
+  return subset;
+}
+
+void AppendGeoCircleData(EntityData* data, float radius, int slice, 
+                         const Matrix4& mat) {
+  const int32 kVertexCount = slice + 1;
+  VertexPack vpack(data->vdata());
+  vpack.data()->extend(kVertexCount);
+  vpack.move(vpack.data()->vertex_count() - kVertexCount);
+  Subset subset = AppendGeoCircleData(&vpack, radius, slice, mat); 
   data->AddSubset(subset);
 }
 

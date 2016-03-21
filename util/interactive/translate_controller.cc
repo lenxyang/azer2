@@ -451,6 +451,7 @@ void TranslateController::GetDragInitPos(const Ray& ray, Vector3* pos) {
 }
 
 void TranslateController::RenderFrame(Renderer* renderer) {
+  object_->SetScale(scale_);
   object_->Render(renderer);
 }
 
