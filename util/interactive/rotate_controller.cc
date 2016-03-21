@@ -39,10 +39,10 @@ void RotateControllerObj::AppendRoundData(EntityData* data) {
   Matrix4 xroundmat = RotateZ(Degree(90.0f));
   Matrix4 yroundmat = Matrix4::kIdentity;
   Matrix4 zroundmat = RotateX(Degree(-90.0f));
-  AppendGeoCircleData(data, param.radius + 0.01f, param.slice, xroundmat);
-  AppendGeoCircleData(data, param.radius + 0.01f, param.slice, yroundmat);
-  AppendGeoCircleData(data, param.radius + 0.01f, param.slice, zroundmat);
   AppendGeoSphereData(data, param, Matrix4::kIdentity);
+  AppendGeoCircleData(data, param.radius + 0.01f, 1024, xroundmat);
+  AppendGeoCircleData(data, param.radius + 0.01f, 1024, yroundmat);
+  AppendGeoCircleData(data, param.radius + 0.01f, 1024, zroundmat);
 }
 
 void RotateControllerObj::AppendAxisData(EntityData* data) {

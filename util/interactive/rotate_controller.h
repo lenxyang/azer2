@@ -16,13 +16,13 @@ class InteractiveContext;
 class RotateControllerObj {
  public:
   enum {
-    kAxisX,
+    kAxisX = 0,
     kAxisY,
     kAxisZ,
+    kSphere,
     kRoundX,
     kRoundY,
     kRoundZ,
-    kSphere,
     kSubsetCount,
   };
   RotateControllerObj();
