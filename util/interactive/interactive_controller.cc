@@ -20,11 +20,6 @@ void InteractiveController::OnControllerUnpicked() {
                     OnControllerUnpicked(this));
 }
 
-void InteractiveController::OnControllerChanged() {
-  FOR_EACH_OBSERVER(InteractiveControllerObserver, observer_list_, 
-                    OnControllerChanged(this));
-}
-
 void InteractiveController::AddObserver(InteractiveControllerObserver* obs) {
   observer_list_.AddObserver(obs);
 }

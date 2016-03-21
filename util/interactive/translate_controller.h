@@ -55,6 +55,14 @@ class TranslateControlObj {
   DISALLOW_COPY_AND_ASSIGN(TranslateControlObj);
 };
 
+class TranslateController;
+class TranslateControllerObserver {
+ public:
+  virtual void OnTranslateBegin(TranslateController* controller) {}
+  virtual void OnTranslating(TranslateController* controller) {}
+  virtual void OnTranslateEnd(TranslateController* controller) {}
+};
+
 class TranslateController : public InteractiveController {
  public:
   explicit TranslateController(InteractiveContext* ctx);
@@ -79,10 +87,25 @@ class TranslateController : public InteractiveController {
 
   void SetPosition(const Vector3& pos) { position_ = pos;}
   const Vector3& position() const { return position_;}
+  void SetScale(const Vector3& s) { scale_ = s;}
+  const Vector3& scale() const { return scale_;}
+
+  void AddTranslateObserver(TranslateControllerObserver* observer);
+  void RemoteTranslateObserver(TranslateControllerObserver* observer);
+  bool HasTranslateObserver(TranslateControllerObserver* observer);
  private:
+  /*
+   * 拖动时的起始点
+   */
+  void GetDragInitPos(const Ray& ray, Vector3* pos);
+  void CalcDragOffset(const Ray& ray, Vector3* offset);
   Vector3 position_;
+  Vector3 origin_position_;
+  Vector3 draginit_pos_;
+  Vector3 scale_;
   scoped_ptr<TranslateControlObj> object_;
   Plane plane_[3];
+  ObserverList<TranslateControllerObserver> observer_list_;
   static const Vector4 kSelectedColor;
   static const Vector4 kSelectedPlaneColor;
   DISALLOW_COPY_AND_ASSIGN(TranslateController);

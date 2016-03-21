@@ -99,31 +99,31 @@ EntityDataPtr TranslateControlObj::InitAxesObjects(VertexDesc* desc) {
 
   // planes
   // XY
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
-  CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(kPlaneWidth, kPlaneWidth, 0.0f, 1.0f), vpos);
+  CHECK(vpack.next(1));
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // YZ
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
-  CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, kPlaneWidth, kPlaneWidth, 1.0f), vpos);
+  CHECK(vpack.next(1));
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
 
   // ZX
-  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
-  CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, kPlaneWidth, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, kPlaneWidth, 1.0f), vpos);
+  CHECK(vpack.next(1));
+  vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(kPlaneWidth, 0.0f, 0.0f, 1.0f), vpos);
   CHECK(vpack.next(1));
@@ -139,25 +139,27 @@ EntityDataPtr TranslateControlObj::InitAxesObjects(VertexDesc* desc) {
   data->AddSubset(Subset(base + 14, 2, 0, 0, kLineList));
   data->AddSubset(Subset(base + 16, 2, 0, 0, kLineList));
 
-  data->AddSubset(Subset(base + 20, 4, 0, 0, kTriangleStrip));
-  data->AddSubset(Subset(base + 24, 4, 0, 0, kTriangleStrip));
-  data->AddSubset(Subset(base + 28, 4, 0, 0, kTriangleStrip));
+  data->AddSubset(Subset(base + 18, 4, 0, 0, kTriangleStrip));
+  data->AddSubset(Subset(base + 22, 4, 0, 0, kTriangleStrip));
+  data->AddSubset(Subset(base + 26, 4, 0, 0, kTriangleStrip));
   return data;
 }
 
 float TranslateControlObj::plane_width() const {
-  return kPlaneWidth * scale_.x;
+  return kPlaneWidth;
 }
 
 float TranslateControlObj::axis_begin() const {
-  return kAxisBegin * scale_.x;
+  return kAxisBegin;
 }
 
 void TranslateControlObj::ResetColor() {
   colors_[kAxisX] = colors_[kLineXY] = colors_[kLineXZ] = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
   colors_[kAxisY] = colors_[kLineYX] = colors_[kLineYZ] = Vector4(0.0f, 1.0f, 0.0f, 1.0f);
   colors_[kAxisZ] = colors_[kLineZX] = colors_[kLineZY] = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
-  colors_[kPlaneXY] = colors_[kPlaneYZ] = colors_[kPlaneZX] = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+  colors_[kPlaneXY] = Vector4(1.0f, 0.0f, 0.0f, 0.2f);
+  colors_[kPlaneYZ] = Vector4(0.0f, 1.0f, 0.0f, 0.2f);
+  colors_[kPlaneZX] = Vector4(0.0f, 0.0f, 1.0f, 0.2f);
 }
 
 void TranslateControlObj::Update(const Camera* camera, const Vector3& position) {
@@ -208,6 +210,7 @@ const Vector4 TranslateController::kSelectedPlaneColor =
     Vector4(1.0f, 1.0f, 0.0f, 0.4f);
 TranslateController::TranslateController(InteractiveContext* ctx)
     : InteractiveController(ctx) {
+  scale_ = Vector3(1.0f, 1.0f, 1.0f);
   object_.reset(new TranslateControlObj);
 }
 
@@ -217,6 +220,8 @@ TranslateController::~TranslateController() {
 int32 TranslateController::GetPicking(const gfx::Point& screenpt) {
   Ray ray = std::move(context()->GetPickingRay(screenpt));
   const Camera* camera = context()->camera(); 
+  const float kMargin = 0.02 * scale_.x;
+  const float kPlaneWidth = object_->plane_width() * scale_.x;
   Plane planexy(position_, position_ + Vector3(1.0f, 0.0f, 0.0f),
                 position_ + Vector3(0.0f, 1.0f, 0.0f));
   Plane planeyz(position_, position_ + Vector3(0.0f, 1.0f, 0.0f),
@@ -228,21 +233,38 @@ int32 TranslateController::GetPicking(const gfx::Point& screenpt) {
   bool parall_yz = !PickingPlane(ray, planeyz, &yz);
   bool parall_zx = !PickingPlane(ray, planezx, &zx);
   bool hit_axisx = (!parall_xy && !parall_zx)
-      && (std::abs(xy.y - position_.y) < 0.02)
-      && (std::abs(xy.z - position_.z) < 0.02);
+      && (std::abs(xy.y - position_.y) < 0.02f)
+      && (std::abs(xy.z - position_.z) < 0.02f);
   bool hit_axisy = (!parall_yz && !parall_xy)
-      && (std::abs(xy.x - position_.x) < 0.02)
-      && (std::abs(xy.z - position_.z) < 0.02);
+      && (std::abs(xy.x - position_.x) < 0.02f)
+      && (std::abs(xy.z - position_.z) < 0.02f);
   bool hit_axisz = (!parall_zx && !parall_yz)
-      && (std::abs(xy.x - position_.x) < 0.02)
-      && (std::abs(xy.y - position_.y) < 0.02);
+      && (std::abs(xy.x - position_.x) < 0.02f)
+      && (std::abs(xy.y - position_.y) < 0.02f);
   bool hit_planxy = (!parall_xy)
-      && (std::abs(xy.x - position_.x) < object_->plane_width())
-      && (std::abs(xy.y - position_.y) < object_->plane_width())
-      && (std::abs(xy.x - position_.x) > 0.0f)
-      && (std::abs(xy.y - position_.y) > 0.0f)
-      && (std::abs(xy.z - position_.z) < 0.02)
+      && ((xy.x - position_.x) < kPlaneWidth)
+      && ((xy.y - position_.y) < kPlaneWidth)
+      && (xy.x >= position_.x) && (xy.y >= position_.y)
+      && (std::abs(xy.x - position_.x) > 0.02f)
+      && (std::abs(xy.y - position_.y) > 0.02f)
+      && (std::abs(xy.z - position_.z) < 0.02f)
       && (xy.y - position_.y) >= (xy.x - position_.x);
+  bool hit_planyz = (!parall_yz)
+      && ((yz.y - position_.y) < kPlaneWidth)
+      && ((yz.z - position_.z) < kPlaneWidth)
+      && (yz.y >= position_.y) && (yz.z >= position_.z)
+      && (std::abs(yz.x - position_.x) < 0.02f)
+      && (std::abs(yz.y - position_.y) > 0.02f)
+      && (std::abs(yz.z - position_.z) > 0.02f)
+      && (yz.y - position_.y) >= (yz.x - position_.x);
+  bool hit_planzx = (!parall_zx)
+      && ((zx.z - position_.z) < kPlaneWidth)
+      && ((zx.x - position_.x) < kPlaneWidth)
+      && (zx.z >= position_.z) && (zx.x >= position_.x)
+      && (std::abs(zx.x - position_.x) > 0.02f)
+      && (std::abs(zx.y - position_.y) < 0.02f)
+      && (std::abs(zx.z - position_.z) > 0.02f)
+      && (zx.z - position_.z) >= (zx.x - position_.x);
   float depth_xy = detail::CalcDepthValue(xy, *camera);
   float depth_yz = detail::CalcDepthValue(yz, *camera);
   float depth_zx = detail::CalcDepthValue(zx, *camera);
@@ -255,19 +277,45 @@ int32 TranslateController::GetPicking(const gfx::Point& screenpt) {
     return kHitAxisZ;
   } else if (hit_planxy) {
     return kHitPlaneXY;
+  } else if (hit_planyz) {
+    return kHitPlaneYZ;
+  } else if (hit_planzx) {
+    return kHitPlaneZX;
+  } else {
+    return kHitNone;
   }
-  return kHitNone;
 }
 
-void TranslateController::OnDragBegin(const gfx::Point& pt) {
-  int state = GetPicking(pt);
+void TranslateController::OnDragBegin(const gfx::Point& screenpt) {
+  Vector3 offset;
+  origin_position_ = position_;
+  int state = GetPicking(screenpt);
+  set_state(state);
+  Ray ray = std::move(context()->GetPickingRay(screenpt));
+  GetDragInitPos(ray, &draginit_pos_);
+  CalcDragOffset(ray, &offset);
+  position_ = origin_position_ + offset;
+  FOR_EACH_OBSERVER(TranslateControllerObserver, observer_list_, 
+                    OnTranslateBegin(this));
 }
 
-void TranslateController::OnDrag(const gfx::Point& pt) {
-  int state = GetPicking(pt);
+void TranslateController::OnDrag(const gfx::Point& screenpt) {
+  Ray ray = std::move(context()->GetPickingRay(screenpt));
+  Vector3 offset;
+  CalcDragOffset(ray, &offset);
+  position_ = origin_position_ + offset;
+  FOR_EACH_OBSERVER(TranslateControllerObserver, observer_list_, 
+                    OnTranslating(this));
 }
 
-void TranslateController::OnDragEnd(const gfx::Point& pt) {
+void TranslateController::OnDragEnd(const gfx::Point& screenpt) {
+  Ray ray = std::move(context()->GetPickingRay(screenpt));
+  Vector3 offset;
+  CalcDragOffset(ray, &offset);
+  position_ = origin_position_ + offset;
+
+  FOR_EACH_OBSERVER(TranslateControllerObserver, observer_list_, 
+                    OnTranslateEnd(this));
 }
 
 void TranslateController::UpdateFrame(const FrameArgs& args) {
@@ -303,7 +351,121 @@ void TranslateController::UpdateFrame(const FrameArgs& args) {
   object_->Update(context()->camera(), position_);
 }
 
+void TranslateController::CalcDragOffset(const Ray& ray, Vector3* offset) {
+  *offset = Vector3(0.0f, 0.0f, 0.0f);
+  Vector3 pt;
+  switch (state()) {
+    case kHitAxisX: {
+      Plane pxy(Vector3(0.0f, 0.0f, 1.0f), -origin_position_.z);
+      PickingPlane(ray, pxy, &pt);
+      offset->x = pt.x - draginit_pos_.x;
+      offset->y = 0.0f;
+      offset->z = 0.0f;
+      break;
+    }
+    case kHitAxisY: {
+      Plane pyz(Vector3(1.0f, 0.0f, 0.0f), -origin_position_.x);
+      PickingPlane(ray, pyz, &pt);
+      offset->x = 0.0f;
+      offset->y = pt.y - draginit_pos_.y;
+      offset->z = 0.0f;
+      break;
+    }
+    case kHitAxisZ: {
+      Plane pzx(Vector3(0.0f, 1.0f, 0.0f), -origin_position_.y);
+      PickingPlane(ray, pzx, &pt);
+      offset->x = 0.0f;
+      offset->y = 0.0f;
+      offset->z = pt.z - draginit_pos_.z;
+      break;
+    }
+    case kHitPlaneXY: {
+      Plane pxy(Vector3(0.0f, 0.0f, 1.0f), -origin_position_.z);
+      PickingPlane(ray, pxy, &pt);
+      offset->x = pt.x - draginit_pos_.x;
+      offset->y = pt.y - draginit_pos_.y;
+      offset->z = 0.0f;
+      break;
+    }
+    case kHitPlaneYZ: {
+      Plane pyz(Vector3(1.0f, 0.0f, 0.0f), -origin_position_.x);
+      PickingPlane(ray, pyz, &pt);
+      offset->x = 0.0f;
+      offset->y = pt.y - draginit_pos_.y;
+      offset->z = pt.z - draginit_pos_.z;
+      break;
+    }
+    case kHitPlaneZX: {
+      Plane pzx(Vector3(0.0f, 1.0f, 0.0f), -origin_position_.y);
+      PickingPlane(ray, pzx, &pt);
+      offset->x = pt.x - draginit_pos_.x;
+      offset->y = 0.0f;
+      offset->z = pt.z - draginit_pos_.z;
+      break;
+    }
+    default: {
+      CHECK(false);
+      break;
+    }
+  }
+}
+
+void TranslateController::GetDragInitPos(const Ray& ray, Vector3* pos) {
+  Vector3 pt;
+  switch (state()) {
+    case kHitAxisX: {
+      Plane pxy(Vector3(0.0f, 0.0f, 1.0f), -position_.z);
+      PickingPlane(ray, pxy, &pt);
+      break;
+    }
+    case kHitAxisY: {
+      Plane pyz(Vector3(1.0f, 0.0f, 0.0f), -position_.x);
+      PickingPlane(ray, pyz, &pt);
+      break;
+    }
+    case kHitAxisZ: {
+      Plane pzx(Vector3(0.0f, 1.0f, 0.0f), -position_.y);
+      PickingPlane(ray, pzx, &pt);
+      break;
+    }
+    case kHitPlaneXY: {
+      Plane pxy(Vector3(0.0f, 0.0f, 1.0f), -position_.z);
+      PickingPlane(ray, pxy, &pt);
+      break;
+    }
+    case kHitPlaneYZ: {
+      Plane pyz(Vector3(1.0f, 0.0f, 0.0f), -position_.x);
+      PickingPlane(ray, pyz, &pt);
+      break;
+    }
+    case kHitPlaneZX: {
+      Plane pzx(Vector3(0.0f, 1.0f, 0.0f), -position_.y);
+      PickingPlane(ray, pzx, &pt);
+      break;
+    }
+    default: {
+      CHECK(false);
+      break;
+    }
+  }
+  pos->x = pt.x - position_.x;
+  pos->y = pt.y - position_.y;
+  pos->z = pt.z - position_.z;
+}
+
 void TranslateController::RenderFrame(Renderer* renderer) {
   object_->Render(renderer);
+}
+
+void TranslateController::AddTranslateObserver(TranslateControllerObserver* obs) {
+  observer_list_.AddObserver(obs);
+}
+
+void TranslateController::RemoteTranslateObserver(TranslateControllerObserver* obs) {
+  observer_list_.RemoveObserver(obs);
+}
+
+bool TranslateController::HasTranslateObserver(TranslateControllerObserver* obs) {
+  return observer_list_.HasObserver(obs);
 }
 }  // namespace azer

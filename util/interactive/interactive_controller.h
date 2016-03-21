@@ -36,7 +36,6 @@ class InteractiveControllerObserver {
  public:
   virtual void OnControllerPicked(InteractiveController* controller) {}
   virtual void OnControllerUnpicked(InteractiveController* controller) {}
-  virtual void OnControllerChanged(InteractiveController* controller) {}
 };
 
 class InteractiveController {
@@ -64,7 +63,6 @@ class InteractiveController {
  protected:
   void OnControllerPicked();
   void OnControllerUnpicked();
-  void OnControllerChanged();
  private:
   int32 state_;
   ObserverList<InteractiveControllerObserver> observer_list_;
