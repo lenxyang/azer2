@@ -15,6 +15,7 @@
       <include type="txt" name="HLSLLIB_NORMALLINE" file="hlsllib/normalline.hlsl" />
       <include type="txt" name="HLSLLIB_TEXTURE" file="hlsllib/texture.hlsl" />
       <include type="txt" name="HLSLLIB_SKYBOX" file="hlsllib/skybox.hlsl" />
+      <include type="txt" name="HLSLLIB_OVERLAY" file="hlsllib/overlay.hlsl" />
     </includes>
   </release>
 </grit>

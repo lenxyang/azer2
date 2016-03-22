@@ -17,6 +17,8 @@ class EffectLib {
  public:
   EffectLib(ResourcePack* pack);
 
+  static EffectLib* instance();
+
   Effect* GetEffect(const std::string& name);
   EffectAdapterContext* adapter_context() { return adapter_context_.get();}
  private:

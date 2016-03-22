@@ -3,6 +3,7 @@
 #include "base/logging.h"
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
+#include "base/lazy_instance.h"
 #include "base/strings/utf_string_conversions.h"
 #include "azer/render/blending.h"
 #include "azer/render/vertex_buffer.h"
@@ -12,10 +13,11 @@
 #include "azer/effect/color_effect.h"
 #include "azer/effect/diffusemap_effect.h"
 #include "azer/effect/diffusemap_effect_adapter.h"
+#include "azer/effect/normalline_effect.h"
+#include "azer/effect/overlay_effect.h"
+#include "azer/effect/sky_effect.h"
 #include "azer/effect/texture_effect.h"
 #include "azer/effect/text_billboard_effect.h"
-#include "azer/effect/sky_effect.h"
-#include "azer/effect/normalline_effect.h"
 #include "azer/res/grit/hlsllib.h"
 
 namespace azer {
@@ -67,9 +69,31 @@ EffectData effect_data[] = {
    HLSLLIB_TEXTURE, "vs_main1", 0, 0, 0, "ps_main1"},
   {"SkyboxEffect", SkyboxEffect::kEffectName, 1, 
    HLSLLIB_SKYBOX, "vs_main", 0, 0, 0, "ps_main"},
+  {"OverlayEffect", OverlayEffect::kEffectName, 1,
+   HLSLLIB_OVERLAY, "vs_main", 0, 0, 0, "ps_main"},
 };
 
+class EffectLibHolder {
+ public:
+  EffectLibHolder() {
+    ::base::FilePath effectpath(FILE_PATH_LITERAL("out/dbg/azer.pak"));
+    resource_pack_.reset(new ResourcePack);
+    CHECK(resource_pack_->Load(effectpath));
+    effectlib_.reset(new EffectLib(resource_pack_.get()));
+  }
+  EffectLib* GetEffectLib() { return effectlib_.get();}
+ private:
+  scoped_ptr<ResourcePack> resource_pack_;
+  scoped_ptr<EffectLib> effectlib_;
+  DISALLOW_COPY_AND_ASSIGN(EffectLibHolder);
+};
+::base::LazyInstance<EffectLibHolder> env_instance = LAZY_INSTANCE_INITIALIZER;
 }  // namespace effect
+
+
+EffectLib* EffectLib::instance() {
+  return env_instance.Pointer()->GetEffectLib();
+}
 
 EffectLib::EffectLib(ResourcePack* pack) : resource_pack_(pack) {
   InitAdapterContext();
@@ -168,5 +192,4 @@ bool EffectLib::InitAdapterContext() {
   adapter_context_->RegisteAdapter(new DiffuseMapEffect_RenderNode_Adapter);
   return true;
 }
-
 }  // namespace azer

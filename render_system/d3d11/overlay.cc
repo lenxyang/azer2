@@ -153,9 +153,10 @@ const int D3DOverlay::kVertexDescNum = arraysize(D3DOverlay::kVertexDesc);
 
 bool D3DOverlay::InitVertex(RenderSystem* rs) {
   // create vertex buffer
-  const int32 indices[] = {2, 1, 0, 2, 0, 3}; 
+  const int32 indices[] = {0, 1, 2, 3};
   vertex_desc_ptr_ = new VertexDesc(kVertexDesc, kVertexDescNum);
-  scoped_refptr<SlotVertexData> data(new SlotVertexData(vertex_desc_ptr_, kVertexNum));
+  scoped_refptr<SlotVertexData> data(new SlotVertexData(vertex_desc_ptr_, 
+                                                        kVertexNum));
   int32* ptr = (int32*)data->pointer();
   memcpy(ptr, indices, sizeof(indices));
   vb_ptr_ = rs->CreateVertexBuffer(kVertexBufferOpt(), data.get());
@@ -179,7 +180,7 @@ void D3DOverlay::Render(Renderer* renderer) {
   effect_->SetTexture(tex_);
   renderer->BindEffect(effect_.get());
   renderer->BindVertexBuffer(vb_ptr_.get());
-  renderer->SetPrimitiveTopology(kTriangleList);
+  renderer->SetPrimitiveTopology(kTriangleStrip);
   renderer->Draw(6, 0);
   ResetBlending(renderer);
 }

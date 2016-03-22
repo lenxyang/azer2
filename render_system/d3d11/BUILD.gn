@@ -20,8 +20,6 @@ shared_library("d3d11") {
     "gpu_constants_table.h",
     "indices_buffer.cc",
     "indices_buffer.h",
-    "overlay.cc",
-    "overlay.h",
     "plugin.cc",
     "plugin.h",
     "rasterizer_state.cc",
@@ -55,6 +53,7 @@ shared_library("d3d11") {
   configs += [
     "//azer/build/config:d3d11",
     "//azer/build/config:utf8src",
+    "//azer/effect:effectlib",
   ]
   defpath = rebase_path("../render_system.def", root_build_dir)
   if (is_win) { ldflags = ["/DEF:$defpath"]}

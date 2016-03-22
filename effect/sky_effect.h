@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/light.h"

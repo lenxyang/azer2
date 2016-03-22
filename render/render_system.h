@@ -26,7 +26,6 @@ class Context2D;
 class GpuComputeTaskDispatcher;
 class GpuConstantsTable;
 class ImageData;
-class Overlay;
 class RenderTarget;
 class Technique;
 class RasterizerState;
@@ -34,7 +33,6 @@ class RasterizerState;
 typedef scoped_refptr<Blending> BlendingPtr;
 typedef scoped_refptr<GpuComputeTaskDispatcher> GpuComputeTaskDispatcherPtr;
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTpablePtr;;
-typedef scoped_refptr<Overlay> OverlayPtr;
 typedef scoped_refptr<Renderer> RendererPtr;
 typedef scoped_refptr<RenderTarget> RenderTargetPtr;
 typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
@@ -82,8 +80,6 @@ class AZER_EXPORT RenderSystem {
   //
   virtual ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) = 0;
   virtual GpuComputeTaskDispatcherPtr CreateDispatcher() = 0;
-  virtual OverlayPtr CreateOverlay() = 0;
-
   virtual bool reset() = 0;
 
   Context2D* GetContext2D() { return context2d_.get();}

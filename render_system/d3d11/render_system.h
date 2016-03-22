@@ -58,7 +58,6 @@ class D3DRenderSystem : public RenderSystem {
 
   ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) override;
   GpuComputeTaskDispatcherPtr CreateDispatcher() override;
-  OverlayPtr CreateOverlay() override;
   TechniquePtr CreateTechnique() override;
 
   bool reset() override;
