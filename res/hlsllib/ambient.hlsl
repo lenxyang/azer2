@@ -1,3 +1,10 @@
+
+struct VSInput {
+  float3 position:POSITION;
+  float3 normal:NORMAL;
+  float2 texcoord: TEXCOORD0;
+};
+
 struct VsOutput {
   float4 position:SV_POSITION;
   float3 worldpos: WPOS;
@@ -6,16 +13,14 @@ struct VsOutput {
   float2 texcoord: TEXCOORD0;
 };
 
-struct VSInput {
-  float3 position:POSITION;
-  float3 normal:NORMAL;
-  float2 texcoord: TEXCOORD0;
-};
-
-cbuffer c_buffer {
+cbuffer vs_buffer : register(cb0) {
    float4x4 pv;
    float4x4 world;
    float4   camerapos;
+};
+
+cbuffer ps_buffer : register(cb0) {
+   float4     ambient;
 };
 
 VsOutput vs_main(VSInput input) {
@@ -28,4 +33,8 @@ VsOutput vs_main(VSInput input) {
   o.viewin = normalize(camerapos - o.worldpos);
   o.texcoord = input.texcoord;
   return o;
+}
+
+float4 ps_main(VsOutput o):SV_TARGET {
+  return ambient;
 }

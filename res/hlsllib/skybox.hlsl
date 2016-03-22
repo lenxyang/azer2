@@ -13,10 +13,13 @@ struct VSInput {
 };
 
 
-cbuffer c_buffer {
+cbuffer vs_buffer : register(cb0) {
    float4x4 pv;
    float4x4 world;
 };
+
+TextureCube cube : register(t0);
+SamplerState texsampler;
 
 VsOutput vs_main(VSInput input) {
   VsOutput o;
@@ -26,4 +29,9 @@ VsOutput vs_main(VSInput input) {
   o.normal  = mul(world, float4(input.normal, 0.0));
   o.texpos = input.position;
   return o;
+}
+
+float4 ps_main(VsOutput v) : SV_TARGET {
+  float4 color = cube.Sample(texsampler, v.texpos);
+  return color;
 }

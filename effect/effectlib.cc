@@ -39,36 +39,41 @@ const VertexDesc::Desc kVertexDesc[][10] = {
 struct EffectData {
   const char* name;
   const char* effect_name;
-  int32 vertex_desc_index;
-  int32 vertex_shader_id;
-  int32 hull_shader_id;
-  int32 domain_shader_id;
-  int32 geometry_shader_id;
-  int32 pixel_shader_id;
+  int32 vertex_layout_index;
+  int32 shaderid;
+  const char* vsentry;
+  const char* hsentry;
+  const char* dsentry;
+  const char* gsentry;
+  const char* psentry;
 };
 
 EffectData effect_data[] = {
   {"AmbientColorEffect", AmbientColorEffect::kEffectName, 0, 
-   HLSLLIB_AMBIENT_VS, 0, 0, 0, HLSLLIB_AMBIENT_PS},
+   HLSLLIB_AMBIENT, "vs_main", 0, 0, 0, "ps_main"},
   {"TextBillboardEffect", TextBillboardEffect::kEffectName, 0, 
-   HLSLLIB_TEXTBILLBOARD_VS, 0, 0, HLSLLIB_TEXTBILLBOARD_GS,
-   HLSLLIB_TEXTBILLBOARD_PS},
-  {"ColorEffect", ColorEffect::kEffectName, 0, 
-   HLSLLIB_COLOR_VS, 0, 0, 0, HLSLLIB_COLOR_PS},
+   HLSLLIB_TEXTBILLBOARD, "vs_main", 0, 0, "gs_main", "ps_main"},
+  {"ColorEffect", ColorEffect::kEffectName, 0, HLSLLIB_COLOR, 
+   "vs_main", 0, 0, 0, "ps_main"},
   {"DiffuseMapEffect", DiffuseMapEffect::kEffectName, 0, 
-   HLSLLIB_DIFFUSEMAP_VS, 0, 0, 0, HLSLLIB_DIFFUSEMAP_PS},
+   HLSLLIB_DIFFUSEMAP, "vs_main", 0, 0, 0, "ps_main"},
+  {"InstDiffuseMapEffect", DiffuseMapEffect::kEffectName, 0, 
+   HLSLLIB_INST_DIFFUSEMAP, "vs_main", 0, 0, 0, "ps_main"},
   {"NormalLineEffect", NormalLineEffect::kEffectName, 0, 
-   HLSLLIB_NORMALLINE_VS, 0, 0, HLSLLIB_NORMALLINE_GS, HLSLLIB_NORMALLINE_PS},
+   HLSLLIB_NORMALLINE, "vs_main", 0, 0, "gs_main", "ps_main"},
   {"TextureEffect0", TextureEffect::kEffectName, 1, 
-   HLSLLIB_TEXTURE0_VS, 0, 0, 0, HLSLLIB_TEXTURE0_PS},
+   HLSLLIB_TEXTURE, "vs_main0", 0, 0, 0, "ps_main0"},
   {"TextureEffect1", TextureEffect::kEffectName, 1, 
-   HLSLLIB_TEXTURE1_VS, 0, 0, 0, HLSLLIB_TEXTURE1_PS},
+   HLSLLIB_TEXTURE, "vs_main1", 0, 0, 0, "ps_main1"},
   {"SkyboxEffect", SkyboxEffect::kEffectName, 1, 
-   HLSLLIB_SKYBOX_VS, 0, 0, 0, HLSLLIB_SKYBOX_PS},
+   HLSLLIB_SKYBOX, "vs_main", 0, 0, 0, "ps_main"},
 };
+
 }  // namespace effect
 
-EffectLib::EffectLib(ResourcePack* pack) : resource_pack_(pack) {}
+EffectLib::EffectLib(ResourcePack* pack) : resource_pack_(pack) {
+  InitAdapterContext();
+}
 
 Effect* EffectLib::GetEffect(const std::string& name) {
   auto iter = effects_.find(name);
@@ -81,51 +86,56 @@ Effect* EffectLib::GetEffect(const std::string& name) {
 
 namespace {
 void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
-  if (data->vertex_shader_id > 0) {
+  if (data->vsentry) {
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".vs.hlsl";
     shader.stage = kVertexStage;
-    int32 id = data->vertex_shader_id;
+    shader.entry = data->vsentry;
+    int32 id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
 
-  if (data->hull_shader_id > 0) {
+  if (data->hsentry) {
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".hs.hlsl";
     shader.stage = kHullStage;
-    int32 id = data->hull_shader_id;
+    shader.entry = data->hsentry;
+    int32 id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
 
-  if (data->domain_shader_id > 0) {
+  if (data->dsentry) {
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".ds.hlsl";
     shader.stage = kDomainStage;
-    int32 id = data->domain_shader_id;
+    shader.entry = data->dsentry;
+    int32 id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
 
-  if (data->geometry_shader_id > 0) {
+  if (data->gsentry) {
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".gs.hlsl";
     shader.stage = kGeometryStage;
-    int32 id = data->geometry_shader_id;
+    shader.entry = data->gsentry;
+    int32 id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
   }
 
-  if (data->pixel_shader_id > 0) {
+  if (data->psentry) {
     ShaderInfo shader;
     shader.path = std::string(data->name) + ".ps.hlsl";
     shader.stage = kPixelStage;
-    int32 id = data->pixel_shader_id;
+    shader.entry = data->psentry;
+    int32 id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
@@ -138,7 +148,7 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
     if (std::string(effect_data[i].name) == name) {
       EffectData* data = effect_data + i;
       EffectPtr effect(CreateEffectByName(data->effect_name));
-      int32 vdindex = data->vertex_desc_index;
+      int32 vdindex = data->vertex_layout_index;
       VertexDescPtr desc(new VertexDesc(kVertexDesc[vdindex]));
       TechSource tech(desc);
       LoadEffectData(data, &tech, resource_pack_);

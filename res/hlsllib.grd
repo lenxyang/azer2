@@ -7,25 +7,14 @@
   </outputs>
   <release seq="1">
     <includes first_id="60000">
-      <include type="txt" name="HLSLLIB_TEXTBILLBOARD_VS" file="hlsllib/text_billborard.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_TEXTBILLBOARD_GS" file="hlsllib/text_billborard.gs.hlsl" />
-      <include type="txt" name="HLSLLIB_TEXTBILLBOARD_PS" file="hlsllib/text_billborard.ps.hlsl" />
-      <include type="txt" name="HLSLLIB_COLOR_PS" file="hlsllib/color.ps.hlsl" />
-      <include type="txt" name="HLSLLIB_COLOR_VS" file="hlsllib/color.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_AMBIENT_PS" file="hlsllib/ambient.ps.hlsl" />
-      <include type="txt" name="HLSLLIB_AMBIENT_VS" file="hlsllib/ambient.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_DIFFUSEMAP_PS" file="hlsllib/diffusemap.ps.hlsl" />
-      <include type="txt" name="HLSLLIB_DIFFUSEMAP_VS" file="hlsllib/diffusemap.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_DIFFUSEMAP_INSTVS" file="hlsllib/inst_diffusemap.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_NORMALLINE_VS" file="hlsllib/normalline.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_NORMALLINE_GS" file="hlsllib/normalline.gs.hlsl" />
-      <include type="txt" name="HLSLLIB_NORMALLINE_PS" file="hlsllib/normalline.ps.hlsl" />
-      <include type="txt" name="HLSLLIB_TEXTURE0_VS" file="hlsllib/texture0.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_TEXTURE0_PS" file="hlsllib/texture0.ps.hlsl" />
-      <include type="txt" name="HLSLLIB_TEXTURE1_VS" file="hlsllib/texture1.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_TEXTURE1_PS" file="hlsllib/texture1.ps.hlsl" />
-      <include type="txt" name="HLSLLIB_SKYBOX_VS" file="hlsllib/skybox.vs.hlsl" />
-      <include type="txt" name="HLSLLIB_SKYBOX_PS" file="hlsllib/skybox.ps.hlsl" />
+      <include type="txt" name="HLSLLIB_TEXTBILLBOARD" file="hlsllib/text_billborard.hlsl" />
+      <include type="txt" name="HLSLLIB_COLOR" file="hlsllib/color.hlsl" />
+      <include type="txt" name="HLSLLIB_AMBIENT" file="hlsllib/ambient.hlsl" />
+      <include type="txt" name="HLSLLIB_DIFFUSEMAP" file="hlsllib/diffusemap.hlsl" />
+      <include type="txt" name="HLSLLIB_INST_DIFFUSEMAP" file="hlsllib/inst_diffusemap.hlsl" />
+      <include type="txt" name="HLSLLIB_NORMALLINE" file="hlsllib/normalline.hlsl" />
+      <include type="txt" name="HLSLLIB_TEXTURE" file="hlsllib/texture.hlsl" />
+      <include type="txt" name="HLSLLIB_SKYBOX" file="hlsllib/skybox.hlsl" />
     </includes>
   </release>
 </grit>

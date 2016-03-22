@@ -1,4 +1,3 @@
-#pragma pack_matrix(row_major)
 
 struct VsOutput {
   float4 position : SV_POSITION;
@@ -11,10 +10,18 @@ struct VSInput {
   float2 texcoord: TEXCOORD0;
 };
 
-cbuffer c_buffer {
+struct GsOutput {
+  float4 position:SV_POSITION;
+};
+
+cbuffer vs_buffer : register(cb0) {
    float4x4 pv;
    float4x4 world;
    float linelength;
+};
+
+cbuffer ps_buffer : register(cb0) {
+   float4 color;
 };
 
 VsOutput vs_main(VSInput input) {
@@ -25,4 +32,23 @@ VsOutput vs_main(VSInput input) {
   o.position = mul(pv, worldpos);
   o.npos = mul(pv, o.npos);
   return o;
+}
+
+[maxvertexcount(6)]
+void gs_main(triangle VsOutput v[3], inout LineStream<GsOutput> linestream) {
+  linestream.RestartStrip();
+
+  GsOutput o;
+  [unroll]
+  for (int i = 0; i < 3; ++i) {
+    o.position = v[i].position;
+    linestream.Append(o);
+    o.position = v[i].npos;
+    linestream.Append(o);
+    break;
+  }
+}
+
+float4 ps_main(GsOutput o):SV_TARGET {
+  return color;
 }
