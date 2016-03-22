@@ -62,5 +62,5 @@ class AZER_EXPORT Technique : public ::base::RefCounted<Technique> {
   DISALLOW_COPY_AND_ASSIGN(Technique);
 };
 
-AZER_EXPORT TechniquePtr CreateTechnique(const TechSource& source, RenderSystem* rs);
+AZER_EXPORT TechniquePtr CreateTechnique(const TechSource& source);
 }  // namespace azer

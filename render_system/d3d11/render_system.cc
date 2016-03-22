@@ -230,41 +230,23 @@ RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
   }
 }
 
-RendererPtrVec D3DRenderSystem::CreateRendererVec(const Texture::Options& opt,
-                                                  bool shared_depth_buffer) {
-  RendererPtrVec vec;
+RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
+    const std::vector<Texture::Options>& opts) {
+  DCHECK_GT(opts.size(), 0u);
+  DepthBufferPtr depth(D3DDepthBuffer::Create(opts[0], this));
   std::vector<RenderTargetPtr> targets;
-  std::vector<DepthBufferPtr> depthes;
-  // create texture and create render target for event level
-  if (opt.type == kTexCubemap) {
-    if (!D3D2DArrayRenderTarget::Create(opt, this, &targets)) {
-      LOG(ERROR) << "Failed to create RendererVec.";
-      return vec;
-    }
+  for (int32 i = 0; i < static_cast<int32>(opts.size()); ++i) {
+    scoped_refptr<D3DRenderTarget> target = D3DRenderTarget::Create(opts[i], this);
+    targets.push_back(target);
+  }
+
+  ID3D11DeviceContext* context = envptr_->GetContext();
+  scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
+  if (renderer->Init(&targets, depth)) {
+    return renderer;
   } else {
-    CHECK(false);
-    return vec;
+    return RendererPtr();
   }
-
-  int depth_diminison = shared_depth_buffer ? 1 : static_cast<int32>(targets.size());
-  for (int i = 0; i < depth_diminison; ++i) {
-    DepthBufferPtr depth(D3DDepthBuffer::Create(opt, this));
-    depthes.push_back(depth);
-  }
-
-  for (int i = 0; i < static_cast<int32>(targets.size()); ++i) {
-    ID3D11DeviceContext* context = envptr_->GetContext();
-    scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
-    int depth_index = (shared_depth_buffer ? 0 : i);
-    if (renderer->Init(targets[i], depthes[depth_index])) {
-      vec.push_back(RendererPtr(renderer));
-    } else {
-      vec.clear();
-      return vec;
-    }
-  }
-
-  return vec;
 }
 
 RendererPtr D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {

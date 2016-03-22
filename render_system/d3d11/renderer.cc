@@ -41,13 +41,16 @@ void D3DRenderer::Use() {
   DCHECK(!targets_.empty() && targets_[0].get() != NULL);
   DCHECK(depth_.get() != NULL);
 
-  ID3D11RenderTargetView* target_view[1] = {0};
-  D3DRenderTarget* target = ((D3DRenderTarget*)targets_[0].get());
-  target_view[0] = target->GetD3DRenderTargetView();
+  ID3D11RenderTargetView* target_view[32] = {0};
+  int32 count = 0;
+  for (uint32 i = 0; i < targets_.size(); ++i, ++count) {
+    D3DRenderTarget* target = ((D3DRenderTarget*)targets_[i].get());
+    target_view[i] = target->GetD3DRenderTargetView();
+  }
 
   D3DDepthBuffer* depth = ((D3DDepthBuffer*)depth_.get());
   ID3D11DepthStencilView* depth_view = depth->GetD3DDepthStencilView();
-  d3d_context_->OMSetRenderTargets(1, target_view, depth_view);
+  d3d_context_->OMSetRenderTargets(count, target_view, depth_view);
 
   // reset all state to current
   SetViewport(viewport_);
@@ -267,13 +270,24 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage,
   }
 }
 
-bool D3DRenderer::Init(RenderTargetPtr rt, DepthBufferPtr depth) {
-  DCHECK(rt.get() && depth.get());
+bool D3DRenderer::Init(RenderTarget* rt, DepthBuffer* depth) {
+  DCHECK(rt && depth);
   DCHECK_EQ(targets_.size(), 0u);
   targets_.push_back(rt);
   depth_ = depth;
   Reset();
   const Texture::Options& o = rt->GetTexture()->options();
+  SetViewport(Viewport(0, 0, o.size.width(), o.size.height()));
+  return true;
+}
+
+bool D3DRenderer::Init(std::vector<RenderTargetPtr>* rt, DepthBuffer* depth) {
+  DCHECK_EQ(targets_.size(), 0u);
+  DCHECK_GT(rt->size(), 0u);
+  targets_.swap(*rt);
+  depth_ = depth;
+  Reset();
+  const Texture::Options& o = targets_[0]->GetTexture()->options();
   SetViewport(Viewport(0, 0, o.size.width(), o.size.height()));
   return true;
 }
@@ -296,11 +310,8 @@ bool D3DRenderer::Init(const Texture::Options& o) {
   return true;
 }
 
-bool D3DSurfaceRenderer::InitForSurface(RenderTargetPtr target,
-                                        DepthBufferPtr depth) {
-  if (target.get() == NULL || depth.get() == NULL) {
-    return false;
-  }
+bool D3DSurfaceRenderer::InitForSurface(RenderTarget* target, DepthBuffer* depth) {
+  DCHECK(target != NULL || depth != NULL);
 
   int32 width = surface_->GetBounds().width();
   int32 height = surface_->GetBounds().height();

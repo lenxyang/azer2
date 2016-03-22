@@ -63,7 +63,8 @@ void Technique::AddShader(ShaderPtr& gpu) {
   pline_[gpu->stage()] = gpu;
 }
 
-TechniquePtr CreateTechnique(const TechSource& source, RenderSystem* rs) {
+TechniquePtr CreateTechnique(const TechSource& source) {
+  RenderSystem* rs = RenderSystem::Current();
   TechniquePtr tech = rs->CreateTechnique();  
   const ShaderInfo& vsinfo = source.GetStage(kVertexStage);
   ShaderPtr vs_shader(rs->CreateShader(vsinfo, source.vertex_desc()));

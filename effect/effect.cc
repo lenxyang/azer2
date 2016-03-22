@@ -18,7 +18,7 @@ Effect::~Effect() {}
 bool Effect::Init(const TechSource& sources) {
   vertex_desc_ = sources.vertex_desc();
   DCHECK(vertex_desc_);
-  technique_ = CreateTechnique(sources, RenderSystem::Current());
+  technique_ = CreateTechnique(sources);
   InitGpuConstantTable();
   return true;
 }

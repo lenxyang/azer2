@@ -18,13 +18,13 @@ struct VsOutput {
   float3 binormal : BINORMAL;
 };
 
-cbuffer psbuffer {
+cbuffer vsbuffer {
    float4x4 pv;
    float4x4 world;
    float4   camerapos;
 };
 
-cbuffer vsbuffer {
+cbuffer psbuffer {
    float      ambient_scalar;
    float      specular_scalar;
    float      alpha;

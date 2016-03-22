@@ -73,7 +73,8 @@ class D3DRenderer : public Renderer {
   void ResetRenderTarget();
 
   bool Init(const Texture::Options& opt);
-  bool Init(RenderTargetPtr rt, DepthBufferPtr depth);
+  bool Init(RenderTarget* rt, DepthBuffer* depth);
+  bool Init(std::vector<RenderTargetPtr>* rt, DepthBuffer* depth);
  protected:
   void InitRasterizerState();
   void InitForRenderTarget();
@@ -98,7 +99,7 @@ class D3DSurfaceRenderer : public D3DRenderer {
     DCHECK(NULL != surface);
   }
 
-  bool InitForSurface(RenderTargetPtr target, DepthBufferPtr depth);
+  bool InitForSurface(RenderTarget* target, DepthBuffer* depth);
  private:
   Surface* surface_;
   DISALLOW_COPY_AND_ASSIGN(D3DSurfaceRenderer);
