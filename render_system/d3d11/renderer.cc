@@ -127,11 +127,14 @@ void D3DRenderer::Clear(const azer::Vector4& color) {
   DCHECK(d3d_context_ != NULL);
   DCHECK(targets_[0].get() != NULL);
 
-  D3DRenderTarget* target = ((D3DRenderTarget*)targets_[0].get());
-  ID3D11RenderTargetView* target_view = target->GetD3DRenderTargetView();
-  DCHECK(target_view != NULL);
-  D3DXCOLOR dxcolor(color.x, color.y, color.z, color.w);
-  d3d_context_->ClearRenderTargetView(target_view, dxcolor);
+  for (auto iter = targets_.begin(); iter != targets_.end(); ++iter) {
+    DCHECK(dynamic_cast<D3DRenderTarget*>(iter->get()));
+    D3DRenderTarget* target = (D3DRenderTarget*)iter->get();
+    ID3D11RenderTargetView* target_view = target->GetD3DRenderTargetView();
+    DCHECK(target_view != NULL);
+    D3DXCOLOR dxcolor(color.x, color.y, color.z, color.w);
+    d3d_context_->ClearRenderTargetView(target_view, dxcolor);
+  }
 }
 
 void D3DRenderer::ClearDepthAndStencil(bool clear_depth, bool clear_stencil,

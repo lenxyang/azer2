@@ -173,12 +173,14 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
     return false;
   }
   
-  Texture::Options opt = options_;
-  opt.format = kR24G8;
-  D3DResTexture2D* restex = new D3DResTexture2D(opt, rs);
-  restexture_ = restex;
-  if (restex->InitFromTexture(tex)) {
-    return false;
+  if (options_.target & kBindTargetRenderTarget) {
+    Texture::Options opt = options_;
+    opt.format = kR24nX8;
+    D3DResTexture2D* restex = new D3DResTexture2D(opt, rs);
+    restexture_ = restex;
+    if (restex->InitFromTexture(tex)) {
+      return false;
+    }
   }
   
 

@@ -12,7 +12,7 @@ uint32  TranslateFormat(int32 type) {
     case DXGI_FORMAT_B8G8R8A8_UNORM: return kBGRAn8;
     case DXGI_FORMAT_R8G8B8A8_UINT: return kRGBA8;
     case DXGI_FORMAT_R32G32B32A32_UINT: return kRGBA32;
-    case DXGI_FORMAT_D24_UNORM_S8_UINT: return kDepth24Stencil8;
+    case DXGI_FORMAT_D24_UNORM_S8_UINT: return kDepth24nStencil8u;
     case DXGI_FORMAT_R32_FLOAT: return kScalar;
     case DXGI_FORMAT_R32G32_FLOAT: return kVec2;
     case DXGI_FORMAT_R32G32B32_FLOAT: return kVec3;

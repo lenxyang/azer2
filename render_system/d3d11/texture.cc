@@ -339,7 +339,7 @@ bool D3DResTexture2D::InitFromTexture(D3DTexture2D* texture) {
   D3D11_SHADER_RESOURCE_VIEW_DESC desc;
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURE2D);
-  desc.Format = tex_desc_.Format;
+  desc.Format = TranslateFormat(options_.format);
   desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
   desc.Texture2D.MipLevels = 1;
   desc.Texture2D.MostDetailedMip = 0;
