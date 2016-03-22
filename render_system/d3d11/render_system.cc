@@ -15,7 +15,6 @@
 #include "azer/render_system/d3d11/gpu_compute_task.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
-#include "azer/render_system/d3d11/overlay.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/rasterizer_state.h"
 #include "azer/render_system/d3d11/renderer.h"
@@ -190,15 +189,6 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
 GpuComputeTaskDispatcherPtr D3DRenderSystem::CreateDispatcher() {
   GpuComputeTaskDispatcherPtr ptr(new D3DGpuComputeTaskDispatcher);
   return ptr;
-}
-
-OverlayPtr D3DRenderSystem::CreateOverlay() {
-  scoped_refptr<D3DOverlay> surface_ptr(new D3DOverlay(this));
-  if (surface_ptr->Init(this)) {
-    return surface_ptr;
-  } else {
-    return OverlayPtr();
-  }
 }
 
 BlendingPtr D3DRenderSystem::CreateBlending(const Blending::Desc& desc) {

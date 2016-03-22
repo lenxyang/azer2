@@ -5,7 +5,7 @@ shared_library("azer") {
     "effect",
     "math",
     "render",
-    "render/layers",
+#    "render/layers",
     "render:render2d",
     "scene",
   ]
