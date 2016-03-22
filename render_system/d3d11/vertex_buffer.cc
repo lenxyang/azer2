@@ -71,7 +71,11 @@ std::string D3DVertexLayout::GenVSForDesc(VertexDesc* vertex_desc) {
 bool D3DVertexLayout::Init(RenderSystem* rs) {
   std::string shader = GenVSForDesc(vertex_desc());
   std::string msg;
-  D3DBlobPtr blob(CompileShaderForStage(kVertexStage, shader, "gen", &msg));
+  ShaderInfo info;
+  info.stage = kVertexStage;
+  info.code = shader;
+  info.path = "gen_for_vertex_layut";
+  D3DBlobPtr blob(CompileHLSL(info, &msg));
   CHECK(blob.get()) << "compile shader failed." << shader << "\n" << msg;
   return Init(rs, blob.get());
 }

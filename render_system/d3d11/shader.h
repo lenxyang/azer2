@@ -106,11 +106,9 @@ class D3DComputeShader : public D3DShader {
 };
 
 
-ID3DBlob* CompileShaderForStage(RenderPipelineStage stage, 
-                                const std::string& shader, 
-                                const std::string& path, 
-                                std::string* error_msg);
+ID3DBlob* CompileHLSL(const ShaderInfo& info, std::string* error_msg);
 const char* HLSLTypeName(DataFormat format);
 const char* DefaultShaderEntryForStage(RenderPipelineStage stage);
+const char* DefaultShaderVersionForStage(RenderPipelineStage stage);
 }  // namespace d3d11
 }  // namespace azer

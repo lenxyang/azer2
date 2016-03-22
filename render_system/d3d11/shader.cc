@@ -13,6 +13,7 @@
 
 namespace azer {
 namespace d3d11 {
+
 // clsas D3DShader
 D3DShader::D3DShader(const ShaderInfo& info) : Shader(info) {}
 D3DShader::D3DShader(VertexDesc* desc, const ShaderInfo& info) 
@@ -20,7 +21,7 @@ D3DShader::D3DShader(VertexDesc* desc, const ShaderInfo& info)
 D3DShader::~D3DShader() {}
 D3DBlobPtr D3DShader::CompileShader(ID3D11Device* d3ddevice) {
   std::string msg;
-  D3DBlobPtr blob(CompileShaderForStage(stage(), info_.code, info_.path, &msg));
+  D3DBlobPtr blob(CompileHLSL(info_, &msg));
   if (NULL == blob) {
     LOG(ERROR) << "Failed to shader("  << RenderStageName(stage()) << "): " << msg;
     return D3DBlobPtr();
@@ -217,47 +218,6 @@ const DWORD kCompileFlags =
 const DWORD kCompileFlags = D3DCOMPILE_SKIP_VALIDATION | kCommflags;
 #endif
 
-namespace {
-const char* DefaultShaderVersionForStage(RenderPipelineStage stage);
-}
-
-ID3DBlob* CompileHLSL(const std::string& shader, const std::string& target,
-                      const std::string& entrypointer,
-                      const std::string& shader_path,
-                      std::string* error_msg) {
-  std::string source_path = shader_path.empty() ? "noname.hlsl" : shader_path;
-  ID3DBlob* blob = NULL;
-  ID3DBlob* msgblob = NULL;
-  HRESULT hr;
-  hr = D3DCompile(shader.c_str(),
-                  shader.length(),
-                  source_path.c_str(),
-                  NULL,
-                  D3D_COMPILE_STANDARD_FILE_INCLUDE, // pIncludes
-                  entrypointer.c_str(), // pEntryPointer
-                  target.c_str(),
-                  kCompileFlags,
-                  0,
-                  &blob,
-                  &msgblob);
-
-  if (FAILED(hr)) {
-    error_msg->append((const char*)msgblob->GetBufferPointer(),
-                      msgblob->GetBufferSize());
-    return NULL;
-  }
-  return blob;
-}
-
-ID3DBlob* CompileShaderForStage(RenderPipelineStage stage, 
-                                const std::string& shader, 
-                                const std::string& path, 
-                                std::string* error_msg) {
-  const char* entry_name = DefaultShaderEntryForStage(stage);
-  const char* version_name = DefaultShaderVersionForStage(stage);
-  return CompileHLSL(shader, version_name, entry_name, path, error_msg);
-}
-
 const char* DefaultShaderEntryForStage(RenderPipelineStage stage) {
   switch (stage) {
     case kVertexStage: return "vs_main";
@@ -270,7 +230,6 @@ const char* DefaultShaderEntryForStage(RenderPipelineStage stage) {
   }
 }
 
-namespace {
 const char* DefaultShaderVersionForStage(RenderPipelineStage stage) {
   switch (stage) {
     case kVertexStage: return "vs_5_0";
@@ -282,7 +241,36 @@ const char* DefaultShaderVersionForStage(RenderPipelineStage stage) {
     default: CHECK(false); return "";
   }
 }
-}  // namespace
+ID3DBlob* CompileHLSL(const ShaderInfo& info, std::string* error_msg) {
+  RenderPipelineStage stage = (RenderPipelineStage)info.stage;
+  std::string source_path = info.path.empty() ? "noname.hlsl" : info.path;
+  const char* entry_name = info.entry.empty() ? 
+      DefaultShaderEntryForStage(stage) : info.entry.c_str();
+  const char* target = info.version.empty() ? 
+      DefaultShaderVersionForStage(stage) : info.version.c_str();
+  
+  ID3DBlob* blob = NULL;
+  ID3DBlob* msgblob = NULL;
+  HRESULT hr;
+  hr = D3DCompile(info.code.c_str(),
+                  info.code.length(),
+                  source_path.c_str(),
+                  NULL,
+                  D3D_COMPILE_STANDARD_FILE_INCLUDE, // pIncludes
+                  entry_name, // pEntryPointer
+                  target,
+                  kCompileFlags,
+                  0,
+                  &blob,
+                  &msgblob);
+
+  if (FAILED(hr)) {
+    error_msg->append((const char*)msgblob->GetBufferPointer(),
+                      msgblob->GetBufferSize());
+    return NULL;
+  }
+  return blob;
+}
 
 const char* HLSLTypeName(DataFormat format) {
   switch (format) {
