@@ -28,6 +28,11 @@ enum CPUAccess {
   kCPUAccess   = kCPUWrite | kCPURead,
 };
 
+// n:  normal
+// us: unsigned
+// s:  signed
+// f:  float
+// tl: typeless
 enum DataFormat {
   kScalar = 1,
   kFloat = kScalar,
@@ -59,9 +64,12 @@ enum DataFormat {
   kBGRA32,
   kBGRAn32,
   kBGRAnf,
+  kR11G11B10f,
   kRGBA = kRGBAf,
   kDepth24Stencil8,
-  kDXBC1n      = 1000,
+  kR24G8tl,
+  kR24nG8u,
+  kDXBC1n = 1000,
   kDXBC1nSRGB,
   kDXBC4s,
   kDXBC4n,

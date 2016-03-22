@@ -293,7 +293,6 @@ bool ValidTextureFlags(const Texture::Options& opt) {
 }
 
 // class D3DTexture2D
-
 void D3DTexture2D::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
 }
 
@@ -330,6 +329,31 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
   desc->Texture2D.MipLevels = static_cast<UINT>(-1); // tex_desc_.MipLevels;
   desc->Texture2D.MostDetailedMip = 0;
+}
+
+// 
+D3DResTexture2D::D3DResTexture2D(const Texture::Options& opt, D3DRenderSystem* rs)
+    : D3DTexture2d(opt, rs) {
+}
+
+bool D3DTexture2DShared::InitFromTexture(D3DTexture2D* texture) {
+  texres_ = texture->texres_;
+  texres_->AddRef();
+  D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+  DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
+            D3D11_SRV_DIMENSION_TEXTURE2D);
+  desc.Format = tex_desc_.Format;
+  desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+  desc.Texture2D.MipLevels = 1;
+  desc.Texture2D.MostDetailedMip = 0;
+  HRESULT hr = d3d_device->CreateShaderResourceView(texres_, &desc, &res_view_);
+  HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
+  return true;
+}
+
+bool D3DTexture2DShared::InitFromImage(const ImageData* image) {
+  CHECK(false);
+  return false;
 }
 
 // reference: MSDN, Surface Sharing Between Windows Graphics APIs

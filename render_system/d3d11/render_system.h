@@ -35,10 +35,11 @@ class D3DRenderSystem : public RenderSystem {
 
   RasterizerStatePtr CreateRasterizerState() override;
   DepthStencilStatePtr CreateDepthStencilState() override;
-  RendererPtr CreateRenderer(const Texture::Options& opt) override;
+  RendererPtr CreateRenderer(const Texture::Options& opt,
+                             const Texture::Options& depthopt) override;
   RendererPtr CreateMultipleOutputRenderer(
-      const std::vector<Texture::Options>& opts) override;
-  RendererPtr CreateDeferredRenderer(const Texture::Options& opt) override;
+      int count, const Texture::Options* opts, 
+      const Texture::Options& depthopt) override;
   BlendingPtr CreateBlending(const Blending::Desc& desc) override;
   VertexBufferGroupPtr CreateVertexBufferGroup(VertexDesc* desc) override;
   VertexBufferPtr CreateVertexBuffer(const HBufferOptions& opt,

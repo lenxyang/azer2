@@ -133,11 +133,13 @@ void D3DDepthStencilState::Apply(Renderer* r, uint32 stencilref) {
 D3DDepthBuffer::D3DDepthBuffer(const Texture::Options& opt, D3DRenderSystem* rs)
     : DepthBuffer(opt),
       target_(NULL),
+      rdonly_target_(NULL),
       render_system_(rs) {
   }
 
 D3DDepthBuffer::~D3DDepthBuffer() {
   SAFE_RELEASE(target_);
+  SAFE_RELEASE(rdonly_target_);
 }
 
 D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o, 
@@ -172,12 +174,30 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
   if (!tex->Init(NULL, 1, 1)) {
     return false;
   }
+  
+  Texture::Options opt = options_;
+  opt.format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+  D3DResTexture2D* restex = new D3DResTexture2D(opt, rs);
+  restexture_ = restex;
+  if (restex->InitFromTexture(tex)) {
+    return false;
+  }
+  
 
   ID3D11Resource* resource = tex->GetResource();
-  DCHECK_EQ(TranslateBindTarget(options_.target), D3D11_BIND_DEPTH_STENCIL);
+  uint32 target = TranslateBindTarget(options_.target);
+  DCHECK(target & D3D11_BIND_DEPTH_STENCIL);
 
   hr = d3d_device->CreateDepthStencilView(resource, NULL, &target_);
-  HRESULT_HANDLE(hr, ERROR, "CreateDepthStencilView failed ");  
+  HRESULT_HANDLE(hr, ERROR, "CreateDepthStencilView failed ");
+
+  D3D11_DEPTH_STENCIL_VIEW_DESC dsvd = {
+    DXGI_FORMAT_D24_UNORM_S8_UINT,
+    D3D11_DSV_DIMENSION_TEXTURE2D,
+    0,
+  };
+  hr = d3d_device->CreateDepthStencilView(resource, dsvd, &rdonly_target_);
+  HRESULT_HANDLE(hr, ERROR, "CreateDepthStencilView(ReadOnly) failed ");
 
   return true;
 }

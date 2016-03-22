@@ -73,6 +73,17 @@ class D3DTexture2D : public D3DTexture {
   DISALLOW_COPY_AND_ASSIGN(D3DTexture2D);
 };
 
+class D3DResTexture2D : public D3DTexture2D {
+ private:
+  D3DTexture2D(const Texture::Options& opt, D3DRenderSystem* rs)
+      : D3DTexture(opt, rs) {
+  }
+  bool InitFromTexture(D3DTexture2D* texture);
+ protected:
+  bool InitFromImage(const ImageData* image) override;
+  DISALLOW_COPY_AND_ASSIGN(D3DResTexture2D);
+};
+
 // for shared resource with other D3DDevice
 // here, is use to create texture for ANGLE using
 class D3DTexture2DShared : public D3DTexture2D {

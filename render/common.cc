@@ -44,11 +44,14 @@ const char* GetDataFormatName(DataFormat format) {
     case kBoolVec3: return "boolvec3";
     case kBoolVec4: return "boolvec4";
     case kRGBA8: return "rgba(8)";
-    case kRGBAn8: return "rgba(n8)";
+    case kRGBAn8: return "rgba(norm8)";
     case kRGBA32: return "rgba(32)";
-    case kRGBAn32:return "rgba(n32)";
+    case kRGBAn32:return "rgba(norm32)";
     case kRGBAf: return "rgba(f)";
+    case kR11G11B10f: return "r11g11b10";
     case kDepth24Stencil8: return "depth24stencil8";
+    case kR24G8tl: return "R24G8Typeless";
+    case kR24nG8u: return "R24normG8unsigned";
     case kDXBC1n: return "DXBC1n";
     case kDXBC1nSRGB: return "DXBC1nSRGB";
     case kDXBC4s: return "DXBC4s";

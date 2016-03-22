@@ -34,11 +34,14 @@ void LayerTreeHost::SetBackgroundColor(SkColor color) {
 }
 
 void LayerTreeHost::SetScaleAndSize(float scale, const gfx::Size& size_in_pixel) {
-  azer::RenderSystem* rs = azer::RenderSystem::Current();
-  azer::Texture::Options rdopt;
+  RenderSystem* rs = azer::RenderSystem::Current();
+  Texture::Options rdopt;
   rdopt.size = size_in_pixel;
   rdopt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
-  renderer_ = rs->CreateRenderer(rdopt);
+  Texture::Options depthopt;
+  depthopt.size = size_in_pixel;
+  rdopt.target = kBindTargetDepthStencil;
+  renderer_ = rs->CreateRenderer(rdopt, depthopt);
   if (!overlay_.get()) {
     overlay_ = rs->CreateOverlay();
   }

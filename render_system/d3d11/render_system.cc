@@ -218,7 +218,8 @@ DepthStencilStatePtr D3DRenderSystem::CreateDepthStencilState() {
   return DepthStencilStatePtr(new D3DDepthStencilState);
 }
 
-RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
+RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt,
+                                            const Texture::Options& depthopt) {
   DCHECK(envptr_.get() != NULL);
   DCHECK(envptr_->GetContext() != NULL);
   ID3D11DeviceContext* context = envptr_->GetContext();
@@ -231,11 +232,12 @@ RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt) {
 }
 
 RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
-    const std::vector<Texture::Options>& opts) {
-  DCHECK_GT(opts.size(), 0u);
-  DepthBufferPtr depth(D3DDepthBuffer::Create(opts[0], this));
+    int32 count, const Texture::Options* opts,
+    const Texture::Options& depthopt) {
+  DCHECK_GT(count, 0u);
+  DepthBufferPtr depth(D3DDepthBuffer::Create(depthopt, this));
   std::vector<RenderTargetPtr> targets;
-  for (int32 i = 0; i < static_cast<int32>(opts.size()); ++i) {
+  for (int32 i = 0; i < count; ++i) {
     scoped_refptr<D3DRenderTarget> target = D3DRenderTarget::Create(opts[i], this);
     targets.push_back(target);
   }
@@ -243,23 +245,6 @@ RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
   ID3D11DeviceContext* context = envptr_->GetContext();
   scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(&targets, depth)) {
-    return renderer;
-  } else {
-    return RendererPtr();
-  }
-}
-
-RendererPtr D3DRenderSystem::CreateDeferredRenderer(const Texture::Options& opt) {
-  DCHECK(GetDevice() != NULL);
-  ID3D11DeviceContext* context = NULL;
-  HRESULT hr = GetDevice()->CreateDeferredContext(0, &context);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to CreateDeferredContext";
-    return NULL;
-  }
-
-  scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
-  if (renderer->Init(opt)) {
     return renderer;
   } else {
     return RendererPtr();

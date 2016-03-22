@@ -55,10 +55,11 @@ class AZER_EXPORT RenderSystem {
 
   virtual RasterizerStatePtr CreateRasterizerState() = 0;
   virtual DepthStencilStatePtr CreateDepthStencilState() = 0;
-  virtual RendererPtr CreateRenderer(const Texture::Options& opt) = 0;
+  virtual RendererPtr CreateRenderer(const Texture::Options& opt, 
+                                     const Texture::Options& depthopt) = 0;
   virtual RendererPtr CreateMultipleOutputRenderer(
-      const std::vector<Texture::Options>& opts) = 0;
-  virtual RendererPtr CreateDeferredRenderer(const Texture::Options& opt) = 0;
+      int32 count, const Texture::Options* opts, 
+      const Texture::Options& depthopt) = 0;
   virtual BlendingPtr CreateBlending(const Blending::Desc& desc) = 0;
   virtual TechniquePtr CreateTechnique() = 0;
 
