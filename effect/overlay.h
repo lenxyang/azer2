@@ -6,6 +6,7 @@
 #include "azer/effect/effect.h"
 #include "azer/render/texture.h"
 #include "azer/render/vertex_buffer.h"
+#include "azer/render/rasterizer_state.h"
 #include "azer/render/blending.h"
 #include "ui/gfx/rect_f.h"
 #include "ui/gfx/rect.h"
@@ -31,6 +32,10 @@ class Overlay : public ::base::RefCounted<Overlay> {
   BlendingPtr blending_;
   VertexBufferPtr vb_;
   OverlayEffectPtr effect_;
+  TexturePtr texture_;
+  Vector4 bounds_;
+  Vector4 texbounds_;
+  RasterizerStatePtr state_;
   DISALLOW_COPY_AND_ASSIGN(Overlay);
 };
 

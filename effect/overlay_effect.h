@@ -17,10 +17,8 @@ class OverlayEffect : public Effect {
   const char* GetEffectName() const override;
 #pragma pack(push, 4)
   struct vs_cbuffer {
-    float left;
-    float top;
-    float width;
-    float height;
+    Vector4 bounds;
+    Vector4 texbounds;
   };
 #pragma pack(pop)
 
