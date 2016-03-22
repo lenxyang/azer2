@@ -6,10 +6,11 @@
 #include "azer/render/render_system.h"
 
 namespace azer {
-Overlay::Overlay(EffectLib* lib) {
-  effect_ = Effectlib::instance()->GetEffect("OverlayEffect");
-  SlotVertexData vdata(effect_->vertex_desc(), 4);
-  vb_ = rs->CreateVertexBuffer(kVertexBufferOpt, vdata);
+Overlay::Overlay() {
+  RenderSystem* rs = RenderSystem::Current();
+  effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("OverlayEffect");
+  SlotVertexDataPtr vdata(new SlotVertexData(effect_->vertex_desc(), 4));
+  vb_ = rs->CreateVertexBuffer(kVertexBufferOpt(), vdata);
 }
 
 Overlay::~Overlay() {}
@@ -17,7 +18,7 @@ Overlay::~Overlay() {}
 void Overlay::Render(Renderer* renderer) {
   ScopedResetBlending scoped_blending(renderer);
   renderer->SetBlending(blending_, 0, 0xffffffff);
-  renderer->BindVertexBufferGroup(vbg_.get());
+  renderer->BindVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleStrip);
   renderer->Draw(4, 0);
 }
@@ -25,7 +26,12 @@ void Overlay::Render(Renderer* renderer) {
 void Overlay::SetTexture(Texture* tex) { effect_->SetTexture(tex);}
 
 void Overlay::SetBounds(const gfx::RectF& rect) {
-  Vector4 vec(rect.left(), rect.top(), rect.width(), rect.height());
-  effect_->SetParams(vec);
+  Vector4 vec(rect.x(), rect.y(), rect.width(), rect.height());
+  effect_->SetBounds(vec);
+}
+
+void Overlay::SetTexBounds(const gfx::RectF& rect) {
+  Vector4 vec(rect.x(), rect.y(), rect.width(), rect.height());
+  effect_->SetTexBounds(vec);
 }
 }  // namespace azer

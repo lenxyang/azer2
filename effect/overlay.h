@@ -13,6 +13,7 @@
 namespace azer {
 class Renderer;
 class OverlayEffect;
+typedef scoped_refptr<OverlayEffect> OverlayEffectPtr;
 
 class Overlay : public ::base::RefCounted<Overlay> {
  public:
@@ -22,7 +23,8 @@ class Overlay : public ::base::RefCounted<Overlay> {
   void Render(Renderer* rs);
 
   void SetBounds(const gfx::RectF& rect);
-  void SetTexture(Texture* tex) { tex_ = tex;}
+  void SetTexBounds(const gfx::RectF& rect);
+  void SetTexture(Texture* tex);
   void UseBlending(BlendingPtr ptr) {blending_ = ptr;}
   void ResetBlending() { blending_ = NULL;}
  protected:

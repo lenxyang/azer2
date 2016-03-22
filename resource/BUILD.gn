@@ -23,7 +23,7 @@ static_library("resource") {
     "material_loader.cc",
     "material_loader.h",
     "mesh_loader.cc",
-    "mesh_loader.cc",
+    "mesh_loader.h",
     "resource_util.cc",
     "resource_util.h",
     "scene_loader.cc",
@@ -31,7 +31,7 @@ static_library("resource") {
     "vertex_desc_loader.cc",
     "vertex_desc_loader.h",
     "xml_util.cc",
-    "xml_util.cc",
+    "xml_util.h",
   ]
   deps = [
     "//base",

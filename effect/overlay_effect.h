@@ -3,6 +3,7 @@
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/light.h"
+#include "azer/render/texture.h"
 
 namespace azer {
 class Texture;
@@ -23,7 +24,8 @@ class OverlayEffect : public Effect {
   };
 #pragma pack(pop)
 
-  void SetParams(const Vector4& params) { params_ = params;}
+  void SetBounds(const Vector4& v) { bounds_ = v;}
+  void SetTexBounds(const Vector4& v) { texbounds_ = v;}
   void SetTexture(Texture* texture) { texture_ = texture;}
   static Effect* CreateObject() { return new OverlayEffect;}
  protected:
@@ -31,7 +33,8 @@ class OverlayEffect : public Effect {
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 
-  Vector4 params_;
+  Vector4 bounds_;
+  Vector4 texbounds_;
   TexturePtr texture_; 
   DECLARE_EFFECT_DYNCREATE(OverlayEffect);
   DISALLOW_COPY_AND_ASSIGN(OverlayEffect);
