@@ -49,11 +49,9 @@ class D3DDepthBuffer : public DepthBuffer {
              int stencil_val);
 
   ID3D11DepthStencilView* GetD3DDepthStencilView() { return target_;}
-  ID3D11DepthStencilView* GetD3DDepthStencilViewRDOnly() { return rdonly_target_;}
  private:
   ID3D11DepthStencilView* target_;
-  ID3D11DepthStencilView* rdonly_target_;
-    D3DRenderSystem* render_system_;
+  D3DRenderSystem* render_system_;
   friend class D3DRenderSystem;
   DISALLOW_COPY_AND_ASSIGN(D3DDepthBuffer);
 };

@@ -49,9 +49,9 @@ const char* GetDataFormatName(DataFormat format) {
     case kRGBAn32:return "rgba(norm32)";
     case kRGBAf: return "rgba(f)";
     case kR11G11B10f: return "r11g11b10";
-    case kDepth24Stencil8: return "depth24stencil8";
-    case kR24G8tl: return "R24G8Typeless";
-    case kR24nG8u: return "R24normG8unsigned";
+    case kDepth24nStencil8u: return "Depth24nStencil8u";
+    case kR24G8: return "kR24G8";
+    case kR24nX8: return "kR24nX8";
     case kDXBC1n: return "DXBC1n";
     case kDXBC1nSRGB: return "DXBC1nSRGB";
     case kDXBC4s: return "DXBC4s";
@@ -98,7 +98,10 @@ uint32 SizeofDataFormat(DataFormat format) {
     case kRGBA32: return sizeof(int32) * 4;
     case kRGBAn32: return sizeof(uint32) * 4;
     case kRGBAf: return sizeof(float) * 4;
-    case kDepth24Stencil8: return sizeof(uint32);
+    case kDepth24nStencil8u:
+    case kR24G8:
+    case kR24nX8:
+      return sizeof(uint32);
       // case kRGBA: return sizeof(float) * 4;
     case kDXBC1n:
     case kDXBC1nSRGB:

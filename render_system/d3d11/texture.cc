@@ -21,7 +21,7 @@
 namespace azer {
 namespace d3d11 {
 
-D3DTexture::D3DTexture(const Texture::Options& opt, D3DRenderSystem* rs)
+D3DTexture::D3DTexture(const Options& opt, D3DRenderSystem* rs)
     : Texture(opt)
     , texres_(NULL)
     , render_system_(rs)
@@ -331,13 +331,10 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   desc->Texture2D.MostDetailedMip = 0;
 }
 
-// 
-D3DResTexture2D::D3DResTexture2D(const Texture::Options& opt, D3DRenderSystem* rs)
-    : D3DTexture2d(opt, rs) {
-}
-
-bool D3DTexture2DShared::InitFromTexture(D3DTexture2D* texture) {
-  texres_ = texture->texres_;
+// class D3DResTexture2D
+bool D3DResTexture2D::InitFromTexture(D3DTexture2D* texture) {
+  ID3D11Device* d3d_device = render_system_->GetDevice();
+  texres_ = texture->GetResource();
   texres_->AddRef();
   D3D11_SHADER_RESOURCE_VIEW_DESC desc;
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
@@ -351,13 +348,13 @@ bool D3DTexture2DShared::InitFromTexture(D3DTexture2D* texture) {
   return true;
 }
 
-bool D3DTexture2DShared::InitFromImage(const ImageData* image) {
+bool D3DResTexture2D::InitFromImage(const ImageData* image) {
   CHECK(false);
   return false;
 }
 
 // reference: MSDN, Surface Sharing Between Windows Graphics APIs
-D3DTexture2DShared::D3DTexture2DShared(const Texture::Options& opt,
+D3DTexture2DShared::D3DTexture2DShared(const Options& opt,
                                        D3DRenderSystem* rs)
     : D3DTexture2D(opt, rs)
     , shared_handle_(NULL) {
@@ -426,7 +423,7 @@ D3DTexture2DExtern* D3DTexture2DExtern::Create(HANDLE handle, D3DRenderSystem* r
 
   D3D11_TEXTURE2D_DESC desc;
   shared_tex->GetDesc(&desc);
-  Texture::Options opt;
+  Options opt;
   opt.size = gfx::Size(desc.Width, desc.Height);
   opt.format = TranslateD3DFormat(desc.Format);
   std::unique_ptr<D3DTexture2DExtern> ptr(new D3DTexture2DExtern(opt, rs));
@@ -449,7 +446,7 @@ void D3DTexture2DExtern::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
 }
 
 // class D3D11TextureCubeMap
-D3DTextureCubeMap::D3DTextureCubeMap(const Texture::Options& opt, 
+D3DTextureCubeMap::D3DTextureCubeMap(const Options& opt, 
                                      D3DRenderSystem* rs)
     : D3DTexture(opt, rs) {
 }
@@ -485,8 +482,7 @@ void D3DTextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) 
 
 
 // class D3D11TextureCubeMap
-D3DTexture2DArray::D3DTexture2DArray(const Texture::Options& opt, 
-                                     D3DRenderSystem* rs)
+D3DTexture2DArray::D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs)
     : D3DTexture(opt, rs),
       diminison_(-1) {
 }

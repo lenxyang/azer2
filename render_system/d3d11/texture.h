@@ -14,7 +14,7 @@ class D3DRenderSystem;
 
 class D3DTexture: public Texture {
  public:
-  D3DTexture(const Texture::Options& opt, D3DRenderSystem* rs);
+  D3DTexture(const Options& opt, D3DRenderSystem* rs);
 
   virtual ~D3DTexture();
   virtual bool Init(const D3D11_SUBRESOURCE_DATA* data, int arraysize, int mipmap);
@@ -61,7 +61,7 @@ class D3DTexture: public Texture {
 
 class D3DTexture2D : public D3DTexture {
  public:
-  D3DTexture2D(const Texture::Options& opt, D3DRenderSystem* rs)
+  D3DTexture2D(const Options& opt, D3DRenderSystem* rs)
       : D3DTexture(opt, rs) {
   }
 
@@ -74,9 +74,9 @@ class D3DTexture2D : public D3DTexture {
 };
 
 class D3DResTexture2D : public D3DTexture2D {
- private:
-  D3DTexture2D(const Texture::Options& opt, D3DRenderSystem* rs)
-      : D3DTexture(opt, rs) {
+ public:
+  D3DResTexture2D(const Options& opt, D3DRenderSystem* rs)
+      : D3DTexture2D(opt, rs) {
   }
   bool InitFromTexture(D3DTexture2D* texture);
  protected:
@@ -88,7 +88,7 @@ class D3DResTexture2D : public D3DTexture2D {
 // here, is use to create texture for ANGLE using
 class D3DTexture2DShared : public D3DTexture2D {
  public:
-  D3DTexture2DShared(const Texture::Options& opt, D3DRenderSystem* rs);
+  D3DTexture2DShared(const Options& opt, D3DRenderSystem* rs);
   ~D3DTexture2DShared() override;
 
   // create a resource for other device using
@@ -107,7 +107,7 @@ class D3DTexture2DShared : public D3DTexture2D {
 
 class D3DTexture2DExtern : public D3DTexture2D {
  public:
-  D3DTexture2DExtern(const Texture::Options& opt, D3DRenderSystem* rs)
+  D3DTexture2DExtern(const Options& opt, D3DRenderSystem* rs)
       : D3DTexture2D(opt, rs) {}
 
   // create from other device's resources
@@ -121,7 +121,7 @@ class D3DTexture2DExtern : public D3DTexture2D {
 
 class D3DTextureCubeMap : public D3DTexture {
  public:
-  D3DTextureCubeMap(const Texture::Options& opt, D3DRenderSystem* rs);
+  D3DTextureCubeMap(const Options& opt, D3DRenderSystem* rs);
   bool InitFromImage(const ImageData* image) override;
   bool InitTexture();
  protected:
@@ -132,7 +132,7 @@ class D3DTextureCubeMap : public D3DTexture {
 
 class D3DTexture2DArray : public D3DTexture {
  public:
-  D3DTexture2DArray(const Texture::Options& opt, D3DRenderSystem* rs);
+  D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs);
   bool InitFromImage(const ImageData* image) override;
   bool InitTexture();
  protected:

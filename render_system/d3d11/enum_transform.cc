@@ -33,12 +33,14 @@ D3D11_CPU_ACCESS_FLAG TranslateCPUAccess(CPUAccess access) {
 DXGI_FORMAT TranslateFormat(DataFormat type) {
   switch (type) {
     case kRGBAn8: return DXGI_FORMAT_R8G8B8A8_UNORM;
-    case kBGRAn8: return DXGI_FORMAT_B8G8R8A8_UNORM;
     case kRGBA8:  return DXGI_FORMAT_R8G8B8A8_UINT;
     case kRGBAf: return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kRGBA32: return DXGI_FORMAT_R32G32B32A32_UINT;
     case kRGBAn32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
-    case kDepth24Stencil8: return DXGI_FORMAT_D24_UNORM_S8_UINT;
+    case kR11G11B10f: return DXGI_FORMAT_R11G11B10_FLOAT;
+    case kDepth24nStencil8u: return DXGI_FORMAT_D24_UNORM_S8_UINT;
+    case kR24G8: return DXGI_FORMAT_R24G8_TYPELESS;
+    case kR24nX8: return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
     case kScalar: return DXGI_FORMAT_R32_FLOAT;
     case kVec2: return DXGI_FORMAT_R32G32_FLOAT;
     case kVec3: return DXGI_FORMAT_R32G32B32_FLOAT;
@@ -79,7 +81,7 @@ DataFormat TranslateD3DFormat(DXGI_FORMAT type) {
     case DXGI_FORMAT_R8G8B8A8_UNORM: return kRGBAn8;
     case DXGI_FORMAT_R32G32B32A32_UINT: return kRGBAn32;
     case DXGI_FORMAT_R32G32B32A32_FLOAT: return kRGBAf;
-    case DXGI_FORMAT_D24_UNORM_S8_UINT: return kDepth24Stencil8;
+    case DXGI_FORMAT_D24_UNORM_S8_UINT: return kDepth24nStencil8u;
     case DXGI_FORMAT_R32G32_FLOAT: return kVec2;
     case DXGI_FORMAT_R32G32B32_FLOAT: return kVec3;
     default:
