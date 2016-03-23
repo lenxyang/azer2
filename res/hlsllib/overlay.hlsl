@@ -23,7 +23,7 @@ VsOutput vs_main(uint vertex_id : SV_VertexID) {
     float4((x + bounds.z) * 2 - 1.0f, 1 - y * 2,              0.0f, 1.0f),
     float4((x + bounds.z) * 2 - 1.0f, 1 - (y + bounds.w) * 2, 0.0f, 1.0f),
   };
-  float4 uv[4] = {
+  float2 uv[4] = {
     float2(texbounds.x, texbounds.y),
     float2(texbounds.x, texbounds.z),
     float2(texbounds.w, texbounds.y),

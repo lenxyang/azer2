@@ -1,5 +1,6 @@
 #include "azer/effect/overlay.h"
 
+#include "base/lazy_instance.h"
 #include "azer/effect/overlay_effect.h"
 #include "azer/effect/effectlib.h"
 #include "azer/render/vertex_pack.h"
@@ -7,6 +8,29 @@
 #include "azer/render/render_system.h"
 
 namespace azer {
+namespace {
+class DefaultBlending {
+ public:
+  DefaultBlending() {
+    Blending::Desc blend_desc;
+    blend_desc.src = Blending::kSrcAlpha;
+    blend_desc.dest = Blending::kSrcInvAlpha;
+    blend_desc.oper = Blending::kAdd;
+    blend_desc.src_alpha = Blending::kOne;
+    blend_desc.dest_alpha = Blending::kZero;
+    blend_desc.alpha_oper = Blending::kAdd;
+    blend_desc.mask = Blending::kWriteColor;
+    blending_ = RenderSystem::Current()->CreateBlending(blend_desc);
+    CHECK(blending_.get());
+  }
+  Blending* blending() { return blending_.get();}
+ private:
+  BlendingPtr blending_;
+  DISALLOW_COPY_AND_ASSIGN(DefaultBlending);
+};
+::base::LazyInstance<DefaultBlending> g_blending_instance = LAZY_INSTANCE_INITIALIZER;
+}
+
 Overlay::Overlay() {
   Vector4 position[] = {
     {-1.0f,  1.0f, 0.0f, 1.0f},
@@ -34,23 +58,24 @@ Overlay::Overlay() {
   }
 
   vb_ = rs->CreateVertexBuffer(kVertexBufferOpt(), vdata);
-  rasterizer_state_ = rs->CreateRasterizerState();
-  rasterizer_state_->SetCullingMode(kCullNone);
+  state_ = rs->CreateRasterizerState();
+  state_->SetCullingMode(kCullNone);
+  blending_ = g_blending_instance.Pointer()->blending();
+  bounds_ = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+  texbounds_ = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
 }
 
 Overlay::~Overlay() {}
 
 void Overlay::Render(Renderer* renderer) {
   ScopedResetBlending scoped_blending(renderer);
-  ScopedRasterizerState scoped_rasterizer(renderer);
-  renderer->SetRasterizerState(state_);
   if (blending_) {
     renderer->SetBlending(blending_, 0, 0xffffffff);
   }
 
   effect_->SetBounds(bounds_);
   effect_->SetTexBounds(texbounds_);
-  effect_->SetTexture(tex);
+  effect_->SetTexture(texture_);
   renderer->BindEffect(effect_);
   renderer->BindVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleStrip);
@@ -59,7 +84,7 @@ void Overlay::Render(Renderer* renderer) {
 
 void Overlay::SetTexture(Texture* tex) { texture_ = tex;}
 void Overlay::SetBounds(const gfx::RectF& rect) {
-  bounds = Vector4(rect.x(), rect.y(), rect.width(), rect.height());
+  bounds_ = Vector4(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
 void Overlay::SetTexBounds(const gfx::RectF& rect) {
