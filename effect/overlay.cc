@@ -77,6 +77,10 @@ void Overlay::Render(Renderer* renderer) {
   effect_->SetTexBounds(texbounds_);
   effect_->SetTexture(texture_);
   renderer->BindEffect(effect_);
+  Draw(renderer);
+}
+
+void Overlay::Draw(Renderer* renderer) {
   renderer->BindVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleStrip);
   renderer->Draw(4, 0);
