@@ -28,6 +28,7 @@ void Effect::SetVertexDesc(VertexDesc* desc) {
 }
 
 void Effect::Apply(Renderer* renderer) {
+  ApplyGpuConstantTable(renderer);
   BindConstantsTable(renderer);
   DCHECK(technique_.get() != NULL);
   technique_->Use(renderer);

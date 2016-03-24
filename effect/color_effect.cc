@@ -45,13 +45,17 @@ void AmbientColorEffect::InitGpuConstantTable() {
 
 void AmbientColorEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[0].table;
+    GpuVariable gv = gpu_table_[0];
+    CHECK_EQ(gv.stage, kVertexStage);
+    GpuConstantsTable* tb = gv.table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[1].table;
+    GpuVariable gv = gpu_table_[0];
+    CHECK_EQ(gv.stage, kPixelStage);
+    GpuConstantsTable* tb = gv.table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &ambient_, sizeof(Vector4));
   }
@@ -118,14 +122,18 @@ void ColorEffect::SetLightData(const UniverseLight* value, int32 count) {
 
 void ColorEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[0].table;
+    GpuVariable gv = gpu_table_[0];
+    CHECK_EQ(gv.stage, kVertexStage);
+    GpuConstantsTable* tb = gv.table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
     tb->SetValue(2, &camerapos_, sizeof(Vector4));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[1].table;
+    GpuVariable gv = gpu_table_[1];
+    CHECK_EQ(gv.stage, kPixelStage);
+    GpuConstantsTable* tb = gv.table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &mtrl_, sizeof(mtrl_));
     tb->SetValue(1, lights_, sizeof(UniverseLight) * 4);

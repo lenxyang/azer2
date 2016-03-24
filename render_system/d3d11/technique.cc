@@ -54,7 +54,7 @@ void D3DTechnique::Use(Renderer* renderer) {
 }
 
 TechniquePtr D3DTechnique::CopyTechnique() {
-  TechniquePtr ptr(new D3DTechnique);
+  scoped_refptr<D3DTechnique> ptr(new D3DTechnique(render_system_));
   ptr->pline_ = pline_;
   return ptr;
 }

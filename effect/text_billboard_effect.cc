@@ -59,19 +59,25 @@ void TextBillboardEffect::SetBillboard(float width, float height) {
 
 void TextBillboardEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[0].table;
+    GpuVariable gv = gpu_table_[0];
+    CHECK_EQ(gv.stage, kVertexStage);
+    GpuConstantsTable* tb = gv.table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &world_, sizeof(Matrix4));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[1].table;
+    GpuVariable gv = gpu_table_[1];
+    CHECK_EQ(gv.stage, kGeometryStage);
+    GpuConstantsTable* tb = gv.table;
     tb->SetValue(0, &pv_, sizeof(pv_));
     tb->SetValue(1, &viewup_, sizeof(viewup_));
     tb->SetValue(2, &viewpos_, sizeof(viewpos_));
     tb->SetValue(3, &param_, sizeof(param_));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[2].table;
+    GpuVariable gv = gpu_table_[2];
+    CHECK_EQ(gv.stage, kPixelStage);
+    GpuConstantsTable* tb = gv.table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &diffuse_, sizeof(diffuse_));
   }

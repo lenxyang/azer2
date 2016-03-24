@@ -31,7 +31,9 @@ void OverlayEffect::InitGpuConstantTable() {
 
 void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[0].table;
+    GpuVariable gv = gpu_table_[0];
+    CHECK_EQ(gv.stage, kVertexStage);
+    GpuConstantsTable* tb = gv.table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &bounds_, sizeof(Vector4));
     tb->SetValue(1, &texbounds_, sizeof(Vector4));
