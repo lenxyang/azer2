@@ -13,6 +13,8 @@ static_library("geometry") {
     "geometry.h",
     "normal_util.cc",
     "normal_util.h",
+    "plane.cc",
+    "plane.h",
     "sphere.cc",
     "sphere.h",
   ]
