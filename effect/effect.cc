@@ -9,9 +9,7 @@
 
 
 namespace azer {
-Effect::Effect() {
-  gpu_table_.resize(kRenderPipelineStageNum);
-}
+Effect::Effect() {}
 
 Effect::~Effect() {}
 
@@ -22,7 +20,7 @@ bool Effect::Init(const TechSource& sources) {
   InitGpuConstantTable();
   return true;
 }
-void Effect::UseTexture(Renderer* renderer) {}
+void Effect::BindTexture(int32 mode, Renderer* renderer) {}
 
 void Effect::SetVertexDesc(VertexDesc* desc) {
   DCHECK(vertex_desc_ == NULL);
@@ -30,35 +28,38 @@ void Effect::SetVertexDesc(VertexDesc* desc) {
 }
 
 void Effect::Apply(Renderer* renderer) {
-  UseTexture(renderer);
-  ApplyGpuConstantTable(renderer);
   BindConstantsTable(renderer);
-  BindTechnique(renderer);
-}
-
-void Effect::flush(Renderer* renderer) {
-  for (int i = (int)kVertexStage; i < (int)kPixelStage; ++i) {
-    RenderPipelineStage stage = (RenderPipelineStage)i;
-    GpuConstantsTable* table = gpu_table_[i].get();
-    if (table != NULL) {
-      table->flush(renderer);
-    }
-  }
-}
-
-void Effect::BindTechnique(Renderer* renderer) {
   DCHECK(technique_.get() != NULL);
   technique_->Use(renderer);
+
+  BindTexture(kUpdateAll, renderer);
+  FlushGpuVariables(kUpdateAll, renderer);
 }
 
-void Effect::BindConstantsTable(Renderer* renderer) {
-  for (int i = (int)kVertexStage; i <= (int)kPixelStage; ++i) {
-    GpuConstantsTable* table = gpu_table_[i].get();
-    RenderPipelineStage stage = (RenderPipelineStage)i;
-    if (table != NULL) {
-      table->flush(renderer);
-      renderer->BindConstantsTable(stage, table);
-    }
+void Effect::OnRenderNewObject(Renderer* renderer) {
+}
+
+void Effect::OnRenderBegin(Renderer* renderer) {
+  DCHECK(technique_.get() != NULL);
+  technique_->Use(renderer);
+
+  BindConstantsTable(renderer);
+  BindTexture(kUpdateAll, renderer);
+}
+
+void Effect::OnRenderEnd() {
+}
+
+void Effect::FlushGpuVariables(int type, Renderer* renderer) {
+  for (auto iter = gpu_table_.begin(); iter != gpu_table_.end(); ++iter) {
+    GpuConstantsTable* table = iter->table.get();
+    DCHECK(table);
+    table->flush(renderer);
   }
 }
+
+Technique* Effect::technique() { return technique_.get();}
+void Effect::SetTechnique(Technique* technique) {technique_ = technique;}
+VertexDesc* Effect::vertex_desc() { return vertex_desc_.get();}
+const VertexDesc* Effect::vertex_desc() const { return vertex_desc_.get();}
 }  // namespace azer

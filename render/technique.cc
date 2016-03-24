@@ -63,6 +63,10 @@ void Technique::AddShader(ShaderPtr& gpu) {
   pline_[gpu->stage()] = gpu;
 }
 
+Shader* Technique::GetShader(int stage) { 
+  return pline_[stage];
+}
+
 TechniquePtr CreateTechnique(const TechSource& source) {
   RenderSystem* rs = RenderSystem::Current();
   TechniquePtr tech = rs->CreateTechnique();  

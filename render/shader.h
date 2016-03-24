@@ -40,16 +40,16 @@ struct AZER_EXPORT ShaderInfo {
 
 class AZER_EXPORT Shader : public ::base::RefCounted<Shader> {
  public:
-  explicit Shader(const ShaderInfo& info);
-  Shader(VertexDesc* desc, const ShaderInfo& info);
   virtual ~Shader();
 
   std::string error_msg() const { return error_msg_;}
   RenderPipelineStage stage() const;
 
-  virtual bool Init(RenderSystem* rs) = 0;
   VertexDesc* vertex_desc() { return desc_;}
  protected:
+  explicit Shader(const ShaderInfo& info);
+  Shader(VertexDesc* desc, const ShaderInfo& info);
+
   VertexDescPtr desc_;
   ShaderInfo info_;
   std::string error_msg_;

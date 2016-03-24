@@ -7,14 +7,13 @@
 #include "azer/base/export.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/shader.h"
+#include "azer/render/technique.h"
 
 namespace azer {
 class GpuConstantsTable;
 class Renderer;
 class RenderSystem;
-class Technique;
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
-typedef scoped_refptr<Technique> TechniquePtr;
 
 /**
  * class Effect
@@ -25,26 +24,44 @@ typedef scoped_refptr<Technique> TechniquePtr;
  */
 class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
  public:
+  enum {
+    kUpdatePerOject = 0x00000001,
+    kUpdatePerFrame = 0x00000002,
+    kUpdatePerScene = 0x00000004,
+    kUpdateAll      = (kUpdatePerScene | kUpdatePerOject | kUpdatePerFrame),
+  };
+  
   Effect();
   virtual ~Effect();
 
   virtual const char* GetEffectName() const = 0;
   virtual bool Init(const TechSource& programs);
-  void Apply(Renderer* renderer);
-  VertexDesc* vertex_desc() { return vertex_desc_.get();}
+  Technique* technique();
+  void SetTechnique(Technique* technique);
+  VertexDesc* vertex_desc();
+  const VertexDesc* vertex_desc() const;
   void SetVertexDesc(VertexDesc* desc);
   
   // 刷新所有的 GpuConstantTable
-  void flush(Renderer* renderer);
+  void FlushGpuVariables(int32 flush_mode, Renderer* renderer);
+
+  void Apply(Renderer* renderer);
+  void OnRenderBegin(Renderer* renderer);
+  void OnRenderEnd();
+  void OnRenderNewObject(Renderer* renderer);
  protected:
-  virtual void UseTexture(Renderer* renderer);
+  virtual void BindTexture(int32 mode, Renderer* renderer);
   virtual void InitGpuConstantTable() {};
-  virtual void ApplyGpuConstantTable(Renderer* renderer) = 0;
   void BindConstantsTable(Renderer* renderer);
-  void BindTechnique(Renderer* renderer);
+
+  struct GpuVariable {
+    int stage;
+    int type;
+    GpuConstantsTablePtr table;    
+  };
 
   TechniquePtr technique_;
-  std::vector<scoped_refptr<GpuConstantsTable> > gpu_table_;
+  std::vector<GpuVariable> gpu_table_;
   VertexDescPtr vertex_desc_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };

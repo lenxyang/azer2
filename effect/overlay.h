@@ -21,6 +21,7 @@ class Overlay : public ::base::RefCounted<Overlay> {
   Overlay();
   virtual ~Overlay();
 
+  Effect* effect() { return effect_;} 
   void Render(Renderer* rs);
 
   void SetBounds(const gfx::RectF& rect);

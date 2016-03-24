@@ -54,7 +54,9 @@ class AZER_EXPORT Technique : public ::base::RefCounted<Technique> {
   void AddShader(ShaderPtr& gpu);
 
   virtual void Use(Renderer*) = 0;
+  virtual TechniquePtr CopyTechnique() = 0;
   VertexDesc* GetVertexDesc();
+  Shader* GetShader(int stage);
  protected:
   Technique();
 
