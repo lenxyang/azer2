@@ -66,6 +66,7 @@ bool ResPathTokenizer::ValidStringChar(CharType cb) const {
   }
 
   if (cb == '_') { return true;}
+  if (cb == '-') { return true;}
   if (cb == ' ') { return true;}
   return false;
 }
