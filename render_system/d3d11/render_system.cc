@@ -98,7 +98,7 @@ IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
 }
 
 ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc) {
-  ShaderPtr gpu_program;
+  scoped_refptr<D3DShader> gpu_program;
   switch (info.stage) {
     case kPixelStage:
       DCHECK(NULL == desc);

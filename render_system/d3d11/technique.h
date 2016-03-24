@@ -15,11 +15,8 @@ class D3DTechnique : public Technique {
       : render_system_(rs) {
   }
 
-  virtual bool Finalize() {
-    return true;
-  }
-
-  virtual void Use(Renderer*);
+  TechniquePtr CopyTechnique() override;
+  void Use(Renderer*) override;
  private:
   D3DRenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(D3DTechnique);

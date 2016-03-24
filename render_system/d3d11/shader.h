@@ -22,7 +22,7 @@ class D3DShader : public Shader {
   D3DShader(VertexDesc* desc, const ShaderInfo& info);
   ~D3DShader() override;
 
-  bool Init(RenderSystem* rs) override;
+  virtual bool Init(RenderSystem* rs);
  protected:
   D3DBlobPtr CompileShader(ID3D11Device* d3d_device);
   virtual bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) = 0;

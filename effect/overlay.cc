@@ -90,4 +90,6 @@ void Overlay::SetBounds(const gfx::RectF& rect) {
 void Overlay::SetTexBounds(const gfx::RectF& rect) {
   texbounds_ = Vector4(rect.x(), rect.y(), rect.width(), rect.height());
 }
+
+Effect* Overlay::effect() { return effect_.get();}
 }  // namespace azer

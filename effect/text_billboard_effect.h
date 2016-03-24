@@ -39,7 +39,7 @@ class TextBillboardEffect : public Effect {
   void SetDiffuse(const Vector4& v) { diffuse_ = v;}
   static Effect* CreateObject() { return new TextBillboardEffect;}
  protected:
-  void UseTexture(Renderer* renderer) override;
+  void BindTexture(int mode, Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 

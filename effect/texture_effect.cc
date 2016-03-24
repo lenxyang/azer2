@@ -24,8 +24,12 @@ void TextureEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("camerapos", GpuConstantsType::kVector4,
                             offsetof(vs_cbuffer, camerapos), 1),
   };
-  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc);
+  GpuVariable v;
+  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  v.stage = kVertexStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
+  
   // generate GpuTable init for stage kPixelStage
   GpuConstantsTable::Desc ps_table_desc[] = {
     GpuConstantsTable::Desc("ambient_scalar", GpuConstantsType::kFloat,
@@ -39,8 +43,10 @@ void TextureEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("lights", offsetof(ps_cbuffer, lights),
                             sizeof(UniverseLight), arraysize(lights_)),
   };
-  gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
-      arraysize(ps_table_desc), ps_table_desc);
+  v.table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
+  v.stage = kPixelStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 }
 
 void TextureEffect::SetPV(const Matrix4& value) { pv_ = value;}
@@ -66,14 +72,14 @@ void TextureEffect::SetLightData(const UniverseLight* value, int32 count) {
 
 void TextureEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
+    GpuConstantsTable* tb = gpu_table_[0].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
     tb->SetValue(2, &camerapos_, sizeof(Vector4));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
+    GpuConstantsTable* tb = gpu_table_[1].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &mtrl_.ambient_scalar, sizeof(float));
     tb->SetValue(1, &mtrl_.specular_scalar, sizeof(float));
@@ -83,7 +89,7 @@ void TextureEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 }
 
-void TextureEffect::UseTexture(Renderer* renderer) {
+void TextureEffect::BindTexture(int32 mode, Renderer* renderer) {
   renderer->BindTexture(kPixelStage, 0, mtrl_.diffusemap.get());
   renderer->BindTexture(kPixelStage, 1, mtrl_.specularmap.get());
   renderer->BindTexture(kPixelStage, 2, mtrl_.emissionmap.get());

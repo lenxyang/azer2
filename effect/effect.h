@@ -52,6 +52,7 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
  protected:
   virtual void BindTexture(int32 mode, Renderer* renderer);
   virtual void InitGpuConstantTable() {};
+  virtual void ApplyGpuConstantTable(Renderer* renderer) {}
   void BindConstantsTable(Renderer* renderer);
 
   struct GpuVariable {

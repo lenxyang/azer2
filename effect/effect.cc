@@ -47,7 +47,14 @@ void Effect::OnRenderBegin(Renderer* renderer) {
   BindTexture(kUpdateAll, renderer);
 }
 
-void Effect::OnRenderEnd() {
+void Effect::OnRenderEnd() {}
+
+void Effect::BindConstantsTable(Renderer* renderer) {
+  for (auto iter = gpu_table_.begin(); iter != gpu_table_.end(); ++iter) {
+    GpuConstantsTable* table = iter->table.get();
+    DCHECK(table);
+    renderer->BindConstantsTable((RenderPipelineStage)iter->stage, 0, table);
+  }
 }
 
 void Effect::FlushGpuVariables(int type, Renderer* renderer) {

@@ -27,21 +27,26 @@ void NormalLineEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("linelength", GpuConstantsType::kFloat,
                             offsetof(vs_cbuffer, linelength), 1),
   };
-  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc);
+  GpuVariable v;
+  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  v.stage = kVertexStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 
 
   // generate GpuTable init for stage kPixelStage
   GpuConstantsTable::Desc ps_table_desc[] = {
     GpuConstantsTable::Desc("color", GpuConstantsType::kVector4, 0, 1),
   };
-  gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
-      arraysize(ps_table_desc), ps_table_desc);
+  v.table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
+  v.stage = kPixelStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 }
 
 void NormalLineEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
+    GpuConstantsTable* tb = gpu_table_[0].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
@@ -49,7 +54,7 @@ void NormalLineEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
+    GpuConstantsTable* tb = gpu_table_[1].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &color_, sizeof(Vector4));
   }

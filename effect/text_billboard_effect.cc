@@ -20,8 +20,11 @@ void TextBillboardEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
                             offsetof(vs_cbuffer, world), 1),
   };
-  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc);
+  GpuVariable v;
+  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  v.stage = kVertexStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 
   GpuConstantsTable::Desc gs_table_desc[] = {
     GpuConstantsTable::Desc("pv", GpuConstantsType::kMatrix4,
@@ -33,16 +36,20 @@ void TextBillboardEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("param", GpuConstantsType::kVector4,
                             offsetof(gs_cbuffer, param), 1),
   };
-  gpu_table_[kGeometryStage] = rs->CreateGpuConstantsTable(
-      arraysize(gs_table_desc), gs_table_desc);
+  v.table = rs->CreateGpuConstantsTable(arraysize(gs_table_desc), gs_table_desc);
+  v.stage = kGeometryStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 
   // generate GpuTable init for stage kPixelStage
   GpuConstantsTable::Desc ps_table_desc[] = {
     GpuConstantsTable::Desc("diffuse", GpuConstantsType::kVector4,
                             offsetof(ps_cbuffer, diffuse), 1),
   };
-  gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
-      arraysize(ps_table_desc), ps_table_desc);
+  v.table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
+  v.stage = kPixelStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 }
 
 void TextBillboardEffect::SetBillboard(float width, float height) {
@@ -52,25 +59,25 @@ void TextBillboardEffect::SetBillboard(float width, float height) {
 
 void TextBillboardEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
+    GpuConstantsTable* tb = gpu_table_[0].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &world_, sizeof(Matrix4));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kGeometryStage].get();
+    GpuConstantsTable* tb = gpu_table_[1].table;
     tb->SetValue(0, &pv_, sizeof(pv_));
     tb->SetValue(1, &viewup_, sizeof(viewup_));
     tb->SetValue(2, &viewpos_, sizeof(viewpos_));
     tb->SetValue(3, &param_, sizeof(param_));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
+    GpuConstantsTable* tb = gpu_table_[2].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &diffuse_, sizeof(diffuse_));
   }
 }
 
-void TextBillboardEffect::UseTexture(Renderer* renderer) {
+void TextBillboardEffect::BindTexture(int32 mode, Renderer* renderer) {
   renderer->BindTexture(kPixelStage, 0, tex_.get());
 }
 }  // namespace azer

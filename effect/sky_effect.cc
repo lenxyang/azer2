@@ -24,20 +24,23 @@ void SkyboxEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
                             offsetof(vs_cbuffer, world), 1),
   };
-  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc);
+  GpuVariable v;
+  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  v.stage = kVertexStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 }
 
 void SkyboxEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
+    GpuConstantsTable* tb = gpu_table_[0].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
   }
 }
 
-void SkyboxEffect::UseTexture(Renderer* renderer) {
+void SkyboxEffect::BindTexture(int32 mode, Renderer* renderer) {
   renderer->BindTexture(kPixelStage, 0, cubemap_.get());
 }
 

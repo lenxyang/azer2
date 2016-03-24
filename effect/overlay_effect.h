@@ -27,7 +27,7 @@ class OverlayEffect : public Effect {
   void SetTexture(Texture* texture) { texture_ = texture;}
   static Effect* CreateObject() { return new OverlayEffect;}
  protected:
-  void UseTexture(Renderer* renderer) override;
+  void BindTexture(int32 mode, Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 

@@ -21,20 +21,24 @@ void OverlayEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("texbounds", GpuConstantsType::kVector4,
                             sizeof(Vector4), 1),
   };
-  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc);
+
+  GpuVariable v;
+  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  v.stage = kVertexStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 }
 
 void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
+    GpuConstantsTable* tb = gpu_table_[0].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &bounds_, sizeof(Vector4));
     tb->SetValue(1, &texbounds_, sizeof(Vector4));
   }
 }
 
-void OverlayEffect::UseTexture(Renderer* renderer) {
+void OverlayEffect::BindTexture(int32 mode, Renderer* renderer) {
   renderer->BindTexture(kPixelStage, 0, texture_.get());
 }
 }  // namespace azer

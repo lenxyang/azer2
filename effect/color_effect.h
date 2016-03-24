@@ -30,10 +30,9 @@ class AmbientColorEffect : public Effect {
   void SetAmbient(const Vector4& c) { ambient_ = c;}
   static Effect* CreateObject() { return new AmbientColorEffect;}
  protected:
-  void UseTexture(Renderer* renderer) override;
-  void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
-
+  void ApplyGpuConstantTable(Renderer* renderer) override;
+  
   Matrix4 pv_;
   Matrix4 world_;
   Vector4 ambient_;
@@ -71,7 +70,6 @@ class ColorEffect : public Effect {
   void SetMaterial(const ColorMaterialData& mtrl);
   static Effect* CreateObject() { return new ColorEffect;}
  protected:
-  void UseTexture(Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 

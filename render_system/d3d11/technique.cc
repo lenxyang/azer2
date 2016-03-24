@@ -52,5 +52,11 @@ void D3DTechnique::Use(Renderer* renderer) {
   }
   // TODO(yanglei)
 }
+
+TechniquePtr D3DTechnique::CopyTechnique() {
+  TechniquePtr ptr(new D3DTechnique);
+  ptr->pline_ = pline_;
+  return ptr;
+}
 }  // namespace d3d11
 }  // namespace azer

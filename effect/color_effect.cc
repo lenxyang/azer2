@@ -24,32 +24,38 @@ void AmbientColorEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("camerapos", GpuConstantsType::kVector4,
                             offsetof(vs_cbuffer, camerapos), 1),
   };
-  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc);
+
+  GpuVariable v;
+  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  v.stage = kVertexStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
+  
   // generate GpuTable init for stage kPixelStage
   GpuConstantsTable::Desc ps_table_desc[] = {
     GpuConstantsTable::Desc("ambient", offsetof(ps_cbuffer, ambient),
                             sizeof(Vector4), 1),
   };
-  gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
-      arraysize(ps_table_desc), ps_table_desc);
+
+  v.table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
+  v.stage = kPixelStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 }
 
 void AmbientColorEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
+    GpuConstantsTable* tb = gpu_table_[0].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
+    GpuConstantsTable* tb = gpu_table_[1].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &ambient_, sizeof(Vector4));
   }
 }
-
-void AmbientColorEffect::UseTexture(Renderer* renderer) {}
 
 // class ColorEffect
 IMPLEMENT_EFFECT_DYNCREATE(ColorEffect);
@@ -69,8 +75,11 @@ void ColorEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("camerapos", GpuConstantsType::kVector4,
                             offsetof(vs_cbuffer, camerapos), 1),
   };
-  gpu_table_[kVertexStage] = rs->CreateGpuConstantsTable(
-      arraysize(vs_table_desc), vs_table_desc);
+  GpuVariable v;
+  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  v.stage = kVertexStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
   // generate GpuTable init for stage kPixelStage
   GpuConstantsTable::Desc ps_table_desc[] = {
     GpuConstantsTable::Desc("mtrl", offsetof(ps_cbuffer, mtrl),
@@ -80,8 +89,10 @@ void ColorEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("light_count", GpuConstantsType::kInt,
                             offsetof(ps_cbuffer, light_count), 1),
   };
-  gpu_table_[kPixelStage] = rs->CreateGpuConstantsTable(
-      arraysize(ps_table_desc), ps_table_desc);
+  v.table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
+  v.stage = kPixelStage;
+  v.type = kUpdatePerFrame;
+  gpu_table_.push_back(v);
 }
 
 void ColorEffect::SetPV(const Matrix4& value) { pv_ = value;}
@@ -107,20 +118,18 @@ void ColorEffect::SetLightData(const UniverseLight* value, int32 count) {
 
 void ColorEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kVertexStage].get();
+    GpuConstantsTable* tb = gpu_table_[0].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
     tb->SetValue(2, &camerapos_, sizeof(Vector4));
   }
   {
-    GpuConstantsTable* tb = gpu_table_[(int)kPixelStage].get();
+    GpuConstantsTable* tb = gpu_table_[1].table;
     DCHECK(tb != NULL);
     tb->SetValue(0, &mtrl_, sizeof(mtrl_));
     tb->SetValue(1, lights_, sizeof(UniverseLight) * 4);
     tb->SetValue(2, &light_count_, sizeof(light_count_));
   }
 }
-
-void ColorEffect::UseTexture(Renderer* renderer) {}
 }  // namespace azer

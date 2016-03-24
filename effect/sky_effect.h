@@ -25,7 +25,7 @@ class SkyboxEffect : public Effect {
   void SetTexture(Texture* texture) { cubemap_ = texture;}
   static Effect* CreateObject() { return new SkyboxEffect;}
  protected:
-  void UseTexture(Renderer* renderer) override;
+  void BindTexture(int32 mode, Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 

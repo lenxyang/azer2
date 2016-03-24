@@ -197,19 +197,19 @@ void D3DRenderer::DrawIndexInstanced(int32 instance_num, int32 indices_num,
                                      instance_start_index);
 }
 
-void D3DRenderer::BindConstantsTable(RenderPipelineStage stage,
+void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int32 index,
                                      GpuConstantsTable* table) {
   D3DGpuConstantsTable* constants = (D3DGpuConstantsTable*)table;
   if (stage == kVertexStage) {
-    d3d_context_->VSSetConstantBuffers(0, 1, &(constants->buffer_));
+    d3d_context_->VSSetConstantBuffers(index, 1, &(constants->buffer_));
   } else if (stage == kGeometryStage) {
-    d3d_context_->GSSetConstantBuffers(0, 1, &(constants->buffer_));
+    d3d_context_->GSSetConstantBuffers(index, 1, &(constants->buffer_));
   } else if (stage == kHullStage) {
-    d3d_context_->HSSetConstantBuffers(0, 1, &(constants->buffer_));
+    d3d_context_->HSSetConstantBuffers(index, 1, &(constants->buffer_));
   } else if (stage == kDomainStage) {
-    d3d_context_->DSSetConstantBuffers(0, 1, &(constants->buffer_));
+    d3d_context_->DSSetConstantBuffers(index, 1, &(constants->buffer_));
   } else if (stage == kPixelStage) {
-    d3d_context_->PSSetConstantBuffers(0, 1, &(constants->buffer_));
+    d3d_context_->PSSetConstantBuffers(index, 1, &(constants->buffer_));
   } else {
     CHECK(false);
   }
