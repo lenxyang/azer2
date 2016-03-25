@@ -12,6 +12,8 @@ static_library("interactive") {
     "interactive_controller.cc",
     "rotate_controller.h",
     "rotate_controller.cc",
+    "spotlight_controller.cc",
+    "spotlight_controller.h",
     "translate_controller.h",
     "translate_controller.cc",
     "pick_util.cc",

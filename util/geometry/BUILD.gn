@@ -2,6 +2,8 @@
 
 static_library("geometry") {
   sources = [
+    "arrow.cc",
+    "arrow.h",
     "box.cc",
     "box.h",
     "common.cc",

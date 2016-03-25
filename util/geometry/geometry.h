@@ -1,5 +1,6 @@
 #pragma once
 
+#include "azer/util/geometry/arrow.h"
 #include "azer/util/geometry/box.h"
 #include "azer/util/geometry/common.h"
 #include "azer/util/geometry/cone.h"
