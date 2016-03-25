@@ -33,8 +33,14 @@ void SpotLightControllerObj::InitBarrel() {
   float outer_sine = std::sqrt(1 - phi_ * phi_);
   float outer_radius = range_ * outer_sine / phi_;
 
+  Matrix4 rot = std::move(RotateX(Degree(-90.0f)));
   GeoCylinderParam p;
-  
+  p.height = range_;
+  p.top_radius = top_radius();
+  p.bottom_radius = outer_radius;
+  AppendGeoCylinderData(data, p, rot);
+  p.bottom_radius = inner_radius;
+  AppendGeoCylinderData(data, p, rot);
 }
 
 void SpotLightControllerObj::Update(const Camera* camera, const Vector3& position) {

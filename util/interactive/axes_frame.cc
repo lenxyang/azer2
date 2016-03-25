@@ -8,14 +8,14 @@
 #include "azer/render/entity.h"
 #include "azer/render/renderer.h"
 #include "azer/render/vertex_pack.h"
-#include "azer/util/interactive/env.h"
-#include "azer/res/grit/common.h" 
+#include "azer/res/grit/common.h"
+#include "azer/effect/effectlib.h"
 
 namespace azer {
 AxesFrame::AxesFrame() {
-  InteractiveEnv* env = InteractiveEnv::GetInstance();
-  effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
-  texeffect_ = (TextBillboardEffect*)env->GetEffect("TextBillboardEffect");
+  Effectlib* efflib = Effect::instance();
+  effect_ = (AmbientColorEffect*)efflib->GetEffect("AmbientColorEffect");
+  texeffect_ = (TextBillboardEffect*)efflib->GetEffect("TextBillboardEffect");
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
   scoped_refptr<EntityData> data(new EntityData(effect_->vertex_desc(), 9));
   VertexPack vpack(data->vdata());

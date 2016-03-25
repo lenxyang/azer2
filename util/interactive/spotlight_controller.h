@@ -33,7 +33,9 @@ class SpotLightControllerObj {
   void InitBarrel();
   RasterizerStatePtr rasterizer_state_;
   scoped_refptr<ColorEffect> color_effect_;
-  EntityPtr entity_;
+  EntityPtr inner_cylinder_;
+  EntityPtr outer_cylinder_;
+  EntityPtr lightobj_;
   BlendingPtr blending_;
   float theta_;
   float phi_;
