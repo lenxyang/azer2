@@ -162,7 +162,7 @@ EntityDataPtr CreateSphere(VertexDesc* desc, const GeoSphereParam& p,
 }
 
 void AppendGeoSphereFrameData(EntityData* data, const GeoSphereParam& p, 
-                         const Matrix4& mat) {
+                              const Matrix4& mat) {
   const int32 kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
   const int32 kIndexCount = CalcSphereFrameIndexCount(p.stack, p.slice);
   data->vdata()->extend(kVertexCount);
@@ -176,7 +176,7 @@ void AppendGeoSphereFrameData(EntityData* data, const GeoSphereParam& p,
 }
 
 EntityDataPtr CreateSphereFrame(VertexDesc* desc, const GeoSphereParam& p,
-                           const Matrix4& mat) {
+                                const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
   EntityDataPtr data(new EntityData(vdata, idata));
