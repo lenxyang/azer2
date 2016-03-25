@@ -10,7 +10,7 @@
 
 namespace azer {
 namespace {
-::base::LazyInstance<InteractiveEnv> env_instance = LAZY_INSTANCE_INITIALIZER;
+::base::LazyInstance<ResLib> env_instance = LAZY_INSTANCE_INITIALIZER;
 }
 
 ResLib* ResLib::instance() {
@@ -25,12 +25,12 @@ ResLib::ResLib() {
 }
 
 EffectLib * ResLib::effectlib() { return effectlib_.get();}
-Effect* ResLib::GetEffect*(const std::string& name) {
+Effect* ResLib::GetEffect(const std::string& name) {
   return effectlib_->GetEffect(name);
 }
 
 Texture* ResLib::GetTexture(int32 id) {
-  AutoLock scoped_lock(&lock_);
+  ::base::AutoLock scoped_lock(lock_);
   auto iter = texture_.find(id);
   if (texture_.end() != iter) {
     return iter->second.get();
@@ -47,7 +47,7 @@ Texture* ResLib::GetTexture(int32 id) {
   return tex;
 }
 
-EffectAdapterContext* ResLib::adapter_context() { 
+EffectAdapterContext* ResLib::effect_context() { 
   return effectlib_->adapter_context();
 }
 

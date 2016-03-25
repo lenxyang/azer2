@@ -20,5 +20,6 @@ static_library("geometry") {
   ]
   deps = [
     "//azer",
+    "//azer/res:reslib",
   ]
 }

@@ -5,15 +5,16 @@
 
 #include "base/basictypes.h"
 #include "base/synchronization/lock.h"
-#include "base/thread/lock.h"
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
+#include "base/memory/scoped_ptr.h"
 #include "base/lazy_instance.h"
 
 namespace azer {
 
-class Effect;
 class EffectAdapterContext;
+class Effect;
+class EffectLib;
 class ResourcePack;
 class Texture;
 
@@ -22,19 +23,19 @@ class ResLib {
   static ResLib* instance();
 
   EffectLib * effectlib();
-  Effect* GetEffect*(const std::string& name);
+  Effect* GetEffect(const std::string& name);
   Texture* GetTexture(int32 id);
-  EffectAdapterContext* adapter_context() { return adapter_context_.get();}
-  ResourcePack* resource_pack() { return resource_pack_.get();}
+  EffectAdapterContext* effect_context();
+  ResourcePack* resource_pack();
  private:
   ResLib();
   ~ResLib();
 
-  ::base::Mutex lock_;
+  ::base::Lock lock_;
   scoped_ptr<EffectLib> effectlib_;
-  std::map<int, scoped_refptr<Texture> > textures_;
+  std::map<int, scoped_refptr<Texture> > texture_;
   scoped_ptr<ResourcePack> resource_pack_;
-  friend struct ::base::DefaultSingletonTraits<ResLib>;
+  friend struct ::base::DefaultLazyInstanceTraits<ResLib>;
   DISALLOW_COPY_AND_ASSIGN(ResLib);
 };
 }  // namespace azer

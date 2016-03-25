@@ -9,11 +9,12 @@
 #include "azer/render/renderer.h"
 #include "azer/render/vertex_pack.h"
 #include "azer/res/grit/common.h"
+#include "azer/res/reslib.h"
 #include "azer/effect/effectlib.h"
 
 namespace azer {
 AxesFrame::AxesFrame() {
-  Effectlib* efflib = Effect::instance();
+  EffectLib* efflib = ResLib::instance()->effectlib();
   effect_ = (AmbientColorEffect*)efflib->GetEffect("AmbientColorEffect");
   texeffect_ = (TextBillboardEffect*)efflib->GetEffect("TextBillboardEffect");
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
@@ -52,9 +53,9 @@ AxesFrame::AxesFrame() {
   colors_[1] = Vector4(0.0f, 1.0f, 0.0f, 1.0f);
   colors_[2] = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
 
-  tex_[0] =  env->GetTexture(IMG_COORD_X);
-  tex_[1] =  env->GetTexture(IMG_COORD_Y);
-  tex_[2] =  env->GetTexture(IMG_COORD_Z);
+  tex_[0] =  ResLib::instance()->GetTexture(IMG_COORD_X);
+  tex_[1] =  ResLib::instance()->GetTexture(IMG_COORD_Y);
+  tex_[2] =  ResLib::instance()->GetTexture(IMG_COORD_Z);
 }
 
 AxesFrame::~AxesFrame() {}

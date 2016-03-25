@@ -43,7 +43,7 @@ static_library("reslib") {
   deps = [
     "//base",
     "//azer",
-    "//azer:effectlib",
+    "//azer/effect:effectlib",
     ":res",
   ]
 }

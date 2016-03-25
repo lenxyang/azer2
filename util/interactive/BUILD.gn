@@ -22,6 +22,7 @@ static_library("interactive") {
     "//azer",
     "//azer/effect:effectlib",
     "//azer/res",
+    "//azer/res:reslib",
     "//azer/util/geometry",
   ]
 
