@@ -24,6 +24,8 @@ ResLib::ResLib() {
   effectlib_.reset(new EffectLib(resource_pack_.get()));
 }
 
+ResLib::~ResLib() {}
+
 EffectLib * ResLib::effectlib() { return effectlib_.get();}
 Effect* ResLib::GetEffect(const std::string& name) {
   return effectlib_->GetEffect(name);

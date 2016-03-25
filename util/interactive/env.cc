@@ -47,7 +47,7 @@ Effect* InteractiveEnv::GetEffect(const std::string& name) {
   return ResLib::instance()->GetEffect(name);
 }
 EffectAdapterContext* InteractiveEnv::effect_context() {
-  return ResLib::instance()->adapter_context();
+  return ResLib::instance()->effect_context();
 }
 
 Texture* InteractiveEnv::GetTexture(int32 id) {

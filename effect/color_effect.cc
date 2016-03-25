@@ -53,7 +53,7 @@ void AmbientColorEffect::ApplyGpuConstantTable(Renderer* renderer) {
     tb->SetValue(1, &world_, sizeof(Matrix4));
   }
   {
-    GpuVariable gv = gpu_table_[0];
+    GpuVariable gv = gpu_table_[1];
     CHECK_EQ(gv.stage, kPixelStage);
     GpuConstantsTable* tb = gv.table;
     DCHECK(tb != NULL);
