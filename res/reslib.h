@@ -8,7 +8,7 @@
 #include "base/thread/lock.h"
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
-#include "azer/base/resource_pack.h"
+#include "base/lazy_instance.h"
 
 namespace azer {
 
@@ -34,6 +34,7 @@ class ResLib {
   scoped_ptr<EffectLib> effectlib_;
   std::map<int, scoped_refptr<Texture> > textures_;
   scoped_ptr<ResourcePack> resource_pack_;
+  friend struct ::base::DefaultSingletonTraits<ResLib>;
   DISALLOW_COPY_AND_ASSIGN(ResLib);
 };
 }  // namespace azer
