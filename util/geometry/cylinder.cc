@@ -24,7 +24,7 @@ Subset AppendGeoBarrelData(VertexPack* vpack, IndexPack* ipack,
   VertexPos tpos;
   GetSemanticIndex("texcoord", 0, vpack->desc(), &tpos);
   float height_unit = p.height / ((float)p.stack - 1.0f);
-  float radius_unit = (p.bottom_radius - p.top_radius) / (float)p.stack;
+  float radius_unit = (p.bottom_radius - p.top_radius) / ((float)p.stack - 1.0f);
   float slice_radius = p.top_radius;
   float y = p.height;
   float tex_u_unit = 1.0f / p.slice;
@@ -56,11 +56,30 @@ Subset AppendGeoBarrelData(VertexPack* vpack, IndexPack* ipack,
     GenTriStripIndex(line1, line2, p.slice + 1, ipack);
   }
   subset.index_count = ipack->index() - subset.index_base;
+
+  CalcIndexedTriangleNormal(vpack->data(), ipack->data(), subset);
   return subset;
 }
 
-void AppendGeoCylinderData(EntityData* data, const GeoCylinderParam& p, 
-                           const Matrix4& mat) {
+void AppendGeoBarrelSubset(EntityData* data, const GeoCylinderParam& p, 
+                             const Matrix4& mat) {
+  VertexPack vpack(data->vdata());
+  IndexPack ipack(data->idata());
+
+  {
+    const int32 kVertexCount = CalcBarrelVertexCount(p.stack, p.slice);
+    const int32 kIndexCount = CalcBarrelIndexCount(p.stack, p.slice);
+    data->vdata()->extend(kVertexCount);
+    data->idata()->extend(kIndexCount);
+    vpack.move(data->vdata()->vertex_count() - kVertexCount);
+    ipack.move(data->idata()->count() - kIndexCount);
+    Subset sub = AppendGeoBarrelData(&vpack, &ipack, p, mat);
+    data->AddSubset(sub);
+  }
+}
+
+void AppendGeoCylinderSubset(EntityData* data, const GeoCylinderParam& p, 
+                             const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
 
@@ -98,7 +117,7 @@ EntityDataPtr CreateCylinder(VertexDesc* desc, const GeoCylinderParam& p,
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
   EntityDataPtr data(new EntityData(vdata, idata));
-  AppendGeoCylinderData(data.get(), p, mat);
+  AppendGeoCylinderSubset(data.get(), p, mat);
   return data;
 }
 

@@ -32,3 +32,18 @@ repack("res") {
     ":common",
   ]
 }
+
+
+static_library("reslib") {
+  sources = [
+    "reslib.cc",
+    "reslib.h",
+  ]
+
+  deps = [
+    "//base",
+    "//azer",
+    "//azer/effect:effectlib",
+    ":res",
+  ]
+}

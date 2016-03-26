@@ -26,17 +26,14 @@ class InteractiveEnv {
   EffectAdapterContext* effect_context();
   Blending* blending() { return blending_.get();}
   Texture* GetTexture(int32 id);
-  ResourcePack* resource_pack() { return resource_pack_.get();}
+  ResourcePack* resource_pack();
   RasterizerState* noncull_rasterizer_state() { return noncull_rasterizer_state_;}
  private:
   InteractiveEnv();
   ~InteractiveEnv();
 
   LightPtr light_;
-  scoped_ptr<EffectLib> effectlib_;
   BlendingPtr blending_;
-  std::map<int, TexturePtr> texture_;
-  scoped_ptr<ResourcePack> resource_pack_;
   RasterizerStatePtr noncull_rasterizer_state_;
   friend struct ::base::DefaultLazyInstanceTraits<InteractiveEnv>;
   DISALLOW_COPY_AND_ASSIGN(InteractiveEnv);

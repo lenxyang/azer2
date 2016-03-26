@@ -89,7 +89,7 @@ class TranslateController : public InteractiveController {
   const Vector3& position() const { return position_;}
   void SetScale(const Vector3& s) { scale_ = s;}
   const Vector3& scale() const { return scale_;}
-
+  
   void AddTranslateObserver(TranslateControllerObserver* observer);
   void RemoteTranslateObserver(TranslateControllerObserver* observer);
   bool HasTranslateObserver(TranslateControllerObserver* observer);

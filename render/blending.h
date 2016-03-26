@@ -51,7 +51,7 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
     kWriteAll = (kWriteColor | kWriteA),
   };
 
-  struct Desc {
+  struct RenderTargetDesc {
     Blend src;
     Blend dest;
     Oper oper;
@@ -59,7 +59,7 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
     Blend dest_alpha;
     Oper alpha_oper;
     WriteMask mask;
-    Desc()
+    RenderTargetDesc()
         : src(kOne)
         , dest(kZero)
         , oper(kAdd)
@@ -70,18 +70,27 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
     }
   };
 
+  static const int32 kMaxRenderTargetDesc = 16;
+  struct BlendDesc {
+    RenderTargetDesc desc[kMaxRenderTargetDesc];
+    int32 desc_count;
+    bool alpha_to_converage;
+    bool independent_blending;
+
+    BlendDesc()
+        : desc_count(0),
+          alpha_to_converage(false),
+          independent_blending(false) {
+    }
+  };
  public:
-  explicit Blending(const Desc& desc);
+  explicit Blending(const BlendDesc& desc);
   virtual ~Blending();
-  const Desc& desc() const { return desc_;}
-  void EnableAlphaToConverage(bool enable);
-  void EnableIndependentBlend(bool enable);
+  const BlendDesc& desc() const { return desc_;}
  protected:
   virtual bool OnDescChanged() = 0;
 
-  bool enable_alpha_to_converage_;
-  bool enable_independent_blending_;
-  Desc desc_;
+  BlendDesc desc_;
   DISALLOW_COPY_AND_ASSIGN(Blending);
 };
 

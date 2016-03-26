@@ -50,7 +50,7 @@ Subset AppendGeoPlaneData(VertexPack* vp, IndexPack* ipack,
   return subset;
 }
 
-void AppendGeoPlaneSuset(EntityData* data, const PlaneParam& p, const Matrix4& mat) {
+void AppendGeoPlaneSubset(EntityData* data, const PlaneParam& p, const Matrix4& mat) {
   const int32 kIndexCount = CalcIndexCount(p.row, p.column);
   const int32 kVertexCount = CalcVertexCount(p.row, p.column);
   data->vdata()->extend(kVertexCount);
@@ -61,6 +61,15 @@ void AppendGeoPlaneSuset(EntityData* data, const PlaneParam& p, const Matrix4& m
   ipack.move(data->idata()->count() - kIndexCount);
   Subset subset = AppendGeoPlaneData(&vpack, &ipack, p, mat);
   data->AddSubset(subset);
+}
+
+EntityDataPtr CreatePlane(VertexDesc* desc, const PlaneParam& param,
+                          const Matrix4& mat) {
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata, idata));
+  AppendGeoPlaneSubset(data.get(), param, mat);
+  return data;
 }
 
 Subset AppendGeoSquareData(VertexPack* vp, IndexPack* ipack, 
@@ -112,5 +121,14 @@ void AppendGeoSquareSubset(EntityData* data, float length, int32 slice,
   ipack.move(data->idata()->count() - kIndexCount);
   Subset subset = AppendGeoSquareData(&vpack, &ipack, length, slice, mat);
   data->AddSubset(subset);
+}
+
+EntityDataPtr CreateSquare(VertexDesc* desc, float length, int32 slice,
+                           const Matrix4& mat) {
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata, idata));
+  AppendGeoSquareSubset(data.get(), length, slice, mat);
+  return data;
 }
 }  // namespace azer

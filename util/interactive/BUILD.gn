@@ -4,6 +4,8 @@ static_library("interactive") {
   sources = [
     "axes_frame.cc",
     "axes_frame.h",
+    "camera_overlay.cc",
+    "camera_overlay.h",
     "env.cc",
     "env.h",
     "interactive_context.h",
@@ -12,6 +14,8 @@ static_library("interactive") {
     "interactive_controller.cc",
     "rotate_controller.h",
     "rotate_controller.cc",
+    "spotlight_controller.cc",
+    "spotlight_controller.h",
     "translate_controller.h",
     "translate_controller.cc",
     "pick_util.cc",
@@ -22,6 +26,7 @@ static_library("interactive") {
     "//azer",
     "//azer/effect:effectlib",
     "//azer/res",
+    "//azer/res:reslib",
     "//azer/util/geometry",
   ]
 

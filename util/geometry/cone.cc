@@ -7,8 +7,7 @@
 
 namespace azer {
 Subset AppendGeoTaperData(VertexPack* vpack, IndexPack* ipack, 
-                          const GeoConeParam& p,
-                          const Matrix4& mat) {
+                          const GeoConeParam& p, const Matrix4& mat) {
   const int32 kVertexNum = 1 + p.slice + 1;
   Subset subset;
   VertexPos vpos(0, 0), npos;

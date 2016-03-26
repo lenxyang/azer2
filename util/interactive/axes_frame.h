@@ -16,11 +16,15 @@ class AxesFrame {
   AxesFrame();
   ~AxesFrame();
   
+  void set_position(const Vector3& v) { position_ = v;}
+  void set_scale(const Vector3& v) { scale_ = v;}
   void SetColor(int32 index, const Vector4& color);
-  void Update(const Camera* camera, const Vector3& position);
+  void Update(const Camera* camera);
+  void SetWorld(const Matrix4& world);
   void Render(Renderer* renderer);
  private:
   Vector3 scale_;
+  Vector3 position_;
   Vector4 colors_[3];
   scoped_refptr<Texture> tex_[3];
   scoped_refptr<AmbientColorEffect> effect_;

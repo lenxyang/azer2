@@ -76,8 +76,8 @@ struct UniverseLight {
     struct {
       float phi;
       float theta;
-      float falloff;
       float range;
+      float falloff;
     } spotarg;
       
     // for point light

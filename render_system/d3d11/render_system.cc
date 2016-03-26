@@ -191,7 +191,7 @@ GpuComputeTaskDispatcherPtr D3DRenderSystem::CreateDispatcher() {
   return ptr;
 }
 
-BlendingPtr D3DRenderSystem::CreateBlending(const Blending::Desc& desc) {
+BlendingPtr D3DRenderSystem::CreateBlending(const Blending::BlendDesc& desc) {
   scoped_refptr<D3DBlending> blending(new D3DBlending(desc, this));
   if (blending->Init()) {
     return blending;
