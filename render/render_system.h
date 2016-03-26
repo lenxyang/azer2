@@ -58,7 +58,7 @@ class AZER_EXPORT RenderSystem {
   virtual RendererPtr CreateMultipleOutputRenderer(
       int32 count, const Texture::Options* opts, 
       const Texture::Options& depthopt) = 0;
-  virtual BlendingPtr CreateBlending(const Blending::Desc& desc) = 0;
+  virtual BlendingPtr CreateBlending(const Blending::BlendDesc& desc) = 0;
   virtual TechniquePtr CreateTechnique() = 0;
 
   // create gpu buffers

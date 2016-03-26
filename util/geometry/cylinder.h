@@ -24,7 +24,7 @@ Subset AppendGeoBarrelData(VertexPack* vp, IndexPack* ipack,
                            const GeoCylinderParam& p, 
                            const Matrix4& mat = Matrix4::kIdentity);
 
-void AppendGeoBarrelSuset(EntityData* data, const GeoCylinderParam& p, 
+void AppendGeoBarrelSubset(EntityData* data, const GeoCylinderParam& p, 
                           const Matrix4& mat = Matrix4::kIdentity);
 
 void AppendGeoCylinderSubset(EntityData* data, const GeoCylinderParam& p, 

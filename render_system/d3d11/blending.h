@@ -12,7 +12,7 @@ class D3DRenderer;
 
 class D3DBlending : public Blending {
  public:
-  D3DBlending(const Desc& desc, D3DRenderSystem* rs);
+  D3DBlending(const BlendDesc& desc, D3DRenderSystem* rs);
   ~D3DBlending() override;
 
   bool Init();

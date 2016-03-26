@@ -30,7 +30,7 @@ EntityDataPtr CreateArrow(VertexDesc* desc) {
   cylinder_param.height = 0.75f;
   cylinder_param.slice = 128;
   cylinder_param.stack = 5;
-  AppendGeoCylinderData(data, cylinder_param, rot);
+  AppendGeoCylinderSubset(data, cylinder_param, rot);
   return data;
 }
 }  // namespace azer

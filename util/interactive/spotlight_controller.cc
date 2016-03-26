@@ -42,21 +42,21 @@ void SpotLightControllerObj::InitBarrel() {
   p.height = range_;
   p.stack = 5;
   p.top_radius = top_radius;
-  p.bottom_radius = outer_radius;
   {
     p.bottom_radius = inner_radius;
     VertexDataPtr vdata(new VertexData(color_effect_->vertex_desc(), 1));
     IndicesDataPtr idata(new IndicesData(1));
     EntityDataPtr data(new EntityData(vdata, idata));
-    AppendGeoBarrelData(data, p, mat);
+    AppendGeoBarrelSubset(data, p, mat);
     inner_object_ = new Entity(data);
   }
 
   {
+    p.bottom_radius = outer_radius;
     VertexDataPtr vdata(new VertexData(color_effect_->vertex_desc(), 1));
     IndicesDataPtr idata(new IndicesData(1));
     EntityDataPtr data(new EntityData(vdata, idata));
-    AppendGeoCylinderData(data, p, mat);
+    AppendGeoCylinderSubset(data, p, mat);
     outer_object_ = new Entity(data);
   }
 }
@@ -70,22 +70,26 @@ void SpotLightControllerObj::Update(const Camera* camera) {
 }
 
 void SpotLightControllerObj::Render(Renderer* renderer) {
+  InteractiveEnv* env = InteractiveEnv::GetInstance();
   ScopedResetBlending scoped_blending(renderer);
-  renderer->SetBlending(blending_, 0, 0xffffffff);
-  ColorMaterialData mtrl;
-  mtrl.diffuse = inner_color_;
-  mtrl.ambient = mtrl.diffuse * 0.4f;
-  mtrl.specular = mtrl.diffuse * 0.1f;
-  mtrl.alpha = mtrl.diffuse.w;
-  color_effect_->SetMaterial(mtrl);
+  ScopedRasterizerState scoped_state(renderer);
+  renderer->SetBlending(env->blending(), 0, 0xffffffff);
+  renderer->SetRasterizerState(env->noncull_rasterizer_state());
+  ColorMaterialData inner_mtrl;
+  inner_mtrl.diffuse = inner_color_;
+  inner_mtrl.ambient = inner_mtrl.diffuse * 0.4f;
+  inner_mtrl.specular = inner_mtrl.diffuse * 0.1f;
+  inner_mtrl.alpha = inner_mtrl.diffuse.w;
+  ColorMaterialData outer_mtrl;
+  outer_mtrl.diffuse = outer_color_;
+  outer_mtrl.ambient = outer_mtrl.diffuse * 0.4f;
+  outer_mtrl.specular = outer_mtrl.diffuse * 0.1f;
+  outer_mtrl.alpha = outer_mtrl.diffuse.w;
+
+  color_effect_->SetMaterial(inner_mtrl);
   renderer->BindEffect(color_effect_);
   inner_object_->Draw(renderer);
-
-  mtrl.diffuse = outer_color_;
-  mtrl.ambient = mtrl.diffuse * 0.4f;
-  mtrl.specular = mtrl.diffuse * 0.1f;
-  mtrl.alpha = mtrl.diffuse.w;
-  color_effect_->SetMaterial(mtrl);
+  color_effect_->SetMaterial(outer_mtrl);
   renderer->BindEffect(color_effect_);
   outer_object_->Draw(renderer);
 }
