@@ -59,8 +59,25 @@ Subset AppendGeoBarrelData(VertexPack* vpack, IndexPack* ipack,
   return subset;
 }
 
-void AppendGeoCylinderData(EntityData* data, const GeoCylinderParam& p, 
-                           const Matrix4& mat) {
+void AppendGeoBarrelSubset(EntityData* data, const GeoCylinderParam& p, 
+                             const Matrix4& mat) {
+  VertexPack vpack(data->vdata());
+  IndexPack ipack(data->idata());
+
+  {
+    const int32 kVertexCount = CalcBarrelVertexCount(p.stack, p.slice);
+    const int32 kIndexCount = CalcBarrelIndexCount(p.stack, p.slice);
+    data->vdata()->extend(kVertexCount);
+    data->idata()->extend(kIndexCount);
+    vpack.move(data->vdata()->vertex_count() - kVertexCount);
+    ipack.move(data->idata()->count() - kIndexCount);
+    Subset sub = AppendGeoBarrelData(&vpack, &ipack, p, mat);
+    data->AddSubset(sub);
+  }
+}
+
+void AppendGeoCylinderSubset(EntityData* data, const GeoCylinderParam& p, 
+                             const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
 
