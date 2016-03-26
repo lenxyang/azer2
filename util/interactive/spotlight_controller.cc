@@ -11,10 +11,12 @@ namespace azer {
 namespace {
 static const float kTopRadius = 0.5f;
 }
-SpotLightControllerObj::SpotLightControllerObj()
-    : theta_(),
-      phi_(),
-      range_(1.0f) {
+SpotLightControllerObj::SpotLightControllerObj(Light* light) {
+  DCHECK_EQ(light->type(), kSpotLight);
+  const UniverseLight& data = light->data();
+  theta_ = data.spotarg.theta;
+  phi_ = data.spotarg.phi;
+  range_ = data.spotarg.range;
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   color_effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
   InitCircle();
@@ -83,18 +85,18 @@ void SpotLightControllerObj::Render(Renderer* renderer) {
 }
 
 // class SpotLightController
-SpotLightController::SpotLightController(InteractiveContext* ctx)
+SpotLightController::SpotLightController(Light* light, InteractiveContext* ctx)
     : InteractiveController(ctx) {
-  object_.reset(new SpotLightControllerObj);
+  object_.reset(new SpotLightControllerObj(light));
 }
 
 SpotLightController::~SpotLightController() {
 }
 
 void SpotLightController::SetLight(Light* ptr) {
+  object_.reset(new SpotLightControllerObj(ptr));
   DCHECK_EQ(ptr->type(), kSpotLight);
   light_ = ptr;
-  object_.reset(new SpotLightControllerObj);
 }
 
 int32 SpotLightController::GetPicking(const gfx::Point& pt) {
@@ -112,12 +114,10 @@ void SpotLightController::OnDragEnd(const gfx::Point& pt) {
 
 void SpotLightController::UpdateFrame(const FrameArgs& args) {
   const UniverseLight& data = light_->data();
-  object_->set_theta(data.spotarg.theta);
-  object_->set_phi(data.spotarg.phi);
-  object_->set_range(data.spotarg.range);
+  Vector3 position(data.position[0], data.position[1], data.position[2]);
   object_->set_inner_color(Vector4(0.75f, 0.75f, 0.75f, 0.2f));
   object_->set_outer_color(Vector4(0.9f,   0.9f,  0.9f, 0.4f));
-  object_->set_position(Vector3(data.position[0], data.position[1], data.position[2]));
+  object_->set_position(position);
   object_->Update(context()->camera());
 }
 

@@ -11,7 +11,6 @@
 #include "azer/util/interactive/interactive_controller.h"
 
 namespace azer {
-
 class Blending;
 class Camera;
 class ColorEffect;
@@ -19,7 +18,7 @@ typedef scoped_refptr<Blending> BlendingPtr;
 
 class SpotLightControllerObj {
  public:
-  SpotLightControllerObj();
+  explicit SpotLightControllerObj(Light* light);
   ~SpotLightControllerObj();
 
   void ResetColor();
@@ -28,9 +27,6 @@ class SpotLightControllerObj {
 
   void set_position(const Vector3& pos) { position_ = pos;}
   void set_orientation(const Quaternion& orientation) { orientation_ = orientation;}
-  void set_theta(float v) { theta_ = v;}
-  void set_phi(float v) { phi_ = v;}
-  void set_range(float v) { range_ = v;}
   void set_inner_color(const Vector4& v) { inner_color_ = v;}
   void set_outer_color(const Vector4& v) { outer_color_ = v;}
  private:
@@ -61,7 +57,7 @@ class SpotLightControllerObserver {
 
 class SpotLightController : public InteractiveController {
  public:
-  explicit SpotLightController(InteractiveContext* ctx);
+  SpotLightController(Light* light, InteractiveContext* ctx);
   ~SpotLightController();
   
   void SetLight(Light* ptr);
@@ -78,6 +74,7 @@ class SpotLightController : public InteractiveController {
   bool HasSpotLightObserver(SpotLightControllerObserver* observer);
  private:
   LightPtr light_;
+  Vector3 position_;
   scoped_ptr<SpotLightControllerObj> object_;
   ObserverList<SpotLightControllerObserver> observer_list_;
   DISALLOW_COPY_AND_ASSIGN(SpotLightController);
