@@ -22,7 +22,7 @@ D3DBlending::~D3DBlending() {
 bool D3DBlending::Init() {
   D3D11_BLEND_DESC blend_desc;
   ZeroMemory(&blend_desc, sizeof(blend_desc));
-
+  DCHECK_GT(desc_.desc_count, 0);
   for (int32 i = 0; i < desc_.desc_count; ++i) {
     D3D11_RENDER_TARGET_BLEND_DESC& rtbd = blend_desc.RenderTarget[i];
     ZeroMemory(&rtbd, sizeof(rtbd));
@@ -36,8 +36,8 @@ bool D3DBlending::Init() {
     rtbd.RenderTargetWriteMask = TranslateWriteMask(desc_.desc[i].mask);
   }
 
-  blend_desc.AlphaToCoverageEnable = desc_.enable_alpha_to_converage;
-  blend_desc.IndependentBlendEnable = desc_.enable_independent_blending;
+  blend_desc.AlphaToCoverageEnable = desc_.alpha_to_converage;
+  blend_desc.IndependentBlendEnable = desc_.independent_blending;
   
   ID3D11Device* d3d_device = render_system_->GetDevice();
   DCHECK(NULL != d3d_device);

@@ -4,6 +4,8 @@ static_library("interactive") {
   sources = [
     "axes_frame.cc",
     "axes_frame.h",
+    "camera_overlay.cc",
+    "camera_overlay.h",
     "env.cc",
     "env.h",
     "interactive_context.h",

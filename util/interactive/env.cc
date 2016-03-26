@@ -27,16 +27,17 @@ InteractiveEnv::InteractiveEnv() {
   light_ = new Light(dir);
 
   azer::RenderSystem* rs = azer::RenderSystem::Current();
-  Blending::Desc blend_desc;
-  blend_desc.src = Blending::kSrcAlpha;
-  blend_desc.dest = Blending::kSrcInvAlpha;
-  blend_desc.oper = Blending::kAdd;
-  blend_desc.src_alpha = Blending::kOne;
-  blend_desc.dest_alpha = Blending::kZero;
-  blend_desc.alpha_oper = Blending::kAdd;
-  blend_desc.mask = Blending::kWriteColor;
+  Blending::BlendDesc blend_desc;
+  blend_desc.desc[0].src = Blending::kSrcAlpha;
+  blend_desc.desc[0].dest = Blending::kSrcInvAlpha;
+  blend_desc.desc[0].oper = Blending::kAdd;
+  blend_desc.desc[0].src_alpha = Blending::kOne;
+  blend_desc.desc[0].dest_alpha = Blending::kZero;
+  blend_desc.desc[0].alpha_oper = Blending::kAdd;
+  blend_desc.desc[0].mask = Blending::kWriteColor;
+  blend_desc.desc_count = 1;
+  blend_desc.alpha_to_converage = true;
   blending_ = rs->CreateBlending(blend_desc);
-  blending_->EnableAlphaToConverage(true);
 
   noncull_rasterizer_state_ = rs->CreateRasterizerState();
   noncull_rasterizer_state_->SetCullingMode(kCullNone);

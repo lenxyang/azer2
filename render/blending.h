@@ -74,13 +74,13 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
   struct BlendDesc {
     RenderTargetDesc desc[kMaxRenderTargetDesc];
     int32 desc_count;
-    bool enable_alpha_to_converage;
-    bool enable_independent_blending;
+    bool alpha_to_converage;
+    bool independent_blending;
 
     BlendDesc()
         : desc_count(0),
-          enable_alpha_to_converage(false),
-          enable_independent_blending(false) {
+          alpha_to_converage(false),
+          independent_blending(false) {
     }
   };
  public:
