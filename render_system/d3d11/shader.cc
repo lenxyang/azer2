@@ -113,7 +113,6 @@ int32 ComponentCount(DataFormat type) {
     case kBGRAn8:
     case kBGRA32:
     case kBGRAn32:
-    case kBGRAnf: return 4;
     default: CHECK(false); return -1;
   }
 }

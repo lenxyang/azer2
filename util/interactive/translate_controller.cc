@@ -461,7 +461,7 @@ void TranslateController::AddTranslateObserver(TranslateControllerObserver* obs)
   observer_list_.AddObserver(obs);
 }
 
-void TranslateController::RemoteTranslateObserver(TranslateControllerObserver* obs) {
+void TranslateController::RemoveTranslateObserver(TranslateControllerObserver* obs) {
   observer_list_.RemoveObserver(obs);
 }
 

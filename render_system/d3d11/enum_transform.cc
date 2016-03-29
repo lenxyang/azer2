@@ -37,6 +37,7 @@ DXGI_FORMAT TranslateFormat(DataFormat type) {
     case kRGBAf: return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kRGBA32: return DXGI_FORMAT_R32G32B32A32_UINT;
     case kRGBAn32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
+    case kBGRAn8: return DXGI_FORMAT_B8G8R8A8_UNORM;
     case kR11G11B10f: return DXGI_FORMAT_R11G11B10_FLOAT;
     case kDepth24nStencil8u: return DXGI_FORMAT_D24_UNORM_S8_UINT;
     case kR24G8: return DXGI_FORMAT_R24G8_TYPELESS;

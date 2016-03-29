@@ -10,6 +10,7 @@
 namespace azer {
 BoundingBoxObj::BoundingBoxObj() {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
+  color_ = Vector4(0.0f, 1.0f, 0.0f, 0.5f);
   color_effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
   box_ = new Entity(CreateBox(color_effect_->vertex_desc()));
   boxframe_ = new Entity(CreateBoxFrame(color_effect_->vertex_desc()));
