@@ -85,9 +85,9 @@ class TranslateController : public InteractiveController {
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
 
-  void SetPosition(const Vector3& pos) { position_ = pos;}
+  void set_position(const Vector3& pos) { position_ = pos;}
   const Vector3& position() const { return position_;}
-  void SetScale(const Vector3& s) { scale_ = s;}
+  void set_scale(const Vector3& s) { scale_ = s;}
   const Vector3& scale() const { return scale_;}
   
   void AddTranslateObserver(TranslateControllerObserver* observer);

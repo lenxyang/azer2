@@ -211,4 +211,16 @@ void RotateController::UpdateFrame(const FrameArgs& args) {
 void RotateController::RenderFrame(Renderer* renderer) {
   object_->Render(renderer);
 }
+
+void RotateController::AddRotateObserver(RotateControllerObserver* obs) {
+  observer_list_.AddObserver(obs);
+}
+
+void RotateController::RemoveRotateObserver(RotateControllerObserver* obs) {
+  observer_list_.RemoveObserver(obs);
+}
+
+bool RotateController::HasRotateObserver(RotateControllerObserver* obs) {
+  return observer_list_.HasObserver(obs);
+}
 }  // namespace azer

@@ -48,6 +48,13 @@ class RotateControllerObj {
   DISALLOW_COPY_AND_ASSIGN(RotateControllerObj);
 };
 
+class RotateControllerObserver {
+ public:
+  virtual void OnRotateBegin(RotateController* controller) {}
+  virtual void OnRotating(RotateController* controller) {}
+  virtual void OnRotateEnd(RotateController* controller) {}
+};
+
 class RotateController : public InteractiveController {
  public:
   enum {
@@ -67,15 +74,20 @@ class RotateController : public InteractiveController {
   void RenderFrame(Renderer* renderer) override;
 
   const Quaternion& orientation() const { return orientation_;}
-  void SetPosition(const Vector3& pos) { position_ = pos;}
+  void set_position(const Vector3& pos) { position_ = pos;}
   const Vector3& position() const { return position_;}
-  void SetScale(const Vector3& s) { scale_ = s;}
+  void set_scale(const Vector3& s) { scale_ = s;}
   const Vector3& scale() const { return scale_;}
+
+  void AddRotateObserver(RotateControllerObserver* observer);
+  void RemoveRotateObserver(RotateControllerObserver* observer);
+  bool HasRotateObserver(RotateControllerObserver* observer);
  private:
   const Quaternion orientation_;
   Vector3 scale_;
   Vector3 position_;
   scoped_ptr<RotateControllerObj> object_;
+  ObserverList<RotateControllerObserver> observer_list_;
   static const Vector4 kSelectedColor;
   DISALLOW_COPY_AND_ASSIGN(RotateController);
 };
