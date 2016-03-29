@@ -33,7 +33,7 @@ void BoundingBoxObj::Render(Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   ScopedResetBlending scoped_blending(renderer);
   renderer->SetBlending(env->blending(), 0, 0xffffffff);
-
+  
   ColorMaterialData mtrl;
   mtrl.diffuse = color_;
   mtrl.ambient = mtrl.diffuse * 0.4f;
