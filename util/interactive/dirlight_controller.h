@@ -41,6 +41,9 @@ class DirLightController : public InteractiveController,
   DirLightController(Light* light, InteractiveContext* ctx);
   ~DirLightController() override;
 
+  void set_position(const Vector3& pos);
+  const Vector3& position() const;
+
   int32 GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const gfx::Point& pt) override;
   void OnDrag(const gfx::Point& pt) override;

@@ -4,6 +4,7 @@
 #include "azer/render/entity.h"
 #include "azer/render/renderer.h"
 #include "azer/util/geometry/arrow.h"
+#include "azer/util/interactive/interactive_context.h"
 #include "azer/util/interactive/env.h"
 
 namespace azer {
@@ -44,6 +45,14 @@ DirLightController::~DirLightController() {
   controller_->RemoteRotateObserver(this);
 }
 
+void DirLightController::set_position(const Vector3& pos) {
+  object_->set_position(pos);
+}
+
+const DirLightController::Vector3& position() const {
+  return object_->position();
+}
+
 int32 DirLightController::GetPicking(const gfx::Point& pt) {
   return 0;
 }
@@ -59,11 +68,12 @@ void DirLightController::OnDragEnd(const gfx::Point& pt) {
 
 void DirLightController::UpdateFrame(const FrameArgs& args) {
   object_->set_color(light_->diffuse());
-  object_->set_orientation();
+  object_->set_orientation(light);
+  object_->Update(args);
 }
 
 void DirLightController::RenderFrame(Renderer* renderer) {
-  object_->Render(renderer);
+  object_->Render(renderer, context()->camera());
 }
 
 // observer funcs
