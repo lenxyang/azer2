@@ -15,7 +15,7 @@ BoundingBoxObj::BoundingBoxObj() {
   boxframe_ = new Entity(CreateBoxFrame(color_effect_->vertex_desc()));
 }
 
-void BoundingBoxObj::SetMinAndMax(const Vector3& min, const Vector3& max) {
+void BoundingBoxObj::SetCorner(const Vector3& min, const Vector3& max) {
   Vector3 position = (min + max) * 0.5f;
   Vector3 scale(max.x - min.x, max.y - min.y, max.z - min.z);
   world_ = std::move(Translate(position) * Scale(scale));

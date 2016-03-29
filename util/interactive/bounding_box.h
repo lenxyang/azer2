@@ -17,7 +17,7 @@ class BoundingBoxObj {
   BoundingBoxObj();
   
   void SetColor(const Vector4& color) { color_ = color;}
-  void SetMinAndMax(const Vector3& min, const Vector3& max);
+  void SetCorner(const Vector3& min, const Vector3& max);
   void Update(const Camera* camera);
   void Render(Renderer* renderer);
  private:

@@ -28,6 +28,7 @@ class InteractiveEnv {
   Texture* GetTexture(int32 id);
   ResourcePack* resource_pack();
   RasterizerState* noncull_rasterizer_state() { return noncull_rasterizer_state_;}
+  DepthStencilState* depth_disabled_state() { return depth_disabled_state_;}
  private:
   InteractiveEnv();
   ~InteractiveEnv();
@@ -35,6 +36,7 @@ class InteractiveEnv {
   LightPtr light_;
   BlendingPtr blending_;
   RasterizerStatePtr noncull_rasterizer_state_;
+  DepthStencilStatePtr depth_disabled_state_;
   friend struct ::base::DefaultLazyInstanceTraits<InteractiveEnv>;
   DISALLOW_COPY_AND_ASSIGN(InteractiveEnv);
 };

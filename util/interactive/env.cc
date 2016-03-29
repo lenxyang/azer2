@@ -41,6 +41,9 @@ InteractiveEnv::InteractiveEnv() {
 
   noncull_rasterizer_state_ = rs->CreateRasterizerState();
   noncull_rasterizer_state_->SetCullingMode(kCullNone);
+
+  depth_disabled_state_ = rs->CreateDepthStencilState();
+  depth_disabled_state_->EnableDepthTest(false);
 }
 
 InteractiveEnv::~InteractiveEnv() {}
