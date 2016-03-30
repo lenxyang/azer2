@@ -101,8 +101,7 @@ SpotLightController::SpotLightController(InteractiveContext* ctx)
   rotate_controller_.reset(new RotateController(ctx));
 }
 
-SpotLightController::~SpotLightController() {
-}
+SpotLightController::~SpotLightController() {}
 
 void SpotLightController::SetLight(Light* ptr) {
   object_.reset(new SpotLightControllerObject(ptr));
@@ -139,11 +138,29 @@ void SpotLightController::AddSpotLightObserver(SpotLightControllerObserver* obs)
   observer_list_.AddObserver(obs);
 }
 
-void SpotLightController::RemoteSpotLightObserver(SpotLightControllerObserver* obs) {
+void SpotLightController::RemoveSpotLightObserver(SpotLightControllerObserver* obs) {
   observer_list_.RemoveObserver(obs);
 }
 
 bool SpotLightController::HasSpotLightObserver(SpotLightControllerObserver* obs) {
   return observer_list_.HasObserver(obs);
+}
+
+void SpotLightController::OnRotateBegin(RotateController* controller) {
+}
+
+void SpotLightController::OnRotating(RotateController* controller) {
+}
+
+void SpotLightController::OnRotateEnd(RotateController* controller) {
+}
+
+void SpotLightController::OnTranslateBegin(TranslateController* controller) {
+}
+
+void SpotLightController::OnTranslating(TranslateController* controller) {
+}
+
+void SpotLightController::OnTranslateEnd(TranslateController* controller) {
 }
 }  // namespace azer

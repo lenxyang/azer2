@@ -16,6 +16,7 @@ namespace azer {
 class Blending;
 class Camera;
 class ColorEffect;
+class Light;
 typedef scoped_refptr<Blending> BlendingPtr;
 
 class SpotLightObject : public ::base::RefCounted<SpotLightObject> {
@@ -65,7 +66,9 @@ class SpotLightControllerObserver {
   virtual void OnSpotLightOrientationChanged(SpotLightController* controller) {}
 };
 
-class SpotLightController : public InteractiveController {
+class SpotLightController : public InteractiveController,
+                            public RotateControllerObserver,
+                            public TranslateControllerObserver {
  public:
   explicit SpotLightController(InteractiveContext* ctx);
   ~SpotLightController();
@@ -78,6 +81,20 @@ class SpotLightController : public InteractiveController {
   void OnDragEnd(const ui::MouseEvent& e) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
+
+  // override form RotateControllerObserver
+  void OnRotateBegin(RotateController* controller) override;
+  void OnRotating(RotateController* controller) override;
+  void OnRotateEnd(RotateController* controller) override;
+
+  // override from TranslateControllerObserver
+  void OnTranslateBegin(TranslateController* controller) override;
+  void OnTranslating(TranslateController* controller) override;
+  void OnTranslateEnd(TranslateController* controller) override;
+
+  void AddSpotLightObserver(SpotLightControllerObserver* obs);
+  void RemoveSpotLightObserver(SpotLightControllerObserver* obs);
+  bool HasSpotLightObserver(SpotLightControllerObserver* obs);
  private:
   LightPtr light_;
   scoped_ptr<TranslateController> translate_controller_;
