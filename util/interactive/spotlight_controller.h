@@ -8,6 +8,8 @@
 #include "azer/math/vector4.h" 
 #include "azer/render/entity.h"
 #include "azer/render/rasterizer_state.h"
+#include "azer/util/interactive/rotate_controller.h"
+#include "azer/util/interactive/translate_controller.h"
 #include "azer/util/interactive/interactive_controller.h"
 
 namespace azer {
@@ -16,10 +18,18 @@ class Camera;
 class ColorEffect;
 typedef scoped_refptr<Blending> BlendingPtr;
 
-class SpotLightControllerObj {
+class SpotLightObject : public ::base::RefCounted<SpotLightObject> {
  public:
-  explicit SpotLightControllerObj(Light* light);
-  ~SpotLightControllerObj();
+  SpotLightObject();
+  ~SpotLightObject();
+ private:
+  DISALLOW_COPY_AND_ASSIGN(SpotLightObject);
+};
+
+class SpotLightControllerObject {
+ public:
+  explicit SpotLightControllerObject(Light* light);
+  ~SpotLightControllerObject();
 
   void ResetColor();
   void Update(const Camera* camera);
@@ -45,7 +55,7 @@ class SpotLightControllerObj {
   Vector4 outer_color_;
   Vector3 position_;
   Quaternion orientation_;
-  DISALLOW_COPY_AND_ASSIGN(SpotLightControllerObj);
+  DISALLOW_COPY_AND_ASSIGN(SpotLightControllerObject);
 };
 
 class SpotLightController;
@@ -57,7 +67,7 @@ class SpotLightControllerObserver {
 
 class SpotLightController : public InteractiveController {
  public:
-  SpotLightController(Light* light, InteractiveContext* ctx);
+  explicit SpotLightController(InteractiveContext* ctx);
   ~SpotLightController();
   
   void SetLight(Light* ptr);
@@ -68,14 +78,11 @@ class SpotLightController : public InteractiveController {
   void OnDragEnd(const ui::MouseEvent& e) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
-
-  void AddSpotLightObserver(SpotLightControllerObserver* observer);
-  void RemoteSpotLightObserver(SpotLightControllerObserver* observer);
-  bool HasSpotLightObserver(SpotLightControllerObserver* observer);
  private:
   LightPtr light_;
-  Vector3 position_;
-  scoped_ptr<SpotLightControllerObj> object_;
+  scoped_ptr<TranslateController> translate_controller_;
+  scoped_ptr<RotateController> rotate_controller_;
+  scoped_ptr<SpotLightControllerObject> object_;
   ObserverList<SpotLightControllerObserver> observer_list_;
   DISALLOW_COPY_AND_ASSIGN(SpotLightController);
 };

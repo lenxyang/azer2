@@ -11,7 +11,7 @@ namespace azer {
 namespace {
 static const float kTopRadius = 0.5f;
 }
-SpotLightControllerObj::SpotLightControllerObj(Light* light) {
+SpotLightControllerObject::SpotLightControllerObject(Light* light) {
   DCHECK_EQ(light->type(), kSpotLight);
   const UniverseLight& data = light->data();
   theta_ = data.spotarg.theta;
@@ -24,12 +24,12 @@ SpotLightControllerObj::SpotLightControllerObj(Light* light) {
   blending_ = env->blending();
 }
 
-SpotLightControllerObj::~SpotLightControllerObj() {}
+SpotLightControllerObject::~SpotLightControllerObject() {}
 
-void SpotLightControllerObj::InitCircle() {
+void SpotLightControllerObject::InitCircle() {
 }
 
-void SpotLightControllerObj::InitBarrel() {
+void SpotLightControllerObject::InitBarrel() {
   float top_radius = kTopRadius;
   float inner_sine = std::sqrt(1 - theta_ * theta_);
   float inner_radius = range_ * inner_sine / theta_;
@@ -61,7 +61,7 @@ void SpotLightControllerObj::InitBarrel() {
   }
 }
 
-void SpotLightControllerObj::Update(const Camera* camera) {
+void SpotLightControllerObject::Update(const Camera* camera) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 mat = std::move(Translate(position_) * orientation_.ToMatrix());
   color_effect_->SetPV(camera->GetProjViewMatrix());
@@ -69,7 +69,7 @@ void SpotLightControllerObj::Update(const Camera* camera) {
   color_effect_->SetLightData(&env->light()->data(), 1);
 }
 
-void SpotLightControllerObj::Render(Renderer* renderer) {
+void SpotLightControllerObject::Render(Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   ScopedResetBlending scoped_blending(renderer);
   ScopedRasterizerState scoped_state(renderer);
@@ -94,18 +94,18 @@ void SpotLightControllerObj::Render(Renderer* renderer) {
   outer_object_->Draw(renderer);
 }
 
-// class SpotLightController
-SpotLightController::SpotLightController(Light* light, InteractiveContext* ctx)
-    : InteractiveController(ctx),
-    light_(light) {
-  object_.reset(new SpotLightControllerObj(light));
+
+SpotLightController::SpotLightController(InteractiveContext* ctx)
+    : InteractiveController(ctx) {
+  translate_controller_.reset(new TranslateController(ctx));
+  rotate_controller_.reset(new RotateController(ctx));
 }
 
 SpotLightController::~SpotLightController() {
 }
 
 void SpotLightController::SetLight(Light* ptr) {
-  object_.reset(new SpotLightControllerObj(ptr));
+  object_.reset(new SpotLightControllerObject(ptr));
   DCHECK_EQ(ptr->type(), kSpotLight);
   light_ = ptr;
 }
@@ -123,16 +123,15 @@ void SpotLightController::OnDragging(const ui::MouseEvent& e) {
 void SpotLightController::OnDragEnd(const ui::MouseEvent& e) {
 }
 
-void SpotLightController::UpdateFrame(const FrameArgs& args) {
+void SpotLightController::UpdateFrame(const FrameArgs& args) {}
+
+void SpotLightController::RenderFrame(Renderer* renderer) {
   const UniverseLight& data = light_->data();
   Vector3 position(data.position[0], data.position[1], data.position[2]);
   object_->set_inner_color(Vector4(0.75f, 0.75f, 0.75f, 0.2f));
   object_->set_outer_color(Vector4(0.9f,   0.9f,  0.9f, 0.4f));
   object_->set_position(position);
   object_->Update(context()->camera());
-}
-
-void SpotLightController::RenderFrame(Renderer* renderer) {
   object_->Render(renderer);
 }
 

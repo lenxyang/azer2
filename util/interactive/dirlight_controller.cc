@@ -46,6 +46,7 @@ void DirLightControllerObj::Render(const Camera* camera, Renderer* renderer) {
   mtrl.diffuse = color_;
   mtrl.ambient = mtrl.diffuse * 0.4f;
   mtrl.specular = mtrl.diffuse * 0.1f;
+  mtrl.emission = mtrl.diffuse * 0.4f;
   mtrl.alpha = 1.0f;
   effect_->SetMaterial(mtrl);
   effect_->SetWorld(world_);
