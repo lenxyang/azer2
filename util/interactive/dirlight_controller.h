@@ -27,8 +27,7 @@ class DirLightControllerObj {
   void set_position(const Vector3& pos);
   void set_orientation(const Quaternion& q);
   void set_color(const Vector4& c);
-  void Update(const Camera* camera);
-  void Render(Renderer* renderer);
+  void Render(const Camera* camera, Renderer* renderer);
  private:
   void OnParamUpdate();
   EntityPtr arrow_;
@@ -40,16 +39,30 @@ class DirLightControllerObj {
   DISALLOW_COPY_AND_ASSIGN(DirLightControllerObj);
 };
 
+class DirLightObject : public ::base::RefCounted<DirLightObject> {
+ public:
+  explicit DirLightObject(Light* light);
+
+  Light* light() { return light_.get();}
+  void set_position(const Vector3& pos) { position_ = pos;}
+  const Vector3& position() const { return position_;}
+  void Render(const Camera* camera, Renderer* renderer);
+ private:
+  Vector3 position_;
+  LightPtr light_;
+  scoped_ptr<DirLightControllerObj> object_;
+  DISALLOW_COPY_AND_ASSIGN(DirLightObject);
+};
+
 class DirLightController : public InteractiveController,
                            public RotateControllerObserver {
  public:
-  DirLightController(Light* light, InteractiveContext* ctx);
+  explicit DirLightController(InteractiveContext* ctx);
   ~DirLightController() override;
 
-  void set_position(const Vector3& pos);
-  const Vector3& position() const;
-  void show_rotate_controller(bool b);
-
+  void SetDirLightObj(DirLightObject* obj);
+  Light* light() { return lightobj()->light();}
+  DirLightObject* lightobj() { return lightobj_.get();}
   void OnActive() override;
   void OnDeactive() override;
   int32 GetPicking(const gfx::Point& pt) override;
@@ -65,12 +78,9 @@ class DirLightController : public InteractiveController,
   void OnRotateEnd(RotateController* controller) override;
  private:
   void UpdateParam();
-  bool show_rotate_controller_;
   bool dragging_;
-  LightPtr light_;
-
+  scoped_refptr<DirLightObject> lightobj_;
   scoped_ptr<RotateController> controller_;
-  scoped_ptr<DirLightControllerObj> object_;
   DISALLOW_COPY_AND_ASSIGN(DirLightController);
 };
 }  // namespace azer

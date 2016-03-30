@@ -200,7 +200,7 @@ const Vector3& Light::position() const {
 }
 
 const Vector3& Light::directional() const {
-  return *(Vector3*)(&data_.position);
+  return *(Vector3*)(&data_.directional);
 }
 
 const Vector4& Light::diffuse() const {

@@ -10,7 +10,8 @@ InteractiveContext::InteractiveContext(nelf::RenderWindow* window,
     : window_(window),
       activated_(-1),
       draging_(false),
-      camera_(camera) {
+      camera_(camera),
+      args_(NULL)  {
 }
 
 void InteractiveContext::Activate(InteractiveController* controller) {
@@ -120,16 +121,17 @@ void InteractiveContext::OnDragEnd(const ui::MouseEvent& event) {
 }
 
 void InteractiveContext::Update(const FrameArgs& args) {
+  args_ = &args;
   if (activated_ >= 0) {
     InteractiveController* controller = controllers_[activated_];
-    controller->UpdateFrame(args);
+    controller->Update(args);
   }
 }
 
 void InteractiveContext::Render(Renderer* renderer) {
   if (activated_ >= 0) {
     InteractiveController* controller = controllers_[activated_];
-    controller->RenderFrame(renderer);
+    controller->Render(renderer);
   }
 }
 }  // namespace azer

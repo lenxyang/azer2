@@ -5,7 +5,8 @@
 
 namespace azer {
 InteractiveController::InteractiveController(InteractiveContext* ctx)
-    : context_(ctx) {
+    : context_(ctx),
+      activate_frame_(false) {
 }
 
 InteractiveController::~InteractiveController() {}
@@ -42,9 +43,21 @@ void InteractiveController::HitTest(const gfx::Point& pt) {
 
 void InteractiveController::Activate() {
   context()->Activate(this);
+  activate_frame_ = true;
 }
 
 void InteractiveController::Deactivate() {
   context()->Deactivate(this);
+}
+
+void InteractiveController::Update(const FrameArgs& args) {
+  UpdateFrame(args);
+}
+
+void InteractiveController::Render(Renderer* renderer) {
+  if (!activate_frame_) {
+    RenderFrame(renderer);
+  }
+  activate_frame_ = false;
 }
 }

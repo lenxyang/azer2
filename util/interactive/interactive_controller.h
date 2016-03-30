@@ -48,6 +48,8 @@ class InteractiveController {
 
   void Activate();
   void Deactivate();
+  void Update(const FrameArgs& args);
+  void Render(Renderer* renderer);
 
   virtual void OnActive() {}
   virtual void OnDeactive() {}
@@ -75,6 +77,7 @@ class InteractiveController {
   int32 state_;
   ObserverList<InteractiveControllerObserver> observer_list_;
   InteractiveContext* context_;
+  bool activate_frame_;
   DISALLOW_COPY_AND_ASSIGN(InteractiveController);
 };
 
