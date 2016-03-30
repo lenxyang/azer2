@@ -39,6 +39,24 @@ int InteractiveContext::GetIndexOf(InteractiveController* controller) const {
   return i != controllers_.end() ? static_cast<int>(i - controllers_.begin()) : -1;
 }
 
+bool InteractiveContext::OnKeyPressed(const ui::KeyEvent& event) {
+  if (activated_ >= 0) {
+    InteractiveController* controller = controllers_[activated_];
+    return controller->OnKeyPressed(event);
+  } else {
+    return true;
+  }
+}
+
+bool InteractiveContext::OnKeyReleased(const ui::KeyEvent& event) {
+  if (activated_ >= 0) {
+    InteractiveController* controller = controllers_[activated_];
+    return controller->OnKeyReleased(event);
+  } else {
+    return true;
+  }
+}
+
 void InteractiveContext::OnMousePressed(const ui::MouseEvent& event) {
   OnDragBegin(event);
 }

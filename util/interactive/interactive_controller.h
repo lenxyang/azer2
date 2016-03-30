@@ -50,10 +50,9 @@ class InteractiveController {
   virtual void OnDragBegin(const gfx::Point& pt) {}
   virtual void OnDrag(const gfx::Point& pt) {};
   virtual void OnDragEnd(const gfx::Point& pt) {}
-  virtual void OnMousePressed(const ui::MouseEvent& event) {}
-  virtual void OnMouseDragged(const ui::MouseEvent& event) {}
-  virtual void OnMouseReleased(const ui::MouseEvent& event) {}
-  virtual void OnMouseMoved(const ui::MouseEvent& event) {}
+
+  virtual bool OnKeyPressed(const ui::KeyEvent& event) {}
+  virtual bool OnKeyReleased(const ui::KeyEvent& event) {}
   void HitTest(const gfx::Point& pt);
 
   // render

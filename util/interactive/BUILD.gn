@@ -6,6 +6,8 @@ static_library("interactive") {
     "axes_frame.h",
     "bounding_box.cc",
     "bounding_box.h",
+    "camera_controller.cc",
+    "camera_controller.h",
     "camera_overlay.cc",
     "camera_overlay.h",
     "env.cc",
