@@ -22,15 +22,19 @@ class DirLightControllerObj {
  public:
   DirLightControllerObj();
 
-  void set_scale(const Vector3& scale) { scale_ = scale;}
-  void set_postion(const Vector3& pos) { position_ = pos;}
-  void set_orientation(const Quaternion& quaternion) { quaternion_ = q;}
+  const Vector3& position() const { return position_;}
+  void set_scale(const Vector3& v) { scale_ = v;}
+  void set_position(const Vector3& pos) { position_ = pos;}
+  void set_orientation(const Quaternion& q) { orientation_ = q;}
   void set_color(const Vector4& c) { color_ = c;}
   void Update(const Camera* camera);
   void Render(Renderer* renderer);
  private:
   EntityPtr arrow_;
   Vector4 color_;
+  Vector3 scale_;
+  Vector3 position_;
+  Quaternion orientation_;
   scoped_refptr<ColorEffect> effect_;
   DISALLOW_COPY_AND_ASSIGN(DirLightControllerObj);
 };
@@ -43,6 +47,7 @@ class DirLightController : public InteractiveController,
 
   void set_position(const Vector3& pos);
   const Vector3& position() const;
+  void show_rotate_controller(bool b);
 
   int32 GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const gfx::Point& pt) override;
@@ -53,11 +58,14 @@ class DirLightController : public InteractiveController,
 
   // override from DirLightController
   void OnRotateBegin(RotateController* controller) override;
-  void OnTranslating(RotateController* controller) override;
+  void OnRotating(RotateController* controller) override;
   void OnRotateEnd(RotateController* controller) override;
  private:
+  bool show_rotate_controller_;
+  bool dragging_;
   LightPtr light_;
-  InteractiveController* controller_;
+
+  scoped_ptr<RotateController> controller_;
   scoped_ptr<DirLightControllerObj> object_;
   DISALLOW_COPY_AND_ASSIGN(DirLightController);
 };

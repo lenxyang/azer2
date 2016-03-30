@@ -25,6 +25,7 @@ class InteractiveEnv {
   Effect* GetEffect(const std::string& name);
   EffectAdapterContext* effect_context();
   Blending* blending() { return blending_.get();}
+  Blending* a2c_blending() { return a2c_blending_.get();}
   Texture* GetTexture(int32 id);
   ResourcePack* resource_pack();
   RasterizerState* noncull_rasterizer_state() { return noncull_rasterizer_state_;}
@@ -35,6 +36,7 @@ class InteractiveEnv {
 
   LightPtr light_;
   BlendingPtr blending_;
+  BlendingPtr a2c_blending_;
   RasterizerStatePtr noncull_rasterizer_state_;
   DepthStencilStatePtr depth_disabled_state_;
   friend struct ::base::DefaultLazyInstanceTraits<InteractiveEnv>;

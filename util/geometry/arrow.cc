@@ -19,16 +19,16 @@ EntityDataPtr CreateArrow(VertexDesc* desc) {
 
   GeoConeParam cone_param;
   cone_param.height = 0.25f;
-  cone_param.radius = 0.25f;
+  cone_param.radius = 0.125f;
   cone_param.slice = 64;
   Matrix4 cone_mat = rot * Translate(0.0f, 0.75f, 0.0f);
   AppendGeoConeData(data, cone_param, cone_mat);
 
   GeoCylinderParam cylinder_param;
-  cylinder_param.top_radius = 0.1f;
-  cylinder_param.bottom_radius = 0.1f;
+  cylinder_param.top_radius = 0.05f;
+  cylinder_param.bottom_radius = cylinder_param.top_radius;
   cylinder_param.height = 0.75f;
-  cylinder_param.slice = 128;
+  cylinder_param.slice = 64;
   cylinder_param.stack = 5;
   AppendGeoCylinderSubset(data, cylinder_param, rot);
   return data;

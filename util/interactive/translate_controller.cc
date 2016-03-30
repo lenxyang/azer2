@@ -182,7 +182,7 @@ void TranslateControlObj::Render(Renderer* renderer) {
     renderer->SetDepthStencilState(env->depth_disabled_state(), 0x0);
     for (uint32 i = 0; i < arraysize(colors_); ++i) {
       if (i == kPlaneXY) {
-        renderer->SetBlending(env->blending(), 0, 0xffffffff);
+        renderer->SetBlending(env->a2c_blending(), 0, 0xffffffff);
       }
       ambient_effect_->SetAmbient(colors_[i]);
       renderer->BindEffect(ambient_effect_);

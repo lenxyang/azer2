@@ -36,8 +36,10 @@ InteractiveEnv::InteractiveEnv() {
   blend_desc.desc[0].alpha_oper = Blending::kAdd;
   blend_desc.desc[0].mask = Blending::kWriteColor;
   blend_desc.desc_count = 1;
-  blend_desc.alpha_to_converage = true;
+  blend_desc.alpha_to_converage = false;
   blending_ = rs->CreateBlending(blend_desc);
+  blend_desc.alpha_to_converage = true;
+  a2c_blending_ = rs->CreateBlending(blend_desc);
 
   noncull_rasterizer_state_ = rs->CreateRasterizerState();
   noncull_rasterizer_state_->SetCullingMode(kCullNone);

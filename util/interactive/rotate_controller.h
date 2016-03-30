@@ -11,6 +11,7 @@
 namespace azer {
 class EntityData;
 class Camera;
+class RotateController;
 class InteractiveContext;
 
 class RotateControllerObj {
