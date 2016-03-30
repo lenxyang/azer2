@@ -114,13 +114,13 @@ int32 SpotLightController::GetPicking(const gfx::Point& pt) {
   return 0;
 }
 
-void SpotLightController::OnDragBegin(const gfx::Point& pt) {
+void SpotLightController::OnDragBegin(const ui::MouseEvent& e) {
 }
 
-void SpotLightController::OnDrag(const gfx::Point& pt) {
+void SpotLightController::OnDragging(const ui::MouseEvent& e) {
 }
 
-void SpotLightController::OnDragEnd(const gfx::Point& pt) {
+void SpotLightController::OnDragEnd(const ui::MouseEvent& e) {
 }
 
 void SpotLightController::UpdateFrame(const FrameArgs& args) {

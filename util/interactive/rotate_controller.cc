@@ -172,17 +172,63 @@ int32 RotateController::GetPicking(const gfx::Point& screenpt) {
   }
 }
 
-void RotateController::OnDragBegin(const gfx::Point& screenpt) {
+void RotateController::OnDragBegin(const ui::MouseEvent& e) {
   Vector3 offset;
-  int state = GetPicking(screenpt);
+  int state = GetPicking(e.location());
   set_state(state);
-  Ray ray = std::move(context()->GetPickingRay(screenpt));
+  Ray ray = std::move(context()->GetPickingRay(e.location()));
+
+  org_orientation_ = orientation_;
+  location_ = e.location();
+  FOR_EACH_OBSERVER(RotateControllerObserver, observer_list_, 
+                    OnRotateBegin(this));
 }
 
-void RotateController::OnDrag(const gfx::Point& pt) {
+void RotateController::OnDragging(const ui::MouseEvent& e) {
+  orientation_ = CalcOrientation(e.location());
+  FOR_EACH_OBSERVER(RotateControllerObserver, observer_list_, 
+                    OnRotating(this));
 }
 
-void RotateController::OnDragEnd(const gfx::Point& pt) {
+void RotateController::OnDragEnd(const ui::MouseEvent& e) {
+  orientation_ = CalcOrientation(e.location());
+  FOR_EACH_OBSERVER(RotateControllerObserver, observer_list_, 
+                    OnRotateEnd(this));
+}
+
+Quaternion RotateController::CalcOrientation(const gfx::Point& pt) {
+  gfx::Rect bounds = context()->window()->GetContentsBounds();
+  float width = bounds.width();
+  float height = bounds.height();
+  Quaternion quad;
+  switch (state()) {
+    case kHitAxisX: {
+      float offset = (float)(pt.y() - location_.y()) / height;
+      Radians rad(kPI * 4.0f * offset);
+      quad = Quaternion(Vector3(1.0f, 0.0f, 0.0f), rad);
+      break;
+    }
+    case kHitAxisY: {
+      float offset = (float)(pt.x() - location_.x()) / width;
+      Radians rad(kPI * 4.0f * offset);
+      quad = Quaternion(Vector3(0.0f, 1.0f, 0.0f), rad);
+      break;
+    }
+    case kHitAxisZ: {
+      float offset = (float)(pt.x() - location_.x()) / width;
+      Radians rad(kPI * 4.0f * offset);
+      quad = Quaternion(Vector3(0.0f, 0.0f, 1.0f), rad);
+      break;
+    }
+    default:
+      quad = Quaternion();
+      break;
+  }
+
+  quad.Normalize();
+  Quaternion q = std::move(quad * org_orientation_);
+  q.Normalize();
+  return q;
 }
 
 void RotateController::UpdateFrame(const FrameArgs& args) {

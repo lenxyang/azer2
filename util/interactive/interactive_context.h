@@ -17,6 +17,7 @@ class InteractiveContext : public nelf::EventListener {
   InteractiveContext(nelf::RenderWindow* window, const Camera* camera);
 
   void Activate(InteractiveController* controller);
+  void Deactivate(InteractiveController* controller);
   void AddController(InteractiveController* controller);
   void RemoveController(InteractiveController* controller);
   int GetIndexOf(InteractiveController* controller) const;
@@ -27,8 +28,9 @@ class InteractiveContext : public nelf::EventListener {
   const Camera* camera() const { return camera_;}
   Ray GetPickingRay(const gfx::Point& pt);
  protected:
-  bool OnKeyPressed(const ui::KeyEvent& event) override;
-  bool OnKeyReleased(const ui::KeyEvent& event) override;
+  // override from nelf::EventListener
+  void OnKeyPressed(const ui::KeyEvent& event) override;
+  void OnKeyReleased(const ui::KeyEvent& event) override;
   void OnMousePressed(const ui::MouseEvent& event) override;
   void OnMouseDragged(const ui::MouseEvent& event) override;
   void OnMouseReleased(const ui::MouseEvent& event) override;

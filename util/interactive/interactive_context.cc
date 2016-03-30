@@ -14,9 +14,21 @@ InteractiveContext::InteractiveContext(nelf::RenderWindow* window,
 }
 
 void InteractiveContext::Activate(InteractiveController* controller) {
+  if (activated_ >= 0) {
+    controllers_[activated_]->OnDeactive();
+  }
+
   int index = GetIndexOf(controller);
   DCHECK_GE(index, 0);
   activated_ = index;
+  controller->OnActive();
+}
+
+void InteractiveContext::Deactivate(InteractiveController* controller) {
+  int index = GetIndexOf(controller);
+  DCHECK_EQ(index, activated_);
+  activated_ = -1;
+  controller->OnDeactive();
 }
 
 void InteractiveContext::AddController(InteractiveController* controller) {
@@ -39,21 +51,17 @@ int InteractiveContext::GetIndexOf(InteractiveController* controller) const {
   return i != controllers_.end() ? static_cast<int>(i - controllers_.begin()) : -1;
 }
 
-bool InteractiveContext::OnKeyPressed(const ui::KeyEvent& event) {
+void InteractiveContext::OnKeyPressed(const ui::KeyEvent& event) {
   if (activated_ >= 0) {
     InteractiveController* controller = controllers_[activated_];
-    return controller->OnKeyPressed(event);
-  } else {
-    return true;
+    controller->OnKeyPressed(event);
   }
 }
 
-bool InteractiveContext::OnKeyReleased(const ui::KeyEvent& event) {
+void InteractiveContext::OnKeyReleased(const ui::KeyEvent& event) {
   if (activated_ >= 0) {
     InteractiveController* controller = controllers_[activated_];
-    return controller->OnKeyReleased(event);
-  } else {
-    return true;
+    controller->OnKeyReleased(event);
   }
 }
 
@@ -91,7 +99,7 @@ void InteractiveContext::OnDragBegin(const ui::MouseEvent& event) {
     int ret = controller->GetPicking(event.location());
     if (ret > 0) {
       draging_ = true;
-      controller->OnDragBegin(event.location());
+      controller->OnDragBegin(event);
     }
   }
 }
@@ -99,14 +107,14 @@ void InteractiveContext::OnDragBegin(const ui::MouseEvent& event) {
 void InteractiveContext::OnDrag(const ui::MouseEvent& event) {
   if (draging_) {
     InteractiveController* controller = controllers_[activated_];
-    controller->OnDrag(event.location());
+    controller->OnDragging(event);
   }
 }
 
 void InteractiveContext::OnDragEnd(const ui::MouseEvent& event) {
   if (draging_) {
     InteractiveController* controller = controllers_[activated_];
-    controller->OnDragEnd(event.location());
+    controller->OnDragEnd(event);
     draging_ = false;
   }
 }

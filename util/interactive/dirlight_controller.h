@@ -23,13 +23,14 @@ class DirLightControllerObj {
   DirLightControllerObj();
 
   const Vector3& position() const { return position_;}
-  void set_scale(const Vector3& v) { scale_ = v;}
-  void set_position(const Vector3& pos) { position_ = pos;}
-  void set_orientation(const Quaternion& q) { orientation_ = q;}
-  void set_color(const Vector4& c) { color_ = c;}
+  void set_scale(const Vector3& v);
+  void set_position(const Vector3& pos);
+  void set_orientation(const Quaternion& q);
+  void set_color(const Vector4& c);
   void Update(const Camera* camera);
   void Render(Renderer* renderer);
  private:
+  void OnParamUpdate();
   EntityPtr arrow_;
   Vector4 color_;
   Vector3 scale_;
@@ -49,10 +50,12 @@ class DirLightController : public InteractiveController,
   const Vector3& position() const;
   void show_rotate_controller(bool b);
 
+  void OnActive() override;
+  void OnDeactive() override;
   int32 GetPicking(const gfx::Point& pt) override;
-  void OnDragBegin(const gfx::Point& pt) override;
-  void OnDrag(const gfx::Point& pt) override;
-  void OnDragEnd(const gfx::Point& pt) override;
+  void OnDragBegin(const ui::MouseEvent& e) override;
+  void OnDragging(const ui::MouseEvent& e) override;
+  void OnDragEnd(const ui::MouseEvent& e) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
 
@@ -61,6 +64,7 @@ class DirLightController : public InteractiveController,
   void OnRotating(RotateController* controller) override;
   void OnRotateEnd(RotateController* controller) override;
  private:
+  void UpdateParam();
   bool show_rotate_controller_;
   bool dragging_;
   LightPtr light_;

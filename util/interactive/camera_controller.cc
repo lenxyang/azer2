@@ -1,6 +1,8 @@
 #include "azer/util/interactive/camera_controller.h"
 
 #include "azer/render/camera.h"
+#include "azer/render/frame_args.h"
+#include "azer/util/interactive/interactive_context.h"
 
 namespace azer {
 CameraController::CameraController(InteractiveContext* ctx)
@@ -70,39 +72,33 @@ bool CameraController::OnKeyReleased(const ui::KeyEvent& event) {
   }
 }
 
-bool CameraController::OnMousePressed(const ui::MouseEvent& event) {
+int32 CameraController::GetPicking(const gfx::Point& pt) {
+  return 1;
+}
+
+void CameraController::OnDragBegin(const ui::MouseEvent& event) {
   location_ = event.location();
   if (event.IsLeftMouseButton() && event.GetClickCount() == 1) {
-    origin_orient_ = camera_->holder().orientation();
+    origin_orient_ = camera()->holder().orientation();
     orientation_dragging_ = true;
-    return true;
-  } else {
-    return false;
   }
 }
 
-bool CameraController::OnMouseDragged(const ui::MouseEvent& event) {
+void CameraController::OnDragging(const ui::MouseEvent& event) {
   if (orientation_dragging_) {
     RotateCamera(location_, event.location());
-    return true;
-  } else {
-    return false;
   }
 }
 
-bool CameraController::OnMouseReleased(const ui::MouseEvent& event) {
+void CameraController::OnDragEnd(const ui::MouseEvent& event) {
   if (orientation_dragging_) {
     RotateCamera(location_, event.location());
     orientation_dragging_ = false;
-    return true;
-  } else {
-    return false;
   }
 }
 
-void CameraController::RotateCamera(const gfx::Point& prev, 
-                                    const gfx::Point& cur) {
-  TransformHolder* holder = camera_->mutable_holder();
+void CameraController::RotateCamera(const gfx::Point& prev, const gfx::Point& cur) {
+  TransformHolder* holder = camera()->mutable_holder();
   holder->set_orientation(origin_orient_);
   Degree to_yaw = Degree(cur.x() - prev.x()) * 0.2f;
   // holder->yaw(to_yaw);
@@ -111,13 +107,22 @@ void CameraController::RotateCamera(const gfx::Point& prev,
   holder->pitch(to_pitch);
 }
 
-void CameraController::Update(const azer::FrameArgs& args) {
-  DCHECK(camera_);
+void CameraController::UpdateFrame(const azer::FrameArgs& args) {
+  DCHECK(camera());
   float unit = args.delta().InSecondsF() * move_speed_;
-  TransformHolder* holder = camera_->mutable_holder();
+  TransformHolder* holder = camera()->mutable_holder();
   holder->strafe((posx_ - negx_) * unit);
   holder->walk((posz_ - negz_) * unit);
   holder->fly((posy_ - negy_)* unit);
-  camera_->Update();
+  camera()->Update();
+}
+
+const Camera* CameraController::camera() const {
+  return context()->camera();
+}
+
+Camera* CameraController::camera() {
+  return const_cast<Camera*>(
+      const_cast<const CameraController*>(this)->camera());
 }
 }  // namespace azer

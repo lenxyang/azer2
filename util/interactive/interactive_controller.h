@@ -46,13 +46,17 @@ class InteractiveController {
   InteractiveContext* context() { return context_;}
   const InteractiveContext* context() const { return context_;}
 
-  virtual int32 GetPicking(const gfx::Point& pt) = 0;
-  virtual void OnDragBegin(const gfx::Point& pt) {}
-  virtual void OnDrag(const gfx::Point& pt) {};
-  virtual void OnDragEnd(const gfx::Point& pt) {}
+  void Activate();
+  void Deactivate();
 
-  virtual bool OnKeyPressed(const ui::KeyEvent& event) {}
-  virtual bool OnKeyReleased(const ui::KeyEvent& event) {}
+  virtual void OnActive() {}
+  virtual void OnDeactive() {}
+  virtual int32 GetPicking(const gfx::Point& pt) = 0;
+  virtual void OnDragBegin(const ui::MouseEvent& e) {}
+  virtual void OnDragging(const ui::MouseEvent& e) {};
+  virtual void OnDragEnd(const ui::MouseEvent& e) {}
+  virtual bool OnKeyPressed(const ui::KeyEvent& event) { return false;}
+  virtual bool OnKeyReleased(const ui::KeyEvent& event) { return false;}
   void HitTest(const gfx::Point& pt);
 
   // render

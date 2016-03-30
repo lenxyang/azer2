@@ -287,12 +287,12 @@ int32 TranslateController::GetPicking(const gfx::Point& screenpt) {
   }
 }
 
-void TranslateController::OnDragBegin(const gfx::Point& screenpt) {
+void TranslateController::OnDragBegin(const ui::MouseEvent& e) {
   Vector3 offset;
   origin_position_ = position_;
-  int state = GetPicking(screenpt);
+  int state = GetPicking(e.location());
   set_state(state);
-  Ray ray = std::move(context()->GetPickingRay(screenpt));
+  Ray ray = std::move(context()->GetPickingRay(e.location()));
   GetDragInitPos(ray, &draginit_pos_);
   CalcDragOffset(ray, &offset);
   position_ = origin_position_ + offset;
@@ -300,8 +300,8 @@ void TranslateController::OnDragBegin(const gfx::Point& screenpt) {
                     OnTranslateBegin(this));
 }
 
-void TranslateController::OnDrag(const gfx::Point& screenpt) {
-  Ray ray = std::move(context()->GetPickingRay(screenpt));
+void TranslateController::OnDragging(const ui::MouseEvent& e) {
+  Ray ray = std::move(context()->GetPickingRay(e.location()));
   Vector3 offset;
   CalcDragOffset(ray, &offset);
   position_ = origin_position_ + offset;
@@ -309,8 +309,8 @@ void TranslateController::OnDrag(const gfx::Point& screenpt) {
                     OnTranslating(this));
 }
 
-void TranslateController::OnDragEnd(const gfx::Point& screenpt) {
-  Ray ray = std::move(context()->GetPickingRay(screenpt));
+void TranslateController::OnDragEnd(const ui::MouseEvent& e) {
+  Ray ray = std::move(context()->GetPickingRay(e.location()));
   Vector3 offset;
   CalcDragOffset(ray, &offset);
   position_ = origin_position_ + offset;

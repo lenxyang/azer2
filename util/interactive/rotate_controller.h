@@ -68,9 +68,9 @@ class RotateController : public InteractiveController {
   ~RotateController() override;
 
   int32 GetPicking(const gfx::Point& pt) override;
-  void OnDragBegin(const gfx::Point& pt) override;
-  void OnDrag(const gfx::Point& pt) override;
-  void OnDragEnd(const gfx::Point& pt) override;
+  void OnDragBegin(const ui::MouseEvent& e) override;
+  void OnDragging(const ui::MouseEvent& e) override;
+  void OnDragEnd(const ui::MouseEvent& e) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
 
@@ -84,7 +84,10 @@ class RotateController : public InteractiveController {
   void RemoveRotateObserver(RotateControllerObserver* observer);
   bool HasRotateObserver(RotateControllerObserver* observer);
  private:
-  const Quaternion orientation_;
+  Quaternion CalcOrientation(const gfx::Point& pt);
+  Quaternion orientation_;
+  Quaternion org_orientation_;
+  gfx::Point location_;
   Vector3 scale_;
   Vector3 position_;
   scoped_ptr<RotateControllerObj> object_;

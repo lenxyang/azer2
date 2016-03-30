@@ -79,9 +79,9 @@ class TranslateController : public InteractiveController {
   };
 
   int32 GetPicking(const gfx::Point& pt) override;
-  void OnDragBegin(const gfx::Point& pt) override;
-  void OnDrag(const gfx::Point& pt) override;
-  void OnDragEnd(const gfx::Point& pt) override;
+  void OnDragBegin(const ui::MouseEvent& e) override;
+  void OnDragging(const ui::MouseEvent& e) override;
+  void OnDragEnd(const ui::MouseEvent& e) override;
   void UpdateFrame(const FrameArgs& args) override;
   void RenderFrame(Renderer* renderer) override;
 

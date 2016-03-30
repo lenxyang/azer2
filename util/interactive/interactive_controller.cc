@@ -39,4 +39,12 @@ void InteractiveController::set_state(int32 state) {
 void InteractiveController::HitTest(const gfx::Point& pt) {
   state_ = GetPicking(pt);
 }
+
+void InteractiveController::Activate() {
+  context()->Activate(this);
+}
+
+void InteractiveController::Deactivate() {
+  context()->Deactivate(this);
+}
 }
