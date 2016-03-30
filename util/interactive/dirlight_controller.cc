@@ -102,6 +102,7 @@ void DirLightController::UpdateFrame(const FrameArgs& args) {
   object_->set_color(light_->diffuse());
   object_->set_orientation(quad);
   object_->Update(context()->camera());
+  controller_->set_state(state());
   controller_->UpdateFrame(args);
 }
 

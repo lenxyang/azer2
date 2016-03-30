@@ -2,6 +2,7 @@
 
 #include "base/observer_list.h"
 #include "ui/gfx/geometry/point.h"
+#include "ui/events/event.h"
 #include "azer/base/export.h"
 #include "azer/math/ray.h"
 #include "azer/math/vector3.h"
@@ -49,6 +50,10 @@ class InteractiveController {
   virtual void OnDragBegin(const gfx::Point& pt) {}
   virtual void OnDrag(const gfx::Point& pt) {};
   virtual void OnDragEnd(const gfx::Point& pt) {}
+  virtual void OnMousePressed(const ui::MouseEvent& event) {}
+  virtual void OnMouseDragged(const ui::MouseEvent& event) {}
+  virtual void OnMouseReleased(const ui::MouseEvent& event) {}
+  virtual void OnMouseMoved(const ui::MouseEvent& event) {}
   void HitTest(const gfx::Point& pt);
 
   // render
