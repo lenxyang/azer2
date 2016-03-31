@@ -125,4 +125,11 @@ Camera* CameraController::camera() {
   return const_cast<Camera*>(
       const_cast<const CameraController*>(this)->camera());
 }
+
+void CameraController::OnActive() {
+}
+
+void CameraController::OnDeactive() {
+  ResetState();
+}
 }  // namespace azer

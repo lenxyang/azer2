@@ -136,7 +136,7 @@ void SpotLightDirectionalObject::Render(Renderer* renderer) {
 
   ScopedResetBlending scoped_blending(renderer);
   ScopedRasterizerState scoped_state(renderer);
-  renderer->SetBlending(env->blending(), 0, 0xffffffff);
+  renderer->SetBlending(env->a2c_blending(), 0, 0xffffffff);
   renderer->SetRasterizerState(env->noncull_rasterizer_state());
   ColorMaterialData inner_mtrl;
   inner_mtrl.diffuse = inner_color_;

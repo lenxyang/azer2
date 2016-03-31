@@ -20,6 +20,8 @@ class CameraController : public InteractiveController {
   explicit CameraController(InteractiveContext* ctx);
   ~CameraController() override;
 
+  void OnActive() override;
+  void OnDeactive() override;
   int32 GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const ui::MouseEvent& e) override;
   void OnDragging(const ui::MouseEvent& e) override;
