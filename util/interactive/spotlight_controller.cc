@@ -164,6 +164,7 @@ SpotLightController::SpotLightController(InteractiveContext* ctx)
     : InteractiveController(ctx),
       mode_(kNone) ,
       new_mode_(kNone) {
+  scale_ = Vector3(2.0f, 2.0f, 2.0f);
   translate_controller_.reset(new TranslateController(ctx));
   rotate_controller_.reset(new RotateController(ctx));
 }
@@ -223,13 +224,18 @@ void SpotLightController::UpdateFrame(const FrameArgs& args) {
   object_->set_position(light_->position());
   object_->set_orientation(quad);
   object_->Update(*context()->camera());
-  translate_controller_->set_scale(Vector3(0.5f, 0.5f, 0.5f));
-  translate_controller_->set_position(light_->position());
-  rotate_controller_->set_scale(Vector3(0.5f, 0.5f, 0.5f));
-  rotate_controller_->set_position(light_->position());
 
-  rotate_controller_->UpdateFrame(args);
-  translate_controller_->UpdateFrame(args);
+  if (mode_ == kRotate) {
+    translate_controller_->set_scale(scale_);
+    rotate_controller_->set_state(state());
+    rotate_controller_->set_position(light_->position());
+    rotate_controller_->UpdateFrame(args);
+  } else if (mode_ == kTranslate) {
+    translate_controller_->set_state(state());
+    translate_controller_->set_scale(scale_);
+    translate_controller_->set_position(light_->position());
+    translate_controller_->UpdateFrame(args);
+  }
 }
 
 void SpotLightController::RenderFrame(Renderer* renderer) {

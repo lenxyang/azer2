@@ -92,6 +92,8 @@ class SpotLightController : public InteractiveController,
   
   void SetLight(Light* ptr);
   void set_mode(int32 mode);
+  const Vector3& scale() const { return scale_;}
+  void set_scale(const Vector3& v) { scale_ = v;}
 
   int32 GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const ui::MouseEvent& e) override;
@@ -117,6 +119,7 @@ class SpotLightController : public InteractiveController,
   LightPtr light_;
   int32 mode_;
   int32 new_mode_;
+  Vector3 scale_;
   scoped_ptr<TranslateController> translate_controller_;
   scoped_ptr<RotateController> rotate_controller_;
   scoped_ptr<SpotLightDirectionalObject> object_;
