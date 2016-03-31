@@ -20,27 +20,27 @@ SpotLightObject::SpotLightObject(Light* light)
 
   const float kConeHeight = 0.5f;
   const float kCylinderHeight = 0.5f;
+  const float kTotalHeight = kConeHeight + kCylinderHeight;
   VertexDataPtr vdata(new VertexData(effect_->vertex_desc(), 1));
   IndicesDataPtr idata(new IndicesData(1));
   EntityDataPtr data(new EntityData(vdata, idata));
   Matrix4 rot = std::move(RotateX(Degree(-90.0f)));
+  Matrix4 world = std::move(Translate(0.0f, 0.0f, -kTotalHeight));
+  {
+    GeoCylinderParam param;
+    param.bottom_radius = param.top_radius = 0.1f;
+    param.height = kCylinderHeight;
+    Matrix4 mat = world * rot;
+    AppendGeoCylinderSubset(data, param, mat);    
+  }
+
   {
     GeoCylinderParam param;
     param.top_radius = 0.25f;
     param.bottom_radius = param.top_radius * 0.5f;
     param.height = kConeHeight;
-    float depth = -kConeHeight;
-    Matrix4 mat = Translate(0.0f, 0.0f, depth) * rot;
+    Matrix4 mat = world * rot * Translate(0.0f, kCylinderHeight, 0.0f);
     AppendGeoCylinderSubset(data, param, mat);
-  }
-
-  {
-    GeoCylinderParam param;
-    param.bottom_radius = param.top_radius = 0.1f;
-    param.height = kCylinderHeight;
-    float depth = 0.0f - kCylinderHeight - kConeHeight;
-    Matrix4 mat = Translate(0.0f, 0.0f, depth) * rot;
-    AppendGeoCylinderSubset(data, param, mat);    
   }
 
   entity_ = new Entity(data);
@@ -54,7 +54,7 @@ void SpotLightObject::Render(const Camera& camera, Renderer* renderer) {
 
   Quaternion quad;
   CalcSceneOrientForZDirection(light_->directional(), &quad);
-  Matrix4 world_ = std::move(Translate(light_->position()))
+  Matrix4 world = std::move(Translate(light_->position()))
       * std::move(quad.ToMatrix())
       * std::move(Scale(scale_));
   
@@ -62,10 +62,10 @@ void SpotLightObject::Render(const Camera& camera, Renderer* renderer) {
   mtrl.diffuse = light_->diffuse();
   mtrl.ambient = mtrl.diffuse * 0.4f;
   mtrl.specular = mtrl.diffuse * 0.1f;
-  mtrl.emission = mtrl.diffuse * 0.4f;
+  mtrl.emission = mtrl.diffuse * 0.1f;
   mtrl.alpha = 1.0f;
   effect_->SetMaterial(mtrl);
-  effect_->SetWorld(world_);
+  effect_->SetWorld(world);
   effect_->SetPV(camera.GetProjViewMatrix());
   effect_->SetLightData(&env->light()->data(), 1);
   renderer->BindEffect(effect_);
@@ -94,20 +94,18 @@ void SpotLightDirectionalObject::InitCircle() {
 }
 
 void SpotLightDirectionalObject::InitBarrel() {
-  float top_radius = kTopRadius;
   float inner_sine = std::sqrt(1 - theta_ * theta_);
   float inner_radius = range_ * inner_sine / theta_;
   float outer_sine = std::sqrt(1 - phi_ * phi_);
   float outer_radius = range_ * outer_sine / phi_;
-  
-  Matrix4 mat = std::move(RotateX(Degree(-90.0f)))
-      * std::move(Translate(0.0f, -range_, 0.0f));
+
+  Matrix4 mat = std::move(RotateX(Degree(-90.0f)));
   GeoCylinderParam p;
   p.height = range_;
   p.stack = 5;
-  p.top_radius = top_radius;
+  p.bottom_radius = kTopRadius;
   {
-    p.bottom_radius = inner_radius;
+    p.top_radius = inner_radius;
     VertexDataPtr vdata(new VertexData(color_effect_->vertex_desc(), 1));
     IndicesDataPtr idata(new IndicesData(1));
     EntityDataPtr data(new EntityData(vdata, idata));
@@ -116,7 +114,7 @@ void SpotLightDirectionalObject::InitBarrel() {
   }
 
   {
-    p.bottom_radius = outer_radius;
+    p.top_radius = outer_radius;
     VertexDataPtr vdata(new VertexData(color_effect_->vertex_desc(), 1));
     IndicesDataPtr idata(new IndicesData(1));
     EntityDataPtr data(new EntityData(vdata, idata));
@@ -167,9 +165,14 @@ SpotLightController::SpotLightController(InteractiveContext* ctx)
   scale_ = Vector3(2.0f, 2.0f, 2.0f);
   translate_controller_.reset(new TranslateController(ctx));
   rotate_controller_.reset(new RotateController(ctx));
+  translate_controller_->AddTranslateObserver(this);
+  rotate_controller_->AddRotateObserver(this);
 }
 
-SpotLightController::~SpotLightController() {}
+SpotLightController::~SpotLightController() {
+  translate_controller_->RemoveTranslateObserver(this);
+  rotate_controller_->RemoveRotateObserver(this);
+}
 
 void SpotLightController::SetLight(Light* ptr) {
   object_.reset(new SpotLightDirectionalObject(ptr));
@@ -226,7 +229,7 @@ void SpotLightController::UpdateFrame(const FrameArgs& args) {
   object_->Update(*context()->camera());
 
   if (mode_ == kRotate) {
-    translate_controller_->set_scale(scale_);
+    rotate_controller_->set_scale(scale_);
     rotate_controller_->set_state(state());
     rotate_controller_->set_position(light_->position());
     rotate_controller_->UpdateFrame(args);
@@ -240,19 +243,22 @@ void SpotLightController::UpdateFrame(const FrameArgs& args) {
 
 void SpotLightController::RenderFrame(Renderer* renderer) {
   if (mode_ == kRotate) {
-    rotate_controller_->RenderFrame(renderer);
-
     object_->set_inner_color(Vector4(0.75f, 0.75f, 0.75f, 0.2f));
     object_->set_outer_color(Vector4(0.9f,   0.9f,  0.9f, 0.4f));
     object_->set_position(light_->position());
     object_->Update(*context()->camera());
     object_->Render(renderer);
+
+    rotate_controller_->RenderFrame(renderer);
   } else if (mode_ == kTranslate) {
     translate_controller_->RenderFrame(renderer);
   } else {
   }
   
-  mode_ = new_mode_;
+  if (mode_ != new_mode_) {
+    set_state(0);
+    mode_ = new_mode_;
+  }
 }
 
 void SpotLightController::AddSpotLightObserver(SpotLightControllerObserver* obs) {
@@ -271,17 +277,28 @@ void SpotLightController::OnRotateBegin(RotateController* controller) {
 }
 
 void SpotLightController::OnRotating(RotateController* controller) {
+  Vector3 dir = RotateLightDir(light_->directional(), controller->orientation());
+  light_->set_directional(dir);
 }
 
 void SpotLightController::OnRotateEnd(RotateController* controller) {
+  Vector3 dir = RotateLightDir(light_->directional(), controller->orientation());
+  light_->set_directional(dir);
 }
 
 void SpotLightController::OnTranslateBegin(TranslateController* controller) {
 }
 
 void SpotLightController::OnTranslating(TranslateController* controller) {
+  light_->set_position(controller->position());
 }
 
 void SpotLightController::OnTranslateEnd(TranslateController* controller) {
+  light_->set_position(controller->position());
 }
+
+void SpotLightController::OnActive() {}
+
+void SpotLightController::OnDeactive() {}
+      
 }  // namespace azer

@@ -133,22 +133,14 @@ void DirLightController::OnRotateBegin(RotateController* controller) {
 
 void DirLightController::OnRotating(RotateController* controller) {
   if (lightobj_.get()) {
-    Quaternion quad;
-    CalcSceneOrientForZDirection(light()->directional(), &quad);
-    Quaternion q = controller->orientation() * quad;
-    Matrix4 mat = std::move(q.ToMatrix());
-    Vector3 dir = std::move(mat * Vector4(0.0f, 0.0f, 1.0f, 0.0));
+    Vector3 dir = RotateLightDir(light()->directional(), controller->orientation());
     light()->set_directional(dir);
   }
 }
 
 void DirLightController::OnRotateEnd(RotateController* controller) {
   if (lightobj_.get()) {
-    Quaternion quad;
-    CalcSceneOrientForZDirection(light()->directional(), &quad);
-    Quaternion q = controller->orientation() * quad;
-    Matrix4 mat = std::move(q.ToMatrix());
-    Vector3 dir = std::move(mat * Vector4(0.0f, 0.0f, 1.0f, 0.0));
+    Vector3 dir = RotateLightDir(light()->directional(), controller->orientation());
     light()->set_directional(dir);
   }
 }

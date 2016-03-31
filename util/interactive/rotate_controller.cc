@@ -93,16 +93,18 @@ void RotateControllerObj::ResetColor() {
 void RotateControllerObj::Update(const Camera& camera, const Vector3& position) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 mat = std::move(Scale(scale_));
-  mat = std::move(std::move(Translate(position)) * mat);
-  ambient_effect_->SetPV(camera.GetProjViewMatrix());
-  ambient_effect_->SetWorld(mat);
-  color_effect_->SetLightData(&env->light()->data(), 1);
-  color_effect_->SetPV(camera.GetProjViewMatrix());
-  color_effect_->SetWorld(mat);
+  world_ = std::move(std::move(Translate(position)) * mat);
+  pv_ = std::move(camera.GetProjViewMatrix());
 }
 
 void RotateControllerObj::Render(Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
+  ambient_effect_->SetPV(pv_);
+  ambient_effect_->SetWorld(world_);
+  color_effect_->SetLightData(&env->light()->data(), 1);
+  color_effect_->SetPV(pv_);
+  color_effect_->SetWorld(world_);
+
   ScopedResetBlending scoped_blending(renderer);
   for (uint32 i = 0; i < arraysize(colors_); ++i) {
     if (i == kSphere) {

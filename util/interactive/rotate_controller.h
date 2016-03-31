@@ -42,6 +42,7 @@ class RotateControllerObj {
   Vector4 colors_[kSubsetCount];
   EntityPtr entity_;
   Vector3 scale_;
+  Matrix4 pv_, world_;
   scoped_refptr<AmbientColorEffect> ambient_effect_;
   scoped_refptr<ColorEffect> color_effect_;
   static const float CirclekMargin;

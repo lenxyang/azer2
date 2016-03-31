@@ -16,4 +16,12 @@ void CalcSceneOrientForZDirection(const Vector3& d, Quaternion* orient) {
   Vector3 newzz = orient->zaxis();
 }
 
+Vector3 RotateLightDir(const Vector3& d, const Quaternion& orgq) {
+  Quaternion quad;
+  CalcSceneOrientForZDirection(d, &quad);
+  Quaternion q = orgq * quad;
+  Matrix4 mat = std::move(q.ToMatrix());
+  Vector3 dir = std::move(mat * Vector4(0.0f, 0.0f, 1.0f, 0.0));
+  return dir;
+}
 }  // namespace azer
