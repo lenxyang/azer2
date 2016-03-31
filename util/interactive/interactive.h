@@ -1,5 +1,7 @@
 #pragma once
 
+#include "azer/util/interactive/axes_frame.h"
+#include "azer/util/interactive/camera_overlay.h"
 #include "azer/util/interactive/camera_controller.h"
 #include "azer/util/interactive/dirlight_controller.h"
 #include "azer/util/interactive/interactive_context.h"

@@ -161,19 +161,22 @@ void TranslateControlObj::ResetColor() {
   colors_[kPlaneZX] = Vector4(0.0f, 0.0f, 1.0f, 0.2f);
 }
 
-void TranslateControlObj::Update(const Camera* camera, const Vector3& position) {
+void TranslateControlObj::Update(const Camera& camera, const Vector3& position) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 mat = std::move(Scale(scale_));
-  mat = std::move(std::move(Translate(position)) * mat);
-  ambient_effect_->SetPV(camera->GetProjViewMatrix());
-  ambient_effect_->SetWorld(mat);
-  color_effect_->SetLightData(&env->light()->data(), 1);
-  color_effect_->SetPV(camera->GetProjViewMatrix());
-  color_effect_->SetWorld(mat);
+  world_ = std::move(std::move(Translate(position)) * mat);
+  pv_ = camera.GetProjViewMatrix();
 }
 
 void TranslateControlObj::Render(Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
+
+  ambient_effect_->SetPV(pv_);
+  ambient_effect_->SetWorld(world_);
+  color_effect_->SetLightData(&env->light()->data(), 1);
+  color_effect_->SetPV(pv_);
+  color_effect_->SetWorld(world_);
+
   ScopedRasterizerState scoped_noncull(renderer);
   renderer->SetRasterizerState(env->noncull_rasterizer_state());
   {
@@ -349,7 +352,7 @@ void TranslateController::UpdateFrame(const FrameArgs& args) {
     default:
     break;
   }
-  object_->Update(context()->camera(), position_);
+  object_->Update(*context()->camera(), position_);
 }
 
 void TranslateController::CalcDragOffset(const Ray& ray, Vector3* offset) {

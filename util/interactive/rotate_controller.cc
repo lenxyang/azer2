@@ -90,14 +90,14 @@ void RotateControllerObj::ResetColor() {
   colors_[kSphere] = Vector4(0.80f, 0.8f, 0.8f, 0.4f);
 }
 
-void RotateControllerObj::Update(const Camera* camera, const Vector3& position) {
+void RotateControllerObj::Update(const Camera& camera, const Vector3& position) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 mat = std::move(Scale(scale_));
   mat = std::move(std::move(Translate(position)) * mat);
-  ambient_effect_->SetPV(camera->GetProjViewMatrix());
+  ambient_effect_->SetPV(camera.GetProjViewMatrix());
   ambient_effect_->SetWorld(mat);
   color_effect_->SetLightData(&env->light()->data(), 1);
-  color_effect_->SetPV(camera->GetProjViewMatrix());
+  color_effect_->SetPV(camera.GetProjViewMatrix());
   color_effect_->SetWorld(mat);
 }
 
@@ -251,7 +251,7 @@ void RotateController::UpdateFrame(const FrameArgs& args) {
   }
 
   object_->SetScale(scale_);
-  object_->Update(context()->camera(), position_);
+  object_->Update(*context()->camera(), position_);
 }
 
 void RotateController::RenderFrame(Renderer* renderer) {

@@ -12,7 +12,7 @@ class VertexDesc;
 struct GeoCylinderParam {
   GeoCylinderParam() 
       : top_radius(1.0f), bottom_radius(1.0f), height(1.0f), 
-        slice(64), stack(64) {}
+        slice(64), stack(5) {}
   float top_radius;
   float bottom_radius;
   float height;

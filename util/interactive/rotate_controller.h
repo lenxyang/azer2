@@ -33,7 +33,7 @@ class RotateControllerObj {
   const Vector3& scale() const { return scale_;}
   void SetColor(int32 index, const Vector4& c);
   void ResetColor();
-  void Update(const Camera* camera, const Vector3& position);
+  void Update(const Camera& camera, const Vector3& position);
   void Render(Renderer* renderer);
  private:
   void InitEntity();
