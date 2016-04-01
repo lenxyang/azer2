@@ -282,7 +282,7 @@ void SpotLightController::UpdateFrame(const FrameArgs& args) {
 
 void SpotLightController::RenderFrame(Renderer* renderer) {
   if (mode_ == kRotate) {
-    object_->set_inner_color(Vector4(0.75f, 0.75f, 0.75f, 0.2f));
+    object_->set_inner_color(Vector4(0.75f, 0.75f, 0.75f, 0.1f));
     object_->set_outer_color(Vector4(0.9f,   0.9f,  0.9f, 0.4f));
     object_->set_position(light_->position());
     object_->Update(*context()->camera());

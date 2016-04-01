@@ -204,22 +204,23 @@ Quaternion RotateController::CalcOrientation(const gfx::Point& pt) {
   float width = bounds.width();
   float height = bounds.height();
   Quaternion quad;
+  float rotate_range = kPI;
   switch (state()) {
     case kHitAxisX: {
       float offset = (float)(pt.y() - location_.y()) / height;
-      Radians rad(kPI * 2.0f * offset);
+      Radians rad(rotate_range * offset);
       quad = Quaternion(Vector3(1.0f, 0.0f, 0.0f), rad);
       break;
     }
     case kHitAxisY: {
       float offset = (float)(pt.x() - location_.x()) / width;
-      Radians rad(kPI * 2.0f * offset);
+      Radians rad(rotate_range * offset);
       quad = Quaternion(Vector3(0.0f, 1.0f, 0.0f), rad);
       break;
     }
     case kHitAxisZ: {
       float offset = (float)(pt.x() - location_.x()) / width;
-      Radians rad(kPI * 2.0f * offset);
+      Radians rad(rotate_range * offset);
       quad = Quaternion(Vector3(0.0f, 0.0f, 1.0f), rad);
       break;
     }
