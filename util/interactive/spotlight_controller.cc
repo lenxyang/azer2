@@ -4,6 +4,7 @@
 #include "azer/effect/color_effect.h"
 #include "azer/render/camera.h"
 #include "azer/render/renderer.h"
+#include "azer/render/vertex_pack.h"
 #include "azer/util/geometry/geometry.h"
 #include "azer/util/interactive/env.h"
 #include "azer/util/interactive/interactive_context.h"
@@ -26,6 +27,29 @@ SpotLightObject::SpotLightObject(Light* light)
   EntityDataPtr data(new EntityData(vdata, idata));
   Matrix4 rot = std::move(RotateX(Degree(-90.0f)));
   Matrix4 world = std::move(Translate(0.0f, 0.0f, -kTotalHeight));
+
+  {
+    VertexPos vpos(0, 0), npos;
+    VertexPack vpack(data->vdata());
+    vpack.data()->extend(2);
+    vpack.move(vpack.data()->vertex_count() - 2);
+    GetSemanticIndex("normal", 0, vpack.desc(), &npos);
+
+    Subset subset;
+    subset.vertex_base = vpack.index();
+    subset.vertex_count = 2;
+    subset.primitive = kLineList;
+    data->AddSubset(subset);
+    Vector4 beginpos(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+    Vector4 endpos(Vector4(0.0f, 0.0f, light->range(), 1.0f));
+    vpack.first();
+    vpack.WriteVector3Or4(beginpos, vpos);
+    vpack.WriteVector3Or4(Vector4(1.0f, 1.0f, 1.0f, 0.0), npos);
+    vpack.next(1);
+    vpack.WriteVector3Or4(endpos, vpos);
+    vpack.WriteVector3Or4(Vector4(1.0f, 1.0f, 1.0f, 0.0), npos);
+    vpack.next(1);
+  }
   {
     GeoCylinderParam param;
     param.bottom_radius = param.top_radius = 0.1f;
@@ -51,6 +75,8 @@ SpotLightObject::~SpotLightObject() {
 
 void SpotLightObject::Render(const Camera& camera, Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
+  ScopedRasterizerState scoped_state(renderer);
+  renderer->SetRasterizerState(env->wireframe_rasterizer_state());
 
   Quaternion quad;
   CalcSceneOrientForZDirection(light_->directional(), &quad);

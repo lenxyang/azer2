@@ -61,7 +61,7 @@ Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius,
   return subset;
 }
 
-void AppendGeoRoundData(EntityData* data, float radius, int slice, 
+void AppendGeoRoundSubset(EntityData* data, float radius, int slice, 
                         const Matrix4& mat) {
   const int32 kVertexCount = CalcGeoRoundVertexCount(slice);
   const int32 kIndexCount = CalcGeoRoundIndexCount(slice);
@@ -97,8 +97,8 @@ Subset AppendGeoCircleData(VertexPack* vpack, float radius,
   return subset;
 }
 
-void AppendGeoCircleData(EntityData* data, float radius, int slice, 
-                         const Matrix4& mat) {
+void AppendGeoCircleSubset(EntityData* data, float radius, int slice, 
+                           const Matrix4& mat) {
   const int32 kVertexCount = slice + 1;
   VertexPack vpack(data->vdata());
   vpack.data()->extend(kVertexCount);

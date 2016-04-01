@@ -44,6 +44,9 @@ InteractiveEnv::InteractiveEnv() {
   noncull_rasterizer_state_ = rs->CreateRasterizerState();
   noncull_rasterizer_state_->SetCullingMode(kCullNone);
 
+  wireframe_rasterizer_state_ = rs->CreateRasterizerState();
+  wireframe_rasterizer_state_->SetFillMode(kWireFrame);
+
   depth_disabled_state_ = rs->CreateDepthStencilState();
   depth_disabled_state_->EnableDepthTest(false);
 }
@@ -58,5 +61,17 @@ EffectAdapterContext* InteractiveEnv::effect_context() {
 
 Texture* InteractiveEnv::GetTexture(int32 id) {
   return ResLib::instance()->GetTexture(id);
+}
+
+RasterizerState* InteractiveEnv::wireframe_rasterizer_state() { 
+  return wireframe_rasterizer_state_;
+}
+
+RasterizerState* InteractiveEnv::noncull_rasterizer_state() { 
+  return noncull_rasterizer_state_;
+}
+
+DepthStencilState* InteractiveEnv::depth_disabled_state() { 
+  return depth_disabled_state_;
 }
 }  // namespace azer

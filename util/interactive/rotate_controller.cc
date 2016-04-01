@@ -41,9 +41,9 @@ void RotateControllerObj::AppendRoundData(EntityData* data) {
   Matrix4 yroundmat = Matrix4::kIdentity;
   Matrix4 zroundmat = RotateX(Degree(-90.0f));
   AppendGeoSphereData(data, param, Matrix4::kIdentity);
-  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, xroundmat);
-  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, yroundmat);
-  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, zroundmat);
+  AppendGeoCircleSubset(data, param.radius + CirclekMargin, 1024, xroundmat);
+  AppendGeoCircleSubset(data, param.radius + CirclekMargin, 1024, yroundmat);
+  AppendGeoCircleSubset(data, param.radius + CirclekMargin, 1024, zroundmat);
 }
 
 void RotateControllerObj::AppendAxisData(EntityData* data) {
