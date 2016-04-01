@@ -56,7 +56,7 @@ class SpotLightDirectionalObject {
   scoped_refptr<ColorEffect> color_effect_;
   EntityPtr inner_object_;
   EntityPtr outer_object_;
-  EntityPtr lightobj_;
+  EntityPtr dirline_;
   BlendingPtr blending_;
   float theta_;
   float phi_;

@@ -27,29 +27,6 @@ SpotLightObject::SpotLightObject(Light* light)
   EntityDataPtr data(new EntityData(vdata, idata));
   Matrix4 rot = std::move(RotateX(Degree(-90.0f)));
   Matrix4 world = std::move(Translate(0.0f, 0.0f, -kTotalHeight));
-
-  {
-    VertexPos vpos(0, 0), npos;
-    VertexPack vpack(data->vdata());
-    vpack.data()->extend(2);
-    vpack.move(vpack.data()->vertex_count() - 2);
-    GetSemanticIndex("normal", 0, vpack.desc(), &npos);
-
-    Subset subset;
-    subset.vertex_base = vpack.index();
-    subset.vertex_count = 2;
-    subset.primitive = kLineList;
-    data->AddSubset(subset);
-    Vector4 beginpos(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
-    Vector4 endpos(Vector4(0.0f, 0.0f, light->range(), 1.0f));
-    vpack.first();
-    vpack.WriteVector3Or4(beginpos, vpos);
-    vpack.WriteVector3Or4(Vector4(1.0f, 1.0f, 1.0f, 0.0), npos);
-    vpack.next(1);
-    vpack.WriteVector3Or4(endpos, vpos);
-    vpack.WriteVector3Or4(Vector4(1.0f, 1.0f, 1.0f, 0.0), npos);
-    vpack.next(1);
-  }
   {
     GeoCylinderParam param;
     param.bottom_radius = param.top_radius = 0.1f;
@@ -75,8 +52,6 @@ SpotLightObject::~SpotLightObject() {
 
 void SpotLightObject::Render(const Camera& camera, Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
-  ScopedRasterizerState scoped_state(renderer);
-  renderer->SetRasterizerState(env->wireframe_rasterizer_state());
 
   Quaternion quad;
   CalcSceneOrientForZDirection(light_->directional(), &quad);
@@ -111,6 +86,34 @@ SpotLightDirectionalObject::SpotLightDirectionalObject(Light* light) {
   color_effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
   InitCircle();
   InitBarrel();
+
+  {
+    VertexDataPtr vdata(new VertexData(color_effect_->vertex_desc(), 1));
+    IndicesDataPtr idata(new IndicesData(1));
+    EntityDataPtr data(new EntityData(vdata, idata));
+    VertexPos vpos(0, 0), npos;
+    VertexPack vpack(data->vdata());
+    vpack.data()->extend(2);
+    vpack.move(vpack.data()->vertex_count() - 2);
+    GetSemanticIndex("normal", 0, vpack.desc(), &npos);
+
+    Subset subset;
+    subset.vertex_base = vpack.index();
+    subset.vertex_count = 2;
+    subset.primitive = kLineList;
+    data->AddSubset(subset);
+    Vector4 beginpos(Vector4(0.0f, 0.0f, 0.0f, 1.0f));
+    Vector4 endpos(Vector4(0.0f, 0.0f, 100.0f, 1.0f));
+    vpack.first();
+    vpack.WriteVector3Or4(beginpos, vpos);
+    vpack.WriteVector3Or4(Vector4(1.0f, 1.0f, 1.0f, 0.0), npos);
+    vpack.next(1);
+    vpack.WriteVector3Or4(endpos, vpos);
+    vpack.WriteVector3Or4(Vector4(1.0f, 1.0f, 1.0f, 0.0), npos);
+    vpack.next(1);
+    dirline_ = new Entity(data);
+  }
+
   blending_ = env->blending();
 }
 
@@ -164,6 +167,10 @@ void SpotLightDirectionalObject::Render(Renderer* renderer) {
   ScopedRasterizerState scoped_state(renderer);
   renderer->SetBlending(env->a2c_blending(), 0, 0xffffffff);
   renderer->SetRasterizerState(env->noncull_rasterizer_state());
+  ColorMaterialData line_mtrl;
+  line_mtrl.diffuse = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+  line_mtrl.ambient = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+  line_mtrl.alpha = 1.0f;
   ColorMaterialData inner_mtrl;
   inner_mtrl.diffuse = inner_color_;
   inner_mtrl.ambient = inner_mtrl.diffuse * 0.4f;
@@ -175,6 +182,9 @@ void SpotLightDirectionalObject::Render(Renderer* renderer) {
   outer_mtrl.specular = outer_mtrl.diffuse * 0.1f;
   outer_mtrl.alpha = outer_mtrl.diffuse.w;
 
+  color_effect_->SetMaterial(line_mtrl);
+  renderer->BindEffect(color_effect_);
+  dirline_->Draw(renderer);
   color_effect_->SetMaterial(inner_mtrl);
   renderer->BindEffect(color_effect_);
   inner_object_->Draw(renderer);
@@ -211,13 +221,16 @@ void SpotLightController::set_mode(int32 mode) {
 }
 
 int32 SpotLightController::GetPicking(const gfx::Point& pt) {
+  int state = 0;
   if (mode_ == kRotate) {
-    return rotate_controller_->GetPicking(pt);
+    state = rotate_controller_->GetPicking(pt);
   } else if (mode_ == kTranslate) {
-    return translate_controller_->GetPicking(pt);
+    state = translate_controller_->GetPicking(pt);
   } else {
-    return 0;
+    state = 0;
   }
+
+  return state;
 }
 
 void SpotLightController::OnDragBegin(const ui::MouseEvent& e) {

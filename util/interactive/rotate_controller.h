@@ -45,7 +45,7 @@ class RotateControllerObj {
   Matrix4 pv_, world_;
   scoped_refptr<AmbientColorEffect> ambient_effect_;
   scoped_refptr<ColorEffect> color_effect_;
-  static const float CirclekMargin;
+  static const float kCirclekMargin;
   static const float kAxisLength; 
   DISALLOW_COPY_AND_ASSIGN(RotateControllerObj);
 };

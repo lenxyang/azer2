@@ -13,7 +13,7 @@
 namespace azer {
 // class RotateControlerObj
 const float RotateControllerObj::kAxisLength = 0.6f;;
-const float RotateControllerObj::CirclekMargin = 0.01f;
+const float RotateControllerObj::kCirclekMargin = 0.02f;
 RotateControllerObj::RotateControllerObj() {
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
   InitEntity();
@@ -41,9 +41,9 @@ void RotateControllerObj::AppendRoundData(EntityData* data) {
   Matrix4 yroundmat = Matrix4::kIdentity;
   Matrix4 zroundmat = RotateX(Degree(-90.0f));
   AppendGeoSphereData(data, param, Matrix4::kIdentity);
-  AppendGeoCircleSubset(data, param.radius + CirclekMargin, 1024, xroundmat);
-  AppendGeoCircleSubset(data, param.radius + CirclekMargin, 1024, yroundmat);
-  AppendGeoCircleSubset(data, param.radius + CirclekMargin, 1024, zroundmat);
+  AppendGeoCircleSubset(data, param.radius + kCirclekMargin, 1024, xroundmat);
+  AppendGeoCircleSubset(data, param.radius + kCirclekMargin, 1024, yroundmat);
+  AppendGeoCircleSubset(data, param.radius + kCirclekMargin, 1024, zroundmat);
 }
 
 void RotateControllerObj::AppendAxisData(EntityData* data) {
@@ -72,7 +72,7 @@ void RotateControllerObj::AppendAxisData(EntityData* data) {
 }
 
 float RotateControllerObj::circle_radius() const {
-  return 1.0f + CirclekMargin;
+  return 1.0f + kCirclekMargin;
 }
 
 void RotateControllerObj::SetColor(int32 index, const Vector4& c) {
@@ -135,7 +135,8 @@ bool PickCircle(const Ray& ray, const Vector3& center, float radius,
         + (pos->y - center.y) * (pos->y - center.y)
         + (pos->z - center.z) * (pos->z - center.z);
     
-    return std::abs(dist2 - radius * radius) < 0.02;
+    float margin = std::max(0.03, radius * 0.03);
+    return std::abs(dist2 - radius * radius) < margin;
   } else {
     return false;
   }
