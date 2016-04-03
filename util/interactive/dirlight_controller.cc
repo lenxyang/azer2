@@ -36,7 +36,7 @@ void DirLightControllerObj::set_color(const Vector4& c) {
   color_ = c; 
 }
 
-void DirLightControllerObj::Render(const Camera* camera, Renderer* renderer) {
+void DirLightControllerObj::Render(const Camera& camera, Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 world_ = std::move(Translate(position_))
       * std::move(orientation_.ToMatrix())
@@ -50,7 +50,7 @@ void DirLightControllerObj::Render(const Camera* camera, Renderer* renderer) {
   mtrl.alpha = 1.0f;
   effect_->SetMaterial(mtrl);
   effect_->SetWorld(world_);
-  effect_->SetPV(camera->GetProjViewMatrix());
+  effect_->SetPV(camera.GetProjViewMatrix());
   effect_->SetLightData(&env->light()->data(), 1);
   renderer->BindEffect(effect_);
   arrow_->Draw(renderer);
@@ -63,7 +63,7 @@ DirLightObject::DirLightObject(Light* light)
   object_.reset(new DirLightControllerObj);
 }
 
-void DirLightObject::Render(const Camera* camera, Renderer* renderer) {
+void DirLightObject::Render(const Camera& camera, Renderer* renderer) {
   Quaternion quad;
   CalcSceneOrientForZDirection(light_->directional(), &quad);
   object_->set_color(light_->diffuse());
@@ -133,22 +133,14 @@ void DirLightController::OnRotateBegin(RotateController* controller) {
 
 void DirLightController::OnRotating(RotateController* controller) {
   if (lightobj_.get()) {
-    Quaternion quad;
-    CalcSceneOrientForZDirection(light()->directional(), &quad);
-    Quaternion q = controller->orientation() * quad;
-    Matrix4 mat = std::move(q.ToMatrix());
-    Vector3 dir = std::move(mat * Vector4(0.0f, 0.0f, 1.0f, 0.0));
+    Vector3 dir = RotateLightDir(light()->directional(), controller->orientation());
     light()->set_directional(dir);
   }
 }
 
 void DirLightController::OnRotateEnd(RotateController* controller) {
   if (lightobj_.get()) {
-    Quaternion quad;
-    CalcSceneOrientForZDirection(light()->directional(), &quad);
-    Quaternion q = controller->orientation() * quad;
-    Matrix4 mat = std::move(q.ToMatrix());
-    Vector3 dir = std::move(mat * Vector4(0.0f, 0.0f, 1.0f, 0.0));
+    Vector3 dir = RotateLightDir(light()->directional(), controller->orientation());
     light()->set_directional(dir);
   }
 }

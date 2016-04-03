@@ -33,7 +33,7 @@ class RotateControllerObj {
   const Vector3& scale() const { return scale_;}
   void SetColor(int32 index, const Vector4& c);
   void ResetColor();
-  void Update(const Camera* camera, const Vector3& position);
+  void Update(const Camera& camera, const Vector3& position);
   void Render(Renderer* renderer);
  private:
   void InitEntity();
@@ -42,9 +42,10 @@ class RotateControllerObj {
   Vector4 colors_[kSubsetCount];
   EntityPtr entity_;
   Vector3 scale_;
+  Matrix4 pv_, world_;
   scoped_refptr<AmbientColorEffect> ambient_effect_;
   scoped_refptr<ColorEffect> color_effect_;
-  static const float CirclekMargin;
+  static const float kCirclekMargin;
   static const float kAxisLength; 
   DISALLOW_COPY_AND_ASSIGN(RotateControllerObj);
 };

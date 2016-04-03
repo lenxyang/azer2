@@ -27,7 +27,7 @@ class DirLightControllerObj {
   void set_position(const Vector3& pos);
   void set_orientation(const Quaternion& q);
   void set_color(const Vector4& c);
-  void Render(const Camera* camera, Renderer* renderer);
+  void Render(const Camera& camera, Renderer* renderer);
  private:
   void OnParamUpdate();
   EntityPtr arrow_;
@@ -46,7 +46,7 @@ class DirLightObject : public ::base::RefCounted<DirLightObject> {
   Light* light() { return light_.get();}
   void set_position(const Vector3& pos) { position_ = pos;}
   const Vector3& position() const { return position_;}
-  void Render(const Camera* camera, Renderer* renderer);
+  void Render(const Camera& camera, Renderer* renderer);
  private:
   Vector3 position_;
   LightPtr light_;

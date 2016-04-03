@@ -13,7 +13,7 @@
 namespace azer {
 // class RotateControlerObj
 const float RotateControllerObj::kAxisLength = 0.6f;;
-const float RotateControllerObj::CirclekMargin = 0.01f;
+const float RotateControllerObj::kCirclekMargin = 0.02f;
 RotateControllerObj::RotateControllerObj() {
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
   InitEntity();
@@ -41,9 +41,9 @@ void RotateControllerObj::AppendRoundData(EntityData* data) {
   Matrix4 yroundmat = Matrix4::kIdentity;
   Matrix4 zroundmat = RotateX(Degree(-90.0f));
   AppendGeoSphereData(data, param, Matrix4::kIdentity);
-  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, xroundmat);
-  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, yroundmat);
-  AppendGeoCircleData(data, param.radius + CirclekMargin, 1024, zroundmat);
+  AppendGeoCircleSubset(data, param.radius + kCirclekMargin, 1024, xroundmat);
+  AppendGeoCircleSubset(data, param.radius + kCirclekMargin, 1024, yroundmat);
+  AppendGeoCircleSubset(data, param.radius + kCirclekMargin, 1024, zroundmat);
 }
 
 void RotateControllerObj::AppendAxisData(EntityData* data) {
@@ -72,7 +72,7 @@ void RotateControllerObj::AppendAxisData(EntityData* data) {
 }
 
 float RotateControllerObj::circle_radius() const {
-  return 1.0f + CirclekMargin;
+  return 1.0f + kCirclekMargin;
 }
 
 void RotateControllerObj::SetColor(int32 index, const Vector4& c) {
@@ -90,19 +90,21 @@ void RotateControllerObj::ResetColor() {
   colors_[kSphere] = Vector4(0.80f, 0.8f, 0.8f, 0.4f);
 }
 
-void RotateControllerObj::Update(const Camera* camera, const Vector3& position) {
+void RotateControllerObj::Update(const Camera& camera, const Vector3& position) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 mat = std::move(Scale(scale_));
-  mat = std::move(std::move(Translate(position)) * mat);
-  ambient_effect_->SetPV(camera->GetProjViewMatrix());
-  ambient_effect_->SetWorld(mat);
-  color_effect_->SetLightData(&env->light()->data(), 1);
-  color_effect_->SetPV(camera->GetProjViewMatrix());
-  color_effect_->SetWorld(mat);
+  world_ = std::move(std::move(Translate(position)) * mat);
+  pv_ = std::move(camera.GetProjViewMatrix());
 }
 
 void RotateControllerObj::Render(Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
+  ambient_effect_->SetPV(pv_);
+  ambient_effect_->SetWorld(world_);
+  color_effect_->SetLightData(&env->light()->data(), 1);
+  color_effect_->SetPV(pv_);
+  color_effect_->SetWorld(world_);
+
   ScopedResetBlending scoped_blending(renderer);
   for (uint32 i = 0; i < arraysize(colors_); ++i) {
     if (i == kSphere) {
@@ -133,7 +135,8 @@ bool PickCircle(const Ray& ray, const Vector3& center, float radius,
         + (pos->y - center.y) * (pos->y - center.y)
         + (pos->z - center.z) * (pos->z - center.z);
     
-    return std::abs(dist2 - radius * radius) < 0.02;
+    float margin = std::max(0.03, radius * 0.03);
+    return std::abs(dist2 - radius * radius) < margin;
   } else {
     return false;
   }
@@ -201,22 +204,23 @@ Quaternion RotateController::CalcOrientation(const gfx::Point& pt) {
   float width = bounds.width();
   float height = bounds.height();
   Quaternion quad;
+  float rotate_range = kPI;
   switch (state()) {
     case kHitAxisX: {
       float offset = (float)(pt.y() - location_.y()) / height;
-      Radians rad(kPI * 4.0f * offset);
+      Radians rad(rotate_range * offset);
       quad = Quaternion(Vector3(1.0f, 0.0f, 0.0f), rad);
       break;
     }
     case kHitAxisY: {
       float offset = (float)(pt.x() - location_.x()) / width;
-      Radians rad(kPI * 4.0f * offset);
+      Radians rad(rotate_range * offset);
       quad = Quaternion(Vector3(0.0f, 1.0f, 0.0f), rad);
       break;
     }
     case kHitAxisZ: {
       float offset = (float)(pt.x() - location_.x()) / width;
-      Radians rad(kPI * 4.0f * offset);
+      Radians rad(rotate_range * offset);
       quad = Quaternion(Vector3(0.0f, 0.0f, 1.0f), rad);
       break;
     }
@@ -251,7 +255,7 @@ void RotateController::UpdateFrame(const FrameArgs& args) {
   }
 
   object_->SetScale(scale_);
-  object_->Update(context()->camera(), position_);
+  object_->Update(*context()->camera(), position_);
 }
 
 void RotateController::RenderFrame(Renderer* renderer) {

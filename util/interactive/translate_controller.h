@@ -4,6 +4,7 @@
 #include "azer/math/plane.h" 
 #include "azer/math/vector3.h"
 #include "azer/math/vector4.h"
+#include "azer/math/matrix4.h"
 #include "azer/render/entity.h"
 #include "azer/util/interactive/interactive_controller.h"
 
@@ -36,7 +37,7 @@ class TranslateControlObj {
   void SetScale(const Vector3& v) { scale_ = v;}
   void SetColor(int32 index, const Vector4& color) { colors_[index] = color;}
   void ResetColor();
-  void Update(const Camera* camera, const Vector3& position);
+  void Update(const Camera& camera, const Vector3& position);
   void Render(Renderer* renderer);
 
   float plane_width() const;
@@ -46,6 +47,8 @@ class TranslateControlObj {
   EntityDataPtr InitAxesConeData(VertexDesc* desc);
   Vector3 scale_;
   Vector4 colors_[kSubsetCount];
+  Matrix4 world_;
+  Matrix4 pv_;
   EntityPtr entity_;
   EntityPtr cones_;
   scoped_refptr<AmbientColorEffect> ambient_effect_;

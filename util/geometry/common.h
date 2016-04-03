@@ -29,14 +29,14 @@ int32 AppendBottomGeoTaperIndexData(int32 last, IndexPack* ipack, int slice);
 Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius, 
                           int slice, const Matrix4& mat = Matrix4::kIdentity);
 
-void AppendGeoRoundData(EntityData* data, float radius, int slice, 
-                        const Matrix4& mat = Matrix4::kIdentity);
+void AppendGeoRoundSubset(EntityData* data, float radius, int slice, 
+                          const Matrix4& mat = Matrix4::kIdentity);
 
 // Circle
 Subset AppendGeoCircleData(VertexPack* vpack, float radius, int slice,
                            const Matrix4& mat = Matrix4::kIdentity);
-void AppendGeoCircleData(EntityData* data, float radius, int slice, 
-                        const Matrix4& mat = Matrix4::kIdentity);
+void AppendGeoCircleSubset(EntityData* data, float radius, int slice, 
+                           const Matrix4& mat = Matrix4::kIdentity);
 
 void UpdateVertexBounds(const Vector4 pos, Vector3* vmin, Vector3* vmax);
 }  // namespace azer

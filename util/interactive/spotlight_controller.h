@@ -21,19 +21,28 @@ typedef scoped_refptr<Blending> BlendingPtr;
 
 class SpotLightObject : public ::base::RefCounted<SpotLightObject> {
  public:
-  SpotLightObject();
+  explicit SpotLightObject(Light* light);
   ~SpotLightObject();
+
+  void set_scale(const Vector3& s) { scale_ = s;}
+  const Vector3& scale() const { return scale_;}
+  Light* light() { return light_.get();}
+  void Render(const Camera& camera, Renderer* renderer);
  private:
+  LightPtr light_;
+  EntityPtr entity_;
+  Vector3 scale_;
+  scoped_refptr<ColorEffect> effect_;
   DISALLOW_COPY_AND_ASSIGN(SpotLightObject);
 };
 
-class SpotLightControllerObject {
+class SpotLightDirectionalObject {
  public:
-  explicit SpotLightControllerObject(Light* light);
-  ~SpotLightControllerObject();
+  explicit SpotLightDirectionalObject(Light* light);
+  ~SpotLightDirectionalObject();
 
   void ResetColor();
-  void Update(const Camera* camera);
+  void Update(const Camera& camera);
   void Render(Renderer* renderer);
 
   void set_position(const Vector3& pos) { position_ = pos;}
@@ -47,7 +56,7 @@ class SpotLightControllerObject {
   scoped_refptr<ColorEffect> color_effect_;
   EntityPtr inner_object_;
   EntityPtr outer_object_;
-  EntityPtr lightobj_;
+  EntityPtr dirline_;
   BlendingPtr blending_;
   float theta_;
   float phi_;
@@ -56,7 +65,9 @@ class SpotLightControllerObject {
   Vector4 outer_color_;
   Vector3 position_;
   Quaternion orientation_;
-  DISALLOW_COPY_AND_ASSIGN(SpotLightControllerObject);
+  Matrix4 pv_;
+  Matrix4 world_;
+  DISALLOW_COPY_AND_ASSIGN(SpotLightDirectionalObject);
 };
 
 class SpotLightController;
@@ -72,9 +83,20 @@ class SpotLightController : public InteractiveController,
  public:
   explicit SpotLightController(InteractiveContext* ctx);
   ~SpotLightController();
+
+  enum {
+    kNone = 0,
+    kTranslate,
+    kRotate,
+  };
   
   void SetLight(Light* ptr);
+  void set_mode(int32 mode);
+  const Vector3& scale() const { return scale_;}
+  void set_scale(const Vector3& v) { scale_ = v;}
 
+  void OnActive() override;
+  void OnDeactive() override;
   int32 GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const ui::MouseEvent& e) override;
   void OnDragging(const ui::MouseEvent& e) override;
@@ -97,9 +119,12 @@ class SpotLightController : public InteractiveController,
   bool HasSpotLightObserver(SpotLightControllerObserver* obs);
  private:
   LightPtr light_;
+  int32 mode_;
+  int32 new_mode_;
+  Vector3 scale_;
   scoped_ptr<TranslateController> translate_controller_;
   scoped_ptr<RotateController> rotate_controller_;
-  scoped_ptr<SpotLightControllerObject> object_;
+  scoped_ptr<SpotLightDirectionalObject> object_;
   ObserverList<SpotLightControllerObserver> observer_list_;
   DISALLOW_COPY_AND_ASSIGN(SpotLightController);
 };
