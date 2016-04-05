@@ -20,7 +20,7 @@ class DefaultBlending {
     blend_desc.desc[0].dest_alpha = Blending::kZero;
     blend_desc.desc[0].alpha_oper = Blending::kAdd;
     blend_desc.desc[0].mask = Blending::kWriteColor;
-    blend_desc.desc_count = 1;
+    blend_desc.desc[0].enable = true;
     blending_ = RenderSystem::Current()->CreateBlending(blend_desc);
     CHECK(blending_.get());
   }

@@ -51,7 +51,7 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
     kWriteAll = (kWriteColor | kWriteA),
   };
 
-  AZER_EXPORT struct RenderTargetDesc {
+  struct AZER_EXPORT RenderTargetDesc {
     Blend src;
     Blend dest;
     Oper oper;
@@ -64,7 +64,7 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
   };
 
   static const int32 kMaxRenderTargetDesc = 16;
-  AZER_EXPORT struct BlendDesc {
+  struct AZER_EXPORT BlendDesc {
     RenderTargetDesc desc[kMaxRenderTargetDesc];
     bool alpha_to_converage;
     bool independent_blending;

@@ -22,11 +22,12 @@ D3DBlending::~D3DBlending() {
 bool D3DBlending::Init() {
   D3D11_BLEND_DESC blend_desc;
   ZeroMemory(&blend_desc, sizeof(blend_desc));
-  DCHECK_GT(desc_.desc_count, 0);
-  for (int32 i = 0; i < desc_.desc_count; ++i) {
+  int32 count = std::min(kMaxRenderTargetDesc,
+                         (int)arraysize(blend_desc.RenderTarget));
+  for (int32 i = 0; i < count; ++i) {
     D3D11_RENDER_TARGET_BLEND_DESC& rtbd = blend_desc.RenderTarget[i];
     ZeroMemory(&rtbd, sizeof(rtbd));
-    rtbd.BlendEnable = true;
+    rtbd.BlendEnable = desc_.desc[i].enable;
     rtbd.SrcBlend = TranslateBlending(desc_.desc[i].src);
     rtbd.DestBlend = TranslateBlending(desc_.desc[i].dest);
     rtbd.BlendOp = TranslateBlendingOper(desc_.desc[i].oper);
