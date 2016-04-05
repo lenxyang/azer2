@@ -68,6 +68,8 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
     RenderTargetDesc desc[kMaxRenderTargetDesc];
     bool alpha_to_converage;
     bool independent_blending;
+
+    BlendDesc();
   };
  public:
   explicit Blending(const BlendDesc& desc);
