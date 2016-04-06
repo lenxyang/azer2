@@ -20,7 +20,7 @@ class ResourcePack;
 class InteractiveEnv {
  public:
   static InteractiveEnv* GetInstance();
-
+  
   Light* light() const { return light_.get();}
   Effect* GetEffect(const std::string& name);
   EffectAdapterContext* effect_context();
