@@ -218,6 +218,9 @@ void SpotLightController::SetLight(Light* ptr) {
 
 void SpotLightController::set_mode(int32 mode) {
   new_mode_ = mode;
+  set_state(0);
+  rotate_controller_->set_state(0);
+  translate_controller_->set_state(0);
 }
 
 int32 SpotLightController::GetPicking(const gfx::Point& pt) {
@@ -273,8 +276,8 @@ void SpotLightController::UpdateFrame(const FrameArgs& args) {
     rotate_controller_->set_position(light_->position());
     rotate_controller_->UpdateFrame(args);
   } else if (mode_ == kTranslate) {
-    translate_controller_->set_state(state());
     translate_controller_->set_scale(scale_);
+    translate_controller_->set_state(state());
     translate_controller_->set_position(light_->position());
     translate_controller_->UpdateFrame(args);
   }
