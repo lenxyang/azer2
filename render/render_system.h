@@ -55,6 +55,8 @@ class AZER_EXPORT RenderSystem {
   virtual DepthStencilStatePtr CreateDepthStencilState() = 0;
   virtual RendererPtr CreateRenderer(const Texture::Options& opt, 
                                      const Texture::Options& depthopt) = 0;
+  virtual RendererPtr CreateRenderer(std::vector<RenderTargetPtr>* targets,
+                                     DepthBuffer* depth_buffer) = 0;
   virtual RendererPtr CreateMultipleOutputRenderer(
       int32 count, const Texture::Options* opts, 
       const Texture::Options& depthopt) = 0;

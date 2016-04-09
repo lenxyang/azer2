@@ -208,6 +208,17 @@ DepthStencilStatePtr D3DRenderSystem::CreateDepthStencilState() {
   return DepthStencilStatePtr(new D3DDepthStencilState);
 }
 
+RendererPtr D3DRenderSystem::CreateRenderer(std::vector<RenderTargetPtr>* targets,
+                                            DepthBuffer* depth_buffer) {
+  ID3D11DeviceContext* context = envptr_->GetContext();
+  scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
+  if (renderer->Init(targets, depth_buffer)) {
+    return renderer;
+  } else {
+    return RendererPtr();  
+  }
+}
+
 RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt,
                                             const Texture::Options& depthopt) {
   DCHECK(envptr_.get() != NULL);

@@ -37,6 +37,8 @@ class D3DRenderSystem : public RenderSystem {
   DepthStencilStatePtr CreateDepthStencilState() override;
   RendererPtr CreateRenderer(const Texture::Options& opt,
                              const Texture::Options& depthopt) override;
+  RendererPtr CreateRenderer(std::vector<RenderTargetPtr>* targets,
+                             DepthBuffer* depth_buffer) override;
   RendererPtr CreateMultipleOutputRenderer(
       int count, const Texture::Options* opts, 
       const Texture::Options& depthopt) override;
