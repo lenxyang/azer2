@@ -1,6 +1,7 @@
 #include "azer/util/interactive/interactive_context.h"
 
 #include "base/logging.h"
+#include "ui/events/event_constants.h"
 #include "azer/util/interactive/interactive_controller.h"
 #include "azer/util/interactive/pick_util.h"
 
@@ -10,16 +11,26 @@ InteractiveContext::InteractiveContext(nelf::RenderWindow* window,
     : window_(window),
       activated_(-1),
       draging_(false),
+      last_drag_event_(ui::ET_MOUSE_PRESSED, gfx::Point(), gfx::Point(),
+                       ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON),
       camera_(camera),
       args_(NULL)  {
 }
 
 void InteractiveContext::Activate(InteractiveController* controller) {
-  if (activated_ >= 0) {
-    controllers_[activated_]->OnDeactive();
+  int index = GetIndexOf(controller);
+  if (activated_ == index) {
+    return;
   }
 
-  int index = GetIndexOf(controller);
+  if (activated_ >= 0) {
+    controllers_[activated_]->OnDeactive();
+    if (draging_) {
+      controllers_[activated_]->OnDragEnd(last_drag_event_);
+      draging_ = false;
+    }
+  }
+
   DCHECK_GE(index, 0);
   activated_ = index;
   controller->OnActive();
@@ -101,12 +112,14 @@ void InteractiveContext::OnDragBegin(const ui::MouseEvent& event) {
     if (ret > 0) {
       draging_ = true;
       controller->OnDragBegin(event);
+      last_drag_event_ = event;
     }
   }
 }
 
 void InteractiveContext::OnDrag(const ui::MouseEvent& event) {
   if (draging_) {
+    last_drag_event_ = event;
     InteractiveController* controller = controllers_[activated_];
     controller->OnDragging(event);
   }

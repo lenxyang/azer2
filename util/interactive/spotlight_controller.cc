@@ -217,10 +217,10 @@ void SpotLightController::SetLight(Light* ptr) {
 }
 
 void SpotLightController::set_mode(int32 mode) {
-  new_mode_ = mode;
   set_state(0);
   rotate_controller_->set_state(0);
   translate_controller_->set_state(0);
+  new_mode_ = mode;
 }
 
 int32 SpotLightController::GetPicking(const gfx::Point& pt) {
