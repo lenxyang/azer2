@@ -50,4 +50,13 @@ void Renderer::SetDepthStencilState(DepthStencilState* state,
 DepthStencilState* Renderer::GetDepthStencilState() {
   return current_depth_state_;
 }
+
+void Renderer::SetDepthBuffer(DepthBuffer* depth) {
+  depth_ = depth;
+}
+
+void Renderer::SetRenderTargets(std::vector<RenderTargetPtr>* targets) {
+  targets_.clear();
+  targets_ = *targets;
+}
 }  // namespace azer

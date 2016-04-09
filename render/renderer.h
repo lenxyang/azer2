@@ -90,6 +90,9 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   typedef std::vector<RenderTargetPtr> RenderTargetVec;
   RenderTargetVec* GetAllRenderTargets() { return &targets_;}
   RenderSystem* GetRenderSystem() { return render_system_;}
+
+  void SetDepthBuffer(DepthBuffer* depth);
+  void SetRenderTargets(std::vector<RenderTargetPtr>* targets);
  protected:
   RenderSystem* render_system_;
   DepthBufferPtr depth_;
