@@ -82,6 +82,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
                                   int32 first_indices = 0, int32 index_base = 0,
                                   int32 instance_start_index = 0) = 0;
   
+  const gfx::Size& size() const; 
   virtual void SetViewport(const Viewport& viewport) = 0;
   virtual const Viewport& GetViewport() const  = 0;
 

@@ -52,11 +52,16 @@ DepthStencilState* Renderer::GetDepthStencilState() {
 }
 
 void Renderer::SetDepthBuffer(DepthBuffer* depth) {
+  DCHECK_EQ(size(), depth->size());
   depth_ = depth;
 }
 
 void Renderer::SetRenderTargets(std::vector<RenderTargetPtr>* targets) {
   targets_.clear();
   targets_ = *targets;
+}
+
+const gfx::Size& Renderer::size() const; {
+  return GetRenderTarget(0)->options().size;
 }
 }  // namespace azer

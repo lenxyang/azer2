@@ -42,7 +42,7 @@ class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
  public:
   virtual ~DepthBuffer() {};
 
-
+  const gfx::Size& size() const; 
   Texture* GetTexture() { return texture_.get();}
   Texture* GetResTexture() { return restexture_.get();}
  protected:

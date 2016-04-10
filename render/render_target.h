@@ -10,12 +10,8 @@ namespace azer {
 
 class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
  public:
-  RenderTarget(const Texture::Options& opt, bool default_rt = false)
-      : default_render_target_(default_rt)
-      , options_(opt) {
-  }
-
-  virtual ~RenderTarget() {}
+  RenderTarget(const Texture::Options& opt, bool default_rt = false);
+  virtual ~RenderTarget();
 
   virtual void Clear(const azer::Vector4& color) = 0;
 
@@ -23,6 +19,7 @@ class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
   const Texture* GetTexture() const { return texture_.get();}
   bool IsDefaultRenderTarget() { return default_render_target_;}
 
+  const gfx::Size& size() const;
   const Texture::Options& options() { return options_;}
  protected:
   const bool default_render_target_;

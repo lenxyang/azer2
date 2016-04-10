@@ -35,6 +35,10 @@ Texture::Options::Options()
 
 Texture::Texture(const Options& opt) : options_(opt) {}
 
+const gfx::Size& Texture::size() const {
+  return options_.size();
+}
+
 bool Texture::Save(const ::base::FilePath& path) {
   SkBitmap bitmap;
   SkImageInfo info = SkImageInfo::Make(options_.size.width(),
@@ -70,4 +74,5 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   opt.sampler.mip_level = 1;
   return opt;
 }
+
 }   // namespace azer

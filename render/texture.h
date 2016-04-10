@@ -65,6 +65,8 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
     uint32 depth_pitch;
   };
 
+
+  const gfx::Size& size() const;
   virtual MapData map(MapType maptype) = 0;
   virtual void unmap() = 0;
   virtual bool InitFromImage(const ImageData* image) = 0;

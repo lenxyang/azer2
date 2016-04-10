@@ -60,6 +60,7 @@ source_set("render") {
     "render_system_loader.h",
     "render_system_observer.cc",
     "render_system_observer.h",
+    "render_target.cc",
     "render_target.h",
     "renderer.cc",
     "transform_holder.cc",

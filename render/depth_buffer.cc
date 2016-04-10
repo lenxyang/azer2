@@ -5,4 +5,8 @@ DepthStencilState::DepthStencilState() {
 }
 DepthStencilState::~DepthStencilState() {
 }
+
+const gfx::Size& DepthStencilState::size() const {
+  return GetTexture()->size();
+}
 }  // namespace azer
