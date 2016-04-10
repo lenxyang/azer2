@@ -36,7 +36,7 @@ Texture::Options::Options()
 Texture::Texture(const Options& opt) : options_(opt) {}
 
 const gfx::Size& Texture::size() const {
-  return options_.size();
+  return options_.size;
 }
 
 bool Texture::Save(const ::base::FilePath& path) {
