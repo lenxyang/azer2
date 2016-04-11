@@ -227,11 +227,13 @@ RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
   DCHECK_GT(count, 0u);
   std::vector<RenderTargetPtr> targets;
   for (int32 i = 0; i < count; ++i) {
-    DCHECK(opts[i].size == depthopt.size);
+    DCHECK(opts[i].size == depth->size());
     scoped_refptr<D3DRenderTarget> target = D3DRenderTarget::Create(opts[i], this);
     targets.push_back(target);
   }
 
+  ID3D11DeviceContext* context = envptr_->GetContext();
+  scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(&targets, depth)) {
     return renderer;
   } else {
