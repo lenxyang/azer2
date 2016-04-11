@@ -24,7 +24,6 @@ Renderer* D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
   std::unique_ptr<D3DSurfaceRenderer> renderer(
       new D3DSurfaceRenderer(surface, d3d_context, render_system_));
-  
   RenderTargetPtr target(D3DSurfaceRenderTarget::Create(d3d_swapchain_.get(),
                                                         render_system_));
   DepthBufferPtr depth(D3DDepthBuffer::Create(surface, render_system_));
