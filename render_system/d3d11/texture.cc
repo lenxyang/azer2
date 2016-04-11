@@ -77,7 +77,7 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
 }
 
 void D3DTexture::SetPSSampler(int index, D3DRenderer* renderer) {
-  DCHECK(NULL != res_view_);
+  DCHECK(NULL != res_view_) << "Cannot Bind as Shader Resource";
   DCHECK_GE(index, 0);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
   d3d_context->PSSetShaderResources(index, 1, &res_view_);

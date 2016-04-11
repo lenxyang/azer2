@@ -50,7 +50,7 @@ void D3DRenderer::Use() {
 
   
   D3DDepthBuffer* depth = ((D3DDepthBuffer*)depth_.get());
-  DCHECK(depth->size() == targets_[0].size());
+  DCHECK(depth->size() == targets_[0]->size());
   ID3D11DepthStencilView* depth_view = depth->GetD3DDepthStencilView();
   d3d_context_->OMSetRenderTargets(count, target_view, depth_view);
 
