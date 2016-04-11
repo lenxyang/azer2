@@ -86,6 +86,12 @@ namespace {
 int32 ComponentCount(DataFormat type) {
   switch (type) {
     case kFloat: return 1;
+    case kByteVec2: return 2;
+    case kByteVec3: return 3;
+    case kByteVec4: return 4;
+    case kShortVec2: return 2;
+    case kShortVec3: return 3;
+    case kShortVec4: return 4;
     case kVec2: return 2;
     case kVec3: return 3;
     case kVec4: return 4;
@@ -93,10 +99,22 @@ int32 ComponentCount(DataFormat type) {
     case kMat3: return 9;
     case kMat4: return 16;
     case kInt: return 1;
+    case kByteIntVec2: return 2;
+    case kByteIntVec3: return 3;
+    case kByteIntVec4: return 4;
+    case kShortIntVec2: return 2;
+    case kShortIntVec3: return 3;
+    case kShortIntVec4: return 4;
     case kIntVec2: return 2;
     case kIntVec3: return 3;
     case kIntVec4: return 4;
     case kUint: return 1;
+    case kByteUintVec2: return 2;
+    case kByteUintVec3: return 3;
+    case kByteUintVec4: return 4;
+    case kShortUintVec2: return 2;
+    case kShortUintVec3: return 3;
+    case kShortUintVec4: return 4;
     case kUintVec2: return 2;
     case kUintVec3: return 3;
     case kUintVec4: return 4;
@@ -104,15 +122,6 @@ int32 ComponentCount(DataFormat type) {
     case kBoolVec2: return 2;
     case kBoolVec3: return 3;
     case kBoolVec4: return 4;
-    case kRGBA8:
-    case kRGBAn8:
-    case kRGBA32:
-    case kRGBAn32:
-    case kRGBAf:
-    case kBGRA8:
-    case kBGRAn8:
-    case kBGRA32:
-    case kBGRAn32:
     default: CHECK(false); return -1;
   }
 }

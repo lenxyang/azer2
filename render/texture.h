@@ -16,6 +16,8 @@ class RenderSystem;
 class ImageData;
 
 enum TexFormat {
+  kUndefined = 0,
+  kTexBGRAn8,
   kTexRGBA8,
   kTexRGBAn8,
   kTexR32,

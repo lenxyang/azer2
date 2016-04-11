@@ -31,34 +31,35 @@ D3D11_CPU_ACCESS_FLAG TranslateCPUAccess(CPUAccess access) {
 }
 
 DXGI_FORMAT TranslateFormat(DataFormat type) {
+  DXGI_FORMAT none = (DXGI_FORMAT)0;
   switch (type) {
     case kScalar: return DXGI_FORMAT_R32_FLOAT;
-    case kByteVec2: return DXGI_FORMAT_R8G8_FLOAT;
-    case kByteVec3: return DXGI_FORMAT_R8G8B8_FLOAT;
-    case kByteVec4: return DXGI_FORMAT_R8G8B8A8_FLOAT;
-    case kShortVec2: return DXGI_FORMAT_R16G16_FLOAT;
-    case kShortVec3: return DXGI_FORMAT_R16G16B16_FLOAT;
-    case kShortVec4: return DXGI_FORMAT_R16G16B16A16_FLOAT;
+    case kByteVec2: return DXGI_FORMAT_R8G8_TYPELESS;
+    case kByteVec3: CHECK(false); return none; // no DXGI_FORMAT_R8G8B8_TYPELESS;
+    case kByteVec4: return DXGI_FORMAT_R8G8B8A8_TYPELESS;
+    case kShortVec2: return DXGI_FORMAT_R16G16_TYPELESS;
+    case kShortVec3: CHECK(false); return none; // no DXGI_FORMAT_R16G16B16_TYPELESS;
+    case kShortVec4: return DXGI_FORMAT_R16G16B16A16_TYPELESS;
     case kVec2: return DXGI_FORMAT_R32G32_FLOAT;
     case kVec3: return DXGI_FORMAT_R32G32B32_FLOAT;
     case kVec4: return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kInt: return DXGI_FORMAT_R32_SINT;
-    case kByteIntVec2: return DXGI_FORMAT_R8G8_FLOAT;
-    case kByteIntVec3: return DXGI_FORMAT_R8G8B8_FLOAT;
-    case kByteIntVec4: return DXGI_FORMAT_R8G8B8A8_FLOAT;
-    case kShortIntVec2: return DXGI_FORMAT_R16G16_FLOAT;
-    case kShortIntVec3: return DXGI_FORMAT_R16G16B16_FLOAT;
-    case kShortIntVec4: return DXGI_FORMAT_R16G16B16A16_FLOAT;
+    case kByteIntVec2: return DXGI_FORMAT_R8G8_SINT;
+    case kByteIntVec3: CHECK(false); return none; // no DXGI_FORMAT_R8G8B8_SINT;
+    case kByteIntVec4: return DXGI_FORMAT_R8G8B8A8_SINT;
+    case kShortIntVec2: return DXGI_FORMAT_R16G16_SINT;
+    case kShortIntVec3: CHECK(false); return none; // no DXGI_FORMAT_R16G16B16_SINT;
+    case kShortIntVec4: return DXGI_FORMAT_R16G16B16A16_SINT;
     case kIntVec2: return DXGI_FORMAT_R32G32_SINT;
     case kIntVec3: return DXGI_FORMAT_R32G32B32_SINT;
     case kIntVec4: return DXGI_FORMAT_R32G32B32A32_SINT;
     case kUint: return DXGI_FORMAT_R32_UINT;
-    case kByteUintVec2: return DXGI_FORMAT_R8G8_FLOAT;
-    case kByteUintVec3: return DXGI_FORMAT_R8G8B8_FLOAT;
-    case kByteUintVec4: return DXGI_FORMAT_R8G8B8A8_FLOAT;
-    case kShortUintVec2: return DXGI_FORMAT_R16G16_FLOAT;
-    case kShortUintVec3: return DXGI_FORMAT_R16G16B16_FLOAT;
-    case kShortUintVec4: return DXGI_FORMAT_R16G16B16A16_FLOAT;
+    case kByteUintVec2: return DXGI_FORMAT_R8G8_UINT;
+    case kByteUintVec3: CHECK(false); return none; // return DXGI_FORMAT_R8G8B8_UINT;
+    case kByteUintVec4: return DXGI_FORMAT_R8G8B8A8_UINT;
+    case kShortUintVec2: return DXGI_FORMAT_R16G16_UINT;
+    case kShortUintVec3: CHECK(false); return none; // no DXGI_FORMAT_R16G16B16_UINT;
+    case kShortUintVec4: return DXGI_FORMAT_R16G16B16A16_UINT;
     case kUintVec2: return DXGI_FORMAT_R32G32_UINT;
     case kUintVec3: return DXGI_FORMAT_R32G32B32_UINT;
     case kUintVec4: return DXGI_FORMAT_R32G32B32A32_UINT;
@@ -82,16 +83,15 @@ DataFormat TranslateD3DFormat(DXGI_FORMAT type) {
   }
 }
 
-TexFormat TranslateD3DFormat(DXGI_FORMAT type) {
+TexFormat TranslateD3DTexFormat(DXGI_FORMAT type) {
   switch (type) {
-    case DXGI_FORMAT_B8G8R8A8_UNORM: return kTexBGRAn8;
     case DXGI_FORMAT_R8G8B8A8_UNORM: return kTexRGBAn8;
     case DXGI_FORMAT_R32G32B32A32_UINT: return kTexRGBAn32;
     case DXGI_FORMAT_R32G32B32A32_FLOAT: return kTexRGBAf;
     case DXGI_FORMAT_D24_UNORM_S8_UINT: return kTexDepth24nStencil8u;
     default:
       DCHECK(false) << "Unsupport type: " << (int32)type;
-      return (DataFormat)0;
+      return (TexFormat)0;
   }
 }
 

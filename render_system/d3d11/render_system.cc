@@ -153,7 +153,7 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
                                           const ImageData* img) {
   Texture::Options texopt = opt;
   texopt.size = gfx::Size(img->width(), img->height());
-  texopt.format = (DataFormat)img->data_format();
+  texopt.format = (TexFormat)img->data_format();
   texopt.type = (TexType)img->textype();
   scoped_refptr<D3DTexture> tex;
   if (texopt.type == kTex2D) {

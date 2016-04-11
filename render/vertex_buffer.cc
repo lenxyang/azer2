@@ -32,7 +32,7 @@ VertexDesc::~VertexDesc() {
 namespace {
 int32 calc_vertex_desc_size(const VertexDesc::Desc* desc) {
   // TODO(yanglei), align not support
-  return VertexTypeSize(desc->type);
+  return SizeofDataFormat(desc->type);
 }
 }
 

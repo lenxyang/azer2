@@ -94,7 +94,7 @@ bool D3D2DArrayRenderTarget::Init(int index) {
   D3D11_RENDER_TARGET_VIEW_DESC desc;
   memset(&desc, 0, sizeof(desc));
   desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DARRAY;
-  desc.Format = TranslateFormat(texture_->options().format);
+  desc.Format = TranslateTexFormat(texture_->options().format);
   desc.Texture2DArray.ArraySize = 1;
   desc.Texture2DArray.FirstArraySlice = index;
   HRESULT hr = d3d_device->CreateRenderTargetView(resource, &desc, &target_);

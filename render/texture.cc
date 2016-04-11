@@ -76,7 +76,7 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
 }
 
 
-const char* GetTexFormatName(DataFormat format) {
+const char* GetTexFormatName(TexFormat format) {
   switch (format) {
     case kTexRGBA8: return "rgba(8)";
     case kTexRGBAn8: return "rgba(norm8)";
@@ -99,7 +99,6 @@ const char* GetTexFormatName(DataFormat format) {
     case kTexDXBC5n: return "DXBC5n";
     case kTexDXBC7n: return "DXBC7n";
     case kTexDXBC7nSRGB: return "DXBC7nSRGB";
-      // case kTexRGBA: return sizeof(float) * 4;
     default:
       NOTREACHED();
       return "";
@@ -107,7 +106,7 @@ const char* GetTexFormatName(DataFormat format) {
 }
 
 
-uint32 SizeofTexFormat(DataFormat format) {
+uint32 SizeofTexFormat(TexFormat format) {
   switch (format) {
     case kTexRGBA8: return sizeof(int8) * 4;
     case kTexRGBAn8: return sizeof(uint8) * 4;
@@ -118,7 +117,6 @@ uint32 SizeofTexFormat(DataFormat format) {
     case kTexR24G8:
     case kTexR24nX8:
       return sizeof(uint32);
-      // case kTexRGBA: return sizeof(float) * 4;
     case kTexDXBC1n:
     case kTexDXBC1nSRGB:
     case kTexDXBC4n:

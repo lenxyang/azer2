@@ -50,7 +50,7 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   tex_desc_.Height    = options_.size.height();
   tex_desc_.MipLevels = mipmap;
   tex_desc_.ArraySize = arraysize;
-  tex_desc_.Format    = TranslateFormat(options_.format);
+  tex_desc_.Format    = TranslateTexFormat(options_.format);
   tex_desc_.SampleDesc.Count   = options_.sampler.sample_level;
   tex_desc_.SampleDesc.Quality = options_.sampler.sample_quality;
   tex_desc_.Usage          = TranslateUsage(options_.usage);
@@ -339,7 +339,7 @@ bool D3DResTexture2D::InitFromTexture(D3DTexture2D* texture) {
   D3D11_SHADER_RESOURCE_VIEW_DESC desc;
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURE2D);
-  desc.Format = TranslateFormat(options_.format);
+  desc.Format = TranslateTexFormat(options_.format);
   desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
   desc.Texture2D.MipLevels = 1;
   desc.Texture2D.MostDetailedMip = 0;
@@ -425,7 +425,7 @@ D3DTexture2DExtern* D3DTexture2DExtern::Create(HANDLE handle, D3DRenderSystem* r
   shared_tex->GetDesc(&desc);
   Options opt;
   opt.size = gfx::Size(desc.Width, desc.Height);
-  opt.format = TranslateD3DFormat(desc.Format);
+  opt.format = TranslateD3DTexFormat(desc.Format);
   std::unique_ptr<D3DTexture2DExtern> ptr(new D3DTexture2DExtern(opt, rs));
   ptr->Attach(shared_tex);
   if (ptr->GetResource()) {

@@ -144,7 +144,7 @@ D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o,
                                        D3DRenderSystem* rs) {
   Texture::Options opt;
   opt = o;
-  opt.format = kDepth24nStencil8u;
+  opt.format = kTexDepth24nStencil8u;
   opt.target = kBindTargetDepthStencil;
   opt.genmipmap = false;
   std::unique_ptr<D3DDepthBuffer> ptr(new D3DDepthBuffer(opt, rs));
@@ -175,7 +175,7 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
   
   if (options_.target & kBindTargetRenderTarget) {
     Texture::Options opt = options_;
-    opt.format = kR24nX8;
+    opt.format = kTexR24nX8;
     D3DResTexture2D* restex = new D3DResTexture2D(opt, rs);
     restexture_ = restex;
     if (restex->InitFromTexture(tex)) {

@@ -27,6 +27,12 @@ namespace {
 const char* DeclHLSLTypeName(DataFormat format) {
   switch (format) {
     case kFloat: return "float";
+    case kByteVec2: return "float2";
+    case kByteVec3: return "float3";
+    case kByteVec4: return "float4";
+    case kShortVec2: return "float2";
+    case kShortVec3: return "float3";
+    case kShortVec4: return "float4";
     case kVec2: return "float2";
     case kVec3: return "float3";
     case kVec4: return "float4";
@@ -34,15 +40,25 @@ const char* DeclHLSLTypeName(DataFormat format) {
     case kMat3: return "float3x3";
     case kMat4: return "float4x4";
     case kInt: return "int";
+    case kByteIntVec2: return "int2";
+    case kByteIntVec3: return "int3";
+    case kByteIntVec4: return "int4";
+    case kShortIntVec2: return "int2";
+    case kShortIntVec3: return "int3";
+    case kShortIntVec4: return "int4";
     case kIntVec2: return "int2";
     case kIntVec3: return "int3";
     case kIntVec4: return "int4";
     case kUint: return "uint";
+    case kByteUintVec2: return "uint2";
+    case kByteUintVec3: return "uint3";
+    case kByteUintVec4: return "uint4";
+    case kShortUintVec2: return "uint2";
+    case kShortUintVec3: return "uint3";
+    case kShortUintVec4: return "uint4";
     case kUintVec2: return "uint2";
     case kUintVec3: return "uint3";
     case kUintVec4: return "uint4";
-    case kRGBAn8:   return "uint4";
-    case kRGBA8:    return "float4";
     default:
       CHECK(false) << " not support :" << format;
       return "";
