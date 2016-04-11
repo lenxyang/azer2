@@ -208,17 +208,6 @@ DepthStencilStatePtr D3DRenderSystem::CreateDepthStencilState() {
   return DepthStencilStatePtr(new D3DDepthStencilState);
 }
 
-RendererPtr D3DRenderSystem::CreateRenderer(std::vector<RenderTargetPtr>* targets,
-                                            DepthBuffer* depth_buffer) {
-  ID3D11DeviceContext* context = envptr_->GetContext();
-  scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
-  if (renderer->Init(targets, depth_buffer)) {
-    return renderer;
-  } else {
-    return RendererPtr();  
-  }
-}
-
 RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt,
                                             const Texture::Options& depthopt) {
   DCHECK(envptr_.get() != NULL);
@@ -234,10 +223,8 @@ RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt,
 }
 
 RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
-    int32 count, const Texture::Options* opts,
-    const Texture::Options& depthopt) {
+    int count, const Texture::Options* opts, DepthBuffer* depth) {
   DCHECK_GT(count, 0u);
-  DepthBufferPtr depth(D3DDepthBuffer::Create(depthopt, this));
   std::vector<RenderTargetPtr> targets;
   for (int32 i = 0; i < count; ++i) {
     DCHECK(opts[i].size == depthopt.size);
@@ -245,13 +232,19 @@ RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
     targets.push_back(target);
   }
 
-  ID3D11DeviceContext* context = envptr_->GetContext();
-  scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(&targets, depth)) {
     return renderer;
   } else {
     return RendererPtr();
   }
+}
+
+RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
+    int32 count, const Texture::Options* opts,
+    const Texture::Options& depthopt) {
+  DepthBufferPtr depth(D3DDepthBuffer::Create(depthopt, this));
+  CHECK(depth.get()) << "Failed to Create DepthBuffer";
+  return CreateMultipleOutputRenderer(count, opts, depth);
 }
 }  // namespace d3d11
 }  // namespace azer
