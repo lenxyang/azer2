@@ -87,7 +87,7 @@ void VertexPack::WriteIntVec4(const IntVec4& v, const VertexPos& pos) {
     uint8* ptr = get_data_ptr(pos);
     IntVec4* vec = (IntVec4*)ptr;
     *vec = v;
-  } else if (get_data_type(pos) == kRGBA8) {
+  } else if (get_data_type(pos) == kByteInt) {
     uint32* ptr = (uint32*)get_data_ptr(pos);
     int32 nv = (v.x & 0x000000FF);
     nv |= (v.y & 0x0000FF00) >> 8;
@@ -136,7 +136,7 @@ void VertexPack::WriteVector4(const Vector4& v, const VertexPos& pos) {
     Vector4* vec = (Vector4*)ptr;
 
     *vec = v;
-  } else if (get_data_type(pos) == kRGBAn8) {
+  } else if (get_data_type(pos) == kByteVec4) {
     uint32* ptr = (uint32*)get_data_ptr(pos);
     uint32 x = ((uint32)(v.x * 255));
     uint32 y = ((uint32)(v.y * 255)) >> 8;
@@ -193,7 +193,7 @@ void VertexPack::ReadIntVec4(IntVec4* v, const VertexPos& pos) const {
   if (get_data_type(pos) == kIntVec4) {
     IntVec4* ptr = (IntVec4*)(get_data_ptr(pos));
     *v = *ptr;
-  } else if (get_data_type(pos) == kRGBA8) {
+  } else if (get_data_type(pos) == kByteIntVec4) {
     int32 i32 = *(int32*)(get_data_ptr(pos));
     v->x = (0x000000ff & i32);
     v->y = (0x0000ff00 & i32) >> 8;
@@ -231,7 +231,7 @@ void VertexPack::ReadVector4(Vector4* v, const VertexPos& pos) const {
   if (get_data_type(pos) == kVec4) {
     Vector4* ptr = (Vector4*)(get_data_ptr(pos));
     *v = *ptr;
-  } else if (get_data_type(pos) == kRGBAn8) {
+  } else if (get_data_type(pos) == kByteVec4) {
     int32 i32 = *(int32*)(get_data_ptr(pos));
     float x = (0x000000ff & i32);
     float y = (0x0000ff00 & i32) >> 8;

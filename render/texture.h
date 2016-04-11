@@ -15,6 +15,33 @@ namespace azer {
 class RenderSystem;
 class ImageData;
 
+enum TexFormat {
+  kTexRGBA8,
+  kTexRGBAn8,
+  kTexR32,
+  kTexRG32,
+  kTexRGB32,
+  kTexRGBA32,
+  kTexRGBAn32,
+  kTexRGBAf,
+  kTexR11G11B10f,
+  kTexDepth24nStencil8u,
+  kTexR24G8,
+  kTexR24nX8,
+  kTexDXBC1n = 1000,
+  kTexDXBC1nSRGB,
+  kTexDXBC4s,
+  kTexDXBC4n,
+  kTexDXBC2n,
+  kTexDXBC2nSRGB,
+  kTexDXBC3n,
+  kTexDXBC3nSRGB,
+  kTexDXBC5s,
+  kTexDXBC5n,
+  kTexDXBC7n,
+  kTexDXBC7nSRGB,
+};
+
 struct AZER_EXPORT SamplerState {
   AddressMode wrap_u;
   AddressMode wrap_v;
@@ -37,7 +64,7 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
   struct AZER_EXPORT Options {
     gfx::Size size;
     SamplerState sampler;
-    DataFormat format;            // default: kRGBAn8
+    TexFormat format;            // default: kRGBAn8
     BufferUsage usage;   // default: GraphicBuffer::kDefault
     CPUAccess cpu_access;         // default: kCPUNoAccess
     uint32 target;

@@ -24,7 +24,7 @@ SamplerState::SamplerState()
 }
 
 Texture::Options::Options()
-    : format(kRGBAn8),
+    : format(kTexRGBAn8),
       usage(kBufferDefault),
       cpu_access(kCPUNoAccess),
       target(kBindTargetUnknown),
@@ -67,7 +67,7 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   Texture::Options opt;
   opt.size = size;
   opt.genmipmap = true;
-  opt.format = kRGBAn8;
+  opt.format = kTexRGBAn8;
   opt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
   opt.type = kTex2D;
   // opt.sampler.mip_level = -1;
@@ -75,4 +75,67 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   return opt;
 }
 
+
+const char* GetTexFormatName(DataFormat format) {
+  switch (format) {
+    case kTexRGBA8: return "rgba(8)";
+    case kTexRGBAn8: return "rgba(norm8)";
+    case kTexRGBA32: return "rgba(32)";
+    case kTexRGBAn32:return "rgba(norm32)";
+    case kTexRGBAf: return "rgba(f)";
+    case kTexR11G11B10f: return "r11g11b10";
+    case kTexDepth24nStencil8u: return "Depth24nStencil8u";
+    case kTexR24G8: return "kTexR24G8";
+    case kTexR24nX8: return "kTexR24nX8";
+    case kTexDXBC1n: return "DXBC1n";
+    case kTexDXBC1nSRGB: return "DXBC1nSRGB";
+    case kTexDXBC4s: return "DXBC4s";
+    case kTexDXBC4n: return "DXBC4n";
+    case kTexDXBC2n: return "DXBC2n";
+    case kTexDXBC2nSRGB: return "DXBC2nSRGB";
+    case kTexDXBC3n: return "DXBC3n";
+    case kTexDXBC3nSRGB: return "DXBC3nSRGB";
+    case kTexDXBC5s: return "DXBC5s";
+    case kTexDXBC5n: return "DXBC5n";
+    case kTexDXBC7n: return "DXBC7n";
+    case kTexDXBC7nSRGB: return "DXBC7nSRGB";
+      // case kTexRGBA: return sizeof(float) * 4;
+    default:
+      NOTREACHED();
+      return "";
+  }
+}
+
+
+uint32 SizeofTexFormat(DataFormat format) {
+  switch (format) {
+    case kTexRGBA8: return sizeof(int8) * 4;
+    case kTexRGBAn8: return sizeof(uint8) * 4;
+    case kTexRGBA32: return sizeof(int32) * 4;
+    case kTexRGBAn32: return sizeof(uint32) * 4;
+    case kTexRGBAf: return sizeof(float) * 4;
+    case kTexDepth24nStencil8u:
+    case kTexR24G8:
+    case kTexR24nX8:
+      return sizeof(uint32);
+      // case kTexRGBA: return sizeof(float) * 4;
+    case kTexDXBC1n:
+    case kTexDXBC1nSRGB:
+    case kTexDXBC4n:
+    case kTexDXBC4s:
+      return 4;
+    case kTexDXBC2n:
+    case kTexDXBC2nSRGB:
+    case kTexDXBC3n:
+    case kTexDXBC3nSRGB:
+    case kTexDXBC5s:
+    case kTexDXBC5n:
+    case kTexDXBC7n:
+    case kTexDXBC7nSRGB:
+      return 8;
+    default:
+      NOTREACHED();
+      return 0;
+  }
+};
 }   // namespace azer
