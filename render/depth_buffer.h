@@ -45,11 +45,9 @@ class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
   const gfx::Size& size() const; 
   Texture* GetTexture() { return texture_.get();}
   const Texture* GetTexture() const { return texture_.get();}
-  Texture* GetResTexture() { return restexture_.get();}
  protected:
   DepthBuffer(const Texture::Options& opt) : options_(opt) {}
   TexturePtr texture_;
-  TexturePtr restexture_;
   const Texture::Options options_;
   DISALLOW_COPY_AND_ASSIGN(DepthBuffer);
 };
