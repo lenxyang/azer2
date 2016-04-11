@@ -223,6 +223,7 @@ RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt,
                                             const Texture::Options& depthopt) {
   DCHECK(envptr_.get() != NULL);
   DCHECK(envptr_->GetContext() != NULL);
+  DCHECK(opt.size == depthopt.size);
   ID3D11DeviceContext* context = envptr_->GetContext();
   scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
   if (renderer->Init(opt)) {
@@ -239,6 +240,7 @@ RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
   DepthBufferPtr depth(D3DDepthBuffer::Create(depthopt, this));
   std::vector<RenderTargetPtr> targets;
   for (int32 i = 0; i < count; ++i) {
+    DCHECK(opts[i].size == depthopt.size);
     scoped_refptr<D3DRenderTarget> target = D3DRenderTarget::Create(opts[i], this);
     targets.push_back(target);
   }
