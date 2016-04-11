@@ -142,12 +142,9 @@ D3DDepthBuffer::~D3DDepthBuffer() {
 
 D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o, 
                                        D3DRenderSystem* rs) {
-  Texture::Options opt;
-  opt = o;
-  opt.format = kTexDepth24nStencil8u;
-  opt.target = kBindTargetDepthStencil;
-  opt.genmipmap = false;
-  std::unique_ptr<D3DDepthBuffer> ptr(new D3DDepthBuffer(opt, rs));
+  DCHECK(o.format == kTexDepth24nStencil8u);
+  DCHECK(o.target & kBindTargetDepthStencil);
+  std::unique_ptr<D3DDepthBuffer> ptr(new D3DDepthBuffer(o, rs));
   if (!ptr->Init(rs)) {
     return NULL;
   }
@@ -157,6 +154,8 @@ D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o,
 
 D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
   Texture::Options o;
+  o.target = kBindTargetDepthStencil;
+  o.format = kTexDepth24nStencil8u;
   o.size = surface->GetBounds().size();
   o.sampler.sample_level = surface->sample_count();
   o.sampler.sample_quality = surface->sample_quality();
