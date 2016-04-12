@@ -10,7 +10,7 @@ source_set("effect") {
     "light_observer.h",
     "light.cc",
     "light.h",
-    "base_material.h"
+    "base_material.h",
     "stage_texture.cc",
     "stage_texture.h",
   ]

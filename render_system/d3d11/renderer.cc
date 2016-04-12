@@ -245,7 +245,7 @@ void D3DRenderer::ResetStageTexture(RenderPipelineStage stage) {
 }
 
 void D3DRenderer::SetShaderResTexture(RenderPipelineStage stage, int index, 
-                                      int32 count, Texture** texture) {
+                                      int32 count, TexturePtr* texture) {
   const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};

@@ -1,11 +1,14 @@
 #pragma once
 
+#include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/render/texture.h"
 
 namespace azer {
 
 class Texture;
 class Renderer;
+typedef scoped_refptr<Texture> TexturePtr;
 
 struct AZER_EXPORT StageTexture {
   int stage;

@@ -1,6 +1,7 @@
 #include "azer/effect/stage_texture.h"
 
-#include "base/common/logging.h"
+#include <algorithm>
+#include "base/logging.h"
 #include "azer/render/common.h"
 #include "azer/render/renderer.h"
 
@@ -24,9 +25,9 @@ StageTexContainer::~StageTexContainer() {
 }
 
 void StageTexContainer::SetTex(int stage, int index, Texture* tex) {
-  StageTexture& stage = GetStage(stage);
-  stage.count = std::max(stage.count, index + 1);
-  stage.tex[index] = tex;
+  StageTexture& s = GetStage(stage);
+  s.count = std::max(s.count, index + 1);
+  s.tex[index] = tex;
 }
 
 StageTexture& StageTexContainer::GetStage(int32 stage) {
@@ -38,14 +39,16 @@ StageTexture& StageTexContainer::GetStage(int32 stage) {
 void StageTexContainer::Bind(Renderer* renderer) {
   for (auto iter = stages_.begin(); iter != stages_.end(); ++iter) {
     if (iter->count > 0) {
-      renderer->BindTexture(stage, 0, iter->count, iter->tex);
+      RenderPipelineStage stage = (RenderPipelineStage)iter->stage;
+      renderer->SetShaderResTexture(stage, 0, iter->count, iter->tex);
     }
   }
 }
 
-void StageTexCounter::Reset(Renderer* renderer) {
+void StageTexContainer::Reset(Renderer* renderer) {
   for (auto iter = stages_.begin(); iter != stages_.end(); ++iter) {
     if (iter->count > 0) {
+      RenderPipelineStage stage = (RenderPipelineStage)iter->stage;
       renderer->ResetStageTexture(stage);
     }
   }
