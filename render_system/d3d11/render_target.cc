@@ -53,10 +53,8 @@ bool D3DRenderTarget::Init() {
 
 D3DRenderTarget* D3DRenderTarget::Create(const Texture::Options& o,
                                          D3DRenderSystem* rs) {
-  Texture::Options opt;
-  opt = o;
-  opt.target = (kBindTargetRenderTarget | o.target);
-  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(opt, false, rs));
+  DCHECK(o.target & kBindTargetRenderTarget);
+  std::unique_ptr<D3DRenderTarget> target(new D3DRenderTarget(o, false, rs));
   if (!target->Init()) {
     return NULL;
   }
@@ -164,6 +162,8 @@ D3DRenderTarget* D3DSurfaceRenderTarget::Create(D3DEnvSwapChain* swapchain,
   Texture::Options opt;
   opt.size = gfx::Size(surface->GetBounds().size());
   opt.target = (kBindTargetRenderTarget);
+  opt.sampler.sample_level = surface->sample_count();
+  opt.sampler.sample_quality = surface->sample_quality();
   std::unique_ptr<D3DSurfaceRenderTarget> target(
       new D3DSurfaceRenderTarget(opt, swapchain, rs));
   if (!target->Init()) {
