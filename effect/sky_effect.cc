@@ -40,8 +40,9 @@ void SkyboxEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 }
 
-void SkyboxEffect::BindTexture(int32 mode, Renderer* renderer) {
-  renderer->BindTexture(kPixelStage, 0, cubemap_.get());
+void SkyboxEffect::SetTexture(Texture* texture) {
+  cubemap_ = texture;
+  SaveShaderResTexture(kPixelStage, 0, cubemap_);
 }
 
 }  // namespace azer

@@ -37,7 +37,6 @@ class DiffuseMapEffect : public Effect {
   void SetMaterial(const DiffuseMapMaterialData& mtrl);
   static Effect* CreateObject() { return new DiffuseMapEffect;}
  protected:
-  void BindTexture(int32 mode, Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 

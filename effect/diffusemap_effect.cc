@@ -54,6 +54,7 @@ void DiffuseMapEffect::SetWorld(const Matrix4& value) { world_ = value;}
 void DiffuseMapEffect::SetCameraPos(const Vector4& pos) { camerapos_ = pos;}
 void DiffuseMapEffect::SetMaterial(const DiffuseMapMaterialData& mtrl) {
   mtrl_ = mtrl;
+  SetTexture(kPixelStage, 0, mtrl_.diffusemap);
 }
 
 void DiffuseMapEffect::SetLights(const LightPtr* value, int32 count) {
@@ -93,7 +94,4 @@ void DiffuseMapEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 }
 
-void DiffuseMapEffect::BindTexture(int32 mode, Renderer* renderer) {
-  renderer->BindTexture(kPixelStage, 0, mtrl_.diffusemap.get());
-}
 }  // namespace azer

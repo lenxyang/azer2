@@ -24,10 +24,9 @@ class OverlayEffect : public Effect {
 
   void SetBounds(const Vector4& v) { bounds_ = v;}
   void SetTexBounds(const Vector4& v) { texbounds_ = v;}
-  void SetTexture(Texture* texture) { texture_ = texture;}
+  void SetTexture(Texture* texture);
   static Effect* CreateObject() { return new OverlayEffect;}
  protected:
-  void BindTexture(int32 mode, Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 

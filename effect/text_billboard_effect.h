@@ -35,11 +35,10 @@ class TextBillboardEffect : public Effect {
   void SetViewPos(const Vector3& v) { viewpos_ = v;}
   void SetViewUp(const Vector3& v) { viewup_ = v;}
   void SetBillboard(float width, float height);
-  void SetTexture(Texture* tex) { tex_ = tex;}
+  void SetTexture(Texture* tex);
   void SetDiffuse(const Vector4& v) { diffuse_ = v;}
   static Effect* CreateObject() { return new TextBillboardEffect;}
  protected:
-  void BindTexture(int mode, Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 

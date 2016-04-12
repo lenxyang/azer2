@@ -52,8 +52,8 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void OnRenderBegin(Renderer* renderer);
   void OnRenderEnd(Renderer* renderer);
   void OnRenderNewObject(Renderer* renderer);
-  void SetTexture(int32 stage, int32 index, Texture* tex);
  protected:
+  void SaveShaderResTexture(int32 stage, int32 index, Texture* tex);
   void BindTexture(int32 mode, Renderer* renderer);
   virtual void InitGpuConstantTable() {};
   virtual void ApplyGpuConstantTable(Renderer* renderer) {}

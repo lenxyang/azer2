@@ -40,7 +40,8 @@ void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 }
 
-void OverlayEffect::BindTexture(int32 mode, Renderer* renderer) {
-  renderer->BindTexture(kPixelStage, 0, texture_.get());
+void OverlayEffect::SetTexture(Texture* texture) {
+  texture_ = texture;
+  SaveShaderResTexture(kPixelStage, 0, texture_);
 }
 }  // namespace azer
