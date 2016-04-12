@@ -159,10 +159,14 @@ D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
   o.size = surface->GetBounds().size();
   o.sampler.sample_level = surface->sample_count();
   o.sampler.sample_quality = surface->sample_quality();
+  o.format = kTexR24G8; // kTexDepth24nStencil8u;
+  o.target = kBindTargetDepthStencil | kBindTargetShaderResource;
+  o.genmipmap = false;
   return Create(o, rs);
 }
 
 bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
+  DCHECK(options_.target & kBindTargetDepthStencil);
   ID3D11Device* d3d_device = rs->GetDevice();
   HRESULT hr;
   DCHECK(texture_.get() == NULL);
@@ -172,22 +176,16 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
     return false;
   }
   
-  if (options_.target & kBindTargetRenderTarget) {
-    Texture::Options opt = options_;
-    opt.format = kTexR24nX8;
-    D3DResTexture2D* restex = new D3DResTexture2D(opt, rs);
-    restexture_ = restex;
-    if (restex->InitFromTexture(tex)) {
-      return false;
-    }
-  }
-  
-
   ID3D11Resource* resource = tex->GetResource();
   uint32 target = TranslateBindTarget(options_.target);
   DCHECK(target & D3D11_BIND_DEPTH_STENCIL);
 
-  hr = d3d_device->CreateDepthStencilView(resource, NULL, &target_);
+  D3D11_DEPTH_STENCIL_VIEW_DESC dvsd = {
+    DXGI_FORMAT_D24_UNORM_S8_UINT,
+    D3D11_DSV_DIMENSION_TEXTURE2D,
+    0
+  };
+  hr = d3d_device->CreateDepthStencilView(resource, &dvsd, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateDepthStencilView failed ");
 
   return true;

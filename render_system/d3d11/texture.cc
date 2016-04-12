@@ -148,7 +148,12 @@ void D3DTexture::GenerateMips(int level) {
 
 bool D3DTexture::InitResourceView() {
   ID3D11Device* d3d_device = render_system_->GetDevice();
-  D3D11_SHADER_RESOURCE_VIEW_DESC view_desc;
+  D3D11_SHADER_RESOURCE_VIEW_DESC view_desc = {
+    DXGI_FORMAT_UNKNOWN,
+    D3D11_SRV_DIMENSION_TEXTURE2D,
+    0,
+    0,
+  };
   InitResourceDesc(&view_desc);
   HRESULT hr = d3d_device->CreateShaderResourceView(texres_, &view_desc, &res_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
@@ -325,9 +330,14 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   DCHECK(texres_ != NULL);
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURE2D);
-  desc->Format = tex_desc_.Format;
+  if (options_.format == kTexR24G8
+      || options_.format == kTexDepth24nStencil8u) {
+    desc->Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+  } else {
+    desc->Format = tex_desc_.Format;
+  }
   desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-  desc->Texture2D.MipLevels = static_cast<UINT>(-1); // tex_desc_.MipLevels;
+  desc->Texture2D.MipLevels = tex_desc_.MipLevels;
   desc->Texture2D.MostDetailedMip = 0;
 }
 
