@@ -51,8 +51,8 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   tex_desc_.MipLevels = mipmap;
   tex_desc_.ArraySize = arraysize;
   tex_desc_.Format    = TranslateTexFormat(options_.format);
-  tex_desc_.SampleDesc.Count   = options_.sampler.sample_level;
-  tex_desc_.SampleDesc.Quality = options_.sampler.sample_quality;
+  tex_desc_.SampleDesc.Count   = options_.sample_desc.count;
+  tex_desc_.SampleDesc.Quality = options_.sample_desc.quality;
   tex_desc_.Usage          = TranslateUsage(options_.usage);
   tex_desc_.BindFlags      = TranslateBindTarget(options_.target);
   tex_desc_.CPUAccessFlags = TranslateCPUAccess(options_.cpu_access);
@@ -97,7 +97,7 @@ bool D3DTexture::InitResourceView() {
   InitResourceDesc(&view_desc);
   HRESULT hr = d3d_device->CreateShaderResourceView(texres_, &view_desc, &res_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
-  return SetSamplerState(options_.sampler);
+  return SetSamplerState(sampler());
 }
 
 bool D3DTexture::SetSamplerState(const SamplerState& sampler_state) {
@@ -176,10 +176,10 @@ bool D3DTexture::CopyTo(Texture* texture) {
     return false;
   }
 
-  if (options().sampler.sample_level == tex->options().sampler.sample_level) {
+  if (options().sample_desc.count == tex->options().sample_desc.count) {
     ID3D11DeviceContext* d3d_context = render_system_->GetContext();
     d3d_context->CopyResource(tex->texres_, texres_);
-  } else if (options().sampler.sample_level > 1 && tex->options().sampler.sample_level == 1) {
+  } else if (options().sample_desc.count > 1 && tex->options().sample_desc.count == 1) {
     ID3D11DeviceContext* d3d_context = render_system_->GetContext();
     d3d_context->ResolveSubresource(
         tex->texres_, 0, texres_, 0, TranslateTexFormat(tex->options().format));
@@ -268,7 +268,7 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
     desc->Format = tex_desc_.Format;
   }
 
-  if (options_.sampler.sample_level > 1) {
+  if (options_.sample_desc.count > 1) {
     desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
   } else {
     desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;

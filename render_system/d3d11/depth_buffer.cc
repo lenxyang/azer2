@@ -158,8 +158,8 @@ D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
   o.format = kTexR24G8;
   o.target = kBindTargetDepthStencil | kBindTargetShaderResource;
   o.size = surface->GetBounds().size();
-  o.sampler.sample_level = surface->sample_count();
-  o.sampler.sample_quality = surface->sample_quality();
+  o.sample_desc.count = surface->sample_count();
+  o.sample_desc.quality = surface->sample_quality();
   o.genmipmap = false;
   return Create(o, rs);
 }
@@ -185,7 +185,7 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
     0
   };
 
-  if (options_.sampler.sample_level > 1) {
+  if (options_.sample_desc.count > 1) {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
   } else {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;

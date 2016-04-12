@@ -176,7 +176,7 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
 TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   if (opt.type == kTex2D) {
     scoped_refptr<D3DTexture2D> ptr(new D3DTexture2D(opt, this));
-    if (ptr->Init(NULL, 1, opt.sampler.mip_level)) {
+    if (ptr->Init(NULL, 1, opt.mipmap_level)) {
       return ptr;
     } else {
       return TexturePtr();

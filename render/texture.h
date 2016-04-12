@@ -55,25 +55,30 @@ struct AZER_EXPORT SamplerState {
   FilterMode mip_filter;
   CompareFunc compare_func;
   Vector4 border_color;
-  int mip_level;
   int max_anisotropy;
-  int sample_level;
-  int sample_quality;
  
   SamplerState();
+};
+
+struct AZER_EXPORT SampleDesc {
+  int count;
+  int quality;
+
+  SampleDesc();
 };
 
 class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
  public:
   struct AZER_EXPORT Options {
     gfx::Size size;
-    SamplerState sampler;
+    SampleDesc sample_desc;
     TexFormat format;            // default: kRGBAn8
     BufferUsage usage;   // default: GraphicBuffer::kDefault
     CPUAccess cpu_access;         // default: kCPUNoAccess
     uint32 target;
     TexType type;
     int32 diminison;
+    int32 mipmap_level;
     bool genmipmap;
     Options();
   };
@@ -109,8 +114,10 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
   bool Save(const ::base::FilePath& path);
 
   const Options& options() const { return options_;}
+  const SamplerState& sampler() const { return sampler_;}
  protected:
   Options options_;
+  SamplerState sampler_;
   DISALLOW_COPY_AND_ASSIGN(Texture);
 };
 
