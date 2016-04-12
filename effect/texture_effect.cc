@@ -54,11 +54,11 @@ void TextureEffect::SetWorld(const Matrix4& value) { world_ = value;}
 void TextureEffect::SetCameraPos(const Vector4& pos) { camerapos_ = pos;}
 void TextureEffect::SetMaterial(const TextureMaterialData& mtrl) {
   mtrl_ = mtrl;
-  SetTexture(kPixelStage, 0, mtrl_.diffusemap);
-  SetTexture(kPixelStage, 1, mtrl_.specularmap);
-  SetTexture(kPixelStage, 2, mtrl_.emissionmap);
-  SetTexture(kPixelStage, 3, mtrl_.alphamap);
-  SetTexture(kPixelStage, 4, mtrl_.normalmap);
+  SaveShaderResTexture(kPixelStage, 0, mtrl_.diffusemap);
+  SaveShaderResTexture(kPixelStage, 1, mtrl_.specularmap);
+  SaveShaderResTexture(kPixelStage, 2, mtrl_.emissionmap);
+  SaveShaderResTexture(kPixelStage, 3, mtrl_.alphamap);
+  SaveShaderResTexture(kPixelStage, 4, mtrl_.normalmap);
 }
 
 void TextureEffect::SetLights(const LightPtr* value, int32 count) {
