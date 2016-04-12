@@ -37,7 +37,6 @@ class TextureEffect : public Effect {
   void SetMaterial(const TextureMaterialData& mtrl);
   static Effect* CreateObject() { return new TextureEffect;}
  protected:
-  void BindTexture(int32 mode, Renderer* renderer) override;
   void ApplyGpuConstantTable(Renderer* renderer) override;
   void InitGpuConstantTable() override;
 

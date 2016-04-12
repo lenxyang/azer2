@@ -11,7 +11,7 @@ struct AZER_EXPORT StageTexture {
   int stage;
   int count;
   int mode;
-  Texture* tex[32];
+  TexturePtr tex[32];
 
   StageTexture();
 };

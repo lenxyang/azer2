@@ -54,6 +54,11 @@ void TextureEffect::SetWorld(const Matrix4& value) { world_ = value;}
 void TextureEffect::SetCameraPos(const Vector4& pos) { camerapos_ = pos;}
 void TextureEffect::SetMaterial(const TextureMaterialData& mtrl) {
   mtrl_ = mtrl;
+  SetTexture(kPixelStage, 0, mtrl_.diffusemap);
+  SetTexture(kPixelStage, 1, mtrl_.specularmap);
+  SetTexture(kPixelStage, 2, mtrl_.emissionmap);
+  SetTexture(kPixelStage, 3, mtrl_.alphamap);
+  SetTexture(kPixelStage, 4, mtrl_.normalmap);
 }
 
 void TextureEffect::SetLights(const LightPtr* value, int32 count) {
@@ -93,11 +98,4 @@ void TextureEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 }
 
-void TextureEffect::BindTexture(int32 mode, Renderer* renderer) {
-  renderer->BindTexture(kPixelStage, 0, mtrl_.diffusemap.get());
-  renderer->BindTexture(kPixelStage, 1, mtrl_.specularmap.get());
-  renderer->BindTexture(kPixelStage, 2, mtrl_.emissionmap.get());
-  renderer->BindTexture(kPixelStage, 3, mtrl_.alphamap.get());
-  renderer->BindTexture(kPixelStage, 4, mtrl_.normalmap.get());
-}
 }  // namespace azer
