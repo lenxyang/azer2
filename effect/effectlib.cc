@@ -71,6 +71,8 @@ EffectData effect_data[] = {
    HLSLLIB_SKYBOX, "vs_main", 0, 0, 0, "ps_main"},
   {"OverlayEffect", OverlayEffect::kEffectName, 1,
    HLSLLIB_OVERLAY, "vs_main", 0, 0, 0, "ps_main"},
+  {"MSOverlayEffect", OverlayEffect::kEffectName, 1,
+   HLSLLIB_OVERLAY, "vs_main", 0, 0, 0, "ps_main_ms"},
 };
 
 class EffectLibHolder {

@@ -11,6 +11,7 @@ cbuffer ps_buffer : register(cb0) {
 };
 
 Texture2D tex : register(t0);
+Texture2DMS<float4> mstex : register(t0);
 SamplerState sample_state;
 
 VsOutput vs_main(uint vertex_id : SV_VertexID) {
@@ -37,4 +38,8 @@ VsOutput vs_main(uint vertex_id : SV_VertexID) {
 
 float4 ps_main(VsOutput input) : SV_TARGET {
   return tex.Sample(sample_state, input.texcoord);
+};
+
+float4 ps_main_ms(VsOutput input) : SV_TARGET {
+  return mstex.Load(input.texcoord, 0);
 };

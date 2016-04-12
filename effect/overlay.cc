@@ -87,7 +87,14 @@ void Overlay::Draw(Renderer* renderer) {
   renderer->Draw(4, 0);
 }
 
-void Overlay::SetTexture(Texture* tex) { texture_ = tex;}
+void Overlay::SetTexture(Texture* tex) { 
+  if (tex->options().sampler.sample_level > 1) {
+    effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("MSOverlayEffect");
+  } else {
+    effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("OverlayEffect");
+  }
+  texture_ = tex;
+}
 void Overlay::SetBounds(const gfx::RectF& rect) {
   bounds_ = Vector4(rect.x(), rect.y(), rect.width(), rect.height());
 }
