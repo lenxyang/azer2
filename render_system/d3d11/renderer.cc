@@ -249,9 +249,10 @@ void D3DRenderer::SetShaderResTexture(RenderPipelineStage stage, int index,
   const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
-  for (int32 i = 0; i < count; ++i) {
-    D3DTexture* tex = (D3DTexture*)(texture + i);
-    views[i] = tex->GetResourceView();
+  TexturePtr* cur = texture;
+  for (int32 i = 0; i < count; ++i, ++cur) {
+    D3DTexture* tex = (D3DTexture*)(cur->get());
+    views[i] = tex ? tex->GetResourceView() : NULL;
   }
   
   D3DTexture2D* tex = (D3DTexture2D*)texture;
