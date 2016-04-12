@@ -176,10 +176,10 @@ bool D3DTexture::CopyTo(Texture* texture) {
     return false;
   }
 
-  if (options().sample_level == tex->options().sample_level) {
+  if (options().sampler.sample_level == tex->options().sampler.sample_level) {
     ID3D11DeviceContext* d3d_context = render_system_->GetContext();
     d3d_context->CopyResource(tex->texres_, texres_);
-  } else if (options().sample_level > 1 && tex->options().sample_level == 1) {
+  } else if (options().sampler.sample_level > 1 && tex->options().sampler.sample_level == 1) {
     ID3D11DeviceContext* d3d_context = render_system_->GetContext();
     d3d_context->ResolveSubresource(
         tex->texres_, 0, texres_, 0, TranslateTexFormat(tex->options().format));
