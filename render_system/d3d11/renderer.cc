@@ -41,7 +41,7 @@ void D3DRenderer::Use() {
   DCHECK(!targets_.empty() && targets_[0].get() != NULL);
   DCHECK(depth_.get() != NULL);
 
-  ID3D11RenderTargetView* target_view[32] = {0};
+  ID3D11RenderTargetView* target_view[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT] = {0};
   int32 count = 0;
   for (uint32 i = 0; i < targets_.size(); ++i, ++count) {
     D3DRenderTarget* target = ((D3DRenderTarget*)targets_[i].get());
@@ -49,6 +49,7 @@ void D3DRenderer::Use() {
   }
 
   
+  DCHECK_GT(count, 0);
   D3DDepthBuffer* depth = ((D3DDepthBuffer*)depth_.get());
   DCHECK(depth->size() == targets_[0]->size());
   ID3D11DepthStencilView* depth_view = depth->GetD3DDepthStencilView();
@@ -63,6 +64,10 @@ void D3DRenderer::Reset() {
   d3d_context_->ClearState();
   ResetRasterizerState();
   ResetDepthStencilState();
+
+  ID3D11RenderTargetView* nullViews[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT] = { 0 };
+  d3d_context_->OMSetRenderTargets(D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT,
+                                   nullViews, nullptr);
 }
 
 void D3DRenderer::ResetBlending() {
@@ -217,33 +222,56 @@ void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int32 index,
   }
 }
 
-inline void D3DRenderer::ResetTexture(RenderPipelineStage stage, int index) {
+void D3DRenderer::ResetStageTexture(RenderPipelineStage stage) {
+  const int32 count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+  ID3D11ShaderResourceView* views[count] = {0};
   DCHECK(NULL != d3d_context_);
   switch (stage) {
     case kVertexStage:
-      d3d_context_->VSSetShaderResources(index, 0, NULL);
+      d3d_context_->VSSetShaderResources(0, count, views);
       break;
     case kHullStage:
-      d3d_context_->HSSetShaderResources(index, 0, NULL);
+      d3d_context_->HSSetShaderResources(0, count, views);
       break;
     case kDomainStage:
-      d3d_context_->DSSetShaderResources(index, 0, NULL);
+      d3d_context_->DSSetShaderResources(0, count, views);
       break;
     case kPixelStage:
-      d3d_context_->PSSetShaderResources(index, 0, NULL);
+      d3d_context_->PSSetShaderResources(0, count, views);
       break;
     default:
       CHECK(false);
   }
 }
 
-void D3DRenderer::BindTexture(RenderPipelineStage stage, int index,
-                             Texture* texture) {
+void D3DRenderer::BindTexture(RenderPipelineStage stage, int index, int count,
+                              Texture** texture) {
+  const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+  DCHECK_LT(count, kMaxShaderTexCount);
+  ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
+  for (int32 i = 0; i < count; ++i) {
+    D3DTexture* tex = (D3DTexture*)(texture + i);
+    views[i] = tex->GetResourceView();
+  }
+  
   D3DTexture2D* tex = (D3DTexture2D*)texture;
-  if (tex) {
-    tex->UseForStage(stage, index, this);
-  } else {
-    ResetTexture(stage, index);
+  switch (stage) {
+    case kVertexStage: 
+      d3d_context->VSSetShaderResources(index, count, views);
+      break;
+    case kHullStage: 
+      d3d_context->HSSetShaderResources(index, count, views);
+      break;
+    case kDomainStage: 
+      d3d_context->DSSetShaderResources(index, count, views);
+      break;
+    case kGeometryStage: 
+      d3d_context->GSSetShaderResources(index, count, views);
+      break;
+    case kPixelStage: 
+      d3d_context->PSSetShaderResources(index, count, views);
+      break;
+    default: CHECK(false);
   }
 }
 

@@ -8,6 +8,7 @@
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/shader.h"
 #include "azer/render/technique.h"
+#include "azer/effect/stage_texture.h"
 
 namespace azer {
 class GpuConstantsTable;
@@ -49,8 +50,9 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void OnRenderBegin(Renderer* renderer);
   void OnRenderEnd();
   void OnRenderNewObject(Renderer* renderer);
+  void SetTexture(int32 stage, int32 index, Texture* tex);
  protected:
-  virtual void BindTexture(int32 mode, Renderer* renderer);
+  void BindTexture(int32 mode, Renderer* renderer);
   virtual void InitGpuConstantTable() {};
   virtual void ApplyGpuConstantTable(Renderer* renderer) {}
   void BindConstantsTable(Renderer* renderer);
@@ -63,6 +65,8 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
 
   TechniquePtr technique_;
   std::vector<GpuVariable> gpu_table_;
+  StageTexContainers tex_container_;
+  std::vector<StageTex> stage_tex_;
   VertexDescPtr vertex_desc_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };

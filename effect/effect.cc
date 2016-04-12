@@ -20,7 +20,6 @@ bool Effect::Init(const TechSource& sources) {
   InitGpuConstantTable();
   return true;
 }
-void Effect::BindTexture(int32 mode, Renderer* renderer) {}
 
 void Effect::SetVertexDesc(VertexDesc* desc) {
   DCHECK(vertex_desc_ == NULL);
@@ -33,8 +32,12 @@ void Effect::Apply(Renderer* renderer) {
   DCHECK(technique_.get() != NULL);
   technique_->Use(renderer);
 
-  BindTexture(kUpdateAll, renderer);
+  tex_container_.Bind(renderer);
   FlushGpuVariables(kUpdateAll, renderer);
+}
+
+void Effect::SetTexture(int32 stage, int32 index, Texture* tex) {
+  tex_container_.SetTex(stage, index, tex);
 }
 
 void Effect::OnRenderNewObject(Renderer* renderer) {
@@ -48,7 +51,9 @@ void Effect::OnRenderBegin(Renderer* renderer) {
   BindTexture(kUpdateAll, renderer);
 }
 
-void Effect::OnRenderEnd() {}
+void Effect::OnRenderEnd() {
+  Reset();
+}
 
 void Effect::BindConstantsTable(Renderer* renderer) {
   for (auto iter = gpu_table_.begin(); iter != gpu_table_.end(); ++iter) {

@@ -14,6 +14,8 @@ namespace azer {
 
 class RenderSystem;
 class ImageData;
+class Texture;
+typedef scoped_refptr<Texture> TexturePtr;
 
 enum TexFormat {
   kUndefined = 0,
@@ -107,13 +109,10 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
   bool Save(const ::base::FilePath& path);
 
   const Options& options() const { return options_;}
-protected:
+ protected:
   Options options_;
   DISALLOW_COPY_AND_ASSIGN(Texture);
 };
-
-typedef scoped_refptr<Texture> TexturePtr;
-
 
 AZER_EXPORT Texture::Options InitTexOptForRenderTarget(const gfx::Size& size);
 }  // namespace azer

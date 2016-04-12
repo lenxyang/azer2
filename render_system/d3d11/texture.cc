@@ -76,6 +76,7 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   return true;
 }
 
+/*
 void D3DTexture::SetPSSampler(int index, D3DRenderer* renderer) {
   DCHECK(NULL != res_view_) << "Cannot Bind as Shader Resource";
   DCHECK_GE(index, 0);
@@ -94,7 +95,7 @@ void D3DTexture::SetVSSampler(int index, D3DRenderer* renderer) {
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
   d3d_context->VSSetShaderResources(index, 1, &res_view_);
   if (sampler_state_) {
-    d3d_context->VSSetSamplers(index, 1, &sampler_state_);
+  d3d_context->VSSetSamplers(index, 1, &sampler_state_);
   } else {
     d3d_context->VSSetSamplers(index, 1, NULL);
   }
@@ -135,6 +136,7 @@ void D3DTexture::SetGSSampler(int index, D3DRenderer* renderer) {
     d3d_context->GSSetSamplers(index, 1, NULL);
   }
 }
+*/
 
 void D3DTexture::GenerateMips(int level) {
   // attention:
@@ -336,9 +338,14 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   } else {
     desc->Format = tex_desc_.Format;
   }
-  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-  desc->Texture2D.MipLevels = tex_desc_.MipLevels;
-  desc->Texture2D.MostDetailedMip = 0;
+
+  if (options_.sampler.sample_level > 1) {
+    desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+  } else {
+    desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    desc->Texture2D.MipLevels = tex_desc_.MipLevels;
+    desc->Texture2D.MostDetailedMip = 0;
+  }
 }
 
 // class D3DResTexture2D

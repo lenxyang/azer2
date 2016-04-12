@@ -53,7 +53,9 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void BindVertexBuffer(VertexBuffer* vb) = 0;
   virtual void BindVertexBufferGroup(VertexBufferGroup* vbg) = 0;
   virtual void BindIndicesBuffer(IndicesBuffer* ib) = 0;
-  virtual void BindTexture(RenderPipelineStage stage, int index, Texture* texture) = 0;
+  virtual void ResetStageTexture(enderPipelineStage stage) = 0;
+  virtual void BindTexture(RenderPipelineStage stage, int index, 
+                           int32 count, Texture** texture) = 0;
   virtual void BindConstantsTable(RenderPipelineStage stage, int32 index,
                                   GpuConstantsTable* table) = 0;
   virtual void SetStreamOutTargets(HardwareBuffer** buffer, int count, int off) = 0;
@@ -108,4 +110,18 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
 
 typedef scoped_refptr<Renderer> RendererPtr;
 typedef std::vector<RendererPtr> RendererPtrVec;
+
+class ScopedRenderer {
+ public:
+  ScopedRenderer(Renderer* renderer) 
+      : renderer_(renderer) {
+    renderer_->Use();
+  }
+  ~ScopedRenderer() {
+    renderer_->Reset();
+  }
+ private:
+  Renderer* renderer_;
+  DISALLOW_COPY_AND_ASSIGN(ScopedRenderer);
+};
 }  // namespace azer

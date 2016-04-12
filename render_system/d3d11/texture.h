@@ -24,13 +24,6 @@ class D3DTexture: public Texture {
   MapData map(MapType type) override;
   void unmap() override;
 
-  void UseForStage(RenderPipelineStage stage, int index, D3DRenderer* renderer);
-  void SetVSSampler(int index, D3DRenderer* renderer);
-  void SetHSSampler(int index, D3DRenderer* renderer);
-  void SetDSSampler(int index, D3DRenderer* renderer);
-  void SetGSSampler(int index, D3DRenderer* renderer);
-  void SetPSSampler(int index, D3DRenderer* renderer);
-
   bool Initialized() const { return NULL != texres_;}
   void Attach(ID3D11Texture2D* tex) { texres_ = tex;}
   void Detach() { texres_ = NULL; }
