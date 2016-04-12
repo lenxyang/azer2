@@ -30,6 +30,7 @@ class D3DTexture: public Texture {
 
   ID3D11ShaderResourceView* GetResourceView() { return res_view_;}
   ID3D11UnorderedAccessView* GetUnorderedAccessView() { return uav_view_;}
+  ID3D11SamplerState* GetD3DSamplerState() { return sampler_state_;}
   ID3D11Resource* GetResource() { return texres_;}
 
   bool CopyTo(Texture* texture) override;
