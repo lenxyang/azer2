@@ -50,7 +50,7 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
 
   void Apply(Renderer* renderer);
   void OnRenderBegin(Renderer* renderer);
-  void OnRenderEnd();
+  void OnRenderEnd(Renderer* renderer);
   void OnRenderNewObject(Renderer* renderer);
   void SetTexture(int32 stage, int32 index, Texture* tex);
  protected:
@@ -81,7 +81,7 @@ class ScopedEffect {
   }
 
   ~ScopedEffect() {
-    effect_->OnRenderEnd();
+    effect_->OnRenderEnd(renderer_);
   }
  private:
   Effect* effect_;

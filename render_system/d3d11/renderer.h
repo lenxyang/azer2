@@ -37,9 +37,9 @@ class D3DRenderer : public Renderer {
   void BindIndicesBuffer(IndicesBuffer* ib) override;
   void BindConstantsTable(RenderPipelineStage stage, int32 index,
                           GpuConstantsTable* table) override;
-  void ResetStageTexture(enderPipelineStage stage) override;
-  void BindTexture(RenderPipelineStage stage, int index, int32 count, 
-                   Texture* texture) override;
+  void ResetStageTexture(RenderPipelineStage stage) override;
+  void SetShaderResTexture(RenderPipelineStage stage, int index, 
+                           int32 count, Texture** texture) override;
   void SetStreamOutTargets(HardwareBuffer** buffer, int count, int offset) override;
   void ResetShader(RenderPipelineStage stage) override;
 

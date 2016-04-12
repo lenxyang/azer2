@@ -244,8 +244,8 @@ void D3DRenderer::ResetStageTexture(RenderPipelineStage stage) {
   }
 }
 
-void D3DRenderer::BindTexture(RenderPipelineStage stage, int index, int count,
-                              Texture** texture) {
+void D3DRenderer::SetShaderResTexture(RenderPipelineStage stage, int index, 
+                                      int32 count, Texture** texture) {
   const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
@@ -257,19 +257,19 @@ void D3DRenderer::BindTexture(RenderPipelineStage stage, int index, int count,
   D3DTexture2D* tex = (D3DTexture2D*)texture;
   switch (stage) {
     case kVertexStage: 
-      d3d_context->VSSetShaderResources(index, count, views);
+      d3d_context_->VSSetShaderResources(index, count, views);
       break;
     case kHullStage: 
-      d3d_context->HSSetShaderResources(index, count, views);
+      d3d_context_->HSSetShaderResources(index, count, views);
       break;
     case kDomainStage: 
-      d3d_context->DSSetShaderResources(index, count, views);
+      d3d_context_->DSSetShaderResources(index, count, views);
       break;
     case kGeometryStage: 
-      d3d_context->GSSetShaderResources(index, count, views);
+      d3d_context_->GSSetShaderResources(index, count, views);
       break;
     case kPixelStage: 
-      d3d_context->PSSetShaderResources(index, count, views);
+      d3d_context_->PSSetShaderResources(index, count, views);
       break;
     default: CHECK(false);
   }

@@ -136,6 +136,25 @@ void D3DTexture::SetGSSampler(int index, D3DRenderer* renderer) {
     d3d_context->GSSetSamplers(index, 1, NULL);
   }
 }
+
+void D3DTexture::UseForStage(RenderPipelineStage stage, int index,
+                             D3DRenderer* renderer) {
+  DCHECK(NULL != render_system_);
+  if (stage == kVertexStage) {
+    SetVSSampler(index, renderer);
+  } else if (stage == kHullStage) {
+    SetHSSampler(index, renderer);
+  } else if (stage == kDomainStage) {
+    SetDSSampler(index, renderer);
+  } else if (stage == kGeometryStage) {
+    SetGSSampler(index, renderer);
+  } else if (stage == kPixelStage) {
+    SetPSSampler(index, renderer);
+  } else {
+    CHECK(false);
+  }
+}
+
 */
 
 void D3DTexture::GenerateMips(int level) {
@@ -188,24 +207,6 @@ bool D3DTexture::SetSamplerState(const SamplerState& sampler_state) {
   D3D11_SAMPLER_DESC sampler_desc2;
   sampler_state_->GetDesc(&sampler_desc2);
   return true;
-}
-
-void D3DTexture::UseForStage(RenderPipelineStage stage, int index,
-                             D3DRenderer* renderer) {
-  DCHECK(NULL != render_system_);
-  if (stage == kVertexStage) {
-    SetVSSampler(index, renderer);
-  } else if (stage == kHullStage) {
-    SetHSSampler(index, renderer);
-  } else if (stage == kDomainStage) {
-    SetDSSampler(index, renderer);
-  } else if (stage == kGeometryStage) {
-    SetGSSampler(index, renderer);
-  } else if (stage == kPixelStage) {
-    SetPSSampler(index, renderer);
-  } else {
-    CHECK(false);
-  }
 }
 
 // reference: MSDN "How to: Use dynamic resources"
