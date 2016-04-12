@@ -135,7 +135,7 @@ bool PickCircle(const Ray& ray, const Vector3& center, float radius,
         + (pos->y - center.y) * (pos->y - center.y)
         + (pos->z - center.z) * (pos->z - center.z);
     
-    float margin = std::max(0.03, radius * 0.03);
+    float margin = std::max(0.2, radius * 0.2);
     return std::abs(dist2 - radius * radius) < margin;
   } else {
     return false;
