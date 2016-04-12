@@ -161,8 +161,8 @@ D3DRenderTarget* D3DSurfaceRenderTarget::Create(D3DEnvSwapChain* swapchain,
   Texture::Options opt;
   opt.size = gfx::Size(surface->GetBounds().size());
   opt.target = (kBindTargetRenderTarget);
-  opt.sample_desc.count = surface->sample_count();
-  opt.sample_desc.quality = surface->sample_quality();
+  opt.sample_desc.count = surface->sample_desc().count;
+  opt.sample_desc.quality = surface->sample_desc().quality;
   std::unique_ptr<D3DSurfaceRenderTarget> target(
       new D3DSurfaceRenderTarget(opt, swapchain, rs));
   if (!target->Init()) {

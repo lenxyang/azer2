@@ -104,8 +104,8 @@ bool D3DEnvSwapChain::ResetSwapChain() {
   DXGI_SWAP_CHAIN_DESC swapChainDesc; 
   ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
   swapChainDesc.BufferDesc = bufferDesc;
-  swapChainDesc.SampleDesc.Count = surface_->sample_count();
-  swapChainDesc.SampleDesc.Quality = surface_->sample_quality();
+  swapChainDesc.SampleDesc.Count = surface_->sample_desc().count;
+  swapChainDesc.SampleDesc.Quality = surface_->sample_desc().quality;
   swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
   swapChainDesc.BufferCount = 1;
   swapChainDesc.OutputWindow = (HWND)surface_->GetWindow();

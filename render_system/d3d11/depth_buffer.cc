@@ -158,8 +158,8 @@ D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
   o.format = kTexR24G8;
   o.target = kBindTargetDepthStencil | kBindTargetShaderResource;
   o.size = surface->GetBounds().size();
-  o.sample_desc.count = surface->sample_count();
-  o.sample_desc.quality = surface->sample_quality();
+  o.sample_desc.count = surface->sample_desc().count;
+  o.sample_desc.quality = surface->sample_desc().quality;
   o.genmipmap = false;
   return Create(o, rs);
 }
