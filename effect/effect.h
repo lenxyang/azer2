@@ -11,10 +11,12 @@
 #include "azer/effect/stage_texture.h"
 
 namespace azer {
+class Effect;
 class GpuConstantsTable;
 class Renderer;
 class RenderSystem;
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
+typedef scoped_refptr<Effect> EffectPtr;
 
 /**
  * class Effect
@@ -65,11 +67,25 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
 
   TechniquePtr technique_;
   std::vector<GpuVariable> gpu_table_;
-  StageTexContainers tex_container_;
-  std::vector<StageTex> stage_tex_;
+  StageTexContainer tex_container_;
   VertexDescPtr vertex_desc_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };
 
-typedef scoped_refptr<Effect> EffectPtr;
+class ScopedEffect {
+ public:
+  ScopedEffect(Effect* effect, Renderer* renderer) 
+      : effect_(effect),
+        renderer_(renderer) {
+    effect_->OnRenderBegin(renderer);
+  }
+
+  ~ScopedEffect() {
+    effect_->OnRenderEnd();
+  }
+ private:
+  Effect* effect_;
+  Renderer* renderer_;
+  DISALLOW_COPY_AND_ASSIGN(ScopedEffect);
+};
 }  // namespace azer

@@ -46,13 +46,12 @@ void Effect::OnRenderNewObject(Renderer* renderer) {
 void Effect::OnRenderBegin(Renderer* renderer) {
   DCHECK(technique_.get() != NULL);
   technique_->Use(renderer);
-
   BindConstantsTable(renderer);
-  BindTexture(kUpdateAll, renderer);
+  tex_container_.Bind(renderer);
 }
 
-void Effect::OnRenderEnd() {
-  Reset();
+void Effect::OnRenderEnd(Renderer* renderer) {
+  tex_container_.Reset(renderer);
 }
 
 void Effect::BindConstantsTable(Renderer* renderer) {
