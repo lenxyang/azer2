@@ -5,6 +5,11 @@
 
 namespace azer {
 
+
+// https://msdn.microsoft.com/en-us/library/windows/desktop/bb206341(v=vs.85).aspx
+// FOV: represent the viewport's horizontal and vertical fields of view, in radians.
+// Aspect: viewport aspect ratio 
+
 /**
  * 右手坐标系
  */
