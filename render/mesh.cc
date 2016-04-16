@@ -112,6 +112,13 @@ void Mesh::Render(Renderer* renderer) {
   }
 }
 
+void Mesh::Draw(Renderer* renderer) {
+  for (auto iter = part_.begin(); iter != part_.end(); ++iter) {
+    MeshPart* part = iter->get();
+    part->Draw(renderer);
+  }
+}
+
 void Mesh::UpdateMinAndMax() {
   for (auto iter = part_.begin(); iter != part_.end(); ++iter) {
     MeshPart* part = iter->get();

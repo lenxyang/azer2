@@ -66,6 +66,7 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   bool has_blending() const { return blending_count_ > 0;}
 
   virtual void Render(Renderer* renderer);
+  void Draw(Renderer* renderer);
   
   const Vector3& vmin() { return vmin_;}
   const Vector3& vmax() { return vmax_;}
