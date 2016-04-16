@@ -97,8 +97,8 @@ TexFormat TranslateD3DTexFormat(DXGI_FORMAT type) {
 
 DXGI_FORMAT TranslateTexResFormat(TexFormat type) {
   switch (type) {
-    case kTexDepth24nStencil8u: return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-    case kTexR24G8: return DXGI_FORMAT_R24G8_TYPELESS;
+    case kTexDepth24nStencil8u:
+    case kTexR24G8:
     case kTexR24nX8: return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
     case kTexR32: return DXGI_FORMAT_R32_FLOAT;
     default:
