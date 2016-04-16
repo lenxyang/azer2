@@ -135,5 +135,6 @@ class D3DTexture2DArray : public D3DTexture {
   int32 diminison_;
   DISALLOW_COPY_AND_ASSIGN(D3DTexture2DArray);
 };
+
 }  // namespace d3d11
 }  // namespace azer

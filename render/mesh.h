@@ -34,6 +34,7 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
   void SetBlending(Blending* blending) { blending_ = blending;}
   Blending* blending() { return blending_.get();}
   virtual void Render(Renderer* renderer);
+  void Draw(Renderer* renderer);
 
   Effect* effect() { return effect_.get();}
   void SetEffect(Effect* effect) { effect_ = effect;}

@@ -261,12 +261,7 @@ void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   DCHECK(texres_ != NULL);
   DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
             D3D11_SRV_DIMENSION_TEXTURE2D);
-  if (options_.format == kTexR24G8
-      || options_.format == kTexDepth24nStencil8u) {
-    desc->Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-  } else {
-    desc->Format = tex_desc_.Format;
-  }
+  desc->Format = TranslateTexResFormat(options_.format);
 
   if (options_.sample_desc.count > 1) {
     desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;

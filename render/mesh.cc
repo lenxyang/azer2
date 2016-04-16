@@ -40,6 +40,20 @@ const Entity* MeshPart::entity_at(int32 index) const {
 }
 int32 MeshPart::entity_count() const  { return vecptr_->entity_count();}
 
+void MeshPart::Draw(Renderer* renderer) {
+  for (int32 i = 0; i < vecptr_->entity_count(); ++i) {
+    Entity* entity = vecptr_->entity_at(i);
+    entity->Draw(renderer);
+  }
+}
+
+void MeshPart::RenderPart(Renderer* renderer) {
+  DCHECK(effect_.get()) << "MeshPart Entity cannot be NULL";
+  ApplyParams(effect_.get());
+  renderer->BindEffect(effect_.get());
+  Draw(renderer);
+}
+
 void MeshPart::Render(Renderer* renderer) {
   DCHECK(context_ || providers_.size() == 0u);
   if (!blending_.get()) {
@@ -49,16 +63,6 @@ void MeshPart::Render(Renderer* renderer) {
     autoblending_.reset(new ScopedResetBlending(renderer));
     renderer->SetBlending(blending_.get(), 0, 0xffffffff);
     RenderPart(renderer);
-  }
-}
-
-void MeshPart::RenderPart(Renderer* renderer) {
-  DCHECK(effect_.get()) << "MeshPart Entity cannot be NULL";
-  ApplyParams(effect_.get());
-  renderer->BindEffect(effect_.get());
-  for (int32 i = 0; i < vecptr_->entity_count(); ++i) {
-    Entity* entity = vecptr_->entity_at(i);
-    entity->Draw(renderer);
   }
 }
 

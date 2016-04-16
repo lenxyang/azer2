@@ -153,8 +153,6 @@ D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o,
 
 D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
   Texture::Options o;
-  // o.target = kBindTargetDepthStencil;
-  // o.format = kTexDepth24nStencil8u;
   o.format = kTexR24G8;
   o.target = kBindTargetDepthStencil | kBindTargetShaderResource;
   o.size = surface->GetBounds().size();
@@ -184,6 +182,10 @@ bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
     D3D11_DSV_DIMENSION_TEXTURE2D,
     0
   };
+
+  if (options_.format == kTexR32) {
+    dvsd.Format = DXGI_FORMAT_D32_FLOAT;
+  }
 
   if (options_.sample_desc.count > 1) {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;

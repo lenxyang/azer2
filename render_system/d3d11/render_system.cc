@@ -224,7 +224,7 @@ RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt,
 
 RendererPtr D3DRenderSystem::CreateMultipleOutputRenderer(
     int count, const Texture::Options* opts, DepthBuffer* depth) {
-  DCHECK_GT(count, 0u);
+  DCHECK_GE(count, 0u);
   std::vector<RenderTargetPtr> targets;
   for (int32 i = 0; i < count; ++i) {
     DCHECK(opts[i].size == depth->size());
