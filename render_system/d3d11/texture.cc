@@ -25,7 +25,6 @@ D3DTexture::D3DTexture(const Options& opt, D3DRenderSystem* rs)
     : Texture(opt)
     , texres_(NULL)
     , render_system_(rs)
-    , sampler_state_(NULL)
     , res_view_(NULL),
       uav_view_(NULL) {
 #ifdef DEBUG
@@ -36,7 +35,6 @@ D3DTexture::D3DTexture(const Options& opt, D3DRenderSystem* rs)
 D3DTexture::~D3DTexture() {
   SAFE_RELEASE(texres_);
   SAFE_RELEASE(res_view_);
-  SAFE_RELEASE(sampler_state_);
   SAFE_RELEASE(uav_view_);
 }
 

@@ -40,6 +40,7 @@ bool D3DSamplerState::Init() {
 
   D3D11_SAMPLER_DESC sampler_desc2;
   sampler_state_->GetDesc(&sampler_desc2);
+  return true;
 }
 }  // namespace d3d11
 }  // namespace azer

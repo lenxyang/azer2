@@ -56,6 +56,8 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void ResetStageTexture(RenderPipelineStage stage) = 0;
   virtual void SetShaderResTexture(RenderPipelineStage stage, int index, 
                                    int32 count, TexturePtr* texture) = 0;
+  virtual void SetShaderSamplerState(RenderPipelineStage stage, int index, 
+                                     int32 count, SamplerState* sampler) = 0;
   virtual void BindConstantsTable(RenderPipelineStage stage, int32 index,
                                   GpuConstantsTable* table) = 0;
   virtual void SetStreamOutTargets(HardwareBuffer** buffer, int count, int off) = 0;
