@@ -41,7 +41,7 @@ class D3DRenderer : public Renderer {
   void SetShaderResTexture(RenderPipelineStage stage, int index, 
                            int32 count, TexturePtr* texture) override;
   void SetShaderSamplerState(RenderPipelineStage stage, int index, 
-                             int32 count, SamplerStatePtr sampler) override;
+                             int32 count, SamplerStatePtr* sampler) override;
   void SetStreamOutTargets(HardwareBuffer** buffer, int count, int offset) override;
   void ResetShader(RenderPipelineStage stage) override;
 

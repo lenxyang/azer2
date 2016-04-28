@@ -11,6 +11,7 @@
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
+#include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/technique.h"
@@ -245,13 +246,12 @@ void D3DRenderer::SetShaderSamplerState(RenderPipelineStage stage, int index,
   const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11SamplerState* sampler_state[kMaxShaderTexCount] = {0};
-  for (int32 i = 0; i < count; ++i, ++cur) {
+  for (int32 i = 0; i < count; ++i) {
     D3DSamplerState* p = (D3DSamplerState*)sampler[i].get();
     sampler_state[i] = p->GetD3DSamplerState();
     DCHECK(sampler_state[i]);
   }
 
-  D3DTexture2D* tex = (D3DTexture2D*)texture;
   switch (stage) {
     case kVertexStage: 
       d3d_context_->VSSetSamplers(index, count, sampler_state);
