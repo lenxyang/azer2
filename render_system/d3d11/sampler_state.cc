@@ -23,11 +23,17 @@ bool D3DSamplerState::Init() {
   }
   D3D11_SAMPLER_DESC sampler_desc;
   ZeroMemory(&sampler_desc, sizeof(sampler_desc));
-  sampler_desc.Filter = TranslateSamplerState(options());
+  if (options().compare_func == kCompareFuncNever) {
+    sampler_desc.Filter = TranslateSamplerStateFilter(options());  
+  } else {
+    sampler_desc.Filter = TranslateSamplerStateCompFilter(options());  
+  }
+  sampler_desc.ComparisonFunc = TranslateCompareFunc(options().compare_func);
+  
   sampler_desc.AddressU = TranslateTexWrapMode(options().wrap_u);
   sampler_desc.AddressV = TranslateTexWrapMode(options().wrap_v);
   sampler_desc.AddressW = TranslateTexWrapMode(options().wrap_w);
-  sampler_desc.ComparisonFunc = TranslateCompareFunc(options().compare_func);
+  
   sampler_desc.MaxAnisotropy = options().max_anisotropy;
   sampler_desc.MipLODBias = 0.0f;
   sampler_desc.MinLOD = 0;

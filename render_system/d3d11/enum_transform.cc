@@ -358,7 +358,7 @@ D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc type) {
   }
 }
 
-D3D11_FILTER TranslateSamplerStateCompFiler(const SamplerState::Options& state) {
+D3D11_FILTER TranslateSamplerStateCompFilter(const SamplerState::Options& state) {
   DCHECK_NE(state.compare_func, kCompareFuncNever);
   if (state.mag_filter == kFilterModePoint && state.min_filter == kFilterModePoint
       && state.mip_filter == kFilterModePoint) {
