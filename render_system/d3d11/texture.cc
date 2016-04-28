@@ -97,36 +97,9 @@ bool D3DTexture::InitResourceView() {
   InitResourceDesc(&view_desc);
   HRESULT hr = d3d_device->CreateShaderResourceView(texres_, &view_desc, &res_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
-  return SetSamplerState(sampler());
-}
-
-bool D3DTexture::SetSamplerState(const SamplerState& sampler_state) {
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  if (sampler_state_) {
-    SAFE_RELEASE(sampler_state_);
-  }
-  D3D11_SAMPLER_DESC sampler_desc;
-  ZeroMemory(&sampler_desc, sizeof(sampler_desc));
-  sampler_desc.Filter = TranslateSamplerState(sampler_state);
-  sampler_desc.AddressU = TranslateTexWrapMode(sampler_state.wrap_u);
-  sampler_desc.AddressV = TranslateTexWrapMode(sampler_state.wrap_v);
-  sampler_desc.AddressW = TranslateTexWrapMode(sampler_state.wrap_w);
-  sampler_desc.ComparisonFunc = TranslateCompareFunc(sampler_state.compare_func);
-  sampler_desc.MaxAnisotropy = sampler_state.max_anisotropy;
-  sampler_desc.MipLODBias = 0.0f;
-  sampler_desc.MinLOD = 0;
-  sampler_desc.MaxLOD = D3D11_FLOAT32_MAX;
-  sampler_desc.BorderColor[0] = sampler_state.border_color.x;
-  sampler_desc.BorderColor[1] = sampler_state.border_color.y;
-  sampler_desc.BorderColor[2] = sampler_state.border_color.z;
-  sampler_desc.BorderColor[3] = sampler_state.border_color.w;
-  HRESULT hr = d3d_device->CreateSamplerState(&sampler_desc, &sampler_state_);
-  HRESULT_HANDLE(hr, ERROR, "CreateSamplerState failed ");
-
-  D3D11_SAMPLER_DESC sampler_desc2;
-  sampler_state_->GetDesc(&sampler_desc2);
   return true;
 }
+
 
 // reference: MSDN "How to: Use dynamic resources"
 Texture::MapData D3DTexture::map(MapType maptype) {

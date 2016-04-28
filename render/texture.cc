@@ -8,7 +8,7 @@
 #include "azer/render/canvas2d.h"
 
 namespace azer {
-SamplerState::SamplerState()
+SamplerState::Options::Options()
     : wrap_u(kTexAddrModeWrap),
       wrap_v(kTexAddrModeWrap),
       wrap_w(kTexAddrModeWrap),
@@ -19,6 +19,12 @@ SamplerState::SamplerState()
       border_color(0.0f, 0.0f, 0.0f, 0.0f),
       max_anisotropy(4) {
 }
+
+SamplerState::SamplerState(const Options& options)
+    : options_(options) {
+}
+
+SamplerState::~SamplerState() {}
 
 Texture::Options::Options()
     : format(kTexRGBAn8),

@@ -18,6 +18,7 @@
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/rasterizer_state.h"
 #include "azer/render_system/d3d11/renderer.h"
+#include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/shader.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
@@ -183,6 +184,16 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
     }
   } else {
     return TexturePtr();
+  }
+}
+
+SamplerStatePtr D3DRenderSystem::CreateSamplerState(
+    const SamplerState::Options& opt) {
+  scoped_refptr<D3DSamplerState> ptr(new D3DSamplerState(opt, this));
+  if (ptr->Init()) {
+    return ptr;
+  } else {
+    return SamplerStatePtr();
   }
 }
 

@@ -14,8 +14,10 @@ namespace azer {
 
 class RenderSystem;
 class ImageData;
+class SamplerState;
 class Texture;
 typedef scoped_refptr<Texture> TexturePtr;
+typedef scoped_refptr<SamplerState> SamplerStatePtr;
 
 enum TexFormat {
   kUndefined = 0,
@@ -46,25 +48,37 @@ enum TexFormat {
   kTexDXBC7nSRGB,
 };
 
-struct AZER_EXPORT SamplerState {
-  AddressMode wrap_u;
-  AddressMode wrap_v;
-  AddressMode wrap_w;
-  FilterMode mag_filter;
-  FilterMode min_filter;
-  FilterMode mip_filter;
-  CompareFunc compare_func;
-  Vector4 border_color;
-  int max_anisotropy;
- 
-  SamplerState();
-};
-
 struct AZER_EXPORT SampleDesc {
   int count;
   int quality;
 
   SampleDesc();
+};
+
+class AZER_EXPORT SamplerState : public public ::base::RefCounted<Texture> {
+ public:
+  struct AZER_EXPORT Options {
+    AddressMode wrap_u;
+    AddressMode wrap_v;
+    AddressMode wrap_w;
+    FilterMode mag_filter;
+    FilterMode min_filter;
+    FilterMode mip_filter;
+    CompareFunc compare_func;
+    Vector4 border_color;
+    int max_anisotropy;
+ 
+    Options();
+  };
+
+  explicit SamplerState(const Options& state);
+  virtual ~SamplerState();
+  const Options& options() const { return options_;}
+ protected:
+  virtual bool Init() = 0;
+ private:
+  const Options options_;
+  DISALLOW_COPY_AND_ASSIGN(TexSampler);
 };
 
 class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
@@ -86,7 +100,6 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
   explicit Texture(const Options& opt);
   virtual ~Texture() {}
   
-  virtual bool SetSamplerState(const SamplerState& sampler_state) = 0;
   virtual void GenerateMips(int level) = 0; 
 
   /**
@@ -112,12 +125,9 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
   // save the texture into file
   // for debug
   bool Save(const ::base::FilePath& path);
-
   const Options& options() const { return options_;}
-  const SamplerState& sampler() const { return sampler_;}
  protected:
   Options options_;
-  SamplerState sampler_;
   DISALLOW_COPY_AND_ASSIGN(Texture);
 };
 
