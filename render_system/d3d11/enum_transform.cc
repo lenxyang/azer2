@@ -358,7 +358,42 @@ D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc type) {
   }
 }
 
-D3D11_FILTER TranslateSamplerState(const SamplerState::Options& state) {
+D3D11_FILTER TranslateSamplerStateCompFiler(const SamplerState::Options& state) {
+  DCHECK_NE(state.compare_func, kCompareFuncNever);
+  if (state.mag_filter == kFilterModePoint && state.min_filter == kFilterModePoint
+      && state.mip_filter == kFilterModePoint) {
+    return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+  } else if (state.mag_filter == kFilterModeLinear
+             && state.min_filter == kFilterModeLinear
+             && state.mip_filter == kFilterModeLinear) {
+    return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+  } else if (state.mag_filter == kFilterModePoint
+             && state.min_filter == kFilterModeLinear
+             && state.mip_filter == kFilterModePoint) {
+    return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
+  } else if (state.mag_filter == kFilterModePoint
+             && state.min_filter == kFilterModeLinear
+             && state.mip_filter == kFilterModeLinear) {
+    return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
+  } else if (state.mag_filter == kFilterModeLinear
+             && state.min_filter == kFilterModePoint
+             && state.mip_filter == kFilterModePoint) {
+    return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT;
+  } else if (state.mag_filter == kFilterModeLinear
+             && state.min_filter == kFilterModePoint
+             && state.mip_filter == kFilterModeLinear) {
+    return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+  } else if (state.mag_filter == kFilterModeLinear
+             && state.min_filter == kFilterModeLinear
+             && state.mip_filter == kFilterModePoint) {
+    return D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+  } else {
+    NOTREACHED();
+    return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+  }
+}
+
+D3D11_FILTER TranslateSamplerStateFilter(const SamplerState::Options& state) {
   if (state.mag_filter == kFilterModePoint && state.min_filter == kFilterModePoint
       && state.mip_filter == kFilterModePoint) {
     return D3D11_FILTER_MIN_MAG_MIP_POINT;
