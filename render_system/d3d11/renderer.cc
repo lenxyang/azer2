@@ -240,40 +240,66 @@ void D3DRenderer::ResetStageTexture(RenderPipelineStage stage) {
   }
 }
 
+void D3DRenderer::SetShaderSamplerState(RenderPipelineStage stage, int index, 
+                                        int32 count, SamplerStatePtr* sampler) {
+  const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+  DCHECK_LT(count, kMaxShaderTexCount);
+  ID3D11SamplerState* sampler_state[kMaxShaderTexCount] = {0};
+  for (int32 i = 0; i < count; ++i, ++cur) {
+    D3DSamplerState* p = (D3DSamplerState*)sampler[i].get();
+    sampler_state[i] = p->GetD3DSamplerState();
+    DCHECK(sampler_state[i]);
+  }
+
+  D3DTexture2D* tex = (D3DTexture2D*)texture;
+  switch (stage) {
+    case kVertexStage: 
+      d3d_context_->VSSetSamplers(index, count, sampler_state);
+      break;
+    case kHullStage: 
+      d3d_context_->HSSetSamplers(index, count, sampler_state);
+      break;
+    case kDomainStage: 
+      d3d_context_->DSSetSamplers(index, count, sampler_state);
+      break;
+    case kGeometryStage: 
+      d3d_context_->GSSetSamplers(index, count, sampler_state);
+      break;
+    case kPixelStage: 
+      d3d_context_->PSSetSamplers(index, count, sampler_state);
+      break;
+    default: CHECK(false);
+  }
+}
+
 void D3DRenderer::SetShaderResTexture(RenderPipelineStage stage, int index, 
                                       int32 count, TexturePtr* texture) {
   const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
-  ID3D11SamplerState* sampler_state[kMaxShaderTexCount] = {0};
+  
   TexturePtr* cur = texture;
   for (int32 i = 0; i < count; ++i, ++cur) {
     D3DTexture* tex = (D3DTexture*)(cur->get());
     views[i] = tex ? tex->GetResourceView() : NULL;
-    sampler_state[i] = tex ? tex->GetD3DSamplerState() : NULL;
   }
   
   D3DTexture2D* tex = (D3DTexture2D*)texture;
   switch (stage) {
     case kVertexStage: 
       d3d_context_->VSSetShaderResources(index, count, views);
-      d3d_context_->VSSetSamplers(index, count, sampler_state);
       break;
     case kHullStage: 
       d3d_context_->HSSetShaderResources(index, count, views);
-      d3d_context_->HSSetSamplers(index, count, sampler_state);
       break;
     case kDomainStage: 
       d3d_context_->DSSetShaderResources(index, count, views);
-      d3d_context_->DSSetSamplers(index, count, sampler_state);
       break;
     case kGeometryStage: 
       d3d_context_->GSSetShaderResources(index, count, views);
-      d3d_context_->GSSetSamplers(index, count, sampler_state);
       break;
     case kPixelStage: 
       d3d_context_->PSSetShaderResources(index, count, views);
-      d3d_context_->PSSetSamplers(index, count, sampler_state);
       break;
     default: CHECK(false);
   }

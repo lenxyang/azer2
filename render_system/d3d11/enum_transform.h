@@ -10,6 +10,7 @@
 #include "azer/render/depth_buffer.h"
 #include "azer/render/common.h"
 #include "azer/render/render_target.h"
+#include "azer/render/texture.h"
 #include "azer/render/vertex_buffer.h"
 
 
@@ -46,6 +47,6 @@ D3D11_SRV_DIMENSION  GetViewDimensionFromTextureType(TexType type);
 D3D11_MAP TranslateMapType(MapType type);
 D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc type);
 D3D11_STENCIL_OP TranslateStencilOper(StencilOper oper);
-D3D11_FILTER TranslateSamplerState(const SamplerState& state);
+D3D11_FILTER TranslateSamplerState(const SamplerState::Options& state);
 }  // namespace d3d11
 }  // namespace azer

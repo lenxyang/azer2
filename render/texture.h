@@ -55,7 +55,7 @@ struct AZER_EXPORT SampleDesc {
   SampleDesc();
 };
 
-class AZER_EXPORT SamplerState : public public ::base::RefCounted<Texture> {
+class AZER_EXPORT SamplerState : public ::base::RefCounted<Texture> {
  public:
   struct AZER_EXPORT Options {
     AddressMode wrap_u;
@@ -78,7 +78,7 @@ class AZER_EXPORT SamplerState : public public ::base::RefCounted<Texture> {
   virtual bool Init() = 0;
  private:
   const Options options_;
-  DISALLOW_COPY_AND_ASSIGN(TexSampler);
+  DISALLOW_COPY_AND_ASSIGN(SamplerState);
 };
 
 class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
