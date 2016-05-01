@@ -39,8 +39,8 @@ D3DRenderer::~D3DRenderer() {
 }
 
 void D3DRenderer::Use() {
-  DCHECK(!targets_.empty() && targets_[0].get() != NULL);
-  DCHECK(depth_.get() != NULL);
+  // DCHECK(!targets_.empty() && targets_[0].get() != NULL);
+  DCHECK(targets_.empty() || depth_.get() != NULL);
 
   ID3D11RenderTargetView* target_view[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT] = {0};
   int32 count = 0;
@@ -50,10 +50,15 @@ void D3DRenderer::Use() {
   }
 
   
-  DCHECK_GT(count, 0);
-  D3DDepthBuffer* depth = ((D3DDepthBuffer*)depth_.get());
-  DCHECK(depth->size() == targets_[0]->size());
-  ID3D11DepthStencilView* depth_view = depth->GetD3DDepthStencilView();
+  DCHECK_GE(count, 0);
+  ID3D11DepthStencilView* depth_view = NULL;
+  
+  if (depth_.get()) {
+    D3DDepthBuffer* depth = ((D3DDepthBuffer*)depth_.get());
+    DCHECK(targets_.size() == 0u || depth->size() == targets_[0]->size());
+    depth_view = depth->GetD3DDepthStencilView();
+  }
+
   d3d_context_->OMSetRenderTargets(count, target_view, depth_view);
 
   // reset all state to current
@@ -129,7 +134,7 @@ void D3DRenderer::SetBlending(Blending* vblending, float* factor, uint32 mask) {
 
 void D3DRenderer::Clear(const azer::Vector4& color) {
   DCHECK(d3d_context_ != NULL);
-  DCHECK(targets_[0].get() != NULL);
+  // DCHECK(targets_[0].get() != NULL);
 
   D3DXCOLOR dxcolor(color.x, color.y, color.z, color.w);
   for (auto iter = targets_.begin(); iter != targets_.end(); ++iter) {
@@ -346,12 +351,11 @@ bool D3DRenderer::Init(RenderTarget* rt, DepthBuffer* depth) {
 
 bool D3DRenderer::Init(std::vector<RenderTargetPtr>* rt, DepthBuffer* depth) {
   DCHECK_EQ(targets_.size(), 0u);
-  DCHECK_GT(rt->size(), 0u);
+  DCHECK_GE(rt->size(), 0u);
   targets_.swap(*rt);
   depth_ = depth;
   Reset();
-  const Texture::Options& o = targets_[0]->GetTexture()->options();
-  SetViewport(Viewport(0, 0, o.size.width(), o.size.height()));
+  SetViewport();
   return true;
 }
 
@@ -369,7 +373,7 @@ bool D3DRenderer::Init(const Texture::Options& o) {
   targets_.push_back(target);
   depth_ = depth;
   Reset();
-  SetViewport(Viewport(0, 0, o.size.width(), o.size.height()));
+  SetViewport();
   return true;
 }
 
@@ -382,8 +386,20 @@ bool D3DSurfaceRenderer::InitForSurface(RenderTarget* target, DepthBuffer* depth
   targets_[0] = target;
   depth_ = depth;
   Reset();
-  SetViewport(Viewport(0, 0, width, height));
+  SetViewport();
   return true;
+}
+
+void D3DRenderer::SetViewport() {
+  gfx::Size size;
+  if (targets_.size() > 0u) {
+    const Texture::Options& o = targets_[0]->GetTexture()->options();
+    size = o.size;
+  } else {
+    size = depth_->size();
+  }
+
+  SetViewport(Viewport(0, 0, size.width(), size.height()));
 }
 }  // namespace d3d11
 }  // namespace azer
