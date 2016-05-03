@@ -9,6 +9,9 @@
 #include "azer/render/entity.h"
 
 namespace azer {
+class Camera;
+class Renderer;
+
 class ArrowObject {
  public:
   ArrowObject();

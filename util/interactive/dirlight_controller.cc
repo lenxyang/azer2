@@ -19,10 +19,8 @@ DirLightObject::DirLightObject(Light* light)
 }
 
 void DirLightObject::Render(const Camera& camera, Renderer* renderer) {
-  
   object_->set_color(light_->diffuse());
   object_->set_position(position_);
-  object_->set_orientation(quad);
   object_->set_directional(light_->directional());
   object_->Render(camera, renderer);
 }

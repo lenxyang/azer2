@@ -1,6 +1,8 @@
 #include "azer/util/interactive/arrow_object.h"
 
+#include "azer/render/camera.h"
 #include "azer/util/geometry/arrow.h"
+#include "azer/util/interactive/env.h"
 #include "azer/util/interactive/orientation_util.h"
 
 namespace azer {
