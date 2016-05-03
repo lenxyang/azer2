@@ -12,32 +12,12 @@
 #include "azer/util/interactive/rotate_controller.h"
 
 namespace azer {
+class ArrowObject;
 class ColorEffect;
 class InteractiveContext;
 class TranslateController;
 class RotateController;
 class Renderer;
-
-class DirLightControllerObj {
- public:
-  DirLightControllerObj();
-
-  const Vector3& position() const { return position_;}
-  void set_scale(const Vector3& v);
-  void set_position(const Vector3& pos);
-  void set_orientation(const Quaternion& q);
-  void set_color(const Vector4& c);
-  void Render(const Camera& camera, Renderer* renderer);
- private:
-  void OnParamUpdate();
-  EntityPtr arrow_;
-  Vector4 color_;
-  Vector3 scale_;
-  Vector3 position_;
-  Quaternion orientation_;
-  scoped_refptr<ColorEffect> effect_;
-  DISALLOW_COPY_AND_ASSIGN(DirLightControllerObj);
-};
 
 class DirLightObject : public ::base::RefCounted<DirLightObject> {
  public:
@@ -50,7 +30,7 @@ class DirLightObject : public ::base::RefCounted<DirLightObject> {
  private:
   Vector3 position_;
   LightPtr light_;
-  scoped_ptr<DirLightControllerObj> object_;
+  scoped_ptr<ArrowObject> object_;
   DISALLOW_COPY_AND_ASSIGN(DirLightObject);
 };
 

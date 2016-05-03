@@ -2,6 +2,8 @@
 
 static_library("interactive") {
   sources = [
+    "arrow_object.cc",
+    "arrow_object.h",
     "axes_frame.cc",
     "axes_frame.h",
     "bounding_box.cc",
