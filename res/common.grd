@@ -12,6 +12,7 @@
       <include type="dds" name="IMG_COORD_X" file="common/images/x.dds" />
       <include type="dds" name="IMG_COORD_Y" file="common/images/y.dds" />
       <include type="dds" name="IMG_COORD_Z" file="common/images/z.dds" />
+      <include type="dds" name="IMG_POINTGRAY" file="common/images/pointgray.dds" />
     </includes>
   </release>
 </grit>
