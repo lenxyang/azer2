@@ -26,6 +26,8 @@ static_library("interactive") {
     "orientation_util.h",
     "pick_util.cc",
     "pick_util.h",
+    "point_sprite.cc",
+    "point_sprite.h",
     "rotate_controller.h",
     "rotate_controller.cc",
     "spotlight_controller.cc",
