@@ -141,10 +141,10 @@ D3DDepthBuffer::~D3DDepthBuffer() {
 }
 
 
-bool D3DDepthBuffer::D3DInit(Texture* tex) {
+bool D3DDepthBuffer::Init(D3DTexture* tex) {
   DCHECK(tex->options().target & kBindTargetDepthStencil);
   texture_ = tex;
-  ID3D11Device* d3d_device = rs->GetDevice();
+  ID3D11Device* d3d_device = render_system_->GetDevice();
   HRESULT hr;
   ID3D11Resource* resource = tex->GetResource();
   uint32 target = TranslateBindTarget(options_.target);
