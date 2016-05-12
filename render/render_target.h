@@ -10,6 +10,9 @@ namespace azer {
 
 class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
  public:
+  AZER_EXPORT struct Options {
+  };
+
   RenderTarget(const Texture::Options& opt, bool default_rt = false);
   virtual ~RenderTarget();
 

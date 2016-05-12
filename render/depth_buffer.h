@@ -40,15 +40,19 @@ typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
 
 class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
  public:
-  virtual ~DepthBuffer() {};
+  AZER_EXPORT struct Options {
+  };
+
+  DepthBuffer(const Options& opt);
+  virtual ~DepthBuffer();
 
   const gfx::Size& size() const; 
   Texture* GetTexture() { return texture_.get();}
   const Texture* GetTexture() const { return texture_.get();}
+  const Options& options() const { return options_;}
  protected:
-  DepthBuffer(const Texture::Options& opt) : options_(opt) {}
   TexturePtr texture_;
-  const Texture::Options options_;
+  const Options options_;
   DISALLOW_COPY_AND_ASSIGN(DepthBuffer);
 };
 
@@ -70,4 +74,6 @@ class ScopedDepthStencilState {
   uint32 stencilref_;
   DISALLOW_COPY_AND_ASSIGN(ScopedDepthStencilState);
 };
+
+DepthBufferPtr CreateDepthBufferForSurface(Surface* surface);
 }  // namespace azer

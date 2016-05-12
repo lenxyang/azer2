@@ -5,7 +5,7 @@ struct VsOutput {
 };
 
 /* [0,1][0,1] */
-cbuffer ps_buffer : register(cb0) {
+cbuffer vs_buffer : register(cb0) {
   float4 bounds;
   float4 texbounds;
 };

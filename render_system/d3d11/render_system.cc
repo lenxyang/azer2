@@ -219,6 +219,18 @@ DepthStencilStatePtr D3DRenderSystem::CreateDepthStencilState() {
   return DepthStencilStatePtr(new D3DDepthStencilState);
 }
 
+DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& opt, 
+                                                  Texture* texture) {
+  DCHECK(texture->ptions().target & kBindTargetDepthStencil);
+  scoped_refptr<D3DDepthBuffer> depthbuffer(new D3DDepthBuffer(opt, texture));
+  return 
+}
+
+RenderTargetPtr D3DRenderSystem::CreateRenderTarget(
+    const RenderTarget::Options& opt, Texture* texture) {
+  return RenderTargetPtr();
+}
+
 RendererPtr D3DRenderSystem::CreateRenderer(const Texture::Options& opt,
                                             const Texture::Options& depthopt) {
   DCHECK(envptr_.get() != NULL);

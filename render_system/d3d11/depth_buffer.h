@@ -37,14 +37,11 @@ class D3DDepthStencilState : public DepthStencilState {
 
 class D3DDepthBuffer : public DepthBuffer {
  public:
-  static D3DDepthBuffer* Create(Surface* surface, D3DRenderSystem* rs);
-  static D3DDepthBuffer* Create(const Texture::Options& opt, 
-                                D3DRenderSystem* rs);
    // create by rendersystem
-  D3DDepthBuffer(const Texture::Options& opt, D3DRenderSystem* rs);
+  D3DDepthBuffer(const Options& opt, D3DRenderSystem* rs);
   ~D3DDepthBuffer() override;
 
-  bool Init(D3DRenderSystem* rs);
+  bool Init(Texture* tex);
   void Clear(D3DRenderer*, bool clear_depth, bool clear_stencil, float depth_val,
              int stencil_val);
 
