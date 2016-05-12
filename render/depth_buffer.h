@@ -74,6 +74,4 @@ class ScopedDepthStencilState {
   uint32 stencilref_;
   DISALLOW_COPY_AND_ASSIGN(ScopedDepthStencilState);
 };
-
-DepthBufferPtr CreateDepthBufferForSurface(Surface* surface);
 }  // namespace azer

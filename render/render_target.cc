@@ -1,7 +1,7 @@
 #include "azer/render/render_target.h"
 
 namespace azer {
-RenderTarget::RenderTarget(const Texture::Options& opt, bool default_rt)
+RenderTarget::RenderTarget(const Options& opt, bool default_rt)
     : default_render_target_(default_rt),
       options_(opt) {
 }
