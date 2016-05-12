@@ -20,18 +20,40 @@ bool D3DSwapChain::Init(Surface* surface)  {
   return reset(surface);
 }
 
-Renderer* D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
-  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  std::unique_ptr<D3DSurfaceRenderer> renderer(
-      new D3DSurfaceRenderer(surface, d3d_context, render_system_));
-  RenderTargetPtr target(D3DSurfaceRenderTarget::Create(d3d_swapchain_.get(),
-                                                        render_system_));
-  DepthBufferPtr depth(D3DDepthBuffer::Create(surface, render_system_));
-  if (!renderer->InitForSurface(target, depth)) {
-    return false;
+RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
+  
+  Texture::Options opt;
+  opt.format = kTexRGBAn8;
+  opt.size = gfx::Size(surface->GetBounds().size());
+  opt.target = (kBindTargetRenderTarget);
+  opt.sample_desc.count = surface->sample_desc().count;
+  opt.sample_desc.quality = surface->sample_desc().quality;
+  scoped_refptr<D3DTexture2D> ptr(new D3DTexture2D(opt, render_system_));
+  ID3D11Texture2D* buffer = GetD3DEnvSwapChain()->GetSwapTexture();
+  ptr->Attach(buffer);
+  RenderTargetPtr rt = render_system_->CreateRenderTarget(
+      RenderTarget::Options(), ptr);
+  
+  
+  opt.format = kTexR24G8;
+  opt.target = kBindTargetDepthStencil | kBindTargetShaderResource;
+  scoped_refptr<D3DTexture2D> tex = new D3DTexture2D(opt, render_system_);
+  if (!tex->Init(NULL, 1, 1)) {
+    return RendererPtr();
   }
 
-  return renderer.release();
+  DepthBufferPtr depth = render_system_->CreateDepthBuffer(
+      DepthBuffer::Options(), tex);
+
+  if (!depth.get() || !rt.get()) {
+    return RendererPtr();
+  }
+
+
+  RenderTargetPtrs targets;
+  targets.push_back(rt);
+  RendererPtr renderer = render_system_->CreateRenderer(targets, depth);
+  return renderer;
 }
 
 bool D3DSwapChain::resize(Surface* surface) {

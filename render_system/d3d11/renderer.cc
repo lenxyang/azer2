@@ -344,7 +344,14 @@ bool D3DRenderer::Init(std::vector<RenderTargetPtr>* rt, DepthBuffer* depth) {
   targets_.swap(*rt);
   depth_ = depth;
   Reset();
-  SetViewport();
+  gfx::Size size;
+  if (depth) {
+    size = depth->size();
+  } else {
+    CHECK_GT(rt->size(), 0u);
+    size = rt->at(0)->size();
+  }
+  SetViewport(Viewport(0, 0, size.width(), size.height()));
   return true;
 }
 }  // namespace d3d11

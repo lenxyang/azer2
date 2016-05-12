@@ -9,6 +9,7 @@
 
 namespace azer {
 namespace d3d11 {
+class D3DTexture;
 class D3DRenderSystem;
 class D3DRenderer;
 class D3DSurfaceRenderTarget;
@@ -22,7 +23,7 @@ class D3DRenderTarget : public RenderTarget {
   
   virtual void Clear(const azer::Vector4& color);
 
-  bool Init(Texture* tex);
+  bool Init(D3DTexture* tex);
   ID3D11RenderTargetView* GetD3DRenderTargetView() { return target_;}
  protected:
   ID3D11RenderTargetView* target_;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "base/basictypes.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
@@ -31,4 +32,5 @@ class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
 };
 
 typedef scoped_refptr<RenderTarget> RenderTargetPtr;
+typedef std::vector<RenderTargetPtr> RenderTargetPtrs;
 }  // namespace azer

@@ -147,20 +147,17 @@ bool D3DDepthBuffer::Init(D3DTexture* tex) {
   ID3D11Device* d3d_device = render_system_->GetDevice();
   HRESULT hr;
   ID3D11Resource* resource = tex->GetResource();
-  uint32 target = TranslateBindTarget(options_.target);
-  DCHECK(target & D3D11_BIND_DEPTH_STENCIL);
-
   D3D11_DEPTH_STENCIL_VIEW_DESC dvsd = {
     DXGI_FORMAT_D24_UNORM_S8_UINT,
     D3D11_DSV_DIMENSION_TEXTURE2D,
     0
   };
 
-  if (options_.format == kTexR32) {
+  if (tex->options().format == kTexR32) {
     dvsd.Format = DXGI_FORMAT_D32_FLOAT;
   }
 
-  if (options_.sample_desc.count > 1) {
+  if (tex->options().sample_desc.count > 1) {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
   } else {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;

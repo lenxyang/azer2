@@ -40,7 +40,7 @@ bool D3DRenderTarget::Init(D3DTexture* tex) {
 
 
   ID3D11Resource* resource = tex->GetResource();
-  DCHECK(TranslateBindTarget(options_.target) & D3D11_BIND_RENDER_TARGET);
+  DCHECK(TranslateBindTarget(tex->options().target) & D3D11_BIND_RENDER_TARGET);
   hr = d3d_device->CreateRenderTargetView(resource, NULL, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateRenderTargetView failed ");
   return true;

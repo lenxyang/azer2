@@ -77,7 +77,6 @@ class D3DRenderer : public Renderer {
   void ResetRenderTarget();
   bool Init(std::vector<RenderTargetPtr>* rt, DepthBuffer* depth);
  protected:
-  void SetViewport();
   void InitRasterizerState();
   void InitForRenderTarget();
   void SetShaderResource(RenderPipelineStage stage, uint32 first, uint32 num,

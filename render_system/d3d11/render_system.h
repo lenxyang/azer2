@@ -40,12 +40,7 @@ class D3DRenderSystem : public RenderSystem {
   RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
                                      Texture* texture) override;
 
-  RendererPtr CreateRenderer(const Texture::Options& opt,
-                             const Texture::Options& depthopt) override;
-  RendererPtr CreateMultipleOutputRenderer(
-      int count, const Texture::Options* opts, const Texture::Options& d) override;
-  RendererPtr CreateMultipleOutputRenderer(
-      int count, const Texture::Options* opts, DepthBuffer* depthbuffer) override;
+  RendererPtr CreateRenderer(RenderTargetPtrs targets, DepthBuffer* depth) override;
   BlendingPtr CreateBlending(const Blending::BlendDesc& desc) override;
   VertexBufferGroupPtr CreateVertexBufferGroup(VertexDesc* desc) override;
   VertexBufferPtr CreateVertexBuffer(const HBufferOptions& opt,
