@@ -7,6 +7,8 @@
 #include "azer/math/vector4.h" 
 
 namespace azer {
+class Camera;
+class Renderer;
 class PointSprite {
  public:
   PointSprite();

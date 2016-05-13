@@ -57,7 +57,8 @@ class AZER_EXPORT RenderSystem {
                                            Texture* texture) = 0;
   virtual RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
                                              Texture* texture) = 0;
-  virtual RendererPtr CreateRenderer(RenderTargetPtrs targets, DepthBuffer* depth) = 0;
+  virtual RendererPtr CreateRenderer(RenderTargetPtrs* targets,
+                                     DepthBuffer* depth) = 0;
   virtual BlendingPtr CreateBlending(const Blending::BlendDesc& desc) = 0;
   virtual TechniquePtr CreateTechnique() = 0;
 

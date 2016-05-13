@@ -126,4 +126,6 @@ class ScopedRenderer {
   Renderer* renderer_;
   DISALLOW_COPY_AND_ASSIGN(ScopedRenderer);
 };
+
+RendererPtr CreateCommonRenderer(const gfx::Size& size);
 }  // namespace azer

@@ -240,11 +240,11 @@ RenderTargetPtr D3DRenderSystem::CreateRenderTarget(
   }
 }
 
-RendererPtr D3DRenderSystem::CreateRenderer(RenderTargetPtrs targets, 
+RendererPtr D3DRenderSystem::CreateRenderer(RenderTargetPtrs* targets, 
                                             DepthBuffer* depth) {
   ID3D11DeviceContext* context = envptr_->GetContext();
   scoped_refptr<D3DRenderer> renderer(new D3DRenderer(context, this));
-  if (renderer->Init(&targets, depth)) {
+  if (renderer->Init(targets, depth)) {
     return renderer;
   } else {
     return RendererPtr();
