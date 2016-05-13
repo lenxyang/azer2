@@ -221,6 +221,7 @@ DepthStencilStatePtr D3DRenderSystem::CreateDepthStencilState() {
 
 DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& opt, 
                                                   Texture* texture) {
+  DCHECK(texture);
   DCHECK(texture->options().target & kBindTargetDepthStencil);
   scoped_refptr<D3DDepthBuffer> depth(new D3DDepthBuffer(opt, this));
   if (depth->Init((D3DTexture*)texture)) {
@@ -232,6 +233,7 @@ DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& op
 
 RenderTargetPtr D3DRenderSystem::CreateRenderTarget(
     const RenderTarget::Options& opt, Texture* texture) {
+  DCHECK(texture);
   scoped_refptr<D3DRenderTarget> rt(new D3DRenderTarget(opt, false, this));
   if (rt->Init((D3DTexture*)texture)) {
     return rt;
