@@ -11,6 +11,9 @@ namespace azer {
 class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
  public:
   AZER_EXPORT struct Options {
+    TexFormat format;
+
+    Options();
   };
 
   RenderTarget(const Options& opt, bool default_rt = false);
