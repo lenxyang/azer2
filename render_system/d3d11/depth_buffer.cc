@@ -130,7 +130,7 @@ void D3DDepthStencilState::Apply(Renderer* r, uint32 stencilref) {
 }
 
 // class D3DDepthBuffer 
-D3DDepthBuffer::D3DDepthBuffer(const Texture::Options& opt, D3DRenderSystem* rs)
+D3DDepthBuffer::D3DDepthBuffer(const Options& opt, D3DRenderSystem* rs)
     : DepthBuffer(opt),
       target_(NULL),
       render_system_(rs) {
@@ -140,54 +140,24 @@ D3DDepthBuffer::~D3DDepthBuffer() {
   SAFE_RELEASE(target_);
 }
 
-D3DDepthBuffer* D3DDepthBuffer::Create(const Texture::Options& o, 
-                                       D3DRenderSystem* rs) {
-  DCHECK(o.target & kBindTargetDepthStencil);
-  std::unique_ptr<D3DDepthBuffer> ptr(new D3DDepthBuffer(o, rs));
-  if (!ptr->Init(rs)) {
-    return NULL;
-  }
 
-  return ptr.release();
-}
-
-D3DDepthBuffer* D3DDepthBuffer::Create(Surface* surface, D3DRenderSystem* rs) {
-  Texture::Options o;
-  o.format = kTexR24G8;
-  o.target = kBindTargetDepthStencil | kBindTargetShaderResource;
-  o.size = surface->GetBounds().size();
-  o.sample_desc.count = surface->sample_desc().count;
-  o.sample_desc.quality = surface->sample_desc().quality;
-  o.genmipmap = false;
-  return Create(o, rs);
-}
-
-bool D3DDepthBuffer::Init(D3DRenderSystem* rs) {
-  DCHECK(options_.target & kBindTargetDepthStencil);
-  ID3D11Device* d3d_device = rs->GetDevice();
-  HRESULT hr;
-  DCHECK(texture_.get() == NULL);
-  D3DTexture2D* tex = new D3DTexture2D(options_, rs);
+bool D3DDepthBuffer::Init(D3DTexture* tex) {
+  DCHECK(tex->options().target & kBindTargetDepthStencil);
   texture_ = tex;
-  if (!tex->Init(NULL, 1, 1)) {
-    return false;
-  }
-  
+  ID3D11Device* d3d_device = render_system_->GetDevice();
+  HRESULT hr;
   ID3D11Resource* resource = tex->GetResource();
-  uint32 target = TranslateBindTarget(options_.target);
-  DCHECK(target & D3D11_BIND_DEPTH_STENCIL);
-
   D3D11_DEPTH_STENCIL_VIEW_DESC dvsd = {
     DXGI_FORMAT_D24_UNORM_S8_UINT,
     D3D11_DSV_DIMENSION_TEXTURE2D,
     0
   };
 
-  if (options_.format == kTexR32) {
+  if (tex->options().format == kTexR32) {
     dvsd.Format = DXGI_FORMAT_D32_FLOAT;
   }
 
-  if (options_.sample_desc.count > 1) {
+  if (tex->options().sample_desc.count > 1) {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
   } else {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;

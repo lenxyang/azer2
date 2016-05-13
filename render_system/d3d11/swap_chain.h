@@ -29,7 +29,7 @@ class D3DSwapChain : public SwapChain {
 
   D3DEnvSwapChain* GetD3DEnvSwapChain() { return d3d_swapchain_.get();}
  private:
-  Renderer* CreateSurfaceRenderer(Surface* surface);
+  RendererPtr CreateSurfaceRenderer(Surface* surface);
   D3DRenderSystem* render_system_;
   std::unique_ptr<D3DEnvSwapChain> d3d_swapchain_;
   DISALLOW_COPY_AND_ASSIGN(D3DSwapChain);

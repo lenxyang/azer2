@@ -75,12 +75,8 @@ class D3DRenderer : public Renderer {
   }
 
   void ResetRenderTarget();
-
-  bool Init(const Texture::Options& opt);
-  bool Init(RenderTarget* rt, DepthBuffer* depth);
   bool Init(std::vector<RenderTargetPtr>* rt, DepthBuffer* depth);
  protected:
-  void SetViewport();
   void InitRasterizerState();
   void InitForRenderTarget();
   void SetShaderResource(RenderPipelineStage stage, uint32 first, uint32 num,
@@ -94,19 +90,5 @@ class D3DRenderer : public Renderer {
   DISALLOW_COPY_AND_ASSIGN(D3DRenderer);
 };
 
-class D3DSurfaceRenderer : public D3DRenderer {
- public:
-  D3DSurfaceRenderer(Surface* surface, ID3D11DeviceContext* context,
-                     D3DRenderSystem* rs)
-      : D3DRenderer(context, rs)
-      , surface_(surface) {
-    DCHECK(NULL != surface);
-  }
-
-  bool InitForSurface(RenderTarget* target, DepthBuffer* depth);
- private:
-  Surface* surface_;
-  DISALLOW_COPY_AND_ASSIGN(D3DSurfaceRenderer);
-};
 }  // namespace d3d11
 }  // namespace azer
