@@ -52,7 +52,7 @@ RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
 
   RenderTargetPtrs targets;
   targets.push_back(rt);
-  RendererPtr renderer = render_system_->CreateRenderer(targets, depth);
+  RendererPtr renderer = render_system_->CreateRenderer(&targets, depth);
   return renderer;
 }
 
