@@ -40,10 +40,12 @@ typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
 
 class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
  public:
-  AZER_EXPORT struct Options {
+  struct AZER_EXPORT Options {
     TexFormat format;
     bool depth_readonly;
     bool stencil_readonly;
+
+    Options();
   };
 
   DepthBuffer(const Options& opt);

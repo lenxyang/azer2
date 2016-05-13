@@ -4,7 +4,7 @@
 #include "azer/render/render_system.h"
 
 namespace azer {
-DepthStencilState::Options::Options() 
+DepthBuffer::Options::Options() 
     : format(kUndefined),
       depth_readonly(false),
       stencil_readonly(false) {

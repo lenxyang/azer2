@@ -10,7 +10,7 @@
 namespace azer {
 class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
  public:
-  AZER_EXPORT struct Options {
+  struct AZER_EXPORT Options {
     TexFormat format;
 
     Options();
