@@ -14,13 +14,9 @@ namespace azer {
 CameraOverlay::CameraOverlay(const Camera* camera) 
     : camera_(camera) {
   RenderSystem* rs = RenderSystem::Current();
-  Texture::Options rdopt, depthopt;
-  rdopt.size = gfx::Size(128, 128);
-  rdopt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
-  depthopt.size = rdopt.size;
-  depthopt.target = kBindTargetDepthStencil;
-  renderer_ = rs->CreateRenderer(rdopt, depthopt);
-  viewport_.bounds = gfx::Rect(rdopt.size);
+  gfx::Size size(128, 128);
+  viewport_.bounds = gfx::Rect(size);
+  renderer_ = CreateCommonRenderer(size);
   renderer_->SetViewport(viewport_);
 
   overlay_ = new Overlay;
