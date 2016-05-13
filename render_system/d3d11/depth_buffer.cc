@@ -153,6 +153,13 @@ bool D3DDepthBuffer::Init(D3DTexture* tex) {
     0
   };
 
+  if (options().depth_readonly) {
+    dvsd.Flags != D3D11_DSV_READ_ONLY_DEPTH;
+  }
+  if (options().stencil_readonly) {
+    dvsd.Flags != D3D11_DSV_READ_ONLY_STENCIL;
+  }
+
   if (tex->options().format == kTexR32) {
     dvsd.Format = DXGI_FORMAT_D32_FLOAT;
   }
