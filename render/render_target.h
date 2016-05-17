@@ -5,10 +5,11 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
+#include "azer/render/resource_view.h"
 #include "azer/math/math.h"
 
 namespace azer {
-class AZER_EXPORT RenderTarget : public ::base::RefCounted<RenderTarget> {
+class AZER_EXPORT RenderTarget : public ResourceView {
  public:
   struct AZER_EXPORT Options {
     TexFormat format;

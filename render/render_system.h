@@ -16,6 +16,7 @@
 #include "azer/render/shader.h"
 #include "azer/render/swap_chain.h"
 #include "azer/render/surface.h"
+#include "azer/render/texture_view.h"
 #include "azer/render/vertex_buffer.h"
 #include "ui/gfx/geometry/rect.h"
 
@@ -75,6 +76,8 @@ class AZER_EXPORT RenderSystem {
   virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;
   virtual TexturePtr CreateTexture(const Texture::Options& opt,
                                    const ImageData* image) = 0;
+  virtual TextureViewPtr CreateTextureView(const TextureView::Options& opt, 
+                                           Texture* tex) = 0;
   virtual SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) = 0;
 
   // create Shader

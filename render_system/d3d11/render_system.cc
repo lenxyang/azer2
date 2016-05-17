@@ -187,6 +187,11 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   }
 }
 
+TextureViewPtr D3DRenderSystem::CreateTextureView(const TextureView::Options& opt, 
+                                                  Texture* tex) {
+  return TextureViewPtr();
+}
+
 SamplerStatePtr D3DRenderSystem::CreateSamplerState(
     const SamplerState::Options& opt) {
   scoped_refptr<D3DSamplerState> ptr(new D3DSamplerState(opt, this));

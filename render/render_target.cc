@@ -2,7 +2,7 @@
 
 namespace azer {
 RenderTarget::Options::Options() 
-    : format(kUndefined) {
+    : format(kTexFormatUndefined) {
 }
 
 RenderTarget::RenderTarget(const Options& opt, bool default_rt)

@@ -23,6 +23,7 @@ class IndicesBuffer;
 class RenderSystem;
 class RasterizerState;
 class Texture;
+class TextureView;
 class VertexBuffer;
 class VertexBufferGroup;
 class VertexLayout;
@@ -30,6 +31,7 @@ class VertexLayout;
 typedef scoped_refptr<DepthBuffer> DepthBufferPtr;
 typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
 typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
+typedef scoped_refptr<TextureView> TextureViewPtr;
 
 
 class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
@@ -55,7 +57,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void BindIndicesBuffer(IndicesBuffer* ib) = 0;
   virtual void ResetStageTexture(RenderPipelineStage stage) = 0;
   virtual void SetShaderResTexture(RenderPipelineStage stage, int index, 
-                                   int32 count, TexturePtr* texture) = 0;
+                                   int32 count, TextureViewPtr* texture) = 0;
   virtual void SetShaderSamplerState(RenderPipelineStage stage, int index, 
                                      int32 count, SamplerStatePtr* sampler) = 0;
   virtual void BindConstantsTable(RenderPipelineStage stage, int32 index,

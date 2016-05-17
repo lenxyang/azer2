@@ -20,7 +20,7 @@ typedef scoped_refptr<Texture> TexturePtr;
 typedef scoped_refptr<SamplerState> SamplerStatePtr;
 
 enum TexFormat {
-  kUndefined = 0,
+  kTexFormatUndefined = 0,
   kTexBGRAn8,
   kTexRGBA8,
   kTexRGBAn8,
@@ -99,8 +99,6 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
 
   explicit Texture(const Options& opt);
   virtual ~Texture() {}
-  
-  virtual void GenerateMips(int level) = 0; 
 
   /**
    * Note: map 返回 MapData 结构体，返回的数据当中 width 和 depth
@@ -119,7 +117,6 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
   virtual MapData map(MapType maptype) = 0;
   virtual void unmap() = 0;
   virtual bool InitFromImage(const ImageData* image) = 0;
-
   virtual bool CopyTo(Texture* texture) = 0;
   
   // save the texture into file

@@ -5,6 +5,7 @@
 #include "azer/render_system/d3d11/shader.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/texture.h"
+#include "azer/render_system/d3d11/texture_view.h"
 
 namespace azer {
 namespace d3d11 {
@@ -29,12 +30,12 @@ void D3DGpuComputeTaskDispatcher::Dispatch(GpuComputeTask* task,
   ID3D11DeviceContext* context = rs->GetContext();
   D3DComputeShader* program = (D3DComputeShader*)task->gpu_program();
   for (int32 i = 0; i < task->input_count(); ++i) {
-    resview_[i] = ((D3DTexture*)task->GetInputAt(i))->GetResourceView();
+    resview_[i] = ((D3DResTextureView*)task->GetInputAt(i))->GetResourceView();
     DCHECK(resview_[i] != NULL);
   }
 
   for (int32 i = 0; i < task->output_count(); ++i) {
-    uavview_[i] = ((D3DTexture*)task->GetOutputAt(i))->GetUnorderedAccessView();
+    uavview_[i] = ((D3DUAResTextureView*)task->GetOutputAt(i))->GetResourceView();
     DCHECK(uavview_[i] != NULL);
   }
   context->CSSetShader(program->resource(), 0, 0);

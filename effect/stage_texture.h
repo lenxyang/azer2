@@ -3,18 +3,19 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
+#include "azer/render/texture_view.h"
 
 namespace azer {
 
-class Texture;
+class TextureView;
 class Renderer;
-typedef scoped_refptr<Texture> TexturePtr;
+typedef scoped_refptr<TextureView> TextureViewPtr;
 
 struct AZER_EXPORT StageTexture {
   int stage;
   int count;
   int mode;
-  TexturePtr tex[32];
+  TextureViewPtr tex[32];
 
   StageTexture();
 };
@@ -24,7 +25,7 @@ class AZER_EXPORT StageTexContainer {
   StageTexContainer();
   ~StageTexContainer();
 
-  void SetTex(int stage, int count, Texture* tex);
+  void SetTex(int stage, int count, TextureView* tex);
   void Bind(Renderer* renderer);
   void Reset(Renderer* renderer);
  private:
