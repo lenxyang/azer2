@@ -61,7 +61,16 @@ bool SoftwareCanvas2D::InitTexture() {
   opt.cpu_access = kCPUWrite;
   RenderSystem* rs = RenderSystem::Current();
   texture_ = rs->CreateTexture(opt);
-  return texture_.get() != NULL;
+  if (!texture_.get()) {
+    return false;
+  }
+
+  texview_ = rs->CreateTextureView(TextureView::Options(), texture_);
+  if (!texview_.get()) {
+    return false;
+  }
+
+  return true;
 }
 
 SkCanvas* SoftwareCanvas2D::BeginPaint() {

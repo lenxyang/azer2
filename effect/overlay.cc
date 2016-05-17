@@ -87,8 +87,8 @@ void Overlay::Draw(Renderer* renderer) {
   renderer->Draw(4, 0);
 }
 
-void Overlay::SetTexture(Texture* tex) { 
-  if (tex->options().sample_desc.count > 1) {
+void Overlay::SetTexture(TextureView* tex) { 
+  if (tex->texture()->options().sample_desc.count > 1) {
     effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("MSOverlayEffect");
   } else {
     effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("OverlayEffect");

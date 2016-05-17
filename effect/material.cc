@@ -59,9 +59,11 @@ bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) 
   if (!node->GetChildText("diffusemap", &path)) {
     return false;
   }
-  
+
+  RenderSystem* rs = RenderSystem::Current();
   ResPath texpath(ResPath(::base::UTF8ToUTF16(path)));
-  mutable_data()->diffusemap = LoadTexture(texpath, ctx->file_system);
+  TexturePtr tex = LoadTexture(texpath, ctx->file_system);
+  mutable_data()->diffusemap = rs->CreateTextureView(TextureView::Options(), tex);
   return (mutable_data()->diffusemap != NULL);
 }
 

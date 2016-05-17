@@ -7,6 +7,7 @@
 #include "base/logging.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
+#include "azer/render/texture_view.h"
 
 class SkCanvas;
 class SkBitmap;
@@ -37,7 +38,8 @@ class AZER_EXPORT Canvas2D : public ::base::RefCounted<Canvas2D> {
     return context_;
   }
 
-  TexturePtr& GetTexture() { return texture_;}
+  Texture* GetTexture() { return texture_;}
+  TextureView* GetTextureView() { return texview_;}
   virtual uint32 GetTexID() = 0;
 
   // save the content into file
@@ -51,6 +53,7 @@ class AZER_EXPORT Canvas2D : public ::base::RefCounted<Canvas2D> {
   const int32 width_;
   const int32 height_;
   TexturePtr texture_;
+  TextureViewPtr texview_;
   SkCanvas* skcanvas_;
   Context2D* context_;
   friend class Context2D;

@@ -20,6 +20,9 @@ void D3DTextureView::GenerateMips(int32 level) {
 }
 
 bool D3DTextureView::CheckTexFormatCapability() {
+  if (! (texture()->options().target & kBindTargetShaderResource)) {
+    return false;
+  }
   return true;
 }
 
