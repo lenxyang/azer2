@@ -117,7 +117,7 @@ enum PrimitiveTopology {
 };
 
 enum RenderPipelineStage {
-  kStageNotSpec = -1,
+  kStageNotSpec = 0,
   kInputAssemblerStage = 1,
   kVertexStage,
   kHullStage,
@@ -180,7 +180,7 @@ enum VisibleState {
 };
 
 enum TexType {
-  kUnkonwnTexType = -1,
+  kUnkonwnTexType = 0,
   kTex1D = 1,
   kTex1DArray,
   kTex2D,

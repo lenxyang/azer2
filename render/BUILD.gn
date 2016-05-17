@@ -70,6 +70,8 @@ source_set("render") {
     "swap_chain.h",
     "technique.cc",
     "technique.h",
+    "texture_view.cc",
+    "texture_view.h",
     "texture.cc",
     "texture.h",
     "vertex_buffer.cc",

@@ -5,6 +5,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
+#include "azer/render/resource_view.h"
 #include "azer/render/renderer.h"
 
 namespace azer {
@@ -38,7 +39,7 @@ class AZER_EXPORT DepthStencilState : public ::base::RefCounted<DepthStencilStat
 
 typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
 
-class AZER_EXPORT DepthBuffer : public ::base::RefCounted<DepthBuffer> {
+class AZER_EXPORT DepthBuffer : public ResourceView {
  public:
   struct AZER_EXPORT Options {
     TexFormat format;
