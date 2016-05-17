@@ -15,7 +15,4 @@ TextureView::TextureView(const Options& opt, Texture* tex)
   DCHECK(CheckTexFormatCapability());
 }
 
-void TextureView::GenerateMips(int level) {
-  CHECK(false) << "GenerateMips should not called";
-}
 }  // namespace azer

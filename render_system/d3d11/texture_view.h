@@ -11,6 +11,7 @@ class D3DTexView : public TextureView {
   virtual ~D3DTexView();
   virtual bool Init() = 0;
   void GenerateMips(int32 level) override;
+  bool CheckTexFormatCapability() override;
  private:
   DISALLOW_COPY_AND_ASSIGN(D3DTexView);
 };

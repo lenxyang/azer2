@@ -18,6 +18,10 @@ void D3DTexView::GenerateMips(int32 level) {
   CHECK(false);
 }
 
+bool D3DTexView::CheckTexFormatCapability() {
+  return true;
+}
+
 // class D3DResTextureView
 D3DResTextureView::D3DResTextureView(const Options& options, Texture* tex) 
     : D3DTexView(options, tex),
