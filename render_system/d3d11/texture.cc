@@ -24,9 +24,7 @@ namespace d3d11 {
 D3DTexture::D3DTexture(const Options& opt, D3DRenderSystem* rs)
     : Texture(opt)
     , texres_(NULL)
-    , render_system_(rs)
-    , res_view_(NULL),
-      uav_view_(NULL) {
+    , render_system_(rs) {
 #ifdef DEBUG
   mapped_ = false;
 #endif
@@ -34,8 +32,6 @@ D3DTexture::D3DTexture(const Options& opt, D3DRenderSystem* rs)
 
 D3DTexture::~D3DTexture() {
   SAFE_RELEASE(texres_);
-  SAFE_RELEASE(res_view_);
-  SAFE_RELEASE(uav_view_);
 }
 
 bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, 
@@ -63,31 +59,8 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
 
   texres_ = tex;
-  if (options_.target & kBindTargetShaderResource) {
-    if (!InitResourceView()) 
-      return false;
-  }
-
-  if (options_.target & kBindTargetUnorderedAccess) {
-    return InitUnorderedAccessView();
-  }
   return true;
 }
-
-bool D3DTexture::InitResourceView() {
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  D3D11_SHADER_RESOURCE_VIEW_DESC view_desc = {
-    DXGI_FORMAT_UNKNOWN,
-    D3D11_SRV_DIMENSION_TEXTURE2D,
-    0,
-    0,
-  };
-  InitResourceDesc(&view_desc);
-  HRESULT hr = d3d_device->CreateShaderResourceView(texres_, &view_desc, &res_view_);
-  HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
-  return true;
-}
-
 
 // reference: MSDN "How to: Use dynamic resources"
 Texture::MapData D3DTexture::map(MapType maptype) {
@@ -151,18 +124,6 @@ bool D3DTexture::CopyTo(Texture* texture) {
   return true;
 }
 
-
-// class D3DTexture2DShared
-ID3D11Resource* D3DTexture2DShared::GetSharedResource() {
-  DCHECK(shared_texres_ != NULL);
-  return shared_texres_;
-}
-
-HANDLE D3DTexture2DShared::GetSharedHanle() {
-  DCHECK(shared_handle_ != NULL);
-  return shared_handle_;
-}
-
 // class D3DTexture2D
 bool D3DTexture2D::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
@@ -178,31 +139,6 @@ bool D3DTexture2D::InitFromImage(const ImageData* image) {
   return Init(subres, image->depth(), count);
 }
 
-bool D3DTexture2D::InitUnorderedAccessView() {
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
-  desc.Format = tex_desc_.Format;
-  desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
-  desc.Texture2D.MipSlice = 0;
-  HRESULT hr = d3d_device->CreateUnorderedAccessView(texres_, &desc, &uav_view_);
-  HRESULT_HANDLE(hr, ERROR, "CreateUnorderedAccessView failed ");
-  return true;
-}
-
-void D3DTexture2D::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
-  DCHECK(texres_ != NULL);
-  DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
-            D3D11_SRV_DIMENSION_TEXTURE2D);
-  desc->Format = TranslateTexResFormat(options_.format);
-
-  if (options_.sample_desc.count > 1) {
-    desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
-  } else {
-    desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    desc->Texture2D.MipLevels = tex_desc_.MipLevels;
-    desc->Texture2D.MostDetailedMip = 0;
-  }
-}
 
 // class D3DResTexture2D
 bool D3DResTexture2D::InitFromTexture(D3DTexture2D* texture) {
@@ -224,94 +160,6 @@ bool D3DResTexture2D::InitFromTexture(D3DTexture2D* texture) {
 bool D3DResTexture2D::InitFromImage(const ImageData* image) {
   CHECK(false);
   return false;
-}
-
-// reference: MSDN, Surface Sharing Between Windows Graphics APIs
-D3DTexture2DShared::D3DTexture2DShared(const Options& opt,
-                                       D3DRenderSystem* rs)
-    : D3DTexture2D(opt, rs)
-    , shared_handle_(NULL) {
-  DCHECK(opt.target & kBindTargetRenderTarget);
-  DCHECK_EQ(opt.usage, kBufferDefault);
-}
-
-D3DTexture2DShared::~D3DTexture2DShared() {
-  if (shared_handle_ != NULL) {
-    // CloseHandle(shared_handle_);
-  }
-}
-
-bool D3DTexture2DShared::InitSharedResource() {
-  CHECK(NULL == shared_handle_);
-  HRESULT hr;
-  IDXGIResource* dxgi_res = NULL;
-  ID3D11Resource* resource = GetResource();
-  hr = resource->QueryInterface(__uuidof(IDXGIResource), (void**)&dxgi_res);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to get IDXGIResource";
-    return false;
-  }
-
-  hr = dxgi_res->GetSharedHandle(&shared_handle_);
-  SAFE_RELEASE(dxgi_res);
-  if (FAILED(hr)) {
-    return false;
-  }
-
-  ID3D11Texture2D* shared_tex = NULL;
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  hr = d3d_device->OpenSharedResource(shared_handle_,
-                                      __uuidof(ID3D11Texture2D),
-                                      (void**)&shared_texres_);
-  if (FAILED(hr)) {
-    SAFE_RELEASE(shared_texres_);
-    return false;
-  }
-
-  return true;
-}
-
-bool D3DTexture2DShared::Init(const D3D11_SUBRESOURCE_DATA* data, int arraysize, 
-                              int32 mipmap) {
-  if (!D3DTexture::Init(data, arraysize, mipmap)) {
-    return false;
-  }
-
-  return InitSharedResource();
-}
-
-D3DTexture2DExtern* D3DTexture2DExtern::Create(HANDLE handle, D3DRenderSystem* rs) {
-  ID3D11Texture2D* shared_tex = NULL;
-  ID3D11Device* d3d_device = rs->GetDevice();
-  HRESULT hr = d3d_device->OpenSharedResource(handle, __uuidof(ID3D11Texture2D),
-                                              (void**)&shared_tex);
-  if (FAILED(hr)) {
-    SAFE_RELEASE(shared_tex);
-    return NULL;
-  }
-
-  D3D11_TEXTURE2D_DESC desc;
-  shared_tex->GetDesc(&desc);
-  Options opt;
-  opt.size = gfx::Size(desc.Width, desc.Height);
-  opt.format = TranslateD3DTexFormat(desc.Format);
-  std::unique_ptr<D3DTexture2DExtern> ptr(new D3DTexture2DExtern(opt, rs));
-  ptr->Attach(shared_tex);
-  if (ptr->GetResource()) {
-    return ptr.release();
-  } else {
-    return NULL;
-  }
-}
-
-void D3DTexture2DExtern::Attach(ID3D11Texture2D* tex) {
-  D3DTexture::Attach(tex);
-  tex->GetDesc(&tex_desc_);
-  InitResourceView();
-}
-
-void D3DTexture2DExtern::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
-  desc->MiscFlags      = D3D11_RESOURCE_MISC_SHARED;
 }
 
 // class D3D11TextureCubeMap

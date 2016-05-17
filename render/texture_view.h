@@ -18,7 +18,7 @@ class AZER_EXPORT TextureView : public ResourceView {
 
   TextureView(const Options& options, Texture* tex);
   const Options& options() const { return options_;}
-  Texture* GetTexture() { return tex_;}
+  Texture* texture() { return tex_;}
   virtual bool CheckTexFormatCapability() = 0;
   virtual void GenerateMips(int32 level);
  private:

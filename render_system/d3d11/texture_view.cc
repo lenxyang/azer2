@@ -56,6 +56,11 @@ bool D3DResTextureView::Init() {
       break;
     case kTex2DArray:
       view_desc.Format = tex_desc_.Format;
+      if (texture()->options().sample_desc.count > 1) {
+        desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+      } else {
+        desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+      }
       view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
       view_desc.Texture2DArray.MipLevels = tex_desc_.MipLevels;
       view_desc.Texture2DArray.MostDetailedMip = 0;
@@ -78,5 +83,14 @@ D3DUAResTextureView::~D3DUAResTextureView() {
   SAFE_RELEASE(uav_view_);
 }
 
+bool D3DUAResTextureView::Init() {
+  ID3D11Device* d3d_device = render_system_->GetDevice();
+  D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
+  desc.Format = tex_desc_.Format;
+  desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+  desc.Texture2D.MipSlice = 0;
+  HRESULT hr = d3d_device->CreateUnorderedAccessView(texres_, &desc, &uav_view_);
+  HRESULT_HANDLE(hr, ERROR, "CreateUnorderedAccessView failed ");
+}
 }  // namespace azer
 }  // namespace d3d11
