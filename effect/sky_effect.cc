@@ -40,7 +40,7 @@ void SkyboxEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 }
 
-void SkyboxEffect::SetTexture(Texture* texture) {
+void SkyboxEffect::SetTexture(TextureView* texture) {
   cubemap_ = texture;
   SaveShaderResTexture(kPixelStage, 0, cubemap_);
 }

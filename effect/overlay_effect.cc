@@ -40,7 +40,7 @@ void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 }
 
-void OverlayEffect::SetTexture(Texture* texture) {
+void OverlayEffect::SetTexture(TextureView* texture) {
   texture_ = texture;
   SaveShaderResTexture(kPixelStage, 0, texture_);
 }

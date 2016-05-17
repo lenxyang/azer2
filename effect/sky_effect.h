@@ -22,7 +22,7 @@ class SkyboxEffect : public Effect {
 
   void SetPV(const Matrix4& value) { pv_ = value;}
   void SetWorld(const Matrix4& value) { world_ = value;}
-  void SetTexture(Texture* texture);
+  void SetTexture(TextureView* texture);
   static Effect* CreateObject() { return new SkyboxEffect;}
  protected:
   void ApplyGpuConstantTable(Renderer* renderer) override;
@@ -30,7 +30,7 @@ class SkyboxEffect : public Effect {
 
   Matrix4 pv_;
   Matrix4 world_;
-  TexturePtr cubemap_;
+  TextureViewPtr cubemap_;
   DECLARE_EFFECT_DYNCREATE(SkyboxEffect);
   DISALLOW_COPY_AND_ASSIGN(SkyboxEffect);
 };

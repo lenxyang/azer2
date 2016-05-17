@@ -35,7 +35,7 @@ class TextBillboardEffect : public Effect {
   void SetViewPos(const Vector3& v) { viewpos_ = v;}
   void SetViewUp(const Vector3& v) { viewup_ = v;}
   void SetBillboard(float width, float height);
-  void SetTexture(Texture* tex);
+  void SetTexture(TextureView* tex);
   void SetDiffuse(const Vector4& v) { diffuse_ = v;}
   static Effect* CreateObject() { return new TextBillboardEffect;}
  protected:
@@ -48,7 +48,7 @@ class TextBillboardEffect : public Effect {
   Vector3 viewup_;
   Vector2 param_;
   Vector4 diffuse_;
-  TexturePtr tex_;
+  TextureViewPtr tex_;
   DECLARE_EFFECT_DYNCREATE(TextBillboardEffect);
   DISALLOW_COPY_AND_ASSIGN(TextBillboardEffect);
 };

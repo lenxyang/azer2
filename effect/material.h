@@ -3,6 +3,7 @@
 #include "azer/effect/base_material.h"
 #include "azer/math/vector4.h"
 #include "azer/render/texture.h"
+#include "azer/render/texture_view.h"
 
 namespace azer {
 struct ColorMaterialData {
@@ -19,7 +20,7 @@ struct ColorMaterialData {
 };
 
 struct DiffuseMapMaterialData {
-  TexturePtr diffusemap;
+  TextureViewPtr diffusemap;
   float ambient_scalar;
   float specular_scalar;
   float alpha;
@@ -28,11 +29,11 @@ struct DiffuseMapMaterialData {
 };
 
 struct TextureMaterialData {
-  TexturePtr diffusemap;
-  TexturePtr specularmap;
-  TexturePtr emissionmap;
-  TexturePtr alphamap;
-  TexturePtr normalmap;
+  TextureViewPtr diffusemap;
+  TextureViewPtr specularmap;
+  TextureViewPtr emissionmap;
+  TextureViewPtr alphamap;
+  TextureViewPtr normalmap;
   float ambient_scalar;
   float specular_scalar;
   float alpha;

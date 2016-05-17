@@ -27,14 +27,14 @@ class Overlay : public ::base::RefCounted<Overlay> {
 
   void SetBounds(const gfx::RectF& rect);
   void SetTexBounds(const gfx::RectF& rect);
-  void SetTexture(Texture* tex);
+  void SetTexture(TextureView* tex);
   void UseBlending(BlendingPtr ptr) {blending_ = ptr;}
   void ResetBlending() { blending_ = NULL;}
  protected:
   BlendingPtr blending_;
   VertexBufferPtr vb_;
   OverlayEffectPtr effect_;
-  TexturePtr texture_;
+  TextureViewPtr texture_;
   Vector4 bounds_;
   Vector4 texbounds_;
   RasterizerStatePtr state_;
