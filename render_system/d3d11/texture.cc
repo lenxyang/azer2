@@ -74,16 +74,6 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   return true;
 }
 
-void D3DTexture::GenerateMips(int level) {
-  // attention:
-  // resource must be specified bind with Resource and RenderTarget
-  // and misc flags must be with D3D11_RESOURCE_MISC_GENERATE_MIPS
-  DCHECK(res_view_ != NULL);
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  d3d_context->GenerateMips(res_view_);
-}
-
 bool D3DTexture::InitResourceView() {
   ID3D11Device* d3d_device = render_system_->GetDevice();
   D3D11_SHADER_RESOURCE_VIEW_DESC view_desc = {
@@ -173,36 +163,7 @@ HANDLE D3DTexture2DShared::GetSharedHanle() {
   return shared_handle_;
 }
 
-bool ValidTextureFlags(const Texture::Options& opt) {
-  // cpu access require for Usage
-  // reference D3D11_CPU_ACCESS_FLAG enumeration
-  if (opt.cpu_access & kCPURead) {
-    if (!(opt.usage & kBufferStaging)) {
-      return false;
-    }
-
-    if (opt.target & kBindTargetRenderTarget) {
-      return false;
-    }
-
-    if (opt.target & kBindTargetShaderResource) {
-      return false;
-    }
-  }
-  if (opt.cpu_access & kCPUWrite) {
-    if (!(opt.usage & kBufferStaging
-          && opt.usage & kBufferDynamic)) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 // class D3DTexture2D
-void D3DTexture2D::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
-}
-
 bool D3DTexture2D::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   int32 count = 0;
@@ -278,10 +239,6 @@ D3DTexture2DShared::~D3DTexture2DShared() {
   if (shared_handle_ != NULL) {
     // CloseHandle(shared_handle_);
   }
-}
-
-void D3DTexture2DShared::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
-  desc->MiscFlags      |= D3D11_RESOURCE_MISC_SHARED;
 }
 
 bool D3DTexture2DShared::InitSharedResource() {
@@ -363,11 +320,6 @@ D3DTextureCubeMap::D3DTextureCubeMap(const Options& opt,
     : D3DTexture(opt, rs) {
 }
 
-void D3DTextureCubeMap::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
-  DCHECK_EQ(desc->Width, desc->Height) << "Cubemap's width must equal height.";
-  desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
-} 
-
 bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   D3D11_SUBRESOURCE_DATA subres[6];
@@ -381,28 +333,11 @@ bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
   return Init(subres, 6, 1);
 }
 
-void D3DTextureCubeMap::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
-  DCHECK(texres_ != NULL);
-  DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
-            D3D11_SRV_DIMENSION_TEXTURECUBE);
-  memset(desc, 0, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-  desc->Format = tex_desc_.Format;
-  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-  desc->TextureCube.MipLevels = tex_desc_.MipLevels;
-  desc->TextureCube.MostDetailedMip = 0;
-}
-
-
 // class D3D11TextureCubeMap
 D3DTexture2DArray::D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs)
     : D3DTexture(opt, rs),
       diminison_(-1) {
 }
-
-void D3DTexture2DArray::ModifyTextureDesc(D3D11_TEXTURE2D_DESC* desc) {
-  DCHECK_EQ(desc->Width, desc->Height) << "Cubemap's width must equal height.";
-  desc->MiscFlags |= D3D11_RESOURCE_MISC_TEXTURECUBE;
-} 
 
 bool D3DTexture2DArray::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
@@ -416,19 +351,6 @@ bool D3DTexture2DArray::InitFromImage(const ImageData* image) {
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
   return Init(subres, image->depth(), 1);
-}
-
-void D3DTexture2DArray::InitResourceDesc(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
-  DCHECK(texres_ != NULL);
-  DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
-    D3D11_SRV_DIMENSION_TEXTURE2DARRAY);
-  memset(desc, 0, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-  desc->Format = tex_desc_.Format;
-  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-  desc->Texture2DArray.MipLevels = tex_desc_.MipLevels;
-  desc->Texture2DArray.MostDetailedMip = 0;
-  desc->Texture2DArray.FirstArraySlice = 0;
-  desc->Texture2DArray.ArraySize = diminison_;
 }
 
 }  // namespace d3d11

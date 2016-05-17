@@ -18,8 +18,6 @@ class D3DTexture: public Texture {
 
   virtual ~D3DTexture();
   virtual bool Init(const D3D11_SUBRESOURCE_DATA* data, int arraysize, int mipmap);
-  void GenerateMips(int level) override;
-
   MapData map(MapType type) override;
   void unmap() override;
 
@@ -27,8 +25,6 @@ class D3DTexture: public Texture {
   void Attach(ID3D11Texture2D* tex) { texres_ = tex;}
   void Detach() { texres_ = NULL; }
 
-  ID3D11ShaderResourceView* GetResourceView() { return res_view_;}
-  ID3D11UnorderedAccessView* GetUnorderedAccessView() { return uav_view_;}
   ID3D11Resource* GetResource() { return texres_;}
 
   bool CopyTo(Texture* texture) override;
@@ -41,8 +37,6 @@ class D3DTexture: public Texture {
   ID3D11Resource* texres_;
   D3DRenderSystem* render_system_;
   D3D11_TEXTURE2D_DESC tex_desc_;
-  ID3D11ShaderResourceView* res_view_;
-  ID3D11UnorderedAccessView* uav_view_;
 
 #ifdef DEBUG
   bool mapped_;
