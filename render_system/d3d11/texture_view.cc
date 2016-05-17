@@ -60,9 +60,9 @@ bool D3DResTextureView::Init() {
     case kTex2DArray:
       view_desc.Format = texdesc.Format;
       if (texture()->options().sample_desc.count > 1) {
-        desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+        view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
       } else {
-        desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
       }
       view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
       view_desc.Texture2DArray.MipLevels = texdesc.MipLevels;
