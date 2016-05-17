@@ -6,7 +6,8 @@
 
 namespace azer {
 namespace d3d11 {
-D3DTexView::D3DTexView() {
+D3DTexView::D3DTexView(const Options& options, Texture* tex)
+    : TextureView(options, tex) {
 }
 
 D3DTexView::~D3DTexView() {
@@ -17,8 +18,9 @@ void D3DTexView::GenerateMips(int32 level) {
 }
 
 // class D3DResTextureView
-D3DResTextureView::D3DResTextureView() 
-    : res_view_(NULL) {
+D3DResTextureView::D3DResTextureView(const Options& options, Texture* tex) 
+    : D3DTexView(options, view),
+      res_view_(NULL) {
 }
 
 D3DResTextureView::~D3DResTextureView() {
@@ -35,7 +37,7 @@ void D3DResTextureView::GenerateMips(int32 level) {
   d3d_context->GenerateMips(res_view_);
 }
 
-bool D3DResTextureView::InitRes() {
+bool D3DResTextureView::Init() {
   ID3D11Device* d3d_device = render_system_->GetDevice();
   D3D11_SHADER_RESOURCE_VIEW_DESC view_desc = {
     DXGI_FORMAT_UNKNOWN,
@@ -67,8 +69,9 @@ bool D3DResTextureView::InitRes() {
   return true;
 }
 
-D3DUAResTextureView::D3DUAResTextureView() 
-    : uav_view_(NULL) {
+D3DUAResTextureView::D3DUAResTextureView(const Options& options, Texture* tex) 
+    : D3DTexRes(options, tex),
+      uav_view_(NULL) {
 }
 
 D3DUAResTextureView::~D3DUAResTextureView() {

@@ -16,7 +16,7 @@ class AZER_EXPORT TextureView : public ResourceView {
     TextureView();
   };
 
-  TextureView(Texture* tex);
+  TextureView(const Options& options, Texture* tex);
   const Options& options() const { return options_;}
   Texture* GetTexture() { return tex_;}
   virtual bool CheckTexFormatCapability() = 0;
