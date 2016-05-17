@@ -7,24 +7,25 @@
 
 namespace azer {
 namespace d3d11 {
-D3DTexView::D3DTexView(const Options& options, Texture* tex)
+D3DTextureView::D3DTextureView(const Options& options, Texture* tex)
     : TextureView(options, tex) {
+  DCHECK(CheckTexFormatCapability());
 }
 
-D3DTexView::~D3DTexView() {
+D3DTextureView::~D3DTextureView() {
 }
 
-void D3DTexView::GenerateMips(int32 level) {
+void D3DTextureView::GenerateMips(int32 level) {
   CHECK(false);
 }
 
-bool D3DTexView::CheckTexFormatCapability() {
+bool D3DTextureView::CheckTexFormatCapability() {
   return true;
 }
 
 // class D3DResTextureView
 D3DResTextureView::D3DResTextureView(const Options& options, Texture* tex) 
-    : D3DTexView(options, tex),
+    : D3DTextureView(options, tex),
       res_view_(NULL) {
 }
 
@@ -53,7 +54,9 @@ bool D3DResTextureView::Init() {
     0,
   };
 
-  const D3D11_TEXTURE2D_DESC& texdesc = ((D3DTexture*)texture())->desc();
+
+  D3DTexture* tex = ((D3DTexture*)texture());
+  const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
   switch (options().type) {
     case kTexCubemap: 
       view_desc.Format = texdesc.Format;
@@ -72,11 +75,10 @@ bool D3DResTextureView::Init() {
       view_desc.Texture2DArray.MipLevels = texdesc.MipLevels;
       view_desc.Texture2DArray.MostDetailedMip = 0;
       view_desc.Texture2DArray.FirstArraySlice = 0;
-      view_desc.Texture2DArray.ArraySize = texture()->diminison();
+      view_desc.Texture2DArray.ArraySize = tex->diminison();
       break;
   }
 
-  D3DTexture* tex = (D3DTexture*)texture();
   HRESULT hr = d3d_device->CreateShaderResourceView(
       tex->GetResource(), &view_desc, &res_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
@@ -84,7 +86,7 @@ bool D3DResTextureView::Init() {
 }
 
 D3DUAResTextureView::D3DUAResTextureView(const Options& options, Texture* tex) 
-    : D3DTexRes(options, tex),
+    : D3DTextureView(options, tex),
       uav_view_(NULL) {
 }
 
@@ -94,16 +96,18 @@ D3DUAResTextureView::~D3DUAResTextureView() {
 
 bool D3DUAResTextureView::Init() {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  D3DTexture* tex = (D3DTexture*)texture();
   ID3D11Device* d3d_device = rs->GetDevice();
   D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
-  desc.Format = tex_desc_.Format;
+  desc.Format = tex->desc().Format;
   desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
   desc.Texture2D.MipSlice = 0;
 
-  D3DTexture* tex = (D3DTexture*)texture();
+  
   HRESULT hr = d3d_device->CreateUnorderedAccessView(
       tex->GetResource(), &desc, &uav_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateUnorderedAccessView failed ");
+  return true;
 }
 }  // namespace azer
 }  // namespace d3d11

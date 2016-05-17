@@ -12,7 +12,6 @@ TextureView::TextureView(const Options& opt, Texture* tex)
     : tex_(tex), 
       options_(opt) {
   DCHECK(tex->options().target & kBindTargetShaderResource);
-  DCHECK(CheckTexFormatCapability());
 }
 
 }  // namespace azer

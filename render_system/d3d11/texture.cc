@@ -53,7 +53,6 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   tex_desc_.CPUAccessFlags = TranslateCPUAccess(options_.cpu_access);
   tex_desc_.MiscFlags      = options_.genmipmap ?  
       D3D11_RESOURCE_MISC_GENERATE_MIPS : 0;
-  ModifyTextureDesc(&tex_desc_);
 
   if (options().type == kTexCubemap) {
     tex_desc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
