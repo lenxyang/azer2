@@ -24,7 +24,7 @@ StageTexContainer::StageTexContainer() {
 StageTexContainer::~StageTexContainer() {
 }
 
-void StageTexContainer::SetTex(int stage, int index, Texture* tex) {
+void StageTexContainer::SetTex(int stage, int index, TextureView* tex) {
   StageTexture& s = GetStage(stage);
   s.count = std::max(s.count, index + 1);
   s.tex[index] = tex;

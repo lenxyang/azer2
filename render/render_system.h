@@ -16,6 +16,7 @@
 #include "azer/render/shader.h"
 #include "azer/render/swap_chain.h"
 #include "azer/render/surface.h"
+#include "azer/render/texture_view.h"
 #include "azer/render/vertex_buffer.h"
 #include "ui/gfx/geometry/rect.h"
 

@@ -11,6 +11,7 @@ namespace azer {
 class Shader;
 class GpuConstantsTable;
 class Texture;
+class TextureView;
 struct ShaderInfo;
 
 class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
@@ -22,12 +23,12 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   int output_count() const { return output_count_;}
   void SetInputCount(int32 count) { input_count_ = count;}
   void SetOutputCount(int32 count) { output_count_ = count;}
-  void SetInputTexture(int32 index, Texture* tex);
-  void SetOutputTexture(int32 index, Texture* tex);
+  void SetInputTexture(int32 index, TextureView* tex);
+  void SetOutputTexture(int32 index, TextureView* tex);
   void Reset();
 
-  Texture* GetInputAt(int32 index);
-  Texture* GetOutputAt(int32 index);
+  TextureView* GetInputAt(int32 index);
+  TextureView* GetOutputAt(int32 index);
   Shader* gpu_program() { return gpu_program_;}
   GpuConstantsTable* constants_table() { return constants_table_;}
 
@@ -36,8 +37,8 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
  protected:
   scoped_refptr<Shader> gpu_program_;
   scoped_refptr<GpuConstantsTable> constants_table_;
-  Texture* input_[kMaxInput];
-  Texture* output_[kMaxOutput];
+  TextureView* input_[kMaxInput];
+  TextureView* output_[kMaxOutput];
   int32 input_count_;
   int32 output_count_;
   ShaderInfo shader_info_;

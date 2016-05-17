@@ -13,7 +13,7 @@ class AZER_EXPORT TextureView : public ResourceView {
     TexFormat format;            // default: kRGBAn8
     TexType type;
 
-    TextureView();
+    Options();
   };
 
   TextureView(const Options& options, Texture* tex);
@@ -23,7 +23,7 @@ class AZER_EXPORT TextureView : public ResourceView {
   virtual void GenerateMips(int32 level);
  private:
   TexturePtr tex_;
-  Options options_;
+  const Options options_;
   DISALLOW_COPY_AND_ASSIGN(TextureView);
 };
 }  // namespace azer

@@ -16,6 +16,7 @@
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
+#include "azer/render_system/d3d11/texture_view.h"
 #include "azer/render_system/d3d11/vertex_buffer.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 
@@ -278,18 +279,17 @@ void D3DRenderer::SetShaderSamplerState(RenderPipelineStage stage, int index,
 }
 
 void D3DRenderer::SetShaderResTexture(RenderPipelineStage stage, int index, 
-                                      int32 count, TexturePtr* texture) {
+                                      int32 count, TextureViewPtr* texture) {
   const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
   
-  TexturePtr* cur = texture;
+  TextureViewPtr* cur = (TextureViewPtr*)texture;
   for (int32 i = 0; i < count; ++i, ++cur) {
-    D3DTexture* tex = (D3DTexture*)(cur->get());
+    D3DResTextureView* tex = (D3DResTextureView*)(cur->get());
     views[i] = tex ? tex->GetResourceView() : NULL;
   }
   
-  D3DTexture2D* tex = (D3DTexture2D*)texture;
   switch (stage) {
     case kVertexStage: 
       d3d_context_->VSSetShaderResources(index, count, views);

@@ -22,9 +22,10 @@ namespace azer {
 namespace d3d11 {
 
 D3DTexture::D3DTexture(const Options& opt, D3DRenderSystem* rs)
-    : Texture(opt)
-    , texres_(NULL)
-    , render_system_(rs) {
+    : Texture(opt),
+      texres_(NULL),
+      render_system_(rs),
+      diminison_(0) {
 #ifdef DEBUG
   mapped_ = false;
 #endif
@@ -53,6 +54,10 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   tex_desc_.MiscFlags      = options_.genmipmap ?  
       D3D11_RESOURCE_MISC_GENERATE_MIPS : 0;
   ModifyTextureDesc(&tex_desc_);
+
+  if (options().type == kTexCubemap) {
+    tex_desc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+  }
 
   ID3D11Texture2D* tex = NULL;
   hr = d3d_device->CreateTexture2D(&tex_desc_, data, &tex);
@@ -140,27 +145,6 @@ bool D3DTexture2D::InitFromImage(const ImageData* image) {
 }
 
 
-// class D3DResTexture2D
-bool D3DResTexture2D::InitFromTexture(D3DTexture2D* texture) {
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  texres_ = texture->GetResource();
-  texres_->AddRef();
-  D3D11_SHADER_RESOURCE_VIEW_DESC desc;
-  DCHECK_EQ(GetViewDimensionFromTextureType(options_.type),
-            D3D11_SRV_DIMENSION_TEXTURE2D);
-  desc.Format = TranslateTexFormat(options_.format);
-  desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-  desc.Texture2D.MipLevels = 1;
-  desc.Texture2D.MostDetailedMip = 0;
-  HRESULT hr = d3d_device->CreateShaderResourceView(texres_, &desc, &res_view_);
-  HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
-  return true;
-}
-
-bool D3DResTexture2D::InitFromImage(const ImageData* image) {
-  CHECK(false);
-  return false;
-}
 
 // class D3D11TextureCubeMap
 D3DTextureCubeMap::D3DTextureCubeMap(const Options& opt, 
@@ -183,8 +167,7 @@ bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
 
 // class D3D11TextureCubeMap
 D3DTexture2DArray::D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs)
-    : D3DTexture(opt, rs),
-      diminison_(-1) {
+    : D3DTexture(opt, rs) {
 }
 
 bool D3DTexture2DArray::InitFromImage(const ImageData* image) {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <d3d11.h>
 #include "azer/render/texture_view.h"
 
 namespace azer {
@@ -7,7 +8,7 @@ namespace d3d11 {
 class D3DTexView : public TextureView {
  public:
   D3DTexView(const Options& options, Texture* tex);
-  ~D3DTexView() override;
+  virtual ~D3DTexView();
   virtual bool Init() = 0;
   void GenerateMips(int32 level) override;
  private:
@@ -27,7 +28,7 @@ class D3DResTextureView : public D3DTexView {
   DISALLOW_COPY_AND_ASSIGN(D3DResTextureView);
 };
 
-class D3DUAResTextureView : public TextureView {
+class D3DUAResTextureView : public D3DTexView {
  public:
   D3DUAResTextureView(const Options& options, Texture* tex);
   ~D3DUAResTextureView() override;
