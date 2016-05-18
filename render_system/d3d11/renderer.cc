@@ -33,9 +33,12 @@ D3DRenderer::D3DRenderer(ID3D11DeviceContext* context, D3DRenderSystem* rs)
     : Renderer(rs)
     , d3d11_render_system_(rs)
     , d3d_context_(context) {
+  LOG(ERROR) << " D3DRenderer::ctor(" << (void*)this;
 }
 
 D3DRenderer::~D3DRenderer() {
+  ReportDeviceObjects(d3d11_render_system_);
+  LOG(ERROR) << " D3DRenderer::dctor(" << (void*)this;
   SAFE_RELEASE(d3d_context_);
 }
 

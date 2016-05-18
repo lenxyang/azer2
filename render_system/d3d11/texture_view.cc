@@ -69,9 +69,11 @@ bool D3DResTextureView::Init() {
 	  tex->options().type : options().type;
   switch (textype) {
     case kTex2D:
-	  view_desc.Format = texdesc.Format;
-	  view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	  break;
+	    view_desc.Format = texdesc.Format;
+	    view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+      view_desc.Texture2D.MipLevels = texdesc.MipLevels;
+      view_desc.Texture2D.MostDetailedMip = 0;
+	    break;
     case kTexCubemap: 
       view_desc.Format = texdesc.Format;
       view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;

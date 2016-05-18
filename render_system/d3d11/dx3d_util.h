@@ -11,6 +11,7 @@
 #include <d3d11.h>
 
 namespace azer {
+namespace d3d11 {
 std::string HRMessage(uint32 hr);
 
 struct COMDeleter {
@@ -45,6 +46,10 @@ class ScopedRefCOM {
   IUnknown* ptr_;
   DISALLOW_COPY_AND_ASSIGN(ScopedRefCOM);
 };
+
+class D3DRenderSystem;
+void ReportDeviceObjects(D3DRenderSystem* rs);
+}  // namespace d3d11
 }  // namespace base
 
 #define SAFE_RELEASE(res)                       \
