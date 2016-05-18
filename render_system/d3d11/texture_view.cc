@@ -10,9 +10,13 @@ namespace d3d11 {
 D3DTextureView::D3DTextureView(const Options& options, Texture* tex)
     : TextureView(options, tex) {
   DCHECK(CheckTexFormatCapability());
+  D3DTexture* t = (D3DTexture*)tex;
+  t->GetResource()->AddRef();
 }
 
 D3DTextureView::~D3DTextureView() {
+  ID3D11Resource* res = ((D3DTexture*)texture())->GetResource();
+  SAFE_RELEASE(res);
 }
 
 void D3DTextureView::GenerateMips(int32 level) {
@@ -33,6 +37,7 @@ D3DResTextureView::D3DResTextureView(const Options& options, Texture* tex)
 }
 
 D3DResTextureView::~D3DResTextureView() {
+  D3DTexture* tex = ((D3DTexture*)texture());
   SAFE_RELEASE(res_view_);
 }
 
