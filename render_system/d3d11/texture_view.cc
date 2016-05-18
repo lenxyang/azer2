@@ -60,7 +60,13 @@ bool D3DResTextureView::Init() {
 
   D3DTexture* tex = ((D3DTexture*)texture());
   const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
-  switch (options().type) {
+  TexType textype = (options().type == kUnkonwnTexType) ?
+	  tex->options().type : options().type;
+  switch (textype) {
+    case kTex2D:
+	  view_desc.Format = texdesc.Format;
+	  view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	  break;
     case kTexCubemap: 
       view_desc.Format = texdesc.Format;
       view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
