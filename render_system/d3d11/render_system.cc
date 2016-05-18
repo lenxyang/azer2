@@ -22,6 +22,7 @@
 #include "azer/render_system/d3d11/shader.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
+#include "azer/render_system/d3d11/texture_view.h"
 #include "azer/render_system/d3d11/vertex_buffer.h"
 
 namespace azer {
@@ -189,7 +190,12 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
 
 TextureViewPtr D3DRenderSystem::CreateTextureView(const TextureView::Options& opt, 
                                                   Texture* tex) {
-  return TextureViewPtr();
+  scoped_refptr<D3DTextureView> ptr(new D3DResTextureView(opt, tex));
+  if (ptr->Init()) {
+    return ptr;
+  } else {
+    return TextureViewPtr();
+  }
 }
 
 SamplerStatePtr D3DRenderSystem::CreateSamplerState(
