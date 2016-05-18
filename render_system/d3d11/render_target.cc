@@ -34,14 +34,16 @@ void D3DRenderTarget::Clear(const azer::Vector4& color) {
 bool D3DRenderTarget::Init(D3DTexture* tex) {
   DCHECK(!default_render_target_);
   DCHECK(target_ == NULL);
+  DCHECK(texres_ == NULL);
 
   ID3D11Device* d3d_device = render_system_->GetDevice();
-  HRESULT hr;
+  HRESULT hr = S_OK;
   DCHECK(texture_.get() == NULL);
   texture_ = tex;
 
-
   ID3D11Resource* resource = tex->GetResource();
+  resource->AddRef();
+  texres_ = resource;
   DCHECK(TranslateBindTarget(tex->options().target) & D3D11_BIND_RENDER_TARGET);
   hr = d3d_device->CreateRenderTargetView(resource, NULL, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateRenderTargetView failed ");

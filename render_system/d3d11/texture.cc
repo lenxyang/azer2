@@ -66,6 +66,18 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   return true;
 }
 
+void D3DTexture::Attach(ID3D11Texture2D* tex) { 
+  DCHECK(texres_ == NULL);
+  DCHECK(tex != NULL);
+  texres_ = tex;
+  texres_->AddRef();
+}
+
+void D3DTexture::Detach() { 
+  SAFE_RELEASE(texres_);
+  texres_ = NULL; 
+}
+
 // reference: MSDN "How to: Use dynamic resources"
 Texture::MapData D3DTexture::map(MapType maptype) {
   DCHECK(NULL != texres_);

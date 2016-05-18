@@ -22,8 +22,8 @@ class D3DTexture: public Texture {
   void unmap() override;
 
   bool Initialized() const { return NULL != texres_;}
-  void Attach(ID3D11Texture2D* tex) { texres_ = tex;}
-  void Detach() { texres_ = NULL; }
+  void Attach(ID3D11Texture2D* tex);
+  void Detach();
 
   ID3D11Resource* GetResource() { return texres_;}
   int32 diminison() const { return diminison_;}
