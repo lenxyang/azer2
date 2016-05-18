@@ -49,6 +49,7 @@ class D3DDepthBuffer : public DepthBuffer {
   ID3D11DepthStencilView* GetD3DDepthStencilView() { return target_;}
  private:
   ID3D11DepthStencilView* target_;
+  ID3D11Resource* texres_;
   D3DRenderSystem* render_system_;
   friend class D3DRenderSystem;
   DISALLOW_COPY_AND_ASSIGN(D3DDepthBuffer);

@@ -13,13 +13,15 @@ namespace d3d11 {
 
 D3DRenderTarget::D3DRenderTarget(const Options& opt, bool surface_target, 
                                  D3DRenderSystem* render_system)
-    : RenderTarget(opt, surface_target)
-    , target_(NULL)
-    , render_system_(render_system) {
+    : RenderTarget(opt, surface_target),
+      target_(NULL),
+      texres_(NULL),
+      render_system_(render_system) {
 }
   
 D3DRenderTarget::~D3DRenderTarget() {
   SAFE_RELEASE(target_);
+  SAFE_RELEASE(texres_);
 }
 
 void D3DRenderTarget::Clear(const azer::Vector4& color) {

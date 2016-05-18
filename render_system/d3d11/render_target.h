@@ -27,6 +27,7 @@ class D3DRenderTarget : public RenderTarget {
   ID3D11RenderTargetView* GetD3DRenderTargetView() { return target_;}
  protected:
   ID3D11RenderTargetView* target_;
+  ID3D11Resource* texres_;
   D3DRenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(D3DRenderTarget);
 };
