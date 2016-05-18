@@ -1,5 +1,6 @@
 #pragma once
 
+#include "base/memory/ref_counted.h"
 #include "azer/math/vector3.h"
 #include "azer/math/vector4.h"
 #include "azer/render/entity.h"
@@ -9,7 +10,9 @@ class Camera;
 class ColorEffect;
 class AmbientColorEffect;
 class Texture;
+class TextureView;
 class TextBillboardEffect;
+typedef scoped_refptr<TextureView> TextureViewPtr;
 
 class AxesFrame {
  public:
@@ -26,7 +29,7 @@ class AxesFrame {
   Vector3 scale_;
   Vector3 position_;
   Vector4 colors_[3];
-  scoped_refptr<Texture> tex_[3];
+  TextureViewPtr tex_[3];
   scoped_refptr<AmbientColorEffect> effect_;
   scoped_refptr<TextBillboardEffect> texeffect_;
   EntityPtr entity_;

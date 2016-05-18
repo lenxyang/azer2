@@ -4,6 +4,7 @@
 #include "base/memory/scoped_ptr.h"
 #include "ui/gfx/geometry/rect.h"
 #include "azer/math/matrix4.h"
+#include "azer/render/texture_view.h"
 #include "azer/render/viewport.h"
 
 namespace azer {
@@ -24,6 +25,7 @@ class CameraOverlay {
   Matrix4 world_;
   scoped_refptr<Overlay> overlay_;
   scoped_refptr<Renderer> renderer_;
+  TextureViewPtr renderer_view_;
   Viewport viewport_;
   scoped_ptr<AxesFrame> object_;
   const Camera* camera_;

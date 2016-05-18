@@ -7,6 +7,7 @@
 #include "azer/render/camera.h"
 #include "azer/render/entity.h"
 #include "azer/render/renderer.h"
+#include "azer/render/render_system.h"
 #include "azer/render/vertex_pack.h"
 #include "azer/res/grit/common.h"
 #include "azer/res/reslib.h"
@@ -55,9 +56,13 @@ AxesFrame::AxesFrame() {
   colors_[1] = Vector4(0.0f, 1.0f, 0.0f, 1.0f);
   colors_[2] = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
 
-  tex_[0] =  ResLib::instance()->GetTexture(IMG_COORD_X);
-  tex_[1] =  ResLib::instance()->GetTexture(IMG_COORD_Y);
-  tex_[2] =  ResLib::instance()->GetTexture(IMG_COORD_Z);
+  RenderSystem* rs = RenderSystem::Current();
+  tex_[0] =  rs->CreateTextureView(TextureView::Options(),
+                                   ResLib::instance()->GetTexture(IMG_COORD_X));
+  tex_[1] =  rs->CreateTextureView(TextureView::Options(),
+                                   ResLib::instance()->GetTexture(IMG_COORD_Y));
+  tex_[2] =  rs->CreateTextureView(TextureView::Options(),
+                                   ResLib::instance()->GetTexture(IMG_COORD_Z));
 }
 
 AxesFrame::~AxesFrame() {}

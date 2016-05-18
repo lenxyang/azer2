@@ -18,6 +18,8 @@ CameraOverlay::CameraOverlay(const Camera* camera)
   viewport_.bounds = gfx::Rect(size);
   renderer_ = CreateCommonRenderer(size);
   renderer_->SetViewport(viewport_);
+  renderer_view_ = rs->CreateTextureView(
+      TextureView::Options(), renderer_->GetRenderTarget(0)->GetTexture());
 
   overlay_ = new Overlay;
   overlay_->SetBounds(gfx::RectF(0.75f, 0.75f, 0.25f, 0.25f));
@@ -54,7 +56,7 @@ void CameraOverlay::Render(Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   Blending* blending = env->blending();
   renderer->SetBlending(blending, 0, 0xffffffff);
-  overlay_->SetTexture(renderer_->GetRenderTarget(0)->GetTexture());
+  overlay_->SetTexture(renderer_view_);
   overlay_->Render(renderer);
   renderer->ResetBlending();
 }
