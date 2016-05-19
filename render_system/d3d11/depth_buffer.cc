@@ -158,10 +158,10 @@ bool D3DDepthBuffer::Init(D3DTexture* tex) {
   };
 
   if (options().depth_readonly) {
-    dvsd.Flags != D3D11_DSV_READ_ONLY_DEPTH;
+    dvsd.Flags |= D3D11_DSV_READ_ONLY_DEPTH;
   }
   if (options().stencil_readonly) {
-    dvsd.Flags != D3D11_DSV_READ_ONLY_STENCIL;
+    dvsd.Flags |= D3D11_DSV_READ_ONLY_STENCIL;
   }
 
   if (tex->options().format == kTexR32) {
