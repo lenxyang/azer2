@@ -9,6 +9,7 @@
 #include "azer/util/geometry/geometry.h"
 #include "azer/util/interactive/interactive_context.h"
 #include "azer/util/interactive/pick_util.h"
+#include "azer/util/interactive/orientation_util.h"
 
 namespace azer {
 // class RotateControlerObj
@@ -154,6 +155,12 @@ RotateController::RotateController(InteractiveContext* ctx)
 RotateController::~RotateController() {
 }
 
+void RotateController::set_directional(const Vector3& dir) {
+  Quaternion quad;
+  CalcSceneOrientForZDirection(dir, &quad);
+  set_orientation(quad);
+}
+
 int32 RotateController::GetPicking(const gfx::Point& screenpt) {
   Ray ray = std::move(context()->GetPickingRay(screenpt));
   const Camera* camera = context()->camera(); 
@@ -197,14 +204,15 @@ void RotateController::OnDragEnd(const ui::MouseEvent& e) {
   orientation_ = CalcOrientation(e.location());
   FOR_EACH_OBSERVER(RotateControllerObserver, observer_list_, 
                     OnRotateEnd(this));
+  org_orientation_ = orientation_;
 }
 
 Quaternion RotateController::CalcOrientation(const gfx::Point& pt) {
   gfx::Rect bounds = context()->window()->GetContentsBounds();
   float width = bounds.width();
   float height = bounds.height();
-  Quaternion quad;
   float rotate_range = kPI;
+  Quaternion quad;
   switch (state()) {
     case kHitAxisX: {
       float offset = (float)(pt.y() - location_.y()) / height;
@@ -215,22 +223,20 @@ Quaternion RotateController::CalcOrientation(const gfx::Point& pt) {
     case kHitAxisY: {
       float offset = (float)(pt.x() - location_.x()) / width;
       Radians rad(rotate_range * offset);
-      quad = Quaternion(Vector3(0.0f, 1.0f, 0.0f), rad);
+      quad = Quaternion(Vector3(1.0f, 0.0f, 0.0f), rad);
       break;
     }
     case kHitAxisZ: {
       float offset = (float)(pt.x() - location_.x()) / width;
       Radians rad(rotate_range * offset);
-      quad = Quaternion(Vector3(0.0f, 0.0f, 1.0f), rad);
+      quad = Quaternion(Vector3(1.0f, 0.0f, 0.0f), rad);
       break;
     }
     default:
-      quad = Quaternion();
       break;
   }
 
-  quad.Normalize();
-  Quaternion q = std::move(quad * org_orientation_);
+  Quaternion q =  quad * org_orientation_;
   q.Normalize();
   return q;
 }

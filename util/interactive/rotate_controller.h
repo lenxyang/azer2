@@ -6,6 +6,7 @@
 #include "azer/math/vector3.h"
 #include "azer/math/vector4.h" 
 #include "azer/render/entity.h"
+#include "azer/render/transform_holder.h"
 #include "azer/util/interactive/interactive_controller.h"
 
 namespace azer {
@@ -76,6 +77,7 @@ class RotateController : public InteractiveController {
   void RenderFrame(Renderer* renderer) override;
 
   const Quaternion& orientation() const { return orientation_;}
+  void set_directional(const Vector3& dir);
   void set_position(const Vector3& pos) { position_ = pos;}
   const Vector3& position() const { return position_;}
   void set_scale(const Vector3& s) { scale_ = s;}
