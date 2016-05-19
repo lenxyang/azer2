@@ -67,21 +67,22 @@ bool D3DResTextureView::Init() {
   const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
   TexType textype = (options().type == kUnkonwnTexType) ?
 	  tex->options().type : options().type;
+  view_desc.Format = texdesc.Format;
+  if (options().format != kTexFormatUndefined) {
+    view_desc.Format = TranslateTexFormat(options().format);
+  }
   switch (textype) {
     case kTex2D:
-	    view_desc.Format = texdesc.Format;
-	    view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+      view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
       view_desc.Texture2D.MipLevels = texdesc.MipLevels;
       view_desc.Texture2D.MostDetailedMip = 0;
-	    break;
+      break;
     case kTexCubemap: 
-      view_desc.Format = texdesc.Format;
       view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
       view_desc.TextureCube.MipLevels = texdesc.MipLevels;
       view_desc.TextureCube.MostDetailedMip = 0;
       break;
     case kTex2DArray:
-      view_desc.Format = texdesc.Format;
       if (texture()->options().sample_desc.count > 1) {
         view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
       } else {
@@ -93,6 +94,8 @@ bool D3DResTextureView::Init() {
       view_desc.Texture2DArray.FirstArraySlice = 0;
       view_desc.Texture2DArray.ArraySize = tex->diminison();
       break;
+    default:
+      CHECK(false);
   }
 
   HRESULT hr = d3d_device->CreateShaderResourceView(
