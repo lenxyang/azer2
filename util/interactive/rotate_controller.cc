@@ -158,7 +158,7 @@ RotateController::~RotateController() {
 void RotateController::set_directional(const Vector3& dir) {
   Quaternion quad;
   CalcSceneOrientForZDirection(dir, &quad);
-  set_orientation(quad);
+  orientation_ = quad;
 }
 
 int32 RotateController::GetPicking(const gfx::Point& screenpt) {
@@ -211,7 +211,7 @@ Quaternion RotateController::CalcOrientation(const gfx::Point& pt) {
   gfx::Rect bounds = context()->window()->GetContentsBounds();
   float width = bounds.width();
   float height = bounds.height();
-  float rotate_range = kPI;
+  float rotate_range = kPI * 4.0f;
   Quaternion quad;
   switch (state()) {
     case kHitAxisX: {
@@ -223,13 +223,13 @@ Quaternion RotateController::CalcOrientation(const gfx::Point& pt) {
     case kHitAxisY: {
       float offset = (float)(pt.x() - location_.x()) / width;
       Radians rad(rotate_range * offset);
-      quad = Quaternion(Vector3(1.0f, 0.0f, 0.0f), rad);
+      quad = Quaternion(Vector3(0.0f, 1.0f, 0.0f), rad);
       break;
     }
     case kHitAxisZ: {
       float offset = (float)(pt.x() - location_.x()) / width;
       Radians rad(rotate_range * offset);
-      quad = Quaternion(Vector3(1.0f, 0.0f, 0.0f), rad);
+      quad = Quaternion(Vector3(0.0f, 0.0f, 1.0f), rad);
       break;
     }
     default:
