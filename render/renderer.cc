@@ -16,6 +16,11 @@ Renderer::Renderer(RenderSystem* rs) :
 }
 
 Renderer::~Renderer() {
+  default_rasterizer_state_ = NULL;
+  default_depth_state_ = NULL;
+  current_depth_state_ = NULL;
+  depth_ = NULL;
+  targets_.clear();
 }
 
 void Renderer::BindEffect(Effect* effect) {

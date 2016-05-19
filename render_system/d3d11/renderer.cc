@@ -344,7 +344,9 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage,
 bool D3DRenderer::Init(std::vector<RenderTargetPtr>* rt, DepthBuffer* depth) {
   DCHECK_EQ(targets_.size(), 0u);
   DCHECK_GE(rt->size(), 0u);
-  targets_.swap(*rt);
+  for (auto iter = rt->begin(); iter != rt->end(); ++iter) {
+    targets_.push_back(*iter);
+  }
   depth_ = depth;
   Reset();
   gfx::Size size;

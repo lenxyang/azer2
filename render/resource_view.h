@@ -7,6 +7,7 @@ namespace azer {
 class AZER_EXPORT ResourceView : public ::base::RefCounted<ResourceView> {
  public:
   ResourceView() {}
+  virtual ~ResourceView() {}
  private:
   DISALLOW_COPY_AND_ASSIGN(ResourceView);
 };
