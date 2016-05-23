@@ -8,7 +8,12 @@ namespace azer {
 void CalcSceneOrientForZDirection(const Vector3& d, Quaternion* orient) {
   Camera camera;
   Vector3 dir = d.NormalizeCopy();
-  Vector3 up = Vector3(dir.x, 10.0f, dir.z);
+  Vector3 up;
+  if (dir.y > 0) {
+    up = Vector3(dir.x + 1.0f, dir.z + 10.0f, dir.z + 5.0f);
+  } else {
+    up = Vector3(dir.x + 1.0f, dir.z - 10.0f, dir.z + 5.0f);
+  }
   Vector3 newz = dir.NormalizeCopy();
   Vector3 newx = std::move(up.cross(newz).NormalizeCopy());
   Vector3 newy = std::move(newz.cross(newx).NormalizeCopy());
