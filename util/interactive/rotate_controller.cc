@@ -242,6 +242,7 @@ Quaternion RotateController::CalcOrientation(const gfx::Point& pt) {
 }
 
 void RotateController::UpdateFrame(const FrameArgs& args) {
+  object_->ResetColor();
   switch (state()) {
     case kHitAxisX: 
       object_->SetColor(RotateControllerObj::kAxisX, kSelectedColor);
