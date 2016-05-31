@@ -39,7 +39,7 @@ void CanvasLayer::Redraw() {
   if (delegate_ && !bounds_.IsEmpty()) {
     SkCanvas* skcanvas = canvas_->BeginPaint();
     
-    scoped_ptr<gfx::Canvas> canvas(
+    std::unique_ptr<gfx::Canvas> canvas(
         gfx::Canvas::CreateCanvasWithoutScaling(skcanvas, 1.0f));
     canvas->DrawColor(color(), SkXfermode::kSrc_Mode);
     delegate_->OnPaintLayer(canvas.get());

@@ -2,7 +2,7 @@
 
 #include <d3d11.h>
 
-#include "base/basictypes.h"
+
 #include "azer/render/blending.h"
 
 namespace azer {

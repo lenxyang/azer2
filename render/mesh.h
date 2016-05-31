@@ -61,7 +61,7 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   MeshPart* AddMeshPart(MeshPart* entity);
   MeshPartPtr RemoveMeshPartAt(int32_t index);
   void ClearMeshPart();
-  int32_t part_count() const { return static_cast<int32>(part_.size());}
+  int32_t part_count() const { return static_cast<int32_t>(part_.size());}
   MeshPart* part_at(int32_t index) { return part_[index].get();}
   bool has_blending() const { return blending_count_ > 0;}
 

@@ -11,8 +11,8 @@ namespace azer {
 
 void InitApp(int* argc, char** argv[], const char*) {
   static ::base::AtExitManager at_exit;
-  CommandLine::Init(*argc, *argv);
-  base::FilePath path = CommandLine::ForCurrentProcess()->GetProgram();
+  ::base::CommandLine::Init(*argc, *argv);
+  base::FilePath path = ::base::CommandLine::ForCurrentProcess()->GetProgram();
 
   ::logging::LoggingSettings setting;
   // setting.log_file = UTF16ToUTF8(path.value());

@@ -3,7 +3,6 @@
 #include <memory>
 #include <vector>
 
-#include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/string.h"
 #include "azer/render/common.h"
@@ -16,12 +15,12 @@ typedef scoped_refptr<ImageLevelData> ImageLevelDataPtr;
 
 class AZER_EXPORT ImageLevelData : public ::base::RefCounted<ImageLevelData> {
  public:
-  ImageLevelData(int32_t width, int32_t height, int32_t depth, uint8* data, 
+  ImageLevelData(int32_t width, int32_t height, int32_t depth, uint8_t* data, 
                  int32_t data_size, int32_t row_bytes, int32_t format);
 
-  const uint8* data() const { return data_.get();}
+  const uint8_t* data() const { return data_.get();}
   int32_t data_size() const { return data_size_;}
-  const uint8* dim_data(int32_t depth) const;
+  const uint8_t* dim_data(int32_t depth) const;
   int32_t dim_data_size() const;
   
   int32_t pixel_size() const { return pixel_size(data_format());}
@@ -40,7 +39,7 @@ class AZER_EXPORT ImageLevelData : public ::base::RefCounted<ImageLevelData> {
   int32_t row_bytes_;
   int32_t data_format_;
   int32_t data_size_;
-  scoped_ptr<uint8> data_;
+  std::unique_ptr<uint8_t> data_;
   DISALLOW_COPY_AND_ASSIGN(ImageLevelData);
 };
 
@@ -55,7 +54,7 @@ class AZER_EXPORT ImageData : public ::base::RefCounted<ImageData> {
   int32_t textype() const { return textype_;}
   int32_t data_format() const;
   void AppendData(ImageLevelData* data);
-  int32_t level_count() const { return static_cast<int32>(levels_.size());}
+  int32_t level_count() const { return static_cast<int32_t>(levels_.size());}
   const ImageLevelData* GetLevelData(int32_t level) const;
  private:
   int32_t textype_;

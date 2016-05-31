@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 
 namespace azer {
 namespace detail {

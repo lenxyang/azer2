@@ -1,7 +1,7 @@
 #include "azer/render/common.h" 
 
 #include "base/logging.h"
-#include "base/basictypes.h"
+
 
 namespace azer {
 const char* RenderStageName(RenderPipelineStage stage) {

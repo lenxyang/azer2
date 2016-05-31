@@ -4,8 +4,6 @@
 #include <string.h>
 #include <vector>
 
-#include "base/basictypes.h"
-#include "base/memory/scoped_ptr.h"
 #include "azer/base/export.h"
 #include "azer/render/common.h"
 #include "azer/render/hardware_buffer.h"
@@ -71,15 +69,15 @@ class AZER_EXPORT VertexDesc : public ::base::RefCounted<VertexDesc> {
   void init(const Desc* desc, int desc_count);
 
   void ReCalc(int strip);
-  scoped_ptr<Desc[]> desc_;
+  std::unique_ptr<Desc[]> desc_;
   int32_t vertex_size_;
   int32_t slot_count_;
 
-  typedef std::vector<int32> OffsetIndex;
+  typedef std::vector<int32_t> OffsetIndex;
   OffsetIndex offsets_idx_;
-  std::vector<int32> slot_index_;
-  std::vector<int32> slot_stride_;
-  std::vector<int32> slot_element_;
+  std::vector<int32_t> slot_index_;
+  std::vector<int32_t> slot_stride_;
+  std::vector<int32_t> slot_element_;
 
   DISALLOW_COPY_AND_ASSIGN(VertexDesc);
 };
@@ -89,14 +87,14 @@ class AZER_EXPORT SlotVertexData : public ::base::RefCounted<SlotVertexData> {
   SlotVertexData(VertexDesc* desc, int32_t vertex_count);
   void extend(int32_t count);
 
-  uint8* next(const uint8* cur);
-  const uint8* next(const uint8* cur) const;
+  uint8_t* next(const uint8_t* cur);
+  const uint8_t* next(const uint8_t* cur) const;
 
-  uint8* pointer();
-  const uint8* pointer() const;
+  uint8_t* pointer();
+  const uint8_t* pointer() const;
 
-  uint8* vertex_data_at(int32_t index);
-  const uint8* vertex_data_at(int32_t index) const;
+  uint8_t* vertex_data_at(int32_t index);
+  const uint8_t* vertex_data_at(int32_t index) const;
   int32_t buffer_size() const;
   int32_t vertex_count() const;
   int32_t element_count() const;
@@ -105,7 +103,7 @@ class AZER_EXPORT SlotVertexData : public ::base::RefCounted<SlotVertexData> {
   const VertexDesc* vertex_desc() const;
   VertexDesc* vertex_desc();
  private:
-  std::unique_ptr<uint8[]> data_;
+  std::unique_ptr<uint8_t[]> data_;
   int32_t vertex_count_;
   VertexDescPtr desc_;
   DISALLOW_COPY_AND_ASSIGN(SlotVertexData);
@@ -177,7 +175,7 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
 
   bool validate() const;
   int32_t vertex_count() const { return vertex_count_;}
-  int32_t vertex_buffer_count() const { return static_cast<int32>(vector_.size());}
+  int32_t vertex_buffer_count() const { return static_cast<int32_t>(vector_.size());}
   VertexBuffer* vertex_buffer_at(int32_t index);
   void add_vertex_buffer(VertexBuffer* vb);
   void add_vertex_buffer_at(VertexBuffer* vb, int32_t index);

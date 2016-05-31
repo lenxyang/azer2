@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "base/basictypes.h"
+
 #include "azer/math/math.h"
 #include "azer/render/common.h"
 #include "azer/render/vertex_buffer.h"

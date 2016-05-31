@@ -74,12 +74,12 @@ class RenderFrame : public azer::widget::RenderLoopDelegate {
     overlay_->Render(renderer);
   }
  private:
-  scoped_ptr<azer::compositor::LayerTreeHost> layer_host_;
-  scoped_ptr<azer::compositor::Compositor> compositor_;
+  std::unique_ptr<azer::compositor::LayerTreeHost> layer_host_;
+  std::unique_ptr<azer::compositor::Compositor> compositor_;
   azer::OverlayPtr overlay_;
-  scoped_ptr<ColorLayerDelegate> red_layer_delegate_;
-  scoped_ptr<ColorLayerDelegate> green_layer_delegate_;
-  scoped_ptr<ColorLayerDelegate> blue_layer_delegate_;
+  std::unique_ptr<ColorLayerDelegate> red_layer_delegate_;
+  std::unique_ptr<ColorLayerDelegate> green_layer_delegate_;
+  std::unique_ptr<ColorLayerDelegate> blue_layer_delegate_;
   DISALLOW_COPY_AND_ASSIGN(RenderFrame);
 };
 
@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
   WidgetContext::Init();
   ::base::MessageLoopForUI message_loop;
   RenderFrame delegate;
-  scoped_ptr<WidgetTreeHost> host(
+  std::unique_ptr<WidgetTreeHost> host(
     WidgetTreeHost::Create(gfx::Rect(100, 100, 800, 600)));
   azer::widget::RenderLoop renderloop(&delegate);
   host->Show();

@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "base/basictypes.h"
+
 #include "base/strings/string16.h"
 #include "azer/base/string.h"
 

@@ -1,7 +1,7 @@
 #include "azer/render_system/d3d11/renderer.h"
 
 #include "base/strings/string16.h"
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 
 #include "azer/render/surface.h"

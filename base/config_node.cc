@@ -75,12 +75,12 @@ const ConfigNode* ConfigNode::root() const {
 
 const ConfigNode* ConfigNode::child_at(int32_t index) const {
   DCHECK_LT(index, child_count());
-  return children_[index];
+  return children_[index].get();
 }
 
 ConfigNode* ConfigNode::child_at(int32_t index) {
   DCHECK_LT(index, child_count());
-  return children_[index];
+  return children_[index].get();
 }
 
 bool ConfigNode::AddChild(ConfigNode* node) {
@@ -172,7 +172,7 @@ ConfigNodes ConfigNode::GetNodeWithAttr(const std::string& name,
 ConfigNode* ConfigNode::GetFirstChildTagged(const std::string& tag) const {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     if ((*iter)->tagname() == tag)
-      return *iter;
+      return iter->get();
   }
 
   return NULL;
@@ -182,7 +182,7 @@ ConfigNode* ConfigNode::GetLastChildTagged(
     const std::string& name) const {
   for (auto iter = children_.rbegin(); iter != children_.rend(); ++iter) {
     if ((*iter)->tagname() == name)
-      return *iter;
+      return iter->get();
   }
 
   return NULL;
@@ -225,7 +225,7 @@ bool ConfigNode::GetAttrAsFloat(const std::string& name, float* v) const {
   return ret;
 }
 
-bool ConfigNode::GetAttrAsInt(const std::string& name, int32* v) const {
+bool ConfigNode::GetAttrAsInt(const std::string& name, int32_t* v) const {
   std::string str = std::move(GetAttr(name));
   return ::base::StringToInt(str, v);
 }
@@ -292,7 +292,7 @@ bool ConfigNode::GetTextAsFloat(float* v) const {
   return ret;
 }
 
-bool ConfigNode::GetTextAsInt(int32* v) const {
+bool ConfigNode::GetTextAsInt(int32_t* v) const {
   return ::base::StringToInt(text_, v);
 }
 
@@ -367,7 +367,7 @@ bool ConfigNode::GetChildTextAsFloat(const std::string& name, float* v) const {
   return vec[0]->GetTextAsFloat(v);
 }
 
-bool ConfigNode::GetChildTextAsInt(const std::string& name, int32* v) const {
+bool ConfigNode::GetChildTextAsInt(const std::string& name, int32_t* v) const {
   std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
@@ -430,7 +430,7 @@ bool ConfigNode::InitFromXMLNodeRecusive(util::xml::Element* element) {
     if (child->type() == util::xml::Node::kElementNode) {
       util::xml::Element* ele = child->ToElement();
       ConfigNodePtr ptr = new ConfigNode();
-      if (!ptr->InitFromXMLNodeRecusive(ele) || !this->AddChild(ptr)) {
+      if (!ptr->InitFromXMLNodeRecusive(ele) || !this->AddChild(ptr.get())) {
         return false;
       }
     }

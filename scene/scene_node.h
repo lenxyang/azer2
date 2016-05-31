@@ -85,8 +85,8 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode> {
   SceneNode* AddChild(SceneNode* child);
   void RemoveChild(SceneNode* child);
   bool has_child() const { return !children_.empty();}
-  int32_t child_count() const { return children_.size();}
-  SceneNode* child_at(int32_t index) { return children_.at(index);}
+  int32_t child_count() const { return static_cast<int32_t>(children_.size());}
+  SceneNode* child_at(int32_t index) { return children_.at(index).get();}
   bool HasAncestor(SceneNode* node) const;
   SceneNodes* mutable_children() { return &children_;}
 
@@ -167,14 +167,14 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode> {
   std::string name_;
   SceneNodeType type_;
   void* user_data_;
-  scoped_ptr<SceneNodeData> data_;
+  std::unique_ptr<SceneNodeData> data_;
   TransformHolder holder_;
   std::map<std::string, std::string> attributes_;
 
   // bounding
   Vector3 local_vmin_;
   Vector3 local_vmax_;
-  ObserverList<SceneNodeObserver> observers_;
+  ::base::ObserverList<SceneNodeObserver> observers_;
   int32_t id_;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };
@@ -186,7 +186,7 @@ class AZER_EXPORT SceneNodeManager {
   bool Unregister(SceneNode* node);
   SceneNode* Lookup(int32_t id);
  private:
-  std::map<int32, SceneNode*> dict_;
+  std::map<int32_t, SceneNode*> dict_;
   DISALLOW_COPY_AND_ASSIGN(SceneNodeManager);
 };
 

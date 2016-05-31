@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "azer/afx/compiler/loc.h"
-#include "base/basictypes.h"
+
 #include "base/strings/string_tokenizer.h"
 
 //

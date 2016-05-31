@@ -83,7 +83,7 @@ RepositoryNodePtr RepositoryNode::child_at(int32_t index) {
 }
 
 int32_t RepositoryNode::child_count() const {
-  return static_cast<int32>(children_.size());
+  return static_cast<int32_t>(children_.size());
 }
 
 RepositoryNodePtr RepositoryNode::FindOrCreate(const StringType& name) {

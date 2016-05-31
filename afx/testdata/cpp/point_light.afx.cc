@@ -4,7 +4,7 @@
  */
 #include <stddef.h>
 
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 
 #include "azer/render/render.h"

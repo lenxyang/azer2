@@ -6,7 +6,7 @@
 #include <d3dx11.h>
 #include <d3dx10.h>
 
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 #include "azer/render/shader.h"
 #include "azer/render/vertex_buffer.h"

@@ -5,7 +5,7 @@
 #include "azer/afx/compiler/errno.h"
 #include "azer/math/math.h"
 #include "base/logging.h"
-#include "base/basictypes.h"
+
 
 namespace azer {
 namespace afx {
@@ -217,8 +217,8 @@ Value operator + (const Value& v1, const Value& v2) {
   }
 
   if (IsIntegerScalar(v1.type()) && IsIntegerScalar(v2.type())) {
-    int64 value = 0;
-    int64 tmp = 0;
+    int64_t value = 0;
+    int64_t tmp = 0;
     AFX_INT_VALUE(v1, tmp);
     value += tmp;
     AFX_INT_VALUE(v2, tmp);
@@ -286,8 +286,8 @@ Value operator - (const Value& v1, const Value& v2) {
   }
 
   if (IsIntegerScalar(v1.type()) && IsIntegerScalar(v2.type())) {
-    int64 value = 0;
-    int64 tmp = 0;
+    int64_t value = 0;
+    int64_t tmp = 0;
     AFX_INT_VALUE(v1, tmp);
     value = tmp;
     AFX_INT_VALUE(v2, tmp);
@@ -492,8 +492,8 @@ Value operator % (const Value& v1, const Value& v2) {
     return Value(TypePtr(new Type(kInt32)));
   }
 
-  int64 i1 = 0;
-  int64 i2 = 0;
+  int64_t i1 = 0;
+  int64_t i2 = 0;
   AFX_INT_VALUE(v1, i1);
   AFX_INT_VALUE(v2, i2);
   return Value((int)(i1 % i2));
@@ -565,7 +565,7 @@ bool IsLogicalAndAcceptable(const TypePtr& ptr) {
 
 Value operator && (const Value& v1, const Value& v2) {
   if (IsLogicalAndAcceptable(v1.type()) && IsLogicalAndAcceptable(v2.type())) {
-    int64 i1, i2;
+    int64_t i1, i2;
     AFX_INT_VALUE(v1, i1);
     AFX_INT_VALUE(v2, i2);
     return Value((bool)(i1 && i2));
@@ -576,7 +576,7 @@ Value operator && (const Value& v1, const Value& v2) {
 
 Value operator || (const Value& v1, const Value& v2) {
   if (IsLogicalAndAcceptable(v1.type()) && IsLogicalAndAcceptable(v2.type())) {
-    int64 i1, i2;
+    int64_t i1, i2;
     AFX_INT_VALUE(v1, i1);
     AFX_INT_VALUE(v2, i2);
     return Value((bool)(i1 || i2));
@@ -588,7 +588,7 @@ Value operator || (const Value& v1, const Value& v2) {
 Value operator & (const Value& v1, const Value& v2) {
   AFX_LOGIC_VALID();
 
-  int64 i1, i2;
+  int64_t i1, i2;
   AFX_INT_VALUE(v1, i1);
   AFX_INT_VALUE(v2, i2);
   return Value((uint32)(i1 & i2));
@@ -597,7 +597,7 @@ Value operator & (const Value& v1, const Value& v2) {
 Value operator | (const Value& v1, const Value& v2) {
   AFX_LOGIC_VALID();
 
-  int64 i1, i2;
+  int64_t i1, i2;
   AFX_INT_VALUE(v1, i1);
   AFX_INT_VALUE(v2, i2);
   return Value((uint32)(i1 | i2));
@@ -605,7 +605,7 @@ Value operator | (const Value& v1, const Value& v2) {
 
 Value operator ^ (const Value& v1, const Value& v2) {
   AFX_LOGIC_VALID();
-  int64 i1, i2;
+  int64_t i1, i2;
   AFX_INT_VALUE(v1, i1);
   AFX_INT_VALUE(v2, i2);
   return Value((uint32)(i1 ^ i2));
@@ -613,7 +613,7 @@ Value operator ^ (const Value& v1, const Value& v2) {
 
 Value operator << (const Value& v1, const Value& v2) {
   AFX_LOGIC_VALID();
-  int64 i1, i2;
+  int64_t i1, i2;
   AFX_INT_VALUE(v1, i1);
   AFX_INT_VALUE(v2, i2);
   return Value((uint32)(i1 << i2));
@@ -621,7 +621,7 @@ Value operator << (const Value& v1, const Value& v2) {
 
 Value operator >> (const Value& v1, const Value& v2) {
   AFX_LOGIC_VALID();
-  int64 i1, i2;
+  int64_t i1, i2;
   AFX_INT_VALUE(v1, i1);
   AFX_INT_VALUE(v2, i2);
   return Value((uint32)(i1 >> i2));

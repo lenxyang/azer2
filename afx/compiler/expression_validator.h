@@ -4,7 +4,7 @@
 #include "azer/afx/compiler/errno.h"
 #include "azer/afx/compiler/astnode.h"
 #include "azer/base/tree_node.h"
-#include "base/basictypes.h"
+
 
 namespace azer {
 namespace afx {

@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"
@@ -108,7 +108,7 @@ class AZER_EXPORT GpuConstantsTable : public HardwareBuffer {
    */
   void SetData(int offset, const void* value, int32_t size);
   std::vector<Variable> constants_;
-  std::unique_ptr<uint8[]> data_;
+  std::unique_ptr<uint8_t[]> data_;
   int32_t size_;
   DISALLOW_COPY_AND_ASSIGN(GpuConstantsTable);
 };

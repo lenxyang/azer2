@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/render/export.h"
 
 namespace azer {

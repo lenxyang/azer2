@@ -41,7 +41,7 @@ RenderNode::RenderNode(SceneNode* node)
 RenderNode::~RenderNode() {
 }
 
-void RenderNode::SetDelegate(scoped_ptr<RenderNodeDelegate> delegate) {
+void RenderNode::SetDelegate(std::unique_ptr<RenderNodeDelegate> delegate) {
   delegate_ = delegate.Pass();
 }
 

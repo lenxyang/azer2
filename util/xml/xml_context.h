@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "base/basictypes.h"
+
 #include "azer/util/xml/node.h"
 
 namespace util {

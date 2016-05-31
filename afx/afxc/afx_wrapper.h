@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "base/basictypes.h"
+
 #include "azer/afx/linker/afx_facade.h"
 
 namespace azer {

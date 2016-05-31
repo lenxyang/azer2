@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "azer/base/string.h"
-#include "base/basictypes.h"
+
 #include "base/files/file_path.h"
 
 namespace azer {

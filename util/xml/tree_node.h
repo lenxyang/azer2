@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 
 namespace util {

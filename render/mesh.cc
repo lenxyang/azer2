@@ -59,7 +59,7 @@ void MeshPart::Render(Renderer* renderer) {
   if (!blending_.get()) {
     RenderPart(renderer);
   } else {
-    scoped_ptr<ScopedResetBlending> autoblending_;
+    std::unique_ptr<ScopedResetBlending> autoblending_;
     autoblending_.reset(new ScopedResetBlending(renderer));
     renderer->SetBlending(blending_.get(), 0, 0xffffffff);
     RenderPart(renderer);

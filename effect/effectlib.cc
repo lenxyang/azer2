@@ -85,8 +85,8 @@ class EffectLibHolder {
   }
   EffectLib* GetEffectLib() { return effectlib_.get();}
  private:
-  scoped_ptr<ResourcePack> resource_pack_;
-  scoped_ptr<EffectLib> effectlib_;
+  std::unique_ptr<ResourcePack> resource_pack_;
+  std::unique_ptr<EffectLib> effectlib_;
   DISALLOW_COPY_AND_ASSIGN(EffectLibHolder);
 };
 ::base::LazyInstance<EffectLibHolder> env_instance = LAZY_INSTANCE_INITIALIZER;

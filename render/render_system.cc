@@ -4,7 +4,7 @@
 #include "third_party/skia/include/gpu/gl/GrGLInterface.h"
 
 #include <memory>
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 #include "base/lazy_instance.h"
 #include "azer/base/dynlib.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/render/canvas2d.h"
 #include "azer/render/texture.h"
 

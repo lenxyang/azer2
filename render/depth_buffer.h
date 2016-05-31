@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
@@ -72,7 +72,7 @@ class ScopedDepthStencilState {
     stencilref_ = renderer->stencilref();
   }
   ~ScopedDepthStencilState() {
-    renderer_->SetDepthStencilState(prev_state_, stencilref_);
+    renderer_->SetDepthStencilState(prev_state_.get(), stencilref_);
   }
  private:
   DepthStencilStatePtr prev_state_;

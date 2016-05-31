@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/afx/compiler/type.h"
 #include "azer/afx/compiler/errno.h"
 

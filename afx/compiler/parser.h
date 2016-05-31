@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "base/basictypes.h"
+
 #include "azer/afx/compiler/context.h"
 
 namespace azer {

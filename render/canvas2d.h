@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "base/logging.h"
 #include "azer/base/export.h"

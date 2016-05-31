@@ -10,7 +10,7 @@
 #include "azer/afx/compiler/type.h"
 #include "azer/afx/compiler/value.h"
 #include "azer/afx/compiler/loc.h"
-#include "base/basictypes.h"
+
 
 namespace azer {
 namespace afx {

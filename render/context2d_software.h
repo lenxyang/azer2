@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "base/basictypes.h"
+
 #include "azer/base/export.h"
 #include "azer/render/context2d.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/math/plane.h" 
 #include "azer/math/vector3.h"
 #include "azer/math/vector4.h"

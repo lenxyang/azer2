@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/render/context2d.h"
 
 class GrContext;

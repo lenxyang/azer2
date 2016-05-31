@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "base/files/file_path.h"
 #include "base/synchronization/lock.h"
 #include "ui/base/resource/data_pack.h"
@@ -24,7 +24,7 @@ private:
   typedef std::map<int, gfx::Image> ImageMap;
   ImageMap images_;
   gfx::Image empty_image_;
-  scoped_ptr< ::base::Lock> image_lock_;
+  std::unique_ptr< ::base::Lock> image_lock_;
   DISALLOW_COPY_AND_ASSIGN(ResourcePack);
 };
 }  // namespace azer

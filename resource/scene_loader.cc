@@ -55,7 +55,7 @@ VariantResource SceneLoader::Load(const ConfigNode* node, ResourceLoadContext* c
   return ret;
 }
 
-void SceneLoader::RegisterSceneNodeLoader(scoped_ptr<SceneNodeLoader> loader) {
+void SceneLoader::RegisterSceneNodeLoader(std::unique_ptr<SceneNodeLoader> loader) {
   DCHECK(NULL == GetLoader(loader->node_type_name()));
   loader_map_.insert(std::make_pair(loader->node_type_name(), loader.Pass()));
 }

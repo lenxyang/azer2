@@ -28,7 +28,7 @@ class AZER_EXPORT IndexPack {
   IndicesData* data() { return idata_;}
  private:
   IndicesData* idata_;
-  mutable uint64 offset_;
+  mutable uint64_t offset_;
   DISALLOW_COPY_AND_ASSIGN(IndexPack);
 };
 }  // namespace azer

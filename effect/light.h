@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/math/math.h"
@@ -134,7 +134,7 @@ class AZER_EXPORT Light : public ::base::RefCounted<Light> {
   bool HasObserver(LightObserver* observer) const;
  private:
   UniverseLight data_;
-  ObserverList<LightObserver> observers_;
+  ::base::ObserverList<LightObserver> observers_;
   DISALLOW_COPY_AND_ASSIGN(Light);
 };
 

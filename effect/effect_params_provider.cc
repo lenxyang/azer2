@@ -55,7 +55,7 @@ void EffectParamsProviderContainer::SetEffectAdapterContext(
 }
 
 int32_t EffectParamsProviderContainer::provider_count() const {
-  return static_cast<int32>(providers_.size());
+  return static_cast<int32_t>(providers_.size());
 }
 
 EffectParamsProviderPtr EffectParamsProviderContainer::provider_at(int32_t index) {

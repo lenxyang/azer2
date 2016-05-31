@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/effect/color_effect.h"
 #include "azer/math/quaternion.h" 
 #include "azer/math/vector3.h"

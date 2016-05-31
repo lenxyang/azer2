@@ -1,7 +1,7 @@
 #pragma once
 
 #include "azer/base/export.h"
-#include "base/basictypes.h"
+
 
 namespace azer {
 

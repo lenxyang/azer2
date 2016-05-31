@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 #include "azer/base/export.h"
 #include "azer/render/shader.h"
@@ -36,8 +36,8 @@ class AZER_EXPORT TechSource {
   const ShaderInfo& operator[](const int32_t index) const;
   const ShaderInfo& GetStage(const int32_t index) const;
   int32_t size() const { return kRenderPipelineStageNum;}
-  VertexDesc* vertex_desc() const { return vertex_desc_;}
-  VertexDesc* streamout_vertex_desc() const { return streamout_desc_;}
+  VertexDesc* vertex_desc() const { return vertex_desc_.get();}
+  VertexDesc* streamout_vertex_desc() const { return streamout_desc_.get();}
   void SetStage(int32_t stage, const ShaderInfo& shader);
   void AddShader(const ShaderInfo& shader);
  private:

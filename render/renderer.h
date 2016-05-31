@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 
 #include "azer/base/export.h"

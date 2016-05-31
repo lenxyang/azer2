@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "base/basictypes.h"
+
 #include "base/lazy_instance.h"
 
 namespace azer {

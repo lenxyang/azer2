@@ -9,7 +9,7 @@ namespace azer {
 
 SceneTreeRender::SceneTreeRender() : camera_(NULL) {}
 
-void SceneTreeRender::SetTreeBuildDelegate(scoped_ptr<RenderTreeBuilderDelegate> delegate) {
+void SceneTreeRender::SetTreeBuildDelegate(std::unique_ptr<RenderTreeBuilderDelegate> delegate) {
   delegate_ = delegate.Pass();
 }
 

@@ -23,7 +23,7 @@ FileType File::GetType() const {
   return file_info_.type;
 }
 
-int64 File::GetSize() const {
+int64_t File::GetSize() const {
   return file_info_.size;
 }
 

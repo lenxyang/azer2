@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "base/basictypes.h"
-#include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 
@@ -52,7 +50,7 @@ class AZER_EXPORT EffectParamsProviderContainer :
  protected:
   void RebuildCache();
   EffectParamsProviderVector providers_;
-  scoped_ptr<EffectAdapterCache> cached_;
+  std::unique_ptr<EffectAdapterCache> cached_;
   EffectAdapterContext* context_;
   DISALLOW_COPY_AND_ASSIGN(EffectParamsProviderContainer);
 };

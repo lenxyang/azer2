@@ -7,7 +7,7 @@
 #include <d3dx10.h>
 #include <xnamath.h>
 
-#include "base/basictypes.h"
+
 #include "azer/render/surface.h"
 #include "azer/render/swap_chain.h"
 #include "ui/gfx/native_widget_types.h"

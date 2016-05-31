@@ -44,7 +44,7 @@ inline std::string* MakeDoubleEqString(double v1, double v2) {
         _result).stream()
 
 #define DCHECK_FLOAT_EQ(v1, v2)                                         \
-  if (DCHECK_IS_ON)                                                     \
+  if (DCHECK_IS_ON())                                                   \
     CHECK_FLOAT_EQ(v1, v2)
 
 #define CHECK_DOUBLE_EQ(v1, v2)                                          \

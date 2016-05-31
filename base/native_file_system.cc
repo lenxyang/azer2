@@ -28,7 +28,7 @@ bool NativeFile::Open(const ResPath& path) {
 void NativeFile::Close() {
 }
 
-bool NativeFile::PRead(int64 offset, int64 size, FileContents* contents) {
+bool NativeFile::PRead(int64_t offset, int64_t size, FileContents* contents) {
   DCHECK(file_.get());
 
   base::File::Info info;
@@ -37,7 +37,7 @@ bool NativeFile::PRead(int64 offset, int64 size, FileContents* contents) {
     return false;
   }
 
-  int64 expected_size = 0;
+  int64_t expected_size = 0;
   if (size >= 0) {
     expected_size = std::min(size, info.size - offset);
   } else {
@@ -53,7 +53,7 @@ bool NativeFile::PRead(int64 offset, int64 size, FileContents* contents) {
   return true;
 }
 
-bool NativeFile::AsyncPRead(int64 offset, int64 size, FileContents* content, 
+bool NativeFile::AsyncPRead(int64_t offset, int64_t size, FileContents* content, 
                             base::Closure* callback) {
   NOTIMPLEMENTED();
   return true;
@@ -90,7 +90,7 @@ FileType NativeFileSystem::GetFileType(const ResPath& path) {
   return kArchiveFile;
 }
 
-int64 NativeFileSystem::GetFileSize(const ResPath& path) {
+int64_t NativeFileSystem::GetFileSize(const ResPath& path) {
   NOTIMPLEMENTED();
   return -1;
 }

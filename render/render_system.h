@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "base/basictypes.h"
+
 #include "base/files/file_path.h"
 #include "azer/math/math.h"
 #include "azer/base/export.h"

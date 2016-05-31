@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "base/basictypes.h"
+
 #include "azer/afx/compiler/astnode.h"
 #include "azer/afx/linker/technique.h"
 

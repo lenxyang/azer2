@@ -53,12 +53,12 @@ EffectAdapterCache::AdapterVector* EffectAdapterCache::GetAdapter(Effect* effect
   if (iter != cached_.end()) {
     return iter->second.get();
   } else {
-    scoped_ptr<AdapterVector> adapters(new AdapterVector);
+    std::unique_ptr<AdapterVector> adapters(new AdapterVector);
     for (auto iter = providers_->begin(); iter != providers_->end(); ++iter) {
       std::string provider_name = typeid(*((*iter).get())).name();
       adapters->push_back(context_->LookupAdapter(effect_name, provider_name));   
     }
-    cached_.insert(std::make_pair(effect_name, adapters.Pass()));
+    cached_.insert(std::make_pair(effect_name, adapters));
     return GetAdapter(effect);
   }
 }

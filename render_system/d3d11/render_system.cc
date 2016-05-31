@@ -4,7 +4,7 @@
 
 
 #include "base/strings/string16.h"
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 #include "azer/base/image.h"
 #include "azer/render/common.h"

@@ -97,7 +97,7 @@ class AZER_EXPORT EntityVec : public ::base::RefCounted<EntityVec> {
   Entity* AddEntity(Entity* ptr);
   void RemoveEntityAt(int32_t index);
   Entity* entity_at(int32_t index) { return vec_[index].get();}
-  int32_t entity_count() { return static_cast<int32>(vec_.size());}
+  int32_t entity_count() { return static_cast<int32_t>(vec_.size());}
   EntityVecPtr DeepCopy();
 
   const Vector3& vmin() { return vmin_;}

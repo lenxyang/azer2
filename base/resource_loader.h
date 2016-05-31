@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "base/memory/scoped_ptr.h"
 #include "azer/base/repository_node.h"
 
 namespace azer {

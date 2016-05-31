@@ -107,7 +107,7 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
    * 因此操作内存时，应以 MapData 给定的数据为准，不要使用 Options 的数据
    */
   struct MapData {
-    uint8* pdata;
+    uint8_t* pdata;
     uint32_t row_pitch;
     uint32_t depth_pitch;
   };

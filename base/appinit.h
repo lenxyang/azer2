@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 #include "azer/base/export.h"
 

@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-#include "base/basictypes.h"
+
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/resource_pack.h"

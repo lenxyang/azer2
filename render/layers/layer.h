@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "third_party/skia/include/core/SkColor.h"
 #include "ui/gfx/geometry/size.h"

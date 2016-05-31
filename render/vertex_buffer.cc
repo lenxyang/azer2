@@ -130,7 +130,7 @@ const VertexDesc::Desc* VertexDesc::descs() const {
 
 VertexDescPtr VertexDesc::gen_slot_desc(int32_t sindex) const {
   int32_t element_count = this->element_count_inslot(sindex);
-  scoped_ptr<VertexDesc::Desc[]> descptr(new VertexDesc::Desc[element_count]);
+  std::unique_ptr<VertexDesc::Desc[]> descptr(new VertexDesc::Desc[element_count]);
   VertexDesc::Desc* desc = descptr.get();
   int32_t index = 0;
   for (int32_t i = 0; i < static_cast<int32>(slot_index_.size()); i++) {
