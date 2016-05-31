@@ -6,7 +6,7 @@
 
 namespace azer {
 namespace detail {
-uint32  TranslateFormat(int32 type) {
+uint32_t  TranslateFormat(int32_t type) {
   switch (type) {
     case DXGI_FORMAT_R8G8B8A8_UNORM: return kTexRGBAn8;
     case DXGI_FORMAT_R32_FLOAT: return kTexR32;

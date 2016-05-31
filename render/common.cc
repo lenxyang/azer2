@@ -68,7 +68,7 @@ const char* GetDataFormatName(DataFormat format) {
 }
 
 
-uint32 SizeofDataFormat(DataFormat format) {
+uint32_t SizeofDataFormat(DataFormat format) {
   switch (format) {
     case kFloat: return sizeof(float);
     case kByteVec2: return sizeof(uint8) * 2;

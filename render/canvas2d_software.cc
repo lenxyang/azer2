@@ -33,7 +33,7 @@ bool SoftwareCanvas2D::Init() {
   return InitTexture();
 }
 
-uint32 SoftwareCanvas2D::GetTexID() {
+uint32_t SoftwareCanvas2D::GetTexID() {
   return static_cast<uint32>(-1);
 }
 

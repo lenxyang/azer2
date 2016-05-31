@@ -83,7 +83,7 @@ bool D3DGeometryShader::Init(RenderSystem* vrs)  {
 }
 
 namespace {
-int32 ComponentCount(DataFormat type) {
+int32_t ComponentCount(DataFormat type) {
   switch (type) {
     case kFloat: return 1;
     case kByteVec2: return 2;
@@ -136,11 +136,11 @@ bool D3DGeometryShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
                                          &resource_);
     HRESULT_HANDLE(hr, ERROR, "CreateGeometryShader failed ");
   } else {
-    const int32 kMaxEntry = 64;
+    const int32_t kMaxEntry = 64;
     D3D11_SO_DECLARATION_ENTRY pDecl[kMaxEntry];
     memset(pDecl, 0, sizeof(pDecl));
     DCHECK_LT(vertex_desc()->element_count(), sizeof(pDecl));
-    for (int32 i = 0; i < vertex_desc()->element_count(); ++i) {
+    for (int32_t i = 0; i < vertex_desc()->element_count(); ++i) {
       const VertexDesc::Desc* desc = vertex_desc()->descs() + i;
       pDecl[i].SemanticName = desc->name;
       pDecl[i].Stream = 0;

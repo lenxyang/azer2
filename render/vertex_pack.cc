@@ -4,12 +4,12 @@
 #include "base/strings/string_util.h"
 
 namespace azer {
-int32 memalign(int32 n, int32 align) {
+int32_t memalign(int32_t n, int32_t align) {
   return (n + align - 1) & (~(align - 1));
 }
 
 VertexPos::VertexPos() : slot(-1), index(-1) {}
-VertexPos::VertexPos(int32 s, int32 i) : slot(s), index(i) {}
+VertexPos::VertexPos(int32_t s, int32_t i) : slot(s), index(i) {}
 
 VertexPack::VertexPack(VertexData* data) 
     : vertex_data_(data),
@@ -27,7 +27,7 @@ VertexPack::VertexPack(SlotVertexData* data)
 VertexPack::~VertexPack() {
 }
 
-int32 VertexPack::index() const {
+int32_t VertexPack::index() const {
   return index_;
 }
 
@@ -36,13 +36,13 @@ bool VertexPack::first() {
   return index_ < vertex_data_->vertex_count();
 }
 
-bool VertexPack::move(int32 offset) {
+bool VertexPack::move(int32_t offset) {
   first();
   index_ = offset;
   return index_ < vertex_data_->vertex_count();
 }
 
-bool VertexPack::next(int32 step) {
+bool VertexPack::next(int32_t step) {
   index_ += step;
   return index_ < vertex_data_->vertex_count();
 }
@@ -51,7 +51,7 @@ bool VertexPack::end() {
   return !(index_ < vertex_data_->vertex_count());
 }
 
-void VertexPack::Writeint(int32 v, const VertexPos& pos) {
+void VertexPack::Writeint(int32_t v, const VertexPos& pos) {
   if (pos.slot == -1 || pos.index == -1)
     return;
   DCHECK(get_data_type(pos) == kInt);
@@ -89,7 +89,7 @@ void VertexPack::WriteIntVec4(const IntVec4& v, const VertexPos& pos) {
     *vec = v;
   } else if (get_data_type(pos) == kByteInt) {
     uint32* ptr = (uint32*)get_data_ptr(pos);
-    int32 nv = (v.x & 0x000000FF);
+    int32_t nv = (v.x & 0x000000FF);
     nv |= (v.y & 0x0000FF00) >> 8;
     nv |= (v.z & 0x00FF0000) >> 16;
     nv |= (v.w & 0xFF000000) >> 24;
@@ -138,10 +138,10 @@ void VertexPack::WriteVector4(const Vector4& v, const VertexPos& pos) {
     *vec = v;
   } else if (get_data_type(pos) == kByteVec4) {
     uint32* ptr = (uint32*)get_data_ptr(pos);
-    uint32 x = ((uint32)(v.x * 255));
-    uint32 y = ((uint32)(v.y * 255)) >> 8;
-    uint32 z = ((uint32)(v.z * 255)) >> 16;
-    uint32 w = ((uint32)(v.w * 255)) >> 24;
+    uint32_t x = ((uint32)(v.x * 255));
+    uint32_t y = ((uint32)(v.y * 255)) >> 8;
+    uint32_t z = ((uint32)(v.z * 255)) >> 16;
+    uint32_t w = ((uint32)(v.w * 255)) >> 24;
     *ptr = x | y | z | w;
   } else {
     CHECK(false);
@@ -194,7 +194,7 @@ void VertexPack::ReadIntVec4(IntVec4* v, const VertexPos& pos) const {
     IntVec4* ptr = (IntVec4*)(get_data_ptr(pos));
     *v = *ptr;
   } else if (get_data_type(pos) == kByteIntVec4) {
-    int32 i32 = *(int32*)(get_data_ptr(pos));
+    int32_t i32 = *(int32*)(get_data_ptr(pos));
     v->x = (0x000000ff & i32);
     v->y = (0x0000ff00 & i32) >> 8;
     v->z = (0x00ff0000 & i32) >> 16;
@@ -232,7 +232,7 @@ void VertexPack::ReadVector4(Vector4* v, const VertexPos& pos) const {
     Vector4* ptr = (Vector4*)(get_data_ptr(pos));
     *v = *ptr;
   } else if (get_data_type(pos) == kByteVec4) {
-    int32 i32 = *(int32*)(get_data_ptr(pos));
+    int32_t i32 = *(int32*)(get_data_ptr(pos));
     float x = (0x000000ff & i32);
     float y = (0x0000ff00 & i32) >> 8;
     float z = (0x00ff0000 & i32) >> 16;
@@ -279,12 +279,12 @@ DataFormat VertexPack::get_data_type(const VertexPos& pos) const {
   return desc->type;
 }
 
-bool GetSemanticIndex(const std::string& name, int32 semantic_index, 
+bool GetSemanticIndex(const std::string& name, int32_t semantic_index, 
                       const VertexDesc* d, VertexPos* pos) {
   const VertexDesc::Desc* desc = d->descs();
-  int32 index = 0;
-  int32 prev_slot = 0;
-  for (int32 i = 0; i < d->element_count(); ++i) {
+  int32_t index = 0;
+  int32_t prev_slot = 0;
+  for (int32_t i = 0; i < d->element_count(); ++i) {
     if (base::strncasecmp(name.c_str(), (desc + i)->name, name.length()) == 0
         && (desc + i)->semantic_index == semantic_index) {
       const VertexDesc::Desc* cur = (desc + i);

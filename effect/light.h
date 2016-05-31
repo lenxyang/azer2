@@ -96,7 +96,7 @@ class AZER_EXPORT Light : public ::base::RefCounted<Light> {
   explicit Light(const PointLight& light);
   explicit Light(const SpotLight& light);
 
-  int32 type() const;
+  int32_t type() const;
   const UniverseLight& data() const { return data_;}
 
   void SetLightData(const UniverseLight& data);

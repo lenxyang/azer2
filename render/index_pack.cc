@@ -9,21 +9,21 @@ IndexPack::IndexPack(IndicesData* data)
       offset_(0) {
 }
 
-void IndexPack::move(int32 step) {
+void IndexPack::move(int32_t step) {
   offset_ = step * step_size();
   DCHECK(current() < pointer() + idata_->size());
 }
 
-bool IndexPack::advance(int32 step) const {
+bool IndexPack::advance(int32_t step) const {
   offset_ += step * step_size();
   return current() < pointer() + idata_->size();
 }
 
-int32 IndexPack::index() const {
+int32_t IndexPack::index() const {
   return offset_ / step_size();
 }
 
-void IndexPack::write(int32 value) {
+void IndexPack::write(int32_t value) {
   switch (type()) {
     case kIndexUint16:
       DCHECK(value < std::numeric_limits<uint16>::max());
@@ -41,9 +41,9 @@ void IndexPack::write(int32 value) {
   }
 }
 
-uint32 IndexPack::value(int32 index) const {
+uint32_t IndexPack::value(int32_t index) const {
   const uint8* ptr = pointer() + (step_size() * index);
-  uint32 value;
+  uint32_t value;
   switch (type()) {
     case kIndexUint16:
       value = *(uint16*)(ptr);
@@ -61,9 +61,9 @@ uint32 IndexPack::value(int32 index) const {
   return value;
 }
 
-uint32 IndexPack::value() const {
+uint32_t IndexPack::value() const {
   CHECK(current() < pointer() + idata_->size());
-  uint32 value;
+  uint32_t value;
   switch (type()) {
     case kIndexUint16:
       value = *(uint16*)(current());
@@ -81,7 +81,7 @@ uint32 IndexPack::value() const {
   return value;
 }
 
-bool IndexPack::WriteAndAdvance(int32 value) {
+bool IndexPack::WriteAndAdvance(int32_t value) {
   if (current() - pointer() < idata_->size()) {
     write(value);
     advance();
@@ -91,9 +91,9 @@ bool IndexPack::WriteAndAdvance(int32 value) {
   }
 }
 
-uint32 IndexPack::ReadAndAdvanceOrDie() const {
+uint32_t IndexPack::ReadAndAdvanceOrDie() const {
   DCHECK(current() - pointer() < idata_->size());
-  uint32 value = this->value();
+  uint32_t value = this->value();
   advance();
   return value;
 }

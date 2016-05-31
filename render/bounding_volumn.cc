@@ -29,10 +29,10 @@ AxisAlignedBoundingBox::AxisAlignedBoundingBox(Vector3 vmin, Vector3 vmax)
   pt[6] = Vector3(vmax_.x, vmin_.y,  vmin_.z);
   pt[7] = Vector3(vmin_.x, vmin_.y,  vmin_.z);
   int index = 0;
-  for (uint32 i = 0; i < arraysize(kIndices); i+=3, ++index) {
-    int32 idx1 = kIndices[i];
-    int32 idx2 = kIndices[i+1];
-    int32 idx3 = kIndices[i+2];
+  for (uint32_t i = 0; i < arraysize(kIndices); i+=3, ++index) {
+    int32_t idx1 = kIndices[i];
+    int32_t idx2 = kIndices[i+1];
+    int32_t idx3 = kIndices[i+2];
     subplane_[index].reset(pt[idx1], pt[idx2], pt[idx3]);
   }
 }

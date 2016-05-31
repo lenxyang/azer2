@@ -142,7 +142,7 @@ TechniquePtr D3DRenderSystem::CreateTechnique() {
 }
 
 GpuConstantsTablePtr D3DRenderSystem::CreateGpuConstantsTable(
-    int32 num, const GpuConstantsTable::Desc* desc) {
+    int32_t num, const GpuConstantsTable::Desc* desc) {
   scoped_refptr<D3DGpuConstantsTable> tableptr = new D3DGpuConstantsTable(num, desc);
   if (tableptr->Init(this)) {
     return tableptr;

@@ -44,9 +44,9 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   void SetRasterizerState(RasterizerState* render_state);
   RasterizerState* GetRasterizerState();
 
-  uint32 stencilref() { return stencilref_;}
+  uint32_t stencilref() { return stencilref_;}
   void ResetDepthStencilState();
-  void SetDepthStencilState(DepthStencilState* render_state, uint32 stencilref);
+  void SetDepthStencilState(DepthStencilState* render_state, uint32_t stencilref);
   DepthStencilState* GetDepthStencilState();
 
   virtual void Use() = 0;
@@ -57,13 +57,13 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void BindIndicesBuffer(IndicesBuffer* ib) = 0;
   virtual void ResetStageTexture(RenderPipelineStage stage) = 0;
   virtual void SetShaderResTexture(RenderPipelineStage stage, int index, 
-                                   int32 count, TextureViewPtr* texture) = 0;
+                                   int32_t count, TextureViewPtr* texture) = 0;
   virtual void SetShaderSamplerState(RenderPipelineStage stage, int index, 
-                                     int32 count, SamplerStatePtr* sampler) = 0;
-  virtual void BindConstantsTable(RenderPipelineStage stage, int32 index,
+                                     int32_t count, SamplerStatePtr* sampler) = 0;
+  virtual void BindConstantsTable(RenderPipelineStage stage, int32_t index,
                                   GpuConstantsTable* table) = 0;
   virtual void SetStreamOutTargets(HardwareBuffer** buffer, int count, int off) = 0;
-  virtual void SetBlending(Blending* blending, float* factor, uint32 mask) = 0;
+  virtual void SetBlending(Blending* blending, float* factor, uint32_t mask) = 0;
   virtual void ResetBlending() = 0;
   virtual void Reset() = 0;
 
@@ -78,22 +78,22 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void SetVertexLayout(VertexLayout* layout) = 0;
   virtual void SetPrimitiveTopology(PrimitiveTopology primitive) = 0;
   virtual void DrawAuto() = 0;
-  virtual void Draw(int32 num_of_vertices = -1, int32 first_vertex = 0) = 0;
-  virtual void DrawIndex(int32 num_of_indices, int32 first_indices = 0, 
-                         int32 index_base = 0) = 0;
-  virtual void DrawInstanced(int32 instance_num, int32 num_of_vertices = -1,
-                             int32 first_vertex = 0, 
-                             int32 instance_start_index = 0) = 0;
-  virtual void DrawIndexInstanced(int32 instance_num, int32 num_of_indices = -1,
-                                  int32 first_indices = 0, int32 index_base = 0,
-                                  int32 instance_start_index = 0) = 0;
+  virtual void Draw(int32_t num_of_vertices = -1, int32_t first_vertex = 0) = 0;
+  virtual void DrawIndex(int32_t num_of_indices, int32_t first_indices = 0, 
+                         int32_t index_base = 0) = 0;
+  virtual void DrawInstanced(int32_t instance_num, int32_t num_of_vertices = -1,
+                             int32_t first_vertex = 0, 
+                             int32_t instance_start_index = 0) = 0;
+  virtual void DrawIndexInstanced(int32_t instance_num, int32_t num_of_indices = -1,
+                                  int32_t first_indices = 0, int32_t index_base = 0,
+                                  int32_t instance_start_index = 0) = 0;
   
   const gfx::Size& size() const; 
   virtual void SetViewport(const Viewport& viewport) = 0;
   virtual const Viewport& GetViewport() const  = 0;
 
   DepthBuffer* GetDepthBuffer() { return depth_.get();}
-  RenderTarget* GetRenderTarget(int32 index) { return targets_[index].get();}
+  RenderTarget* GetRenderTarget(int32_t index) { return targets_[index].get();}
   typedef std::vector<RenderTargetPtr> RenderTargetVec;
   RenderTargetVec* GetAllRenderTargets() { return &targets_;}
   RenderSystem* GetRenderSystem() { return render_system_;}
@@ -108,7 +108,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   RasterizerStatePtr default_rasterizer_state_;
   DepthStencilStatePtr current_depth_state_;
   DepthStencilStatePtr default_depth_state_;
-  uint32 stencilref_;
+  uint32_t stencilref_;
   DISALLOW_COPY_AND_ASSIGN(Renderer);
 };
 

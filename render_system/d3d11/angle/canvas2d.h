@@ -23,7 +23,7 @@ class D3DCanvas2D : public Canvas2D {
 
   ~D3DCanvas2D() override;
   bool Init() override;
-  uint32 GetTexID() override;
+  uint32_t GetTexID() override;
 
   SkGpuDevice* GetSkGpuDevice() {
     DCHECK(NULL != gr_device_.get());

@@ -6,10 +6,10 @@ namespace azer {
 class HDRColorA;
 class LDRColorA {
  public:
-  uint8 r, g, b, a;
+  uint8_t r, g, b, a;
 
   LDRColorA();
-  LDRColorA(uint8 _r, uint8 _g, uint8 _b, uint8 _a) 
+  LDRColorA(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) 
       : r(_r), g(_g), b(_b), a(_a) {}
 
   const uint8& operator [] (size_t ele) const;
@@ -65,14 +65,14 @@ class INTColor {
   INTColor& operator += (const INTColor& c);
   INTColor& operator -= (const INTColor& c);
   INTColor& operator &= (const INTColor& c);
-  int& operator [] (uint8 i);
+  int& operator [] (uint8_t i);
 
   void Set(const HDRColorA& c,  bool bSigned);
   INTColor& Clamp(int iMin,  int iMax);
   INTColor& SignExtend( const LDRColorA& Prec);
-  void ToF16(uint16 aF16[3],  bool bSigned) const;
+  void ToF16(uint16_t aF16[3],  bool bSigned) const;
  private:    
-  static int F16ToINT(const uint16 f, bool bsigned);
-  static uint16 INT2F16(int input,  bool bsigned);
+  static int F16ToINT(const uint16_t f, bool bsigned);
+  static uint16_t INT2F16(int input,  bool bsigned);
 };
 }  // namespace azer

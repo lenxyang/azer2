@@ -89,10 +89,10 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
     TexFormat format;            // default: kRGBAn8
     BufferUsage usage;   // default: GraphicBuffer::kDefault
     CPUAccess cpu_access;         // default: kCPUNoAccess
-    uint32 target;
+    uint32_t target;
     TexType type;
-    int32 diminison;
-    int32 mipmap_level;
+    int32_t diminison;
+    int32_t mipmap_level;
     bool genmipmap;
     Options();
   };
@@ -108,8 +108,8 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
    */
   struct MapData {
     uint8* pdata;
-    uint32 row_pitch;
-    uint32 depth_pitch;
+    uint32_t row_pitch;
+    uint32_t depth_pitch;
   };
 
 

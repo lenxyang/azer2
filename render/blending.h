@@ -63,7 +63,7 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
     RenderTargetDesc();
   };
 
-  static const int32 kMaxRenderTargetDesc = 16;
+  static const int32_t kMaxRenderTargetDesc = 16;
   struct AZER_EXPORT BlendDesc {
     RenderTargetDesc desc[kMaxRenderTargetDesc];
     bool alpha_to_converage;

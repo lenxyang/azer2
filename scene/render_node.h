@@ -68,15 +68,15 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
     return const_cast<const RenderNode*>(
         const_cast<RenderNode*>(this)->parent());
   }
-  int32 child_count() const;
-  RenderNode* child_at(int32 index);
+  int32_t child_count() const;
+  RenderNode* child_at(int32_t index);
   void AddChild(RenderNode* child);
   bool RemoveChild(RenderNode* child);
   bool Contains(RenderNode* child) const;
-  int32 GetIndexOf(RenderNode* child) const;
+  int32_t GetIndexOf(RenderNode* child) const;
   const std::vector<RenderNodePtr>& children() const { return children_;}
   std::string DumpTree() const;
-  std::string DumpNode(const RenderNode* node, int32 depth) const;
+  std::string DumpNode(const RenderNode* node, int32_t depth) const;
  protected:
   void CalcParams(const FrameArgs& args);
   RenderNode* parent_;

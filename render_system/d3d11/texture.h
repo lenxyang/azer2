@@ -26,14 +26,14 @@ class D3DTexture: public Texture {
   void Detach();
 
   ID3D11Resource* GetResource() { return texres_;}
-  int32 diminison() const { return diminison_;}
+  int32_t diminison() const { return diminison_;}
   bool CopyTo(Texture* texture) override;
   const D3D11_TEXTURE2D_DESC& desc() const { return tex_desc_;}
  protected:
   ID3D11Resource* texres_;
   D3DRenderSystem* render_system_;
   D3D11_TEXTURE2D_DESC tex_desc_;
-  int32 diminison_;
+  int32_t diminison_;
 
 #ifdef DEBUG
   bool mapped_;

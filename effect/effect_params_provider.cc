@@ -54,11 +54,11 @@ void EffectParamsProviderContainer::SetEffectAdapterContext(
   RebuildCache();
 }
 
-int32 EffectParamsProviderContainer::provider_count() const {
+int32_t EffectParamsProviderContainer::provider_count() const {
   return static_cast<int32>(providers_.size());
 }
 
-EffectParamsProviderPtr EffectParamsProviderContainer::provider_at(int32 index) {
+EffectParamsProviderPtr EffectParamsProviderContainer::provider_at(int32_t index) {
   return providers_.at(index);
 }
 

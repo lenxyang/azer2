@@ -31,9 +31,9 @@ void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata,
   IndexPack ipack(idata);
   ipack.move(subset.index_base);
   for (int i = 0; i < subset.index_count; i+=3) {
-    uint32 idx1 = ipack.ReadAndAdvanceOrDie();
-    uint32 idx2 = ipack.ReadAndAdvanceOrDie();
-    uint32 idx3 = ipack.ReadAndAdvanceOrDie();
+    uint32_t idx1 = ipack.ReadAndAdvanceOrDie();
+    uint32_t idx2 = ipack.ReadAndAdvanceOrDie();
+    uint32_t idx3 = ipack.ReadAndAdvanceOrDie();
     DCHECK_LT(idx1, subset.vertex_count);
     DCHECK_LT(idx2, subset.vertex_count);
     DCHECK_LT(idx3, subset.vertex_count);
@@ -79,8 +79,8 @@ void CalcIndexedTriangleListTangentAndBinormal(VertexData* vd, IndicesData* id,
   }
   
   ipack.move(subset.index_base);
-  for (int32 i = 0; i < subset.index_count; i+=3) {
-    uint32 index[3];
+  for (int32_t i = 0; i < subset.index_count; i+=3) {
+    uint32_t index[3];
     CHECK(ipack.ReadAndAdvance(index));
     CHECK(ipack.ReadAndAdvance(index + 1));
     CHECK(ipack.ReadAndAdvance(index + 2));

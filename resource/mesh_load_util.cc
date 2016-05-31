@@ -73,8 +73,8 @@ void CalcIndexedTriangleListTangentAndBinormal(VertexData* vd, IndicesData* id) 
     return;
   }
   
-  for (int32 i = 0; i < ipack.count(); i+=3) {
-    uint32 index[3];
+  for (int32_t i = 0; i < ipack.count(); i+=3) {
+    uint32_t index[3];
     CHECK(ipack.ReadAndAdvance(index));
     CHECK(ipack.ReadAndAdvance(index + 1));
     CHECK(ipack.ReadAndAdvance(index + 2));
@@ -113,7 +113,7 @@ MeshData LoadMeshData(const aiMesh* paiMesh, VertexDescPtr desc) {
 
   const aiVector3D zero3d(0.0f, 0.0f, 0.0f);
   CHECK(vpack.first());
-  for (uint32 i = 0; i < paiMesh->mNumVertices; ++i) {
+  for (uint32_t i = 0; i < paiMesh->mNumVertices; ++i) {
     const aiVector3D& aipos = paiMesh->mVertices[i];
     const aiVector3D& normal = paiMesh->mNormals[i];
     const aiVector3D& texcoord =
@@ -128,7 +128,7 @@ MeshData LoadMeshData(const aiMesh* paiMesh, VertexDescPtr desc) {
   }
 
   IndexPack ipack(idata.get());
-  for (uint32 i = 0; i < paiMesh->mNumFaces; ++i) {
+  for (uint32_t i = 0; i < paiMesh->mNumFaces; ++i) {
     const aiFace& face = paiMesh->mFaces[i];
     CHECK(ipack.WriteAndAdvance(face.mIndices[0]));
     CHECK(ipack.WriteAndAdvance(face.mIndices[1]));
@@ -152,7 +152,7 @@ MeshLoadUtil::MeshLoadUtil(FileSystem* fs)
 
 const aiScene* MeshLoadUtil::LoadScene(const azer::ResPath& path, 
                                       Assimp::Importer* importer, 
-                                      uint32 flags) {
+                                      uint32_t flags) {
   std::vector<uint8> contents;
   FilePtr file = fsystem_->OpenFile(path);
   if (!file.get()) {
@@ -173,7 +173,7 @@ const aiScene* MeshLoadUtil::LoadScene(const azer::ResPath& path,
 
 EntityVecPtr MeshLoadUtil::LoadVertexData(const ResPath& path, VertexDesc* desc) {
   RenderSystem* rs = RenderSystem::Current();
-  uint32 flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals 
+  uint32_t flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals 
       | aiProcess_FlipUVs;
   Assimp::Importer importer;
   const aiScene* scene = LoadScene(path, &importer, flags);
@@ -186,7 +186,7 @@ EntityVecPtr MeshLoadUtil::LoadVertexData(const ResPath& path, VertexDesc* desc)
   std::vector<int32> mtrl_index;
   Vector3 vmin  = Vector3(999999.9f, 999999.9f, 999999.9f);
   Vector3 vmax = Vector3(-999999.9f, -999999.9f, -999999.9f);
-  for (uint32 i = 0; i < scene->mNumMeshes; ++i) {
+  for (uint32_t i = 0; i < scene->mNumMeshes; ++i) {
     const aiMesh* paiMesh = scene->mMeshes[i];
     MeshData data = LoadMeshData(scene->mMeshes[i], desc);
     VertexBufferGroupPtr vbg = CreateVertexBufferGroup(
@@ -203,7 +203,7 @@ EntityVecPtr MeshLoadUtil::LoadVertexData(const ResPath& path, VertexDesc* desc)
 
 MeshPtr MeshLoadUtil::Load(const ResPath& path, VertexDesc* desc) {
   RenderSystem* rs = RenderSystem::Current();
-  uint32 flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals 
+  uint32_t flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals 
       | aiProcess_FlipUVs;
   Assimp::Importer importer;
   const aiScene* scene = LoadScene(path, &importer, flags);
@@ -216,7 +216,7 @@ MeshPtr MeshLoadUtil::Load(const ResPath& path, VertexDesc* desc) {
   std::vector<int32> mtrl_index;
   Vector3 vmin  = Vector3(999999.9f, 999999.9f, 999999.9f);
   Vector3 vmax = Vector3(-999999.9f, -999999.9f, -999999.9f);
-  for (uint32 i = 0; i < scene->mNumMeshes; ++i) {
+  for (uint32_t i = 0; i < scene->mNumMeshes; ++i) {
     MeshPartPtr part = new MeshPart(NULL);
     const aiMesh* paiMesh = scene->mMeshes[i];
     MeshData data = LoadMeshData(scene->mMeshes[i], desc);

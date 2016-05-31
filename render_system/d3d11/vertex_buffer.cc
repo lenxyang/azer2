@@ -69,7 +69,7 @@ const char* DeclHLSLTypeName(DataFormat format) {
 std::string D3DVertexLayout::GenVSForDesc(VertexDesc* vertex_desc) {
   std::stringstream ss;
   ss << "\nstruct VSInput {\n";
-  for (int32 i = 0; i < vertex_desc->element_count(); ++i) {
+  for (int32_t i = 0; i < vertex_desc->element_count(); ++i) {
     const VertexDesc::Desc* desc = vertex_desc->descs() + i;
      std::string name(desc->name);
      ss << DeclHLSLTypeName(desc->type) << " "
@@ -243,7 +243,7 @@ void D3DVertexBufferGroup::OnVertexBufferChanged() {
   GenVertexArray();
 }
 
-int32 D3DVertexBufferGroup::GenVertexArray() {
+int32_t D3DVertexBufferGroup::GenVertexArray() {
   for (int i = 0; i < vertex_buffer_count(); ++i) {
     D3DVertexBuffer* vb = (D3DVertexBuffer*)(vertex_buffer_at(i));
     DCHECK(vb->Initialized()) << "VertexBuffer not initialized.";

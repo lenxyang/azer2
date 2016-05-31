@@ -16,7 +16,7 @@ StageTexture::StageTexture() {
 // class StageTexContainer
 StageTexContainer::StageTexContainer() {
   stages_.resize(kRenderPipelineStageNum);
-  for (int32 i = 0; i < kRenderPipelineStageNum; ++i) {
+  for (int32_t i = 0; i < kRenderPipelineStageNum; ++i) {
     stages_[i].stage = i;
   }
 }
@@ -30,7 +30,7 @@ void StageTexContainer::SetTex(int stage, int index, TextureView* tex) {
   s.tex[index] = tex;
 }
 
-StageTexture& StageTexContainer::GetStage(int32 stage) {
+StageTexture& StageTexContainer::GetStage(int32_t stage) {
   DCHECK_GE(stage, 0);
   DCHECK_LT(stage, kRenderPipelineStageNum);
   return stages_[stage];

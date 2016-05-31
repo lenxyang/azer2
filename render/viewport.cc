@@ -1,7 +1,7 @@
 #include "azer/render/viewport.h"
 
 namespace azer {
-Viewport::Viewport(int32 l, int32 t, int32 w, int32 h, float mindepth,
+Viewport::Viewport(int32_t l, int32_t t, int32_t w, int32_t h, float mindepth,
                    float maxdepth)
     : bounds(l, t, w, h)
     , min_depth(mindepth), max_depth(maxdepth) {

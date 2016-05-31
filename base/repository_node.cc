@@ -61,7 +61,7 @@ RepositoryNodePtr RepositoryNode::GetChild(const StringType& name) {
   }
 }
 
-int32 RepositoryNode::GetIndexOf(const RepositoryNodePtr& node) const {
+int32_t RepositoryNode::GetIndexOf(const RepositoryNodePtr& node) const {
   int index = 0;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++index) {
     if (iter->second.get() == node.get())
@@ -70,7 +70,7 @@ int32 RepositoryNode::GetIndexOf(const RepositoryNodePtr& node) const {
   return -1;
 }
 
-RepositoryNodePtr RepositoryNode::child_at(int32 index) {
+RepositoryNodePtr RepositoryNode::child_at(int32_t index) {
   DCHECK(index < child_count());
   int cur = 0;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++cur) {
@@ -82,7 +82,7 @@ RepositoryNodePtr RepositoryNode::child_at(int32 index) {
   return RepositoryNodePtr();
 }
 
-int32 RepositoryNode::child_count() const {
+int32_t RepositoryNode::child_count() const {
   return static_cast<int32>(children_.size());
 }
 

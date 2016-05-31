@@ -21,7 +21,7 @@ namespace {
     if (!ret) return false;                     \
   }
 
-bool GenerateTopTriangleStrip(int32 top, int32 begin, int32 vertex_num,
+bool GenerateTopTriangleStrip(int32_t top, int32_t begin, int32_t vertex_num,
                               bool closed, IndexPack* ipack) {
   int num = closed ? vertex_num : vertex_num - 1;
   for (int i = 0; i < num; ++i) {
@@ -34,7 +34,7 @@ bool GenerateTopTriangleStrip(int32 top, int32 begin, int32 vertex_num,
   return true;
 }
 
-bool GenerateBottomTriangleStrip(int32 bottom, int32 begin, int32 vertex_num,
+bool GenerateBottomTriangleStrip(int32_t bottom, int32_t begin, int32_t vertex_num,
                                  bool closed, IndexPack* ipack) {
   int num = closed ? vertex_num : vertex_num - 1;
   for (int i = 0; i < num; ++i) {
@@ -47,7 +47,7 @@ bool GenerateBottomTriangleStrip(int32 bottom, int32 begin, int32 vertex_num,
   return true;
 }
 
-bool GenerateStripIndex(int32 line1, int32 line2, int32 vertex_num, bool closed,
+bool GenerateStripIndex(int32_t line1, int32_t line2, int32_t vertex_num, bool closed,
                         IndexPack* ipack) {
   int num = closed ? vertex_num : vertex_num - 1;
   for (int i = 0; i < num; ++i) {
@@ -65,25 +65,25 @@ bool GenerateStripIndex(int32 line1, int32 line2, int32 vertex_num, bool closed,
 }
 
 void MergeMeshPart(MeshPart* merge_to, MeshPart* part) {
-  for (int32 i = 0; i < part->entity_count(); ++i) {
+  for (int32_t i = 0; i < part->entity_count(); ++i) {
     merge_to->AddEntity(part->entity_at(i));
   }
 }
 
-inline int32 CalcSphereIndexNum(int32 stack_num, int32 slice_num) {
+inline int32_t CalcSphereIndexNum(int32_t stack_num, int32_t slice_num) {
   return (stack_num - 2 - 1) * slice_num * 3 * 2 + slice_num * 2 * 3;
 }
 
-inline int32 CalcSphereVertexNum(int32 stack_num, int32 slice_num) {
+inline int32_t CalcSphereVertexNum(int32_t stack_num, int32_t slice_num) {
   return (stack_num - 2) * slice_num + 2;
 }
 
 VertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
-                                   float radius, int32 stack, int32 slice) {
+                                   float radius, int32_t stack, int32_t slice) {
   VertexPos texpos;
   bool hastex = GetSemanticIndex("texcoord", 0, desc, &texpos);
 
-  const int32 kVertexNum = CalcSphereVertexNum(stack, slice);
+  const int32_t kVertexNum = CalcSphereVertexNum(stack, slice);
   VertexDataPtr vdata(new VertexData(desc, kVertexNum));
   VertexPack vpack(vdata);
 
@@ -126,9 +126,9 @@ VertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
   return vdata;
 }
 
-IndicesDataPtr InitSphereIndicesData(int32 stack, int32 slice) {
+IndicesDataPtr InitSphereIndicesData(int32_t stack, int32_t slice) {
   const int kIndexNum = CalcSphereIndexNum(stack, slice);
-  const int32 kVertexNum = CalcSphereVertexNum(stack, slice);
+  const int32_t kVertexNum = CalcSphereVertexNum(stack, slice);
   int bottom_index = kVertexNum - 1;
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
   IndexPack ipack(idata);
@@ -143,9 +143,9 @@ IndicesDataPtr InitSphereIndicesData(int32 stack, int32 slice) {
   return idata;
 }
 
-IndicesDataPtr InitSphereWireFrameIndicesData(int32 stack, int32 slice) {
+IndicesDataPtr InitSphereWireFrameIndicesData(int32_t stack, int32_t slice) {
   const int kIndexNum = (stack - 1) * slice * 2 + (stack - 2) * (slice + 1) * 2;
-  const int32 kVertexNum = CalcSphereVertexNum(stack, slice);
+  const int32_t kVertexNum = CalcSphereVertexNum(stack, slice);
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
   IndexPack ipack(idata);
   for (int i = 0; i < slice; ++i) {
@@ -200,9 +200,9 @@ void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata) {
   vpack.first();
   IndexPack ipack(idata);
   for (int i = 0; i < idata->count(); i+=3) {
-    uint32 idx1 = ipack.ReadAndAdvanceOrDie();
-    uint32 idx2 = ipack.ReadAndAdvanceOrDie();
-    uint32 idx3 = ipack.ReadAndAdvanceOrDie();
+    uint32_t idx1 = ipack.ReadAndAdvanceOrDie();
+    uint32_t idx2 = ipack.ReadAndAdvanceOrDie();
+    uint32_t idx3 = ipack.ReadAndAdvanceOrDie();
     Vector3 p1, p2, p3;
     CHECK(vpack.move(idx1));
     vpack.ReadVector3Or4(&p1, VertexPos(0, 0));
@@ -298,8 +298,8 @@ void CalcIndexedTriangleListTangentAndBinormal(VertexData* vd, IndicesData* id) 
     return;
   }
   
-  for (int32 i = 0; i < ipack.count(); i+=3) {
-    uint32 index[3];
+  for (int32_t i = 0; i < ipack.count(); i+=3) {
+    uint32_t index[3];
     CHECK(ipack.ReadAndAdvance(index));
     CHECK(ipack.ReadAndAdvance(index + 1));
     CHECK(ipack.ReadAndAdvance(index + 2));
@@ -492,12 +492,12 @@ VertexDataPtr CreateBoxVertexData(VertexDesc* desc) {
 }
 
 IndicesDataPtr CreateBoxFrameIndicesData() {
-  int32 edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
+  int32_t edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
                           0, 14, 2, 8, 1, 7, 4, 13,
                           14, 8, 8, 7, 7, 13, 13, 14};
   IndicesDataPtr idata(new IndicesData(arraysize(edge_indices)));
   IndexPack ipack(idata);
-  for (uint32 i = 0; i < arraysize(edge_indices); ++i) {
+  for (uint32_t i = 0; i < arraysize(edge_indices); ++i) {
     CHECK(ipack.WriteAndAdvance(edge_indices[i]));
   }
   return idata;
@@ -555,7 +555,7 @@ VertexDataPtr CreatePlaneVertexData(VertexDesc* desc,
   const bool kHasNormalIndex = GetSemanticIndex("normal", 0, desc, &npos);
   const bool kHasTexcoordIndex = GetSemanticIndex("texcoord", 0, desc, &tpos);
 
-  int32 kVertexCount = (params.row + 1) * (params.column + 1);
+  int32_t kVertexCount = (params.row + 1) * (params.column + 1);
   VertexDataPtr vdata(new VertexData(desc, kVertexCount));
   VertexPack vpack(vdata);
   vpack.first();
@@ -579,7 +579,7 @@ VertexDataPtr CreatePlaneVertexData(VertexDesc* desc,
 }
 
 IndicesDataPtr CreatePlaneIndicesData(const GeoPlaneParams& params) {
-  const int32 kIndexNum = params.row * params.column * 2 * 3;
+  const int32_t kIndexNum = params.row * params.column * 2 * 3;
   IndicesDataPtr idata(new IndicesData(kIndexNum));
   IndexPack ipack(idata);
   for (int i = 0; i < params.row; ++i) {
@@ -598,19 +598,19 @@ IndicesDataPtr CreatePlaneIndicesData(const GeoPlaneParams& params) {
 }
 
 IndicesDataPtr CreatePlaneFrameIndicesData(const GeoPlaneParams& params) {
-  int32 count = (params.row + 1) * 2 + (params.column + 1) * 2;
+  int32_t count = (params.row + 1) * 2 + (params.column + 1) * 2;
   IndicesDataPtr idata(new IndicesData(count));
   IndexPack ipack(idata);
-  for (uint32 i = 0; i < params.row; ++i) {
-    int32 index1 = i * (params.column + 1);
-    int32 index2 = (i  + 1) * (params.column + 1) - 1;
+  for (uint32_t i = 0; i < params.row; ++i) {
+    int32_t index1 = i * (params.column + 1);
+    int32_t index2 = (i  + 1) * (params.column + 1) - 1;
     CHECK(ipack.WriteAndAdvance(index1));
     CHECK(ipack.WriteAndAdvance(index2));
   }
 
-  for (uint32 i = 0; i < params.column; ++i) {
-    int32 index1 = i;
-    int32 index2 = (params.row + 1) * params.column + i;
+  for (uint32_t i = 0; i < params.column; ++i) {
+    int32_t index1 = i;
+    int32_t index2 = (params.row + 1) * params.column + i;
     CHECK(ipack.WriteAndAdvance(index1));
     CHECK(ipack.WriteAndAdvance(index2));
   }
@@ -677,7 +677,7 @@ VertexDataPtr CreateRoundVertexData(VertexDesc* desc, const Matrix4& mat,
                                     float radius, float slice) {
   VertexPos npos;
   GetSemanticIndex("normal", 0, desc, &npos);
-  const int32 kVertexNum = 1 + slice + 1;
+  const int32_t kVertexNum = 1 + slice + 1;
   float degree = 360.0f / (float)slice;
   VertexDataPtr vdata(new VertexData(desc, kVertexNum));
   VertexPack vpack(vdata);
@@ -696,7 +696,7 @@ VertexDataPtr CreateRoundVertexData(VertexDesc* desc, const Matrix4& mat,
   return vdata;
 }
 
-IndicesDataPtr CreateRoundInidcesData(int32 slice) {
+IndicesDataPtr CreateRoundInidcesData(int32_t slice) {
   IndicesDataPtr idata(new IndicesData(slice * 3));  
   IndexPack ipack(idata);
   for (int i = 0; i < slice; ++i) {
@@ -709,7 +709,7 @@ IndicesDataPtr CreateRoundInidcesData(int32 slice) {
   return idata;
 }
 
-IndicesDataPtr CreateCircleInidcesData(int32 slice) {
+IndicesDataPtr CreateCircleInidcesData(int32_t slice) {
   const int kIndexNum = slice * 2;
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
   IndexPack ipack(idata);
@@ -721,7 +721,7 @@ IndicesDataPtr CreateCircleInidcesData(int32 slice) {
 }
 } // namespace
 
-EntityPtr CreateRoundEntity(VertexDesc* desc, float radius, int32 slice, 
+EntityPtr CreateRoundEntity(VertexDesc* desc, float radius, int32_t slice, 
                             const Matrix4& mat) {
   VertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   IndicesDataPtr idata = CreateRoundInidcesData(slice);
@@ -738,7 +738,7 @@ EntityPtr CreateRoundEntity(VertexDesc* desc, float radius, int32 slice,
   return entity;
 }
 
-EntityPtr CreateCircleEntity(VertexDesc* desc, float radius, int32 slice, 
+EntityPtr CreateCircleEntity(VertexDesc* desc, float radius, int32_t slice, 
                              const Matrix4& mat) {
   VertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   IndicesDataPtr idata = CreateCircleInidcesData(slice);
@@ -773,7 +773,7 @@ MeshPartPtr CreateCircleMeshPart(Effect* e, float radius, int slice,
 // cone
 EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params, 
                             const Matrix4& mat) {
-  const int32 kVertexNum = 1 + params.slice + 1;
+  const int32_t kVertexNum = 1 + params.slice + 1;
   float degree = 360.0f / (float)params.slice;
   VertexDataPtr vdata(new VertexData(desc, kVertexNum));
   VertexPack vpack(vdata);
@@ -828,11 +828,11 @@ MeshPartPtr CreateConeMeshPart(Effect* e, const GeoConeParams& params,
 }
 
 namespace {
-int32 CalcCylinderIndexNum(int32 stack_num, int32 slice_num) {
+int32_t CalcCylinderIndexNum(int32_t stack_num, int32_t slice_num) {
   return (stack_num - 1) * slice_num * 3 * 2;
 }
 
-int32 CalcCylinderVertexNum(int32 stack_num, int32 slice_num) {
+int32_t CalcCylinderVertexNum(int32_t stack_num, int32_t slice_num) {
   return stack_num * slice_num;
 }
 }
@@ -872,8 +872,8 @@ EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params,
 
   IndexPack ipack(idata);
   for (int i = 0; i < params.stack - 1; ++i) {
-    int32 line1 = i * params.slice; 
-    int32 line2 = (i + 1) * params.slice; 
+    int32_t line1 = i * params.slice; 
+    int32_t line2 = (i + 1) * params.slice; 
     for (int j = 0; j < params.slice; ++j) {
       int index1 = j % params.slice;
       int index2 = (j + 1) % params.slice;
@@ -987,13 +987,13 @@ MeshPartPtr CreateLineAxisMeshPart(Effect* e, const GeoAxisParams& params,
 }
 
 EntityPtr CreateGeoPointsList(PrimitiveTopology primitive, const Vector3* points,
-                              int32 count, VertexDesc* desc, const Matrix4& mat) {
+                              int32_t count, VertexDesc* desc, const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, count));
   VertexPack vpack(vdata);
   vpack.first();
   Vector3 vmin(mat * Vector4(points[0], 1.0));
   Vector3 vmax(mat * Vector4(points[0], 1.0));
-  for (int32 i = 0; i < count; ++i) {
+  for (int32_t i = 0; i < count; ++i) {
     Vector4 vec(mat * Vector4(points[i], 1.0f));
     vpack.WriteVector3Or4(vec, VertexPos(0, 0));
     UpdateVMinAndVMax(Vector3(vec), &vmin, &vmax);

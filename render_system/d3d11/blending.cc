@@ -22,9 +22,9 @@ D3DBlending::~D3DBlending() {
 bool D3DBlending::Init() {
   D3D11_BLEND_DESC blend_desc;
   ZeroMemory(&blend_desc, sizeof(blend_desc));
-  int32 count = std::min(kMaxRenderTargetDesc,
+  int32_t count = std::min(kMaxRenderTargetDesc,
                          (int)arraysize(blend_desc.RenderTarget));
-  for (int32 i = 0; i < count; ++i) {
+  for (int32_t i = 0; i < count; ++i) {
     D3D11_RENDER_TARGET_BLEND_DESC& rtbd = blend_desc.RenderTarget[i];
     ZeroMemory(&rtbd, sizeof(rtbd));
     rtbd.BlendEnable = desc_.desc[i].enable;

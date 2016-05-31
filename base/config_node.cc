@@ -73,12 +73,12 @@ const ConfigNode* ConfigNode::root() const {
   return NULL;
 }
 
-const ConfigNode* ConfigNode::child_at(int32 index) const {
+const ConfigNode* ConfigNode::child_at(int32_t index) const {
   DCHECK_LT(index, child_count());
   return children_[index];
 }
 
-ConfigNode* ConfigNode::child_at(int32 index) {
+ConfigNode* ConfigNode::child_at(int32_t index) {
   DCHECK_LT(index, child_count());
   return children_[index];
 }

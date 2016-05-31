@@ -30,7 +30,7 @@ D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(PrimitiveTopology topology);
 
 DXGI_FORMAT TranslateIndexType(IndexType type);
 
-D3D11_BIND_FLAG TranslateBindTarget(uint32 target);
+D3D11_BIND_FLAG TranslateBindTarget(uint32_t target);
 
 D3D11_FILL_MODE TranslateFillMode(FillMode mode);
 FillMode TranslateD3DFillMode(D3D11_FILL_MODE mode);

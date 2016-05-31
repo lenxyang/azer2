@@ -28,8 +28,8 @@ enum ShaderType {
 
 struct AZER_EXPORT ShaderInfo {
   ShaderInfo();
-  int32 stage;
-  int32 format;
+  int32_t stage;
+  int32_t format;
   std::string code;
   std::string path;
   std::string version;

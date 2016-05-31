@@ -33,7 +33,7 @@ bool InteractiveController::HasObserver(InteractiveControllerObserver* obs) {
   return observer_list_.HasObserver(obs);
 }
 
-void InteractiveController::set_state(int32 state) { 
+void InteractiveController::set_state(int32_t state) { 
   state_ = state; 
 }
 

@@ -18,7 +18,7 @@ void SceneNodeTraverse::Traverse(SceneNode* root) {
 
 void SceneNodeTraverse::TraverseNode(SceneNode* node) {
   if (delegate_->OnTraverseNodeEnter(node)) {
-    for (int32 i = 0; i < node->child_count(); ++i) {
+    for (int32_t i = 0; i < node->child_count(); ++i) {
       SceneNode* child = node->child_at(i);
       TraverseNode(child);
     }

@@ -47,7 +47,7 @@ void Renderer::ResetDepthStencilState() {
 }
 
 void Renderer::SetDepthStencilState(DepthStencilState* state,
-                                    uint32 stencilref) {
+                                    uint32_t stencilref) {
   stencilref_ = stencilref;
   current_depth_state_ = state;
   current_depth_state_->Apply(this, stencilref);

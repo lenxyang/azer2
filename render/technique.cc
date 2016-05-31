@@ -22,11 +22,11 @@ TechSource::TechSource(VertexDesc* vertex_desc, VertexDesc* streamout_desc,
       streamout_desc_(streamout_desc) {
 }
 
-const ShaderInfo& TechSource::operator[](const int32 index) const {
+const ShaderInfo& TechSource::operator[](const int32_t index) const {
   return GetStage(index);
 }
 
-const ShaderInfo& TechSource::GetStage(const int32 index) const {
+const ShaderInfo& TechSource::GetStage(const int32_t index) const {
   DCHECK_LT(index, kRenderPipelineStageNum);
   return shaders_[index];
 }
@@ -35,7 +35,7 @@ void TechSource::AddShader(const ShaderInfo& shader) {
   SetStage(shader.stage, shader);
 }
 
-void TechSource::SetStage(int32 stage, const ShaderInfo& shader) {
+void TechSource::SetStage(int32_t stage, const ShaderInfo& shader) {
   DCHECK_LT(stage, kRenderPipelineStageNum);
   shaders_[stage] = shader;
   shaders_[stage].stage = stage;
@@ -73,7 +73,7 @@ TechniquePtr CreateTechnique(const TechSource& source) {
   const ShaderInfo& vsinfo = source.GetStage(kVertexStage);
   ShaderPtr vs_shader(rs->CreateShader(vsinfo, source.vertex_desc()));
   tech->AddShader(vs_shader);
-  for (uint32 i = (uint32)(kVertexStage + 1); i < source.size(); ++i) {
+  for (uint32_t i = (uint32)(kVertexStage + 1); i < source.size(); ++i) {
     const ShaderInfo& info = source.GetStage(i);
     if (!info.code.empty()) {
       VertexDesc* desc = NULL;

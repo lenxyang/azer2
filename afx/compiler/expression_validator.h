@@ -23,8 +23,8 @@ class ConstExpressValueCalculator : public TreeNode<ASTNode>::Traverser {
     bool b;
     char c;
     short s;
-    uint32 u32;
-    int32 i32;
+    uint32_t u32;
+    int32_t i32;
     float f;
     double d;
   } value_;

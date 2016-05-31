@@ -6,17 +6,17 @@ namespace azer {
 
 #pragma pack(push,1)
 
-const uint32 DDS_MAGIC = 0x20534444; // "DDS "
+const uint32_t DDS_MAGIC = 0x20534444; // "DDS "
 
 struct DDS_PIXELFORMAT {
-  uint32    size;
-  uint32    flags;
-  uint32    fourCC;
-  uint32    RGBBitCount;
-  uint32    RBitMask;
-  uint32    GBitMask;
-  uint32    BBitMask;
-  uint32    ABitMask;
+  uint32_t    size;
+  uint32_t    flags;
+  uint32_t    fourCC;
+  uint32_t    RGBBitCount;
+  uint32_t    RBitMask;
+  uint32_t    GBitMask;
+  uint32_t    BBitMask;
+  uint32_t    ABitMask;
 };
 
 #define DDS_FOURCC      0x00000004  // DDPF_FOURCC
@@ -169,28 +169,28 @@ enum DDS_MISC_FLAGS2 {
 };
 
 struct DDS_HEADER {
-  uint32        size;
-  uint32        flags;
-  uint32        height;
-  uint32        width;
-  uint32        pitchOrLinearSize;
-  uint32        depth; // only if DDS_HEADER_FLAGS_VOLUME is set in flags
-  uint32        mipMapCount;
-  uint32        reserved1[11];
+  uint32_t        size;
+  uint32_t        flags;
+  uint32_t        height;
+  uint32_t        width;
+  uint32_t        pitchOrLinearSize;
+  uint32_t        depth; // only if DDS_HEADER_FLAGS_VOLUME is set in flags
+  uint32_t        mipMapCount;
+  uint32_t        reserved1[11];
   DDS_PIXELFORMAT ddspf;
-  uint32        caps;
-  uint32        caps2;
-  uint32        caps3;
-  uint32        caps4;
-  uint32        reserved2;
+  uint32_t        caps;
+  uint32_t        caps2;
+  uint32_t        caps3;
+  uint32_t        caps4;
+  uint32_t        reserved2;
 };
 
 struct DDS_HEADER_DXT10 {
-  uint32        dxgiFormat;
-  uint32        resourceDimension;
-  uint32        miscFlag; // see D3D11_RESOURCE_MISC_FLAG
-  uint32        arraySize;
-  uint32        miscFlags2; // see DDS_MISC_FLAGS2
+  uint32_t        dxgiFormat;
+  uint32_t        resourceDimension;
+  uint32_t        miscFlag; // see D3D11_RESOURCE_MISC_FLAG
+  uint32_t        arraySize;
+  uint32_t        miscFlags2; // see DDS_MISC_FLAGS2
 } ;
 
 #pragma pack(pop)

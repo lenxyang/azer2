@@ -45,8 +45,8 @@ void D3DRenderer::Use() {
   DCHECK(targets_.empty() || depth_.get() != NULL);
 
   ID3D11RenderTargetView* target_view[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT] = {0};
-  int32 count = 0;
-  for (uint32 i = 0; i < targets_.size(); ++i, ++count) {
+  int32_t count = 0;
+  for (uint32_t i = 0; i < targets_.size(); ++i, ++count) {
     D3DRenderTarget* target = ((D3DRenderTarget*)targets_[i].get());
     target_view[i] = target->GetD3DRenderTargetView();
   }
@@ -117,7 +117,7 @@ void D3DRenderer::SetStreamOutTargets(HardwareBuffer** buffer, int count,
   const int kMaxBufferCount = 64;
   DCHECK_LT(count, kMaxBufferCount);
   ID3D11Buffer* buffers[kMaxBufferCount] = { 0 };
-  uint32 offsets[kMaxBufferCount] = { 0 };
+  uint32_t offsets[kMaxBufferCount] = { 0 };
   for (int i = 0; i < count; ++i) {
     DCHECK(dynamic_cast<D3DVertexBuffer*>(*(buffer + i)));
     D3DVertexBuffer* vb = static_cast<D3DVertexBuffer*>(*(buffer + i));
@@ -127,7 +127,7 @@ void D3DRenderer::SetStreamOutTargets(HardwareBuffer** buffer, int count,
   d3d_context_->SOSetTargets(count, buffers, offsets);
 }
 
-void D3DRenderer::SetBlending(Blending* vblending, float* factor, uint32 mask) {
+void D3DRenderer::SetBlending(Blending* vblending, float* factor, uint32_t mask) {
   DCHECK(NULL != d3d_context_);
   D3DBlending* blending = (D3DBlending*)vblending;
   DCHECK(NULL != blending->blending_state_);
@@ -185,30 +185,30 @@ void D3DRenderer::DrawAuto() {
   d3d_context_->DrawAuto();
 }
 
-void D3DRenderer::Draw(int vertices_num, int32 start_vertex) {
+void D3DRenderer::Draw(int vertices_num, int32_t start_vertex) {
   d3d_context_->Draw(vertices_num, start_vertex);
 }
 
-void D3DRenderer::DrawIndex(int indices_num, int32 start_indices, 
-                            int32 vertex_base) {
+void D3DRenderer::DrawIndex(int indices_num, int32_t start_indices, 
+                            int32_t vertex_base) {
   d3d_context_->DrawIndexed(indices_num, start_indices, vertex_base);
 }
 
-void D3DRenderer::DrawInstanced(int32 instance_num, int32 vertices_num, 
-                                int32 first_vertex, int32 instance_start_index) {
+void D3DRenderer::DrawInstanced(int32_t instance_num, int32_t vertices_num, 
+                                int32_t first_vertex, int32_t instance_start_index) {
   d3d_context_->DrawInstanced(vertices_num, instance_num,
                               first_vertex, instance_start_index);
 }
 
-void D3DRenderer::DrawIndexInstanced(int32 instance_num, int32 indices_num, 
-                                     int32 first_indices, int32 index_base,
-                                     int32 instance_start_index) {
+void D3DRenderer::DrawIndexInstanced(int32_t instance_num, int32_t indices_num, 
+                                     int32_t first_indices, int32_t index_base,
+                                     int32_t instance_start_index) {
   d3d_context_->DrawIndexedInstanced(indices_num, instance_num,
                                      first_indices, index_base,
                                      instance_start_index);
 }
 
-void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int32 index,
+void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int32_t index,
                                      GpuConstantsTable* table) {
   D3DGpuConstantsTable* constants = (D3DGpuConstantsTable*)table;
   if (stage == kVertexStage) {
@@ -227,7 +227,7 @@ void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int32 index,
 }
 
 void D3DRenderer::ResetStageTexture(RenderPipelineStage stage) {
-  const int32 count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+  const int32_t count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   ID3D11ShaderResourceView* views[count] = {0};
   DCHECK(NULL != d3d_context_);
   switch (stage) {
@@ -249,11 +249,11 @@ void D3DRenderer::ResetStageTexture(RenderPipelineStage stage) {
 }
 
 void D3DRenderer::SetShaderSamplerState(RenderPipelineStage stage, int index, 
-                                        int32 count, SamplerStatePtr* sampler) {
-  const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+                                        int32_t count, SamplerStatePtr* sampler) {
+  const int32_t kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11SamplerState* sampler_state[kMaxShaderTexCount] = {0};
-  for (int32 i = 0; i < count; ++i) {
+  for (int32_t i = 0; i < count; ++i) {
     D3DSamplerState* p = (D3DSamplerState*)sampler[i].get();
     sampler_state[i] = p->GetD3DSamplerState();
     DCHECK(sampler_state[i]);
@@ -280,13 +280,13 @@ void D3DRenderer::SetShaderSamplerState(RenderPipelineStage stage, int index,
 }
 
 void D3DRenderer::SetShaderResTexture(RenderPipelineStage stage, int index, 
-                                      int32 count, TextureViewPtr* texture) {
-  const int32 kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+                                      int32_t count, TextureViewPtr* texture) {
+  const int32_t kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
   
   TextureViewPtr* cur = (TextureViewPtr*)texture;
-  for (int32 i = 0; i < count; ++i, ++cur) {
+  for (int32_t i = 0; i < count; ++i, ++cur) {
     D3DResTextureView* tex = (D3DResTextureView*)(cur->get());
     views[i] = tex ? tex->GetResourceView() : NULL;
   }
@@ -329,7 +329,7 @@ void D3DRenderer::SetViewport(const Viewport& vp) {
 }
 
 void D3DRenderer::SetShaderResource(RenderPipelineStage stage,
-                                    uint32 first, uint32 num,
+                                    uint32_t first, uint32_t num,
                                     ID3D11ShaderResourceView** view) {
   DCHECK(d3d_context_ != NULL);
   switch (stage) {

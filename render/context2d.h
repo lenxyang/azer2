@@ -18,7 +18,7 @@ class AZER_EXPORT Context2D : public ::base::RefCounted<Context2D> {
   
   virtual void flush() = 0;
   virtual void finish() = 0;
-  virtual Canvas2D* CreateCanvas(int32 width, int32 height) = 0;
+  virtual Canvas2D* CreateCanvas(int32_t width, int32_t height) = 0;
  protected:
   DISALLOW_COPY_AND_ASSIGN(Context2D);
 };

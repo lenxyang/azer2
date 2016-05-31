@@ -16,7 +16,7 @@ Subset::Subset()
   InitMinAndVMax(&vmin, &vmax);
 }
 
-Subset::Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount) 
+Subset::Subset(int32_t vbase, int32_t vcount, int32_t ibase, int32_t icount) 
     : vertex_base(vbase),
       vertex_count(vcount),
       index_base(ibase),
@@ -25,7 +25,7 @@ Subset::Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount)
   InitMinAndVMax(&vmin, &vmax);
 }
 
-Subset::Subset(int32 vbase, int32 vcount, int32 ibase, int32 icount, 
+Subset::Subset(int32_t vbase, int32_t vcount, int32_t ibase, int32_t icount, 
                PrimitiveTopology type)
     : vertex_base(vbase),
       vertex_count(vcount),
@@ -43,7 +43,7 @@ EntityData::EntityData(VertexData* vdata, IndicesData* idata)
     : vdata_(vdata),
       idata_(idata) {
 }
-EntityData::EntityData(VertexDesc* desc, int32 count) {
+EntityData::EntityData(VertexDesc* desc, int32_t count) {
   vdata_ = new VertexData(desc, count);
 }
 
@@ -95,7 +95,7 @@ Entity::Entity(VertexBufferGroup* vbg, IndicesBuffer* ib) {
 Entity::~Entity() {
 }
 
-VertexBuffer* Entity::vertex_buffer_at(int32 index) { 
+VertexBuffer* Entity::vertex_buffer_at(int32_t index) { 
   return vbg_->vertex_buffer_at(index);
 }
 
@@ -105,21 +105,21 @@ void Entity::AddSubset(const Subset& subset) {
   subset_.push_back(subset);
 }
 
-void Entity::RemoveSubset(int32 index) {
+void Entity::RemoveSubset(int32_t index) {
   DCHECK_LT(index, static_cast<int32>(subset_.size()));
   subset_.erase(subset_.begin() + index);
 }
 
-int32 Entity::subset_count() const {
+int32_t Entity::subset_count() const {
   return static_cast<int32>(subset_.size());
 }
 
-const Subset& Entity::subset_at(int32 index) const {
+const Subset& Entity::subset_at(int32_t index) const {
   DCHECK_LT(index, static_cast<int32>(subset_.size()));
   return subset_[index];
 }
 
-void Entity::SetVertexBuffer(VertexBuffer* vb, int32 index) {
+void Entity::SetVertexBuffer(VertexBuffer* vb, int32_t index) {
   vbg_->add_vertex_buffer_at(vb, index);
 }
 
@@ -155,7 +155,7 @@ void Entity::DrawIndexSubset(Renderer* renderer, const Subset& subset)  const {
   renderer->DrawIndex(subset.index_count, subset.index_base, subset.vertex_base);
 }
 
-void Entity::DrawSub(int32 index, Renderer* renderer) const {
+void Entity::DrawSub(int32_t index, Renderer* renderer) const {
   DCHECK(vbg_.get() && vbg_->validate());
   renderer->BindVertexBufferGroup(vbg_.get());
   renderer->BindIndicesBuffer(ib_.get());
@@ -197,7 +197,7 @@ Entity* EntityVec::AddEntity(Entity* ptr) {
   return ptr;
 }
 
-void EntityVec::RemoveEntityAt(int32 index) {
+void EntityVec::RemoveEntityAt(int32_t index) {
   DCHECK(index < static_cast<int32>(vec_.size()));
   vec_.erase(vec_.begin() + index);
   UpdateMinAndMax();
@@ -205,7 +205,7 @@ void EntityVec::RemoveEntityAt(int32 index) {
 
 EntityVecPtr EntityVec::DeepCopy() {
   EntityVecPtr ptr = new EntityVec;
-  for (uint32 i = 0; i < vec_.size(); ++i) {
+  for (uint32_t i = 0; i < vec_.size(); ++i) {
     ptr->AddEntity(vec_[i]->DeepCopy());
   }
   return ptr;

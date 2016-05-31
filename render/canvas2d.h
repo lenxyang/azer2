@@ -21,8 +21,8 @@ class AZER_EXPORT Canvas2D : public ::base::RefCounted<Canvas2D> {
  public:
   virtual ~Canvas2D();
 
-  int32 width() const { return width_;}
-  int32 height() const { return height_;}
+  int32_t width() const { return width_;}
+  int32_t height() const { return height_;}
 
   // is use SkCanvas to Paint, should call the following functions
   virtual SkCanvas* BeginPaint() = 0;
@@ -40,18 +40,18 @@ class AZER_EXPORT Canvas2D : public ::base::RefCounted<Canvas2D> {
 
   Texture* GetTexture() { return texture_;}
   TextureView* GetTextureView() { return texview_;}
-  virtual uint32 GetTexID() = 0;
+  virtual uint32_t GetTexID() = 0;
 
   // save the content into file
   bool Save(const ::base::FilePath& path);
  protected:
   // create by canvas
-  Canvas2D(int32 width, int32 height, Context2D* context);
+  Canvas2D(int32_t width, int32_t height, Context2D* context);
   virtual bool Init() = 0;
   // virtual TexturePtr CreateSharedTexture() = 0;
   
-  const int32 width_;
-  const int32 height_;
+  const int32_t width_;
+  const int32_t height_;
   TexturePtr texture_;
   TextureViewPtr texview_;
   SkCanvas* skcanvas_;

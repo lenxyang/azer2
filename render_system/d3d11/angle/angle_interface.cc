@@ -42,7 +42,7 @@ bool InitANGLEInterface() {
     (void**)&pfnGetTexShareD3DTex,
   };
 
-  for (uint32 i = 0; i < arraysize(fnames); ++i) {
+  for (uint32_t i = 0; i < arraysize(fnames); ++i) {
     if (!GetANGLEProcAddress(fnames[i], pfn[i])) {
       LOG(ERROR) << "Failed to get address: " << fname_GetTexShareD3DTex;
       return false;

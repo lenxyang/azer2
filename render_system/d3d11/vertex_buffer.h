@@ -22,7 +22,7 @@ class D3DVertexLayout : public VertexLayout {
   void CreateInputDesc(VertexDesc* desc, D3D11_INPUT_ELEMENT_DESC* d3ddesc);
   std::string GenVSForDesc(VertexDesc* desc);
   ID3D11InputLayout *input_layout_;
-  static const int32 kMaxInputElementDesc = 256;
+  static const int32_t kMaxInputElementDesc = 256;
   DISALLOW_COPY_AND_ASSIGN(D3DVertexLayout);
 };
 
@@ -56,11 +56,11 @@ class D3DVertexBufferGroup : public VertexBufferGroup {
   uint32* strides() { return stride_;}
   uint32* offsets() { return offset_;}
  private:
-  int32 GenVertexArray();
-  static const int32 kMaxVertexBuffer = 16;
+  int32_t GenVertexArray();
+  static const int32_t kMaxVertexBuffer = 16;
   ID3D11Buffer* vbs_[kMaxVertexBuffer];
-  uint32 stride_[kMaxVertexBuffer];
-  uint32 offset_[kMaxVertexBuffer];
+  uint32_t stride_[kMaxVertexBuffer];
+  uint32_t offset_[kMaxVertexBuffer];
   DISALLOW_COPY_AND_ASSIGN(D3DVertexBufferGroup);
 };
 }  // namespace d3d11

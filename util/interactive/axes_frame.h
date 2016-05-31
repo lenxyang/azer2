@@ -21,7 +21,7 @@ class AxesFrame {
   
   void set_position(const Vector3& v) { position_ = v;}
   void set_scale(const Vector3& v) { scale_ = v;}
-  void SetColor(int32 index, const Vector4& color);
+  void SetColor(int32_t index, const Vector4& color);
   void Update(const Camera* camera);
   void SetWorld(const Matrix4& world);
   void Render(Renderer* renderer);
@@ -41,7 +41,7 @@ class ConeAxesFrame {
   ConeAxesFrame();
   
   void Update(Camera* camera);
-  void SetColor(int32 index, const Vector3& color);
+  void SetColor(int32_t index, const Vector3& color);
   void Render(Renderer* renderer);
  private:
   Vector4 colors_[3];

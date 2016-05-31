@@ -178,12 +178,12 @@ Slice ResPath::DirName() const {
 
 Slice ResPath::BaseName() const {
   Slice slice = fullpath_;
-  int32 component_pos = fullpath_.find(kComponentSeperatorStr);
+  int32_t component_pos = fullpath_.find(kComponentSeperatorStr);
   if (component_pos != -1) {
     slice = Slice(fullpath_.c_str(), component_pos);
   }
   
-  int32 last_dir = slice.find_last_of(kSeperatorStr);
+  int32_t last_dir = slice.find_last_of(kSeperatorStr);
   if (last_dir == static_cast<int32>(slice.length()) - 1) {
     return Slice();
   } else if (last_dir != -1) {
@@ -200,7 +200,7 @@ Slice ResPath::component_name() const {
     return component.substr(1);
   } else {
     Slice name = BaseName();
-    uint32 pos = name.rfind(FILE_PATH_LITERAL("."));
+    uint32_t pos = name.rfind(FILE_PATH_LITERAL("."));
     if (pos != StringType::npos)
       name = name.substr(0, pos);
     return name;

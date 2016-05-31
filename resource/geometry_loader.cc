@@ -122,7 +122,7 @@ MeshPartPtr GeometryLoader::CreateCone(const ConfigNode* node,
 MeshPartPtr GeometryLoader::CreateRound(const ConfigNode* node,
                                         Effect* e, 
                                         ResourceLoadContext* ) {
-  int32 slice = 24;;
+  int32_t slice = 24;;
   float radius = 1.0f;
   if (node->HasAttr("radius")) {
     CHECK(node->GetAttrAsFloat("radius", &radius));

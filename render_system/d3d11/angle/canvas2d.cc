@@ -50,8 +50,8 @@ bool D3DCanvas2D::InitTexture() {
   DCHECK(NULL != gr_device_.get());
   DCHECK(NULL != grtex_.get());
   D3DContext2D* context = (D3DContext2D*)GetContext2D();
-  int32 texid = context->GetRenderTargetColorTexID(this);
-  // int32 texid = grtex_->getTextureHandle();
+  int32_t texid = context->GetRenderTargetColorTexID(this);
+  // int32_t texid = grtex_->getTextureHandle();
   
   HANDLE handle = 0;
   (*pfnGetTexShareD3DTex)(GL_DRAW_FRAMEBUFFER_ANGLE, texid, &handle);
@@ -85,7 +85,7 @@ bool D3DCanvas2D::InitCanvas() {
   return true;
 }
 
-uint32 D3DCanvas2D::GetTexID() {
+uint32_t D3DCanvas2D::GetTexID() {
   D3DContext2D* context = (D3DContext2D*)GetContext2D();
   DCHECK(NULL != context);
   return context->GetRenderTargetColorTexID(this);

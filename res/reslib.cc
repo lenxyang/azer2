@@ -31,7 +31,7 @@ Effect* ResLib::GetEffect(const std::string& name) {
   return effectlib_->GetEffect(name);
 }
 
-Texture* ResLib::GetTexture(int32 id) {
+Texture* ResLib::GetTexture(int32_t id) {
   ::base::AutoLock scoped_lock(lock_);
   auto iter = texture_.find(id);
   if (texture_.end() != iter) {

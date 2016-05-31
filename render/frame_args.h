@@ -22,7 +22,7 @@ class AZER_EXPORT FrameArgs {
   double time() const { return timef_;}
   const ::base::TimeDelta& delta() const { return delta_;}
  private:
-  uint32 which_;
+  uint32_t which_;
   double timef_;
   ::base::Time started_;
   ::base::Time time_[2];
@@ -33,7 +33,7 @@ class AZER_EXPORT FrameArgs {
   double total_seconds_; 
   double recent_seconds_;
   std::deque<::base::TimeDelta> recent_frames_time_consumed_;
-  const int32 max_frame_stored_;
+  const int32_t max_frame_stored_;
   DISALLOW_COPY_AND_ASSIGN(FrameArgs);
 };
 

@@ -43,8 +43,8 @@ class AZER_EXPORT EffectParamsProviderContainer :
   EffectAdapterContext* adapter_context() { return context_;}
   void SetEffectAdapterContext(EffectAdapterContext* context);
 
-  int32 provider_count() const;
-  EffectParamsProviderPtr provider_at(int32 index);
+  int32_t provider_count() const;
+  EffectParamsProviderPtr provider_at(int32_t index);
   void AddProvider(EffectParamsProviderPtr provider);
   void RemoveProvider(EffectParamsProviderPtr provider);
   void ResetProvider();

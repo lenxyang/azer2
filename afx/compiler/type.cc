@@ -121,7 +121,7 @@ Type& Type::operator = (const Type& type) {
   return *this;
 }
 
-uint32 BasicTypeSize(BasicType type) {
+uint32_t BasicTypeSize(BasicType type) {
   switch (type) {
     case kChar: return 1;
     case kShort: return 2;
@@ -143,7 +143,7 @@ uint32 BasicTypeSize(BasicType type) {
   }
 }
 
-uint32 SizeofType(const Type& type) {
+uint32_t SizeofType(const Type& type) {
   int unit_size = 0;
   if (type.IsStructure()) {
   } else if (type.IsBasicType()) {
@@ -158,7 +158,7 @@ uint32 SizeofType(const Type& type) {
   }
 
   if (type.IsArray()) {
-    for (uint32 i = 0; i < type.GetDimVec().size(); ++i) {
+    for (uint32_t i = 0; i < type.GetDimVec().size(); ++i) {
       unit_size *= type.GetDim(i);
     }
     return unit_size;

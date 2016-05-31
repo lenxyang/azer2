@@ -3,27 +3,27 @@
 
 namespace azer {
 
-int32 GpuConstantsTable::offset(int32 index) const {
+int32_t GpuConstantsTable::offset(int32_t index) const {
   DCHECK_GE(index, 0);
   DCHECK_LT(index, constants_.size());
   return constants_[index].offset;
 }
 
-void GpuConstantsTable::SetValue(int32 idx, const void* value, int32 size) {
+void GpuConstantsTable::SetValue(int32_t idx, const void* value, int32_t size) {
   return SetValueWithOffset(idx, 0, value, size);
 }
 
-void GpuConstantsTable::SetMatrix(int32 idx, const Matrix4* matrices,
+void GpuConstantsTable::SetMatrix(int32_t idx, const Matrix4* matrices,
                                   int num) {
   return SetValue(idx, (const void*)matrices, sizeof(Matrix4) * num);
 }
 
-void GpuConstantsTable::SetData(int offset, const void* value, int32 size) {
+void GpuConstantsTable::SetData(int offset, const void* value, int32_t size) {
   memcpy(data_.get() + offset, value, size);
   DCHECK_LE(offset + size, this->size());
 }
 
-int32 GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
+int32_t GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
   if (desc.type == GpuConstantsType::kSelfDefined) {
     DCHECK_NE(desc.element_size, -1);
     return desc.element_size;
@@ -32,13 +32,13 @@ int32 GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
   }
 }
 
-GpuConstantsTable::GpuConstantsTable(int32 num, const Desc* desc)
+GpuConstantsTable::GpuConstantsTable(int32_t num, const Desc* desc)
     : HardwareBuffer(kShaderConstsTableBufferOpt()) {
-  int32 offset = 0;
+  int32_t offset = 0;
   const Desc* curr = desc;
-  for (int32 i = 0; i < num; ++i, ++curr) {
-    const int32 size = GpuTableItemDescSize(*curr);
-    const int32 total_size = size * curr->num;
+  for (int32_t i = 0; i < num; ++i, ++curr) {
+    const int32_t size = GpuTableItemDescSize(*curr);
+    const int32_t total_size = size * curr->num;
     DCHECK_LE(offset, curr->offset);
     offset = curr->offset;
     DCHECK(offset != -1);
@@ -49,8 +49,8 @@ GpuConstantsTable::GpuConstantsTable(int32 num, const Desc* desc)
   data_.reset(new uint8[size_]);
 }
 
-void GpuConstantsTable::SetArrayItem(int32 idx, int32 arridx, const void* value,
-                                     int32 size) {
+void GpuConstantsTable::SetArrayItem(int32_t idx, int32_t arridx, const void* value,
+                                     int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
   DCHECK(idx >= 0 && idx < constants_.size());
   DCHECK(arridx >= 0 && arridx < constants_[idx].desc.num);
@@ -59,8 +59,8 @@ void GpuConstantsTable::SetArrayItem(int32 idx, int32 arridx, const void* value,
   SetData(variable.offset + size * arridx, value, size);
 }
 
-void GpuConstantsTable::SetArrayMultiItem(int32 idx, int32 arridx, const void* value,
-                                          int32 size) {
+void GpuConstantsTable::SetArrayMultiItem(int32_t idx, int32_t arridx, const void* value,
+                                          int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
   DCHECK(idx >= 0 && idx < constants_.size());
   DCHECK(arridx >= 0 && arridx < constants_[idx].desc.num);
@@ -69,8 +69,8 @@ void GpuConstantsTable::SetArrayMultiItem(int32 idx, int32 arridx, const void* v
   SetData(variable.offset + size * arridx, value, size);
 }
 
-void GpuConstantsTable::SetValueWithOffset(int32 idx, int32 offset,
-                                           const void* value, int32 size) {
+void GpuConstantsTable::SetValueWithOffset(int32_t idx, int32_t offset,
+                                           const void* value, int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
   DCHECK(idx >= 0 && idx < constants_.size());
   const Variable& variable = constants_[idx];
@@ -86,7 +86,7 @@ void GpuConstantsTable::unmap() {
   NOTIMPLEMENTED();
 }
 
-int32 GpuTableItemTypeSize(const GpuConstantsType::Type type) {
+int32_t GpuTableItemTypeSize(const GpuConstantsType::Type type) {
   switch(type) {
     case GpuConstantsType::kFloat: return sizeof(float);
     case GpuConstantsType::kVector2: return sizeof(azer::Vector2);

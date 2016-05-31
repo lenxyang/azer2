@@ -23,20 +23,20 @@ void GpuComputeTask::Reset() {
   output_count_ = 0;
 }
 
-void GpuComputeTask::SetInputTexture(int32 index, TextureView* tex) {
+void GpuComputeTask::SetInputTexture(int32_t index, TextureView* tex) {
   DCHECK_LT(index, input_count_);
   input_[index] = tex;
 }
-void GpuComputeTask::SetOutputTexture(int32 index, TextureView* tex) {
+void GpuComputeTask::SetOutputTexture(int32_t index, TextureView* tex) {
   DCHECK_LT(index, output_count_);
   output_[index] = tex;
 }
 
-TextureView* GpuComputeTask::GetInputAt(int32 index) {
+TextureView* GpuComputeTask::GetInputAt(int32_t index) {
   return input_[index];
 }
 
-TextureView* GpuComputeTask::GetOutputAt(int32 index) {
+TextureView* GpuComputeTask::GetOutputAt(int32_t index) {
   return output_[index];
 }
 

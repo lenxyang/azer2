@@ -24,10 +24,10 @@ EntityDataPtr CreatePlane(VertexDesc* desc, const PlaneParam& param,
                           const Matrix4& mat = Matrix4::kIdentity);
 
 Subset AppendGeoSquareData(VertexPack* vpack, IndexPack* ipack, 
-                           float length, int32 slice,
+                           float length, int32_t slice,
                            const Matrix4& mat = Matrix4::kIdentity);
-void AppendGeoSquareSubset(EntityData* data, float length, int32 slice,
+void AppendGeoSquareSubset(EntityData* data, float length, int32_t slice,
                            const Matrix4& mat = Matrix4::kIdentity);
-EntityDataPtr CreateSquare(VertexDesc* desc, float length, int32 slice,
+EntityDataPtr CreateSquare(VertexDesc* desc, float length, int32_t slice,
                            const Matrix4& mat = Matrix4::kIdentity);
 }  // namespace azer

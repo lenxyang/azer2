@@ -70,7 +70,7 @@ class AZER_EXPORT RenderSystem {
   virtual IndicesBufferPtr CreateIndicesBuffer(const HBufferOptions& opt,
                                                IndicesData* idata) = 0;
   virtual GpuConstantsTablePtr CreateGpuConstantsTable(
-      int32 num, const GpuConstantsTable::Desc* desc) = 0;
+      int32_t num, const GpuConstantsTable::Desc* desc) = 0;
 
   // textures functions
   virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;
@@ -91,7 +91,7 @@ class AZER_EXPORT RenderSystem {
   const RenderSystemCapability& capability() const {
     return capability_;
   }
-  static const int32 kMaxRenderTarget = 256;
+  static const int32_t kMaxRenderTarget = 256;
  protected:
   // context2d, init by sub render-system
   RenderSystemCapability capability_;

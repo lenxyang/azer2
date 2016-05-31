@@ -44,7 +44,7 @@ class InteractiveContext : public nelf::EventListener {
   void OnDragBegin(const ui::MouseEvent& event);
   void OnDrag(const ui::MouseEvent& event);
   void OnDragEnd(const ui::MouseEvent& event);
-  int32 activated_;
+  int32_t activated_;
   bool draging_;
   ui::MouseEvent last_drag_event_;
   nelf::RenderWindow* window_;

@@ -48,9 +48,9 @@ EntityDataPtr TranslateControlObj::InitAxesObjects(VertexDesc* desc) {
   scoped_refptr<EntityData> data(new EntityData(desc, 1));
 
   VertexPack vpack(data->vdata());
-  const int32 kVertexCount = 32;
+  const int32_t kVertexCount = 32;
   data->vdata()->extend(kVertexCount);
-  int32 base = data->vdata()->vertex_count() - kVertexCount;
+  int32_t base = data->vdata()->vertex_count() - kVertexCount;
   vpack.move(base);
   VertexPos vpos(0, 0);
   vpack.WriteVector3Or4(Vector4(kAxisBegin, 0.0f, 0.0f, 1.0f), vpos);
@@ -183,7 +183,7 @@ void TranslateControlObj::Render(Renderer* renderer) {
     ScopedResetBlending scoped_blending(renderer);
     ScopedDepthStencilState scoped_depth(renderer);
     renderer->SetDepthStencilState(env->depth_disabled_state(), 0x0);
-    for (uint32 i = 0; i < arraysize(colors_); ++i) {
+    for (uint32_t i = 0; i < arraysize(colors_); ++i) {
       if (i == kPlaneXY) {
         renderer->SetBlending(env->a2c_blending(), 0, 0xffffffff);
       }
@@ -194,7 +194,7 @@ void TranslateControlObj::Render(Renderer* renderer) {
   }
 
   ColorMaterialData mtrl;
-  for (uint32 i = 0; i < cones_->subset_count() /2; ++i) {
+  for (uint32_t i = 0; i < cones_->subset_count() /2; ++i) {
     mtrl.diffuse = colors_[i];
     mtrl.ambient = colors_[i] * 0.1f;
     mtrl.specular = colors_[i] * 0.1f;
@@ -221,7 +221,7 @@ TranslateController::TranslateController(InteractiveContext* ctx)
 TranslateController::~TranslateController() {
 }
 
-int32 TranslateController::GetPicking(const gfx::Point& screenpt) {
+int32_t TranslateController::GetPicking(const gfx::Point& screenpt) {
   Ray ray = std::move(context()->GetPickingRay(screenpt));
   const Camera* camera = context()->camera(); 
   const float kMargin = 0.02 * scale_.x;

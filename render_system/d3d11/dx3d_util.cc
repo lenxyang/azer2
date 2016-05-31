@@ -13,7 +13,7 @@
 
 namespace azer {
 namespace d3d11 {
-std::string HRMessage(uint32 hr) {
+std::string HRMessage(uint32_t hr) {
   /*
   string16 msg;
   LPTSTR pvMsgBuf = NULL;

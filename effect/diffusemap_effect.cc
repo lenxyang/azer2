@@ -57,16 +57,16 @@ void DiffuseMapEffect::SetMaterial(const DiffuseMapMaterialData& mtrl) {
   SaveShaderResTexture(kPixelStage, 0, mtrl_.diffusemap);
 }
 
-void DiffuseMapEffect::SetLights(const LightPtr* value, int32 count) {
+void DiffuseMapEffect::SetLights(const LightPtr* value, int32_t count) {
   DCHECK_LT(count, sizeof(lights_));
   light_count_ = count;
-  for (int32 i = 0; i < count; ++i) {
+  for (int32_t i = 0; i < count; ++i) {
     Light* light = (value + i)->get();
     memcpy(lights_ + i, &light->data(), sizeof(UniverseLight));
   }
 }
 
-void DiffuseMapEffect::SetLightData(const UniverseLight* value, int32 count) {
+void DiffuseMapEffect::SetLightData(const UniverseLight* value, int32_t count) {
   memcpy(lights_, value, sizeof(UniverseLight) * std::min(count, kMaxLightCount));
   light_count_ = count;
 }

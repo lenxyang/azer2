@@ -19,7 +19,7 @@ D3DTextureView::~D3DTextureView() {
   SAFE_RELEASE(res);
 }
 
-void D3DTextureView::GenerateMips(int32 level) {
+void D3DTextureView::GenerateMips(int32_t level) {
   CHECK(false);
 }
 
@@ -41,7 +41,7 @@ D3DResTextureView::~D3DResTextureView() {
   SAFE_RELEASE(res_view_);
 }
 
-void D3DResTextureView::GenerateMips(int32 level) {
+void D3DResTextureView::GenerateMips(int32_t level) {
   // attention:
   // resource must be specified bind with Resource and RenderTarget
   // and misc flags must be with D3D11_RESOURCE_MISC_GENERATE_MIPS

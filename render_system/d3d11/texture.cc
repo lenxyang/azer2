@@ -143,10 +143,10 @@ bool D3DTexture::CopyTo(Texture* texture) {
 // class D3DTexture2D
 bool D3DTexture2D::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  int32 count = 0;
+  int32_t count = 0;
   D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
   DCHECK_LT(image->level_count(), static_cast<int32>(arraysize(subres)));
-  for (int32 i = 0; i < image->level_count(); ++i, ++count) {
+  for (int32_t i = 0; i < image->level_count(); ++i, ++count) {
     const ImageLevelData* data = image->GetLevelData(i);
     subres[i].pSysMem = data->dim_data(0);
     subres[i].SysMemPitch = data->row_bytes();

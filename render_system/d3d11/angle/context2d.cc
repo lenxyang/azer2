@@ -50,7 +50,7 @@ GrTexture* D3DContext2D::CreateTexture(int width, int height) {
   return gr_context_->createUncachedTexture(desc, NULL, 0);
 }
 
-Canvas2D* D3DContext2D::CreateCanvas(int32 width, int32 height) {
+Canvas2D* D3DContext2D::CreateCanvas(int32_t width, int32_t height) {
   std::unique_ptr<D3DCanvas2D> ptr(new D3DCanvas2D(width, height, this));
   if (ptr->Init()) {
     return ptr.release();
@@ -59,9 +59,9 @@ Canvas2D* D3DContext2D::CreateCanvas(int32 width, int32 height) {
   }
 }
 
-int32 D3DContext2D::GetRenderTargetColorTexID(D3DCanvas2D* canvas) {
+int32_t D3DContext2D::GetRenderTargetColorTexID(D3DCanvas2D* canvas) {
   GrRenderTarget* target = canvas->GetSkGpuDevice()->accessRenderTarget();
-  uint32 fboid = target->getRenderTargetHandle();
+  uint32_t fboid = target->getRenderTargetHandle();
 
   GLint texid = 0;
   glBindFramebuffer(GL_FRAMEBUFFER, fboid);

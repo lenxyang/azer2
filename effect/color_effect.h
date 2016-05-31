@@ -65,8 +65,8 @@ class ColorEffect : public Effect {
   void SetPV(const Matrix4& value);
   void SetWorld(const Matrix4& value);
   void SetCameraPos(const Vector4& pos);
-  void SetLights(const LightPtr* value, int32 count);
-  void SetLightData(const UniverseLight* value, int32 count);
+  void SetLights(const LightPtr* value, int32_t count);
+  void SetLightData(const UniverseLight* value, int32_t count);
   void SetMaterial(const ColorMaterialData& mtrl);
   static Effect* CreateObject() { return new ColorEffect;}
  protected:
@@ -76,8 +76,8 @@ class ColorEffect : public Effect {
   Matrix4 pv_;
   Matrix4 world_;
   Vector4 camerapos_;
-  int32 light_count_;
-  static const int32 kMaxLightCount = 8;
+  int32_t light_count_;
+  static const int32_t kMaxLightCount = 8;
   UniverseLight lights_[kMaxLightCount];
   ColorMaterialData mtrl_;
   DECLARE_EFFECT_DYNCREATE(ColorEffect);

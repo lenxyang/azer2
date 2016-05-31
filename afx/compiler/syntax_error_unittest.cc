@@ -27,7 +27,7 @@ TEST(SyntaxError, Stream) {
        "void gsmain1(inout point_stream<int,int> s) {}\n",
        "struct Vertex{vec4 p;}; void gsmain1(inout point_stream<Vertex,int> s) {}\n",
       };
-  for (uint32 i = 0; i < arraysize(str); ++i) {
+  for (uint32_t i = 0; i < arraysize(str); ++i) {
     ASTNodeFactory factory;
     ParseContext context(AFXL(""), "", str[i], &factory);
     Parser parser;

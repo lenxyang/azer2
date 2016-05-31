@@ -26,7 +26,7 @@ class InteractiveEnv {
   EffectAdapterContext* effect_context();
   Blending* blending() { return blending_.get();}
   Blending* a2c_blending() { return a2c_blending_.get();}
-  Texture* GetTexture(int32 id);
+  Texture* GetTexture(int32_t id);
   ResourcePack* resource_pack();
   RasterizerState* wireframe_rasterizer_state();
   RasterizerState* noncull_rasterizer_state();

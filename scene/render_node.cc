@@ -67,11 +67,11 @@ RenderNode* RenderNode::parent() {
   return parent_;
 }
 
-int32 RenderNode::child_count() const {
+int32_t RenderNode::child_count() const {
   return static_cast<int32>(children_.size());
 }
 
-RenderNode* RenderNode::child_at(int32 index) {
+RenderNode* RenderNode::child_at(int32_t index) {
   return children_.at(index).get();
 }
 
@@ -88,7 +88,7 @@ void RenderNode::SetEnvNode(RenderEnvNode* node) {
 }
 
 bool RenderNode::RemoveChild(RenderNode* child) {
-  int32 index = GetIndexOf(child);
+  int32_t index = GetIndexOf(child);
   if (index > 0) {
     children_.erase(children_.begin() + index);
     child->parent_ = NULL;
@@ -108,8 +108,8 @@ bool RenderNode::Contains(RenderNode* child) const {
   return false;
 }
 
-int32 RenderNode::GetIndexOf(RenderNode* child) const {
-  int32 index = 0;
+int32_t RenderNode::GetIndexOf(RenderNode* child) const {
+  int32_t index = 0;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++index) {
     if (iter->get() == child)
       return index;

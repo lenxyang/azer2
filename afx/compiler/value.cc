@@ -410,7 +410,7 @@ Value operator * (const Value& v1, const Value& v2) {
     return v;
   } else if (IsIntegerScalar(v1.type()) && IsIntegerScalar(v2.type())) {
     if (!v1.assigned() || !v2.assigned()) { return Value(kInt32);}
-    int32 i1, i2;
+    int32_t i1, i2;
     AFX_FLOAT_VALUE(v1, i1);
     AFX_FLOAT_VALUE(v2, i2);
     return Value((int32)(i1 * i2));

@@ -52,7 +52,7 @@ Overlay::Overlay() {
   VertexPack vpack(vdata);
   GetSemanticIndex("texcoord", 0, effect_->vertex_desc(), &tpos);
   vpack.first();
-  for (uint32 i = 0; i < arraysize(position); ++i) { 
+  for (uint32_t i = 0; i < arraysize(position); ++i) { 
     vpack.WriteVector3Or4(position[i], vpos);
     vpack.WriteVector2(texcoord[i], tpos);
     vpack.next(1);

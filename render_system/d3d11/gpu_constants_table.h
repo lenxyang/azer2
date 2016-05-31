@@ -13,7 +13,7 @@ class D3DRenderSystem;
 
 class D3DGpuConstantsTable : public GpuConstantsTable {
  public:
-  D3DGpuConstantsTable(int32 num, const Desc* desc);
+  D3DGpuConstantsTable(int32_t num, const Desc* desc);
   ~D3DGpuConstantsTable() override;
 
   virtual void flush(Renderer*) override;

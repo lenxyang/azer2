@@ -48,7 +48,7 @@ class D3DRenderSystem : public RenderSystem {
   IndicesBufferPtr CreateIndicesBuffer(const HBufferOptions& opt,
                                        IndicesData*) override;
   GpuConstantsTablePtr CreateGpuConstantsTable(
-      int32 num, const GpuConstantsTable::Desc* desc) override;
+      int32_t num, const GpuConstantsTable::Desc* desc) override;
 
   // texutre functions
   TexturePtr CreateTexture(const Texture::Options& opt) override;

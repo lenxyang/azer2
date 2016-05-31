@@ -4,11 +4,11 @@
 #include "azer/render/index_pack.h"
 
 namespace azer {
-int32 CalcGeoRoundIndexCount(int slice) { return slice * 3;}
-int32 CalcGeoRoundVertexCount(int slice) { return 1 + slice + 1;}
+int32_t CalcGeoRoundIndexCount(int slice) { return slice * 3;}
+int32_t CalcGeoRoundVertexCount(int slice) { return 1 + slice + 1;}
 
-int32 AppendUpGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
-  int32 begin = ipack->index();
+int32_t AppendUpGeoTaperIndexData(int32_t base, IndexPack* ipack, int slice) {
+  int32_t begin = ipack->index();
   for (int i = 0; i < slice; ++i) {
     int index1 = 1 + i;
     int index2 = 1 + i + 1;
@@ -19,8 +19,8 @@ int32 AppendUpGeoTaperIndexData(int32 base, IndexPack* ipack, int slice) {
   return ipack->index() - begin;
 }
 
-int32 AppendBottomGeoTaperIndexData(int32 last, IndexPack* ipack, int slice) {
-  int32 begin = ipack->index();
+int32_t AppendBottomGeoTaperIndexData(int32_t last, IndexPack* ipack, int slice) {
+  int32_t begin = ipack->index();
   for (int i = 0; i < slice; ++i) {
     int index1 = last - i - 2;
     int index2 = last - i - 1;
@@ -33,7 +33,7 @@ int32 AppendBottomGeoTaperIndexData(int32 last, IndexPack* ipack, int slice) {
 
 Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius, 
                           int slice, const Matrix4& mat) {
-  const int32 kVertexNum = CalcGeoRoundVertexCount(slice);
+  const int32_t kVertexNum = CalcGeoRoundVertexCount(slice);
   Subset subset;
   VertexPos vpos(0, 0), npos;
   GetSemanticIndex("normal", 0, vpack->desc(), &npos);
@@ -63,8 +63,8 @@ Subset AppendGeoRoundData(VertexPack* vpack, IndexPack* ipack, float radius,
 
 void AppendGeoRoundSubset(EntityData* data, float radius, int slice, 
                         const Matrix4& mat) {
-  const int32 kVertexCount = CalcGeoRoundVertexCount(slice);
-  const int32 kIndexCount = CalcGeoRoundIndexCount(slice);
+  const int32_t kVertexCount = CalcGeoRoundVertexCount(slice);
+  const int32_t kIndexCount = CalcGeoRoundIndexCount(slice);
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
   vpack.data()->extend(kVertexCount);
@@ -99,7 +99,7 @@ Subset AppendGeoCircleData(VertexPack* vpack, float radius,
 
 void AppendGeoCircleSubset(EntityData* data, float radius, int slice, 
                            const Matrix4& mat) {
-  const int32 kVertexCount = slice + 1;
+  const int32_t kVertexCount = slice + 1;
   VertexPack vpack(data->vdata());
   vpack.data()->extend(kVertexCount);
   vpack.move(vpack.data()->vertex_count() - kVertexCount);
@@ -107,7 +107,7 @@ void AppendGeoCircleSubset(EntityData* data, float radius, int slice,
   data->AddSubset(subset);
 }
 
-void GenTriStripIndex(int32 line1, int32 line2, int32 vertex_num, IndexPack* ipack) {
+void GenTriStripIndex(int32_t line1, int32_t line2, int32_t vertex_num, IndexPack* ipack) {
   for (int i = 0; i < vertex_num - 1; ++i) {
     int index1 = i;
     int index2 = i + 1;

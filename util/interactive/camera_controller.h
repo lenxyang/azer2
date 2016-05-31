@@ -22,7 +22,7 @@ class CameraController : public InteractiveController {
 
   void OnActive() override;
   void OnDeactive() override;
-  int32 GetPicking(const gfx::Point& pt) override;
+  int32_t GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const ui::MouseEvent& e) override;
   void OnDragging(const ui::MouseEvent& e) override;
   void OnDragEnd(const ui::MouseEvent& e) override;

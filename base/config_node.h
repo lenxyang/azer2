@@ -63,9 +63,9 @@ class AZER_EXPORT ConfigNode : public ::base::RefCounted<ConfigNode> {
 
   const ConfigNodes& children() const { return children_;}
   ConfigNodes& children() { return children_;}
-  int32 child_count() const { return static_cast<int>(children_.size());}
-  const ConfigNode* child_at(int32 index) const;
-  ConfigNode* child_at(int32 index);
+  int32_t child_count() const { return static_cast<int>(children_.size());}
+  const ConfigNode* child_at(int32_t index) const;
+  ConfigNode* child_at(int32_t index);
 
   bool AddChild(ConfigNode* node);
   bool Contains(ConfigNode* node) const;

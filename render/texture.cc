@@ -62,8 +62,8 @@ bool Texture::Save(const ::base::FilePath& path) {
     return false;
   }
 
-  uint32 row_pitch = mapdata.row_pitch;
-  for (int32 i = 0; i < options_.size.height(); ++i) {
+  uint32_t row_pitch = mapdata.row_pitch;
+  for (int32_t i = 0; i < options_.size.height(); ++i) {
     memcpy(pixels, mapdata.pdata + i * row_pitch, row_pitch);
     pixels += row_pitch;
   }
@@ -112,7 +112,7 @@ const char* GetTexFormatName(TexFormat format) {
 }
 
 
-uint32 SizeofTexFormat(TexFormat format) {
+uint32_t SizeofTexFormat(TexFormat format) {
   switch (format) {
     case kTexRGBA8: return sizeof(int8) * 4;
     case kTexRGBAn8: return sizeof(uint8) * 4;

@@ -13,7 +13,7 @@ namespace {
 //--------------------------------------------------------------------------------------
 #define ISBITMASK(r,g,b,a) (ddpf.RBitMask == r && ddpf.GBitMask == g && ddpf.BBitMask == b && ddpf.ABitMask == a)
 
-int32 GetDXGIFormat(const DDS_PIXELFORMAT& ddpf) {
+int32_t GetDXGIFormat(const DDS_PIXELFORMAT& ddpf) {
   using namespace detail;
   if (ddpf.flags & DDS_RGB) {
     // Note that sRGB formats are written using the "DX10" extended header
@@ -202,7 +202,7 @@ int32 GetDXGIFormat(const DDS_PIXELFORMAT& ddpf) {
   return DXGI_FORMAT_UNKNOWN;
 }
 
-uint32 BitsPerPixel(uint32 fmt) {
+uint32_t BitsPerPixel(uint32_t fmt) {
   switch(fmt) {
     case detail::DXGI_FORMAT_R32G32B32A32_TYPELESS:
     case detail::DXGI_FORMAT_R32G32B32A32_FLOAT:
@@ -345,7 +345,7 @@ uint32 BitsPerPixel(uint32 fmt) {
   }
 }
 
-int32 GetDDSDetail(const DDS_HEADER& head, int32* height, int32* depth,
+int32_t GetDDSDetail(const DDS_HEADER& head, int32* height, int32* depth,
                    int32* arraysize, uint32* format) {
   *height = head.height;
   *depth = head.depth;
@@ -427,17 +427,17 @@ int32 GetDDSDetail(const DDS_HEADER& head, int32* height, int32* depth,
   }
 }
 
-void GetSurfaceInfo(uint32 width, uint32 height, uint32 fmt,
+void GetSurfaceInfo(uint32_t width, uint32_t height, uint32_t fmt,
                     uint32* outNumBytes, uint32* outRowBytes, uint32* outNumRows) {
   using namespace detail;
-  uint32 numBytes = 0;
-  uint32 rowBytes = 0;
-  uint32 numRows = 0;
+  uint32_t numBytes = 0;
+  uint32_t rowBytes = 0;
+  uint32_t numRows = 0;
 
   bool bc = false;
   bool packed = false;
   bool planar = false;
-  uint32 bpe = 0;
+  uint32_t bpe = 0;
   switch (fmt) {
     case DXGI_FORMAT_BC1_TYPELESS:
     case DXGI_FORMAT_BC1_UNORM:
@@ -495,11 +495,11 @@ void GetSurfaceInfo(uint32 width, uint32 height, uint32 fmt,
   }
 
   if (bc) {
-    uint32 numBlocksWide = 0;
+    uint32_t numBlocksWide = 0;
     if (width > 0) {
       numBlocksWide = std::max<uint32>(1, (width + 3) / 4);
     }
-    uint32 numBlocksHigh = 0;
+    uint32_t numBlocksHigh = 0;
     if (height > 0) {
       numBlocksHigh = std::max<uint32>(1, (height + 3) / 4);
     }
@@ -520,7 +520,7 @@ void GetSurfaceInfo(uint32 width, uint32 height, uint32 fmt,
     numBytes = (rowBytes * height) + ((rowBytes * height + 1) >> 1);
     numRows = height + ((height + 1) >> 1);
   } else {
-    uint32 bpp = BitsPerPixel(fmt);
+    uint32_t bpp = BitsPerPixel(fmt);
     rowBytes = (width * bpp + 7) / 8; // round up to nearest byte
     numRows = height;
     numBytes = rowBytes * height;
@@ -536,17 +536,17 @@ void GetSurfaceInfo(uint32 width, uint32 height, uint32 fmt,
 }
 
 
-ImageDataPtr LoadDDSImageFromMemory(const uint8* contents, int32 contents_len) {
+ImageDataPtr LoadDDSImageFromMemory(const uint8* contents, int32_t contents_len) {
   const DDS_HEADER* head = (const DDS_HEADER*)(contents + sizeof(uint32));
-  int32 width = head->width;
-  int32 arraysize, depth, height;
-  uint32 format;
-  int32 tex_type = GetDDSDetail(*head, &height, &depth, &arraysize, &format);
+  int32_t width = head->width;
+  int32_t arraysize, depth, height;
+  uint32_t format;
+  int32_t tex_type = GetDDSDetail(*head, &height, &depth, &arraysize, &format);
   if (tex_type == kUnkonwnTexType) {
     return ImageDataPtr();
   }
 
-  int32  mipcount = head->mipMapCount == 0 ? 1 : head->mipMapCount;
+  int32_t  mipcount = head->mipMapCount == 0 ? 1 : head->mipMapCount;
   bool bDXT10Header = false;
   if ((head->ddspf.flags & DDS_FOURCC) &&
       (MAKEFOURCC('D', 'X', '1', '0') == head->ddspf.fourCC)) {
@@ -560,13 +560,13 @@ ImageDataPtr LoadDDSImageFromMemory(const uint8* contents, int32 contents_len) {
   ptrdiff_t offset = sizeof(uint32) + sizeof(DDS_HEADER)
       + (bDXT10Header ? sizeof(DDS_HEADER_DXT10) : 0);
   uint8* ptr = (uint8*)(contents + offset);
-  for (int32 i = 0; i < arraysize; ++i) {
-    int32 w = head->width;
-    int32 h = height;
-    int32 d = depth;
-    int32 row_width = 0;
-    for (int32 mip = 0; mip < mipcount; ++mip) {
-      uint32 bytes, row_bytes, rows_num;
+  for (int32_t i = 0; i < arraysize; ++i) {
+    int32_t w = head->width;
+    int32_t h = height;
+    int32_t d = depth;
+    int32_t row_width = 0;
+    for (int32_t mip = 0; mip < mipcount; ++mip) {
+      uint32_t bytes, row_bytes, rows_num;
       GetSurfaceInfo(w, h, format, &bytes, &row_bytes, &rows_num);
       ImageLevelDataPtr leveldata(new ImageLevelData(
           w, h, d, ptr, bytes,  row_bytes, detail::TranslateFormat(format)));

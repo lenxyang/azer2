@@ -22,7 +22,7 @@ const char* VertexDescLoader::GetLoaderName() const {
 VariantResource VertexDescLoader::Load(const ConfigNode* node,
                                        ResourceLoadContext* ctx) {
   ConfigNodes item = std::move(node->GetTaggedChildren("desc"));
-  const int32 kVertexDescCount = static_cast<int32>(item.size());
+  const int32_t kVertexDescCount = static_cast<int32>(item.size());
   VertexDesc::Desc* desc = new VertexDesc::Desc[kVertexDescCount];
   memset(desc, 0, sizeof(VertexDesc::Desc) * kVertexDescCount);
   VertexDesc::Desc* cur = desc;

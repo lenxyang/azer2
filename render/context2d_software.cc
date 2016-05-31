@@ -16,7 +16,7 @@ void SoftwareContext2D::flush() {
 void SoftwareContext2D::finish() {
 }
 
-Canvas2D* SoftwareContext2D::CreateCanvas(int32 width, int32 height) {
+Canvas2D* SoftwareContext2D::CreateCanvas(int32_t width, int32_t height) {
   std::unique_ptr<SoftwareCanvas2D> ptr(new SoftwareCanvas2D(width, height, this));
   if (ptr->Init()) {
     return ptr.release();

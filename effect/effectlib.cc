@@ -41,8 +41,8 @@ const VertexDesc::Desc kVertexDesc[][10] = {
 struct EffectData {
   const char* name;
   const char* effect_name;
-  int32 vertex_layout_index;
-  int32 shaderid;
+  int32_t vertex_layout_index;
+  int32_t shaderid;
   const char* vsentry;
   const char* hsentry;
   const char* dsentry;
@@ -117,7 +117,7 @@ void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
     shader.path = std::string(data->name) + ".vs.hlsl";
     shader.stage = kVertexStage;
     shader.entry = data->vsentry;
-    int32 id = data->shaderid;
+    int32_t id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
@@ -128,7 +128,7 @@ void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
     shader.path = std::string(data->name) + ".hs.hlsl";
     shader.stage = kHullStage;
     shader.entry = data->hsentry;
-    int32 id = data->shaderid;
+    int32_t id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
@@ -139,7 +139,7 @@ void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
     shader.path = std::string(data->name) + ".ds.hlsl";
     shader.stage = kDomainStage;
     shader.entry = data->dsentry;
-    int32 id = data->shaderid;
+    int32_t id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
@@ -150,7 +150,7 @@ void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
     shader.path = std::string(data->name) + ".gs.hlsl";
     shader.stage = kGeometryStage;
     shader.entry = data->gsentry;
-    int32 id = data->shaderid;
+    int32_t id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
@@ -161,7 +161,7 @@ void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
     shader.path = std::string(data->name) + ".ps.hlsl";
     shader.stage = kPixelStage;
     shader.entry = data->psentry;
-    int32 id = data->shaderid;
+    int32_t id = data->shaderid;
     base::RefCountedStaticMemory* memory = res->LoadDataResourceBytes(id);
     shader.code = std::string((const char*)memory->front(), memory->size());
     source->AddShader(shader);
@@ -170,11 +170,11 @@ void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
 }
 
 Effect* EffectLib::LoadEffect(const std::string& name) {
-  for (uint32 i = 0; i < arraysize(effect_data); ++i) {
+  for (uint32_t i = 0; i < arraysize(effect_data); ++i) {
     if (std::string(effect_data[i].name) == name) {
       EffectData* data = effect_data + i;
       EffectPtr effect(CreateEffectByName(data->effect_name));
-      int32 vdindex = data->vertex_layout_index;
+      int32_t vdindex = data->vertex_layout_index;
       VertexDescPtr desc(new VertexDesc(kVertexDesc[vdindex]));
       TechSource tech(desc);
       LoadEffectData(data, &tech, resource_pack_);

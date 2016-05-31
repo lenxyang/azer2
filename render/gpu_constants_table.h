@@ -44,7 +44,7 @@ class GpuConstantsType {
   };
 };
 
-AZER_EXPORT int32 GpuTableItemTypeSize(const GpuConstantsType::Type type);
+AZER_EXPORT int32_t GpuTableItemTypeSize(const GpuConstantsType::Type type);
 
 class AZER_EXPORT GpuConstantsTable : public HardwareBuffer {
  public:
@@ -52,16 +52,16 @@ class AZER_EXPORT GpuConstantsTable : public HardwareBuffer {
     char name[64];
     GpuConstantsType::Type type;
     int element_size;
-    int32 num;
-    uint32 offset;
+    int32_t num;
+    uint32_t offset;
 
-    Desc(const char* n, GpuConstantsType::Type t, int32 off, int elenum)
+    Desc(const char* n, GpuConstantsType::Type t, int32_t off, int elenum)
         : type(t), element_size(-1),  num(elenum), offset(off) {
       strncpy(name, n, sizeof(name) - 1);
       element_size = GpuTableItemTypeSize(t);
     }
 
-    Desc(const char* n, int32 off, int size, int elenum)
+    Desc(const char* n, int32_t off, int size, int elenum)
         : type(GpuConstantsType::kSelfDefined)
         , element_size(size), num(elenum), offset(off) {
       strncpy(name, n, sizeof(name) - 1);
@@ -80,39 +80,39 @@ class AZER_EXPORT GpuConstantsTable : public HardwareBuffer {
   virtual void flush(Renderer*) = 0;
 
   // set value to gpu constants
-  void SetValue(int32 idx, const void* value, int32 size);
-  void SetValueWithOffset(int32 idx, int32 offset, const void* value, int32 size);
-  void SetArrayItem(int32 idx, int32 arridx, const void* value, int32 size);
-  void SetArrayMultiItem(int32 idx, int32 arridx, const void* value, int32 size);
-  void SetMatrix(int32 idx, const Matrix4* mtrl, int num);
+  void SetValue(int32_t idx, const void* value, int32_t size);
+  void SetValueWithOffset(int32_t idx, int32_t offset, const void* value, int32_t size);
+  void SetArrayItem(int32_t idx, int32_t arridx, const void* value, int32_t size);
+  void SetArrayMultiItem(int32_t idx, int32_t arridx, const void* value, int32_t size);
+  void SetMatrix(int32_t idx, const Matrix4* mtrl, int num);
 
-  int32 offset(int32 index) const;
-  int32 size() const { return size_;}
+  int32_t offset(int32_t index) const;
+  int32_t size() const { return size_;}
  protected:
-  GpuConstantsTable(int32 num, const Desc* desc);
+  GpuConstantsTable(int32_t num, const Desc* desc);
   HardwareBufferDataPtr map(MapType flags) override;
   void unmap() override;
 
   struct Variable {
     Desc desc;
-    int32 size;
-    int32 element_size;
-    int32 offset;
+    int32_t size;
+    int32_t element_size;
+    int32_t offset;
     void* extra;
-    Variable(const Desc& d, int32 es, int32 s, int32 off)
+    Variable(const Desc& d, int32_t es, int32_t s, int32_t off)
         : desc(d), size(s), element_size(es), offset(off), extra(NULL) {}
   };
 
   /**
    * all try to modify data, should call this function
    */
-  void SetData(int offset, const void* value, int32 size);
+  void SetData(int offset, const void* value, int32_t size);
   std::vector<Variable> constants_;
   std::unique_ptr<uint8[]> data_;
-  int32 size_;
+  int32_t size_;
   DISALLOW_COPY_AND_ASSIGN(GpuConstantsTable);
 };
 
 typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
-AZER_EXPORT int32 GpuTableItemDescSize(const GpuConstantsTable::Desc& desc);
+AZER_EXPORT int32_t GpuTableItemDescSize(const GpuConstantsTable::Desc& desc);
 }  // namespace

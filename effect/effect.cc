@@ -36,7 +36,7 @@ void Effect::Apply(Renderer* renderer) {
   FlushGpuVariables(kUpdateAll, renderer);
 }
 
-void Effect::SaveShaderResTexture(int32 stage, int32 index, TextureView* tex) {
+void Effect::SaveShaderResTexture(int32_t stage, int32_t index, TextureView* tex) {
   tex_container_.SetTex(stage, index, tex);
 }
 

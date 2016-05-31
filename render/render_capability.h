@@ -28,7 +28,7 @@ class AZER_EXPORT RenderSystemCapability {
   // Device can support transformation and lighting in hardware.
   bool hw_transform_light_;
 
-  int32 max_simultaneous_textures_;
+  int32_t max_simultaneous_textures_;
   std::vector<SampleDesc> sample_desc_;
   friend class d3d11::D3DRenderSystem;
 };

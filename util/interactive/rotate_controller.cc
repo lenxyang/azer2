@@ -48,9 +48,9 @@ void RotateControllerObj::AppendRoundData(EntityData* data) {
 }
 
 void RotateControllerObj::AppendAxisData(EntityData* data) {
-  const int32 kVertexCount = 6;
+  const int32_t kVertexCount = 6;
   data->vdata()->extend(kVertexCount);
-  int32 base = data->vdata()->vertex_count() - kVertexCount;
+  int32_t base = data->vdata()->vertex_count() - kVertexCount;
   VertexPack vpack(data->vdata());
   vpack.move(base);
   VertexPos vpos(0, 0);
@@ -76,7 +76,7 @@ float RotateControllerObj::circle_radius() const {
   return 1.0f + kCirclekMargin;
 }
 
-void RotateControllerObj::SetColor(int32 index, const Vector4& c) {
+void RotateControllerObj::SetColor(int32_t index, const Vector4& c) {
   DCHECK_LT(index, static_cast<int32>(arraysize(colors_)));
   colors_[index] = c;
 }
@@ -107,7 +107,7 @@ void RotateControllerObj::Render(Renderer* renderer) {
   color_effect_->SetWorld(world_);
 
   ScopedResetBlending scoped_blending(renderer);
-  for (uint32 i = 0; i < arraysize(colors_); ++i) {
+  for (uint32_t i = 0; i < arraysize(colors_); ++i) {
     if (i == kSphere) {
       renderer->SetBlending(env->blending(), 0, 0xffffffff);
       ColorMaterialData mtrl;
@@ -161,7 +161,7 @@ void RotateController::set_directional(const Vector3& dir) {
   orientation_ = quad;
 }
 
-int32 RotateController::GetPicking(const gfx::Point& screenpt) {
+int32_t RotateController::GetPicking(const gfx::Point& screenpt) {
   Ray ray = std::move(context()->GetPickingRay(screenpt));
   const Camera* camera = context()->camera(); 
   Vector3 pxy, pyz, pzx;

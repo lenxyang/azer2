@@ -24,15 +24,15 @@ class AZER_EXPORT DepthStencilState : public ::base::RefCounted<DepthStencilStat
   // depth buffer state
   virtual void EnableDepthTest(bool enable) = 0;
   virtual bool IsDepthTestEnabled() = 0;
-  virtual void SetDepthWriteMask(uint32 mask) = 0;
+  virtual void SetDepthWriteMask(uint32_t mask) = 0;
   virtual void SetDepthCompareFunc(CompareFunc func) = 0;
   // stencil
   virtual void EnableStencil(bool enable) = 0;
   virtual bool IsStencilTestEnabled() = 0; 
-  virtual void SetStencilMask(uint8 read_mask, uint8 write_mask) = 0;
+  virtual void SetStencilMask(uint8_t read_mask, uint8_t write_mask) = 0;
   virtual void SetFrontFaceOper(const StencilOperStruct& oper) = 0;
   virtual void SetBackFaceOper(const StencilOperStruct& oper) = 0;
-  virtual void Apply(Renderer* renderer, uint32 stencilref) = 0;
+  virtual void Apply(Renderer* renderer, uint32_t stencilref) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(DepthStencilState);
 };
@@ -77,7 +77,7 @@ class ScopedDepthStencilState {
  private:
   DepthStencilStatePtr prev_state_;
   Renderer* renderer_;
-  uint32 stencilref_;
+  uint32_t stencilref_;
   DISALLOW_COPY_AND_ASSIGN(ScopedDepthStencilState);
 };
 }  // namespace azer

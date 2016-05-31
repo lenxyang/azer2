@@ -23,20 +23,20 @@ IndexType IndicesData::CalcFixType(int count) {
 
 IndicesData::IndicesData(int count)
     : type_(CalcFixType(count)) {
-  int32 size = count * unit_size();
+  int32_t size = count * unit_size();
   count_ = count;
   data_.reset(new uint8[size]);
 }
 
 IndicesData::IndicesData(int count, IndexType type)
     : type_(type) {
-  int32 size = count * unit_size();
+  int32_t size = count * unit_size();
   count_ = count;
   data_.reset(new uint8[size]);
 }
 
-void IndicesData::extend(int32 count) {
-  int32 size = (count_ + count) * unit_size();
+void IndicesData::extend(int32_t count) {
+  int32_t size = (count_ + count) * unit_size();
   if (CalcFixType(count_ + count) == type()) {
     uint8* ndata = new uint8[size];
     memcpy(ndata, data_.get(), count_ * unit_size());
@@ -47,7 +47,7 @@ void IndicesData::extend(int32 count) {
   count_ += count;
 }
 
-int32 IndicesData::unit_size() const {
+int32_t IndicesData::unit_size() const {
   switch (type()) {
     case kIndexUint8: return (int32)sizeof(uint8);
     case kIndexUint16: return (int32)sizeof(uint16);
@@ -56,7 +56,7 @@ int32 IndicesData::unit_size() const {
   }
 }
 
-int32 IndicesData::index_value(int idx) const {
+int32_t IndicesData::index_value(int idx) const {
   switch (type()) {
     case kIndexUint8: 
       return *(uint8*)(data_.get() + idx);

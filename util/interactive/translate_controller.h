@@ -35,7 +35,7 @@ class TranslateControlObj {
 
   TranslateControlObj();
   void SetScale(const Vector3& v) { scale_ = v;}
-  void SetColor(int32 index, const Vector4& color) { colors_[index] = color;}
+  void SetColor(int32_t index, const Vector4& color) { colors_[index] = color;}
   void ResetColor();
   void Update(const Camera& camera, const Vector3& position);
   void Render(Renderer* renderer);
@@ -81,7 +81,7 @@ class TranslateController : public InteractiveController {
     kHitPlaneZX,
   };
 
-  int32 GetPicking(const gfx::Point& pt) override;
+  int32_t GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const ui::MouseEvent& e) override;
   void OnDragging(const ui::MouseEvent& e) override;
   void OnDragEnd(const ui::MouseEvent& e) override;

@@ -107,7 +107,7 @@ bool SceneLoader::LoadSceneLocation(SceneNode* node,
                                     ResourceLoadContext* ctx) {
   std::vector<ConfigNodePtr> location_children = std::move(
       config->GetTaggedChildren("location"));
-  int32 location_size = location_children.size();
+  int32_t location_size = location_children.size();
   if (location_size == 0u) {
     return true;
   } else if (location_size != 1u) {

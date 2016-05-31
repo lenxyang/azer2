@@ -28,9 +28,9 @@ class D3DContext2D : public Context2D {
 
   virtual void flush() override;
   virtual void finish() override;
-  virtual Canvas2D* CreateCanvas(int32 width, int32 height) override;
+  virtual Canvas2D* CreateCanvas(int32_t width, int32_t height) override;
 
-  int32 GetRenderTargetColorTexID(D3DCanvas2D* canvas);
+  int32_t GetRenderTargetColorTexID(D3DCanvas2D* canvas);
  private:
   GrContext* gr_context_;
   DISALLOW_COPY_AND_ASSIGN(D3DContext2D);

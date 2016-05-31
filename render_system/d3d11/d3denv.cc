@@ -87,8 +87,8 @@ ID3D11Texture2D* D3DEnvSwapChain::GetSwapTexture() {
 
 bool D3DEnvSwapChain::ResetSwapChain() {
   HRESULT hr = 0;
-  int32 width = surface_->GetBounds().width();
-  int32 height = surface_->GetBounds().height();
+  int32_t width = surface_->GetBounds().width();
+  int32_t height = surface_->GetBounds().height();
   SAFE_RELEASE(swap_chain_);
   //Describe our SwapChain
   DXGI_MODE_DESC bufferDesc;

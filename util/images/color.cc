@@ -223,7 +223,7 @@ INTColor& INTColor::operator &= (const INTColor& c) {
   return *this;
 }
 
-int& INTColor::operator [] (uint8 i)  {
+int& INTColor::operator [] (uint8_t i)  {
   DCHECK(i < sizeof(INTColor) / sizeof(int));
   _Analysis_assume_(i < sizeof(INTColor) / sizeof(int));
   return ((int*) this)[i];
@@ -249,13 +249,13 @@ INTColor& INTColor::SignExtend(const LDRColorA& Prec) {
   return *this;
 }
 
-void INTColor::ToF16(uint16 aF16[3], bool bSigned) const {
+void INTColor::ToF16(uint16_t aF16[3], bool bSigned) const {
   aF16[0] = INT2F16(r, bSigned);
   aF16[1] = INT2F16(g, bSigned);
   aF16[2] = INT2F16(b, bSigned);
 }
 
-int INTColor::F16ToINT(uint16 input, bool bSigned) {
+int INTColor::F16ToINT(uint16_t input, bool bSigned) {
   int out, s;
   if(bSigned) {
     s = input & F16S_MASK;
@@ -274,8 +274,8 @@ int INTColor::F16ToINT(uint16 input, bool bSigned) {
   return out;
 }
 
-uint16 INTColor::INT2F16(int input, bool bSigned) {
-  uint16 out;
+uint16_t INTColor::INT2F16(int input, bool bSigned) {
+  uint16_t out;
   if(bSigned) {
     int s = 0;
     if(input < 0) {

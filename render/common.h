@@ -220,5 +220,5 @@ enum BindTarget {
 
 AZER_EXPORT const char* RenderStageName(RenderPipelineStage stage);
 AZER_EXPORT const char* GetDataFormatName(DataFormat format);
-AZER_EXPORT uint32 SizeofDataFormat(DataFormat format);
+AZER_EXPORT uint32_t SizeofDataFormat(DataFormat format);
 }  // namespace azer

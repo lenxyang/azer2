@@ -196,7 +196,7 @@ DXGI_FORMAT TranslateIndexType(IndexType type) {
   }
 }
 
-D3D11_BIND_FLAG TranslateBindTarget(uint32 target) {
+D3D11_BIND_FLAG TranslateBindTarget(uint32_t target) {
   DWORD flags = 0;
   if (target & kBindTargetShaderResource) {
     flags |= D3D11_BIND_SHADER_RESOURCE;

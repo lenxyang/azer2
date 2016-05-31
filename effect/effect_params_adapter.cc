@@ -65,7 +65,7 @@ EffectAdapterCache::AdapterVector* EffectAdapterCache::GetAdapter(Effect* effect
 
 void EffectAdapterCache::ApplyParams(Effect* effect) {
   AdapterVector* adapter_vec = GetAdapter(effect);
-  for (uint32 i = 0; i < adapter_vec->size(); ++i) {
+  for (uint32_t i = 0; i < adapter_vec->size(); ++i) {
     const EffectParamsAdapter* adapter = (*adapter_vec)[i];
     const EffectParamsProvider* provider = (*providers_)[i].get();
     /*

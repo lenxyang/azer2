@@ -196,7 +196,7 @@ inline int Type::GetDim(int index) const {
   return dim_[index];
 }
 
-uint32 SizeofType(const Type& type);
+uint32_t SizeofType(const Type& type);
 
 inline bool IsTypeSupportMemberOper(const TypePtr& type) {
   // float vector support swizzle expression

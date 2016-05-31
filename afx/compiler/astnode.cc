@@ -154,11 +154,11 @@ void ConstNode::SetShort(short s) {
   DCHECK(value_.get() == NULL);
   value_.reset(new Value(s));
 }
-void ConstNode::SetUint32(uint32 i32) {
+void ConstNode::SetUint32(uint32_t i32) {
   DCHECK(value_.get() == NULL);
   value_.reset(new Value(i32));
 }
-void ConstNode::SetInt32(int32 i) {
+void ConstNode::SetInt32(int32_t i) {
   DCHECK(value_.get() == NULL);
   value_.reset(new Value(i));
 }

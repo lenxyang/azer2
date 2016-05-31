@@ -42,6 +42,6 @@ class MemoryFileLoader : public FileLoader {
 };
 
 bool LoadFileToString(const ::base::FilePath& path, std::string* content,
-                      int32 max_size= 0x8FFFFFFF);
+                      int32_t max_size= 0x8FFFFFFF);
 }  // namespace afx
 }  // namespace azer

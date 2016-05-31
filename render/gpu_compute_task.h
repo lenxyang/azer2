@@ -21,26 +21,26 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
 
   int input_count() const { return input_count_;}
   int output_count() const { return output_count_;}
-  void SetInputCount(int32 count) { input_count_ = count;}
-  void SetOutputCount(int32 count) { output_count_ = count;}
-  void SetInputTexture(int32 index, TextureView* tex);
-  void SetOutputTexture(int32 index, TextureView* tex);
+  void SetInputCount(int32_t count) { input_count_ = count;}
+  void SetOutputCount(int32_t count) { output_count_ = count;}
+  void SetInputTexture(int32_t index, TextureView* tex);
+  void SetOutputTexture(int32_t index, TextureView* tex);
   void Reset();
 
-  TextureView* GetInputAt(int32 index);
-  TextureView* GetOutputAt(int32 index);
+  TextureView* GetInputAt(int32_t index);
+  TextureView* GetOutputAt(int32_t index);
   Shader* gpu_program() { return gpu_program_;}
   GpuConstantsTable* constants_table() { return constants_table_;}
 
-  static const int32 kMaxInput = 1024;
-  static const int32 kMaxOutput = 1024;
+  static const int32_t kMaxInput = 1024;
+  static const int32_t kMaxOutput = 1024;
  protected:
   scoped_refptr<Shader> gpu_program_;
   scoped_refptr<GpuConstantsTable> constants_table_;
   TextureView* input_[kMaxInput];
   TextureView* output_[kMaxOutput];
-  int32 input_count_;
-  int32 output_count_;
+  int32_t input_count_;
+  int32_t output_count_;
   ShaderInfo shader_info_;
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTask);
 };
@@ -48,9 +48,9 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
 typedef scoped_refptr<GpuComputeTask> GpuComputeTaskPtr;
 
 struct GpuTaskParams {
-  uint32 thread_group_x;
-  uint32 thread_group_y;
-  uint32 thread_group_z;
+  uint32_t thread_group_x;
+  uint32_t thread_group_y;
+  uint32_t thread_group_z;
 };
 
 class AZER_EXPORT GpuComputeTaskDispatcher :

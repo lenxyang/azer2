@@ -31,7 +31,7 @@ void CalcSceneOrientForZDirection(const Vector3& d, Quaternion* orient) {
 class SceneIdAllocator {
  public:
   SceneIdAllocator() : allocated_(0) {}
-  int32 allocate() { return ++allocated_;}
+  int32_t allocate() { return ++allocated_;}
  private:
   std::atomic<int32> allocated_;
   DISALLOW_COPY_AND_ASSIGN(SceneIdAllocator);
@@ -60,7 +60,7 @@ bool SceneNodeManager::Unregister(SceneNode* node) {
   }
 }
 
-SceneNode* SceneNodeManager::Lookup(int32 id) {
+SceneNode* SceneNodeManager::Lookup(int32_t id) {
   auto iter = dict_.find(id);
   if (dict_.end() != iter) {
     return iter->second;
@@ -146,7 +146,7 @@ void SceneNodeData::OnNodeOrientChanged(SceneNode* node, const Quaternion& prev)
 }
 
 // class SceneNode
-SceneNode* SceneNode::Lookup(int32 id) {
+SceneNode* SceneNode::Lookup(int32_t id) {
   return scene_node_mgr.Pointer()->Lookup(id);
 }
 
@@ -480,7 +480,7 @@ std::string SceneNode::GetAttr(const std::string& name) const {
   }
 }
 
-const char* SceneNodeName(int32 type) {
+const char* SceneNodeName(int32_t type) {
   switch (type) {
     case kSceneNode: return "SceneNode";
     case kEnvSceneNode: return "EnvNode";

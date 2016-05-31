@@ -12,7 +12,7 @@
 
 namespace azer {
 namespace d3d11 {
-std::string HRMessage(uint32 hr);
+std::string HRMessage(uint32_t hr);
 
 struct COMDeleter {
   template<typename T> void operator()(T* ptr) {
@@ -23,7 +23,7 @@ struct COMDeleter {
 typedef std::unique_ptr<ID3DBlob, COMDeleter> D3DBlobPtr;
 typedef std::unique_ptr<IUnknown, COMDeleter> D3DObjPtr;
 
-inline uint32 Align16BindWidth(uint32 size) {
+inline uint32_t Align16BindWidth(uint32_t size) {
   if (size & 0x000F) {
     size &= 0xFFF0;
     size += 0x0010;
