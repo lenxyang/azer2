@@ -190,8 +190,7 @@ RenderNodePtr RenderTreeBuilder::Build(SceneNode* root, const Camera* camera) {
   DCHECK(cur_ == NULL);
   DCHECK(delegate_ != NULL);
   RenderNodePtr render_root = new RenderNode(root);
-  render_root->SetDelegate(delegate_->CreateRenderDelegate(
-      render_root.get()).Pass());
+  render_root->SetDelegate(delegate_->CreateRenderDelegate(render_root.get()));
   RenderEnvNodePtr envnode = new RenderEnvNode(NULL);
   envnode->set_delegate(delegate_->CreateEnvDelegate(envnode));
   render_root->SetEnvNode(envnode.get());
@@ -224,10 +223,10 @@ bool RenderTreeBuilder::OnTraverseNodeEnter(SceneNode* scene_node) {
   }
 
   render_node->SetEnvNode(envnode);
-  render_node->SetDelegate(delegate_->CreateRenderDelegate(render_node).Pass());
+  render_node->SetDelegate(delegate_->CreateRenderDelegate(render_node));
   render_node->Init();
   if (delegate_->NeedRenderNode(scene_node)) {
-    cur_->AddChild(render_node);
+    cur_->AddChild(render_node.get());
     cur_ = render_node;
     return true;
   } else {

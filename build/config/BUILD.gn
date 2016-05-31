@@ -2,7 +2,7 @@
 
 config("utf8src") {
   cflags = []
-  if (is_win) { cflags += ["/wd4819"] }
+  if (is_win) { cflags += ["/wd4819", "/utf-8"] }
 }
 
 if (is_win) {

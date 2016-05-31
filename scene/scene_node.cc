@@ -251,7 +251,7 @@ SceneNode* SceneNode::GetLocalChild(const std::string& name) {
 }
 
 SceneNode* SceneNode::GetNode(const std::string& path) {
-  if (StartsWithASCII(path, "//", false)) {
+  if (StartsWith(path, "//", false)) {
     return root()->GetNode(path.substr(2));
   } else {
     SceneNodePtr cur = this;
@@ -261,7 +261,7 @@ SceneNode* SceneNode::GetNode(const std::string& path) {
       if (!cur.get())
         return NULL;
     }
-    return cur;
+    return cur.get();
   }
 }
 

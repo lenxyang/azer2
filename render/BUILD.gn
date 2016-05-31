@@ -100,8 +100,9 @@ source_set("render") {
     "//ui/views",    
   ]
 
-  configs += ["//azer/build/config:utf8src"]
-  configs += ["//azer/base:build_render_config"]
+  public_configs = ["//azer/build/config:utf8src",
+                    "//build/config/compiler:rtti",
+                    "//azer/base:build_render_config"]
   visibility = ["//azer"]
 }
 

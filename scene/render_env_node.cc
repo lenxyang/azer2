@@ -43,7 +43,7 @@ RenderEnvNode* RenderEnvNode::parent() {
 }
 
 int32_t RenderEnvNode::child_count() const {
-  return static_cast<int32>(children_.size());
+  return static_cast<int32_t>(children_.size());
 }
 
 RenderEnvNode* RenderEnvNode::child_at(int32_t index) {
