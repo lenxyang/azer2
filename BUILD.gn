@@ -1,3 +1,4 @@
+import("//testing/test.gni")
 
 shared_library("azer") {
   deps = [
@@ -24,6 +25,7 @@ shared_library("azer") {
 }
 
 test("unittests") {
+  testonly = true
   output_name = "azer_unittests"
   deps = [
     "base:unittests",

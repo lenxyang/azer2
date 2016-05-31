@@ -30,6 +30,7 @@ repack("res") {
     "//ui/resources",
     "//ui/strings",
     ":common",
+    ":hlsllib",
   ]
 }
 

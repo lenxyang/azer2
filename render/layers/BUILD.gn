@@ -26,6 +26,7 @@ source_set("layers") {
 }
 
 source_set("unittests") {
+  testonly = true
   sources = [
     "tests/test_base.cc",
     "tests/test_base.h",
