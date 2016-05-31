@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "base/macros.h"
 #include "azer/base/export.h"
 
 namespace azer {

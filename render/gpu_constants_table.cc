@@ -46,7 +46,7 @@ GpuConstantsTable::GpuConstantsTable(int32_t num, const Desc* desc)
     offset += total_size;
   }
   size_ = AZER_ALIGN_64(offset);
-  data_.reset(new uint8[size_]);
+  data_.reset(new uint8_t[size_]);
 }
 
 void GpuConstantsTable::SetArrayItem(int32_t idx, int32_t arridx, const void* value,
@@ -92,20 +92,20 @@ int32_t GpuTableItemTypeSize(const GpuConstantsType::Type type) {
     case GpuConstantsType::kVector2: return sizeof(azer::Vector2);
     case GpuConstantsType::kVector3: return sizeof(azer::Vector3);
     case GpuConstantsType::kVector4: return sizeof(azer::Vector4);
-    case GpuConstantsType::kInt: return sizeof(uint32);
-    case GpuConstantsType::kIntVec2: return sizeof(uint32) * 2;
-    case GpuConstantsType::kIntVec3: return sizeof(uint32) * 3;
-    case GpuConstantsType::kIntVec4: return sizeof(uint32) * 4;
+    case GpuConstantsType::kInt: return sizeof(uint32_t);
+    case GpuConstantsType::kIntVec2: return sizeof(uint32_t) * 2;
+    case GpuConstantsType::kIntVec3: return sizeof(uint32_t) * 3;
+    case GpuConstantsType::kIntVec4: return sizeof(uint32_t) * 4;
     case GpuConstantsType::kMatrix3: return sizeof(azer::Matrix3);
     case GpuConstantsType::kMatrix4: return sizeof(azer::Matrix4);
-    case GpuConstantsType::kSampler1D: return sizeof(uint32);
-    case GpuConstantsType::kSampler2D: return sizeof(uint32);
-    case GpuConstantsType::kSampler3D: return sizeof(uint32);
-    case GpuConstantsType::kSamplerCube: return sizeof(uint32);
+    case GpuConstantsType::kSampler1D: return sizeof(uint32_t);
+    case GpuConstantsType::kSampler2D: return sizeof(uint32_t);
+    case GpuConstantsType::kSampler3D: return sizeof(uint32_t);
+    case GpuConstantsType::kSamplerCube: return sizeof(uint32_t);
     case GpuConstantsType::kSelfDefined:
       return -1;
     default:
-      CHECK(false) << "No such GpuConstantType: " << (int32)type;
+      CHECK(false) << "No such GpuConstantType: " << (int32_t)type;
       return 0;
   }
 }

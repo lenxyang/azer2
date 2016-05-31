@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "base/macros.h"
 
 // libxml
 struct _xmlDoc;

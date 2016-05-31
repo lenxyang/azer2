@@ -29,8 +29,8 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
 
   TextureView* GetInputAt(int32_t index);
   TextureView* GetOutputAt(int32_t index);
-  Shader* gpu_program() { return gpu_program_;}
-  GpuConstantsTable* constants_table() { return constants_table_;}
+  Shader* gpu_program() { return gpu_program_.get();}
+  GpuConstantsTable* constants_table() { return constants_table_.get();}
 
   static const int32_t kMaxInput = 1024;
   static const int32_t kMaxOutput = 1024;

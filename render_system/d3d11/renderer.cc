@@ -167,7 +167,7 @@ void D3DRenderer::ResetShader(RenderPipelineStage stage) {
       d3d_context_->GSSetShader(NULL, 0, 0);
       break;
     default:
-      CHECK(false) << "No such GpuProgram Type: " << (int32)stage;
+      CHECK(false) << "No such GpuProgram Type: " << (int32_t)stage;
   }
 }
 

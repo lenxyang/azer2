@@ -55,7 +55,7 @@ bool D3DVertexShader::InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) {
   HRESULT_HANDLE(hr, ERROR, "CreateVertexShader failed ");
 
   // check layout is validate for shader
-  scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_));
+  scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_.get()));
   if (!layout->ValidateShaderLayout(RenderSystem::Current(), blob)) {
     return false;
   }
@@ -150,7 +150,7 @@ bool D3DGeometryShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
       pDecl[i].OutputSlot = desc->input_slot;
     }
 
-    scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_));
+    scoped_refptr<D3DVertexLayout> layout(new D3DVertexLayout(desc_.get()));
     hr = d3ddevice->CreateGeometryShaderWithStreamOutput(
         blob->GetBufferPointer(), blob->GetBufferSize(),
         pDecl, vertex_desc()->element_count(),

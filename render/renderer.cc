@@ -29,7 +29,7 @@ void Renderer::BindEffect(Effect* effect) {
 
 void Renderer::ResetRasterizerState() {
   DCHECK(default_rasterizer_state_.get());
-  SetRasterizerState(default_rasterizer_state_);
+  SetRasterizerState(default_rasterizer_state_.get());
 }
 
 void Renderer::SetRasterizerState(RasterizerState* state) {
@@ -38,12 +38,12 @@ void Renderer::SetRasterizerState(RasterizerState* state) {
 }
 
 RasterizerState* Renderer::GetRasterizerState() {
-  return current_rasterizer_state_;
+  return current_rasterizer_state_.get();
 }
 
 void Renderer::ResetDepthStencilState() {
   DCHECK(default_depth_state_.get());
-  SetDepthStencilState(default_depth_state_, 0);
+  SetDepthStencilState(default_depth_state_.get(), 0);
 }
 
 void Renderer::SetDepthStencilState(DepthStencilState* state,
@@ -54,7 +54,7 @@ void Renderer::SetDepthStencilState(DepthStencilState* state,
 }
 
 DepthStencilState* Renderer::GetDepthStencilState() {
-  return current_depth_state_;
+  return current_depth_state_.get();
 }
 
 void Renderer::SetDepthBuffer(DepthBuffer* depth) {
@@ -87,7 +87,7 @@ RendererPtr CreateCommonRenderer(const gfx::Size& size) {
       DepthBuffer::Options(), depthtex.get());
   RenderTargetPtrs targets;
   targets.push_back(render_target);
-  RendererPtr renderer = rs->CreateRenderer(&targets, depthbuffer);
+  RendererPtr renderer = rs->CreateRenderer(&targets, depthbuffer.get());
   DCHECK(renderer.get());
   return renderer;
 }

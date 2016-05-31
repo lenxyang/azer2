@@ -26,15 +26,15 @@ int32_t IndexPack::index() const {
 void IndexPack::write(int32_t value) {
   switch (type()) {
     case kIndexUint16:
-      DCHECK(value < std::numeric_limits<uint16>::max());
-      *(uint16*)(current()) = value;
+      DCHECK(value < std::numeric_limits<uint16_t>::max());
+      *(uint16_t*)(current()) = value;
       break;
     case kIndexUint32:
-      *(uint32*)(current()) = value;
+      *(uint32_t*)(current()) = value;
       break;
     case kIndexUint8:
-      DCHECK(value < std::numeric_limits<uint8>::max());
-      *(uint8*)(current()) = value;
+      DCHECK(value < std::numeric_limits<uint8_t>::max());
+      *(uint8_t*)(current()) = value;
       break;
     default:
       NOTREACHED();
@@ -42,17 +42,17 @@ void IndexPack::write(int32_t value) {
 }
 
 uint32_t IndexPack::value(int32_t index) const {
-  const uint8* ptr = pointer() + (step_size() * index);
+  const uint8_t* ptr = pointer() + (step_size() * index);
   uint32_t value;
   switch (type()) {
     case kIndexUint16:
-      value = *(uint16*)(ptr);
+      value = *(uint16_t*)(ptr);
       break;
     case kIndexUint32:
-      value = *(uint32*)(ptr);
+      value = *(uint32_t*)(ptr);
       break;
     case kIndexUint8:
-      value = *(uint8*)(ptr);
+      value = *(uint8_t*)(ptr);
       break;
     default:
       NOTREACHED();
@@ -66,13 +66,13 @@ uint32_t IndexPack::value() const {
   uint32_t value;
   switch (type()) {
     case kIndexUint16:
-      value = *(uint16*)(current());
+      value = *(uint16_t*)(current());
       break;
     case kIndexUint32:
-      value = *(uint32*)(current());
+      value = *(uint32_t*)(current());
       break;
     case kIndexUint8:
-      value = *(uint8*)(current());
+      value = *(uint8_t*)(current());
       break;
     default:
       NOTREACHED();
@@ -98,7 +98,7 @@ uint32_t IndexPack::ReadAndAdvanceOrDie() const {
   return value;
 }
 
-bool IndexPack::ReadAndAdvance(uint32* value) const {
+bool IndexPack::ReadAndAdvance(uint32_t* value) const {
   if (current() - pointer() < idata_->size()) {
     *value = this->value();
     advance();

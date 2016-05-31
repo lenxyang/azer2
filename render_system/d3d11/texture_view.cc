@@ -37,7 +37,6 @@ D3DResTextureView::D3DResTextureView(const Options& options, Texture* tex)
 }
 
 D3DResTextureView::~D3DResTextureView() {
-  D3DTexture* tex = ((D3DTexture*)texture());
   SAFE_RELEASE(res_view_);
 }
 
@@ -47,7 +46,6 @@ void D3DResTextureView::GenerateMips(int32_t level) {
   // and misc flags must be with D3D11_RESOURCE_MISC_GENERATE_MIPS
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   DCHECK(res_view_ != NULL);
-  ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = rs->GetContext();
   d3d_context->GenerateMips(res_view_);
 }

@@ -33,7 +33,7 @@ class SceneIdAllocator {
   SceneIdAllocator() : allocated_(0) {}
   int32_t allocate() { return ++allocated_;}
  private:
-  std::atomic<int32> allocated_;
+  std::atomic<int32_t> allocated_;
   DISALLOW_COPY_AND_ASSIGN(SceneIdAllocator);
 };
 static ::base::LazyInstance<SceneIdAllocator> id_alloc = LAZY_INSTANCE_INITIALIZER;
@@ -244,7 +244,7 @@ Vector3 SceneNode::GetWorldPosition() const {
 SceneNode* SceneNode::GetLocalChild(const std::string& name) {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     if ((*iter)->name() == name) {
-      return *iter;
+      return iter->get();
     }
   }
   return NULL;

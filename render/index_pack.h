@@ -19,10 +19,10 @@ class AZER_EXPORT IndexPack {
 
   IndexType type() const { return idata_->type();}
   int32_t index() const;
-  uint8* pointer() { return idata_->pointer();}
-  const uint8* pointer() const { return idata_->pointer();}
-  uint8* current() { return idata_->pointer() + offset_;}
-  const uint8* current() const { return idata_->pointer() + offset_;}
+  uint8_t* pointer() { return idata_->pointer();}
+  const uint8_t* pointer() const { return idata_->pointer();}
+  uint8_t* current() { return idata_->pointer() + offset_;}
+  const uint8_t* current() const { return idata_->pointer() + offset_;}
   int32_t count() const { return idata_->count();}
   int32_t step_size() const { return idata_->unit_size();}
   IndicesData* data() { return idata_;}

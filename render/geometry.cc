@@ -1,6 +1,7 @@
 
 #include "azer/render/geometry.h"
 
+#include <algorithm>
 #include "azer/math/math.h"
 #include "azer/render/mesh.h"
 #include "azer/render/index_pack.h"
@@ -85,7 +86,7 @@ VertexDataPtr InitSphereVertexData(VertexDesc* desc, const Matrix4& matrix,
 
   const int32_t kVertexNum = CalcSphereVertexNum(stack, slice);
   VertexDataPtr vdata(new VertexData(desc, kVertexNum));
-  VertexPack vpack(vdata);
+  VertexPack vpack(vdata.get());
 
   int num = 0;
   CHECK(vpack.first());
@@ -131,7 +132,7 @@ IndicesDataPtr InitSphereIndicesData(int32_t stack, int32_t slice) {
   const int32_t kVertexNum = CalcSphereVertexNum(stack, slice);
   int bottom_index = kVertexNum - 1;
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
-  IndexPack ipack(idata);
+  IndexPack ipack(idata.get());
   CHECK(GenerateTopTriangleStrip(0, 1, slice, true, &ipack));
   for (int i = 1; i < stack - 2; ++i) {
     CHECK(GenerateStripIndex(1 + slice * (i - 1), 1 + slice * i, slice, true,
@@ -147,7 +148,7 @@ IndicesDataPtr InitSphereWireFrameIndicesData(int32_t stack, int32_t slice) {
   const int kIndexNum = (stack - 1) * slice * 2 + (stack - 2) * (slice + 1) * 2;
   const int32_t kVertexNum = CalcSphereVertexNum(stack, slice);
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
-  IndexPack ipack(idata);
+  IndexPack ipack(idata.get());
   for (int i = 0; i < slice; ++i) {
     CHECK(ipack.WriteAndAdvance(0));
     CHECK(ipack.WriteAndAdvance(1 + i));
@@ -335,13 +336,13 @@ EntityPtr CreateSphereEntity(VertexDesc* desc,const GeoSphereParams& params,
 
   VertexPos npos;
   if (GetSemanticIndex("normal", 0, desc, &npos)) {
-    CalcIndexedTriangleNormal(vdata, idata);
+    CalcIndexedTriangleNormal(vdata.get(), idata.get());
   }
 
   RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
@@ -359,12 +360,12 @@ EntityPtr CreateSphereFrameEntity(VertexDesc* desc, const GeoSphereParams& param
   IndicesDataPtr iedata = InitSphereWireFrameIndicesData(params.stack, params.slice);
   VertexPos npos;
   if (GetSemanticIndex("normal", 0, desc, &npos)) {
-    CalcIndexedTriangleNormal(vdata, idata);
+    CalcIndexedTriangleNormal(vdata.get(), idata.get());
   }
   RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), iedata);
-  EntityPtr entity(new Entity(vb, ib));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), iedata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
@@ -464,9 +465,8 @@ VertexDataPtr CreateBoxVertexData(VertexDesc* desc) {
                    3, 6, 2, 3, 7, 6}; // bottom
   VertexPos normal_pos, tex0_pos;
   bool kHasNormal0Idx = GetSemanticIndex("normal", 0, desc, &normal_pos);
-  bool kHasTexcoord0Idx = GetSemanticIndex("texcoord", 0, desc, &tex0_pos);
   VertexDataPtr vdata(new VertexData(desc, arraysize(indices)));
-  VertexPack vpack(vdata);
+  VertexPack vpack(vdata.get());
   vpack.first();
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
     int index = indices[i];
@@ -496,7 +496,7 @@ IndicesDataPtr CreateBoxFrameIndicesData() {
                           0, 14, 2, 8, 1, 7, 4, 13,
                           14, 8, 8, 7, 7, 13, 13, 14};
   IndicesDataPtr idata(new IndicesData(arraysize(edge_indices)));
-  IndexPack ipack(idata);
+  IndexPack ipack(idata.get());
   for (uint32_t i = 0; i < arraysize(edge_indices); ++i) {
     CHECK(ipack.WriteAndAdvance(edge_indices[i]));
   }
@@ -505,10 +505,9 @@ IndicesDataPtr CreateBoxFrameIndicesData() {
 }
 
 EntityPtr CreateBoxEntity(VertexDesc* desc, const Matrix4& mat) {
-  RenderSystem* rs = RenderSystem::Current();
   VertexDataPtr vdata = CreateBoxVertexData(desc);;
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  EntityPtr entity(new Entity(vb));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  EntityPtr entity(new Entity(vb.get()));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
@@ -521,9 +520,9 @@ EntityPtr CreateBoxFrameEntity(VertexDesc* desc, const Matrix4& mat) {
   RenderSystem* rs = RenderSystem::Current();
   VertexDataPtr vdata = CreateBoxVertexData(desc);;
   IndicesDataPtr idata = CreateBoxFrameIndicesData();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   Vector4 vmin = mat * Vector4(-0.5f, -0.5f, -0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( 0.5f,  0.5f,  0.5f, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
@@ -557,7 +556,7 @@ VertexDataPtr CreatePlaneVertexData(VertexDesc* desc,
 
   int32_t kVertexCount = (params.row + 1) * (params.column + 1);
   VertexDataPtr vdata(new VertexData(desc, kVertexCount));
-  VertexPack vpack(vdata);
+  VertexPack vpack(vdata.get());
   vpack.first();
   
   int beginx = -params.column * params.column_width * 0.5;
@@ -581,7 +580,7 @@ VertexDataPtr CreatePlaneVertexData(VertexDesc* desc,
 IndicesDataPtr CreatePlaneIndicesData(const GeoPlaneParams& params) {
   const int32_t kIndexNum = params.row * params.column * 2 * 3;
   IndicesDataPtr idata(new IndicesData(kIndexNum));
-  IndexPack ipack(idata);
+  IndexPack ipack(idata.get());
   for (int i = 0; i < params.row; ++i) {
     for (int j = 0; j < params.column; ++j) {
       int cur_line = i * (params.column + 1);
@@ -600,15 +599,15 @@ IndicesDataPtr CreatePlaneIndicesData(const GeoPlaneParams& params) {
 IndicesDataPtr CreatePlaneFrameIndicesData(const GeoPlaneParams& params) {
   int32_t count = (params.row + 1) * 2 + (params.column + 1) * 2;
   IndicesDataPtr idata(new IndicesData(count));
-  IndexPack ipack(idata);
-  for (uint32_t i = 0; i < params.row; ++i) {
+  IndexPack ipack(idata.get());
+  for (int32_t i = 0; i < params.row; ++i) {
     int32_t index1 = i * (params.column + 1);
     int32_t index2 = (i  + 1) * (params.column + 1) - 1;
     CHECK(ipack.WriteAndAdvance(index1));
     CHECK(ipack.WriteAndAdvance(index2));
   }
 
-  for (uint32_t i = 0; i < params.column; ++i) {
+  for (int32_t i = 0; i < params.column; ++i) {
     int32_t index1 = i;
     int32_t index2 = (params.row + 1) * params.column + i;
     CHECK(ipack.WriteAndAdvance(index1));
@@ -623,10 +622,10 @@ EntityPtr CreatePlaneEntity(VertexDesc* desc, const GeoPlaneParams& params,
   RenderSystem* rs = RenderSystem::Current();
   VertexDataPtr vdata = CreatePlaneVertexData(desc, params, mat);;
   IndicesDataPtr idata = CreatePlaneIndicesData(params);
-  CalcIndexedTriangleListTangentAndBinormal(vdata, idata);
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
+  CalcIndexedTriangleListTangentAndBinormal(vdata.get(), idata.get());
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   Vector4 vmin = mat * Vector4(-params.column_width * params.column * 0.5f,  0.00f, 
                                -params.row_width * params.row * 0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( params.column_width * params.column * 0.5f,  0.01f,  
@@ -642,9 +641,9 @@ EntityPtr CreatePlaneFrameEntity(VertexDesc* desc, const GeoPlaneParams& params,
   RenderSystem* rs = RenderSystem::Current();
   VertexDataPtr vdata = CreatePlaneVertexData(desc, params, mat);
   IndicesDataPtr idata = CreatePlaneFrameIndicesData(params);
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   Vector4 vmin = mat * Vector4(-params.column_width * 0.5f,  0.00f, 
                                -params.row_width * 0.5f, 1.0f);
   Vector4 vmax = mat * Vector4( params.column_width * 0.5f,  0.01f,  
@@ -680,7 +679,7 @@ VertexDataPtr CreateRoundVertexData(VertexDesc* desc, const Matrix4& mat,
   const int32_t kVertexNum = 1 + slice + 1;
   float degree = 360.0f / (float)slice;
   VertexDataPtr vdata(new VertexData(desc, kVertexNum));
-  VertexPack vpack(vdata);
+  VertexPack vpack(vdata.get());
   vpack.first();
   vpack.WriteVector3Or4(mat * Vector4(0, 0, 0, 1.0f), VertexPos(0, 0));
   vpack.WriteVector3Or4(mat * Vector4(0.0f, 1.0f, 0.0f, 0.0f), npos);
@@ -698,7 +697,7 @@ VertexDataPtr CreateRoundVertexData(VertexDesc* desc, const Matrix4& mat,
 
 IndicesDataPtr CreateRoundInidcesData(int32_t slice) {
   IndicesDataPtr idata(new IndicesData(slice * 3));  
-  IndexPack ipack(idata);
+  IndexPack ipack(idata.get());
   for (int i = 0; i < slice; ++i) {
     int index1 = 1 + (i + 1) % slice;
     int index2 = 1 + i;
@@ -712,7 +711,7 @@ IndicesDataPtr CreateRoundInidcesData(int32_t slice) {
 IndicesDataPtr CreateCircleInidcesData(int32_t slice) {
   const int kIndexNum = slice * 2;
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
-  IndexPack ipack(idata);
+  IndexPack ipack(idata.get());
   for (int i = 0; i < slice; ++i) {
     CHECK(ipack.WriteAndAdvance(i + 1));
     CHECK(ipack.WriteAndAdvance((i + 1) % slice + 1));
@@ -725,11 +724,11 @@ EntityPtr CreateRoundEntity(VertexDesc* desc, float radius, int32_t slice,
                             const Matrix4& mat) {
   VertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   IndicesDataPtr idata = CreateRoundInidcesData(slice);
-  CalcIndexedTriangleListTangentAndBinormal(vdata, idata);
+  CalcIndexedTriangleListTangentAndBinormal(vdata.get(), idata.get());
   RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   Vector4 vmin = mat * Vector4(-radius, -0.00f, -radius, 1.0f);
   Vector4 vmax = mat * Vector4( radius,  0.01f,  radius, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
@@ -743,9 +742,9 @@ EntityPtr CreateCircleEntity(VertexDesc* desc, float radius, int32_t slice,
   VertexDataPtr vdata = CreateRoundVertexData(desc, mat, radius, slice);
   IndicesDataPtr idata = CreateCircleInidcesData(slice);
   RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   Vector4 vmin = mat * Vector4(-radius, -0.00f, -radius, 1.0f);
   Vector4 vmax = mat * Vector4( radius,  0.01f,  radius, 1.0f);
   entity->set_vmin(Vector3(vmin.x, vmin.y, vmin.z));
@@ -776,7 +775,7 @@ EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params,
   const int32_t kVertexNum = 1 + params.slice + 1;
   float degree = 360.0f / (float)params.slice;
   VertexDataPtr vdata(new VertexData(desc, kVertexNum));
-  VertexPack vpack(vdata);
+  VertexPack vpack(vdata.get());
   vpack.first();
   vpack.WriteVector3Or4(mat * Vector4(0, params.height, 0, 1.0f), 
                         VertexPos(0, 0));
@@ -790,13 +789,13 @@ EntityPtr CreateTaperEntity(VertexDesc* desc, const GeoConeParams& params,
   CHECK(vpack.end());
 
   IndicesDataPtr idata = CreateRoundInidcesData(params.slice);
-  CalcIndexedTriangleNormal(vdata, idata);
-  CalcIndexedTriangleListTangentAndBinormal(vdata, idata);
+  CalcIndexedTriangleNormal(vdata.get(), idata.get());
+  CalcIndexedTriangleListTangentAndBinormal(vdata.get(), idata.get());
 
   RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   Vector4 vmin = mat * Vector4(-params.radius, 0.0f, -params.radius, 1.0f);
   Vector4 vmax = mat * Vector4( params.radius, params.height,  
                                 params.radius, 1.0f);
@@ -843,7 +842,7 @@ EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params,
   const int kIndexNum = CalcCylinderIndexNum(params.stack, params.slice);
   VertexDataPtr vdata(new VertexData(desc, kVertexNum));
   IndicesDataPtr idata(new IndicesData(kIndexNum));  
-  VertexPack vpack(vdata);
+  VertexPack vpack(vdata.get());
   VertexPos tpos;
   GetSemanticIndex("texcoord", 0, desc, &tpos);
   float height_unit = params.height / ((float)params.stack - 1.0f);
@@ -851,8 +850,8 @@ EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params,
       / (float)params.stack;
   float slice_radius = params.top_radius;
   float y = params.height;
-  float tex_u_unit = 1.0f / params.slice;
-  float tex_v_unit = 1.0f / (params.stack + 2.0f);
+  // float tex_u_unit = 1.0f / params.slice;
+  // float tex_v_unit = 1.0f / (params.stack + 2.0f);
   vpack.first();
   for (int i = 0; i < params.stack; ++i) {
     for (int j = 0; j < params.slice; ++j) {
@@ -861,8 +860,8 @@ EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params,
       float z = slice_radius * sin(Degree(degree));
 
       vpack.WriteVector3Or4(mat * Vector4(x, y, z, 1.0f), VertexPos(0, 0));
-      float u = j * tex_u_unit;
-      float v = (i + 1) * tex_v_unit;
+      // float u = j * tex_u_unit;
+      // float v = (i + 1) * tex_v_unit;
       vpack.WriteVector2(Vector2(0.0f, 0.0f), tpos); 
       vpack.next(1);
     }
@@ -870,7 +869,7 @@ EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params,
     y -= height_unit;
   }
 
-  IndexPack ipack(idata);
+  IndexPack ipack(idata.get());
   for (int i = 0; i < params.stack - 1; ++i) {
     int32_t line1 = i * params.slice; 
     int32_t line2 = (i + 1) * params.slice; 
@@ -887,12 +886,12 @@ EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params,
     }
   }
 
-  CalcIndexedTriangleNormal(vdata, idata);
+  CalcIndexedTriangleNormal(vdata.get(), idata.get());
 
   RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata);
-  EntityPtr entity(new Entity(vb, ib));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), idata.get());
+  EntityPtr entity(new Entity(vb.get(), ib.get()));
   float rad = std::max(params.top_radius, params.bottom_radius);
   Vector4 vmin = mat * Vector4(-rad,  0.0f,          -rad, 1.0f);
   Vector4 vmax = mat * Vector4( rad,  params.height,  rad, 1.0f);
@@ -958,7 +957,7 @@ MeshPartPtr CreateAxisMeshPart(Effect* e, const GeoAxisParams& params,
   col_params.stack = 12;
   col_params.height = params.axis_length;
   MeshPartPtr colpart = CreateCylinderMeshPart(e, col_params, matrix);
-  MergeMeshPart(part, colpart);
+  MergeMeshPart(part.get(), colpart.get());
   return part;
 }
 
@@ -989,7 +988,7 @@ MeshPartPtr CreateLineAxisMeshPart(Effect* e, const GeoAxisParams& params,
 EntityPtr CreateGeoPointsList(PrimitiveTopology primitive, const Vector3* points,
                               int32_t count, VertexDesc* desc, const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, count));
-  VertexPack vpack(vdata);
+  VertexPack vpack(vdata.get());
   vpack.first();
   Vector3 vmin(mat * Vector4(points[0], 1.0));
   Vector3 vmax(mat * Vector4(points[0], 1.0));
@@ -1000,9 +999,8 @@ EntityPtr CreateGeoPointsList(PrimitiveTopology primitive, const Vector3* points
     vpack.next(1);
   }
 
-  RenderSystem* rs = RenderSystem::Current();
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata);
-  EntityPtr entity(new Entity(vb));
+  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  EntityPtr entity(new Entity(vb.get()));
   entity->set_vmin(vmin);
   entity->set_vmax(vmax);
   Subset subset(0, vb->vertex_count(), 0, 0);

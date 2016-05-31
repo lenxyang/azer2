@@ -3,7 +3,6 @@
 #include <deque>
 #include <vector>
 
-#include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/effect/light.h"
@@ -39,12 +38,12 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
  public:
   explicit RenderNode(SceneNode* node);
   virtual ~RenderNode();
-  void SetDelegate(scoped_ptr<RenderNodeDelegate> delegate);
+  void SetDelegate(std::unique_ptr<RenderNodeDelegate> delegate);
 
   SceneNode* GetSceneNode() { return node_;}
   const SceneNode* GetSceneNode() const { return node_;}
-  RenderEnvNode* GetEnvNode() { return envnode_;}
-  const RenderEnvNode* GetEnvNode() const { return envnode_;}
+  RenderEnvNode* GetEnvNode() { return envnode_.get();}
+  const RenderEnvNode* GetEnvNode() const { return envnode_.get();}
   void  SetEnvNode(RenderEnvNode* node);
 
   const Matrix4& GetWorld() const { return world_;}
@@ -83,7 +82,7 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
   std::vector<RenderNodePtr> children_;
 
   SceneNode* node_;
-  scoped_ptr<RenderNodeDelegate> delegate_;
+  std::unique_ptr<RenderNodeDelegate> delegate_;
   RenderEnvNodePtr envnode_;
   const Camera* camera_;
   Matrix4 world_;
@@ -96,7 +95,7 @@ class AZER_EXPORT RenderTreeBuilderDelegate {
  public:
   virtual bool NeedRenderNode(SceneNode* node) = 0;
   virtual bool NeedRenderEnvNode(SceneNode* node);
-  virtual scoped_ptr<RenderNodeDelegate> CreateRenderDelegate(RenderNode* n) = 0;
+  virtual std::unique_ptr<RenderNodeDelegate> CreateRenderDelegate(RenderNode* n) = 0;
   virtual RenderEnvNodeDelegatePtr CreateEnvDelegate(RenderEnvNode* n) = 0;
 };
 

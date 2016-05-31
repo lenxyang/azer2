@@ -125,7 +125,7 @@ ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc
       gpu_program = new D3DComputeShader(info);
       break;
     default:
-      CHECK(false) << "No such Shader Type: " << (int32)info.stage;
+      CHECK(false) << "No such Shader Type: " << (int32_t)info.stage;
       return NULL;
   }
 

@@ -41,7 +41,7 @@ class AZER_EXPORT RenderSystemObserverManager {
   RenderSystemObserverManager();
   ~RenderSystemObserverManager();
 
-  ObserverList<RenderSystemObserver, true> observers_;
+  ::base::ObserverList<RenderSystemObserver, true> observers_;
   DISALLOW_COPY_AND_ASSIGN(RenderSystemObserverManager);
 };
 }  // namespace subtle

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "base/memory/scoped_ptr.h"
 #include "base/observer_list.h"
 #include "azer/base/export.h"
 
@@ -29,7 +28,7 @@ class AZER_EXPORT SceneTreeRender {
 
   RenderNode* root() { return root_.get();}
   const Camera* camera() const { return camera_;}
-  void SetTreeBuildDelegate(scoped_ptr<RenderTreeBuilderDelegate> delegate);
+  void SetTreeBuildDelegate(std::unique_ptr<RenderTreeBuilderDelegate> delegate);
   void Init(SceneNode* root, const Camera* camera);
   void Update(const FrameArgs& args);
   void Render(Renderer* renderer);
@@ -54,9 +53,9 @@ class AZER_EXPORT SceneTreeRender {
   void UpdateNodeRecusive(RenderNode* node, const FrameArgs& args);
   void RenderNodeRecusive(RenderNode* node, Renderer* renderer);
   RenderNodePtr root_;
-  scoped_ptr<RenderTreeBuilderDelegate> delegate_;
+  std::unique_ptr<RenderTreeBuilderDelegate> delegate_;
   const Camera* camera_;
-  ObserverList<SceneTreeRenderObserver> observers_;
+  ::base::ObserverList<SceneTreeRenderObserver> observers_;
   DISALLOW_COPY_AND_ASSIGN(SceneTreeRender);
 };
 }  // namespace azer

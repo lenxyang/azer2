@@ -106,16 +106,16 @@ void Entity::AddSubset(const Subset& subset) {
 }
 
 void Entity::RemoveSubset(int32_t index) {
-  DCHECK_LT(index, static_cast<int32>(subset_.size()));
+  DCHECK_LT(index, static_cast<int32_t>(subset_.size()));
   subset_.erase(subset_.begin() + index);
 }
 
 int32_t Entity::subset_count() const {
-  return static_cast<int32>(subset_.size());
+  return static_cast<int32_t>(subset_.size());
 }
 
 const Subset& Entity::subset_at(int32_t index) const {
-  DCHECK_LT(index, static_cast<int32>(subset_.size()));
+  DCHECK_LT(index, static_cast<int32_t>(subset_.size()));
   return subset_[index];
 }
 
@@ -198,7 +198,7 @@ Entity* EntityVec::AddEntity(Entity* ptr) {
 }
 
 void EntityVec::RemoveEntityAt(int32_t index) {
-  DCHECK(index < static_cast<int32>(vec_.size()));
+  DCHECK(index < static_cast<int32_t>(vec_.size()));
   vec_.erase(vec_.begin() + index);
   UpdateMinAndMax();
 }
@@ -206,7 +206,8 @@ void EntityVec::RemoveEntityAt(int32_t index) {
 EntityVecPtr EntityVec::DeepCopy() {
   EntityVecPtr ptr = new EntityVec;
   for (uint32_t i = 0; i < vec_.size(); ++i) {
-    ptr->AddEntity(vec_[i]->DeepCopy());
+    EntityPtr newptr = vec_[i]->DeepCopy();
+    ptr->AddEntity(newptr.get());
   }
   return ptr;
 }

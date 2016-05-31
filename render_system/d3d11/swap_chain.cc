@@ -31,7 +31,7 @@ RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   ID3D11Texture2D* buffer = GetD3DEnvSwapChain()->GetSwapTexture();
   ptr->Attach(buffer);
   RenderTargetPtr rt = render_system_->CreateRenderTarget(
-      RenderTarget::Options(), ptr);
+      RenderTarget::Options(), ptr.get());
  
   opt.format = kTexR24G8;
   opt.target = kBindTargetDepthStencil | kBindTargetShaderResource;
@@ -41,14 +41,14 @@ RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   }
 
   DepthBufferPtr depth = render_system_->CreateDepthBuffer(
-      DepthBuffer::Options(), tex);
+      DepthBuffer::Options(), tex.get());
   if (!depth.get() || !rt.get()) {
     return RendererPtr();
   }
 
   RenderTargetPtrs targets;
   targets.push_back(rt);
-  RendererPtr renderer = render_system_->CreateRenderer(&targets, depth);
+  RendererPtr renderer = render_system_->CreateRenderer(&targets, depth.get());
   return renderer;
 }
 

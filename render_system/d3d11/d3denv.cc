@@ -56,7 +56,7 @@ void D3DEnvironment::GetD3DMultisampleSupported(
         DXGI_FORMAT_R8G8B8A8_UNORM, i, &count);
 
     RenderSystemCapability::SampleDesc desc;
-    for (int j = 0; j < count; ++j) {
+    for (uint32_t j = 0; j < count; ++j) {
       desc.count = i;
       desc.quality = j + 1;
       supported->push_back(desc);

@@ -42,7 +42,7 @@ bool D3DBlending::Init() {
   
   ID3D11Device* d3d_device = render_system_->GetDevice();
   DCHECK(NULL != d3d_device);
-  ID3D11BlendState* state = NULL;
+  // ID3D11BlendState* state = NULL;
   HRESULT hr = d3d_device->CreateBlendState(&blend_desc, &blending_state_);
   HRESULT_HANDLE(hr, ERROR, "CreateBlendState failed ");
   

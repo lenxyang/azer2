@@ -53,8 +53,8 @@ class D3DVertexBufferGroup : public VertexBufferGroup {
   void OnVertexBufferChanged() override;
 
   ID3D11Buffer** buffer() { return vbs_;}
-  uint32* strides() { return stride_;}
-  uint32* offsets() { return offset_;}
+  uint32_t* strides() { return stride_;}
+  uint32_t* offsets() { return offset_;}
  private:
   int32_t GenVertexArray();
   static const int32_t kMaxVertexBuffer = 16;

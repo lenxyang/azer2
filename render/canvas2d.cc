@@ -52,10 +52,10 @@ SkImageEncoder::Type ImageType(const FilePath::StringType& ext) {
   }
 }
 
-std::vector<uint8> EncodeBitmap(const SkBitmap& bitmap, SkImageEncoder::Type type) {
-  std::vector<uint8> data;
+std::vector<uint8_t> EncodeBitmap(const SkBitmap& bitmap, SkImageEncoder::Type type) {
+  std::vector<uint8_t> data;
   if (type == SkImageEncoder::kPNG_Type) {
-    CHECK(gfx::PNGCodec::Encode((const uint8*)bitmap.getPixels(),
+    CHECK(gfx::PNGCodec::Encode((const uint8_t*)bitmap.getPixels(),
                                 gfx::PNGCodec::FORMAT_BGRA,
                                 gfx::Size(bitmap.width(), bitmap.height()),
                                 bitmap.width() * 4,
@@ -70,9 +70,9 @@ std::vector<uint8> EncodeBitmap(const SkBitmap& bitmap, SkImageEncoder::Type typ
 }
 
 bool SaveSkBitmap(const SkBitmap& bitmap, const ::base::FilePath& path) {
-  const FilePath::StringType ext = ::base::StringToLowerASCII(path.Extension());
+  const FilePath::StringType ext = ::base::ToLowerASCII(path.Extension());
   SkImageEncoder::Type type = ImageType(ext);
-  std::vector<uint8> compressed = std::move(EncodeBitmap(bitmap, type));
+  std::vector<uint8_t> compressed = std::move(EncodeBitmap(bitmap, type));
   FILE* f = base::OpenFile(path, "wb");
   if (f == NULL) {
     return false;

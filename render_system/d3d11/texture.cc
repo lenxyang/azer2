@@ -93,7 +93,7 @@ Texture::MapData D3DTexture::map(MapType maptype) {
     return mapdata;
   }
   
-  mapdata.pdata = (uint8*)mapped.pData;
+  mapdata.pdata = (uint8_t*)mapped.pData;
   mapdata.row_pitch = mapped.RowPitch;
   mapdata.depth_pitch = mapped.DepthPitch;
 
@@ -145,7 +145,7 @@ bool D3DTexture2D::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   int32_t count = 0;
   D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
-  DCHECK_LT(image->level_count(), static_cast<int32>(arraysize(subres)));
+  DCHECK_LT(image->level_count(), static_cast<int32_t>(arraysize(subres)));
   for (int32_t i = 0; i < image->level_count(); ++i, ++count) {
     const ImageLevelData* data = image->GetLevelData(i);
     subres[i].pSysMem = data->dim_data(0);

@@ -56,7 +56,7 @@ bool Texture::Save(const ::base::FilePath& path) {
   bitmap.setInfo(info);
   bitmap.allocPixels();
 
-  uint8* pixels = (uint8*)bitmap.getPixels();
+  uint8_t* pixels = (uint8_t*)bitmap.getPixels();
   MapData mapdata = map(kReadOnly);
   if (mapdata.pdata == NULL) {
     return false;
@@ -114,15 +114,15 @@ const char* GetTexFormatName(TexFormat format) {
 
 uint32_t SizeofTexFormat(TexFormat format) {
   switch (format) {
-    case kTexRGBA8: return sizeof(int8) * 4;
-    case kTexRGBAn8: return sizeof(uint8) * 4;
-    case kTexRGBA32: return sizeof(int32) * 4;
-    case kTexRGBAn32: return sizeof(uint32) * 4;
+    case kTexRGBA8: return sizeof(int8_t) * 4;
+    case kTexRGBAn8: return sizeof(uint8_t) * 4;
+    case kTexRGBA32: return sizeof(int32_t) * 4;
+    case kTexRGBAn32: return sizeof(uint32_t) * 4;
     case kTexRGBAf: return sizeof(float) * 4;
     case kTexDepth24nStencil8u:
     case kTexR24G8:
     case kTexR24nX8:
-      return sizeof(uint32);
+      return sizeof(uint32_t);
     case kTexDXBC1n:
     case kTexDXBC1nSRGB:
     case kTexDXBC4n:

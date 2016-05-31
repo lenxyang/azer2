@@ -40,7 +40,7 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
   void SetEffect(Effect* effect) { effect_ = effect;}
   EntityVec* entity_vector() { return vecptr_.get();}
 
-  void AddEntity(EntityPtr ptr);
+  void AddEntity(Entity* ptr);
   void RemoveEntityAt(int32_t index);
   Entity* entity_at(int32_t index);
   const Entity* entity_at(int32_t index) const;

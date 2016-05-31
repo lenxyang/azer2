@@ -42,7 +42,7 @@ RenderNode::~RenderNode() {
 }
 
 void RenderNode::SetDelegate(std::unique_ptr<RenderNodeDelegate> delegate) {
-  delegate_ = delegate.Pass();
+  delegate_ = delegate;
 }
 
 RenderNode* RenderNode::root() {
@@ -68,7 +68,7 @@ RenderNode* RenderNode::parent() {
 }
 
 int32_t RenderNode::child_count() const {
-  return static_cast<int32>(children_.size());
+  return static_cast<int32_t>(children_.size());
 }
 
 RenderNode* RenderNode::child_at(int32_t index) {
@@ -194,7 +194,7 @@ RenderNodePtr RenderTreeBuilder::Build(SceneNode* root, const Camera* camera) {
       render_root.get()).Pass());
   RenderEnvNodePtr envnode = new RenderEnvNode(NULL);
   envnode->set_delegate(delegate_->CreateEnvDelegate(envnode));
-  render_root->SetEnvNode(envnode);
+  render_root->SetEnvNode(envnode.get());
   render_root->SetCamera(camera);
   cur_ = render_root.get();
   SceneNodeTraverse traverser(this);

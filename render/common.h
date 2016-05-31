@@ -1,7 +1,7 @@
 #pragma once
 
+#include <stdint.h>
 #include "azer/base/export.h"
-
 
 namespace azer {
 

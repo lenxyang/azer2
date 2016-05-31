@@ -38,8 +38,8 @@ class AZER_EXPORT Canvas2D : public ::base::RefCounted<Canvas2D> {
     return context_;
   }
 
-  Texture* GetTexture() { return texture_;}
-  TextureView* GetTextureView() { return texview_;}
+  Texture* GetTexture() { return texture_.get();}
+  TextureView* GetTextureView() { return texview_.get();}
   virtual uint32_t GetTexID() = 0;
 
   // save the content into file

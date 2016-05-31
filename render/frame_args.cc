@@ -13,7 +13,6 @@ FrameArgs::FrameArgs()
       total_seconds_(0.0),
       recent_seconds_(0.0),
       max_frame_stored_(30) {
-  int cur = which_;
   time_[which_] = ::base::Time::Now();
   started_ = time_[which_];
   recent_frames_time_consumed_.push_back(::base::TimeDelta());

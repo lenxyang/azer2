@@ -32,7 +32,7 @@ MeshPart& MeshPart::operator = (const MeshPart& part) {
   return *this;
 }
 
-void MeshPart::AddEntity(EntityPtr ptr) { vecptr_->AddEntity(ptr);}
+void MeshPart::AddEntity(Entity* ptr) { vecptr_->AddEntity(ptr);}
 void MeshPart::RemoveEntityAt(int32_t index) { vecptr_->RemoveEntityAt(index);}
 Entity* MeshPart::entity_at(int32_t index) { return vecptr_->entity_at(index);}
 const Entity* MeshPart::entity_at(int32_t index) const {
@@ -89,7 +89,7 @@ MeshPart* Mesh::AddMeshPart(MeshPart* ptr) {
 }
 
 MeshPartPtr Mesh::RemoveMeshPartAt(int32_t index) {
-  DCHECK(index < static_cast<int32>(part_.size()));
+  DCHECK(index < static_cast<int32_t>(part_.size()));
   MeshPartPtr ptr = part_[index];
   ptr->SetEffectAdapterContext(NULL);
   part_.erase(part_.begin() + index);

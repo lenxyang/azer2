@@ -28,7 +28,7 @@ inline uint32_t Align16BindWidth(uint32_t size) {
     size &= 0xFFF0;
     size += 0x0010;
   }
-  return std::min(size, (uint32)D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT);
+  return std::min(size, (uint32_t)D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT);
 }
 
 class ScopedRefCOM {

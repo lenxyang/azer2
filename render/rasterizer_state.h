@@ -38,7 +38,7 @@ class ScopedRasterizerState {
     prev_state_ = renderer->GetRasterizerState();;
   }
   ~ScopedRasterizerState() {
-    renderer_->SetRasterizerState(prev_state_);
+    renderer_->SetRasterizerState(prev_state_.get());
   }
  private:
   RasterizerStatePtr prev_state_;

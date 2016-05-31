@@ -3,7 +3,6 @@
 #include <deque>
 #include <vector>
 
-#include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/effect/light.h"
