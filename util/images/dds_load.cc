@@ -345,8 +345,8 @@ uint32_t BitsPerPixel(uint32_t fmt) {
   }
 }
 
-int32_t GetDDSDetail(const DDS_HEADER& head, int32* height, int32* depth,
-                   int32* arraysize, uint32* format) {
+int32_t GetDDSDetail(const DDS_HEADER& head, int32_t* height, int32_t* depth,
+                     int32_t* arraysize, uint32_t* format) {
   *height = head.height;
   *depth = head.depth;
   *arraysize = 1;
@@ -428,7 +428,8 @@ int32_t GetDDSDetail(const DDS_HEADER& head, int32* height, int32* depth,
 }
 
 void GetSurfaceInfo(uint32_t width, uint32_t height, uint32_t fmt,
-                    uint32* outNumBytes, uint32* outRowBytes, uint32* outNumRows) {
+                    uint32_t* outNumBytes, uint32_t* outRowBytes,
+                    uint32_t* outNumRows) {
   using namespace detail;
   uint32_t numBytes = 0;
   uint32_t rowBytes = 0;
@@ -497,11 +498,11 @@ void GetSurfaceInfo(uint32_t width, uint32_t height, uint32_t fmt,
   if (bc) {
     uint32_t numBlocksWide = 0;
     if (width > 0) {
-      numBlocksWide = std::max<uint32>(1, (width + 3) / 4);
+      numBlocksWide = std::max<uint32_t>(1, (width + 3) / 4);
     }
     uint32_t numBlocksHigh = 0;
     if (height > 0) {
-      numBlocksHigh = std::max<uint32>(1, (height + 3) / 4);
+      numBlocksHigh = std::max<uint32_t>(1, (height + 3) / 4);
     }
     rowBytes = numBlocksWide * bpe;
     numRows = numBlocksHigh;
@@ -536,9 +537,9 @@ void GetSurfaceInfo(uint32_t width, uint32_t height, uint32_t fmt,
 }
 
 
-ImageDataPtr LoadDDSImageFromMemory(const uint8* contents, int32_t contents_len) {
-  const DDS_HEADER* head = (const DDS_HEADER*)(contents + sizeof(uint32));
-  int32_t width = head->width;
+ImageDataPtr LoadDDSImageFromMemory(const uint8_t* contents, int32_t contents_len) {
+  const DDS_HEADER* head = (const DDS_HEADER*)(contents + sizeof(uint32_t));
+  // int32_t width = head->width;
   int32_t arraysize, depth, height;
   uint32_t format;
   int32_t tex_type = GetDDSDetail(*head, &height, &depth, &arraysize, &format);
@@ -550,27 +551,27 @@ ImageDataPtr LoadDDSImageFromMemory(const uint8* contents, int32_t contents_len)
   bool bDXT10Header = false;
   if ((head->ddspf.flags & DDS_FOURCC) &&
       (MAKEFOURCC('D', 'X', '1', '0') == head->ddspf.fourCC)) {
-    if ((sizeof(uint32) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10))
+    if ((sizeof(uint32_t) + sizeof(DDS_HEADER) + sizeof(DDS_HEADER_DXT10))
         < contents_len) {
       return ImageDataPtr();
     }
   }
 
   ImageDataPtr data(new ImageData(tex_type));
-  ptrdiff_t offset = sizeof(uint32) + sizeof(DDS_HEADER)
+  ptrdiff_t offset = sizeof(uint32_t) + sizeof(DDS_HEADER)
       + (bDXT10Header ? sizeof(DDS_HEADER_DXT10) : 0);
-  uint8* ptr = (uint8*)(contents + offset);
+  uint8_t* ptr = (uint8_t*)(contents + offset);
   for (int32_t i = 0; i < arraysize; ++i) {
     int32_t w = head->width;
     int32_t h = height;
     int32_t d = depth;
-    int32_t row_width = 0;
+    // int32_t row_width = 0;
     for (int32_t mip = 0; mip < mipcount; ++mip) {
       uint32_t bytes, row_bytes, rows_num;
       GetSurfaceInfo(w, h, format, &bytes, &row_bytes, &rows_num);
       ImageLevelDataPtr leveldata(new ImageLevelData(
           w, h, d, ptr, bytes,  row_bytes, detail::TranslateFormat(format)));
-      data->AppendData(leveldata);
+      data->AppendData(leveldata.get());
       ptr += bytes * d;
       w = w >> 1;
       h = h >> 1;
@@ -587,7 +588,8 @@ ImageDataPtr LoadDDSImageFromMemory(const uint8* contents, int32_t contents_len)
 ImageDataPtr LoadDDSImage(const base::FilePath& path) {
   std::string contents;
   if (::base::ReadFileToString(path, &contents)) {
-    return LoadDDSImageFromMemory((const uint8*)contents.c_str(), contents.length());
+    return LoadDDSImageFromMemory(
+        (const uint8_t*)contents.c_str(), static_cast<int32_t>(contents.length()));
   } else {
     return ImageDataPtr();
   }

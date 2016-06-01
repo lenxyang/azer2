@@ -64,6 +64,7 @@ static_library("effectlib") {
   deps = [
     "//azer",
     "//azer/res",
+    "//azer/util/images",
   ]
 
   public_configs = ["//azer/build/config:utf8src",

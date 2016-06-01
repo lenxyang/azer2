@@ -12,8 +12,8 @@ class LDRColorA {
   LDRColorA(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) 
       : r(_r), g(_g), b(_b), a(_a) {}
 
-  const uint8& operator [] (size_t ele) const;
-  uint8& operator [] (size_t ele);
+  const uint8_t& operator [] (size_t ele) const;
+  uint8_t& operator [] (size_t ele);
 
   LDRColorA operator = (const HDRColorA& c);
   static void InterpolateRGB(const LDRColorA& c0, const LDRColorA& c1, size_t wc, 

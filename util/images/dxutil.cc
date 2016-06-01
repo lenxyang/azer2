@@ -30,7 +30,7 @@ uint32_t  TranslateFormat(int32_t type) {
     case DXGI_FORMAT_BC7_UNORM: return kTexDXBC7n;
     case DXGI_FORMAT_BC7_UNORM_SRGB: return kTexDXBC7nSRGB;
     default:
-      DCHECK(false) << "Unsupport type: " << (int32)type;
+      DCHECK(false) << "Unsupport type: " << (int32_t)type;
       return DXGI_FORMAT_UNKNOWN;
   }
 }
