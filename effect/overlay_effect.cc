@@ -33,7 +33,7 @@ void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuVariable gv = gpu_table_[0];
     CHECK_EQ(gv.stage, kVertexStage);
-    GpuConstantsTable* tb = gv.table;
+    GpuConstantsTable* tb = gv.table.get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &bounds_, sizeof(Vector4));
     tb->SetValue(1, &texbounds_, sizeof(Vector4));
@@ -42,6 +42,6 @@ void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
 
 void OverlayEffect::SetTexture(TextureView* texture) {
   texture_ = texture;
-  SaveShaderResTexture(kPixelStage, 0, texture_);
+  SaveShaderResTexture(kPixelStage, 0, texture);
 }
 }  // namespace azer

@@ -8,8 +8,8 @@
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/rasterizer_state.h"
 #include "azer/render/blending.h"
-#include "ui/gfx/rect_f.h"
-#include "ui/gfx/rect.h"
+#include "ui/gfx/geometry/rect_f.h"
+#include "ui/gfx/geometry/rect.h"
 
 namespace azer {
 class Renderer;

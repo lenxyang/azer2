@@ -54,11 +54,11 @@ void TextureEffect::SetWorld(const Matrix4& value) { world_ = value;}
 void TextureEffect::SetCameraPos(const Vector4& pos) { camerapos_ = pos;}
 void TextureEffect::SetMaterial(const TextureMaterialData& mtrl) {
   mtrl_ = mtrl;
-  SaveShaderResTexture(kPixelStage, 0, mtrl_.diffusemap);
-  SaveShaderResTexture(kPixelStage, 1, mtrl_.specularmap);
-  SaveShaderResTexture(kPixelStage, 2, mtrl_.emissionmap);
-  SaveShaderResTexture(kPixelStage, 3, mtrl_.alphamap);
-  SaveShaderResTexture(kPixelStage, 4, mtrl_.normalmap);
+  SaveShaderResTexture(kPixelStage, 0, mtrl_.diffusemap.get());
+  SaveShaderResTexture(kPixelStage, 1, mtrl_.specularmap.get());
+  SaveShaderResTexture(kPixelStage, 2, mtrl_.emissionmap.get());
+  SaveShaderResTexture(kPixelStage, 3, mtrl_.alphamap.get());
+  SaveShaderResTexture(kPixelStage, 4, mtrl_.normalmap.get());
 }
 
 void TextureEffect::SetLights(const LightPtr* value, int32_t count) {
@@ -79,7 +79,7 @@ void TextureEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuVariable gv = gpu_table_[0];
     CHECK_EQ(gv.stage, kVertexStage);
-    GpuConstantsTable* tb = gv.table;
+    GpuConstantsTable* tb = gv.table.get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
@@ -88,7 +88,7 @@ void TextureEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuVariable gv = gpu_table_[1];
     CHECK_EQ(gv.stage, kPixelStage);
-    GpuConstantsTable* tb = gv.table;
+    GpuConstantsTable* tb = gv.table.get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &mtrl_.ambient_scalar, sizeof(float));
     tb->SetValue(1, &mtrl_.specular_scalar, sizeof(float));

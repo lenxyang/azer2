@@ -176,7 +176,7 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
       EffectPtr effect(CreateEffectByName(data->effect_name));
       int32_t vdindex = data->vertex_layout_index;
       VertexDescPtr desc(new VertexDesc(kVertexDesc[vdindex]));
-      TechSource tech(desc);
+      TechSource tech(desc.get());
       LoadEffectData(data, &tech, resource_pack_);
       CHECK(effect->Init(tech)) << "Effect \"" << name << "\" init failed";
       effects_.insert(std::make_pair(name, effect));

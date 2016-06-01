@@ -48,7 +48,7 @@ void NormalLineEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuVariable gv = gpu_table_[0];
     CHECK_EQ(gv.stage, kVertexStage);
-    GpuConstantsTable* tb = gv.table;
+    GpuConstantsTable* tb = gv.table.get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
@@ -58,7 +58,7 @@ void NormalLineEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuVariable gv = gpu_table_[1];
     CHECK_EQ(gv.stage, kPixelStage);
-    GpuConstantsTable* tb = gv.table;
+    GpuConstantsTable* tb = gv.table.get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &color_, sizeof(Vector4));
   }

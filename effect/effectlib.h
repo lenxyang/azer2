@@ -3,7 +3,6 @@
 #include <string>
 #include <map>
 
-
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/resource_pack.h"
@@ -26,7 +25,7 @@ class EffectLib {
   bool InitAdapterContext();
   std::map<std::string, scoped_refptr<Effect> > effects_;
   ResourcePack* resource_pack_;
-  scoped_ptr<EffectAdapterContext> adapter_context_;
+  std::unique_ptr<EffectAdapterContext> adapter_context_;
   DISALLOW_COPY_AND_ASSIGN(EffectLib);
 };
 
