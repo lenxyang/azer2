@@ -42,7 +42,7 @@ class AZER_EXPORT EffectAdapterCache {
   AdapterVector* GetAdapter(Effect* effect);
 
   AdapterVector adapter_;
-  std::map<std::string, std::unique_ptr<AdapterVector> > cached_;
+  std::map<std::string, AdapterVector> cached_;
   const EffectParamsProviderVector* providers_;
   EffectAdapterContext* context_;
   DISALLOW_COPY_AND_ASSIGN(EffectAdapterCache);

@@ -1,4 +1,7 @@
-
+import("//build/config/compiler/compiler.gni")
+import("//build/config/sanitizers/sanitizers.gni")
+import("//build/config/win/visual_studio_version.gni")
+import("//build/toolchain/toolchain.gni")
 
 config("utf8src") {
   cflags = []
@@ -6,29 +9,21 @@ config("utf8src") {
 }
 
 if (is_win) {
-  declare_args() {
-    d3dsdk_path = "D:\Program Files (x86)\Microsoft DirectX SDK (June 2010)"
-  }
-  config("d3d11") {
-    include_dirs = ["$d3dsdk_path/include"]
-    lib_dirs = ["$d3dsdk_path/Lib/x86"]
+   config("d3d11") {
+    include_dirs = ["$windows_sdk_path\Include\um"]
+    #lib_dirs = ["$d3dsdk_path/Lib/x86"]
     libs = ["dxguid.lib", "d3dcompiler.lib", "d3d11.lib"]
     if (is_debug) {
-      libs +=  ["d3dx11.lib", "d3dx10.lib", ]
+      libs +=  ["d3dx11.lib"]
     } else {
-      libs +=  ["d3dx11d.lib", "d3dx10d.lib", ]
+      libs +=  ["d3dx11d.lib" ]
     }
   }
   
   config("d3d9") {
-    include_dirs = ["$d3dsdk_path/include"]
-    lib_dirs = ["$d3dsdk_path/Lib/x86"]
+    include_dirs = ["$windows_sdk_path\Include\um"]
+    # lib_dirs = ["$d3dsdk_path/Lib/x86"]
     libs = ["dxguid.lib", "d3dcompiler.lib", "d3d9.lib"]
-    if (is_debug) {
-      libs +=  ["d3dx9.lib"]
-    } else {
-      libs +=  ["d3dx9d.lib"]
-    }
   }
 }
 

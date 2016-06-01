@@ -138,13 +138,12 @@ void D3DRenderer::Clear(const azer::Vector4& color) {
   DCHECK(d3d_context_ != NULL);
   // DCHECK(targets_[0].get() != NULL);
 
-  D3DXCOLOR dxcolor(color.x, color.y, color.z, color.w);
   for (auto iter = targets_.begin(); iter != targets_.end(); ++iter) {
     DCHECK(dynamic_cast<D3DRenderTarget*>(iter->get()));
     D3DRenderTarget* target = (D3DRenderTarget*)iter->get();
     ID3D11RenderTargetView* target_view = target->GetD3DRenderTargetView();
     DCHECK(target_view != NULL);
-    d3d_context_->ClearRenderTargetView(target_view, dxcolor);
+    d3d_context_->ClearRenderTargetView(target_view, (float*)&color);
   }
 }
 
