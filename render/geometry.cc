@@ -379,14 +379,16 @@ EntityPtr CreateSphereFrameEntity(VertexDesc* desc, const GeoSphereParams& param
 MeshPartPtr CreateSphereMeshPart(Effect* effect, const GeoSphereParams& params,
                                  const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(effect));
-  part->AddEntity(CreateSphereEntity(effect->vertex_desc(), params, mat));
+  EntityPtr entity = CreateSphereEntity(effect->vertex_desc(), params, mat);
+  part->AddEntity(entity.get());
   return part;
 }
 
 MeshPartPtr CreateSphereFrameMeshPart(Effect* e, const GeoSphereParams& params,
                                       const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateSphereFrameEntity(e->vertex_desc(), params, mat));
+  EntityPtr entity = CreateSphereFrameEntity(e->vertex_desc(), params, mat);
+  part->AddEntity(entity.get());
   return part;
 }
 
@@ -535,13 +537,15 @@ EntityPtr CreateBoxFrameEntity(VertexDesc* desc, const Matrix4& mat) {
 
 MeshPartPtr CreateBoxMeshPart(Effect* e, const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateBoxEntity(e->vertex_desc(), mat));
+  EntityPtr entity = CreateBoxEntity(e->vertex_desc(), mat);
+  part->AddEntity(entity.get());
   return part;  
 }
 
 MeshPartPtr CreateBoxFrameMeshPart(Effect* e, const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateBoxFrameEntity(e->vertex_desc(), mat));
+  EntityPtr entity = CreateBoxFrameEntity(e->vertex_desc(), mat);
+  part->AddEntity(entity.get());
   return part;  
 }
 
@@ -659,14 +663,16 @@ EntityPtr CreatePlaneFrameEntity(VertexDesc* desc, const GeoPlaneParams& params,
 MeshPartPtr CreatePlaneMeshPart(Effect* e, const GeoPlaneParams& params,
                                 const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreatePlaneEntity(e->vertex_desc(), params, mat));
+  EntityPtr entity = CreatePlaneEntity(e->vertex_desc(), params, mat);
+  part->AddEntity(entity.get());
   return part;  
 }
 
 MeshPartPtr CreatePlaneFrameMeshPart(Effect* e,const GeoPlaneParams& params,
                                      const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreatePlaneFrameEntity(e->vertex_desc(), params, mat));
+  EntityPtr entity = CreatePlaneFrameEntity(e->vertex_desc(), params, mat);
+  part->AddEntity(entity.get());
   return part;  
 }
 
@@ -757,7 +763,8 @@ EntityPtr CreateCircleEntity(VertexDesc* desc, float radius, int32_t slice,
 MeshPartPtr CreateRoundMeshPart(Effect* e, float radius, int slice, 
                                 const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateRoundEntity(e->vertex_desc(), radius, slice, mat));
+  EntityPtr entity = CreateRoundEntity(e->vertex_desc(), radius, slice, mat);
+  part->AddEntity(entity.get());
   return part;  
 }
 
@@ -765,7 +772,8 @@ MeshPartPtr CreateCircleMeshPart(Effect* e, float radius, int slice,
                                  const Matrix4& mat) {
   
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateCircleEntity(e->vertex_desc(), radius, slice, mat));
+  EntityPtr entity = CreateCircleEntity(e->vertex_desc(), radius, slice, mat);
+  part->AddEntity(entity.get());
   return part;  
 }
 
@@ -808,7 +816,8 @@ MeshPartPtr CreateTaperMeshPart(Effect* e, const GeoConeParams& params,
                                 const Matrix4& mat) {
   
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateTaperEntity(e->vertex_desc(), params, mat));
+  EntityPtr entity = CreateTaperEntity(e->vertex_desc(), params, mat);
+  part->AddEntity(entity.get());
   return part;  
 }
 
@@ -821,8 +830,8 @@ MeshPartPtr CreateConeMeshPart(Effect* e, const GeoConeParams& params,
   EntityPtr round = CreateRoundEntity(e->vertex_desc(), params.radius, params.slice,
                                       round_mat);
   
-  part->AddEntity(round);
-  part->AddEntity(taper);
+  part->AddEntity(round.get());
+  part->AddEntity(taper.get());
   return part;
 }
 
@@ -904,26 +913,28 @@ EntityPtr CreateBarrelEntity(VertexDesc* desc, const GeoBarrelParams& params,
 MeshPartPtr CreateBarrelMeshPart(Effect* e, const GeoBarrelParams& params, 
                                  const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateBarrelEntity(e->vertex_desc(), params, mat));
+  EntityPtr entity = CreateBarrelEntity(e->vertex_desc(), params, mat);
+  part->AddEntity(entity.get());
   return part;  
 }
 
 MeshPartPtr CreateCylinderMeshPart(Effect* e, const GeoBarrelParams& params,
                                    const Matrix4& matrix) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateBarrelEntity(e->vertex_desc(), params, matrix));
+  EntityPtr entity = CreateBarrelEntity(e->vertex_desc(), params, matrix);
+  part->AddEntity(entity.get());
   {
     Matrix4 round_matrix = std::move(matrix * RotateX(Degree(180.0)));
     EntityPtr bot = CreateRoundEntity(e->vertex_desc(), params.bottom_radius, 
                                       params.slice, round_matrix);
-    part->AddEntity(bot);
+    part->AddEntity(bot.get());
   }
 
   {
     Matrix4 round_matrix = matrix * Translate(Vector3(0.0f, params.height, 0.0f));
     EntityPtr top = CreateRoundEntity(e->vertex_desc(), params.top_radius, 
                                       params.slice, round_matrix);
-    part->AddEntity(top);
+    part->AddEntity(top.get());
   }
   return part;
 }
@@ -936,7 +947,8 @@ EntityPtr CreateTourEntity(
 MeshPartPtr CreateTourMeshPart(Effect* e, const GeoTourParams& params,
                                const Matrix4& mat) {
   MeshPartPtr part(new MeshPart(e));
-  part->AddEntity(CreateTourEntity(e->vertex_desc(), params, mat));
+  EntityPtr entity = CreateTourEntity(e->vertex_desc(), params, mat);
+  part->AddEntity(entity.get());
   return part;
 }
 
@@ -981,7 +993,7 @@ MeshPartPtr CreateLineAxisMeshPart(Effect* e, const GeoAxisParams& params,
   entity->set_vmax(points[1] + Vector3(0.0f, 0.0f, 0.01f));
   Subset subset(0, entity->vertex_buffer_at(0)->vertex_count(), 0, 0);
   entity->AddSubset(subset);
-  part->AddEntity(entity);
+  part->AddEntity(entity.get());
   return part;
 }
 

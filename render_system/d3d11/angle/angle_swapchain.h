@@ -1,9 +1,8 @@
 #pragma once
 
-#include <d3d11.h>
-
 #include "azer/render/surface.h"
 #include "azer/render/swap_chain.h"
+#include "azer/render_system/d3d11/d3d11.h"
 #include "azer/render_system/d3d11/overlay.h"
 
 namespace azer {

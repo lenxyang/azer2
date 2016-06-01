@@ -28,7 +28,7 @@ class AZER_EXPORT SceneTreeRender {
 
   RenderNode* root() { return root_.get();}
   const Camera* camera() const { return camera_;}
-  void SetTreeBuildDelegate(std::unique_ptr<RenderTreeBuilderDelegate> delegate);
+  void SetTreeBuildDelegate(scoped_refptr<RenderTreeBuilderDelegate> delegate);
   void Init(SceneNode* root, const Camera* camera);
   void Update(const FrameArgs& args);
   void Render(Renderer* renderer);
@@ -53,7 +53,7 @@ class AZER_EXPORT SceneTreeRender {
   void UpdateNodeRecusive(RenderNode* node, const FrameArgs& args);
   void RenderNodeRecusive(RenderNode* node, Renderer* renderer);
   RenderNodePtr root_;
-  std::unique_ptr<RenderTreeBuilderDelegate> delegate_;
+  scoped_refptr<RenderTreeBuilderDelegate> delegate_;
   const Camera* camera_;
   ::base::ObserverList<SceneTreeRenderObserver> observers_;
   DISALLOW_COPY_AND_ASSIGN(SceneTreeRender);

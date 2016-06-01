@@ -1,11 +1,5 @@
 #include "azer/render_system/d3d11/shader.h"
 
-#include <d3d11.h>
-#include <d3dx11.h>
-#include <d3dx10.h>
-#include <d3dcompiler.h>
-#include <xnamath.h>
-
 #include "azer/base/string.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"

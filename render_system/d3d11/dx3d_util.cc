@@ -4,7 +4,6 @@
 #include <tchar.h>
 #include <comdef.h>
 
-#include <d3d11.h>
 #include "azer/base/string.h"
 #include "base/logging.h"
 #include "base/strings/string16.h"

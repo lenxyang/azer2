@@ -245,9 +245,8 @@ void VertexData::InitSlotFromDesc() {
   DCHECK(static_cast<int32_t>(vector_.size()) == desc_->slot_count());
   for (int32_t i = 0; i < desc_->slot_count(); ++i) {
     VertexDescPtr desc = desc_->gen_slot_desc(i);
-    const VertexDesc::Desc* d = desc->descs();
     int32_t vertex_count = vertex_count_;
-    SlotVertexDataPtr data = new SlotVertexData(desc, vertex_count);
+    SlotVertexDataPtr data = new SlotVertexData(desc.get(), vertex_count);
     vector_[i] = data;
   }
 }

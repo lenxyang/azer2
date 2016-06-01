@@ -1,11 +1,8 @@
-
 #pragma once
-
-#include <d3d11.h>
-
 
 #include "base/logging.h"
 #include "azer/render/texture.h"
+#include "azer/render_system/d3d11/d3d11.h"
 
 namespace azer {
 namespace d3d11 {

@@ -14,9 +14,9 @@ namespace azer {
 
 namespace {
 bool StringToDoubleVec(const std::string& text, std::vector<double>* vec) {
-  std::vector<std::string> v;
   double dv;
-  ::base::SplitString(text, ',', &v);
+  std::vector<std::string> v = ::base::SplitString(text, ",", base::TRIM_WHITESPACE,
+                                                   ::base::SPLIT_WANT_NONEMPTY);
   for (auto iter = v.begin(); iter != v.end(); ++iter) {
     std::string str = *iter;
     if (str.empty())
@@ -115,12 +115,12 @@ ConfigNodes ConfigNode::GetTaggedChildren(
 }
 
 ConfigNode* ConfigNode::GetNodeFromPath(const std::string& path) {
-  if (StartsWithASCII(path, "//", false)) {
+  if (::base::StartsWith(path, "//", ::base::CompareCase::INSENSITIVE_ASCII)) {
     return root()->GetNodeFromPath(path.substr(2));
   } else {
     ConfigNode* cur = this;
-    std::vector<std::string> vec;
-    ::base::SplitString(path, '/', &vec);
+    std::vector<std::string> vec = ::base::SplitString(
+        path, "/", base::TRIM_WHITESPACE, ::base::SPLIT_WANT_NONEMPTY);
     for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
       const std::string& name = *iter;
       ConfigNodes nodes = std::move(cur->GetNodeWithAttr("name", name));

@@ -138,7 +138,7 @@ bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
   D3DRenderSystem* render_system = static_cast<D3DRenderSystem*>(rs);
   ID3D11Device* d3d_device = render_system->GetDevice();
   D3D11_INPUT_ELEMENT_DESC d3ddesc[kMaxInputElementDesc] = {0};
-  CreateInputDesc(desc_t.get(), d3ddesc);
+  CreateInputDesc(desc_.get(), d3ddesc);
   hr = d3d_device->CreateInputLayout(d3ddesc,
                                      desc_->element_count(),
                                      (blob ? blob->GetBufferPointer() : NULL),

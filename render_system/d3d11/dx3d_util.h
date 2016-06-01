@@ -4,11 +4,9 @@
 #include <memory>
 #include <string>
 
-
+#include "azer/render_system/d3d11/d3d11.h"
 #include "base/strings/string16.h"
 #include "azer/base/string.h"
-
-#include <d3d11.h>
 
 namespace azer {
 namespace d3d11 {

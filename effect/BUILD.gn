@@ -27,8 +27,10 @@ source_set("effect") {
     "//ui/views",    
   ]
 
-  configs += ["//azer/build/config:utf8src"]
-  configs += ["//azer/base:build_render_config"]
+  configs += ["//azer/build/config:utf8src",
+              "//build/config/compiler:rtti",
+              "//azer/base:build_render_config"
+              ]
 }
 
 static_library("effectlib") {
@@ -63,5 +65,9 @@ static_library("effectlib") {
     "//azer",
     "//azer/res",
   ]
+
+  public_configs = ["//azer/build/config:utf8src",
+                    "//build/config/compiler:rtti"
+                    ]
 }
 

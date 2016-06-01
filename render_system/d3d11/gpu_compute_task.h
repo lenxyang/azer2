@@ -1,7 +1,7 @@
 #pragma once
 
-#include <d3d11.h>
 #include "azer/render/gpu_compute_task.h"
+#include "azer/render_system/d3d11/d3d11.h"
 
 namespace azer {
 namespace d3d11 {

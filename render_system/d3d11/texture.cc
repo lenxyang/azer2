@@ -6,9 +6,6 @@
 
 #include "azer/render_system/d3d11/texture.h"
 
-#include <d3d11.h>
-#include <d3dx11.h>
-
 #include "base/logging.h"
 #include "base/strings/string16.h"
 #include "azer/base/image.h"

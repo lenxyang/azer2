@@ -1,6 +1,5 @@
 #include "azer/render_system/d3d11/blending.h"
 
-#include <d3d11.h>
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"

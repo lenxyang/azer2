@@ -13,14 +13,16 @@
 namespace azer {
 class Camera;
 class FrameArgs;
+class RenderNodeDelegate;
 class RenderEnvNodeDelegate;
 class RenderEnvNode;
 class RenderNode;
 typedef scoped_refptr<RenderEnvNode> RenderEnvNodePtr;
 typedef scoped_refptr<RenderEnvNodeDelegate> RenderEnvNodeDelegatePtr;
 typedef scoped_refptr<RenderNode> RenderNodePtr;
+typedef scoped_refptr<RenderNodeDelegate> RenderNodeDelegatePtr;
 
-class AZER_EXPORT RenderNodeDelegate {
+class AZER_EXPORT RenderNodeDelegate : public ::base::RefCounted<RenderNodeDelegate> {
  public:
   explicit RenderNodeDelegate(RenderNode* node);
   virtual void Update(const FrameArgs& args) = 0;
@@ -38,7 +40,7 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
  public:
   explicit RenderNode(SceneNode* node);
   virtual ~RenderNode();
-  void SetDelegate(std::unique_ptr<RenderNodeDelegate> delegate);
+  void SetDelegate(scoped_refptr<RenderNodeDelegate> delegate);
 
   SceneNode* GetSceneNode() { return node_;}
   const SceneNode* GetSceneNode() const { return node_;}
@@ -82,7 +84,7 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
   std::vector<RenderNodePtr> children_;
 
   SceneNode* node_;
-  std::unique_ptr<RenderNodeDelegate> delegate_;
+  RenderNodeDelegatePtr delegate_;
   RenderEnvNodePtr envnode_;
   const Camera* camera_;
   Matrix4 world_;
@@ -91,11 +93,12 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
   DISALLOW_COPY_AND_ASSIGN(RenderNode);
 };
 
-class AZER_EXPORT RenderTreeBuilderDelegate {
+class AZER_EXPORT RenderTreeBuilderDelegate
+    : public ::base::RefCounted<RenderTreeBuilderDelegate> {
  public:
   virtual bool NeedRenderNode(SceneNode* node) = 0;
   virtual bool NeedRenderEnvNode(SceneNode* node);
-  virtual std::unique_ptr<RenderNodeDelegate> CreateRenderDelegate(RenderNode* n) = 0;
+  virtual scoped_refptr<RenderNodeDelegate> CreateRenderDelegate(RenderNode* n) = 0;
   virtual RenderEnvNodeDelegatePtr CreateEnvDelegate(RenderEnvNode* n) = 0;
 };
 

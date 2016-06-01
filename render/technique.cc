@@ -73,7 +73,8 @@ TechniquePtr CreateTechnique(const TechSource& source) {
   const ShaderInfo& vsinfo = source.GetStage(kVertexStage);
   ShaderPtr vs_shader(rs->CreateShader(vsinfo, source.vertex_desc()));
   tech->AddShader(vs_shader);
-  for (uint32_t i = (uint32_t)(kVertexStage + 1); i < source.size(); ++i) {
+  int32_t i = (int32_t)(kVertexStage + 1);
+  for (; i < source.size(); ++i) {
     const ShaderInfo& info = source.GetStage(i);
     if (!info.code.empty()) {
       VertexDesc* desc = NULL;

@@ -34,7 +34,7 @@ int32_t GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
 
 GpuConstantsTable::GpuConstantsTable(int32_t num, const Desc* desc)
     : HardwareBuffer(kShaderConstsTableBufferOpt()) {
-  int32_t offset = 0;
+  uint32_t offset = 0;
   const Desc* curr = desc;
   for (int32_t i = 0; i < num; ++i, ++curr) {
     const int32_t size = GpuTableItemDescSize(*curr);
