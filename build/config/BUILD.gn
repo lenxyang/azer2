@@ -13,11 +13,6 @@ if (is_win) {
     include_dirs = ["$windows_sdk_path\Include\um"]
     #lib_dirs = ["$d3dsdk_path/Lib/x86"]
     libs = ["dxguid.lib", "d3dcompiler.lib", "d3d11.lib"]
-    if (is_debug) {
-      libs +=  ["d3dx11.lib"]
-    } else {
-      libs +=  ["d3dx11d.lib" ]
-    }
   }
   
   config("d3d9") {
