@@ -1,10 +1,9 @@
-#include "nelf/adapter/adapter_util.h"
+#include "azer/ui/adapter/util.h"
 
 #include "ui/aura/window.h"
 #include "ui/aura/window_tree_host.h"
 #include "ui/views/widget/widget.h"
 #include "ui/views/widget/native_widget_private.h"
-#include "azer/ui/adapter/util.h"
 
 namespace azer {
 namespace {
