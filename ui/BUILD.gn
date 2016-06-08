@@ -1,0 +1,28 @@
+
+static_library("ui") {
+  sources = [
+    "adapter/output_device.cc",
+    "adapter/output_device.h",
+    "adapter/output_surface.cc",
+    "adapter/output_surface.h",
+    "adapter/swapchain_context.cc",
+    "adapter/swapchain_context.h",
+    "adapter/context_factory.cc",
+    "adapter/context_factory.h",
+    "adapter/util.cc",
+    "adapter/util.h",
+  ]
+
+  deps = [
+    "//base:i18n",
+    "//cc/surfaces",
+    "//cc",
+    "//gpu",
+    "//skia",
+    "//ui/aura",
+    "//ui/accessibility",
+    "//ui/compositor",
+    "//ui/wm",
+    "//ui/views",
+  ]
+}
