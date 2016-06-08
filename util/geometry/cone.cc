@@ -8,7 +8,7 @@
 namespace azer {
 Subset AppendGeoTaperData(VertexPack* vpack, IndexPack* ipack, 
                           const GeoConeParam& p, const Matrix4& mat) {
-  const int32 kVertexNum = 1 + p.slice + 1;
+  const int32_t kVertexNum = 1 + p.slice + 1;
   Subset subset;
   VertexPos vpos(0, 0), npos;
   subset.vertex_base = vpack->index();
@@ -37,8 +37,8 @@ Subset AppendGeoTaperData(VertexPack* vpack, IndexPack* ipack,
 
 void AppendGeoConeData(EntityData* data, const GeoConeParam& p, const Matrix4& mat){
   Subset sub;
-  const int32 kVertexCount = CalcGeoRoundVertexCount(p.slice);
-  const int32 kIndexCount = CalcGeoRoundIndexCount(p.slice);
+  const int32_t kVertexCount = CalcGeoRoundVertexCount(p.slice);
+  const int32_t kIndexCount = CalcGeoRoundIndexCount(p.slice);
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
   VertexPack vpack(data->vdata());

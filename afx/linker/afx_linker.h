@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-#include "base/basictypes.h"
+
 #include "azer/afx/linker/program.h"
 #include "azer/afx/util/file_loader.h"
 

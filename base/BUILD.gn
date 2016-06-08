@@ -1,22 +1,4 @@
-
-action("build_info_action") {
-  gen_dir = rebase_path(target_gen_dir, root_build_dir, ".")
-  exec_script("//azer/build/tools/shell/mkdir.py", [gen_dir])
-  
-  script = "//azer/build/tools/shell/buildinfo.py"
-  src_absolute_dir = rebase_path("//")
-  outputs = ["$target_gen_dir/build_info.cc"]
-  args = [gen_dir, "build_info", src_absolute_dir]
-}
-
-static_library("build_info") {
-  sources = [
-    "$target_gen_dir/build_info.cc",
-    "build_info.cc",
-    "build_info.h",
-  ]
-  deps = [":build_info_action"]
-}
+import("//testing/test.gni")
 
 config("base_config") {
   if (is_win) {
@@ -84,6 +66,7 @@ static_library("test_support") {
 }
 
 source_set("unittests") {
+  testonly = true
   sources = [
     "tests/file_system_tests.cc",
     "tests/res_path_tests.cc",

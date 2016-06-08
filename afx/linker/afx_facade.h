@@ -11,7 +11,7 @@
 #include "azer/afx/linker/afx_linker.h"
 #include "azer/afx/linker/testutil.h"
 #include "azer/afx/util/file_loader.h"
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 
 namespace azer {

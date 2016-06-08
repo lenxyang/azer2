@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/afx/compiler/type.h"
 #include "azer/afx/compiler/errno.h"
 
@@ -17,9 +17,9 @@ class Value {
   explicit Value(bool v);
   explicit Value(char v);
   explicit Value(short v);
-  explicit Value(int32 v);
+  explicit Value(int32_t v);
   explicit Value(int32* v, int dim);
-  explicit Value(uint32 v);
+  explicit Value(uint32_t v);
   explicit Value(uint32* v, int dim);
   explicit Value(float v);
   explicit Value(float* v, int dim);
@@ -78,8 +78,8 @@ class Value {
   bool GetBoolean() const;
   char GetChar() const;
   short GetShort() const;
-  int32 GetInt32() const;
-  uint32 GetUint32() const;
+  int32_t GetInt32() const;
+  uint32_t GetUint32() const;
   float GetFloat() const;
   float GetDouble() const;
   const float* GetVec() const;
@@ -89,8 +89,8 @@ class Value {
   void SetBoolean(bool b);
   void SetChar(char b);
   void SetShort(short s);
-  void SetUint32(uint32 i32);
-  void SetInt32(int32 i);
+  void SetUint32(uint32_t i32);
+  void SetInt32(int32_t i);
   void SetFloat(float f);
   void SetDouble(double d);
   void SetString(const std::string& str);
@@ -116,8 +116,8 @@ class Value {
     bool b;
     char c;
     short s;
-    uint32 u32;
-    int32 i32;
+    uint32_t u32;
+    int32_t i32;
     float f;
     double d;
     int intvec[4];
@@ -168,7 +168,7 @@ inline Value::Value(short v) {
   errno_ = kNoError;
 }
 
-inline Value::Value(int32 v) {
+inline Value::Value(int32_t v) {
   memset(&value_, 0, sizeof(value_));
   type_.reset(new Type(kInt32));
   value_.i32 = v;
@@ -177,7 +177,7 @@ inline Value::Value(int32 v) {
   errno_ = kNoError;
 }
 
-inline Value::Value(uint32 v) {
+inline Value::Value(uint32_t v) {
   memset(&value_, 0, sizeof(value_));
   type_.reset(new Type(kUint32));
   value_.u32 = v;
@@ -303,7 +303,7 @@ inline void Value::SetShort(short s) {
   this->valid_ = true;
 }
 
-inline void Value::SetUint32(uint32 u32) {
+inline void Value::SetUint32(uint32_t u32) {
   reset();
   value_.u32 = u32;
   this->type_.reset(new Type(kUint32));
@@ -311,7 +311,7 @@ inline void Value::SetUint32(uint32 u32) {
   this->valid_ = true;
 }
 
-inline void Value::SetInt32(int32 i32) {
+inline void Value::SetInt32(int32_t i32) {
   reset();
   value_.i32 = i32;
   this->type_.reset(new Type(kInt32));
@@ -432,12 +432,12 @@ inline short Value::GetShort() const {
   return value_.s;
 }
 
-inline int32 Value::GetInt32() const {
+inline int32_t Value::GetInt32() const {
   DCHECK(type_.get() && type_->type() == kInt32);
   return value_.i32;
 }
 
-inline uint32 Value::GetUint32() const {
+inline uint32_t Value::GetUint32() const {
   DCHECK(type_.get() && type_->type() == kUint32);
   return value_.u32;
 }
@@ -462,7 +462,7 @@ inline const int* Value::GetIntVec() const {
   return value_.intvec;
 }
 
-inline int32 GetInteger(const ValuePtr& value) {
+inline int32_t GetInteger(const ValuePtr& value) {
   CHECK(value->type().get() != NULL);
   CHECK(IsIntegerScalar(value->type()));
   const TypePtr& type = value->type(); 

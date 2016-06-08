@@ -9,8 +9,9 @@ namespace azer {
 
 SceneTreeRender::SceneTreeRender() : camera_(NULL) {}
 
-void SceneTreeRender::SetTreeBuildDelegate(scoped_ptr<RenderTreeBuilderDelegate> delegate) {
-  delegate_ = delegate.Pass();
+void SceneTreeRender::SetTreeBuildDelegate(
+    scoped_refptr<RenderTreeBuilderDelegate> delegate) {
+  delegate_ = delegate;
 }
 
 void SceneTreeRender::Init(SceneNode* root, const Camera* camera) {
@@ -24,13 +25,13 @@ void SceneTreeRender::Init(SceneNode* root, const Camera* camera) {
 void SceneTreeRender::Update(const FrameArgs& args) {
   root_->GetEnvNode()->UpdateRecusive(args);
   DoFrameUpdateBegin(args);
-  UpdateNodeRecusive(root_, args);
+  UpdateNodeRecusive(root_.get(), args);
   DoFrameUpdateEnd(args);
 }
 
 void SceneTreeRender::Render(Renderer* renderer) {
   DoFrameRenderBegin(renderer);
-  RenderNodeRecusive(root_, renderer);
+  RenderNodeRecusive(root_.get(), renderer);
   DoFrameRenderEnd(renderer);
 }
 

@@ -287,7 +287,7 @@ void ParseContext::RegisteSymbolType(const std::string& symbol, SymbolType type)
 }
 
 ASTNode* ParseContext::LookupFunction(const std::string& fullname) {
-  uint32 pos = fullname.find_last_of("::");
+  uint32_t pos = fullname.find_last_of("::");
   if (pos != std::string::npos) {
     std::string package = fullname.substr(0, pos-1);
     std::string name = fullname.substr(pos + 1);
@@ -328,7 +328,7 @@ ASTNode* ParseContext::LookupFuncHierarchy(const std::string& symbol,
 }
 
 ASTNode* ParseContext::LookupType(const std::string& fullname) {
-  uint32 pos = fullname.find_last_of("::");
+  uint32_t pos = fullname.find_last_of("::");
   if (pos != std::string::npos) {
     std::string package = fullname.substr(0, pos-1);
     std::string name = fullname.substr(pos + 1);

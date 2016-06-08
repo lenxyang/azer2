@@ -6,9 +6,6 @@
 
 #include "azer/render_system/d3d11/texture.h"
 
-#include <d3d11.h>
-#include <d3dx11.h>
-
 #include "base/logging.h"
 #include "base/strings/string16.h"
 #include "azer/base/image.h"
@@ -93,7 +90,7 @@ Texture::MapData D3DTexture::map(MapType maptype) {
     return mapdata;
   }
   
-  mapdata.pdata = (uint8*)mapped.pData;
+  mapdata.pdata = (uint8_t*)mapped.pData;
   mapdata.row_pitch = mapped.RowPitch;
   mapdata.depth_pitch = mapped.DepthPitch;
 
@@ -143,10 +140,10 @@ bool D3DTexture::CopyTo(Texture* texture) {
 // class D3DTexture2D
 bool D3DTexture2D::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  int32 count = 0;
+  int32_t count = 0;
   D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
-  DCHECK_LT(image->level_count(), static_cast<int32>(arraysize(subres)));
-  for (int32 i = 0; i < image->level_count(); ++i, ++count) {
+  DCHECK_LT(image->level_count(), static_cast<int32_t>(arraysize(subres)));
+  for (int32_t i = 0; i < image->level_count(); ++i, ++count) {
     const ImageLevelData* data = image->GetLevelData(i);
     subres[i].pSysMem = data->dim_data(0);
     subres[i].SysMemPitch = data->row_bytes();

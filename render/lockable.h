@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/render_system_enum.h"
@@ -17,13 +17,13 @@ class AZER_EXPORT LockData : public ::base::RefCounted<LockData> {
   }
 
   uint8* data_ptr() const { return data_;}
-  int32 row_size() const { return row_size_;}
-  int32 column_num() const { return column_num_;}
+  int32_t row_size() const { return row_size_;}
+  int32_t column_num() const { return column_num_;}
  private:
   uint8* data_;
-  int32 row_size_;
-  int32 column_num_;
-  int32 size_;
+  int32_t row_size_;
+  int32_t column_num_;
+  int32_t size_;
 
   friend class Lockable;
   DISALLOW_COPY_AND_ASSIGN(LockData);
@@ -42,10 +42,10 @@ class AZER_EXPORT HardwareBuffer : public ::base::RefCounted<HardwareBuffer> {
   void SetLockDataPtr(void* ptr, LockData* data) {
     data->data_ = (uint8*)ptr;
   }
-  void SetLockDataRowSize(int32 size, LockData* data) {
+  void SetLockDataRowSize(int32_t size, LockData* data) {
     data->row_size_ = size;
   }
-  void SetLockDataColumnNum(int32 num, LockData* data) {
+  void SetLockDataColumnNum(int32_t num, LockData* data) {
     data->column_num_ = num;
   }
  private:

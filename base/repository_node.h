@@ -24,9 +24,9 @@ public:
   void RemoveChild(RepositoryNodePtr child);
   bool HasAncestor(RepositoryNode* node) const;
   RepositoryNodePtr GetChild(const StringType& relative);
-  int32 GetIndexOf(const RepositoryNodePtr& node) const;
-  RepositoryNodePtr child_at(int32 index);
-  int32 child_count() const;
+  int32_t GetIndexOf(const RepositoryNodePtr& node) const;
+  RepositoryNodePtr child_at(int32_t index);
+  int32_t child_count() const;
   const RepositoryNodeDicts& children() const { return children_;}
 
   RepositoryNodePtr FindOrCreate(const StringType& name);

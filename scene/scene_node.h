@@ -63,8 +63,8 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode> {
   ~SceneNode();
   
   // attributes
-  static SceneNode* Lookup(int32 id);
-  int32 id() const { return id_;}
+  static SceneNode* Lookup(int32_t id);
+  int32_t id() const { return id_;}
   void set_visible(bool visible) { visible_ = visible;}
   bool visible() const { return visible_;}
 
@@ -85,8 +85,8 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode> {
   SceneNode* AddChild(SceneNode* child);
   void RemoveChild(SceneNode* child);
   bool has_child() const { return !children_.empty();}
-  int32 child_count() const { return children_.size();}
-  SceneNode* child_at(int32 index) { return children_.at(index);}
+  int32_t child_count() const { return static_cast<int32_t>(children_.size());}
+  SceneNode* child_at(int32_t index) { return children_.at(index).get();}
   bool HasAncestor(SceneNode* node) const;
   SceneNodes* mutable_children() { return &children_;}
 
@@ -167,15 +167,15 @@ class AZER_EXPORT SceneNode: public ::base::RefCounted<SceneNode> {
   std::string name_;
   SceneNodeType type_;
   void* user_data_;
-  scoped_ptr<SceneNodeData> data_;
+  std::unique_ptr<SceneNodeData> data_;
   TransformHolder holder_;
   std::map<std::string, std::string> attributes_;
 
   // bounding
   Vector3 local_vmin_;
   Vector3 local_vmax_;
-  ObserverList<SceneNodeObserver> observers_;
-  int32 id_;
+  ::base::ObserverList<SceneNodeObserver> observers_;
+  int32_t id_;
   DISALLOW_COPY_AND_ASSIGN(SceneNode);
 };
 
@@ -184,13 +184,13 @@ class AZER_EXPORT SceneNodeManager {
   SceneNodeManager();
   bool Register(SceneNode* node);
   bool Unregister(SceneNode* node);
-  SceneNode* Lookup(int32 id);
+  SceneNode* Lookup(int32_t id);
  private:
-  std::map<int32, SceneNode*> dict_;
+  std::map<int32_t, SceneNode*> dict_;
   DISALLOW_COPY_AND_ASSIGN(SceneNodeManager);
 };
 
-AZER_EXPORT const char* SceneNodeName(int32 type);
+AZER_EXPORT const char* SceneNodeName(int32_t type);
 AZER_EXPORT Matrix4 GenWorldMatrixForSceneNode(SceneNode* node);
 AZER_EXPORT void GetSceneNodeBounds(SceneNode* node, Vector3* vmin, Vector3* vmax);
 }  // namespace azer

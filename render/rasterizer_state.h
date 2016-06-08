@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/renderer.h"
@@ -38,7 +38,7 @@ class ScopedRasterizerState {
     prev_state_ = renderer->GetRasterizerState();;
   }
   ~ScopedRasterizerState() {
-    renderer_->SetRasterizerState(prev_state_);
+    renderer_->SetRasterizerState(prev_state_.get());
   }
  private:
   RasterizerStatePtr prev_state_;

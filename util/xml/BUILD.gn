@@ -1,3 +1,4 @@
+import("//testing/test.gni")
 
 static_library("xml") {
   sources = [

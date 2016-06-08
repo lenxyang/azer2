@@ -55,7 +55,7 @@ VariantResource SceneLoader::Load(const ConfigNode* node, ResourceLoadContext* c
   return ret;
 }
 
-void SceneLoader::RegisterSceneNodeLoader(scoped_ptr<SceneNodeLoader> loader) {
+void SceneLoader::RegisterSceneNodeLoader(std::unique_ptr<SceneNodeLoader> loader) {
   DCHECK(NULL == GetLoader(loader->node_type_name()));
   loader_map_.insert(std::make_pair(loader->node_type_name(), loader.Pass()));
 }
@@ -107,7 +107,7 @@ bool SceneLoader::LoadSceneLocation(SceneNode* node,
                                     ResourceLoadContext* ctx) {
   std::vector<ConfigNodePtr> location_children = std::move(
       config->GetTaggedChildren("location"));
-  int32 location_size = location_children.size();
+  int32_t location_size = location_children.size();
   if (location_size == 0u) {
     return true;
   } else if (location_size != 1u) {

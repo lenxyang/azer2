@@ -29,12 +29,12 @@ void D3DGpuComputeTaskDispatcher::Dispatch(GpuComputeTask* task,
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   ID3D11DeviceContext* context = rs->GetContext();
   D3DComputeShader* program = (D3DComputeShader*)task->gpu_program();
-  for (int32 i = 0; i < task->input_count(); ++i) {
+  for (int32_t i = 0; i < task->input_count(); ++i) {
     resview_[i] = ((D3DResTextureView*)task->GetInputAt(i))->GetResourceView();
     DCHECK(resview_[i] != NULL);
   }
 
-  for (int32 i = 0; i < task->output_count(); ++i) {
+  for (int32_t i = 0; i < task->output_count(); ++i) {
     uavview_[i] = ((D3DUAResTextureView*)task->GetOutputAt(i))->GetResourceView();
     DCHECK(uavview_[i] != NULL);
   }

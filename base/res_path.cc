@@ -79,17 +79,17 @@ void ResPath::Init(const StringType& proto, const StringType& path,
   fullpath_.clear();
   fullpath_.append(proto);
   proto_slice_.begin = 0;
-  proto_slice_.len = proto.length();
+  proto_slice_.len = static_cast<int>(proto.length());
 
-  int filepath_index = fullpath_.length();
+  int filepath_index = static_cast<int>(fullpath_.length());
   fullpath_.append(path);
   filepath_slice_.begin = filepath_index;
-  filepath_slice_.len = path.length();
+  filepath_slice_.len = static_cast<int>(path.length());
   
-  int component_index = fullpath_.length();
+  int component_index = static_cast<int>(fullpath_.length());
   fullpath_.append(component);
   component_slice_.begin = component_index;
-  component_slice_.len = component.length();
+  component_slice_.len = static_cast<int>(component.length());
   type_ = path_type;
 }
 
@@ -178,15 +178,15 @@ Slice ResPath::DirName() const {
 
 Slice ResPath::BaseName() const {
   Slice slice = fullpath_;
-  int32 component_pos = fullpath_.find(kComponentSeperatorStr);
-  if (component_pos != -1) {
+  size_t component_pos = fullpath_.find(kComponentSeperatorStr);
+  if (component_pos != StringType::npos) {
     slice = Slice(fullpath_.c_str(), component_pos);
   }
   
-  int32 last_dir = slice.find_last_of(kSeperatorStr);
-  if (last_dir == static_cast<int32>(slice.length()) - 1) {
+  size_t last_dir = slice.find_last_of(kSeperatorStr);
+  if (last_dir == static_cast<int>(slice.length()) - 1) {
     return Slice();
-  } else if (last_dir != -1) {
+  } else if (last_dir != StringType::npos) {
     return slice.substr(last_dir + 1);
   } else {
     return slice;
@@ -200,7 +200,7 @@ Slice ResPath::component_name() const {
     return component.substr(1);
   } else {
     Slice name = BaseName();
-    uint32 pos = name.rfind(FILE_PATH_LITERAL("."));
+    size_t pos = name.rfind(FILE_PATH_LITERAL("."));
     if (pos != StringType::npos)
       name = name.substr(0, pos);
     return name;
@@ -209,7 +209,7 @@ Slice ResPath::component_name() const {
 
 std::vector<Slice> ResPath::dirs() const {
   std::vector<Slice> components;
-  int cur = 0;
+  size_t cur = 0;
   Slice filepath = this->filepath();
   if (IsAbsolutePath()) {
     components.push_back(Slice(filepath.data(), 2));
@@ -217,7 +217,7 @@ std::vector<Slice> ResPath::dirs() const {
   }
 
   while (cur >= 0 && cur < filepath.length()) {
-    int prev = cur;
+    size_t prev = cur;
     cur = filepath.find(kSeperator, prev);
     if (cur > 0) {
       components.push_back(Slice(filepath.data() + prev, cur - prev));

@@ -2,7 +2,8 @@
 
 #include <string>
 #include <vector>
-#include "base/basictypes.h"
+
+#include "base/macros.h"
 
 // libxml
 struct _xmlDoc;

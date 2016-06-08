@@ -9,11 +9,11 @@
 #include "azer/util/geometry/normal_util.h"
 
 namespace azer {
-int32 CalcBarrelVertexCount(int32 stack, int32 slice) {
+int32_t CalcBarrelVertexCount(int32_t stack, int32_t slice) {
   return stack * (slice + 1);
   
 }
-int32 CalcBarrelIndexCount(int32 stack, int32 slice) {
+int32_t CalcBarrelIndexCount(int32_t stack, int32_t slice) {
   return (stack - 1) * slice * 3 * 2;
 }
 
@@ -51,8 +51,8 @@ Subset AppendGeoBarrelData(VertexPack* vpack, IndexPack* ipack,
   subset.vertex_count = vpack->index() - subset.vertex_base;
   subset.index_base = ipack->index();
   for (int i = 0; i < p.stack - 1; ++i) {
-    int32 line1 = i * (p.slice + 1); 
-    int32 line2 = (i + 1) * (p.slice + 1); 
+    int32_t line1 = i * (p.slice + 1); 
+    int32_t line2 = (i + 1) * (p.slice + 1); 
     GenTriStripIndex(line1, line2, p.slice + 1, ipack);
   }
   subset.index_count = ipack->index() - subset.index_base;
@@ -67,8 +67,8 @@ void AppendGeoBarrelSubset(EntityData* data, const GeoCylinderParam& p,
   IndexPack ipack(data->idata());
 
   {
-    const int32 kVertexCount = CalcBarrelVertexCount(p.stack, p.slice);
-    const int32 kIndexCount = CalcBarrelIndexCount(p.stack, p.slice);
+    const int32_t kVertexCount = CalcBarrelVertexCount(p.stack, p.slice);
+    const int32_t kIndexCount = CalcBarrelIndexCount(p.stack, p.slice);
     data->vdata()->extend(kVertexCount);
     data->idata()->extend(kIndexCount);
     vpack.move(data->vdata()->vertex_count() - kVertexCount);
@@ -84,8 +84,8 @@ void AppendGeoCylinderSubset(EntityData* data, const GeoCylinderParam& p,
   IndexPack ipack(data->idata());
 
   {
-    const int32 kVertexCount = CalcBarrelVertexCount(p.stack, p.slice);
-    const int32 kIndexCount = CalcBarrelIndexCount(p.stack, p.slice);
+    const int32_t kVertexCount = CalcBarrelVertexCount(p.stack, p.slice);
+    const int32_t kIndexCount = CalcBarrelIndexCount(p.stack, p.slice);
     data->vdata()->extend(kVertexCount);
     data->idata()->extend(kIndexCount);
     vpack.move(data->vdata()->vertex_count() - kVertexCount);
@@ -95,8 +95,8 @@ void AppendGeoCylinderSubset(EntityData* data, const GeoCylinderParam& p,
   }
 
   {
-    const int32 kVertexCount = CalcGeoRoundVertexCount(p.slice) * 2;
-    const int32 kIndexCount = CalcGeoRoundIndexCount(p.slice) * 2;
+    const int32_t kVertexCount = CalcGeoRoundVertexCount(p.slice) * 2;
+    const int32_t kIndexCount = CalcGeoRoundIndexCount(p.slice) * 2;
     data->vdata()->extend(kVertexCount);
     data->idata()->extend(kIndexCount);
     vpack.move(data->vdata()->vertex_count() - kVertexCount);

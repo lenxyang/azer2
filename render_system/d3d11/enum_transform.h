@@ -1,10 +1,5 @@
 #pragma once
 
-#include <d3d11.h>
-#include <d3dx11.h>
-#include <d3dx10.h>
-#include <xnamath.h>
-
 #include "azer/render/indices_buffer.h"
 #include "azer/render/blending.h"
 #include "azer/render/depth_buffer.h"
@@ -12,7 +7,7 @@
 #include "azer/render/render_target.h"
 #include "azer/render/texture.h"
 #include "azer/render/vertex_buffer.h"
-
+#include "azer/render_system/d3d11/d3d11.h"
 
 namespace azer {
 namespace d3d11 {
@@ -30,7 +25,7 @@ D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(PrimitiveTopology topology);
 
 DXGI_FORMAT TranslateIndexType(IndexType type);
 
-D3D11_BIND_FLAG TranslateBindTarget(uint32 target);
+D3D11_BIND_FLAG TranslateBindTarget(uint32_t target);
 
 D3D11_FILL_MODE TranslateFillMode(FillMode mode);
 FillMode TranslateD3DFillMode(D3D11_FILL_MODE mode);

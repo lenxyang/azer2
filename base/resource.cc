@@ -3,7 +3,7 @@
 namespace azer {
 VariantResource::VariantResource() : type(kResTypeNone), retcode(-1) {}
 
-int32 GetTypeFromString(const std::string& str) {
+int32_t GetTypeFromString(const std::string& str) {
   if (str == "mesh") {
     return kResTypeMesh;
   } else if (str == "material") {

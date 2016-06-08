@@ -7,7 +7,7 @@
 
 namespace azer {
 namespace d3d11 {
-D3DGpuConstantsTable::D3DGpuConstantsTable(int32 num, const Desc* desc)
+D3DGpuConstantsTable::D3DGpuConstantsTable(int32_t num, const Desc* desc)
     : GpuConstantsTable(num, desc)
     , buffer_(NULL) {
 }

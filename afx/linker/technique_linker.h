@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "base/basictypes.h"
+
 #include "azer/afx/linker/technique.h"
 
 namespace azer {

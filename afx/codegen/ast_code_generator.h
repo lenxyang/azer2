@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/afx/compiler/astnode.h"
 #include "azer/afx/compiler/context.h"
 

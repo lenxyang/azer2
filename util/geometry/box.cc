@@ -80,14 +80,14 @@ int indices[] = {0, 2, 1, 0, 3, 2,  // front
                  4, 3, 0, 4, 7, 3,  // left
                  4, 1, 5, 4, 0, 1,  // top
                  3, 6, 2, 3, 7, 6}; // bottom
-int32 edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
+int32_t edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
                           0, 14, 2, 8, 1, 7, 4, 13,
                           14, 8, 8, 7, 7, 13, 13, 14};
-int32 CalcBoxVertexCount() { return static_cast<int32>(arraysize(indices));}
-int32 CalcBoxIndexCount() { return 0;}
-int32 CalcBoxFrameIndexCount() { return static_cast<int32>(arraysize(edge_indices));}
+int32_t CalcBoxVertexCount() { return static_cast<int32>(arraysize(indices));}
+int32_t CalcBoxIndexCount() { return 0;}
+int32_t CalcBoxFrameIndexCount() { return static_cast<int32>(arraysize(edge_indices));}
 
-void CalcTriangleListNormal(int32 base, int32 vcount, int* indices,
+void CalcTriangleListNormal(int32_t base, int32_t vcount, int* indices,
                             VertexPack* vpack) {
   VertexPos npos;
   if (!GetSemanticIndex("normal", 0, vpack->desc(), &npos)) {
@@ -177,8 +177,8 @@ Subset CreateBoxVertexData(VertexPack* vpack, const Matrix4& mat) {
   return subset;
 }
 
-int32 CreateBoxFrameIndicesData(IndexPack* ipack) {
-  for (uint32 i = 0; i < arraysize(edge_indices); ++i) {
+int32_t CreateBoxFrameIndicesData(IndexPack* ipack) {
+  for (uint32_t i = 0; i < arraysize(edge_indices); ++i) {
     CHECK(ipack->WriteAndAdvance(edge_indices[i]));
   }
   return static_cast<int32>(arraysize(edge_indices));
@@ -202,8 +202,8 @@ Subset AppendGeoBoxFrameSubset(VertexPack* vp, IndexPack* ipack,
 void AppendGeoBoxData(EntityData* data, const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  const int32 kVertexCount = CalcBoxVertexCount();
-  const int32 kIndexCount = 0;
+  const int32_t kVertexCount = CalcBoxVertexCount();
+  const int32_t kIndexCount = 0;
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
   vpack.move(data->vdata()->vertex_count() - kVertexCount);
@@ -214,8 +214,8 @@ void AppendGeoBoxData(EntityData* data, const Matrix4& mat) {
 void AppendGeoBoxFrameData(EntityData* data, const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  const int32 kVertexCount = CalcBoxVertexCount();
-  const int32 kIndexCount = CalcBoxFrameIndexCount();
+  const int32_t kVertexCount = CalcBoxVertexCount();
+  const int32_t kIndexCount = CalcBoxFrameIndexCount();
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
   vpack.move(data->vdata()->vertex_count() - kVertexCount);

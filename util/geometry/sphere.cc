@@ -9,15 +9,15 @@
 
 namespace azer {
 namespace {
-inline int32 CalcSphereIndexCount(int32 stack_num, int32 slice_num) {
+inline int32_t CalcSphereIndexCount(int32_t stack_num, int32_t slice_num) {
   return (stack_num - 2 - 1) * slice_num * 3 * 2 + slice_num * 2 * 3;
 }
 
-inline int32 CalcSphereFrameIndexCount(int32 stack, int32 slice) {
+inline int32_t CalcSphereFrameIndexCount(int32_t stack, int32_t slice) {
   return (stack - 1) * (slice + 1) * 2 + (stack - 2) * (slice + 1) * 2;
 }
 
-inline int32 CalcSphereVertexCount(int32 stack_num, int32 slice_num) {
+inline int32_t CalcSphereVertexCount(int32_t stack_num, int32_t slice_num) {
   return (stack_num - 2) * (slice_num + 1) + 2;
 }
 
@@ -74,7 +74,7 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
     GenTriStripIndex(line1, line2, p.slice + 1, ipack);
   }
 
-  int32 last = subset.vertex_count - 1;
+  int32_t last = subset.vertex_count - 1;
   AppendBottomGeoTaperIndexData(last, ipack, p.slice);
   subset.index_count = ipack->index() - subset.index_base;
   CalcIndexedTriangleNormal(vp->data(), ipack->data(), subset);
@@ -82,8 +82,8 @@ Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,
 }
 
 namespace {
-void UpdateSphereNormal(VertexPack* vpack, int32 stack, int32 slice, Subset subset) {
-  const int32 kIndexCount = CalcSphereIndexCount(stack, slice);
+void UpdateSphereNormal(VertexPack* vpack, int32_t stack, int32_t slice, Subset subset) {
+  const int32_t kIndexCount = CalcSphereIndexCount(stack, slice);
   IndicesDataPtr ptr(new IndicesData(kIndexCount));
   IndexPack ipack(ptr);
   subset.index_base = ipack.index();
@@ -94,7 +94,7 @@ void UpdateSphereNormal(VertexPack* vpack, int32 stack, int32 slice, Subset subs
     GenTriStripIndex(line1, line2, slice + 1, &ipack);
   }
 
-  int32 last = subset.vertex_count - 1;
+  int32_t last = subset.vertex_count - 1;
   AppendBottomGeoTaperIndexData(last, &ipack, slice);
   subset.index_count = ipack.index() - subset.index_base;
   CalcIndexedTriangleNormal(vpack->data(), ipack.data(), subset);
@@ -103,7 +103,7 @@ void UpdateSphereNormal(VertexPack* vpack, int32 stack, int32 slice, Subset subs
 
 Subset AppendGeoSphereFrameSuset(VertexPack* vp, IndexPack* ipack,
                                  const GeoSphereParam& p, const Matrix4& mat) {
-  const int32 kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
+  const int32_t kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
   Subset subset = AppendGeoSphereVertexSuset(vp, ipack, p, mat);
   UpdateSphereNormal(vp, p.stack, p.slice, subset);
 
@@ -140,8 +140,8 @@ Subset AppendGeoSphereFrameSuset(VertexPack* vp, IndexPack* ipack,
 
 void AppendGeoSphereData(EntityData* data, const GeoSphereParam& p, 
                          const Matrix4& mat) {
-  const int32 kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
-  const int32 kIndexCount = CalcSphereIndexCount(p.stack, p.slice);
+  const int32_t kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
+  const int32_t kIndexCount = CalcSphereIndexCount(p.stack, p.slice);
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
   VertexPack vpack(data->vdata());
@@ -163,8 +163,8 @@ EntityDataPtr CreateSphere(VertexDesc* desc, const GeoSphereParam& p,
 
 void AppendGeoSphereFrameData(EntityData* data, const GeoSphereParam& p, 
                               const Matrix4& mat) {
-  const int32 kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
-  const int32 kIndexCount = CalcSphereFrameIndexCount(p.stack, p.slice);
+  const int32_t kVertexCount = CalcSphereVertexCount(p.stack, p.slice);
+  const int32_t kIndexCount = CalcSphereFrameIndexCount(p.stack, p.slice);
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
   VertexPack vpack(data->vdata());

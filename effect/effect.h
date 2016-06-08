@@ -46,15 +46,15 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void SetVertexDesc(VertexDesc* desc);
   
   // 刷新所有的 GpuConstantTable
-  void FlushGpuVariables(int32 flush_mode, Renderer* renderer);
+  void FlushGpuVariables(int32_t flush_mode, Renderer* renderer);
 
   void Apply(Renderer* renderer);
   void OnRenderBegin(Renderer* renderer);
   void OnRenderEnd(Renderer* renderer);
   void OnRenderNewObject(Renderer* renderer);
  protected:
-  void SaveShaderResTexture(int32 stage, int32 index, TextureView* tex);
-  void BindTexture(int32 mode, Renderer* renderer);
+  void SaveShaderResTexture(int32_t stage, int32_t index, TextureView* tex);
+  void BindTexture(int32_t mode, Renderer* renderer);
   virtual void InitGpuConstantTable() {};
   virtual void ApplyGpuConstantTable(Renderer* renderer) {}
   void BindConstantsTable(Renderer* renderer);

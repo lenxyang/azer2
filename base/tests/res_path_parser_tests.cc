@@ -1,4 +1,4 @@
-#include "base/basictypes.h"
+
 #include "azer/files/res_path_parser.h"
 #include "testing/gtest/include/gtest/gtest.h"
 

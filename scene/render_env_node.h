@@ -3,7 +3,6 @@
 #include <deque>
 #include <vector>
 
-#include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/effect/light.h"
@@ -61,14 +60,14 @@ class AZER_EXPORT RenderEnvNode : public ::base::RefCounted<RenderEnvNode> {
   }
 
   void UpdateRecusive(const FrameArgs& args);
-  int32 child_count() const;
-  RenderEnvNode* child_at(int32 index);
+  int32_t child_count() const;
+  RenderEnvNode* child_at(int32_t index);
   void AddChild(RenderEnvNode* child);
   bool RemoveChild(RenderEnvNode* child);
   bool Contains(RenderEnvNode* child) const;
-  int32 GetIndexOf(RenderEnvNode* child) const;
+  int32_t GetIndexOf(RenderEnvNode* child) const;
   std::string DumpTree() const;
-  std::string DumpNode(const RenderEnvNode* node, int32 dump) const;
+  std::string DumpNode(const RenderEnvNode* node, int32_t dump) const;
  private:
   RenderEnvNode* parent_;
   std::vector<RenderEnvNodePtr> children_;

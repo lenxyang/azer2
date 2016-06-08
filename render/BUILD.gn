@@ -100,13 +100,15 @@ source_set("render") {
     "//ui/views",    
   ]
 
-  configs += ["//azer/build/config:utf8src"]
-  configs += ["//azer/base:build_render_config"]
-  forward_dependent_configs_from = deps
+  public_configs = ["//azer/build/config:utf8src",
+                    "//build/config/compiler:rtti",
+                    ]
+  configs += ["//azer/base:build_render_config"]                        
   visibility = ["//azer"]
 }
 
 source_set("unittests") {
+  testonly = true
   sources = [
     "../base/tree_node_unittest.cc",
     "test/camera_unittest.cc",

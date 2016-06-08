@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/math/math.h"
@@ -96,7 +96,7 @@ class AZER_EXPORT Light : public ::base::RefCounted<Light> {
   explicit Light(const PointLight& light);
   explicit Light(const SpotLight& light);
 
-  int32 type() const;
+  int32_t type() const;
   const UniverseLight& data() const { return data_;}
 
   void SetLightData(const UniverseLight& data);
@@ -134,7 +134,7 @@ class AZER_EXPORT Light : public ::base::RefCounted<Light> {
   bool HasObserver(LightObserver* observer) const;
  private:
   UniverseLight data_;
-  ObserverList<LightObserver> observers_;
+  ::base::ObserverList<LightObserver> observers_;
   DISALLOW_COPY_AND_ASSIGN(Light);
 };
 

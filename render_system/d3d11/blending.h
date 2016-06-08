@@ -1,9 +1,7 @@
 #pragma once
 
-#include <d3d11.h>
-
-#include "base/basictypes.h"
 #include "azer/render/blending.h"
+#include "azer/render_system/d3d11/d3d11.h"
 
 namespace azer {
 namespace d3d11 {

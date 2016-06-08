@@ -18,7 +18,7 @@ class MeshLoadUtil {
   EntityVecPtr LoadVertexData(const ResPath& path, VertexDesc* desc);
  private:
   const aiScene* LoadScene(const ResPath& path, Assimp::Importer* importer, 
-                           uint32 flags);
+                           uint32_t flags);
   FileSystem* fsystem_;
   DISALLOW_COPY_AND_ASSIGN(MeshLoadUtil);
 };

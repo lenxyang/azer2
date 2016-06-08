@@ -1,7 +1,7 @@
 #pragma once
 
 #include "azer/base/tree_node.h"
-#include "base/basictypes.h"
+
 #include "azer/math/math.h"
 #include "azer/base/export.h"
 #include "azer/render/movable.h"

@@ -1,9 +1,8 @@
 #pragma once
 
-#include <d3d11.h>
-
 #include "base/logging.h"
 #include "azer/render/depth_buffer.h"
+#include "azer/render_system/d3d11/d3d11.h"
 
 namespace azer {
 
@@ -21,15 +20,15 @@ class D3DDepthStencilState : public DepthStencilState {
   
   void EnableDepthTest(bool enable) override;
   bool IsDepthTestEnabled()  override;
-  void SetDepthWriteMask(uint32 mask) override;
+  void SetDepthWriteMask(uint32_t mask) override;
   void SetDepthCompareFunc(CompareFunc func) override;
 
   void EnableStencil(bool enable) override;
   bool IsStencilTestEnabled() override; 
-  void SetStencilMask(uint8 read_mask, uint8 write_mask) override;
+  void SetStencilMask(uint8_t read_mask, uint8_t write_mask) override;
   void SetFrontFaceOper(const StencilOperStruct& oper) override;
   void SetBackFaceOper(const StencilOperStruct& oper) override;
-  void Apply(Renderer* renderer, uint32 stencilref) override;
+  void Apply(Renderer* renderer, uint32_t stencilref) override;
  private:
   void SetDepthStencilState(const D3D11_DEPTH_STENCIL_DESC& desc);
   ID3D11DepthStencilState* depth_state_;

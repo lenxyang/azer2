@@ -33,8 +33,8 @@ bool SoftwareCanvas2D::Init() {
   return InitTexture();
 }
 
-uint32 SoftwareCanvas2D::GetTexID() {
-  return static_cast<uint32>(-1);
+uint32_t SoftwareCanvas2D::GetTexID() {
+  return static_cast<uint32_t>(-1);
 }
 
 bool SoftwareCanvas2D::UpdateTexture() {
@@ -65,7 +65,7 @@ bool SoftwareCanvas2D::InitTexture() {
     return false;
   }
 
-  texview_ = rs->CreateTextureView(TextureView::Options(), texture_);
+  texview_ = rs->CreateTextureView(TextureView::Options(), texture_.get());
   if (!texview_.get()) {
     return false;
   }

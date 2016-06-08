@@ -1,11 +1,8 @@
-
 #pragma once
 
-#include <d3d11.h>
-
-#include "base/basictypes.h"
 #include "base/logging.h"
 #include "azer/render/texture.h"
+#include "azer/render_system/d3d11/d3d11.h"
 
 namespace azer {
 namespace d3d11 {
@@ -26,14 +23,14 @@ class D3DTexture: public Texture {
   void Detach();
 
   ID3D11Resource* GetResource() { return texres_;}
-  int32 diminison() const { return diminison_;}
+  int32_t diminison() const { return diminison_;}
   bool CopyTo(Texture* texture) override;
   const D3D11_TEXTURE2D_DESC& desc() const { return tex_desc_;}
  protected:
   ID3D11Resource* texres_;
   D3DRenderSystem* render_system_;
   D3D11_TEXTURE2D_DESC tex_desc_;
-  int32 diminison_;
+  int32_t diminison_;
 
 #ifdef DEBUG
   bool mapped_;

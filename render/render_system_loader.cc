@@ -51,8 +51,8 @@ bool AutoRenderSystemInit::Init() {
 
 bool LoadRenderSystem() {
   DCHECK(RenderSystem::Current() == NULL);
-  DCHECK(NULL != CommandLine::ForCurrentProcess());
-  ::base::FilePath path = CommandLine::ForCurrentProcess()->GetProgram();
+  DCHECK(NULL != ::base::CommandLine::ForCurrentProcess());
+  ::base::FilePath path = ::base::CommandLine::ForCurrentProcess()->GetProgram();
   ::base::FilePath dllpath = path.DirName();
   dllpath = dllpath.Append(::base::UTF8ToWide("d3d11_render_system.dll"));
 

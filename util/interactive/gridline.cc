@@ -7,9 +7,9 @@
 
 namespace azer {
 
-Gridline::Gridline(int32 row, int32 column, float cell) {
+Gridline::Gridline(int32_t row, int32_t column, float cell) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
-  int32 kVertexCount = (row + 1) * (column + 1) * 2;
+  int32_t kVertexCount = (row + 1) * (column + 1) * 2;
   effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
 
   VertexDataPtr vdata(new VertexData(effect_->vertex_desc(), kVertexCount));
@@ -22,7 +22,7 @@ Gridline::Gridline(int32 row, int32 column, float cell) {
   float row_begin = -row * cell * 0.5f;
   float column_begin = -column * cell * 0.5f;
   VertexPos ppos(0, 0);
-  for (int32 i = 0; i < row + 1; ++i) {
+  for (int32_t i = 0; i < row + 1; ++i) {
     float x = row_begin + i * cell;
     vpack.WriteVector3(Vector3(x, 0.0f, column_begin), ppos);
     vpack.next(1);
@@ -30,7 +30,7 @@ Gridline::Gridline(int32 row, int32 column, float cell) {
     vpack.next(1);
   }
 
-  for (int32 i = 0; i < column + 1; ++i) {
+  for (int32_t i = 0; i < column + 1; ++i) {
     float z = column_begin + i * cell;
     vpack.WriteVector3(Vector3(row_begin, 0.0f, z), ppos);
     vpack.next(1);

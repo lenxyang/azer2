@@ -17,8 +17,9 @@ TexturePtr LoadTexture(const ResPath& path, FileSystem* fs) {
     return TexturePtr();
   }
 
-  const uint8* data = (uint8*)(&contents.front());
-  ImageDataPtr imgdata(LoadDDSImageFromMemory(data, contents.size()));
+  const uint8_t* data = (uint8_t*)(&contents.front());
+  int len = static_cast<int>(contents.size());
+  ImageDataPtr imgdata(LoadDDSImageFromMemory(data, len));
   RenderSystem* rs = RenderSystem::Current();
   Texture::Options opt;
   opt.target = kBindTargetShaderResource;
@@ -63,7 +64,8 @@ bool DiffuseMapMaterial::Init(const ConfigNode* node, ResourceLoadContext* ctx) 
   RenderSystem* rs = RenderSystem::Current();
   ResPath texpath(ResPath(::base::UTF8ToUTF16(path)));
   TexturePtr tex = LoadTexture(texpath, ctx->file_system);
-  mutable_data()->diffusemap = rs->CreateTextureView(TextureView::Options(), tex);
+  mutable_data()->diffusemap = rs->CreateTextureView(
+      TextureView::Options(), tex.get());
   return (mutable_data()->diffusemap != NULL);
 }
 

@@ -68,7 +68,7 @@ bool D3DDepthStencilState::IsDepthTestEnabled() {
   return desc.DepthEnable == TRUE;
 }
 
-void D3DDepthStencilState::SetDepthWriteMask(uint32 mask) {
+void D3DDepthStencilState::SetDepthWriteMask(uint32_t mask) {
   D3D11_DEPTH_STENCIL_DESC desc;  
   depth_state_->GetDesc(&desc);
   desc.DepthWriteMask = (mask == 0 ? D3D11_DEPTH_WRITE_MASK_ZERO:
@@ -96,7 +96,7 @@ bool D3DDepthStencilState::IsStencilTestEnabled() {
   return desc.StencilEnable == TRUE;
 }
 
-void D3DDepthStencilState::SetStencilMask(uint8 read_mask, uint8 write_mask) {
+void D3DDepthStencilState::SetStencilMask(uint8_t read_mask, uint8_t write_mask) {
   D3D11_DEPTH_STENCIL_DESC desc;  
   depth_state_->GetDesc(&desc);
   desc.StencilReadMask = read_mask;
@@ -124,7 +124,7 @@ void D3DDepthStencilState::SetBackFaceOper(const StencilOperStruct& oper) {
   SetDepthStencilState(desc);
 }
 
-void D3DDepthStencilState::Apply(Renderer* r, uint32 stencilref) {
+void D3DDepthStencilState::Apply(Renderer* r, uint32_t stencilref) {
   D3DRenderer* renderer = dynamic_cast<D3DRenderer*>(r);
   renderer->GetContext()->OMSetDepthStencilState(depth_state_, stencilref);
 }
@@ -184,7 +184,7 @@ void D3DDepthBuffer::Clear(D3DRenderer* renderer, bool clear_depth,
                            bool clear_stencil, float depth_val, int stencil_val) {
   DCHECK(target_ != NULL);
   ID3D11DeviceContext* d3d_context = renderer->GetContext();
-  uint32 flags = 0;
+  uint32_t flags = 0;
   flags |= (clear_depth ? D3D11_CLEAR_DEPTH : 0);
   flags |= (clear_stencil ? D3D11_CLEAR_STENCIL : 0);
   d3d_context->ClearDepthStencilView(target_,

@@ -10,7 +10,7 @@
 #include "azer/afx/compiler/type.h"
 #include "azer/afx/compiler/value.h"
 #include "azer/afx/compiler/loc.h"
-#include "base/basictypes.h"
+
 
 namespace azer {
 namespace afx {
@@ -309,8 +309,8 @@ class ConstNode : public ExpressionNode {
   void SetBoolean(bool b);
   void SetChar(char b);
   void SetShort(short s);
-  void SetUint32(uint32 i32);
-  void SetInt32(int32 i);
+  void SetUint32(uint32_t i32);
+  void SetInt32(int32_t i);
   void SetFloat(float f);
   void SetDouble(double d);
   void SetString(const std::string& str);

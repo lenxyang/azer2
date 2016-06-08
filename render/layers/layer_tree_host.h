@@ -3,7 +3,7 @@
 #include <set>
 #include <string>
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "ui/gfx/geometry/rect.h"
 

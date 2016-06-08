@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/effect/color_effect.h"
 #include "azer/effect/light.h"
 #include "azer/math/quaternion.h" 
@@ -45,7 +45,7 @@ class DirLightController : public InteractiveController,
   DirLightObject* lightobj() { return lightobj_.get();}
   void OnActive() override;
   void OnDeactive() override;
-  int32 GetPicking(const gfx::Point& pt) override;
+  int32_t GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const ui::MouseEvent& e) override;
   void OnDragging(const ui::MouseEvent& e) override;
   void OnDragEnd(const ui::MouseEvent& e) override;

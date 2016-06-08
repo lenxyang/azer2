@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/render/canvas2d.h"
 #include "azer/render/texture.h"
 
@@ -17,7 +17,7 @@ class SoftwareCanvas2D : public Canvas2D {
 
   ~SoftwareCanvas2D() override;
   bool Init() override;
-  uint32 GetTexID() override;
+  uint32_t GetTexID() override;
 
   virtual SkCanvas* BeginPaint() override;
   virtual void EndPaint() override;

@@ -7,28 +7,28 @@ class AZER_EXPORT IndexPack {
  public:
   IndexPack(IndicesData* data);
 
-  bool WriteAndAdvance(int32 value);
-  bool ReadAndAdvance(uint32 *value) const;
-  uint32 ReadAndAdvanceOrDie() const;
+  bool WriteAndAdvance(int32_t value);
+  bool ReadAndAdvance(uint32_t *value) const;
+  uint32_t ReadAndAdvanceOrDie() const;
 
-  void write(int32 value);
-  void move(int32 step);
-  bool advance(int32 step = 1) const;
-  uint32 value() const;
-  uint32 value(int32 index) const;
+  void write(int32_t value);
+  void move(int32_t step);
+  bool advance(int32_t step = 1) const;
+  uint32_t value() const;
+  uint32_t value(int32_t index) const;
 
   IndexType type() const { return idata_->type();}
-  int32 index() const;
-  uint8* pointer() { return idata_->pointer();}
-  const uint8* pointer() const { return idata_->pointer();}
-  uint8* current() { return idata_->pointer() + offset_;}
-  const uint8* current() const { return idata_->pointer() + offset_;}
-  int32 count() const { return idata_->count();}
-  int32 step_size() const { return idata_->unit_size();}
+  int32_t index() const;
+  uint8_t* pointer() { return idata_->pointer();}
+  const uint8_t* pointer() const { return idata_->pointer();}
+  uint8_t* current() { return idata_->pointer() + offset_;}
+  const uint8_t* current() const { return idata_->pointer() + offset_;}
+  int32_t count() const { return idata_->count();}
+  int32_t step_size() const { return idata_->unit_size();}
   IndicesData* data() { return idata_;}
  private:
   IndicesData* idata_;
-  mutable uint64 offset_;
+  mutable uint64_t offset_;
   DISALLOW_COPY_AND_ASSIGN(IndexPack);
 };
 }  // namespace azer

@@ -27,8 +27,7 @@ D3DRenderTarget::~D3DRenderTarget() {
 void D3DRenderTarget::Clear(const azer::Vector4& color) {
   DCHECK(NULL != target_);
   ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  d3d_context->ClearRenderTargetView(
-      target_, D3DXCOLOR(color.x, color.y, color.z, color.w));
+  d3d_context->ClearRenderTargetView(target_, (float*)&color);
 }
 
 bool D3DRenderTarget::Init(D3DTexture* tex) {

@@ -54,19 +54,19 @@ void DiffuseMapEffect::SetWorld(const Matrix4& value) { world_ = value;}
 void DiffuseMapEffect::SetCameraPos(const Vector4& pos) { camerapos_ = pos;}
 void DiffuseMapEffect::SetMaterial(const DiffuseMapMaterialData& mtrl) {
   mtrl_ = mtrl;
-  SaveShaderResTexture(kPixelStage, 0, mtrl_.diffusemap);
+  SaveShaderResTexture(kPixelStage, 0, mtrl_.diffusemap.get());
 }
 
-void DiffuseMapEffect::SetLights(const LightPtr* value, int32 count) {
+void DiffuseMapEffect::SetLights(const LightPtr* value, int32_t count) {
   DCHECK_LT(count, sizeof(lights_));
   light_count_ = count;
-  for (int32 i = 0; i < count; ++i) {
+  for (int32_t i = 0; i < count; ++i) {
     Light* light = (value + i)->get();
     memcpy(lights_ + i, &light->data(), sizeof(UniverseLight));
   }
 }
 
-void DiffuseMapEffect::SetLightData(const UniverseLight* value, int32 count) {
+void DiffuseMapEffect::SetLightData(const UniverseLight* value, int32_t count) {
   memcpy(lights_, value, sizeof(UniverseLight) * std::min(count, kMaxLightCount));
   light_count_ = count;
 }
@@ -75,7 +75,7 @@ void DiffuseMapEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuVariable gv = gpu_table_[0];
     CHECK_EQ(gv.stage, kVertexStage);
-    GpuConstantsTable* tb = gv.table;
+    GpuConstantsTable* tb = gv.table.get();
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
     tb->SetValue(2, &camerapos_, sizeof(Vector4));
@@ -83,7 +83,7 @@ void DiffuseMapEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
     GpuVariable gv = gpu_table_[1];
     CHECK_EQ(gv.stage, kPixelStage);
-    GpuConstantsTable* tb = gv.table;
+    GpuConstantsTable* tb = gv.table.get();
     
     DCHECK(tb != NULL);
     tb->SetValue(0, &mtrl_.ambient_scalar, sizeof(float));

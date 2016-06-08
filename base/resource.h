@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "base/values.h"
 #include "azer/base/export.h"
@@ -33,11 +33,11 @@ struct AZER_EXPORT VariantResource {
   BaseMaterialPtr material;
   LightPtr light;
   SceneNodePtr scene;
-  int32 type;
-  int32 retcode;
+  int32_t type;
+  int32_t retcode;
 
   VariantResource();
 };
 
-AZER_EXPORT int32 GetTypeFromString(const std::string& str);
+AZER_EXPORT int32_t GetTypeFromString(const std::string& str);
 }  // namespace azer

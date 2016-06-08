@@ -49,16 +49,16 @@ Overlay::Overlay() {
   effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("OverlayEffect");
   SlotVertexDataPtr vdata(new SlotVertexData(effect_->vertex_desc(), 4));
   VertexPos vpos(0, 0), tpos;
-  VertexPack vpack(vdata);
+  VertexPack vpack(vdata.get());
   GetSemanticIndex("texcoord", 0, effect_->vertex_desc(), &tpos);
   vpack.first();
-  for (uint32 i = 0; i < arraysize(position); ++i) { 
+  for (uint32_t i = 0; i < arraysize(position); ++i) { 
     vpack.WriteVector3Or4(position[i], vpos);
     vpack.WriteVector2(texcoord[i], tpos);
     vpack.next(1);
   }
 
-  vb_ = rs->CreateVertexBuffer(kVertexBufferOpt(), vdata);
+  vb_ = rs->CreateVertexBuffer(kVertexBufferOpt(), vdata.get());
   state_ = rs->CreateRasterizerState();
   state_->SetCullingMode(kCullNone);
   blending_ = g_blending_instance.Pointer()->blending();
@@ -71,13 +71,13 @@ Overlay::~Overlay() {}
 void Overlay::Render(Renderer* renderer) {
   ScopedResetBlending scoped_blending(renderer);
   if (blending_) {
-    renderer->SetBlending(blending_, 0, 0xffffffff);
+    renderer->SetBlending(blending_.get(), 0, 0xffffffff);
   }
 
   effect_->SetBounds(bounds_);
   effect_->SetTexBounds(texbounds_);
-  effect_->SetTexture(texture_);
-  renderer->BindEffect(effect_);
+  effect_->SetTexture(texture_.get());
+  renderer->BindEffect(effect_.get());
   Draw(renderer);
 }
 

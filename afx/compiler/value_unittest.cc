@@ -7,7 +7,7 @@
 
 using azer::afx::Value;
 TEST(Value, Plus) {
-  // int32 + int32
+  // int32_t + int32
   {
     Value v1(10), v2(10);
     Value ret = v1 + v2;
@@ -15,7 +15,7 @@ TEST(Value, Plus) {
     ASSERT_TRUE(ret.assigned());
     ASSERT_EQ(ret.GetInt32(), 20);
   }
-  // uint32 + int32
+  // uint32_t + int32
   {
     Value v1(10u), v2(10);
     Value ret = v1 + v2;
@@ -24,7 +24,7 @@ TEST(Value, Plus) {
     ASSERT_EQ(ret.GetInt32(), 20);
   }
 
-  // int32 + float
+  // int32_t + float
   {
     Value v1(1), v2(2.0f);
     Value ret = v1 + v2;
@@ -46,7 +46,7 @@ TEST(Value, Plus) {
 
 
 TEST(Value, Substract) {
-  // int32 + int32
+  // int32_t + int32
   {
     Value v1(10), v2(1);
     Value ret = v1 - v2;
@@ -54,7 +54,7 @@ TEST(Value, Substract) {
     ASSERT_TRUE(ret.assigned());
     ASSERT_EQ(ret.GetInt32(), 9);
   }
-  // uint32 + int32
+  // uint32_t + int32
   {
     Value v1(10u), v2(8);
     Value ret = v1 - v2;
@@ -63,7 +63,7 @@ TEST(Value, Substract) {
     ASSERT_EQ(ret.GetInt32(), 2);
   }
 
-  // int32 + float
+  // int32_t + float
   {
     Value v1(1), v2(2.0f);
     Value ret = v1 - v2;
@@ -84,7 +84,7 @@ TEST(Value, Substract) {
 }
 
 TEST(Value, Mul) {
-  // int32 + int32
+  // int32_t + int32
   {
     Value v1(10), v2(1);
     Value ret = v1 * v2;
@@ -92,7 +92,7 @@ TEST(Value, Mul) {
     ASSERT_TRUE(ret.assigned());
     ASSERT_EQ(ret.GetInt32(), 10);
   }
-  // uint32 + int32
+  // uint32_t + int32
   {
     Value v1(10u), v2(8);
     Value ret = v1 * v2;
@@ -101,7 +101,7 @@ TEST(Value, Mul) {
     ASSERT_EQ(ret.GetInt32(), 80);
   }
 
-  // int32 + float
+  // int32_t + float
   {
     Value v1(1), v2(2.0f);
     Value ret = v1 * v2;
@@ -173,7 +173,7 @@ TEST(Value, MulInvalid) {
 }
 
 TEST(Value, Div) {
-  // int32 / int32
+  // int32_t / int32
   {
     Value v1(10), v2(1);
     Value ret = v1 / v2;
@@ -181,7 +181,7 @@ TEST(Value, Div) {
     ASSERT_TRUE(ret.assigned());
     ASSERT_EQ(ret.GetInt32(), 10);
   }
-  // uint32 / int32
+  // uint32_t / int32
   {
     Value v1(10u), v2(8);
     Value ret = v1 / v2;
@@ -190,7 +190,7 @@ TEST(Value, Div) {
     ASSERT_EQ(ret.GetInt32(), 1);
   }
 
-  // int32 / float
+  // int32_t / float
   {
     Value v1(1), v2(2.0f);
     Value ret = v1 / v2;
@@ -211,7 +211,7 @@ TEST(Value, Div) {
 }
 
 TEST(Value, DivInvalid) {
-  // int32 / int32
+  // int32_t / int32
   {
     Value v1(true), v2(false);
     Value ret = v1 / v2;
@@ -221,7 +221,7 @@ TEST(Value, DivInvalid) {
 }
 
 TEST(Value, Assign) {
-  // int32 / int32
+  // int32_t / int32
   {
     Value v1(true), v2(false);
     Value ret = v1 / v2;

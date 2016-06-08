@@ -1,6 +1,5 @@
 #include "azer/render_system/d3d11/blending.h"
 
-#include <d3d11.h>
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
@@ -22,9 +21,9 @@ D3DBlending::~D3DBlending() {
 bool D3DBlending::Init() {
   D3D11_BLEND_DESC blend_desc;
   ZeroMemory(&blend_desc, sizeof(blend_desc));
-  int32 count = std::min(kMaxRenderTargetDesc,
+  int32_t count = std::min(kMaxRenderTargetDesc,
                          (int)arraysize(blend_desc.RenderTarget));
-  for (int32 i = 0; i < count; ++i) {
+  for (int32_t i = 0; i < count; ++i) {
     D3D11_RENDER_TARGET_BLEND_DESC& rtbd = blend_desc.RenderTarget[i];
     ZeroMemory(&rtbd, sizeof(rtbd));
     rtbd.BlendEnable = desc_.desc[i].enable;
@@ -42,7 +41,7 @@ bool D3DBlending::Init() {
   
   ID3D11Device* d3d_device = render_system_->GetDevice();
   DCHECK(NULL != d3d_device);
-  ID3D11BlendState* state = NULL;
+  // ID3D11BlendState* state = NULL;
   HRESULT hr = d3d_device->CreateBlendState(&blend_desc, &blending_state_);
   HRESULT_HANDLE(hr, ERROR, "CreateBlendState failed ");
   

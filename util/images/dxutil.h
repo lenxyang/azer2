@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+#include <stdint.h>
 
 namespace azer {
 namespace detail {
@@ -127,7 +127,7 @@ enum DXGI_FORMAT {
   DXGI_FORMAT_FORCE_UINT                  = 0xffffffff
 };
 
-uint32 TranslateFormat(int32 type);
+uint32_t TranslateFormat(int32_t type);
 }  // namespace detail
 }  // namespace azer
 

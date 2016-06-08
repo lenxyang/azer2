@@ -12,7 +12,7 @@ D3D11_USAGE TranslateUsage(BufferUsage usage) {
     case kBufferDynamic: return D3D11_USAGE_DYNAMIC;
     case kBufferStaging: return D3D11_USAGE_STAGING;
     default:
-      DCHECK(false) << "Unsupport usage: " << (int32)usage;
+      DCHECK(false) << "Unsupport usage: " << (int32_t)usage;
       return D3D11_USAGE_DEFAULT;
   }
 }
@@ -25,7 +25,7 @@ D3D11_CPU_ACCESS_FLAG TranslateCPUAccess(CPUAccess access) {
     case kCPUAccess:
       return (D3D11_CPU_ACCESS_FLAG)(D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ);
     default:
-      DCHECK(false) << "Unsupport CPUAccess: " << (int32)access;
+      DCHECK(false) << "Unsupport CPUAccess: " << (int32_t)access;
       return (D3D11_CPU_ACCESS_FLAG)(D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ);
   }
 }
@@ -68,7 +68,7 @@ DXGI_FORMAT TranslateFormat(DataFormat type) {
     case kBoolVec3: return DXGI_FORMAT_R32G32B32_SINT;
     case kBoolVec4: return DXGI_FORMAT_R32G32B32A32_SINT;
     default:
-      DCHECK(false) << "Unsupport type: " << (int32)type;
+      DCHECK(false) << "Unsupport type: " << (int32_t)type;
       return DXGI_FORMAT_UNKNOWN;
   }
 }
@@ -78,7 +78,7 @@ DataFormat TranslateD3DFormat(DXGI_FORMAT type) {
     case DXGI_FORMAT_R32G32B32_FLOAT: return kVec3;
     case DXGI_FORMAT_R32G32B32A32_FLOAT: return kVec4;
     default:
-      DCHECK(false) << "Unsupport type: " << (int32)type;
+      DCHECK(false) << "Unsupport type: " << (int32_t)type;
       return (DataFormat)0;
   }
 }
@@ -90,7 +90,7 @@ TexFormat TranslateD3DTexFormat(DXGI_FORMAT type) {
     case DXGI_FORMAT_R32G32B32A32_FLOAT: return kTexRGBAf;
     case DXGI_FORMAT_D24_UNORM_S8_UINT: return kTexDepth24nStencil8u;
     default:
-      DCHECK(false) << "Unsupport type: " << (int32)type;
+      DCHECK(false) << "Unsupport type: " << (int32_t)type;
       return (TexFormat)0;
   }
 }
@@ -134,7 +134,7 @@ DXGI_FORMAT TranslateTexFormat(TexFormat type) {
     case kTexDXBC7n: return DXGI_FORMAT_BC7_UNORM;
     case kTexDXBC7nSRGB: return DXGI_FORMAT_BC7_UNORM_SRGB;
     default:
-      DCHECK(false) << "Unsupport type: " << (int32)type;
+      DCHECK(false) << "Unsupport type: " << (int32_t)type;
       return DXGI_FORMAT_UNKNOWN;
   }
 }
@@ -180,7 +180,7 @@ D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(
     case kControlPoint31: return D3D11_PRIMITIVE_TOPOLOGY_31_CONTROL_POINT_PATCHLIST;
     case kControlPoint32: return D3D11_PRIMITIVE_TOPOLOGY_32_CONTROL_POINT_PATCHLIST;
     default:
-      DCHECK(false) << "Unsupport type: " << (int32)topology;
+      DCHECK(false) << "Unsupport type: " << (int32_t)topology;
       return D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
   }
 }
@@ -191,12 +191,12 @@ DXGI_FORMAT TranslateIndexType(IndexType type) {
     case kIndexUint16: return DXGI_FORMAT_R16_UINT;
     case kIndexUint32: return DXGI_FORMAT_R32_UINT;
     default:
-      DCHECK(false) << "Unsupport IndexType: " << (int32)type;
+      DCHECK(false) << "Unsupport IndexType: " << (int32_t)type;
       return DXGI_FORMAT_UNKNOWN;
   }
 }
 
-D3D11_BIND_FLAG TranslateBindTarget(uint32 target) {
+D3D11_BIND_FLAG TranslateBindTarget(uint32_t target) {
   DWORD flags = 0;
   if (target & kBindTargetShaderResource) {
     flags |= D3D11_BIND_SHADER_RESOURCE;

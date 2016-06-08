@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "base/basictypes.h"
+
 #include "azer/render/surface.h"
 #include "base/lazy_instance.h"
 

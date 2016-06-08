@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
@@ -28,8 +28,8 @@ enum ShaderType {
 
 struct AZER_EXPORT ShaderInfo {
   ShaderInfo();
-  int32 stage;
-  int32 format;
+  int32_t stage;
+  int32_t format;
   std::string code;
   std::string path;
   std::string version;
@@ -45,7 +45,7 @@ class AZER_EXPORT Shader : public ::base::RefCounted<Shader> {
   std::string error_msg() const { return error_msg_;}
   RenderPipelineStage stage() const;
 
-  VertexDesc* vertex_desc() { return desc_;}
+  VertexDesc* vertex_desc() { return desc_.get();}
  protected:
   explicit Shader(const ShaderInfo& info);
   Shader(VertexDesc* desc, const ShaderInfo& info);

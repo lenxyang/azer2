@@ -1,0 +1,47 @@
+
+static_library("ui") {
+  sources = [
+    "adapter/output_device.cc",
+    "adapter/output_device.h",
+    "adapter/output_surface.cc",
+    "adapter/output_surface.h",
+    "adapter/swapchain_context.cc",
+    "adapter/swapchain_context.h",
+    "adapter/context_factory.cc",
+    "adapter/context_factory.h",
+    "adapter/util.cc",
+    "adapter/util.h",
+    "desktop_window_context.cc",
+    "desktop_window_context.h",
+    "focus_manager_factory.cc",
+    "focus_manager_factory.h",
+    "native_widget.cc",
+    "native_widget.h",
+    "render_widget.cc",
+    "render_widget.h",
+    "render_window.cc",
+    "render_window.h",
+    "render_view.cc",
+    "render_view.h",
+    "render_loop.cc",
+    "render_loop.h",
+    "views_delegate.cc",
+    "views_delegate.h",
+    "window_context.h",
+    "window.cc",
+    "window.h",
+  ]
+
+  deps = [
+    "//base:i18n",
+    "//cc/surfaces",
+    "//cc",
+    "//gpu",
+    "//skia",
+    "//ui/aura",
+    "//ui/accessibility",
+    "//ui/compositor",
+    "//ui/wm",
+    "//ui/views",
+  ]
+}

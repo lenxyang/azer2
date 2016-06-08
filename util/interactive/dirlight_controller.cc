@@ -44,7 +44,7 @@ void DirLightController::SetDirLightObj(DirLightObject* obj) {
 void DirLightController::OnActive() {}
 void DirLightController::OnDeactive() {}
 
-int32 DirLightController::GetPicking(const gfx::Point& pt) {
+int32_t DirLightController::GetPicking(const gfx::Point& pt) {
   if (lightobj_.get()) {
     return controller_->GetPicking(pt);
   } else {

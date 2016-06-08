@@ -1,7 +1,7 @@
 #include "azer/render/common.h" 
 
 #include "base/logging.h"
-#include "base/basictypes.h"
+
 
 namespace azer {
 const char* RenderStageName(RenderPipelineStage stage) {
@@ -68,45 +68,45 @@ const char* GetDataFormatName(DataFormat format) {
 }
 
 
-uint32 SizeofDataFormat(DataFormat format) {
+uint32_t SizeofDataFormat(DataFormat format) {
   switch (format) {
     case kFloat: return sizeof(float);
-    case kByteVec2: return sizeof(uint8) * 2;
-    case kByteVec3: return sizeof(uint8) * 3;
-    case kByteVec4: return sizeof(uint8) * 4;
-    case kShortVec2: return sizeof(uint16) * 2;
-    case kShortVec3: return sizeof(uint16) * 3;
-    case kShortVec4: return sizeof(uint16) * 4;
+    case kByteVec2: return sizeof(uint8_t) * 2;
+    case kByteVec3: return sizeof(uint8_t) * 3;
+    case kByteVec4: return sizeof(uint8_t) * 4;
+    case kShortVec2: return sizeof(uint16_t) * 2;
+    case kShortVec3: return sizeof(uint16_t) * 3;
+    case kShortVec4: return sizeof(uint16_t) * 4;
     case kVec2: return sizeof(float) * 2;
     case kVec3: return sizeof(float) * 3;
     case kVec4: return sizeof(float) * 4;
     case kMat2: return sizeof(float) * 4;
     case kMat3: return sizeof(float) * 9;
     case kMat4: return sizeof(float) * 16;
-    case kInt: return sizeof(int32);
-    case kByteIntVec2: return sizeof(uint8) * 2;
-    case kByteIntVec3: return sizeof(uint8) * 3;
-    case kByteIntVec4: return sizeof(uint8) * 4;
-    case kShortIntVec2: return sizeof(uint16) * 2;
-    case kShortIntVec3: return sizeof(uint16) * 3;
-    case kShortIntVec4: return sizeof(uint16) * 4;
-    case kIntVec2: return sizeof(int32) * 2;
-    case kIntVec3: return sizeof(int32) * 3;
-    case kIntVec4: return sizeof(int32) * 4;
-    case kUint: return sizeof(uint32);
-    case kByteUintVec2: return sizeof(uint8) * 2;
-    case kByteUintVec3: return sizeof(uint8) * 3;
-    case kByteUintVec4: return sizeof(uint8) * 4;
-    case kShortUintVec2: return sizeof(uint16) * 2;
-    case kShortUintVec3: return sizeof(uint16) * 3;
-    case kShortUintVec4: return sizeof(uint16) * 4;
-    case kUintVec2: return sizeof(uint32) * 2;
-    case kUintVec3: return sizeof(uint32) * 3;
-    case kUintVec4: return sizeof(uint32) * 4;
-    case kBool: return sizeof(int32);
-    case kBoolVec2: return sizeof(int32) * 2;
-    case kBoolVec3: return sizeof(int32) * 3;
-    case kBoolVec4: return sizeof(int32) * 4;
+    case kInt: return sizeof(int32_t);
+    case kByteIntVec2: return sizeof(uint8_t) * 2;
+    case kByteIntVec3: return sizeof(uint8_t) * 3;
+    case kByteIntVec4: return sizeof(uint8_t) * 4;
+    case kShortIntVec2: return sizeof(uint16_t) * 2;
+    case kShortIntVec3: return sizeof(uint16_t) * 3;
+    case kShortIntVec4: return sizeof(uint16_t) * 4;
+    case kIntVec2: return sizeof(int32_t) * 2;
+    case kIntVec3: return sizeof(int32_t) * 3;
+    case kIntVec4: return sizeof(int32_t) * 4;
+    case kUint: return sizeof(uint32_t);
+    case kByteUintVec2: return sizeof(uint8_t) * 2;
+    case kByteUintVec3: return sizeof(uint8_t) * 3;
+    case kByteUintVec4: return sizeof(uint8_t) * 4;
+    case kShortUintVec2: return sizeof(uint16_t) * 2;
+    case kShortUintVec3: return sizeof(uint16_t) * 3;
+    case kShortUintVec4: return sizeof(uint16_t) * 4;
+    case kUintVec2: return sizeof(uint32_t) * 2;
+    case kUintVec3: return sizeof(uint32_t) * 3;
+    case kUintVec4: return sizeof(uint32_t) * 4;
+    case kBool: return sizeof(int32_t);
+    case kBoolVec2: return sizeof(int32_t) * 2;
+    case kBoolVec3: return sizeof(int32_t) * 3;
+    case kBoolVec4: return sizeof(int32_t) * 4;
     default:
       NOTREACHED();
       return 0;

@@ -9,7 +9,8 @@ namespace util {
 namespace xml {
 bool XMLParser::Parse(const std::string& text, XMLContext* context) {
   DCHECK(context->doc_ == NULL);
-  context->doc_ = xmlReadMemory(text.c_str(), text.length(), "", NULL, 0);
+  int32_t len = static_cast<int32_t>(text.length());
+  context->doc_ = xmlReadMemory(text.c_str(), len, "", NULL, 0);
   if (context->doc_ == NULL) {
     return false;
   }

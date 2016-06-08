@@ -1,3 +1,4 @@
+import("//testing/test.gni")
 
 shared_library("azer") {
   deps = [
@@ -14,6 +15,8 @@ shared_library("azer") {
     "math",
     "//base",
     "//skia",
+    "//ui/base",
+    "//ui/base:ui_data_pack",
     "//ui/events",
     "//ui/events/platform",
     "//ui/events:events_base",
@@ -24,6 +27,7 @@ shared_library("azer") {
 }
 
 test("unittests") {
+  testonly = true
   output_name = "azer_unittests"
   deps = [
     "base:unittests",

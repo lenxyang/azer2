@@ -82,7 +82,7 @@ bool TechniqueValidator::ValidGeometryShader(Technique::StageInfo* shader) {
     AttrNames::kGSInputPrimitiveType,
     AttrNames::kGSOutputPrimitiveType,
   };
-  for (uint32 i = 0; i < arraysize(attrs); ++i) {
+  for (uint32_t i = 0; i < arraysize(attrs); ++i) {
     if (!attr->HasAttr(attrs[i])) {
       std::stringstream ss;
       ss << "geometry shader: attribute \"" << attrs[i] << "\" no specified.";

@@ -33,7 +33,7 @@ void SkyboxEffect::InitGpuConstantTable() {
 
 void SkyboxEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = gpu_table_[0].table;
+    GpuConstantsTable* tb = gpu_table_[0].table.get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
@@ -42,7 +42,7 @@ void SkyboxEffect::ApplyGpuConstantTable(Renderer* renderer) {
 
 void SkyboxEffect::SetTexture(TextureView* texture) {
   cubemap_ = texture;
-  SaveShaderResTexture(kPixelStage, 0, cubemap_);
+  SaveShaderResTexture(kPixelStage, 0, texture);
 }
 
 }  // namespace azer

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "base/observer_list.h"
 #include "azer/base/export.h"
 #include "azer/math/math.h"

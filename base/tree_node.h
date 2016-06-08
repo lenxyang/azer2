@@ -3,7 +3,7 @@
 #include <string>
 
 #include "base/logging.h"
-#include "base/basictypes.h"
+
 #include "azer/base/string.h"
 #include "azer/base/export.h"
 

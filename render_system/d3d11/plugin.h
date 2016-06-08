@@ -12,5 +12,5 @@ extern "C" AZER_D3D11RS_EXPORT azer::RenderSystem* CreateRenderSystem();
 extern "C" AZER_D3D11RS_EXPORT void ReleaseRenderSystem(azer::RenderSystem* rs);
 
 extern "C" AZER_D3D11RS_EXPORT const char* AzerGetShaderProgram(
-    const char* name, const char* version, int32 stage, const void* extra);
+    const char* name, const char* version, int32_t stage, const void* extra);
     

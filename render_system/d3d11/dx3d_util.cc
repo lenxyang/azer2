@@ -4,7 +4,6 @@
 #include <tchar.h>
 #include <comdef.h>
 
-#include <d3d11.h>
 #include "azer/base/string.h"
 #include "base/logging.h"
 #include "base/strings/string16.h"
@@ -13,7 +12,7 @@
 
 namespace azer {
 namespace d3d11 {
-std::string HRMessage(uint32 hr) {
+std::string HRMessage(uint32_t hr) {
   /*
   string16 msg;
   LPTSTR pvMsgBuf = NULL;

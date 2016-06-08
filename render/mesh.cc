@@ -32,16 +32,16 @@ MeshPart& MeshPart::operator = (const MeshPart& part) {
   return *this;
 }
 
-void MeshPart::AddEntity(EntityPtr ptr) { vecptr_->AddEntity(ptr);}
-void MeshPart::RemoveEntityAt(int32 index) { vecptr_->RemoveEntityAt(index);}
-Entity* MeshPart::entity_at(int32 index) { return vecptr_->entity_at(index);}
-const Entity* MeshPart::entity_at(int32 index) const {
+void MeshPart::AddEntity(Entity* ptr) { vecptr_->AddEntity(ptr);}
+void MeshPart::RemoveEntityAt(int32_t index) { vecptr_->RemoveEntityAt(index);}
+Entity* MeshPart::entity_at(int32_t index) { return vecptr_->entity_at(index);}
+const Entity* MeshPart::entity_at(int32_t index) const {
     return vecptr_->entity_at(index);
 }
-int32 MeshPart::entity_count() const  { return vecptr_->entity_count();}
+int32_t MeshPart::entity_count() const  { return vecptr_->entity_count();}
 
 void MeshPart::Draw(Renderer* renderer) {
-  for (int32 i = 0; i < vecptr_->entity_count(); ++i) {
+  for (int32_t i = 0; i < vecptr_->entity_count(); ++i) {
     Entity* entity = vecptr_->entity_at(i);
     entity->Draw(renderer);
   }
@@ -59,7 +59,7 @@ void MeshPart::Render(Renderer* renderer) {
   if (!blending_.get()) {
     RenderPart(renderer);
   } else {
-    scoped_ptr<ScopedResetBlending> autoblending_;
+    std::unique_ptr<ScopedResetBlending> autoblending_;
     autoblending_.reset(new ScopedResetBlending(renderer));
     renderer->SetBlending(blending_.get(), 0, 0xffffffff);
     RenderPart(renderer);
@@ -88,8 +88,8 @@ MeshPart* Mesh::AddMeshPart(MeshPart* ptr) {
   return ptr;
 }
 
-MeshPartPtr Mesh::RemoveMeshPartAt(int32 index) {
-  DCHECK(index < static_cast<int32>(part_.size()));
+MeshPartPtr Mesh::RemoveMeshPartAt(int32_t index) {
+  DCHECK(index < static_cast<int32_t>(part_.size()));
   MeshPartPtr ptr = part_[index];
   ptr->SetEffectAdapterContext(NULL);
   part_.erase(part_.begin() + index);

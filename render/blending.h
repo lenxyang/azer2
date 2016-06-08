@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "base/logging.h"
 #include "azer/base/export.h"
@@ -63,7 +63,7 @@ class AZER_EXPORT Blending : public ::base::RefCounted<Blending> {
     RenderTargetDesc();
   };
 
-  static const int32 kMaxRenderTargetDesc = 16;
+  static const int32_t kMaxRenderTargetDesc = 16;
   struct AZER_EXPORT BlendDesc {
     RenderTargetDesc desc[kMaxRenderTargetDesc];
     bool alpha_to_converage;

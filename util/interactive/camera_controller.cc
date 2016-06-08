@@ -72,7 +72,7 @@ bool CameraController::OnKeyReleased(const ui::KeyEvent& event) {
   }
 }
 
-int32 CameraController::GetPicking(const gfx::Point& pt) {
+int32_t CameraController::GetPicking(const gfx::Point& pt) {
   return 1;
 }
 

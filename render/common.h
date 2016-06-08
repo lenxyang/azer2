@@ -1,7 +1,7 @@
 #pragma once
 
+#include <stdint.h>
 #include "azer/base/export.h"
-#include "base/basictypes.h"
 
 namespace azer {
 
@@ -220,5 +220,5 @@ enum BindTarget {
 
 AZER_EXPORT const char* RenderStageName(RenderPipelineStage stage);
 AZER_EXPORT const char* GetDataFormatName(DataFormat format);
-AZER_EXPORT uint32 SizeofDataFormat(DataFormat format);
+AZER_EXPORT uint32_t SizeofDataFormat(DataFormat format);
 }  // namespace azer

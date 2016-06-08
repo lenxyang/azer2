@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/math/matrix4.h"
@@ -22,8 +22,8 @@ typedef scoped_refptr<MeshPart> MeshPartPtr;
 struct AZER_EXPORT GeoSphereParams {
   GeoSphereParams() : radius(1.0f), stack(64), slice(64) {}
   float radius;
-  int32 stack;
-  int32 slice;
+  int32_t stack;
+  int32_t slice;
 };
 
 AZER_EXPORT EntityPtr CreateSphereEntity(
@@ -44,8 +44,8 @@ AZER_EXPORT MeshPartPtr CreateBoxFrameMeshPart(Effect* e, const Matrix4& mat);
 // plane
 struct AZER_EXPORT GeoPlaneParams {
   GeoPlaneParams() : row(10), column(10), row_width(1.0f), column_width(1.0f) {}
-  int32 row;
-  int32 column;
+  int32_t row;
+  int32_t column;
   float row_width;
   float column_width;
 };
@@ -61,13 +61,13 @@ AZER_EXPORT MeshPartPtr CreatePlaneFrameMeshPart(
 
 // round
 AZER_EXPORT EntityPtr CreateRoundEntity(
-    VertexDesc* desc, float radius, int32 slice, const Matrix4& mat);
+    VertexDesc* desc, float radius, int32_t slice, const Matrix4& mat);
 AZER_EXPORT EntityPtr CreateCircleEntity(
-    VertexDesc* desc, float radius, int32 slice, const Matrix4& mat);
+    VertexDesc* desc, float radius, int32_t slice, const Matrix4& mat);
 AZER_EXPORT MeshPartPtr CreateRoundMeshPart(
-    Effect* e, float radius, int32 slice, const Matrix4& mat);
+    Effect* e, float radius, int32_t slice, const Matrix4& mat);
 AZER_EXPORT MeshPartPtr CreateCircleMeshPart(
-    Effect* e, float radius, int32 slice, const Matrix4& mat);
+    Effect* e, float radius, int32_t slice, const Matrix4& mat);
 
 //
 struct AZER_EXPORT GeoConeParams {
@@ -89,8 +89,8 @@ struct AZER_EXPORT GeoBarrelParams {
   float top_radius;
   float bottom_radius;
   float height;
-  int32 slice;
-  int32 stack;
+  int32_t slice;
+  int32_t stack;
 };
 
 AZER_EXPORT EntityPtr CreateBarrelEntity(
@@ -104,8 +104,8 @@ struct AZER_EXPORT GeoTourParams {
   GeoTourParams() : radius1(1.0f), radius2(1.0f), slice(64), stack(64) {}
   float radius1;
   float radius2;
-  int32 slice;
-  int32 stack;
+  int32_t slice;
+  int32_t stack;
 };
 AZER_EXPORT EntityPtr CreateTourEntity(
     VertexDesc* desc, const GeoTourParams& params, const Matrix4& mat);
@@ -119,7 +119,7 @@ struct AZER_EXPORT GeoAxisParams {
   float axis_radius;
   float cone_radius;
   float cone_height;
-  int32 slice;
+  int32_t slice;
 };
 
 AZER_EXPORT MeshPartPtr CreateAxisMeshPart(
@@ -128,7 +128,7 @@ AZER_EXPORT MeshPartPtr CreateLineAxisMeshPart(
     Effect* e, const GeoAxisParams& params, const Matrix4& transform);
 
 AZER_EXPORT EntityPtr CreateGeoPointsList(PrimitiveTopology primitive,
-                                          const Vector3* points, int32 count,
+                                          const Vector3* points, int32_t count,
                                           VertexDesc* desc, const Matrix4& mat);
 
 // util

@@ -35,14 +35,14 @@ void LDRColorA::InterpolateRGB(const LDRColorA& c0, const LDRColorA& c1, size_t 
       out->r = out->g = out->b = 0; 
       return;
   }
-  out->r = uint8((uint32(c0.r) * uint32(BC67_WEIGHT_MAX - aWeights[wc]) 
-                  + uint32(c1.r) * uint32(aWeights[wc]) 
+  out->r = uint8_t((uint32_t(c0.r) * uint32_t(BC67_WEIGHT_MAX - aWeights[wc]) 
+                  + uint32_t(c1.r) * uint32_t(aWeights[wc]) 
                   + BC67_WEIGHT_ROUND) >> BC67_WEIGHT_SHIFT);
-  out->g = uint8((uint32(c0.g) * uint32(BC67_WEIGHT_MAX - aWeights[wc]) 
-                  + uint32(c1.g) * uint32(aWeights[wc]) 
+  out->g = uint8_t((uint32_t(c0.g) * uint32_t(BC67_WEIGHT_MAX - aWeights[wc]) 
+                  + uint32_t(c1.g) * uint32_t(aWeights[wc]) 
                   + BC67_WEIGHT_ROUND) >> BC67_WEIGHT_SHIFT);
-  out->b = uint8((uint32(c0.b) * uint32(BC67_WEIGHT_MAX - aWeights[wc]) 
-                  + uint32(c1.b) * uint32(aWeights[wc]) 
+  out->b = uint8_t((uint32_t(c0.b) * uint32_t(BC67_WEIGHT_MAX - aWeights[wc]) 
+                  + uint32_t(c1.b) * uint32_t(aWeights[wc]) 
                   + BC67_WEIGHT_ROUND) >> BC67_WEIGHT_SHIFT);
 }
 
@@ -69,8 +69,8 @@ void LDRColorA::InterpolateA(const LDRColorA& c0, const LDRColorA& c1, size_t wa
       out->a = 0; 
       return;
   }
-  out->a = uint8((uint32(c0.a) * uint32(BC67_WEIGHT_MAX - aWeights[wa])
-                  + uint32(c1.a) * uint32(aWeights[wa]) 
+  out->a = uint8_t((uint32_t(c0.a) * uint32_t(BC67_WEIGHT_MAX - aWeights[wa])
+                  + uint32_t(c1.a) * uint32_t(aWeights[wa]) 
                   + BC67_WEIGHT_ROUND) >> BC67_WEIGHT_SHIFT);
 }
 
@@ -81,7 +81,7 @@ void LDRColorA::Interpolate(const LDRColorA& c0, const LDRColorA& c1,
   InterpolateA(c0, c1, wa, waprec, out);
 }
 
-const uint8& LDRColorA::operator [] (size_t ele) const {
+const uint8_t& LDRColorA::operator [] (size_t ele) const {
   switch(ele) {
     case 0: return r;
     case 1: return g;
@@ -91,7 +91,7 @@ const uint8& LDRColorA::operator [] (size_t ele) const {
   }
 }
 
-uint8& LDRColorA::operator [] (size_t ele) {
+uint8_t& LDRColorA::operator [] (size_t ele) {
   switch(ele) {
     case 0: return r;
     case 1: return g;
@@ -105,10 +105,10 @@ LDRColorA LDRColorA::operator = (const HDRColorA& c) {
   LDRColorA ret;
   HDRColorA tmp(c);
   tmp = tmp.Clamp(0.0f, 1.0f) * 255.0f;
-  ret.r = uint8(tmp.r + 0.001f);
-  ret.g = uint8(tmp.g + 0.001f);
-  ret.b = uint8(tmp.b + 0.001f);
-  ret.a = uint8(tmp.a + 0.001f);
+  ret.r = uint8_t(tmp.r + 0.001f);
+  ret.g = uint8_t(tmp.g + 0.001f);
+  ret.b = uint8_t(tmp.b + 0.001f);
+  ret.a = uint8_t(tmp.a + 0.001f);
   return ret;
 }
 
@@ -193,8 +193,8 @@ HDRColorA& HDRColorA::Clamp(float fMin,  float fMax) {
 }
 
 LDRColorA HDRColorA::ToLDRColorA() const {
-  return LDRColorA((uint8) (r + 0.01f), (uint8) (g + 0.01f), 
-                   (uint8) (b + 0.01f), (uint8) (a + 0.01f));
+  return LDRColorA((uint8_t) (r + 0.01f), (uint8_t) (g + 0.01f), 
+                   (uint8_t) (b + 0.01f), (uint8_t) (a + 0.01f));
 }
 
 // INT Color
@@ -223,7 +223,7 @@ INTColor& INTColor::operator &= (const INTColor& c) {
   return *this;
 }
 
-int& INTColor::operator [] (uint8 i)  {
+int& INTColor::operator [] (uint8_t i)  {
   DCHECK(i < sizeof(INTColor) / sizeof(int));
   _Analysis_assume_(i < sizeof(INTColor) / sizeof(int));
   return ((int*) this)[i];
@@ -249,13 +249,13 @@ INTColor& INTColor::SignExtend(const LDRColorA& Prec) {
   return *this;
 }
 
-void INTColor::ToF16(uint16 aF16[3], bool bSigned) const {
+void INTColor::ToF16(uint16_t aF16[3], bool bSigned) const {
   aF16[0] = INT2F16(r, bSigned);
   aF16[1] = INT2F16(g, bSigned);
   aF16[2] = INT2F16(b, bSigned);
 }
 
-int INTColor::F16ToINT(uint16 input, bool bSigned) {
+int INTColor::F16ToINT(uint16_t input, bool bSigned) {
   int out, s;
   if(bSigned) {
     s = input & F16S_MASK;
@@ -274,18 +274,18 @@ int INTColor::F16ToINT(uint16 input, bool bSigned) {
   return out;
 }
 
-uint16 INTColor::INT2F16(int input, bool bSigned) {
-  uint16 out;
+uint16_t INTColor::INT2F16(int input, bool bSigned) {
+  uint16_t out;
   if(bSigned) {
     int s = 0;
     if(input < 0) {
       s = F16S_MASK;
       input = -input;
     }
-    out = uint16(s | input);
+    out = uint16_t(s | input);
   } else {
     CHECK(input >= 0 && input <= F16MAX);
-    out = (uint16) input;
+    out = (uint16_t) input;
   }
 
   return out;

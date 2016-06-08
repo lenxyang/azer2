@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "base/files/file_path.h"
 #include <string>
 
@@ -20,7 +20,7 @@ class Dynlib {
   void* GetSymbol(const std::string& name) const;
  private:
   ::base::FilePath path_;
-  int64 inst_;
+  int64_t inst_;
   bool auto_release_;
 };
 }  // namespace azer

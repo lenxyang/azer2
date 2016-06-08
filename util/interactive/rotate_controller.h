@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/effect/color_effect.h"
 #include "azer/math/quaternion.h" 
 #include "azer/math/vector3.h"
@@ -32,7 +32,7 @@ class RotateControllerObj {
   float circle_radius() const;
   void SetScale(const Vector3& s) { scale_ = s;}
   const Vector3& scale() const { return scale_;}
-  void SetColor(int32 index, const Vector4& c);
+  void SetColor(int32_t index, const Vector4& c);
   void ResetColor();
   void Update(const Camera& camera, const Vector3& position);
   void Render(Renderer* renderer);
@@ -69,7 +69,7 @@ class RotateController : public InteractiveController {
   explicit RotateController(InteractiveContext* ctx);
   ~RotateController() override;
 
-  int32 GetPicking(const gfx::Point& pt) override;
+  int32_t GetPicking(const gfx::Point& pt) override;
   void OnDragBegin(const ui::MouseEvent& e) override;
   void OnDragging(const ui::MouseEvent& e) override;
   void OnDragEnd(const ui::MouseEvent& e) override;

@@ -16,8 +16,8 @@ struct GeoCylinderParam {
   float top_radius;
   float bottom_radius;
   float height;
-  int32 slice;
-  int32 stack;
+  int32_t slice;
+  int32_t stack;
 };
 
 Subset AppendGeoBarrelData(VertexPack* vp, IndexPack* ipack, 

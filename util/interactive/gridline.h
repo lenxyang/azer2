@@ -15,7 +15,7 @@ class Renderer;
 
 class Gridline {
  public:
-  Gridline(int32 row, int32 column, float cell = 1.0f);
+  Gridline(int32_t row, int32_t column, float cell = 1.0f);
   ~Gridline();
   
   void Update(const Camera& camera);

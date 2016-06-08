@@ -14,9 +14,9 @@ namespace azer {
 
 namespace {
 bool StringToDoubleVec(const std::string& text, std::vector<double>* vec) {
-  std::vector<std::string> v;
   double dv;
-  ::base::SplitString(text, ',', &v);
+  std::vector<std::string> v = ::base::SplitString(text, ",", base::TRIM_WHITESPACE,
+                                                   ::base::SPLIT_WANT_NONEMPTY);
   for (auto iter = v.begin(); iter != v.end(); ++iter) {
     std::string str = *iter;
     if (str.empty())
@@ -73,14 +73,14 @@ const ConfigNode* ConfigNode::root() const {
   return NULL;
 }
 
-const ConfigNode* ConfigNode::child_at(int32 index) const {
+const ConfigNode* ConfigNode::child_at(int32_t index) const {
   DCHECK_LT(index, child_count());
-  return children_[index];
+  return children_[index].get();
 }
 
-ConfigNode* ConfigNode::child_at(int32 index) {
+ConfigNode* ConfigNode::child_at(int32_t index) {
   DCHECK_LT(index, child_count());
-  return children_[index];
+  return children_[index].get();
 }
 
 bool ConfigNode::AddChild(ConfigNode* node) {
@@ -115,12 +115,12 @@ ConfigNodes ConfigNode::GetTaggedChildren(
 }
 
 ConfigNode* ConfigNode::GetNodeFromPath(const std::string& path) {
-  if (StartsWithASCII(path, "//", false)) {
+  if (::base::StartsWith(path, "//", ::base::CompareCase::INSENSITIVE_ASCII)) {
     return root()->GetNodeFromPath(path.substr(2));
   } else {
     ConfigNode* cur = this;
-    std::vector<std::string> vec;
-    ::base::SplitString(path, '/', &vec);
+    std::vector<std::string> vec = ::base::SplitString(
+        path, "/", base::TRIM_WHITESPACE, ::base::SPLIT_WANT_NONEMPTY);
     for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
       const std::string& name = *iter;
       ConfigNodes nodes = std::move(cur->GetNodeWithAttr("name", name));
@@ -172,7 +172,7 @@ ConfigNodes ConfigNode::GetNodeWithAttr(const std::string& name,
 ConfigNode* ConfigNode::GetFirstChildTagged(const std::string& tag) const {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     if ((*iter)->tagname() == tag)
-      return *iter;
+      return iter->get();
   }
 
   return NULL;
@@ -182,7 +182,7 @@ ConfigNode* ConfigNode::GetLastChildTagged(
     const std::string& name) const {
   for (auto iter = children_.rbegin(); iter != children_.rend(); ++iter) {
     if ((*iter)->tagname() == name)
-      return *iter;
+      return iter->get();
   }
 
   return NULL;
@@ -225,7 +225,7 @@ bool ConfigNode::GetAttrAsFloat(const std::string& name, float* v) const {
   return ret;
 }
 
-bool ConfigNode::GetAttrAsInt(const std::string& name, int32* v) const {
+bool ConfigNode::GetAttrAsInt(const std::string& name, int32_t* v) const {
   std::string str = std::move(GetAttr(name));
   return ::base::StringToInt(str, v);
 }
@@ -292,7 +292,7 @@ bool ConfigNode::GetTextAsFloat(float* v) const {
   return ret;
 }
 
-bool ConfigNode::GetTextAsInt(int32* v) const {
+bool ConfigNode::GetTextAsInt(int32_t* v) const {
   return ::base::StringToInt(text_, v);
 }
 
@@ -367,7 +367,7 @@ bool ConfigNode::GetChildTextAsFloat(const std::string& name, float* v) const {
   return vec[0]->GetTextAsFloat(v);
 }
 
-bool ConfigNode::GetChildTextAsInt(const std::string& name, int32* v) const {
+bool ConfigNode::GetChildTextAsInt(const std::string& name, int32_t* v) const {
   std::vector<ConfigNodePtr> vec = std::move(GetTaggedChildren(name));
   if (vec.size() != 1u)
     return false;
@@ -430,7 +430,7 @@ bool ConfigNode::InitFromXMLNodeRecusive(util::xml::Element* element) {
     if (child->type() == util::xml::Node::kElementNode) {
       util::xml::Element* ele = child->ToElement();
       ConfigNodePtr ptr = new ConfigNode();
-      if (!ptr->InitFromXMLNodeRecusive(ele) || !this->AddChild(ptr)) {
+      if (!ptr->InitFromXMLNodeRecusive(ele) || !this->AddChild(ptr.get())) {
         return false;
       }
     }

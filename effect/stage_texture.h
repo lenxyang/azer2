@@ -29,7 +29,7 @@ class AZER_EXPORT StageTexContainer {
   void Bind(Renderer* renderer);
   void Reset(Renderer* renderer);
  private:
-  StageTexture& GetStage(int32 stage);
+  StageTexture& GetStage(int32_t stage);
   std::vector<StageTexture> stages_;
   DISALLOW_COPY_AND_ASSIGN(StageTexContainer);
 };

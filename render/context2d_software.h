@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "base/basictypes.h"
+
 #include "azer/base/export.h"
 #include "azer/render/context2d.h"
 
@@ -18,7 +18,7 @@ class AZER_EXPORT SoftwareContext2D : public Context2D {
   
   void flush() override;
   void finish() override;
-  Canvas2D* CreateCanvas(int32 width, int32 height) override;
+  Canvas2D* CreateCanvas(int32_t width, int32_t height) override;
  protected:
   DISALLOW_COPY_AND_ASSIGN(SoftwareContext2D);
 };

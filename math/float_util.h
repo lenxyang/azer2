@@ -5,17 +5,13 @@
 namespace azer {
 
 
-#if OS_WIN
-typedef __int64 BiggestInt;
-#else
-typedef long long BiggestInt;  // NOLINT
-#endif  // OS_WIN
+typedef int64_t BiggestInt;
 
 // The maximum number a BiggestInt can represent.  This definition
 // works no matter BiggestInt is represented in one's complement or
 // two's complement.
 //
-// We cannot rely on numeric_limits in STL, as __int64 and long long
+// We cannot rely on numeric_limits in STL, as __int64_t and long long
 // are not part of standard C++ and numeric_limits doesn't need to be
 // defined for them.
 const BiggestInt kMaxBiggestInt =
@@ -64,8 +60,8 @@ template <>
 class TypeWithSize<8> {
  public:
 #if GTEST_OS_WINDOWS
-  typedef __int64 Int;
-  typedef unsigned __int64 UInt;
+  typedef __int64_t Int;
+  typedef unsigned __int64_t UInt;
 #else
   typedef long long Int;  // NOLINT
   typedef unsigned long long UInt;  // NOLINT

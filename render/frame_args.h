@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "base/basictypes.h"
+
 #include "base/time/time.h"
 #include "azer/base/export.h"
 
@@ -15,25 +15,25 @@ class AZER_EXPORT FrameArgs {
 
   void Update();
   
-  int64 frame_id() const { return frame_id_;}
+  int64_t frame_id() const { return frame_id_;}
   float recent_average_fps() const; 
   float total_average_fps() const; 
 
   double time() const { return timef_;}
   const ::base::TimeDelta& delta() const { return delta_;}
  private:
-  uint32 which_;
+  uint32_t which_;
   double timef_;
   ::base::Time started_;
   ::base::Time time_[2];
   ::base::TimeDelta delta_;
-  int64 frame_cnt_;
-  int64 frame_id_;
+  int64_t frame_cnt_;
+  int64_t frame_id_;
   void *extra_;
   double total_seconds_; 
   double recent_seconds_;
   std::deque<::base::TimeDelta> recent_frames_time_consumed_;
-  const int32 max_frame_stored_;
+  const int32_t max_frame_stored_;
   DISALLOW_COPY_AND_ASSIGN(FrameArgs);
 };
 

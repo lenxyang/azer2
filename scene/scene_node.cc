@@ -31,9 +31,9 @@ void CalcSceneOrientForZDirection(const Vector3& d, Quaternion* orient) {
 class SceneIdAllocator {
  public:
   SceneIdAllocator() : allocated_(0) {}
-  int32 allocate() { return ++allocated_;}
+  int32_t allocate() { return ++allocated_;}
  private:
-  std::atomic<int32> allocated_;
+  std::atomic<int32_t> allocated_;
   DISALLOW_COPY_AND_ASSIGN(SceneIdAllocator);
 };
 static ::base::LazyInstance<SceneIdAllocator> id_alloc = LAZY_INSTANCE_INITIALIZER;
@@ -60,7 +60,7 @@ bool SceneNodeManager::Unregister(SceneNode* node) {
   }
 }
 
-SceneNode* SceneNodeManager::Lookup(int32 id) {
+SceneNode* SceneNodeManager::Lookup(int32_t id) {
   auto iter = dict_.find(id);
   if (dict_.end() != iter) {
     return iter->second;
@@ -146,7 +146,7 @@ void SceneNodeData::OnNodeOrientChanged(SceneNode* node, const Quaternion& prev)
 }
 
 // class SceneNode
-SceneNode* SceneNode::Lookup(int32 id) {
+SceneNode* SceneNode::Lookup(int32_t id) {
   return scene_node_mgr.Pointer()->Lookup(id);
 }
 
@@ -244,14 +244,14 @@ Vector3 SceneNode::GetWorldPosition() const {
 SceneNode* SceneNode::GetLocalChild(const std::string& name) {
   for (auto iter = children_.begin(); iter != children_.end(); ++iter) {
     if ((*iter)->name() == name) {
-      return *iter;
+      return iter->get();
     }
   }
   return NULL;
 }
 
 SceneNode* SceneNode::GetNode(const std::string& path) {
-  if (StartsWithASCII(path, "//", false)) {
+  if (::base::StartsWith(path, "//", ::base::CompareCase::INSENSITIVE_ASCII)) {
     return root()->GetNode(path.substr(2));
   } else {
     SceneNodePtr cur = this;
@@ -261,7 +261,7 @@ SceneNode* SceneNode::GetNode(const std::string& path) {
       if (!cur.get())
         return NULL;
     }
-    return cur;
+    return cur.get();
   }
 }
 
@@ -480,7 +480,7 @@ std::string SceneNode::GetAttr(const std::string& name) const {
   }
 }
 
-const char* SceneNodeName(int32 type) {
+const char* SceneNodeName(int32_t type) {
   switch (type) {
     case kSceneNode: return "SceneNode";
     case kEnvSceneNode: return "EnvNode";

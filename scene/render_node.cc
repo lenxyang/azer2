@@ -41,8 +41,8 @@ RenderNode::RenderNode(SceneNode* node)
 RenderNode::~RenderNode() {
 }
 
-void RenderNode::SetDelegate(scoped_ptr<RenderNodeDelegate> delegate) {
-  delegate_ = delegate.Pass();
+void RenderNode::SetDelegate(scoped_refptr<RenderNodeDelegate> delegate) {
+  delegate_ = delegate;
 }
 
 RenderNode* RenderNode::root() {
@@ -67,11 +67,11 @@ RenderNode* RenderNode::parent() {
   return parent_;
 }
 
-int32 RenderNode::child_count() const {
-  return static_cast<int32>(children_.size());
+int32_t RenderNode::child_count() const {
+  return static_cast<int32_t>(children_.size());
 }
 
-RenderNode* RenderNode::child_at(int32 index) {
+RenderNode* RenderNode::child_at(int32_t index) {
   return children_.at(index).get();
 }
 
@@ -88,7 +88,7 @@ void RenderNode::SetEnvNode(RenderEnvNode* node) {
 }
 
 bool RenderNode::RemoveChild(RenderNode* child) {
-  int32 index = GetIndexOf(child);
+  int32_t index = GetIndexOf(child);
   if (index > 0) {
     children_.erase(children_.begin() + index);
     child->parent_ = NULL;
@@ -108,8 +108,8 @@ bool RenderNode::Contains(RenderNode* child) const {
   return false;
 }
 
-int32 RenderNode::GetIndexOf(RenderNode* child) const {
-  int32 index = 0;
+int32_t RenderNode::GetIndexOf(RenderNode* child) const {
+  int32_t index = 0;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++index) {
     if (iter->get() == child)
       return index;
@@ -190,11 +190,12 @@ RenderNodePtr RenderTreeBuilder::Build(SceneNode* root, const Camera* camera) {
   DCHECK(cur_ == NULL);
   DCHECK(delegate_ != NULL);
   RenderNodePtr render_root = new RenderNode(root);
-  render_root->SetDelegate(delegate_->CreateRenderDelegate(
-      render_root.get()).Pass());
+  RenderNodeDelegatePtr rdeg = delegate_->CreateRenderDelegate(render_root.get());
+  render_root->SetDelegate(rdeg.get());
   RenderEnvNodePtr envnode = new RenderEnvNode(NULL);
-  envnode->set_delegate(delegate_->CreateEnvDelegate(envnode));
-  render_root->SetEnvNode(envnode);
+  RenderEnvNodeDelegatePtr envdeg = delegate_->CreateEnvDelegate(envnode.get());
+  envnode->set_delegate(envdeg.get());
+  render_root->SetEnvNode(envnode.get());
   render_root->SetCamera(camera);
   cur_ = render_root.get();
   SceneNodeTraverse traverser(this);
@@ -218,17 +219,18 @@ bool RenderTreeBuilder::OnTraverseNodeEnter(SceneNode* scene_node) {
     envnode = new RenderEnvNode(NULL);
     parent->AddChild(envnode);
     RenderEnvNodeDelegatePtr delegate = delegate_->CreateEnvDelegate(envnode);
-    delegate->Init(scene_node, render_node);
-    envnode->set_delegate(delegate);
+    delegate->Init(scene_node, render_node.get());
+    envnode->set_delegate(delegate.get());
     cur_->SetEnvNode(envnode);
   }
 
   render_node->SetEnvNode(envnode);
-  render_node->SetDelegate(delegate_->CreateRenderDelegate(render_node).Pass());
+  RenderNodeDelegatePtr rdel = delegate_->CreateRenderDelegate(render_node.get());
+  render_node->SetDelegate(rdel.get());
   render_node->Init();
   if (delegate_->NeedRenderNode(scene_node)) {
-    cur_->AddChild(render_node);
-    cur_ = render_node;
+    cur_->AddChild(render_node.get());
+    cur_ = render_node.get();
     return true;
   } else {
     return false;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 
 namespace azer {
 
@@ -26,7 +26,7 @@ class BackSwapChain {
   void swap() { which_ ^= 1;}
  private:
   T obj_[2];
-  int32 which_;
+  int32_t which_;
   DISALLOW_COPY_AND_ASSIGN(BackSwapChain);
 };
 }  // namespace azer

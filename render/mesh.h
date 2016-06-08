@@ -40,11 +40,11 @@ class AZER_EXPORT MeshPart : public EffectParamsProviderContainer {
   void SetEffect(Effect* effect) { effect_ = effect;}
   EntityVec* entity_vector() { return vecptr_.get();}
 
-  void AddEntity(EntityPtr ptr);
-  void RemoveEntityAt(int32 index);
-  Entity* entity_at(int32 index);
-  const Entity* entity_at(int32 index) const;
-  int32 entity_count() const;
+  void AddEntity(Entity* ptr);
+  void RemoveEntityAt(int32_t index);
+  Entity* entity_at(int32_t index);
+  const Entity* entity_at(int32_t index) const;
+  int32_t entity_count() const;
  private:
   void RenderPart(Renderer* renderer);
   EffectPtr effect_;
@@ -59,10 +59,10 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   ~Mesh();
 
   MeshPart* AddMeshPart(MeshPart* entity);
-  MeshPartPtr RemoveMeshPartAt(int32 index);
+  MeshPartPtr RemoveMeshPartAt(int32_t index);
   void ClearMeshPart();
-  int32 part_count() const { return static_cast<int32>(part_.size());}
-  MeshPart* part_at(int32 index) { return part_[index].get();}
+  int32_t part_count() const { return static_cast<int32_t>(part_.size());}
+  MeshPart* part_at(int32_t index) { return part_[index].get();}
   bool has_blending() const { return blending_count_ > 0;}
 
   virtual void Render(Renderer* renderer);
@@ -74,7 +74,7 @@ class AZER_EXPORT Mesh : public EffectParamsProviderContainer {
   void UpdateMinAndMax();
   Vector3 vmin_;
   Vector3 vmax_;
-  int32 blending_count_;
+  int32_t blending_count_;
   std::vector<MeshPartPtr> part_;
   DISALLOW_COPY_AND_ASSIGN(Mesh);
 };

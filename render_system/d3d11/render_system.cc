@@ -4,7 +4,7 @@
 
 
 #include "base/strings/string16.h"
-#include "base/basictypes.h"
+
 #include "base/logging.h"
 #include "azer/base/image.h"
 #include "azer/render/common.h"
@@ -125,7 +125,7 @@ ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc
       gpu_program = new D3DComputeShader(info);
       break;
     default:
-      CHECK(false) << "No such Shader Type: " << (int32)info.stage;
+      CHECK(false) << "No such Shader Type: " << (int32_t)info.stage;
       return NULL;
   }
 
@@ -142,7 +142,7 @@ TechniquePtr D3DRenderSystem::CreateTechnique() {
 }
 
 GpuConstantsTablePtr D3DRenderSystem::CreateGpuConstantsTable(
-    int32 num, const GpuConstantsTable::Desc* desc) {
+    int32_t num, const GpuConstantsTable::Desc* desc) {
   scoped_refptr<D3DGpuConstantsTable> tableptr = new D3DGpuConstantsTable(num, desc);
   if (tableptr->Init(this)) {
     return tableptr;

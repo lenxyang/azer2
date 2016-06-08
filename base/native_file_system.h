@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "azer/base/res_path.h"
 #include "azer/base/file_system.h"
 
@@ -12,13 +13,13 @@ class NativeFile : public File {
   bool Open(const ResPath& path) override;
   void Close() override;
 
-  bool PRead(int64 offset, int64 size, FileContents* content) override;
-  bool AsyncPRead(int64 offset, int64 size, FileContents* content, 
+  bool PRead(int64_t offset, int64_t size, FileContents* content) override;
+  bool AsyncPRead(int64_t offset, int64_t size, FileContents* content, 
                   base::Closure* callback) override;
  private:
   NativeFileSystem* native_fs_;
   base::FilePath real_path_;
-  scoped_ptr<::base::File> file_;
+  std::unique_ptr<::base::File> file_;
   DISALLOW_COPY_AND_ASSIGN(NativeFile);
 };
 
@@ -33,7 +34,7 @@ class AZER_EXPORT NativeFileSystem : public FileSystem {
   FilePtr OpenFile(const ResPath& path) override;
   FileType GetFileType(const ResPath& path) override;
   bool IsPathExists(const ResPath& path) override;
-  int64 GetFileSize(const ResPath& path) override;
+  int64_t GetFileSize(const ResPath& path) override;
   bool EnumDirectory(const ResPath& path, FileInfoVec* vec) override;
 
   const base::FilePath& GetRootPath() const { return root_;}

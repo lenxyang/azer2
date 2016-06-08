@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include "base/basictypes.h"
+
 #include "azer/afx/compiler/type.h"
 #include "azer/afx/compiler/loc.h"
 #include "azer/afx/preprocessor/tokenizer.h"

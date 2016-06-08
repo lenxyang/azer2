@@ -3,7 +3,6 @@
 #include <deque>
 #include <vector>
 
-#include "base/memory/scoped_ptr.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/effect/light.h"
@@ -14,14 +13,16 @@
 namespace azer {
 class Camera;
 class FrameArgs;
+class RenderNodeDelegate;
 class RenderEnvNodeDelegate;
 class RenderEnvNode;
 class RenderNode;
 typedef scoped_refptr<RenderEnvNode> RenderEnvNodePtr;
 typedef scoped_refptr<RenderEnvNodeDelegate> RenderEnvNodeDelegatePtr;
 typedef scoped_refptr<RenderNode> RenderNodePtr;
+typedef scoped_refptr<RenderNodeDelegate> RenderNodeDelegatePtr;
 
-class AZER_EXPORT RenderNodeDelegate {
+class AZER_EXPORT RenderNodeDelegate : public ::base::RefCounted<RenderNodeDelegate> {
  public:
   explicit RenderNodeDelegate(RenderNode* node);
   virtual void Update(const FrameArgs& args) = 0;
@@ -39,12 +40,12 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
  public:
   explicit RenderNode(SceneNode* node);
   virtual ~RenderNode();
-  void SetDelegate(scoped_ptr<RenderNodeDelegate> delegate);
+  void SetDelegate(scoped_refptr<RenderNodeDelegate> delegate);
 
   SceneNode* GetSceneNode() { return node_;}
   const SceneNode* GetSceneNode() const { return node_;}
-  RenderEnvNode* GetEnvNode() { return envnode_;}
-  const RenderEnvNode* GetEnvNode() const { return envnode_;}
+  RenderEnvNode* GetEnvNode() { return envnode_.get();}
+  const RenderEnvNode* GetEnvNode() const { return envnode_.get();}
   void  SetEnvNode(RenderEnvNode* node);
 
   const Matrix4& GetWorld() const { return world_;}
@@ -68,22 +69,22 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
     return const_cast<const RenderNode*>(
         const_cast<RenderNode*>(this)->parent());
   }
-  int32 child_count() const;
-  RenderNode* child_at(int32 index);
+  int32_t child_count() const;
+  RenderNode* child_at(int32_t index);
   void AddChild(RenderNode* child);
   bool RemoveChild(RenderNode* child);
   bool Contains(RenderNode* child) const;
-  int32 GetIndexOf(RenderNode* child) const;
+  int32_t GetIndexOf(RenderNode* child) const;
   const std::vector<RenderNodePtr>& children() const { return children_;}
   std::string DumpTree() const;
-  std::string DumpNode(const RenderNode* node, int32 depth) const;
+  std::string DumpNode(const RenderNode* node, int32_t depth) const;
  protected:
   void CalcParams(const FrameArgs& args);
   RenderNode* parent_;
   std::vector<RenderNodePtr> children_;
 
   SceneNode* node_;
-  scoped_ptr<RenderNodeDelegate> delegate_;
+  RenderNodeDelegatePtr delegate_;
   RenderEnvNodePtr envnode_;
   const Camera* camera_;
   Matrix4 world_;
@@ -92,11 +93,12 @@ class AZER_EXPORT RenderNode : public EffectParamsProvider {
   DISALLOW_COPY_AND_ASSIGN(RenderNode);
 };
 
-class AZER_EXPORT RenderTreeBuilderDelegate {
+class AZER_EXPORT RenderTreeBuilderDelegate
+    : public ::base::RefCounted<RenderTreeBuilderDelegate> {
  public:
   virtual bool NeedRenderNode(SceneNode* node) = 0;
   virtual bool NeedRenderEnvNode(SceneNode* node);
-  virtual scoped_ptr<RenderNodeDelegate> CreateRenderDelegate(RenderNode* n) = 0;
+  virtual scoped_refptr<RenderNodeDelegate> CreateRenderDelegate(RenderNode* n) = 0;
   virtual RenderEnvNodeDelegatePtr CreateEnvDelegate(RenderEnvNode* n) = 0;
 };
 

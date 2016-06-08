@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GLES2/gl2.h"
-#include <d3d11.h>
+#include "azer/render_system/d3d11/d3d11.h"
 
 extern "C" {
 

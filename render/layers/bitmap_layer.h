@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/base/export.h"
 #include "azer/azer.h"
 #include "azer/render/layers/layer.h"

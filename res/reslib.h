@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-#include "base/basictypes.h"
+
 #include "base/synchronization/lock.h"
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
@@ -24,7 +24,7 @@ class ResLib {
 
   EffectLib * effectlib();
   Effect* GetEffect(const std::string& name);
-  Texture* GetTexture(int32 id);
+  Texture* GetTexture(int32_t id);
   EffectAdapterContext* effect_context();
   ResourcePack* resource_pack();
  private:

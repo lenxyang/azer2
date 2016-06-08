@@ -1,15 +1,11 @@
 #pragma once
 
-#include <d3d11.h>
-#include <d3dx11.h>
-#include <d3dx10.h>
-#include <xnamath.h>
-
 #include <string>
 
 #include "base/logging.h"
 #include "azer/render/rasterizer_state.h"
 #include "azer/render/shader.h"
+#include "azer/render_system/d3d11/d3d11.h"
 
 namespace azer {
 namespace d3d11 {

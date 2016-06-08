@@ -8,7 +8,7 @@
 namespace azer {
 namespace {
 void InitMeshEffect(Effect* effect, Mesh* mesh) {
-  for (int32 i = 0; i < mesh->part_count(); ++i) {
+  for (int32_t i = 0; i < mesh->part_count(); ++i) {
     mesh->part_at(i)->SetEffect(effect);
   }
 }

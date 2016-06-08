@@ -10,8 +10,8 @@ class VertexPack;
 struct GeoSphereParam {
   GeoSphereParam() : radius(1.0f), stack(64), slice(64) {}
   float radius;
-  int32 stack;
-  int32 slice;
+  int32_t stack;
+  int32_t slice;
 };
 
 Subset AppendGeoSphereSuset(VertexPack* vp, IndexPack* ipack,

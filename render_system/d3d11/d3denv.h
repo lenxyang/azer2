@@ -2,16 +2,11 @@
 
 #include <memory>
 
-#include <d3d11.h>
-#include <d3dx11.h>
-#include <d3dx10.h>
-#include <xnamath.h>
-
-#include "base/basictypes.h"
 #include "azer/render/surface.h"
 #include "azer/render/swap_chain.h"
 #include "ui/gfx/native_widget_types.h"
 #include "azer/render/render_capability.h"
+#include "azer/render_system/d3d11/d3d11.h"
 
 namespace azer {
 namespace d3d11 {

@@ -9,7 +9,7 @@
 #    define DYNLIB_HANDLE HINSTANCE
 #    define DYNLIB_LOAD(a) LoadLibraryEx(a, NULL, LOAD_WITH_ALTERED_SEARCH_PATH)
 #    define DYNLIB_GETSYM(a, b) GetProcAddress(a, b)
-#    define DYNLIB_UNLOAD(a) !FreeLibrary(a)
+#    define DYNLIB_UNLOAD(a) FreeLibrary(a)
 #    define INVALID_HANDLE  0
 #endif
 
@@ -28,7 +28,7 @@ Dynlib::~Dynlib() {
   }
 }
 bool Dynlib::load() {
-  inst_ = (int64)DYNLIB_LOAD(path_.value().c_str());
+  inst_ = (int64_t)DYNLIB_LOAD(path_.value().c_str());
   if (NULL == inst_) {
     PLOG(ERROR) << "Failed to Load Dynlib: " << path_.value();
     return false;

@@ -59,7 +59,7 @@ EffectAdapterContext* InteractiveEnv::effect_context() {
   return ResLib::instance()->effect_context();
 }
 
-Texture* InteractiveEnv::GetTexture(int32 id) {
+Texture* InteractiveEnv::GetTexture(int32_t id) {
   return ResLib::instance()->GetTexture(id);
 }
 

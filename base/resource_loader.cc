@@ -73,7 +73,7 @@ VariantResource ResourceLoader::Load(const ResPath& path) {
   nodepath.append(path.component_name().as_string());
   ConfigNodePtr cnode = croot->GetNodeFromPath(::base::UTF16ToUTF8(nodepath));
   CHECK(cnode.get()) << "cannot node: " << nodepath;
-  ResourceSpecialLoader* loader = GetLoader(cnode);
+  ResourceSpecialLoaderPtr loader = GetLoader(cnode.get());
   return loader->Load(cnode.get(), &ctx);
 }
 

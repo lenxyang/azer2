@@ -61,7 +61,7 @@ RepositoryNodePtr RepositoryNode::GetChild(const StringType& name) {
   }
 }
 
-int32 RepositoryNode::GetIndexOf(const RepositoryNodePtr& node) const {
+int32_t RepositoryNode::GetIndexOf(const RepositoryNodePtr& node) const {
   int index = 0;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++index) {
     if (iter->second.get() == node.get())
@@ -70,7 +70,7 @@ int32 RepositoryNode::GetIndexOf(const RepositoryNodePtr& node) const {
   return -1;
 }
 
-RepositoryNodePtr RepositoryNode::child_at(int32 index) {
+RepositoryNodePtr RepositoryNode::child_at(int32_t index) {
   DCHECK(index < child_count());
   int cur = 0;
   for (auto iter = children_.begin(); iter != children_.end(); ++iter, ++cur) {
@@ -82,8 +82,8 @@ RepositoryNodePtr RepositoryNode::child_at(int32 index) {
   return RepositoryNodePtr();
 }
 
-int32 RepositoryNode::child_count() const {
-  return static_cast<int32>(children_.size());
+int32_t RepositoryNode::child_count() const {
+  return static_cast<int32_t>(children_.size());
 }
 
 RepositoryNodePtr RepositoryNode::FindOrCreate(const StringType& name) {
@@ -189,9 +189,9 @@ RepositoryNodePtr RepositoryNode::GetLocalNode(const StringType& name) {
 RepositoryNodePtr RepositoryNode::GetNode(const ResPath& path) {
   DCHECK_NE(path.type(), ResPath::kInvalidPath);
   if (path.type() ==  ResPath::kAbsolutePath) {
-    std::vector<StringType> vec;
-    ::base::SplitString(path.filepath().substr(2).as_string(),
-                        FILE_PATH_LITERAL('/'), &vec);
+    std::vector<StringType> vec = ::base::SplitString(
+        path.filepath().substr(2).as_string(), FILE_PATH_LITERAL("/"),
+        ::base::TRIM_WHITESPACE, ::base::SPLIT_WANT_NONEMPTY);
     return root()->RepositoryNode::GetNodeFromDirVec(vec);
   } else if (path.type() == ResPath::kRelativePath) {
     return GetLocalNode(path.filepath().as_string());
@@ -202,8 +202,9 @@ RepositoryNodePtr RepositoryNode::GetNode(const ResPath& path) {
 }
 
 RepositoryNodePtr RepositoryNode::GetRelativeNode(const StringType& path) {
-  std::vector<StringType> vec;
-  ::base::SplitString(path, FILE_PATH_LITERAL('/'), &vec);
+  std::vector<StringType> vec =
+      ::base::SplitString(path, FILE_PATH_LITERAL("/"),
+                          base::TRIM_WHITESPACE, ::base::SPLIT_WANT_NONEMPTY);
   return RepositoryNode::GetNodeFromDirVec(vec);
 }
 
@@ -250,8 +251,9 @@ std::string RepositoryNode::PrintHierarchy(int ident) {
 
 void GenerateTreeHierarchy(const ResPath& path, RepositoryNodePtr root) {
   DCHECK_EQ(path.type(), ResPath::kAbsolutePath);
-  std::vector<StringType> vec;
-  ::base::SplitString(path.filepath().as_string(), FILE_PATH_LITERAL('/'), &vec);
+  std::vector<StringType> vec = ::base::SplitString(
+      path.filepath().as_string(), FILE_PATH_LITERAL("/"),
+      base::TRIM_WHITESPACE, ::base::SPLIT_WANT_NONEMPTY);
   RepositoryNodePtr ptr = root;
   for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
     if (iter->empty()) continue;

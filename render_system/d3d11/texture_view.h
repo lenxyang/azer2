@@ -1,6 +1,6 @@
 #pragma once
 
-#include <d3d11.h>
+#include "azer/render_system/d3d11/d3d11.h"
 #include "azer/render/texture_view.h"
 
 namespace azer {
@@ -10,7 +10,7 @@ class D3DTextureView : public TextureView {
   D3DTextureView(const Options& options, Texture* tex);
   virtual ~D3DTextureView();
   virtual bool Init() = 0;
-  void GenerateMips(int32 level) override;
+  void GenerateMips(int32_t level) override;
  protected:
   bool CheckTexFormatCapability();
  private:
@@ -24,7 +24,7 @@ class D3DResTextureView : public D3DTextureView {
 
   bool Init() override;
   ID3D11ShaderResourceView* GetResourceView() { return res_view_;}
-  void GenerateMips(int32 level) override;
+  void GenerateMips(int32_t level) override;
  private:
   ID3D11ShaderResourceView* res_view_;
   DISALLOW_COPY_AND_ASSIGN(D3DResTextureView);

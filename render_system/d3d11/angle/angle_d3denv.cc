@@ -3,7 +3,6 @@
 #include "EGL/egl.h"
 
 #include <windows.h>
-#include <d3d11.h>
 
 #include "azer/render_system/d3d11/angle_env.h"
 #include "azer/render_system/d3d11/angle_swapchain.h"

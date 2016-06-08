@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "base/basictypes.h"
+
 #include "azer/base/export.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/hardware_buffer.h"
@@ -27,21 +27,21 @@ class AZER_EXPORT IndicesData : public ::base::RefCounted<IndicesData> {
   IndicesData(int count, IndexType type);
   virtual ~IndicesData() {}
 
-  void extend(int32 count);
-  int32 size() const { return unit_size() * count();}
-  const uint8* pointer() const;
-  uint8* pointer();
+  void extend(int32_t count);
+  int32_t size() const { return unit_size() * count();}
+  const uint8_t* pointer() const;
+  uint8_t* pointer();
   IndexType type() const { return type_;}
-  int32 count() const { return count_;}
-  int32 unit_size() const;
-  int32 index_value(int idx) const;
-  int32 index_value(uint8* ptr) const;
+  int32_t count() const { return count_;}
+  int32_t unit_size() const;
+  int32_t index_value(int idx) const;
+  int32_t index_value(uint8_t* ptr) const;
 
   void reset() { data_.reset();}
  protected:
   IndexType type_;
-  int32 count_;
-  std::unique_ptr<uint8[]> data_;
+  int32_t count_;
+  std::unique_ptr<uint8_t[]> data_;
   DISALLOW_COPY_AND_ASSIGN(IndicesData);
 };
 
@@ -54,9 +54,9 @@ class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
   virtual HardwareBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
   IndexType type() const { return type_;}
-  int32 indices_count() const { return indices_count_;}
+  int32_t indices_count() const { return indices_count_;}
  protected:
-  int32 indices_count_;
+  int32_t indices_count_;
   IndexType type_;
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);
 };

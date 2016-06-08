@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "base/files/file_path.h"
 #include "azer/base/tree_node.h"
 #include "azer/afx/compiler/astnode.h"

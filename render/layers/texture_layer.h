@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/basictypes.h"
+
 #include "azer/base/export.h"
 #include "azer/render/blending.h"
 #include "azer/render/texture.h"

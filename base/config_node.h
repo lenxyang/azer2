@@ -36,7 +36,7 @@ class AZER_EXPORT ConfigNode : public ::base::RefCounted<ConfigNode> {
   bool HasAttr(const std::string& name) const;
   bool GetAttrAsDouble(const std::string& name, double* v) const;
   bool GetAttrAsFloat(const std::string& name, float* v) const;
-  bool GetAttrAsInt(const std::string& name, int32* v) const;
+  bool GetAttrAsInt(const std::string& name, int32_t* v) const;
   bool GetAttrAsVec2(const std::string& name, Vector2* v) const;
   bool GetAttrAsVec3(const std::string& name, Vector3* v) const;
   bool GetAttrAsVec4(const std::string& name, Vector4* v) const;
@@ -45,7 +45,7 @@ class AZER_EXPORT ConfigNode : public ::base::RefCounted<ConfigNode> {
   const std::string& GetText() const;
   bool GetTextAsDouble(double* v) const;
   bool GetTextAsFloat(float* v) const;
-  bool GetTextAsInt(int32* v) const;
+  bool GetTextAsInt(int32_t* v) const;
   bool GetTextAsVec2(Vector2* v) const;
   bool GetTextAsVec3(Vector3* v) const;
   bool GetTextAsVec4(Vector4* v) const;
@@ -55,7 +55,7 @@ class AZER_EXPORT ConfigNode : public ::base::RefCounted<ConfigNode> {
   bool GetChildText(const std::string& name, std::string* text) const;
   bool GetChildTextAsDouble(const std::string& name, double* v) const;
   bool GetChildTextAsFloat(const std::string& name, float* v) const;
-  bool GetChildTextAsInt(const std::string& name, int32* v) const;
+  bool GetChildTextAsInt(const std::string& name, int32_t* v) const;
   bool GetChildTextAsVec2(const std::string& name, Vector2* v) const;
   bool GetChildTextAsVec3(const std::string& name, Vector3* v) const;
   bool GetChildTextAsVec4(const std::string& name, Vector4* v) const;
@@ -63,9 +63,9 @@ class AZER_EXPORT ConfigNode : public ::base::RefCounted<ConfigNode> {
 
   const ConfigNodes& children() const { return children_;}
   ConfigNodes& children() { return children_;}
-  int32 child_count() const { return static_cast<int>(children_.size());}
-  const ConfigNode* child_at(int32 index) const;
-  ConfigNode* child_at(int32 index);
+  int32_t child_count() const { return static_cast<int>(children_.size());}
+  const ConfigNode* child_at(int32_t index) const;
+  ConfigNode* child_at(int32_t index);
 
   bool AddChild(ConfigNode* node);
   bool Contains(ConfigNode* node) const;

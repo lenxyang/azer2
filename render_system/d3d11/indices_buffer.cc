@@ -1,7 +1,5 @@
 #include "azer/render_system/d3d11/indices_buffer.h"
 
-#include <d3dx11.h>
-
 #include "azer/render/indices_buffer.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
