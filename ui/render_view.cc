@@ -1,13 +1,13 @@
-#include "nelf/render/render_view.h"
+#include "azer/ui/render_view.h"
 
 #include "ui/views/widget/widget.h"
-#include "nelf/render/event_listener.h"
-#include "nelf/render/render_delegate.h"
-#include "nelf/render/render_window.h"
-#include "nelf/render/render_loop.h"
+#include "azer/ui/event_listener.h"
+#include "azer/ui/render_delegate.h"
+#include "azer/ui/render_window.h"
+#include "azer/ui/render_loop.h"
 
-namespace nelf {
-const char RenderView::kViewClassName[] = "nelf::RenderView";
+namespace azer {
+const char RenderView::kViewClassName[] = "azer::RenderView";
 RenderView::RenderView(RenderLoop* loop, RenderDelegate* delegate)
     : delegate_(delegate),
       window_(NULL),
@@ -162,4 +162,4 @@ void RenderView::OnDidChangeFocus(View* focused_before, View* focused_now) {
     }
   }
 }
-}  // namespace nelf
+}  // namespace azer

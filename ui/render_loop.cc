@@ -17,7 +17,7 @@ RenderLoop::RenderLoop(RenderWindow* window)
       running_(false),
       stop_(false),
       fps_limit_(-1) {
-  mainframe->GetWidget()->AddObserver(this);
+  window->GetWidget()->AddObserver(this);
 }
 
 RenderLoop::~RenderLoop() {

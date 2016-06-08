@@ -11,7 +11,7 @@
 #include "azer/render/frame_args.h"
 #include "azer/render/render_system.h"
 
-namespace nelf {
+namespace azer {
 
 class RenderLoop;
 class RenderView;
@@ -71,4 +71,4 @@ class RenderLoop : public views::WidgetObserver,
   int fps_limit_;
   DISALLOW_COPY_AND_ASSIGN(RenderLoop);
 };
-}   // namespace nelf
+}   // namespace azer

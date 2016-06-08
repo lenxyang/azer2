@@ -6,7 +6,7 @@
 #include "azer/render/render_system.h"
 #include "azer/render/renderer.h"
 #include "azer/ui/adapter/swapchain_context.h"
-#include "azer/ui/adapter/window.h"
+#include "azer/ui/window.h"
 
 namespace azer {
 

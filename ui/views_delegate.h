@@ -12,7 +12,7 @@ namespace azer {
 class WindowContext;
 class DefaultViewsDelegate : public views::ViewsDelegate {
  public:
-  DefaultViewsDelegate(Adapter* adapter);
+  explicit DefaultViewsDelegate(WindowContext* context);
   ~DefaultViewsDelegate() override;
 
   // ViewsDelegate:

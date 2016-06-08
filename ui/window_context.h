@@ -7,7 +7,7 @@ class Widget;
 class NativeWidget;
 }
 
-namespace nelf {
+namespace azer {
 class WindowContext {
  public:
   explicit WindowContext();
@@ -30,6 +30,4 @@ class WindowContext {
  private:
   DISALLOW_COPY_AND_ASSIGN(WindowContext);
 };
-}  // namespace nelf
-
-
+}  // namespace azer

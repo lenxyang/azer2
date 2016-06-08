@@ -13,6 +13,8 @@ static_library("ui") {
     "adapter/util.h",
     "desktop_window_context.cc",
     "desktop_window_context.h",
+    "focus_manager_factory.cc",
+    "focus_manager_factory.h",
     "native_widget.cc",
     "native_widget.h",
     "render_widget.cc",
@@ -26,6 +28,8 @@ static_library("ui") {
     "views_delegate.cc",
     "views_delegate.h",
     "window_context.h",
+    "window.cc",
+    "window.h",
   ]
 
   deps = [

@@ -9,9 +9,19 @@
 #include "ui/views/widget/widget_delegate.h"
 
 namespace azer {
+
+class WindowContext;
 class Window : public views::WidgetDelegateView {
  public:
-  explicit Window(gfx::Rect bounds);
+  explicit Window(WindowContext* ctx);
+  Window(const gfx::Rect& rect, WindowContext* ctx);
+  ~Window();
+
+  WindowContext* context() { return context_;}
+  void Init();
+  void Show();
+  void ShowWithCapture();
+  views::Widget* GetWidget();
 
   // call this function must be called, before nonclient existed 
   void SetCanResize(bool value);
@@ -43,7 +53,12 @@ class Window : public views::WidgetDelegateView {
   void WindowClosing() override;
   void OnFocus() override;
 
+  virtual void OnBeforeWidgetInit(views::Widget::InitParams* params,
+                                  views::Widget* widget);
+  virtual void OnAfterWidgetInit();
+  virtual views::Widget* CreateWidget();
  private:
+  void InitValue();
   ::base::string16 title_;
   bool show_title_;
 
@@ -56,6 +71,7 @@ class Window : public views::WidgetDelegateView {
   gfx::Size minsize_;
   gfx::Size maxsize_;
   gfx::Rect init_bounds_;
+  WindowContext* context_;
   std::string name_;
   DISALLOW_COPY_AND_ASSIGN(Window);
 };

@@ -5,7 +5,6 @@
 #include "ui/views/widget/root_view.h"
 #include "azer/ui/render_window.h"
 #include "azer/ui/render_view.h"
-#include "azer/ui/root_view.h"
 
 namespace azer {
 
@@ -86,7 +85,7 @@ views::internal::RootView* RenderWindowWidget::CreateRootView() {
 
 void RenderWindowWidget::OnNativeFocus() {
   window_->GetView()->RequestFocus();
-  BaseWidget::OnNativeFocus();
+  views::Widget::OnNativeFocus();
 }
 
 }  // namespace azer

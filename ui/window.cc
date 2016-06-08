@@ -1,8 +1,17 @@
 #include "azer/ui/window.h"
 
+#include "azer/ui/window_context.h"
+#include "ui/views/widget/native_widget_private.h"
+
 namespace azer {
-Window::Window(gfx::Rect bounds)
-    : init_bounds_(bounds) {
+Window::Window(WindowContext* ctx)
+    : context_(ctx) {
+  InitValue();
+}
+
+Window::Window(const gfx::Rect& rect, WindowContext* ctx)
+    : init_bounds_(rect),
+      context_(ctx) {
   InitValue();
 }
 
@@ -14,7 +23,8 @@ void Window::InitValue() {
   can_minimize_ = false;
 }
 
-Window::~Window() {}
+Window::~Window() {
+}
 
 void Window::SetTitle(const ::base::string16& title) {
   title_ = title;
@@ -50,11 +60,7 @@ void Window::SetMaxSize(const gfx::Size& size) {
 
 // override from views::View 
 gfx::Size Window::GetMinimumSize() const {
-  if (minsize_.IsEmpty()) {
-    return context_->setting().pane_minsize();
-  } else {
-    return minsize_;
-  }
+  return minsize_;
 }
 
 gfx::Size Window::GetMaximumSize() const {
@@ -104,7 +110,7 @@ void Window::Init() {
   using views::Widget;
   Widget* widget = CreateWidget();
   Widget::InitParams wparams;
-  wparams.parent = GetParentNativeView();
+  wparams.parent = NULL;
   wparams.type = Widget::InitParams::TYPE_WINDOW;
   wparams.delegate = this;
   wparams.context  = NULL;
@@ -127,18 +133,15 @@ void Window::Init() {
   OnAfterWidgetInit();
 }
 
-views::Widget* Window::CreateWidget() {
-  return new BaseWidget;
-}
-
 void Window::OnBeforeWidgetInit(views::Widget::InitParams* params,
                                 views::Widget* widget) {
-  params->type = views::Widget::InitParams::TYPE_WINDOW;
-  params->opacity = views::Widget::InitParams::INFER_OPACITY;
-  params->keep_on_top = false;
 }
 
 void Window::OnAfterWidgetInit() {
+}
+
+views::Widget* Window::CreateWidget() {
+  return new views::;
 }
 
 const char* Window::GetClassName() const {

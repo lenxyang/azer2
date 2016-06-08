@@ -1,4 +1,4 @@
-#include "nelf/adapter/stand_alone_adapter.h"
+#include "azer/ui/desktop_window_context.h"
 
 #include "ui/aura/env.h"
 #include "ui/aura/window.h"
@@ -13,9 +13,9 @@
 #include "azer/ui/views_delegate.h"
 #include "azer/ui/focus_manager_factory.h"
 
-namespace nelf {
-DesktopWindowContext::DesktopWindowContext(Context* context)
-    : Adapter(context) {
+namespace azer {
+DesktopWindowContext::DesktopWindowContext(WindowContext* context)
+    : WindowContext(context) {
 }
 
 DesktopWindowContext::~DesktopWindowContext() {
@@ -79,4 +79,4 @@ views::NativeWidget* DesktopWindowContext::CreateBubbleWidget(views::Widget* wid
 views::NativeWidget* DesktopWindowContext::CreateMenuWidget(views::Widget* widget) {
   return CreateDesktopWidget(widget);
 }
-}  // namespace nelf
+}  // namespace azer

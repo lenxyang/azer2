@@ -5,7 +5,7 @@
 #include "ui/views/focus/focus_manager.h"
 #include "azer/render/texture.h"
 
-namespace aer {
+namespace azer {
 
 class EventListener;
 class RenderWindow;
