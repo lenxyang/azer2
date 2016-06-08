@@ -11,6 +11,21 @@ static_library("ui") {
     "adapter/context_factory.h",
     "adapter/util.cc",
     "adapter/util.h",
+    "desktop_window_context.cc",
+    "desktop_window_context.h",
+    "native_widget.cc",
+    "native_widget.h",
+    "render_widget.cc",
+    "render_widget.h",
+    "render_window.cc",
+    "render_window.h",
+    "render_view.cc",
+    "render_view.h",
+    "render_loop.cc",
+    "render_loop.h",
+    "views_delegate.cc",
+    "views_delegate.h",
+    "window_context.h",
   ]
 
   deps = [
