@@ -38,3 +38,13 @@ test("unittests") {
     "//azer",
   ]
 }
+
+group("extend") {
+  deps = [
+    "//azer/ui",
+    "//azer/samples",
+    "//azer/util/interactive",
+    "//azer/util/images",
+    "//azer/util/geometry",
+  ]
+}
