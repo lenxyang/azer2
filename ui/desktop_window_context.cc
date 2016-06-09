@@ -14,8 +14,7 @@
 #include "azer/ui/focus_manager_factory.h"
 
 namespace azer {
-DesktopWindowContext::DesktopWindowContext(WindowContext* context)
-    : WindowContext(context) {
+DesktopWindowContext::DesktopWindowContext() {
 }
 
 DesktopWindowContext::~DesktopWindowContext() {
@@ -45,7 +44,7 @@ views::NativeWidget* DesktopWindowContext::CreateDesktopWidget(views::Widget* wi
 }
 
 views::NativeWidget* DesktopWindowContext::CreateWidget(views::Widget* widget) {
-  return nULL;
+  return NULL;
 }
 
 views::NativeWidget* DesktopWindowContext::CreateWindowWidget(views::Widget* widget)  {

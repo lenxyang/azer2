@@ -1,13 +1,14 @@
 #include "azer/ui/render_window.h"
 
 #include "ui/views/widget/widget.h"
+#include "ui/views/widget/desktop_aura/desktop_screen.h"
 #include "azer/ui/adapter/util.h"
 #include "azer/ui/adapter/swapchain_context.h"
-#include "ui/views/widget/desktop_aura/desktop_screen.h"
 #include "azer/ui/render_delegate.h"
 #include "azer/ui/render_loop.h"
 #include "azer/ui/render_view.h"
 #include "azer/ui/render_widget.h"
+#include "azer/ui/window_context.h"
 
 namespace azer {
 
@@ -19,7 +20,7 @@ RenderWindow::RenderWindow(RenderView* view, RenderDelegate* delegate)
       realtime_render_(true),
       message_loop_(NULL),
       render_view_(view),
-      delegate_(NULL) {
+      delegate_(delegate) {
 }
 
 RenderWindow::~RenderWindow() {}
@@ -50,7 +51,7 @@ void RenderWindow::OnBeforeWidgetInit(views::Widget::InitParams* params,
   params->bounds  = gfx::Rect(0, 0, 800, 600);
   params->shadow_type = views::Widget::InitParams::SHADOW_TYPE_NONE;
   params->child = true;
-  params->native_widget = views::DesktopNativeWidgetAura(widget);
+  params->native_widget = context()->CreateDesktopWidget(widget);
 }
 
 void RenderWindow::SetRenderDelegate(RenderDelegate* delegate) {

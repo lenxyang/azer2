@@ -23,7 +23,7 @@ void DefaultViewsDelegate::OnBeforeWidgetInit(
     Widget::InitParams* params,
     internal::NativeWidgetDelegate* delegate) {
   if (!params->native_widget) {
-    views::Widget* widget = dynamic_cast<views::Widget*>(delegate);
+    views::Widget* widget = static_cast<views::Widget*>(delegate);
     views::NativeWidget* native_widget = NULL;
     switch (params->type) {
       case Widget::InitParams::TYPE_WINDOW:

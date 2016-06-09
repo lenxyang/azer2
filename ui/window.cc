@@ -4,14 +4,31 @@
 #include "ui/views/widget/native_widget_private.h"
 
 namespace azer {
-Window::Window(WindowContext* ctx)
-    : context_(ctx) {
-  InitValue();
+Window* Window::GetWindow(views::View* view) {
+  views::Widget* widget = view->GetWidget();
+  if (!widget)
+    return NULL;
+
+  return (Window*)(widget->widget_delegate());
 }
 
 Window::Window(const gfx::Rect& rect, WindowContext* ctx)
     : init_bounds_(rect),
-      context_(ctx) {
+      context_(ctx),
+      parent_(NULL) {
+  InitValue();
+}
+
+Window::Window(Window* parent)
+    : context_(parent->context()),
+      parent_(parent) {
+  InitValue();
+}
+
+Window::Window(const gfx::Rect& rect, Window* parent)
+    : init_bounds_(rect),
+      context_(parent->context()),
+      parent_(parent) {
   InitValue();
 }
 
@@ -117,19 +134,15 @@ void Window::Init() {
   wparams.show_state = ui::SHOW_STATE_DEFAULT;
   OnBeforeWidgetInit(&wparams, widget);
   if (!wparams.native_widget) {
-    wparams.native_widget = context_->adapter()->CreateDesktopWidget(widget);
+    wparams.native_widget = context_->CreateDesktopWidget(widget);
   }
   
   if (!init_bounds_.IsEmpty()) {
     wparams.bounds = init_bounds_;
   } else if (wparams.bounds.IsEmpty()) {
-    wparams.bounds = gfx::Rect(context_->setting().pane_default_size());
+    wparams.bounds = gfx::Rect(800, 600);
   }
   widget->Init(wparams);
-  if (mainframe_) {
-    SetMainWidgetBelonged(widget, mainframe_->GetWidget());
-  }
-
   OnAfterWidgetInit();
 }
 
@@ -141,7 +154,7 @@ void Window::OnAfterWidgetInit() {
 }
 
 views::Widget* Window::CreateWidget() {
-  return new views::;
+  return new views::Widget;
 }
 
 const char* Window::GetClassName() const {

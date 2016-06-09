@@ -13,10 +13,12 @@ namespace azer {
 class WindowContext;
 class Window : public views::WidgetDelegateView {
  public:
-  explicit Window(WindowContext* ctx);
+  explicit Window(Window* parent);
   Window(const gfx::Rect& rect, WindowContext* ctx);
+  Window(const gfx::Rect& rect, Window* parent);
   ~Window();
 
+  static Window* GetWindow(views::View* view);
   WindowContext* context() { return context_;}
   void Init();
   void Show();
@@ -72,6 +74,7 @@ class Window : public views::WidgetDelegateView {
   gfx::Size maxsize_;
   gfx::Rect init_bounds_;
   WindowContext* context_;
+  Window* parent_;
   std::string name_;
   DISALLOW_COPY_AND_ASSIGN(Window);
 };
