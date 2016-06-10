@@ -1,6 +1,8 @@
 #include <memory>
 
-#include "dxut/dxut.h"
+#include "azer/ui/window.h"
+#include "azer/ui/render_window.h"
+#include "azer/azer.h"
 #include "azer/util/interactive/interactive.h"
 
 using base::FilePath;
@@ -37,7 +39,7 @@ class SimpleEffect : public Effect {
     {
       Matrix4 pvw = std::move(pv_ * world_);
       GpuVariable var = gpu_table_[0];
-      GpuConstantsTable* tb = var.table;
+      GpuConstantsTable* tb = var.table.get();
       DCHECK_EQ(var.stage, kVertexStage);
       DCHECK(tb != NULL);
       tb->SetValue(0, &pvw, sizeof(Matrix4));
@@ -45,7 +47,7 @@ class SimpleEffect : public Effect {
     }
     {
       GpuVariable var = gpu_table_[1];
-      GpuConstantsTable* tb = var.table;
+      GpuConstantsTable* tb = var.table.get();
       DCHECK(tb != NULL);
       DCHECK_EQ(var.stage, kPixelStage);
       tb->SetValue(0, &color_, sizeof(Vector4));
@@ -92,7 +94,7 @@ SimpleEffectPtr CreateSimpleEffect() {
     {"POSITION", 0, kVec4},
   };
   VertexDescPtr desc(new VertexDesc(kVertexDesc, arraysize(kVertexDesc)));
-  TechSource tech(desc);
+  TechSource tech(desc.get());
   ShaderInfo shader;
   shader.path = "effect.vs";
   shader.stage = kVertexStage;
@@ -166,7 +168,7 @@ void MyRenderWindow::OnInit() {
   Vector3 camera_pos(0.0f, 0.0f, 5.0f);
   Vector3 lookat(0.0f, 0.0f, 0.0f);
   Vector3 up(0.0f, 1.0f, 0.0f);
-  camera_->reset(camera_pos, lookat, up);
+  camera_.reset(camera_pos, lookat, up);
 
   effect_ = CreateSimpleEffect();
   Vector3 points[] = {Vector3( 0.0f, 1.0f, 0.0f),
@@ -180,9 +182,9 @@ void MyRenderWindow::OnUpdateFrame(const FrameArgs& args) {
 }
 
 void MyRenderWindow::OnRenderFrame(const FrameArgs& args, Renderer* renderer) {
-  effect_->SetPV(camera().GetProjViewMatrix());
+  effect_->SetPV(camera.GetProjViewMatrix());
   effect_->SetWorld(Matrix4::kIdentity);
   effect_->SetColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-  renderer->BindEffect(effect_);
+  renderer->BindEffect(effect_.get());
   entity_->Draw(renderer);
 }

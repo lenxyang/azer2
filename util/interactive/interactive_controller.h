@@ -53,7 +53,7 @@ class InteractiveController {
 
   virtual void OnActive() {}
   virtual void OnDeactive() {}
-  virtual int32_t GetPicking(const gfx::Point& pt) = 0;
+  virtual int GetPicking(const gfx::Point& pt) = 0;
   virtual void OnDragBegin(const ui::MouseEvent& e) {}
   virtual void OnDragging(const ui::MouseEvent& e) {};
   virtual void OnDragEnd(const ui::MouseEvent& e) {}
@@ -65,8 +65,8 @@ class InteractiveController {
   virtual void UpdateFrame(const FrameArgs& args) = 0;
   virtual void RenderFrame(Renderer* renderer) = 0;
 
-  void set_state(int32_t state);
-  int32_t state() const { return state_;}
+  void set_state(int state);
+  int state() const { return state_;}
   void AddObserver(InteractiveControllerObserver* observer);
   void Removebserver(InteractiveControllerObserver* observer);
   bool HasObserver(InteractiveControllerObserver* observer);
@@ -74,8 +74,8 @@ class InteractiveController {
   void OnControllerPicked();
   void OnControllerUnpicked();
  private:
-  int32_t state_;
-  ObserverList<InteractiveControllerObserver> observer_list_;
+  int state_;
+  ::base::ObserverList<InteractiveControllerObserver> observer_list_;
   InteractiveContext* context_;
   bool activate_frame_;
   DISALLOW_COPY_AND_ASSIGN(InteractiveController);

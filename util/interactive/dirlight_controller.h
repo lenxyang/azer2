@@ -30,7 +30,7 @@ class DirLightObject : public ::base::RefCounted<DirLightObject> {
  private:
   Vector3 position_;
   LightPtr light_;
-  scoped_ptr<ArrowObject> object_;
+  std::unique_ptr<ArrowObject> object_;
   DISALLOW_COPY_AND_ASSIGN(DirLightObject);
 };
 
@@ -60,7 +60,7 @@ class DirLightController : public InteractiveController,
   void UpdateParam();
   bool dragging_;
   scoped_refptr<DirLightObject> lightobj_;
-  scoped_ptr<RotateController> controller_;
+  std::unique_ptr<RotateController> controller_;
   DISALLOW_COPY_AND_ASSIGN(DirLightController);
 };
 }  // namespace azer

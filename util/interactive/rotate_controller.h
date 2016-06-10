@@ -93,8 +93,8 @@ class RotateController : public InteractiveController {
   gfx::Point location_;
   Vector3 scale_;
   Vector3 position_;
-  scoped_ptr<RotateControllerObj> object_;
-  ObserverList<RotateControllerObserver> observer_list_;
+  std::unique_ptr<RotateControllerObj> object_;
+  ::base::ObserverList<RotateControllerObserver> observer_list_;
   static const Vector4 kSelectedColor;
   DISALLOW_COPY_AND_ASSIGN(RotateController);
 };

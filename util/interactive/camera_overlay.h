@@ -1,7 +1,6 @@
 #pragma once
 
 #include "base/memory/ref_counted.h"
-#include "base/memory/scoped_ptr.h"
 #include "ui/gfx/geometry/rect.h"
 #include "azer/math/matrix4.h"
 #include "azer/render/texture_view.h"
@@ -27,7 +26,7 @@ class CameraOverlay {
   scoped_refptr<Renderer> renderer_;
   TextureViewPtr renderer_view_;
   Viewport viewport_;
-  scoped_ptr<AxesFrame> object_;
+  std::unique_ptr<AxesFrame> object_;
   const Camera* camera_;
   DISALLOW_COPY_AND_ASSIGN(CameraOverlay);
 };

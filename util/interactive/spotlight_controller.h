@@ -122,10 +122,10 @@ class SpotLightController : public InteractiveController,
   int32_t mode_;
   int32_t new_mode_;
   Vector3 scale_;
-  scoped_ptr<TranslateController> translate_controller_;
-  scoped_ptr<RotateController> rotate_controller_;
-  scoped_ptr<SpotLightDirectionalObject> object_;
-  ObserverList<SpotLightControllerObserver> observer_list_;
+  std::unique_ptr<TranslateController> translate_controller_;
+  std::unique_ptr<RotateController> rotate_controller_;
+  std::unique_ptr<SpotLightDirectionalObject> object_;
+  ::base::ObserverList<SpotLightControllerObserver> observer_list_;
   DISALLOW_COPY_AND_ASSIGN(SpotLightController);
 };
 }  // namespace azer
