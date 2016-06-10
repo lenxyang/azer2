@@ -1,8 +1,8 @@
 #include <memory>
 
+#include "azer/azer.h"
 #include "azer/ui/window.h"
 #include "azer/ui/render_window.h"
-#include "azer/azer.h"
 #include "azer/util/interactive/interactive.h"
 
 using base::FilePath;
@@ -148,8 +148,6 @@ class MyRenderWindow : public azer::RenderWindow {
 };
 
 int main(int argc, char* argv[]) {
-  dxut::Env::Init(argc, argv);
-  dxut::Env* env = dxut::Env::GetInstance();
   env->SetRootPath(base::FilePath(::base::UTF8ToUTF16("hlsldc")));
   gfx::Rect init_bounds(0, 0, 800, 600);
   MyRenderWindow* window(new MyRenderWindow(init_bounds));

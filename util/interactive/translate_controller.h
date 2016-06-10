@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 
 #include "azer/math/plane.h" 
 #include "azer/math/vector3.h"

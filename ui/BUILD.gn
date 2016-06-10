@@ -25,6 +25,8 @@ static_library("ui") {
     "render_view.h",
     "render_loop.cc",
     "render_loop.h",
+    "simple_render_window.cc",
+    "simple_render_window.h",
     "views_delegate.cc",
     "views_delegate.h",
     "window_context.h",
