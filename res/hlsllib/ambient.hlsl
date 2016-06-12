@@ -13,13 +13,13 @@ struct VsOutput {
   float2 texcoord: TEXCOORD0;
 };
 
-cbuffer vs_buffer : register(cb0) {
+cbuffer vs_buffer : register(b0) {
    float4x4 pv;
    float4x4 world;
    float4   camerapos;
 };
 
-cbuffer ps_buffer : register(cb0) {
+cbuffer ps_buffer : register(b0) {
    float4     ambient;
 };
 
@@ -29,9 +29,9 @@ VsOutput vs_main(VSInput input) {
   float4 normal = float4(input.normal, 0.0f);
   o.worldpos = mul(world, pos).xyz;
   o.position = mul(pv, float4(o.worldpos, 1.0));
-  o.normal = normalize(mul(world, normal)).xyz;
-  o.viewin = normalize(camerapos - o.worldpos);
+  o.normal = normalize(mul(world, normal).xyz);
   o.texcoord = input.texcoord;
+  o.viewin = normalize(camerapos.xyz - o.worldpos.xyz);
   return o;
 }
 

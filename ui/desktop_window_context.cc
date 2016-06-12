@@ -10,12 +10,14 @@
 
 #include "azer/render/render_system_loader.h"
 #include "azer/ui/adapter/context_factory.h"
+#include "azer/ui/native_theme.h"
 #include "azer/ui/native_widget.h"
 #include "azer/ui/views_delegate.h"
 #include "azer/ui/focus_manager_factory.h"
 
 namespace azer {
 DesktopWindowContext::DesktopWindowContext() {
+  native_theme_.reset(new FallbackNativeTheme(this));
 }
 
 DesktopWindowContext::~DesktopWindowContext() {
@@ -81,6 +83,6 @@ views::NativeWidget* DesktopWindowContext::CreateMenuWidget(views::Widget* widge
 }
 
 ui::NativeTheme* DesktopWindowContext::GetNativeTheme() {
-  return ui::NativeThemeAura::instance();
+  return native_theme_.get();
 }
 }  // namespace azer

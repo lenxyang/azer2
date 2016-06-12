@@ -8,6 +8,7 @@ class NativeWidget;
 }
 
 namespace azer {
+class NativeTheme;
 class WindowContext {
  public:
   explicit WindowContext();

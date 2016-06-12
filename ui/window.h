@@ -37,6 +37,8 @@ class Window : public views::WidgetDelegateView {
   void SetShowIcon(bool value);
   void SetWindowIcon(gfx::ImageSkia icon);
   void SetAppIcon(gfx::ImageSkia icon);
+
+  gfx::Size GetContentsSize() const;
  protected:
   // override from views::View
   const char* GetClassName() const override;

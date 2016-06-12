@@ -14,13 +14,13 @@ struct VSInput {
   float2 texcoord: TEXCOORD0;
 };
 
-cbuffer vs_buffer : register(cb0) {
+cbuffer vs_buffer : register(b0) {
    float4x4 pv;
    float4x4 world;
    float4   camerapos;
 };
 
-cbuffer ps_buffer : register(cb0) {
+cbuffer ps_buffer : register(b0) {
    float4     diffuse;
    float4     ambient;
    float4     specular;

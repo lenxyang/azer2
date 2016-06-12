@@ -12,6 +12,7 @@
 namespace azer {
 
 class FrameArgs;
+class FPSPanel;
 class Renderer;
 class RenderLoop;
 class WindowContext;
@@ -52,6 +53,7 @@ class SampleMainframe : public Window, public RenderDelegate,
   scoped_refptr<RenderLoop> render_loop_;
   Camera camera_;
   SampleDesc sample_desc_;
+  FPSPanel* fpspanel_;
   DISALLOW_COPY_AND_ASSIGN(SampleMainframe);
 };
 }  // namespace azer

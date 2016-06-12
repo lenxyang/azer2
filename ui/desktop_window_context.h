@@ -47,6 +47,7 @@ class DesktopWindowContext : public WindowContext {
   std::unique_ptr<display::Screen> desktop_screen_;
   std::unique_ptr<wm::WMState> wm_state_;
   std::unique_ptr<ui::ContextFactory> context_factory_;
+  std::unique_ptr<NativeTheme> native_theme_;
   std::unique_ptr<views::ViewsDelegate> views_delegate_;
   DISALLOW_COPY_AND_ASSIGN(DesktopWindowContext);
 };

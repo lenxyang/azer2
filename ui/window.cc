@@ -176,4 +176,8 @@ void Window::SetAppIcon(gfx::ImageSkia icon) {
   app_icon_ = icon;
 }
 
+gfx::Size Window::GetContentsSize() const {
+  views::View* view = const_cast<Window*>(this)->GetContentsView();
+  return view->size();
+}
 }  // namespace azer
