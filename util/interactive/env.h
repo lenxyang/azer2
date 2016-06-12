@@ -4,7 +4,6 @@
 #include <map>
 
 #include "base/lazy_instance.h"
-#include "base/memory/scoped_ptr.h"
 #include "azer/base/export.h"
 #include "azer/effect/light.h"
 #include "azer/render/blending.h"

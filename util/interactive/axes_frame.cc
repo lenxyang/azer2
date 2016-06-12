@@ -44,7 +44,7 @@ AxesFrame::AxesFrame() {
   CHECK(vpack.next(1));
   vpack.WriteVector3Or4(Vector4(0.0f, 0.0f, 1.1f, 1.0f), VertexPos(0, 0));
 
-  entity_ = new Entity(data);
+  entity_ = new Entity(data.get());
   entity_->AddSubset(Subset(0, 2, 0, 0, kLineList));
   entity_->AddSubset(Subset(2, 2, 0, 0, kLineList));
   entity_->AddSubset(Subset(4, 2, 0, 0, kLineList));
@@ -79,21 +79,21 @@ void AxesFrame::Update(const Camera* camera) {
 }
 
 void AxesFrame::SetColor(int32_t index, const Vector4& color) {
-  DCHECK_LT(index, static_cast<int32>(arraysize(colors_)));
+  DCHECK_LT(index, static_cast<int32_t>(arraysize(colors_)));
   colors_[index] = color;
 }
 
 void AxesFrame::Render(Renderer* renderer) {
   for (uint32_t i = 0; i < arraysize(colors_); ++i) {
     effect_->SetAmbient(colors_[i]);
-    renderer->BindEffect(effect_);
+    renderer->BindEffect(effect_.get());
     entity_->DrawSub(i, renderer);
   }
 
   for (uint32_t i = 0; i < arraysize(colors_); ++i) {
     texeffect_->SetDiffuse(colors_[i]);
-    texeffect_->SetTexture(tex_[i]);
-    renderer->BindEffect(texeffect_);
+    texeffect_->SetTexture(tex_[i].get());
+    renderer->BindEffect(texeffect_.get());
     entity_->DrawSub(i + 3, renderer);
   }
 }

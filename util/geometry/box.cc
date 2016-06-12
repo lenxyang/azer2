@@ -83,9 +83,10 @@ int indices[] = {0, 2, 1, 0, 3, 2,  // front
 int32_t edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
                           0, 14, 2, 8, 1, 7, 4, 13,
                           14, 8, 8, 7, 7, 13, 13, 14};
-int32_t CalcBoxVertexCount() { return static_cast<int32>(arraysize(indices));}
+int32_t CalcBoxVertexCount() { return static_cast<int32_t>(arraysize(indices));}
 int32_t CalcBoxIndexCount() { return 0;}
-int32_t CalcBoxFrameIndexCount() { return static_cast<int32>(arraysize(edge_indices));}
+int32_t CalcBoxFrameIndexCount() { return static_cast<int32_t>(
+    arraysize(edge_indices));}
 
 void CalcTriangleListNormal(int32_t base, int32_t vcount, int* indices,
                             VertexPack* vpack) {
@@ -181,7 +182,7 @@ int32_t CreateBoxFrameIndicesData(IndexPack* ipack) {
   for (uint32_t i = 0; i < arraysize(edge_indices); ++i) {
     CHECK(ipack->WriteAndAdvance(edge_indices[i]));
   }
-  return static_cast<int32>(arraysize(edge_indices));
+  return static_cast<int32_t>(arraysize(edge_indices));
 }
 
 Subset AppendGeoBoxSubset(VertexPack* vp, IndexPack* ipack, 
@@ -228,7 +229,7 @@ void AppendGeoBoxFrameData(EntityData* data, const Matrix4& mat) {
 EntityDataPtr CreateBox(VertexDesc* desc, const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoBoxData(data.get(), mat);
   return data;
 }
@@ -236,7 +237,7 @@ EntityDataPtr CreateBox(VertexDesc* desc, const Matrix4& mat) {
 EntityDataPtr CreateBoxFrame(VertexDesc* desc, const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoBoxFrameData(data.get(), mat);
   return data;
 }

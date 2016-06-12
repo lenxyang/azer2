@@ -22,15 +22,17 @@ TranslateControlObj::TranslateControlObj() {
   ambient_effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
   color_effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
-  entity_ = new Entity(InitAxesObjects(ambient_effect_->vertex_desc()));
-  cones_ = new Entity(InitAxesConeData(ambient_effect_->vertex_desc()));
+  EntityDataPtr axes(InitAxesObjects(ambient_effect_->vertex_desc()));
+  EntityDataPtr cone(InitAxesConeData(ambient_effect_->vertex_desc()));
+  entity_ = new Entity(axes.get());
+  cones_ = new Entity(cone.get());
   ResetColor();
 }
 
 EntityDataPtr TranslateControlObj::InitAxesConeData(VertexDesc* desc) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
 
   GeoConeParam p;
   p.radius = 0.03f;
@@ -162,7 +164,6 @@ void TranslateControlObj::ResetColor() {
 }
 
 void TranslateControlObj::Update(const Camera& camera, const Vector3& position) {
-  InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 mat = std::move(Scale(scale_));
   world_ = std::move(std::move(Translate(position)) * mat);
   pv_ = camera.GetProjViewMatrix();
@@ -188,20 +189,20 @@ void TranslateControlObj::Render(Renderer* renderer) {
         renderer->SetBlending(env->a2c_blending(), 0, 0xffffffff);
       }
       ambient_effect_->SetAmbient(colors_[i]);
-      renderer->BindEffect(ambient_effect_);
+      renderer->BindEffect(ambient_effect_.get());
       entity_->DrawSub(i, renderer);
     }
   }
 
   ColorMaterialData mtrl;
-  for (uint32_t i = 0; i < cones_->subset_count() /2; ++i) {
+  for (int32_t i = 0; i < cones_->subset_count() /2; ++i) {
     mtrl.diffuse = colors_[i];
     mtrl.ambient = colors_[i] * 0.1f;
     mtrl.specular = colors_[i] * 0.1f;
     mtrl.emission = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
     mtrl.ambient.w = mtrl.specular.w = 1.0f;
     color_effect_->SetMaterial(mtrl);
-    renderer->BindEffect(color_effect_);
+    renderer->BindEffect(color_effect_.get());
     cones_->DrawSub(i * 2, renderer);
     cones_->DrawSub(i * 2 + 1, renderer);
   }
@@ -223,7 +224,6 @@ TranslateController::~TranslateController() {
 
 int32_t TranslateController::GetPicking(const gfx::Point& screenpt) {
   Ray ray = std::move(context()->GetPickingRay(screenpt));
-  const Camera* camera = context()->camera(); 
   const float kMargin = 0.02 * scale_.x;
   const float kPlaneWidth = object_->plane_width() * scale_.x;
   Plane planexy(position_, position_ + Vector3(1.0f, 0.0f, 0.0f),
@@ -269,9 +269,9 @@ int32_t TranslateController::GetPicking(const gfx::Point& screenpt) {
       && (std::abs(zx.y - position_.y) < 0.02f)
       && (std::abs(zx.z - position_.z) > 0.02f)
       && (zx.z - position_.z) >= (zx.x - position_.x);
-  float depth_xy = detail::CalcDepthValue(xy, *camera);
-  float depth_yz = detail::CalcDepthValue(yz, *camera);
-  float depth_zx = detail::CalcDepthValue(zx, *camera);
+  // float depth_xy = detail::CalcDepthValue(xy, *camera);
+  // float depth_yz = detail::CalcDepthValue(yz, *camera);
+  // float depth_zx = detail::CalcDepthValue(zx, *camera);
 
   if (hit_axisx) {
     return kHitAxisX;

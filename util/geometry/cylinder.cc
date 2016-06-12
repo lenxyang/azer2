@@ -27,8 +27,8 @@ Subset AppendGeoBarrelData(VertexPack* vpack, IndexPack* ipack,
   float radius_unit = (p.bottom_radius - p.top_radius) / ((float)p.stack - 1.0f);
   float slice_radius = p.top_radius;
   float y = p.height;
-  float tex_u_unit = 1.0f / p.slice;
-  float tex_v_unit = 1.0f / p.stack;
+  // float tex_u_unit = 1.0f / p.slice;
+  // float tex_v_unit = 1.0f / p.stack;
 
   for (int i = 0; i < p.stack; ++i) {
     for (int j = 0; j < p.slice + 1; ++j) {
@@ -39,8 +39,8 @@ Subset AppendGeoBarrelData(VertexPack* vpack, IndexPack* ipack,
       Vector4 pos = std::move(mat * Vector4(x, y, z, 1.0f));
       vpack->WriteVector3Or4(pos, VertexPos(0, 0));
       UpdateVertexBounds(pos, &subset.vmin, &subset.vmax);
-      float u = j * tex_u_unit;
-      float v = i  * tex_v_unit;
+      // float u = j * tex_u_unit;
+      // float v = i  * tex_v_unit;
       vpack->WriteVector2(Vector2(0.0f, 0.0f), tpos); 
       vpack->next(1);
     }
@@ -116,7 +116,7 @@ EntityDataPtr CreateCylinder(VertexDesc* desc, const GeoCylinderParam& p,
                              const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoCylinderSubset(data.get(), p, mat);
   return data;
 }

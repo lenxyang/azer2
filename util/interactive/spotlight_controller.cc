@@ -24,7 +24,7 @@ SpotLightObject::SpotLightObject(Light* light)
   const float kTotalHeight = kConeHeight + kCylinderHeight;
   VertexDataPtr vdata(new VertexData(effect_->vertex_desc(), 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   Matrix4 rot = std::move(RotateX(Degree(-90.0f)));
   Matrix4 world = std::move(Translate(0.0f, 0.0f, -kTotalHeight));
   {
@@ -32,7 +32,7 @@ SpotLightObject::SpotLightObject(Light* light)
     param.bottom_radius = param.top_radius = 0.1f;
     param.height = kCylinderHeight;
     Matrix4 mat = world * rot;
-    AppendGeoCylinderSubset(data, param, mat);    
+    AppendGeoCylinderSubset(data.get(), param, mat);    
   }
 
   {
@@ -41,10 +41,10 @@ SpotLightObject::SpotLightObject(Light* light)
     param.bottom_radius = param.top_radius * 0.5f;
     param.height = kConeHeight;
     Matrix4 mat = world * rot * Translate(0.0f, kCylinderHeight, 0.0f);
-    AppendGeoCylinderSubset(data, param, mat);
+    AppendGeoCylinderSubset(data.get(), param, mat);
   }
 
-  entity_ = new Entity(data);
+  entity_ = new Entity(data.get());
 }
 
 SpotLightObject::~SpotLightObject() {
@@ -69,7 +69,7 @@ void SpotLightObject::Render(const Camera& camera, Renderer* renderer) {
   effect_->SetWorld(world);
   effect_->SetPV(camera.GetProjViewMatrix());
   effect_->SetLightData(&env->light()->data(), 1);
-  renderer->BindEffect(effect_);
+  renderer->BindEffect(effect_.get());
   entity_->Draw(renderer);
 }
 
@@ -90,7 +90,7 @@ SpotLightDirectionalObject::SpotLightDirectionalObject(Light* light) {
   {
     VertexDataPtr vdata(new VertexData(color_effect_->vertex_desc(), 1));
     IndicesDataPtr idata(new IndicesData(1));
-    EntityDataPtr data(new EntityData(vdata, idata));
+    EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
     VertexPos vpos(0, 0), npos;
     VertexPack vpack(data->vdata());
     vpack.data()->extend(2);
@@ -111,7 +111,7 @@ SpotLightDirectionalObject::SpotLightDirectionalObject(Light* light) {
     vpack.WriteVector3Or4(endpos, vpos);
     vpack.WriteVector3Or4(Vector4(1.0f, 1.0f, 1.0f, 0.0), npos);
     vpack.next(1);
-    dirline_ = new Entity(data);
+    dirline_ = new Entity(data.get());
   }
 
   blending_ = env->blending();
@@ -137,18 +137,18 @@ void SpotLightDirectionalObject::InitBarrel() {
     p.top_radius = inner_radius;
     VertexDataPtr vdata(new VertexData(color_effect_->vertex_desc(), 1));
     IndicesDataPtr idata(new IndicesData(1));
-    EntityDataPtr data(new EntityData(vdata, idata));
-    AppendGeoBarrelSubset(data, p, mat);
-    inner_object_ = new Entity(data);
+    EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
+    AppendGeoBarrelSubset(data.get(), p, mat);
+    inner_object_ = new Entity(data.get());
   }
 
   {
     p.top_radius = outer_radius;
     VertexDataPtr vdata(new VertexData(color_effect_->vertex_desc(), 1));
     IndicesDataPtr idata(new IndicesData(1));
-    EntityDataPtr data(new EntityData(vdata, idata));
-    AppendGeoCylinderSubset(data, p, mat);
-    outer_object_ = new Entity(data);
+    EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
+    AppendGeoCylinderSubset(data.get(), p, mat);
+    outer_object_ = new Entity(data.get());
   }
 }
 
@@ -183,13 +183,13 @@ void SpotLightDirectionalObject::Render(Renderer* renderer) {
   outer_mtrl.alpha = outer_mtrl.diffuse.w;
 
   color_effect_->SetMaterial(line_mtrl);
-  renderer->BindEffect(color_effect_);
+  renderer->BindEffect(color_effect_.get());
   dirline_->Draw(renderer);
   color_effect_->SetMaterial(inner_mtrl);
-  renderer->BindEffect(color_effect_);
+  renderer->BindEffect(color_effect_.get());
   inner_object_->Draw(renderer);
   color_effect_->SetMaterial(outer_mtrl);
-  renderer->BindEffect(color_effect_);
+  renderer->BindEffect(color_effect_.get());
   outer_object_->Draw(renderer);
 }
 

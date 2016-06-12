@@ -2,9 +2,9 @@
 
 #include <vector>
 #include "ui/events/event.h"
-#include "nelf/window.h"
-#include "nelf/render/event_listener.h"
-#include "nelf/render/render_window.h"
+#include "azer/ui/window.h"
+#include "azer/ui/event_listener.h"
+#include "azer/ui/render_subwindow.h"
 
 namespace azer {
 class Camera;
@@ -12,9 +12,9 @@ class FrameArgs;
 class InteractiveController;
 class Renderer;
 
-class InteractiveContext : public nelf::EventListener {
+class InteractiveContext : public azer::EventListener {
  public:
-  InteractiveContext(nelf::RenderWindow* window, const Camera* camera);
+  InteractiveContext(RenderSubWindow* window, const Camera* camera);
 
   void AddController(InteractiveController* controller);
   void RemoveController(InteractiveController* controller);
@@ -22,7 +22,7 @@ class InteractiveContext : public nelf::EventListener {
   void Update(const FrameArgs& args);
   void Render(Renderer* renderer);
 
-  nelf::RenderWindow* window() { return window_;}
+  RenderSubWindow* window() { return window_;}
   const Camera* camera() const { return camera_;}
   Ray GetPickingRay(const gfx::Point& pt);
   const FrameArgs* args() const { return args_;}
@@ -47,7 +47,7 @@ class InteractiveContext : public nelf::EventListener {
   int32_t activated_;
   bool draging_;
   ui::MouseEvent last_drag_event_;
-  nelf::RenderWindow* window_;
+  RenderSubWindow* window_;
   const Camera* camera_;
   const FrameArgs* args_;
   std::vector<InteractiveController*> controllers_;

@@ -56,7 +56,7 @@ void CameraOverlay::Render(Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   Blending* blending = env->blending();
   renderer->SetBlending(blending, 0, 0xffffffff);
-  overlay_->SetTexture(renderer_view_);
+  overlay_->SetTexture(renderer_view_.get());
   overlay_->Render(renderer);
   renderer->ResetBlending();
 }

@@ -31,9 +31,9 @@ void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata,
   IndexPack ipack(idata);
   ipack.move(subset.index_base);
   for (int i = 0; i < subset.index_count; i+=3) {
-    uint32_t idx1 = ipack.ReadAndAdvanceOrDie();
-    uint32_t idx2 = ipack.ReadAndAdvanceOrDie();
-    uint32_t idx3 = ipack.ReadAndAdvanceOrDie();
+    int32_t idx1 = ipack.ReadAndAdvanceOrDie();
+    int32_t idx2 = ipack.ReadAndAdvanceOrDie();
+    int32_t idx3 = ipack.ReadAndAdvanceOrDie();
     DCHECK_LT(idx1, subset.vertex_count);
     DCHECK_LT(idx2, subset.vertex_count);
     DCHECK_LT(idx3, subset.vertex_count);

@@ -6,13 +6,14 @@
 #include "azer/util/interactive/pick_util.h"
 
 namespace azer {
-InteractiveContext::InteractiveContext(nelf::RenderWindow* window,
+InteractiveContext::InteractiveContext(RenderSubWindow* window,
                                        const Camera* camera)
     : window_(window),
       activated_(-1),
       draging_(false),
       last_drag_event_(ui::ET_MOUSE_PRESSED, gfx::Point(), gfx::Point(),
-                       ui::EF_LEFT_MOUSE_BUTTON, ui::EF_LEFT_MOUSE_BUTTON),
+                       ::base::TimeDelta::FromSeconds(0.0),
+                       0, ui::EF_LEFT_MOUSE_BUTTON),
       camera_(camera),
       args_(NULL)  {
 }

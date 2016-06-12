@@ -64,14 +64,14 @@ Texture* InteractiveEnv::GetTexture(int32_t id) {
 }
 
 RasterizerState* InteractiveEnv::wireframe_rasterizer_state() { 
-  return wireframe_rasterizer_state_;
+  return wireframe_rasterizer_state_.get();
 }
 
 RasterizerState* InteractiveEnv::noncull_rasterizer_state() { 
-  return noncull_rasterizer_state_;
+  return noncull_rasterizer_state_.get();
 }
 
 DepthStencilState* InteractiveEnv::depth_disabled_state() { 
-  return depth_disabled_state_;
+  return depth_disabled_state_.get();
 }
 }  // namespace azer

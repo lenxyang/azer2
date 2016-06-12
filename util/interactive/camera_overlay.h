@@ -2,6 +2,7 @@
 
 #include "base/memory/ref_counted.h"
 #include "ui/gfx/geometry/rect.h"
+#include "ui/gfx/geometry/rect_f.h"
 #include "azer/math/matrix4.h"
 #include "azer/render/texture_view.h"
 #include "azer/render/viewport.h"

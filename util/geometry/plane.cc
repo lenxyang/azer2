@@ -67,7 +67,7 @@ EntityDataPtr CreatePlane(VertexDesc* desc, const PlaneParam& param,
                           const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoPlaneSubset(data.get(), param, mat);
   return data;
 }
@@ -127,7 +127,7 @@ EntityDataPtr CreateSquare(VertexDesc* desc, float length, int32_t slice,
                            const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoSquareSubset(data.get(), length, slice, mat);
   return data;
 }

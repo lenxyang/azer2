@@ -14,7 +14,7 @@ namespace azer {
 EntityDataPtr CreateArrow(VertexDesc* desc) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   Matrix4 rot = std::move(RotateX(Degree(-90.0f)));
 
   GeoConeParam cone_param;
@@ -22,7 +22,7 @@ EntityDataPtr CreateArrow(VertexDesc* desc) {
   cone_param.radius = 0.125f;
   cone_param.slice = 64;
   Matrix4 cone_mat = rot * Translate(0.0f, 0.75f, 0.0f);
-  AppendGeoConeData(data, cone_param, cone_mat);
+  AppendGeoConeData(data.get(), cone_param, cone_mat);
 
   GeoCylinderParam cylinder_param;
   cylinder_param.top_radius = 0.05f;
@@ -30,7 +30,7 @@ EntityDataPtr CreateArrow(VertexDesc* desc) {
   cylinder_param.height = 0.75f;
   cylinder_param.slice = 64;
   cylinder_param.stack = 5;
-  AppendGeoCylinderSubset(data, cylinder_param, rot);
+  AppendGeoCylinderSubset(data.get(), cylinder_param, rot);
   return data;
 }
 }  // namespace azer

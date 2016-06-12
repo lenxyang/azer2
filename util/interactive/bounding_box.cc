@@ -12,8 +12,10 @@ BoundingBoxObj::BoundingBoxObj() {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   color_ = Vector4(0.0f, 1.0f, 0.0f, 0.5f);
   color_effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
-  box_ = new Entity(CreateBox(color_effect_->vertex_desc()));
-  boxframe_ = new Entity(CreateBoxFrame(color_effect_->vertex_desc()));
+  EntityDataPtr vd = CreateBox(color_effect_->vertex_desc());
+  box_ = new Entity(vd.get());
+  EntityDataPtr vbf = CreateBoxFrame(color_effect_->vertex_desc());
+  boxframe_ = new Entity(vbf.get());
 }
 
 void BoundingBoxObj::SetCorner(const Vector3& min, const Vector3& max) {
@@ -40,12 +42,12 @@ void BoundingBoxObj::Render(Renderer* renderer) {
   mtrl.specular = mtrl.diffuse * 0.1f;
   mtrl.alpha = 1.0f;
   color_effect_->SetMaterial(mtrl);
-  renderer->BindEffect(color_effect_);
+  renderer->BindEffect(color_effect_.get());
   boxframe_->Draw(renderer);
 
   mtrl.alpha = mtrl.diffuse.w;
   color_effect_->SetMaterial(mtrl);
-  renderer->BindEffect(color_effect_);
+  renderer->BindEffect(color_effect_.get());
   box_->Draw(renderer);
 }
 }  // namespace azer

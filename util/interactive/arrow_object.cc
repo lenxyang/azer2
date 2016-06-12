@@ -10,7 +10,8 @@ ArrowObject::ArrowObject() {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
   color_ = Vector4(0.8f, 0.8f, 0.8f, 1.0f);
   effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
-  arrow_ = new Entity(CreateArrow(effect_->vertex_desc()));
+  EntityDataPtr ptr(CreateArrow(effect_->vertex_desc()));
+  arrow_ = new Entity(ptr.get());
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
 }
 
@@ -54,7 +55,7 @@ void ArrowObject::Render(const Camera& camera, Renderer* renderer) {
   effect_->SetWorld(world_);
   effect_->SetPV(camera.GetProjViewMatrix());
   effect_->SetLightData(&env->light()->data(), 1);
-  renderer->BindEffect(effect_);
+  renderer->BindEffect(effect_.get());
   arrow_->Draw(renderer);
 }
 }  // namespace azer

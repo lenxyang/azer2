@@ -85,7 +85,7 @@ namespace {
 void UpdateSphereNormal(VertexPack* vpack, int32_t stack, int32_t slice, Subset subset) {
   const int32_t kIndexCount = CalcSphereIndexCount(stack, slice);
   IndicesDataPtr ptr(new IndicesData(kIndexCount));
-  IndexPack ipack(ptr);
+  IndexPack ipack(ptr.get());
   subset.index_base = ipack.index();
   AppendUpGeoTaperIndexData(0, &ipack, slice);
   for (int i = 1; i < stack - 2; ++i) {
@@ -156,7 +156,7 @@ EntityDataPtr CreateSphere(VertexDesc* desc, const GeoSphereParam& p,
                            const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoSphereData(data.get(), p, mat);
   return data;
 }
@@ -179,7 +179,7 @@ EntityDataPtr CreateSphereFrame(VertexDesc* desc, const GeoSphereParam& p,
                                 const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoSphereFrameData(data.get(), p, mat);
   return data;
 }

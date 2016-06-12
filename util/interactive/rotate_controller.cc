@@ -28,10 +28,10 @@ void RotateControllerObj::InitEntity() {
 
   VertexDataPtr vdata(new VertexData(ambient_effect_->vertex_desc(), 1));
   IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata, idata));
-  AppendAxisData(data);
-  AppendRoundData(data);
-  entity_ = new Entity(data);
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
+  AppendAxisData(data.get());
+  AppendRoundData(data.get());
+  entity_ = new Entity(data.get());
 }
 
 void RotateControllerObj::AppendRoundData(EntityData* data) {
@@ -77,7 +77,7 @@ float RotateControllerObj::circle_radius() const {
 }
 
 void RotateControllerObj::SetColor(int32_t index, const Vector4& c) {
-  DCHECK_LT(index, static_cast<int32>(arraysize(colors_)));
+  DCHECK_LT(index, static_cast<int32_t>(arraysize(colors_)));
   colors_[index] = c;
 }
 
@@ -92,7 +92,6 @@ void RotateControllerObj::ResetColor() {
 }
 
 void RotateControllerObj::Update(const Camera& camera, const Vector3& position) {
-  InteractiveEnv* env = InteractiveEnv::GetInstance();
   Matrix4 mat = std::move(Scale(scale_));
   world_ = std::move(std::move(Translate(position)) * mat);
   pv_ = std::move(camera.GetProjViewMatrix());
@@ -117,11 +116,11 @@ void RotateControllerObj::Render(Renderer* renderer) {
       mtrl.emission = Vector4(0.0f, 0.0f, 0.0f, 0.0f);
       mtrl.alpha = colors_[i].w;
       color_effect_->SetMaterial(mtrl);
-      renderer->BindEffect(color_effect_);
+      renderer->BindEffect(color_effect_.get());
       entity_->DrawSub(i, renderer);
     } else {
       ambient_effect_->SetAmbient(colors_[i]);
-      renderer->BindEffect(ambient_effect_);
+      renderer->BindEffect(ambient_effect_.get());
       entity_->DrawSub(i, renderer);
     }
   }
@@ -163,7 +162,6 @@ void RotateController::set_directional(const Vector3& dir) {
 
 int32_t RotateController::GetPicking(const gfx::Point& screenpt) {
   Ray ray = std::move(context()->GetPickingRay(screenpt));
-  const Camera* camera = context()->camera(); 
   Vector3 pxy, pyz, pzx;
   Plane planexy(Vector3(0.0f, 0.0f, 1.0f), -position_.z);
   Plane planeyz(Vector3(1.0f, 0.0f, 0.0f), -position_.x);

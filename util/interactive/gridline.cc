@@ -13,8 +13,8 @@ Gridline::Gridline(int32_t row, int32_t column, float cell) {
   effect_ = (AmbientColorEffect*)env->GetEffect("AmbientColorEffect");
 
   VertexDataPtr vdata(new VertexData(effect_->vertex_desc(), kVertexCount));
-  EntityDataPtr data(new EntityData(vdata));
-  VertexPack vpack(vdata);
+  EntityDataPtr data(new EntityData(vdata.get()));
+  VertexPack vpack(vdata.get());
   vpack.first();
   
   float depth = row * cell;
@@ -43,7 +43,7 @@ Gridline::Gridline(int32_t row, int32_t column, float cell) {
   subset.vertex_count = kVertexCount;
   subset.primitive = kLineList;
   data->AddSubset(subset);
-  entity_ = new Entity(data);
+  entity_ = new Entity(data.get());
   color_ = Vector4(0.8f, 0.8f, 0.8f, 1.0f);
 }
 
@@ -56,11 +56,10 @@ void Gridline::Update(const Camera& camera) {
 }
 
 void Gridline::Render(Renderer* renderer) {
-  InteractiveEnv* env = InteractiveEnv::GetInstance();
   effect_->SetWorld(world_);
   effect_->SetPV(pv_);
   effect_->SetAmbient(color_);
-  renderer->BindEffect(effect_);
+  renderer->BindEffect(effect_.get());
   entity_->Draw(renderer);
 }
 }  // namespace azer
