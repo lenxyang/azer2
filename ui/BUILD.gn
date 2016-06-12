@@ -17,6 +17,8 @@ static_library("ui") {
     "desktop_window_context.h",
     "focus_manager_factory.cc",
     "focus_manager_factory.h",
+    "fpspanel.cc",
+    "fpspanel.h",
     "native_widget.cc",
     "native_widget.h",
     "render_subwindow.cc",
