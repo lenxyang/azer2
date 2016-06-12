@@ -1,8 +1,11 @@
 #include <memory>
 
 #include "azer/azer.h"
+#include "azer/ui/chromium_env.h"
+#include "azer/ui/render_loop.h"
+#include "azer/ui/sample_mainframe.h"
 #include "azer/ui/window.h"
-#include "azer/ui/render_window.h"
+#include "azer/ui/desktop_window_context.h"
 #include "azer/util/interactive/interactive.h"
 
 using base::FilePath;
@@ -134,9 +137,10 @@ SimpleEffectPtr CreateSimpleEffect() {
   return ptr;
 }
 
-class MyRenderWindow : public azer::RenderWindow {
+class MyRenderWindow : public azer::SampleMainframe {
  public:
-  MyRenderWindow(const gfx::Rect& rect) : azer::RenderWindow(rect) {}
+  MyRenderWindow(const gfx::Rect& rect, WindowContext* ctx)
+      : azer::SampleMainframe(rect, ctx) {}
   void OnInit() override;
   void OnUpdateFrame(const FrameArgs& args) override;
   void OnRenderFrame(const FrameArgs& args, Renderer* renderer) override;
@@ -148,9 +152,12 @@ class MyRenderWindow : public azer::RenderWindow {
 };
 
 int main(int argc, char* argv[]) {
-  env->SetRootPath(base::FilePath(::base::UTF8ToUTF16("hlsldc")));
+  ChromiumEnv env(argc, argv);
+
+  WindowContext* ctx = new DesktopWindowContext;
+  ctx->Init(argc, argv);
   gfx::Rect init_bounds(0, 0, 800, 600);
-  MyRenderWindow* window(new MyRenderWindow(init_bounds));
+  MyRenderWindow* window(new MyRenderWindow(init_bounds, ctx));
   SampleDesc sample_desc;
   sample_desc.count = 1;
   sample_desc.quality = 0;
@@ -180,7 +187,11 @@ void MyRenderWindow::OnUpdateFrame(const FrameArgs& args) {
 }
 
 void MyRenderWindow::OnRenderFrame(const FrameArgs& args, Renderer* renderer) {
-  effect_->SetPV(camera.GetProjViewMatrix());
+  renderer->Use();
+  renderer->Clear(Vector4(0.0f, 0.0f, 1.0f, 1.0));
+  renderer->ClearDepthAndStencil();
+
+  effect_->SetPV(camera_.GetProjViewMatrix());
   effect_->SetWorld(Matrix4::kIdentity);
   effect_->SetColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
   renderer->BindEffect(effect_.get());

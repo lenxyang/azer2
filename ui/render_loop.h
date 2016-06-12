@@ -12,10 +12,10 @@
 #include "azer/render/render_system.h"
 
 namespace azer {
-
+class Window;
 class RenderLoop;
 class RenderView;
-class RenderWindow;
+class RenderSubWindow;
 class RenderLoopObserver;
 class WidgetRendererContext;
 
@@ -31,10 +31,10 @@ class RenderLoop : public views::WidgetObserver,
                    public ::base::RefCounted<RenderLoop> {
  public:
   // the main window's widget
-  explicit RenderLoop(RenderWindow* window);
+  explicit RenderLoop(Window* window);
   ~RenderLoop();
 
-  azer::RenderSystem* GetRenderSystem() { return render_system_;}
+  RenderSystem* GetRenderSystem() { return render_system_;}
   int64_t GetFrameCount() const;
 
   void SetMaxFPS(int fps);
@@ -47,7 +47,7 @@ class RenderLoop : public views::WidgetObserver,
   void AddObserver(RenderLoopObserver* observer);
   void RemoveObserver(RenderLoopObserver* observer);
 
-  const azer::FrameArgs& frame_args() const { return frame_data_;}
+  const FrameArgs& frame_args() const { return frame_data_;}
 
   // run renderloop
   // must has a RenderLoopForUI in current thread
@@ -60,11 +60,11 @@ class RenderLoop : public views::WidgetObserver,
   void PostTask(const ::base::TimeDelta& prev_frame_delta);
  private:
   std::vector<RenderView*> render_view_;
-  azer::RenderSystem* render_system_;
+  RenderSystem* render_system_;
   ::base::MessageLoop* message_loop_;
   ::base::TimeDelta expect_frame_consumed_;
-  RenderWindow* render_window_;
-  azer::FrameArgs frame_data_;
+  Window* window_;
+  FrameArgs frame_data_;
   std::atomic<bool> stop_;
   std::atomic<bool> running_;
   ::base::ObserverList<RenderLoopObserver> observers_;

@@ -4,6 +4,7 @@
 #include "ui/aura/window.h"
 #include "ui/display/display.h"
 #include "ui/display/screen.h"
+#include "ui/native_theme/native_theme_aura.h"
 #include "ui/wm/core/wm_state.h"
 #include "ui/views/widget/desktop_aura/desktop_screen.h"
 
@@ -77,5 +78,9 @@ views::NativeWidget* DesktopWindowContext::CreateBubbleWidget(views::Widget* wid
 
 views::NativeWidget* DesktopWindowContext::CreateMenuWidget(views::Widget* widget) {
   return CreateDesktopWidget(widget);
+}
+
+ui::NativeTheme* DesktopWindowContext::GetNativeTheme() {
+  return ui::NativeThemeAura::instance();
 }
 }  // namespace azer

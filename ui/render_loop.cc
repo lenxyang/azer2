@@ -5,15 +5,15 @@
 #include "base/run_loop.h"
 #include "ui/views/widget/widget.h"
 
-#include "azer/ui/render_window.h"
+#include "azer/ui/render_subwindow.h"
 #include "azer/ui/render_view.h"
 
 namespace azer {
 
-RenderLoop::RenderLoop(RenderWindow* window)
+RenderLoop::RenderLoop(Window* window)
     : render_system_(NULL),
       message_loop_(NULL),
-      render_window_(window),
+      window_(window),
       running_(false),
       stop_(false),
       fps_limit_(-1) {
@@ -58,7 +58,7 @@ void RenderLoop::RemoveObserver(RenderLoopObserver* observer) {
 bool RenderLoop::Init() {
   message_loop_ = ::base::MessageLoop::current();
   DCHECK(message_loop_->type() == ::base::MessageLoop::TYPE_UI);
-  render_system_ = azer::RenderSystem::Current();
+  render_system_ = RenderSystem::Current();
   if (NULL == render_system_) {
     LOG(ERROR) << "RenderSystem not initialized.";
     return false;

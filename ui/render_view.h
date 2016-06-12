@@ -8,7 +8,7 @@
 namespace azer {
 
 class EventListener;
-class RenderWindow;
+class RenderSubWindow;
 class RenderDelegate;
 class RenderLoop;
 
@@ -20,7 +20,7 @@ class RenderView : public views::View,
   RenderView(RenderLoop* loop, RenderDelegate* delegate);
   ~RenderView() override;
 
-  RenderWindow* window() { return window_;}
+  RenderSubWindow* window() { return window_;}
   void AddEventListener(EventListener* item);
   bool RemoveEventListener(EventListener* item);
   bool ContainsEventListener(EventListener* item);
@@ -48,10 +48,10 @@ class RenderView : public views::View,
 protected:
   // override from views::WidgetObserver
   void OnWidgetDestroying(views::Widget* widget) override;
-  void CreateRenderWindow();
+  void CreateRenderSubWindow();
 
   std::vector<EventListener*> listener_;
-  RenderWindow* window_;
+  RenderSubWindow* window_;
   RenderDelegate* delegate_;
   RenderLoop* loop_;
   azer::SampleDesc sample_desc_;

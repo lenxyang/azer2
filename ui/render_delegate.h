@@ -7,7 +7,7 @@
 namespace azer {
 
 class RenderView;
-class RenderWindow;
+class RenderSubWindow;
 class RenderDelegate {
  public:
   // attention the widget must be TopLevelWidget
@@ -18,12 +18,12 @@ class RenderDelegate {
   virtual void OnUpdate(const azer::FrameArgs& frame_data) = 0;
   virtual void OnRender(const azer::FrameArgs& frame_data) = 0;
 
-  RenderWindow* window() { return window_;}
+  RenderSubWindow* window() { return window_;}
   RenderView* view() { return view_;}
  protected:
-  RenderWindow* window_;
+  RenderSubWindow* window_;
   RenderView* view_;
-  friend RenderWindow;
+  friend RenderSubWindow;
   DISALLOW_COPY_AND_ASSIGN(RenderDelegate);
 };
 

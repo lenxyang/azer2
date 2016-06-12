@@ -2,9 +2,11 @@
 
 #include "ui/gfx/geometry/rect.h"
 #include "ui/views/widget/widget.h"
+#include "ui/views/widget/widget_observer.h"
 #include "azer/render/camera.h"
 #include "azer/render/frame_args.h"
 #include "azer/ui/window.h"
+#include "azer/ui/sample_mainframe.h"
 #include "azer/ui/render_delegate.h"
 
 namespace azer {
@@ -14,17 +16,15 @@ class Renderer;
 class RenderLoop;
 class WindowContext;
 
-class SimpleRenderWindow : public Window,
-                           public RenderDelegate,
-                           public views::WidgetObserver {
+class SampleMainframe : public Window, public RenderDelegate,
+                        public views::WidgetObserver {
  public:
-  SimpleRenderWindow(const gfx::Rect& init_bounds, WindowContext* context);
-  ~SimpleRenderWindow();
+  SampleMainframe(const gfx::Rect& init_bounds, WindowContext* context);
+  ~SampleMainframe();
 
   Camera* mutable_camera() { return &camera_;}
   const Camera& camera() const { return camera_;}
   RenderLoop* GetRenderLoop() { return render_loop_.get();}
-  void SetClearColor(const Vector4& color) { clear_color_ = color;}
   void SetSampleDesc(const SampleDesc& desc) { sample_desc_ = desc;}
  protected:
   virtual void OnInit() {}
@@ -42,14 +42,16 @@ class SimpleRenderWindow : public Window,
   void OnWidgetBoundsChanged(views::Widget* widget, 
                              const gfx::Rect& new_bounds) override;
   void OnWidgetDestroying(views::Widget* widget) override;
+
+  // override from Window, views::WidgetDelegate
+  void WindowClosing() override;
  private:
   void InitRenderView();
   virtual void OnAfterWidgetInit() override;
   RenderView* render_view_;
   scoped_refptr<RenderLoop> render_loop_;
   Camera camera_;
-  Vector4 clear_color_;
   SampleDesc sample_desc_;
-  DISALLOW_COPY_AND_ASSIGN(SimpleRenderWindow);
+  DISALLOW_COPY_AND_ASSIGN(SampleMainframe);
 };
 }  // namespace azer

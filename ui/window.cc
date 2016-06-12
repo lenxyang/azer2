@@ -165,6 +165,9 @@ void Window::OnFocus() {
   views::View::OnFocus();
 }
 
+void Window::WindowClosing() {
+}
+
 void Window::SetWindowIcon(gfx::ImageSkia icon) {
   window_icon_ = icon;
 }

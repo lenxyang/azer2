@@ -15,12 +15,12 @@ class RenderLoop;
 class RenderView;
 class WidgetRendererContext;
 
-class RenderWindow : public Window,
-                     public views::WidgetObserver {
+class RenderSubWindow : public Window,
+                        public views::WidgetObserver {
  public:
   static const char kViewClassName[];
-  RenderWindow(RenderView* view, RenderDelegate* delegate);
-  ~RenderWindow() override;
+  RenderSubWindow(RenderView* view, RenderDelegate* delegate);
+  ~RenderSubWindow() override;
 
   SwapChainPtr& GetSwapChain();
   RendererPtr& GetRenderer();
@@ -65,6 +65,6 @@ class RenderWindow : public Window,
   RenderDelegate* delegate_;
   std::unique_ptr<SwapchainContext> render_context_;
   SampleDesc sample_desc_;
-  DISALLOW_COPY_AND_ASSIGN(RenderWindow);
+  DISALLOW_COPY_AND_ASSIGN(RenderSubWindow);
 };
 }  // namespace nelf

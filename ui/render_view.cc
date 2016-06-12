@@ -3,7 +3,7 @@
 #include "ui/views/widget/widget.h"
 #include "azer/ui/event_listener.h"
 #include "azer/ui/render_delegate.h"
-#include "azer/ui/render_window.h"
+#include "azer/ui/render_subwindow.h"
 #include "azer/ui/render_loop.h"
 
 namespace azer {
@@ -58,7 +58,7 @@ void RenderView::ViewHierarchyChanged(
     const ViewHierarchyChangedDetails& details) {
   if (details.is_add && details.child == this) {
     if (!window_)
-      CreateRenderWindow();
+      CreateRenderSubWindow();
   }
 }
 
@@ -66,12 +66,11 @@ void RenderView::SetSampleDesc(const azer::SampleDesc& desc) {
   sample_desc_ = desc; 
 }
 
-void RenderView::CreateRenderWindow() {
+void RenderView::CreateRenderSubWindow() {
   DCHECK(delegate_);
   DCHECK(loop_);
   DCHECK(!window_);
-  window_ = new RenderWindow(this, delegate_);
-  window_->SetRenderDelegate(delegate_);
+  window_ = new RenderSubWindow(this, delegate_);
   window_->Init(loop_);
   window_->GetWidget()->AddObserver(this);
   views::FocusManager* fmgr = GetWidget()->GetFocusManager();

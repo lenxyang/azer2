@@ -23,7 +23,6 @@ class Window : public views::WidgetDelegateView {
   void Init();
   void Show();
   void ShowWithCapture();
-  views::Widget* GetWidget();
 
   // call this function must be called, before nonclient existed 
   void SetCanResize(bool value);

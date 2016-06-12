@@ -107,9 +107,9 @@ class TranslateController : public InteractiveController {
   Vector3 origin_position_;
   Vector3 draginit_pos_;
   Vector3 scale_;
-  std::unique_ptr<TranslateControlObj> object_;
   Plane plane_[3];
-  ObserverList<TranslateControllerObserver> observer_list_;
+  std::unique_ptr<TranslateControlObj> object_;
+  ::base::ObserverList<TranslateControllerObserver> observer_list_;
   static const Vector4 kSelectedColor;
   static const Vector4 kSelectedPlaneColor;
   DISALLOW_COPY_AND_ASSIGN(TranslateController);

@@ -21,6 +21,7 @@ class ViewsDelegate;
 
 namespace ui {
 class ContextFactory;
+class NativeTheme;
 }
 
 namespace azer {
