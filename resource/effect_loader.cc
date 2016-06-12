@@ -69,7 +69,7 @@ VariantResource EffectLoader::LoadSource(const ConfigNode* node,
   DCHECK(vertex_desc.get()) << "vertex desc no specified on effect \""
                             << node->GetNodePath() << "\"";
 
-  TechSource program(vertex_desc);
+  TechSource program(vertex_desc.get());
   ConfigNodes item = node->GetTaggedChildren("shader");
   FileContents contents;
   for (auto iter = item.begin(); iter != item.end(); ++iter) {

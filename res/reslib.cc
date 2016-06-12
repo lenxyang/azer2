@@ -41,12 +41,13 @@ Texture* ResLib::GetTexture(int32_t id) {
   RenderSystem* rs = RenderSystem::Current();
   base::RefCountedStaticMemory* memory = resource_pack_->LoadDataResourceBytes(id);
   CHECK(memory);
-  ImageDataPtr img = LoadDDSImageFromMemory(memory->front(), memory->size());
+  ImageDataPtr img = LoadDDSImageFromMemory(
+      memory->front(), static_cast<int32_t>(memory->size()));
   Texture::Options opt;
   opt.target = kBindTargetShaderResource;
   TexturePtr tex = rs->CreateTexture(opt, img.get());
   texture_.insert(std::make_pair(id, tex));
-  return tex;
+  return tex.get();
 }
 
 EffectAdapterContext* ResLib::effect_context() { 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "azer/base/config_node.h"
 #include "azer/base/file_system.h"
 #include "azer/effect/light.h"
@@ -58,7 +60,7 @@ class SceneLoader : public ResourceSpecialLoader {
   ~SceneLoader();
 
   SceneNodeLoader* GetLoader(const std::string& name);
-  void RegisterSceneNodeLoader(scoped_ptr<SceneNodeLoader> loader);
+  void RegisterSceneNodeLoader(std::unique_ptr<SceneNodeLoader> loader);
 
   const char* GetLoaderName() const override;
   VariantResource Load(const ConfigNode* node,
@@ -77,7 +79,7 @@ class SceneLoader : public ResourceSpecialLoader {
   bool LoadSceneLocation(SceneNode* node, const ConfigNode* config,
                          ResourceLoadContext* ctx);
 
-  std::map<std::string, scoped_ptr<SceneNodeLoader> >loader_map_;
+  std::map<std::string, std::unique_ptr<SceneNodeLoader> >loader_map_;
   DISALLOW_COPY_AND_ASSIGN(SceneLoader);
 };
 }

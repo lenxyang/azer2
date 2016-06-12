@@ -101,15 +101,15 @@ void CalcIndexedTriangleListTangentAndBinormal(VertexData* vd, IndicesData* id) 
   }
 }
 
-MeshData LoadMeshData(const aiMesh* paiMesh, VertexDescPtr desc) {
+MeshData LoadMeshData(const aiMesh* paiMesh, VertexDesc* desc) {
   VertexDataPtr vdata(new VertexData(desc, paiMesh->mNumVertices));
   IndicesDataPtr idata(new IndicesData(paiMesh->mNumFaces * 3));
   VertexPack vpack(vdata.get());
   Vector3 vmin  = Vector3(999999.9f, 999999.9f, 999999.9f);
   Vector3 vmax = Vector3(-999999.9f, -999999.9f, -999999.9f);
   VertexPos npos, tpos;
-  GetSemanticIndex("normal", 0, desc.get(), &npos);
-  GetSemanticIndex("texcoord", 0, desc.get(), &tpos);
+  GetSemanticIndex("normal", 0, desc, &npos);
+  GetSemanticIndex("texcoord", 0, desc, &tpos);
 
   const aiVector3D zero3d(0.0f, 0.0f, 0.0f);
   CHECK(vpack.first());
@@ -153,7 +153,7 @@ MeshLoadUtil::MeshLoadUtil(FileSystem* fs)
 const aiScene* MeshLoadUtil::LoadScene(const azer::ResPath& path, 
                                       Assimp::Importer* importer, 
                                       uint32_t flags) {
-  std::vector<uint8> contents;
+  std::vector<uint8_t> contents;
   FilePtr file = fsystem_->OpenFile(path);
   if (!file.get()) {
     LOG(ERROR) << "Failed to open file: " << path.fullpath();
@@ -183,19 +183,19 @@ EntityVecPtr MeshLoadUtil::LoadVertexData(const ResPath& path, VertexDesc* desc)
   } 
 
   EntityVecPtr vecptr(new EntityVec);
-  std::vector<int32> mtrl_index;
+  std::vector<int32_t> mtrl_index;
   Vector3 vmin  = Vector3(999999.9f, 999999.9f, 999999.9f);
   Vector3 vmax = Vector3(-999999.9f, -999999.9f, -999999.9f);
   for (uint32_t i = 0; i < scene->mNumMeshes; ++i) {
-    const aiMesh* paiMesh = scene->mMeshes[i];
     MeshData data = LoadMeshData(scene->mMeshes[i], desc);
     VertexBufferGroupPtr vbg = CreateVertexBufferGroup(
-        kVertexBufferOpt(), data.vdata);
-    IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), data.idata);
+        kVertexBufferOpt(), data.vdata.get());
+    IndicesBufferPtr ib = rs->CreateIndicesBuffer(
+        kIndicesBufferOpt(), data.idata.get());
     EntityPtr entity(new Entity(vbg.get(), ib.get()));
     entity->set_vmin(data.vmin);
     entity->set_vmax(data.vmax);
-    vecptr->AddEntity(entity);
+    vecptr->AddEntity(entity.get());
   }
 
   return vecptr;
@@ -213,7 +213,7 @@ MeshPtr MeshLoadUtil::Load(const ResPath& path, VertexDesc* desc) {
   } 
 
   MeshPtr mesh(new Mesh);
-  std::vector<int32> mtrl_index;
+  std::vector<int32_t> mtrl_index;
   Vector3 vmin  = Vector3(999999.9f, 999999.9f, 999999.9f);
   Vector3 vmax = Vector3(-999999.9f, -999999.9f, -999999.9f);
   for (uint32_t i = 0; i < scene->mNumMeshes; ++i) {
@@ -221,14 +221,15 @@ MeshPtr MeshLoadUtil::Load(const ResPath& path, VertexDesc* desc) {
     const aiMesh* paiMesh = scene->mMeshes[i];
     MeshData data = LoadMeshData(scene->mMeshes[i], desc);
     VertexBufferGroupPtr vbg = CreateVertexBufferGroup(
-        kVertexBufferOpt(), data.vdata);
-    IndicesBufferPtr ib = rs->CreateIndicesBuffer(kIndicesBufferOpt(), data.idata);
+        kVertexBufferOpt(), data.vdata.get());
+    IndicesBufferPtr ib = rs->CreateIndicesBuffer(
+        kIndicesBufferOpt(), data.idata.get());
     EntityPtr entity(new Entity(vbg.get(), ib.get()));
     entity->set_vmin(data.vmin);
     entity->set_vmax(data.vmax);
     mtrl_index.push_back(paiMesh->mMaterialIndex);
-    part->AddEntity(entity);
-    mesh->AddMeshPart(part);
+    part->AddEntity(entity.get());
+    mesh->AddMeshPart(part.get());
   }
 
   return mesh;

@@ -57,15 +57,15 @@ VariantResource SceneLoader::Load(const ConfigNode* node, ResourceLoadContext* c
 
 void SceneLoader::RegisterSceneNodeLoader(std::unique_ptr<SceneNodeLoader> loader) {
   DCHECK(NULL == GetLoader(loader->node_type_name()));
-  loader_map_.insert(std::make_pair(loader->node_type_name(), loader.Pass()));
+  loader_map_.insert(std::make_pair(loader->node_type_name(), std::move(loader)));
 }
 
 SceneNodePtr SceneLoader::LoadNode(const ConfigNode* cnode, 
                                    ResourceLoadContext* ctx) {
   SceneNodePtr root(new SceneNode());
   SceneNodePtr node(new SceneNode(cnode->GetAttr("name")));
-  root->AddChild(node);
-  if (LoadNodeRecusive(node, cnode, ctx)) {
+  root->AddChild(node.get());
+  if (LoadNodeRecusive(node.get(), cnode, ctx)) {
     return root;
   } else {
     return SceneNodePtr();
@@ -78,8 +78,8 @@ bool SceneLoader::LoadChildrenNode(SceneNode* node, const ConfigNode* config,
   for (auto iter = subnodes.begin(); iter != subnodes.end(); ++iter) {
     ConfigNode* child_config = iter->get();
     SceneNodePtr child_node(new SceneNode);
-    node->AddChild(child_node);
-    if (!LoadNodeRecusive(child_node, child_config, ctx)) {
+    node->AddChild(child_node.get());
+    if (!LoadNodeRecusive(child_node.get(), child_config, ctx)) {
       LOG(INFO) << "Failed to init childnode, parent[" << node->path() << "]";
       return false;
     }
@@ -107,7 +107,7 @@ bool SceneLoader::LoadSceneLocation(SceneNode* node,
                                     ResourceLoadContext* ctx) {
   std::vector<ConfigNodePtr> location_children = std::move(
       config->GetTaggedChildren("location"));
-  int32_t location_size = location_children.size();
+  int32_t location_size = static_cast<int32_t>(location_children.size());
   if (location_size == 0u) {
     return true;
   } else if (location_size != 1u) {
@@ -176,7 +176,7 @@ bool SceneLoader::InitSceneNode(SceneNode* node, const ConfigNode* config,
   if (type_name == "environment") {
     node->SetNodeType(kEnvSceneNode);
   } else if (nodes.size() == 1u) {
-    ConfigNode* cnode = nodes[0];
+    ConfigNode* cnode = nodes[0].get();
     int node_type = GetTypeFromString(cnode->GetAttr("type"));
     if (node_type == kResTypeMesh) {
       MeshPtr mesh = LoadReferMesh(cnode, ctx);
@@ -185,7 +185,7 @@ bool SceneLoader::InitSceneNode(SceneNode* node, const ConfigNode* config,
       node->mutable_data()->AttachMesh(mesh);
     } else if (node_type == kResTypeLight) {
       LightPtr light = LoadReferLight(cnode, ctx);
-      node->mutable_data()->AttachLight(light);
+      node->mutable_data()->AttachLight(light.get());
     } else {
       CHECK(false) << "not support type: " << type_name;
       return false;

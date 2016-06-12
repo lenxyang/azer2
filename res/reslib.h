@@ -2,12 +2,11 @@
 
 #include <string>
 #include <map>
-
+#include <memory>
 
 #include "base/synchronization/lock.h"
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
-#include "base/memory/scoped_ptr.h"
 #include "base/lazy_instance.h"
 
 namespace azer {
@@ -32,9 +31,9 @@ class ResLib {
   ~ResLib();
 
   ::base::Lock lock_;
-  scoped_ptr<EffectLib> effectlib_;
+  ::std::unique_ptr<EffectLib> effectlib_;
   std::map<int, scoped_refptr<Texture> > texture_;
-  scoped_ptr<ResourcePack> resource_pack_;
+  std::unique_ptr<ResourcePack> resource_pack_;
   friend struct ::base::DefaultLazyInstanceTraits<ResLib>;
   DISALLOW_COPY_AND_ASSIGN(ResLib);
 };

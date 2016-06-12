@@ -37,19 +37,19 @@ VariantResource GeometryLoader::Load(const ConfigNode* node,
   MeshPartPtr part;
   std::string geometry_type  = node->GetAttr("geotype");
   if (geometry_type == "sphere") {
-    part = CreateSphere(node, effect, ctx);
+    part = CreateSphere(node, effect.get(), ctx);
   } else if (geometry_type == "box") {
-    part = CreateBox(node, effect, ctx);
+    part = CreateBox(node, effect.get(), ctx);
   } else if (geometry_type == "plane") {
-    part = CreatePlane(node, effect, ctx);
+    part = CreatePlane(node, effect.get(), ctx);
   } else if (geometry_type == "round") {
-    part = CreateRound(node, effect, ctx);
+    part = CreateRound(node, effect.get(), ctx);
   } else if (geometry_type == "cone") {
-    part = CreateCone(node, effect, ctx);
+    part = CreateCone(node, effect.get(), ctx);
   } else if (geometry_type == "barrel") {
-    part = CreateBarrel(node, effect, ctx);
+    part = CreateBarrel(node, effect.get(), ctx);
   } else if (geometry_type == "cylinder") {
-    part = CreateCylinder(node, effect, ctx);
+    part = CreateCylinder(node, effect.get(), ctx);
   } else {
     CHECK(false);
   }
@@ -57,7 +57,7 @@ VariantResource GeometryLoader::Load(const ConfigNode* node,
   VariantResource resource;
   resource.type = kResTypeMesh;
   resource.mesh = new Mesh;
-  resource.mesh->AddMeshPart(part); 
+  resource.mesh->AddMeshPart(part.get()); 
   resource.retcode = 0;
   if (material.get())
     resource.mesh->AddProvider(material);
