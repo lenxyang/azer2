@@ -8,6 +8,7 @@
 #include "base/callback.h"
 #include "base/logging.h"
 #include "base/command_line.h"
+#include "base/trace_event/trace_event.h"
 #include "cc/base/switches.h"
 #include "azer/base/image.h"
 #include "azer/render/render_system.h"
@@ -30,12 +31,19 @@ Azer2DOutputSurface::Azer2DOutputSurface(
   base::Callback<void(void)> callback = 
       ::base::Bind(&Azer2DOutputSurface::OnDeviceResize, base::Unretained(this));
   azer_device->SetResizeCallback(callback);
+
+  TRACE_EVENT_OBJECT_CREATED_WITH_ID(
+      TRACE_DISABLED_BY_DEFAULT("azer.ui"), "azer::Azer2DOutputSurface", id_);
 }
 
 Azer2DOutputSurface::~Azer2DOutputSurface() {
+  TRACE_EVENT0("azer", "Azer2DOutputSurface::~Azer2DOutputSurface()");
+  TRACE_EVENT_OBJECT_DELETED_WITH_ID(
+      TRACE_DISABLED_BY_DEFAULT("azer.ui"), "azer::Azer2DOutputSurface", id_);
 }
 
 void Azer2DOutputSurface::OnDeviceResize() {
+  TRACE_EVENT0("azer", "Azer2DOutputSurface::OnDeviceResize()");
   TextureCopy();
 }
 
@@ -58,6 +66,7 @@ bool Azer2DOutputSurface::BindToClient(cc::OutputSurfaceClient* client) {
 }
 
 void Azer2DOutputSurface::SwapBuffers(cc::CompositorFrame* frame) {
+  TRACE_EVENT0("azer", "Azer2DOutputSurface::SwapBuffers()");
   TextureCopy();
   
   client_->DidSwapBuffers();

@@ -1,7 +1,10 @@
 #include "azer/ui/window.h"
 
-#include "azer/ui/window_context.h"
+#include "base/trace_event/trace_event.h"
+#include "ui/views/widget/widget.h"
 #include "ui/views/widget/native_widget_private.h"
+#include "ui/views/window/non_client_view.h"
+#include "azer/ui/window_context.h"
 
 namespace azer {
 Window* Window::GetWindow(views::View* view) {
@@ -177,7 +180,10 @@ void Window::SetAppIcon(gfx::ImageSkia icon) {
 }
 
 gfx::Size Window::GetContentsSize() const {
-  views::View* view = const_cast<Window*>(this)->GetContentsView();
-  return view->size();
+  views::Widget* widget = const_cast<Window*>(this)->GetWidget();
+  views::NonClientView* nonclient = widget->non_client_view();
+  views::NonClientFrameView *frame_view = nonclient->frame_view();
+  gfx::Rect client = frame_view->GetBoundsForClientView();
+  return client.size();
 }
 }  // namespace azer

@@ -52,7 +52,7 @@ gfx::Insets FPSPanel::GetInsets() const {
 void FPSPanel::Update(Renderer* renderer, const FrameArgs& args) {
   using base::StringPrintf;
   using base::UTF8ToUTF16;
-  if (args.time() - last_update_time_ > 0.5) {
+  if (args.time() - last_update_time_ > 1.0f) {
     avg_fps_label_->SetText(UTF8ToUTF16(StringPrintf(
         "Average FPS: %f/s", args.total_average_fps())));
     cur_fps_label_->SetText(UTF8ToUTF16(StringPrintf(

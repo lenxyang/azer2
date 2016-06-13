@@ -1,8 +1,10 @@
 #include "azer/ui/render_subwindow.h"
 
+#include "base/trace_event/trace_event.h"
 #include "ui/views/widget/desktop_aura/desktop_screen.h"
 #include "ui/views/widget/widget.h"
 #include "ui/views/widget/root_view.h"
+
 #include "azer/ui/adapter/util.h"
 #include "azer/ui/adapter/swapchain_context.h"
 #include "azer/ui/render_delegate.h"

@@ -162,6 +162,7 @@ int main(int argc, char* argv[]) {
   sample_desc.count = 1;
   sample_desc.quality = 0;
   window->SetSampleDesc(sample_desc);
+  window->SetCanResize(true);
   window->Init();
   window->Show();
   

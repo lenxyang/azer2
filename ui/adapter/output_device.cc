@@ -1,6 +1,7 @@
 #include "azer/ui/adapter/output_device.h"
 
 #include "base/logging.h"
+#include "base/trace_event/trace_event.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "ui/gfx/vsync_provider.h"
 #include "azer/ui/adapter/util.h"
@@ -81,10 +82,14 @@ SwapchainOutputDevice::SwapchainOutputDevice(views::Widget* widget)
   widget_context_.reset(new SwapchainContext(widget));
   widget_context_->Reset();
   auto_present_ = !IsRendererWindow(widget);
+  TRACE_EVENT_OBJECT_CREATED_WITH_ID(
+      TRACE_DISABLED_BY_DEFAULT("azer.ui"), "azer::SwapchainOutputDevice", id_);
 }
 
 SwapchainOutputDevice::~SwapchainOutputDevice() {
   widget_context_.reset();
+  TRACE_EVENT_OBJECT_DELETED_WITH_ID(
+      TRACE_DISABLED_BY_DEFAULT("azer.ui"), "azer::SwapchainOutputDevice", id_);
 }
 
 void SwapchainOutputDevice::Resize(const gfx::Size& viewport_pixel_size,

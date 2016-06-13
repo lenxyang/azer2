@@ -105,6 +105,7 @@ class SwapchainOutputDevice : public TextureOutputDevice {
   std::unique_ptr<SwapchainContext> widget_context_;
   bool auto_present_;
  private:
+  int id_;
   DISALLOW_COPY_AND_ASSIGN(SwapchainOutputDevice);
 };
 }  // namespace azer

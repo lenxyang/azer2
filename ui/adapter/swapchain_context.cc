@@ -1,6 +1,8 @@
 #include "azer/ui/adapter/swapchain_context.h"
 
 #include "base/logging.h"
+#include "base/strings/stringprintf.h"
+#include "base/trace_event/trace_event.h"
 #include "ui/aura/window_tree_host.h"
 #include "ui/aura/window.h"
 #include "ui/compositor/compositor.h"
@@ -27,9 +29,16 @@ SwapchainContext::SwapchainContext(views::Widget* widget)
   rasterizer_state_->SetFrontFace(kCounterClockwise);
   rasterizer_state_->SetCullingMode(kCullNone);
   depth_state_->EnableDepthTest(false);
+
+  TRACE_EVENT_OBJECT_CREATED_WITH_ID(
+      TRACE_DISABLED_BY_DEFAULT("azer.ui"), "azer::SwapchainContext", id_);
 }
 
 SwapchainContext::~SwapchainContext() {
+  TRACE_EVENT0("azer", "SwapchainContext::~SwapchainContext()");
+  TRACE_EVENT_OBJECT_DELETED_WITH_ID(
+      TRACE_DISABLED_BY_DEFAULT("azer.ui"), "azer::SwapchainContext", id_);
+
   widget_->RemoveObserver(this);
   Clear();
 }
@@ -41,12 +50,14 @@ void SwapchainContext::Clear() {
 }
 
 void SwapchainContext::Reset() {
+  TRACE_EVENT0("azer", "SwapchainContext::Reset()");
   surface_ = CreateSurfaceForWidget(widget_);
   swapchain_ = render_system_->CreateSwapChainForSurface(surface_.get());
   ResetSwapchain();
 }
 
 void SwapchainContext::ResetSwapchain() {
+  TRACE_EVENT0("azer", "SwapchainContext::ResetSwapchain()");
   renderer_ = swapchain_->GetRenderer();
   overlay_ = new Overlay;
   renderer_->SetViewport(Viewport(gfx::Rect(surface_->GetBounds().size())));
@@ -81,14 +92,20 @@ void SwapchainContext::RenderUI() {
 }
 
 void SwapchainContext::Present() {
+  TRACE_EVENT0("azer", "SwapchainContext::Present()");
   swapchain_->Present();
 }
 
 // 
 void SwapchainContext::OnWidgetBoundsChanged(views::Widget* widget, 
                                              const gfx::Rect& new_bounds) {
-  if (surface_->GetBounds().size() != new_bounds.size()
-      && !new_bounds.size().IsEmpty()) {
+  views::NonClientView* nonclient = widget->non_client_view();
+  views::NonClientFrameView *frame_view = nonclient->frame_view();
+  gfx::Rect client = frame_view->GetBoundsForClientView();
+  if (surface_->GetBounds().size() != client.size()
+      && !client.size().IsEmpty()) {
+    TRACE_EVENT0("azer", ::base::StringPrintf(
+        "SwapchainContext::OnWidgetBoundsChanged(%d, %d)", client.width(), client.height()).c_str());
     surface_ = CreateSurfaceForWidget(widget);
     swapchain_->reset(surface_.get());
     ResetSwapchain();

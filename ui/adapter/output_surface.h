@@ -43,6 +43,7 @@ class Azer2DOutputSurface : public cc::OutputSurface {
   azer::TexturePtr texture_;
 
   ::base::WeakPtrFactory<Azer2DOutputSurface> weak_ptr_factory_;
+  int id_;
   DISALLOW_COPY_AND_ASSIGN(Azer2DOutputSurface);
 };
 

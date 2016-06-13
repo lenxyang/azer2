@@ -48,6 +48,7 @@ class SwapchainContext : public views::WidgetObserver {
   RenderSystem* render_system_;
   SampleDesc sample_desc_;
   views::Widget* widget_;
+  int id_;
   DISALLOW_COPY_AND_ASSIGN(SwapchainContext);
 };
 
