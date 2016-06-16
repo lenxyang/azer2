@@ -84,12 +84,14 @@ views::Widget* RenderSubWindow::CreateWidget() {
 }
 
 void RenderSubWindow::OnBeforeWidgetInit(views::Widget::InitParams* params,
-                                      views::Widget* widget) {
+                                         views::Widget* widget) {
+  views::Widget* view_widget = GetView()->GetWidget();
+  gfx::Size size = view_widget->GetClientAreaBoundsInScreen().size();
   params->type = views::Widget::InitParams::TYPE_CONTROL;
   params->child = true;
   params->activatable = views::Widget::InitParams::ACTIVATABLE_NO;
   params->opacity = views::Widget::InitParams::INFER_OPACITY;
-  params->bounds  = gfx::Rect(0, 0, 800, 600);
+  params->bounds  = gfx::Rect(size);
   params->shadow_type = views::Widget::InitParams::SHADOW_TYPE_NONE;
   params->native_widget = context()->CreateDesktopWidget(widget);
   params->parent = GetView()->GetWidget()->GetNativeView();

@@ -143,7 +143,7 @@ void Window::Init() {
   if (!init_bounds_.IsEmpty()) {
     wparams.bounds = init_bounds_;
   } else if (wparams.bounds.IsEmpty()) {
-    wparams.bounds = gfx::Rect(800, 600);
+    wparams.bounds = gfx::Rect(400, 400);
   }
   widget->Init(wparams);
   OnAfterWidgetInit();
@@ -181,9 +181,6 @@ void Window::SetAppIcon(gfx::ImageSkia icon) {
 
 gfx::Size Window::GetContentsSize() const {
   views::Widget* widget = const_cast<Window*>(this)->GetWidget();
-  views::NonClientView* nonclient = widget->non_client_view();
-  views::NonClientFrameView *frame_view = nonclient->frame_view();
-  gfx::Rect client = frame_view->GetBoundsForClientView();
-  return client.size();
+  return widget->GetClientAreaBoundsInScreen().size();
 }
 }  // namespace azer
