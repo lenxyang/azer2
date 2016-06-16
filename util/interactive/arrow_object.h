@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "azer/effect/color_effect.h"
 #include "azer/effect/light.h"
 #include "azer/math/quaternion.h" 
