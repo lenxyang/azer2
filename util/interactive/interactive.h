@@ -9,6 +9,7 @@
 #include "azer/util/interactive/gridline.h"
 #include "azer/util/interactive/interactive_context.h"
 #include "azer/util/interactive/interactive_controller.h"
+#include "azer/util/interactive/pointlight_object.h"
 #include "azer/util/interactive/rotate_controller.h"
 #include "azer/util/interactive/spotlight_controller.h"
 #include "azer/util/interactive/translate_controller.h"
