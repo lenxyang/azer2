@@ -16,6 +16,8 @@ static_library("interactive") {
     "dirlight_controller.h",
     "env.cc",
     "env.h",
+    "graypoint.cc",
+    "graypoint.h",
     "gridline.cc",
     "gridline.h",
     "interactive_context.cc",
