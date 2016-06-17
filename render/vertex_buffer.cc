@@ -232,7 +232,9 @@ VertexData::VertexData(VertexDesc* desc, int32_t vertex_count)
   InitSlotFromDesc();
 }
 
-VertexData::~VertexData() {}
+VertexData::~VertexData() {
+  vector_.clear();
+}
 
 void VertexData::extend(int32_t count) {
   for (auto iter = vector_.begin(); iter != vector_.end(); ++iter) {

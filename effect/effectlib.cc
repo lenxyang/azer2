@@ -25,6 +25,10 @@ namespace {
 const VertexDesc::Desc kVertexDesc[][10] = {
   {
     {"POSITION", 0, kVec3},
+    {NULL, 0, kVec3}
+  },
+  {
+    {"POSITION", 0, kVec3},
     {"NORMAL", 0, kVec3},
     {"TEXCOORD", 0, kVec2},
     {NULL, 0, kVec3}
@@ -51,27 +55,27 @@ struct EffectData {
 };
 
 EffectData effect_data[] = {
-  {"AmbientColorEffect", AmbientColorEffect::kEffectName, 0, 
-   HLSLLIB_AMBIENT, "vs_main", 0, 0, 0, "ps_main"},
   {"TextBillboardEffect", TextBillboardEffect::kEffectName, 0, 
    HLSLLIB_TEXTBILLBOARD, "vs_main", 0, 0, "gs_main", "ps_main"},
-  {"ColorEffect", ColorEffect::kEffectName, 0, HLSLLIB_COLOR, 
+  {"AmbientColorEffect", AmbientColorEffect::kEffectName, 1, 
+   HLSLLIB_AMBIENT, "vs_main", 0, 0, 0, "ps_main"},
+  {"ColorEffect", ColorEffect::kEffectName, 1, HLSLLIB_COLOR, 
    "vs_main", 0, 0, 0, "ps_main"},
-  {"DiffuseMapEffect", DiffuseMapEffect::kEffectName, 0, 
+  {"DiffuseMapEffect", DiffuseMapEffect::kEffectName, 1, 
    HLSLLIB_DIFFUSEMAP, "vs_main", 0, 0, 0, "ps_main"},
-  {"InstDiffuseMapEffect", DiffuseMapEffect::kEffectName, 0, 
+  {"InstDiffuseMapEffect", DiffuseMapEffect::kEffectName, 1, 
    HLSLLIB_INST_DIFFUSEMAP, "vs_main", 0, 0, 0, "ps_main"},
-  {"NormalLineEffect", NormalLineEffect::kEffectName, 0, 
+  {"NormalLineEffect", NormalLineEffect::kEffectName, 1, 
    HLSLLIB_NORMALLINE, "vs_main", 0, 0, "gs_main", "ps_main"},
-  {"TextureEffect0", TextureEffect::kEffectName, 1, 
+  {"TextureEffect0", TextureEffect::kEffectName, 2, 
    HLSLLIB_TEXTURE, "vs_main0", 0, 0, 0, "ps_main0"},
-  {"TextureEffect1", TextureEffect::kEffectName, 1, 
+  {"TextureEffect1", TextureEffect::kEffectName, 2, 
    HLSLLIB_TEXTURE, "vs_main1", 0, 0, 0, "ps_main1"},
-  {"SkyboxEffect", SkyboxEffect::kEffectName, 1, 
+  {"SkyboxEffect", SkyboxEffect::kEffectName, 2, 
    HLSLLIB_SKYBOX, "vs_main", 0, 0, 0, "ps_main"},
-  {"OverlayEffect", OverlayEffect::kEffectName, 1,
+  {"OverlayEffect", OverlayEffect::kEffectName, 2,
    HLSLLIB_OVERLAY, "vs_main", 0, 0, 0, "ps_main"},
-  {"MSOverlayEffect", OverlayEffect::kEffectName, 1,
+  {"MSOverlayEffect", OverlayEffect::kEffectName, 2,
    HLSLLIB_OVERLAY, "vs_main", 0, 0, 0, "ps_main_ms"},
 };
 

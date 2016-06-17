@@ -1,13 +1,17 @@
 #pragma once
 
+#include "azer/math/math.h"
+#include "azer/render/entity.h"
 #include "azer/effect/effect.h"
 
 namespace azer {
+class Camera;
 class TextBillboardEffect;
 
 class GrayPoint {
  public:
   GrayPoint();
+  ~GrayPoint();
   
   const Vector3& position() const { return position_;}
   void set_position(const Vector3& pos) { position_ = pos;}
@@ -19,6 +23,7 @@ class GrayPoint {
   Vector3 scale_;
   Vector4 color_;
   EntityPtr point_;
+  scoped_refptr<TextureView> pointgray_texview_;
   scoped_refptr<TextBillboardEffect> effect_;
   DISALLOW_COPY_AND_ASSIGN(GrayPoint);
 };

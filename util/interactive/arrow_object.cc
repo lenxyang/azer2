@@ -11,7 +11,8 @@ ArrowObject::ArrowObject() {
   color_ = Vector4(0.8f, 0.8f, 0.8f, 1.0f);
   effect_ = (ColorEffect*)env->GetEffect("ColorEffect");
   EntityDataPtr ptr(CreateArrow(effect_->vertex_desc()));
-  arrow_ = new Entity(ptr.get());
+  
+arrow_ = new Entity(ptr.get());
   scale_ = Vector3(1.0f, 1.0f, 1.0f);
 }
 
