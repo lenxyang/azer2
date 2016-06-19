@@ -29,6 +29,7 @@ enum TexFormat {
   kTexRGB32,
   kTexRGBA32,
   kTexRGBAn32,
+  kTexRGBA32Typeless,
   kTexRGBAf,
   kTexR11G11B10f,
   kTexDepth24nStencil8u,

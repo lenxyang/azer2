@@ -95,17 +95,6 @@ TexFormat TranslateD3DTexFormat(DXGI_FORMAT type) {
   }
 }
 
-DXGI_FORMAT TranslateTexResFormat(TexFormat type) {
-  switch (type) {
-    case kTexDepth24nStencil8u:
-    case kTexR24G8:
-    case kTexR24nX8: return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-    case kTexR32: return DXGI_FORMAT_R32_FLOAT;
-    default:
-      return TranslateTexFormat(type);
-  }
-}
-
 DXGI_FORMAT TranslateTexFormat(TexFormat type) {
   switch (type) {
     case kTexRGBAn8: return DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -116,6 +105,7 @@ DXGI_FORMAT TranslateTexFormat(TexFormat type) {
     case kTexRGB32: return DXGI_FORMAT_R32G32B32_TYPELESS;
     case kTexRGBA32: return DXGI_FORMAT_R32G32B32A32_UINT;
     case kTexRGBAn32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
+    case kTexRGBA32Typeless: return DXGI_FORMAT_R32G32B32A32_TYPELESS;
     case kTexBGRAn8: return DXGI_FORMAT_B8G8R8A8_UNORM;
     case kTexR11G11B10f: return DXGI_FORMAT_R11G11B10_FLOAT;
     case kTexDepth24nStencil8u: return DXGI_FORMAT_D24_UNORM_S8_UINT;

@@ -16,8 +16,6 @@ D3D11_USAGE TranslateUsage(BufferUsage usage);
 D3D11_CPU_ACCESS_FLAG TranslateCPUAccess(CPUAccess access);
 DXGI_FORMAT TranslateFormat(DataFormat type);
 DXGI_FORMAT TranslateTexFormat(TexFormat type);
-DXGI_FORMAT TranslateTexResFormat(TexFormat type);
-
 TexFormat TranslateD3DTexFormat(DXGI_FORMAT type);
 DataFormat TranslateD3DFormat(DXGI_FORMAT type);
 
