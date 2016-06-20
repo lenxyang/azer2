@@ -49,9 +49,9 @@ Technique::Technique() {
 Technique::~Technique() {
 }
 
-VertexDesc* Technique::GetVertexDesc() {
-  ShaderPtr& ptr = pline_[kVertexStage];
-  if (ptr.get()) {
+VertexDesc* Technique::vertex_desc() {
+  Shader* ptr = pline_[kVertexStage].get();
+  if (ptr) {
     return ptr->vertex_desc();
   } else {
     return NULL;
@@ -59,7 +59,7 @@ VertexDesc* Technique::GetVertexDesc() {
 }
 
 void Technique::AddShader(Shader* gpu) {
-  DCHECK(gpu->stage() == NULL);
+  DCHECK(pline_[gpu->stage()].get() == NULL);
   SetShader(gpu);
 }
 
@@ -77,7 +77,7 @@ TechniquePtr CreateTechnique(const TechSource& source) {
   TechniquePtr tech = rs->CreateTechnique();  
   const ShaderInfo& vsinfo = source.GetStage(kVertexStage);
   ShaderPtr vs_shader(rs->CreateShader(vsinfo, source.vertex_desc()));
-  tech->AddShader(vs_shader);
+  tech->AddShader(vs_shader.get());
   int32_t i = (int32_t)(kVertexStage + 1);
   for (; i < source.size(); ++i) {
     const ShaderInfo& info = source.GetStage(i);
@@ -88,7 +88,7 @@ TechniquePtr CreateTechnique(const TechSource& source) {
       }
       ShaderPtr ptr(rs->CreateShader(info, desc));
       CHECK(ptr.get() != NULL);
-      tech->AddShader(ptr);
+      tech->AddShader(ptr.get());
     }
   }
   return tech;
