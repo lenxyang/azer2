@@ -51,11 +51,13 @@ class AZER_EXPORT TechSource {
 class AZER_EXPORT Technique : public ::base::RefCounted<Technique> {
  public:
   virtual ~Technique();
-  void AddShader(ShaderPtr& gpu);
+  VertexDesc* vertex_desc();
 
   virtual void Use(Renderer*) = 0;
   virtual TechniquePtr CopyTechnique() = 0;
-  VertexDesc* GetVertexDesc();
+
+  void AddShader(Shader* shader);
+  void SetShader(Shader* shader);
   Shader* GetShader(int stage);
  protected:
   Technique();

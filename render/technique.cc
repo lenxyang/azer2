@@ -58,7 +58,12 @@ VertexDesc* Technique::GetVertexDesc() {
   }
 }
 
-void Technique::AddShader(ShaderPtr& gpu) {
+void Technique::AddShader(Shader* gpu) {
+  DCHECK(gpu->stage() == NULL);
+  SetShader(gpu);
+}
+
+void Technique::SetShader(Shader* gpu) { 
   DCHECK_LT(gpu->stage(), kRenderPipelineStageNum);
   pline_[gpu->stage()] = gpu;
 }
