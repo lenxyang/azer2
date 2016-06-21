@@ -97,13 +97,12 @@ TexFormat TranslateD3DTexFormat(DXGI_FORMAT type) {
 
 DXGI_FORMAT TranslateTexFormat(TexFormat type) {
   switch (type) {
-    
+    case kTexBGRA8UNorm:     return DXGI_FORMAT_B8G8R8A8_UNORM;
     case kTexRGBA8UNorm:     return DXGI_FORMAT_R8G8B8A8_UNORM;
     case kTexRGBA8Uint:      return DXGI_FORMAT_R8G8B8A8_UINT;
     case kTexR32Typeless:    return DXGI_FORMAT_R32_TYPELESS;
     case kTexRG32Typeless:   return DXGI_FORMAT_R32G32_TYPELESS;
     case kTexRGB32Typeless:  return DXGI_FORMAT_R32G32B32_TYPELESS;
-    
     case kTexRGBA32Uint:     return DXGI_FORMAT_R32G32B32A32_UINT;
     case kTexRGBA32Float:    return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kTexRGBA32Typeless: return DXGI_FORMAT_R32G32B32A32_TYPELESS;

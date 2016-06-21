@@ -84,26 +84,36 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
 
 const char* GetTexFormatName(TexFormat format) {
   switch (format) {
+    case kTexBGRA8Sint: return "kTexBGRA8Sint";
+    case kTexBGRA8SNorm: return "kTexBGRA8SNorm";
+    case kTexBGRA8Uint: return "kTexBGRA8Uint";
+    case kTexBGRA8UNorm: return "kTexBGRA8UNorm";
+
     case kTexRGBA8Sint: return "kTexRGBA8Sint";
     case kTexRGBA8SNorm: return "kTexRGBA8SNorm";
     case kTexRGBA8Uint: return "kTexRGBA8Uint";
     case kTexRGBA8UNorm: return "kTexRGBA8UNorm";
+
     case kTexR32Sint: return "kTexR32Sint";
     case kTexR32Uint: return "kTexR32Uint";
     case kTexR32Float: return "kTexR32Float";
     case kTexR32Typeless: return "kTexR32Typeless";
+
     case kTexRG32Sint: return "kTexRG32Sint";
     case kTexRG32Uint: return "kTexRG32Uint";
     case kTexRG32Float: return "kTexRG32Float";
     case kTexRG32Typeless: return "kTexRG32Typeless";
+
     case kTexRGB32Sint: return "kTexRGB32Sint";
     case kTexRGB32Uint: return "kTexRGB32Uint";
     case kTexRGB32Float: return "kTexRGB32Float";
     case kTexRGB32Typeless: return "kTexRGB32Typeless";
+
     case kTexRGBA32Sint: return "kTexRGBA32Sint";
     case kTexRGBA32Uint: return "kTexRGBA32Uint";
     case kTexRGBA32Float: return "kTexRGBA32Float";
     case kTexRGBA32Typeless: return "kTexRGBA32Typeless";
+
     case kTexR11G11B10f: return "r11g11b10";
     case kTexDepth24nStencil8u: return "Depth24nStencil8u";
     case kTexR24G8: return "kTexR24G8";
@@ -129,6 +139,10 @@ const char* GetTexFormatName(TexFormat format) {
 
 uint32_t SizeofTexFormat(TexFormat format) {
   switch (format) {
+    case kTexBGRA8Sint: return 4;
+    case kTexBGRA8SNorm: return 4;
+    case kTexBGRA8Uint: return 4;
+    case kTexBGRA8UNorm: return 4;
     case kTexRGBA8Sint: return 4;
     case kTexRGBA8SNorm: return 4;
     case kTexRGBA8Uint: return 4;

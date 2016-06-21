@@ -21,6 +21,10 @@ typedef scoped_refptr<SamplerState> SamplerStatePtr;
 
 enum TexFormat {
   kTexFormatUndefined = 0,
+  kTexBGRA8Sint,
+  kTexBGRA8SNorm,
+  kTexBGRA8Uint,
+  kTexBGRA8UNorm,
   kTexRGBA8Sint,
   kTexRGBA8SNorm,
   kTexRGBA8Uint,
