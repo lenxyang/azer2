@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <ostream>
 
 #include "ui/gfx/geometry/size.h"
 #include "base/files/file_path.h"
@@ -19,50 +20,50 @@ class Texture;
 typedef scoped_refptr<Texture> TexturePtr;
 typedef scoped_refptr<SamplerState> SamplerStatePtr;
 
-enum TexFormat {
-  kTexFormatUndefined = 0,
-  kTexBGRA8Sint,
-  kTexBGRA8SNorm,
-  kTexBGRA8Uint,
-  kTexBGRA8UNorm,
-  kTexRGBA8Sint,
-  kTexRGBA8SNorm,
-  kTexRGBA8Uint,
-  kTexRGBA8UNorm,
-  kTexR32Sint,
-  kTexR32Uint,
-  kTexR32Float,
-  kTexR32Typeless,
-  kTexRG32Sint,
-  kTexRG32Uint,
-  kTexRG32Float,
-  kTexRG32Typeless,
-  kTexRGB32Sint,
-  kTexRGB32Uint,
-  kTexRGB32Float,
-  kTexRGB32Typeless,
-  kTexRGBA32Sint,
-  kTexRGBA32Uint,
-  kTexRGBA32Float,
-  kTexRGBA32Typeless,
-  kTexR11G11B10f,
-  kTexD24UNormS8Uint,
-  kTexR24UNormG8Uint,
-  kTexR24UNormX8Typeless,
-  kTexX24TypelessG8Uint,
-  kTexD32Float,
-  kTexDXBC1n = 1000,
-  kTexDXBC1nSRGB,
-  kTexDXBC4s,
-  kTexDXBC4n,
-  kTexDXBC2n,
-  kTexDXBC2nSRGB,
-  kTexDXBC3n,
-  kTexDXBC3nSRGB,
-  kTexDXBC5s,
-  kTexDXBC5n,
-  kTexDXBC7n,
-  kTexDXBC7nSRGB,
+enum class TexFormat {
+  kUndefined = 0,
+  kBGRA8Sint,
+  kBGRA8SNorm,
+  kBGRA8Uint,
+  kBGRA8UNorm,
+  kRGBA8Sint,
+  kRGBA8SNorm,
+  kRGBA8Uint,
+  kRGBA8UNorm,
+  kR32Sint,
+  kR32Uint,
+  kR32Float,
+  kR32Typeless,
+  kRG32Sint,
+  kRG32Uint,
+  kRG32Float,
+  kRG32Typeless,
+  kRGB32Sint,
+  kRGB32Uint,
+  kRGB32Float,
+  kRGB32Typeless,
+  kRGBA32Sint,
+  kRGBA32Uint,
+  kRGBA32Float,
+  kRGBA32Typeless,
+  kR11G11B10f,
+  kD24UNormS8Uint,
+  kR24UNormG8Uint,
+  kR24UNormX8Typeless,
+  kX24TypelessG8Uint,
+  kD32Float,
+  kDXBC1n = 1000,
+  kDXBC1nSRGB,
+  kDXBC4s,
+  kDXBC4n,
+  kDXBC2n,
+  kDXBC2nSRGB,
+  kDXBC3n,
+  kDXBC3nSRGB,
+  kDXBC5s,
+  kDXBC5n,
+  kDXBC7n,
+  kDXBC7nSRGB,
 };
 
 struct AZER_EXPORT SampleDesc {
@@ -145,5 +146,7 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
   DISALLOW_COPY_AND_ASSIGN(Texture);
 };
 
+AZER_EXPORT uint32_t SizeofTexFormat(TexFormat format);
+AZER_EXPORT std::ostream& operator << (std::ostream& os, TexFormat format);
 AZER_EXPORT Texture::Options InitTexOptForRenderTarget(const gfx::Size& size);
 }  // namespace azer

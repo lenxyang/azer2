@@ -162,7 +162,7 @@ bool D3DDepthBuffer::Init(D3DTexture* tex) {
 
   TexType type = (options().type != TexType::kUnknown) ?
       options().type : tex->options().type;
-  TexFormat format = (options().format != kTexFormatUndefined) ?
+  TexFormat format = (options().format != TexFormat::kUndefined) ?
       options().format : tex->options().format;
   dvsd.Format = TranslateTexFormat(format);
   bool multisampler = (tex->options().sample_desc.count > 1);
@@ -185,8 +185,8 @@ bool D3DDepthBuffer::Init(D3DTexture* tex) {
   } else {
     CHECK(false) << "Unsupport TexType[" << type << " for depth";
   }
-  if (tex->options().format == kTexR24UNormG8Uint) {
-    CHECK(format == kTexD24UNormS8Uint);
+  if (tex->options().format == TexFormat::kR24UNormG8Uint) {
+    CHECK(format == TexFormat::kD24UNormS8Uint);
   }
 
   hr = d3d_device->CreateDepthStencilView(texres_, &dvsd, &target_);

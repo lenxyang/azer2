@@ -77,7 +77,7 @@ RendererPtr CreateCommonRenderer(const gfx::Size& size) {
   rdopt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
   depthopt.size = rdopt.size = size;
   depthopt.target = kBindTargetDepthStencil;
-  depthopt.format = kTexD24UNormS8Uint;
+  depthopt.format = TexFormat::kD24UNormS8Uint;
   TexturePtr rttex = rs->CreateTexture(rdopt);
   TexturePtr depthtex = rs->CreateTexture(depthopt);
   DCHECK(rttex.get() && depthtex.get());

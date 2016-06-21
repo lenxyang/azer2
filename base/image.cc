@@ -3,16 +3,17 @@
 #include <cmath>
 #include <algorithm>
 #include "base/files/file_path.h"
+#include "azer/render/texture.h"
 
 namespace azer {
 
-uint32_t ImageLevelData::pixel_size(int32_t format) {
-  return SizeofDataFormat((DataFormat)format);
+uint32_t ImageLevelData::pixel_size(TexFormat format) {
+  return SizeofTexFormat(format);
 }
 
 ImageLevelData::ImageLevelData(int32_t width, int32_t height, int32_t depth, 
                                uint8_t* data, int32_t data_size, int32_t row_bytes,
-                               int32_t format) 
+                               TexFormat format) 
     : width_(width),
       height_(height),
       depth_(depth),
@@ -53,7 +54,7 @@ int32_t ImageData::depth() const {
   return levels_[0]->depth();
 }
 
-int32_t ImageData::data_format() const {
+TexFormat ImageData::data_format() const {
   return levels_[0]->data_format();
 }
 

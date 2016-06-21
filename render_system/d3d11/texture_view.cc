@@ -66,7 +66,7 @@ bool D3DResTextureView::Init() {
   TexType textype = (options().type == TexType::kUnknown) ?
 	  tex->options().type : options().type;
   view_desc.Format = texdesc.Format;
-  if (options().format != kTexFormatUndefined) {
+  if (options().format != TexFormat::kUndefined) {
     view_desc.Format = TranslateTexFormat(options().format);
   }
   bool msaa = (texture()->options().sample_desc.count > 1);

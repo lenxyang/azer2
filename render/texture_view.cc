@@ -6,7 +6,7 @@
 
 namespace azer {
 TextureView::Options::Options() 
-    : format(kTexFormatUndefined),
+    : format(TexFormat::kUndefined),
       type(TexType::kUnknown) {
 }
 TextureView::TextureView(const Options& opt, Texture* tex)
