@@ -178,7 +178,10 @@ bool D3DDepthBuffer::Init(D3DTexture* tex) {
   } else {
     CHECK(false) << "Unsupport TexType[" << type << " for depth";
   }
-    
+  if (tex->options().format == kTexR24G8) {
+    CHECK(format == kTexDepth24nStencil8u);
+  }
+
   hr = d3d_device->CreateDepthStencilView(texres_, &dvsd, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateDepthStencilView failed ");
 

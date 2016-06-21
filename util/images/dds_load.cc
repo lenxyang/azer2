@@ -345,7 +345,7 @@ uint32_t BitsPerPixel(uint32_t fmt) {
   }
 }
 
-int32_t GetDDSDetail(const DDS_HEADER& head, int32_t* height, int32_t* depth,
+TexType GetDDSDetail(const DDS_HEADER& head, int32_t* height, int32_t* depth,
                      int32_t* arraysize, uint32_t* format) {
   *height = head.height;
   *depth = head.depth;
@@ -358,12 +358,12 @@ int32_t GetDDSDetail(const DDS_HEADER& head, int32_t* height, int32_t* depth,
     *arraysize = d3d10ext->arraySize;
     if (*arraysize == 0) {
       // return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
-      return kUnkonwnTexType;
+      return TexType::kUnknown;
     }
 
     if (BitsPerPixel(d3d10ext->dxgiFormat) == 0) {
       // return HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
-      return kUnkonwnTexType;
+      return TexType::kUnknown;
     }
            
     *format = d3d10ext->dxgiFormat;
@@ -372,56 +372,56 @@ int32_t GetDDSDetail(const DDS_HEADER& head, int32_t* height, int32_t* depth,
         // D3DX writes 1D textures with a fixed Height of 1
         if ((head.flags & DDS_HEIGHT) && *height != 1) {
           // return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
-          return kUnkonwnTexType;
+          return TexType::kUnknown;
         }
         *height = *depth = 1;
-        return kTex1D;
+        return TexType::k1D;
       case DDS_DIMENSION_TEXTURE2D:
         *depth = 1;
         if (d3d10ext->miscFlag & DDS_RESOURCE_MISC_TEXTURECUBE) {
           *arraysize *= 6;
-          return kTexCubemap;
+          return TexType::kCubemap;
         } else {
-          return kTex2D;
+          return TexType::k2D;
         }
       case DDS_DIMENSION_TEXTURE3D:
         if (!(head.flags & DDS_HEADER_FLAGS_VOLUME)) {
           // return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
-          return kUnkonwnTexType;
+          return TexType::kUnknown;
         }
 
         if (*arraysize > 1) {
           // return HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
-          return kUnkonwnTexType;
+          return TexType::kUnknown;
         }
-        return kTex3D;
+        return TexType::k3D;
       default:
         // return HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
-        return kUnkonwnTexType;
+        return TexType::kUnknown;
     }
   } else {
     *format = GetDXGIFormat(head.ddspf);
     if (*format == detail::DXGI_FORMAT_UNKNOWN) {
       // return HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
-      return kUnkonwnTexType;
+      return TexType::kUnknown;
     }
 
     if (head.flags & DDS_HEADER_FLAGS_VOLUME) {
       // resDim = D3D11_RESOURCE_DIMENSION_TEXTURE3D;
-      return kTex3D;
+      return TexType::k3D;
     } else {
       *depth = 1;
       if (head.caps2 & DDS_CUBEMAP) {
         // We require all six faces to be defined
         if ((head.caps2 & DDS_CUBEMAP_ALLFACES) != DDS_CUBEMAP_ALLFACES) {
           // return HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
-          return kUnkonwnTexType;
+          return TexType::kUnknown;
         }
         *arraysize = 6;
-        return kTexCubemap;
+        return TexType::kCubemap;
       } else {
         // resDim = D3D11_RESOURCE_DIMENSION_TEXTURE2D;
-        return kTex2D;
+        return TexType::k2D;
       }
     }
   }
@@ -542,8 +542,8 @@ ImageDataPtr LoadDDSImageFromMemory(const uint8_t* contents, int32_t contents_le
   // int32_t width = head->width;
   int32_t arraysize, depth, height;
   uint32_t format;
-  int32_t tex_type = GetDDSDetail(*head, &height, &depth, &arraysize, &format);
-  if (tex_type == kUnkonwnTexType) {
+  TexType tex_type = GetDDSDetail(*head, &height, &depth, &arraysize, &format);
+  if (tex_type == TexType::kUnknown) {
     return ImageDataPtr();
   }
 
@@ -557,7 +557,7 @@ ImageDataPtr LoadDDSImageFromMemory(const uint8_t* contents, int32_t contents_le
     }
   }
 
-  ImageDataPtr data(new ImageData(tex_type));
+  ImageDataPtr data(new ImageData((int)tex_type));
   ptrdiff_t offset = sizeof(uint32_t) + sizeof(DDS_HEADER)
       + (bDXT10Header ? sizeof(DDS_HEADER_DXT10) : 0);
   uint8_t* ptr = (uint8_t*)(contents + offset);

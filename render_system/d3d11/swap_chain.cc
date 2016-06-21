@@ -40,8 +40,9 @@ RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
     return RendererPtr();
   }
 
-  DepthBufferPtr depth = render_system_->CreateDepthBuffer(
-      DepthBuffer::Options(), tex.get());
+  DepthBuffer::Options dopt;
+  dopt.format = kTexDepth24nStencil8u;
+  DepthBufferPtr depth = render_system_->CreateDepthBuffer(dopt, tex.get());
   if (!depth.get() || !rt.get()) {
     return RendererPtr();
   }
