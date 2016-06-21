@@ -23,7 +23,7 @@ bool D3DSamplerState::Init() {
   }
   D3D11_SAMPLER_DESC sampler_desc;
   ZeroMemory(&sampler_desc, sizeof(sampler_desc));
-  if (options().compare_func == kCompareFuncNever) {
+  if (options().compare_func == CompareFunc::kNever) {
     sampler_desc.Filter = TranslateSamplerStateFilter(options());  
   } else {
     sampler_desc.Filter = TranslateSamplerStateCompFilter(options());  

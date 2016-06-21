@@ -42,6 +42,7 @@ typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
 class AZER_EXPORT DepthBuffer : public ResourceView {
  public:
   struct AZER_EXPORT Options {
+    TexType   type;
     TexFormat format;
     bool depth_readonly;
     bool stencil_readonly;

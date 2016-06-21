@@ -32,16 +32,12 @@ D3DTexture::~D3DTexture() {
   SAFE_RELEASE(texres_);
 }
 
-bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data, 
-                      int arraysize, int mipmap) {
-  HRESULT hr = S_OK;
-  DCHECK(NULL == texres_);
-  ID3D11Device* d3d_device = render_system_->GetDevice();
+void D3DTexture::InitTexDesc() {
   ZeroMemory(&tex_desc_, sizeof(D3D11_TEXTURE2D_DESC));
   tex_desc_.Width     = options_.size.width();
   tex_desc_.Height    = options_.size.height();
-  tex_desc_.MipLevels = mipmap;
-  tex_desc_.ArraySize = arraysize;
+  tex_desc_.MipLevels = options_.mipmap_level;
+  tex_desc_.ArraySize = options_.diminison;
   tex_desc_.Format    = TranslateTexFormat(options_.format);
   tex_desc_.SampleDesc.Count   = options_.sample_desc.count;
   tex_desc_.SampleDesc.Quality = options_.sample_desc.quality;
@@ -50,10 +46,13 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data,
   tex_desc_.CPUAccessFlags = TranslateCPUAccess(options_.cpu_access);
   tex_desc_.MiscFlags      = options_.genmipmap ?  
       D3D11_RESOURCE_MISC_GENERATE_MIPS : 0;
+}
 
-  if (options().type == kTexCubemap) {
-    tex_desc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
-  }
+bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data) {
+  HRESULT hr = S_OK;
+  DCHECK(NULL == texres_);
+  ID3D11Device* d3d_device = render_system_->GetDevice();
+  InitTexDesc();
 
   ID3D11Texture2D* tex = NULL;
   hr = d3d_device->CreateTexture2D(&tex_desc_, data, &tex);
@@ -149,15 +148,15 @@ bool D3DTexture2D::InitFromImage(const ImageData* image) {
     subres[i].SysMemPitch = data->row_bytes();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
-  return Init(subres, image->depth(), count);
+  return Init(subres);
 }
-
 
 
 // class D3D11TextureCubeMap
 D3DTextureCubeMap::D3DTextureCubeMap(const Options& opt, 
                                      D3DRenderSystem* rs)
     : D3DTexture(opt, rs) {
+  CHECK_EQ(opt.diminison, 6);
 }
 
 bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
@@ -170,12 +169,17 @@ bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
     subres[i].SysMemPitch = data->dim_data_size();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
-  return Init(subres, 6, 1);
+  return Init(subres);
 }
 
 // class D3D11TextureCubeMap
 D3DTexture2DArray::D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs)
     : D3DTexture(opt, rs) {
+}
+
+void D3DTexture2DArray::InitTexDesc() {
+  D3DTexture::InitTexDesc();
+  tex_desc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 }
 
 bool D3DTexture2DArray::InitFromImage(const ImageData* image) {
@@ -189,7 +193,8 @@ bool D3DTexture2DArray::InitFromImage(const ImageData* image) {
     subres[i].SysMemPitch = data->dim_data_size();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
-  return Init(subres, image->depth(), 1);
+  CHECK_EQ(image->depth(), options().diminison);
+  return Init(subres);
 }
 
 }  // namespace d3d11

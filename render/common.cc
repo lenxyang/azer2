@@ -112,4 +112,38 @@ uint32_t SizeofDataFormat(DataFormat format) {
       return 0;
   }
 };
+
+
+
+std::ostream& operator << (std::ostream& os, const CompareFunc& func) {
+  switch (func) {
+    case CompareFunc::kNever: os << "CompareFunc::kNever"; break;
+    case CompareFunc::kLess: os << "CompareFunc::kLess"; break;
+    case CompareFunc::kEqual: os << "CompareFunc::kEqual"; break;
+    case CompareFunc::kLessEqual: os << "CompareFunc::kLessEqual"; break;
+    case CompareFunc::kGreater: os << "CompareFunc::kGreater"; break;
+    case CompareFunc::kNotEqueal: os << "CompareFunc::kNotEqueal"; break;
+    case CompareFunc::kGreaterEqual: os << "CompareFunc::kGreaterEqual"; break;
+    case CompareFunc::kAlways: os << "CompareFunc::kAlways"; break;
+    default: CHECK(false) << "Unknonw Comparefunc";
+  }
+  return os;
+}
+
+std::ostream& operator << (std::ostream& os, const TexType& t) {
+  switch (t) {
+    case TexType::kUnknown: os << "TexType::kUnknown"; break;
+    case TexType::k1D: os << "TexType::k1D"; break;
+    case TexType::k1DArray: os << "TexType::k1DArray"; break;
+    case TexType::k2D: os << "TexType::k2D"; break;
+    case TexType::k2DArray: os << "TexType::k2DArray"; break;
+    case TexType::k2DMultiSample: os << "TexType::k2DMultiSample"; break;
+    case TexType::k2DArrayMultiSample: os << "TexType::k2DArrayMultiSample"; break;
+    case TexType::k3D: os << "TexType::k3D"; break;
+    case TexType::kCubemap: os << "TexType::kCubemap"; break;
+    case TexType::kCubemapArray: os << "TexType::kCubemapArray"; break;
+    default: CHECK(false) << "Unknown TexType";
+  }
+  return os;
+}
 }  // namespace azer

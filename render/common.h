@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <ostream>
 #include "azer/base/export.h"
 
 namespace azer {
@@ -22,10 +23,10 @@ enum FrontFace {
 };
 
 enum CPUAccess {
-  kCPUNoAccess = 0x0,
-  kCPUWrite    = 0x10000L,
-  kCPURead     = 0x20000L,
-  kCPUAccess   = kCPUWrite | kCPURead,
+  kCPUNoAccess   = 0x0,
+  kCPUWrite      = 0x10000L,
+  kCPURead       = 0x20000L,
+  kCPUReadWrite  = kCPUWrite | kCPURead,
 };
 
 // n:  normal
@@ -142,29 +143,31 @@ enum BufferUsage {
   kBufferStaging,      // supports transform resource from GPU to CPU
 };
 
-enum CompareFunc {
-  kCompareFuncNever = 1,
-  kCompareFuncLess,
-  kCompareFuncEqual,
-  kCompareFuncLessEqual,
-  kCompareFuncGreater,
-  kCompareFuncNotEqueal,
-  kCompareFuncGreaterEqua,
-  kCompareFuncAlways,
+enum class CompareFunc {
+  kNever = 1,
+  kLess,
+  kEqual,
+  kLessEqual,
+  kGreater,
+  kNotEqueal,
+  kGreaterEqual,
+  kAlways,
 };
 
-enum StencilOper {
-  kStencilOperKeep,
-  kStencilOperZero,
-  kStencilOperReplace,
-  kStencilOperIncrSat,
-  kStencilOperDecrSat,
-  kStencilOperInvert,
-  kStencilOperIncr,
-  kStencilOperDecr,
+AZER_EXPORT std::ostream& operator << (std::ostream& os, const CompareFunc& func);
+
+enum class StencilOper {
+  kKeep,
+  kZero,
+  kReplace,
+  kIncrSat,
+  kDecrSat,
+  kInvert,
+  kIncr,
+  kDecr,
 };
 
-enum MapType {
+enum class MapType {
   kReadOnly,
   kWrite,
   kReadWrite,
@@ -176,33 +179,34 @@ enum VisibleState {
   kNoneVisible    = -1,
   kFullyVisible   = 0,
   kPartialVisible = 1,
-  
 };
 
-enum TexType {
-  kUnkonwnTexType = 0,
-  kTex1D = 1,
-  kTex1DArray,
-  kTex2D,
-  kTex2DArray,
-  kTex2DMultiSample,
-  kTex2DArrayMultiSample,
-  kTex3D,
-  kTexCubemap,
-  kTexCubemapArray,
+enum class TexType {
+  kUnknown = 0,
+  k1D = 1,
+  k1DArray,
+  k2D,
+  k2DArray,
+  k2DMultiSample,
+  k2DArrayMultiSample,
+  k3D,
+  kCubemap,
+  kCubemapArray,
 };
 
-enum AddressMode {
-  kTexAddrModeWrap,
-  kTexAddrModeMirror,
-  kTexAddrModeClamp,
-  kTexAddrModeBorder,
-  kTexAddrModeMirrorOnce,
+AZER_EXPORT std::ostream& operator << (std::ostream& os, const TexType& t);
+
+enum class TexAddressMode {
+  kWrap,
+  kMirror,
+  kClamp,
+  kBorder,
+  kMirrorOnce,
 };
 
-enum FilterMode {
-  kFilterModePoint = 1,
-  kFilterModeLinear,
+enum class FilterMode {
+  kPoint = 1,
+  kLinear,
 };
 
 enum BindTarget {

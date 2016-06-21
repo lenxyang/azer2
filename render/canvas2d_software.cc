@@ -39,7 +39,7 @@ uint32_t SoftwareCanvas2D::GetTexID() {
 
 bool SoftwareCanvas2D::UpdateTexture() {
   DCHECK(NULL != texture_.get());
-  Texture::MapData mapdata = texture_->map(kWriteDiscard);
+  Texture::MapData mapdata = texture_->map(MapType::kWriteDiscard);
   if (mapdata.pdata) {
     SkImageInfo imageinfo = SkImageInfo::Make(skcanvas_->imageInfo().width(),
                                               skcanvas_->imageInfo().height(),

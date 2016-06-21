@@ -158,11 +158,11 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
   texopt.format = (TexFormat)img->data_format();
   texopt.type = (TexType)img->textype();
   scoped_refptr<D3DTexture> tex;
-  if (texopt.type == kTex2D) {
+  if (texopt.type == TexType::k2D) {
     tex = new D3DTexture2D(texopt, this);
-  } else if (texopt.type == kTex2DArray) {
+  } else if (texopt.type == TexType::k2DArray) {
     tex = new D3DTexture2DArray(texopt, this);
-  } else if (texopt.type == kTexCubemap) {
+  } else if (texopt.type == TexType::kCubemap) {
     tex = new D3DTextureCubeMap(texopt, this);
   } else {
     NOTREACHED();
@@ -176,13 +176,18 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
 }
 
 TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
-  if (opt.type == kTex2D) {
-    scoped_refptr<D3DTexture2D> ptr(new D3DTexture2D(opt, this));
-    if (ptr->Init(NULL, 1, opt.mipmap_level)) {
-      return ptr;
-    } else {
-      return TexturePtr();
-    }
+  scoped_refptr<D3DTexture> ptr;
+  if (opt.type == TexType::k2D) {
+    ptr = new D3DTexture2D(opt, this);
+  } else if (opt.type == TexType::k2DArray) {
+    ptr = new D3DTexture2DArray(opt, this);
+  } else {
+    CHECK(false) << "Unsupport Texture Type: " << opt.type;
+    return TexturePtr();
+  }
+
+  if (ptr->Init(NULL)) {
+    return ptr;
   } else {
     return TexturePtr();
   }
@@ -232,7 +237,7 @@ DepthStencilStatePtr D3DRenderSystem::CreateDepthStencilState() {
 
 DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& opt, 
                                                   Texture* texture) {
-  DCHECK(texture);
+  DCHECK(texture) << "Try Create DepthBuffer With None Texture";
   DCHECK(texture->options().target & kBindTargetDepthStencil);
   scoped_refptr<D3DDepthBuffer> depth(new D3DDepthBuffer(opt, this));
   if (depth->Init((D3DTexture*)texture)) {
@@ -244,7 +249,7 @@ DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& op
 
 RenderTargetPtr D3DRenderSystem::CreateRenderTarget(
     const RenderTarget::Options& opt, Texture* texture) {
-  DCHECK(texture);
+  DCHECK(texture) << "Try Create DepthBuffer With None Texture";
   scoped_refptr<D3DRenderTarget> rt(new D3DRenderTarget(opt, false, this));
   if (rt->Init((D3DTexture*)texture)) {
     return rt;

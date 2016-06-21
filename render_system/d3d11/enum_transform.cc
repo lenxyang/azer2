@@ -22,7 +22,7 @@ D3D11_CPU_ACCESS_FLAG TranslateCPUAccess(CPUAccess access) {
     case kCPUNoAccess: return (D3D11_CPU_ACCESS_FLAG)0x0;
     case kCPUWrite: return D3D11_CPU_ACCESS_WRITE;
     case kCPURead: return D3D11_CPU_ACCESS_READ;
-    case kCPUAccess:
+    case kCPUReadWrite:
       return (D3D11_CPU_ACCESS_FLAG)(D3D11_CPU_ACCESS_WRITE | D3D11_CPU_ACCESS_READ);
     default:
       DCHECK(false) << "Unsupport CPUAccess: " << (int32_t)access;
@@ -247,13 +247,13 @@ CullingMode TranslateD3DCullingMode(D3D11_CULL_MODE mode) {
   }
 }
 
-D3D11_TEXTURE_ADDRESS_MODE TranslateTexWrapMode(AddressMode mode) {
+D3D11_TEXTURE_ADDRESS_MODE TranslateTexWrapMode(TexAddressMode mode) {
   switch (mode) {
-    case kTexAddrModeWrap: return D3D11_TEXTURE_ADDRESS_WRAP;
-    case kTexAddrModeMirror: return D3D11_TEXTURE_ADDRESS_MIRROR;
-    case kTexAddrModeClamp: return  D3D11_TEXTURE_ADDRESS_CLAMP;
-    case kTexAddrModeBorder: return D3D11_TEXTURE_ADDRESS_BORDER;
-    case kTexAddrModeMirrorOnce: return D3D11_TEXTURE_ADDRESS_BORDER;
+    case TexAddressMode::kWrap: return D3D11_TEXTURE_ADDRESS_WRAP;
+    case TexAddressMode::kMirror: return D3D11_TEXTURE_ADDRESS_MIRROR;
+    case TexAddressMode::kClamp: return  D3D11_TEXTURE_ADDRESS_CLAMP;
+    case TexAddressMode::kBorder: return D3D11_TEXTURE_ADDRESS_BORDER;
+    case TexAddressMode::kMirrorOnce: return D3D11_TEXTURE_ADDRESS_BORDER;
     default:CHECK(false); return (D3D11_TEXTURE_ADDRESS_MODE)0;
   }
 }
@@ -309,72 +309,73 @@ D3D11_COLOR_WRITE_ENABLE TranslateWriteMask(Blending::WriteMask mask) {
 
 D3D11_SRV_DIMENSION  GetViewDimensionFromTextureType(TexType type) {
   switch (type) {
-    case kTex1D: return D3D11_SRV_DIMENSION_TEXTURE1D;
-    case kTex1DArray: return D3D11_SRV_DIMENSION_TEXTURE1DARRAY;
-    case kTex2D: return D3D11_SRV_DIMENSION_TEXTURE2D;
-    case kTex2DArray: return D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-    case kTex2DMultiSample: return D3D11_SRV_DIMENSION_TEXTURE2DMS;
-    case kTex2DArrayMultiSample: return D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
-    case kTex3D: return D3D11_SRV_DIMENSION_TEXTURE3D;
-    case kTexCubemap: return D3D11_SRV_DIMENSION_TEXTURECUBE;
-    case kTexCubemapArray: return D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
+    case TexType::k1D: return D3D11_SRV_DIMENSION_TEXTURE1D;
+    case TexType::k1DArray: return D3D11_SRV_DIMENSION_TEXTURE1DARRAY;
+    case TexType::k2D: return D3D11_SRV_DIMENSION_TEXTURE2D;
+    case TexType::k2DArray: return D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+    case TexType::k2DMultiSample: return D3D11_SRV_DIMENSION_TEXTURE2DMS;
+    case TexType::k2DArrayMultiSample: return D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
+    case TexType::k3D: return D3D11_SRV_DIMENSION_TEXTURE3D;
+    case TexType::kCubemap: return D3D11_SRV_DIMENSION_TEXTURECUBE;
+    case TexType::kCubemapArray: return D3D11_SRV_DIMENSION_TEXTURECUBEARRAY;
     default: CHECK(false); return (D3D11_SRV_DIMENSION)0;
   }
 }
 
 D3D11_MAP TranslateMapType(MapType type) {
   switch (type) {
-    case kReadOnly: return D3D11_MAP_READ;
-    case kWrite: return D3D11_MAP_WRITE;
-    case kReadWrite: return D3D11_MAP_READ_WRITE;
-    case kWriteDiscard: return D3D11_MAP_WRITE_DISCARD;
-    case kWriteNoOverwrite: return D3D11_MAP_WRITE_NO_OVERWRITE;
+    case MapType::kReadOnly: return D3D11_MAP_READ;
+    case MapType::kWrite: return D3D11_MAP_WRITE;
+    case MapType::kReadWrite: return D3D11_MAP_READ_WRITE;
+    case MapType::kWriteDiscard: return D3D11_MAP_WRITE_DISCARD;
+    case MapType::kWriteNoOverwrite: return D3D11_MAP_WRITE_NO_OVERWRITE;
     default: CHECK(false); return (D3D11_MAP)0;
   }
 }
 
 D3D11_COMPARISON_FUNC TranslateCompareFunc(CompareFunc type) {
   switch (type) {
-    case kCompareFuncNever: return D3D11_COMPARISON_NEVER;
-    case kCompareFuncLess: return D3D11_COMPARISON_LESS;
-    case kCompareFuncEqual: return D3D11_COMPARISON_EQUAL;
-    case kCompareFuncLessEqual: return D3D11_COMPARISON_LESS_EQUAL;
-    case kCompareFuncGreater: return D3D11_COMPARISON_GREATER;
-    case kCompareFuncNotEqueal: return D3D11_COMPARISON_NOT_EQUAL;
-    case kCompareFuncGreaterEqua: return D3D11_COMPARISON_GREATER_EQUAL; 
-    case kCompareFuncAlways: return D3D11_COMPARISON_ALWAYS;
+    case CompareFunc::kNever: return D3D11_COMPARISON_NEVER;
+    case CompareFunc::kLess: return D3D11_COMPARISON_LESS;
+    case CompareFunc::kEqual: return D3D11_COMPARISON_EQUAL;
+    case CompareFunc::kLessEqual: return D3D11_COMPARISON_LESS_EQUAL;
+    case CompareFunc::kGreater: return D3D11_COMPARISON_GREATER;
+    case CompareFunc::kNotEqueal: return D3D11_COMPARISON_NOT_EQUAL;
+    case CompareFunc::kGreaterEqual: return D3D11_COMPARISON_GREATER_EQUAL; 
+    case CompareFunc::kAlways: return D3D11_COMPARISON_ALWAYS;
     default: CHECK(false); return (D3D11_COMPARISON_FUNC)0;
   }
 }
 
 D3D11_FILTER TranslateSamplerStateCompFilter(const SamplerState::Options& state) {
-  DCHECK_NE(state.compare_func, kCompareFuncNever);
-  if (state.mag_filter == kFilterModePoint && state.min_filter == kFilterModePoint
-      && state.mip_filter == kFilterModePoint) {
+  DCHECK_NE(state.compare_func, CompareFunc::kNever);
+  if (state.mag_filter == FilterMode::kPoint
+      && state.min_filter == FilterMode::kPoint
+      && state.mip_filter == FilterMode::kPoint) {
     return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
-  } else if (state.mag_filter == kFilterModeLinear
-             && state.min_filter == kFilterModeLinear
-             && state.mip_filter == kFilterModeLinear) {
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kLinear) {
     return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
-  } else if (state.mag_filter == kFilterModePoint
-             && state.min_filter == kFilterModeLinear
-             && state.mip_filter == kFilterModePoint) {
+  } else if (state.mag_filter == FilterMode::kPoint
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kPoint) {
     return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
-  } else if (state.mag_filter == kFilterModePoint
-             && state.min_filter == kFilterModeLinear
-             && state.mip_filter == kFilterModeLinear) {
+  } else if (state.mag_filter == FilterMode::kPoint
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kLinear) {
     return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
-  } else if (state.mag_filter == kFilterModeLinear
-             && state.min_filter == kFilterModePoint
-             && state.mip_filter == kFilterModePoint) {
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kPoint
+             && state.mip_filter == FilterMode::kPoint) {
     return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT;
-  } else if (state.mag_filter == kFilterModeLinear
-             && state.min_filter == kFilterModePoint
-             && state.mip_filter == kFilterModeLinear) {
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kPoint
+             && state.mip_filter == FilterMode::kLinear) {
     return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-  } else if (state.mag_filter == kFilterModeLinear
-             && state.min_filter == kFilterModeLinear
-             && state.mip_filter == kFilterModePoint) {
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kPoint) {
     return D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
   } else {
     NOTREACHED();
@@ -383,32 +384,33 @@ D3D11_FILTER TranslateSamplerStateCompFilter(const SamplerState::Options& state)
 }
 
 D3D11_FILTER TranslateSamplerStateFilter(const SamplerState::Options& state) {
-  if (state.mag_filter == kFilterModePoint && state.min_filter == kFilterModePoint
-      && state.mip_filter == kFilterModePoint) {
+  if (state.mag_filter == FilterMode::kPoint
+      && state.min_filter == FilterMode::kPoint
+      && state.mip_filter == FilterMode::kPoint) {
     return D3D11_FILTER_MIN_MAG_MIP_POINT;
-  } else if (state.mag_filter == kFilterModeLinear
-             && state.min_filter == kFilterModeLinear
-             && state.mip_filter == kFilterModeLinear) {
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kLinear) {
     return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-  } else if (state.mag_filter == kFilterModePoint
-             && state.min_filter == kFilterModeLinear
-             && state.mip_filter == kFilterModePoint) {
+  } else if (state.mag_filter == FilterMode::kPoint
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kPoint) {
     return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
-  } else if (state.mag_filter == kFilterModePoint
-             && state.min_filter == kFilterModeLinear
-             && state.mip_filter == kFilterModeLinear) {
+  } else if (state.mag_filter == FilterMode::kPoint
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kLinear) {
     return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
-  } else if (state.mag_filter == kFilterModeLinear
-             && state.min_filter == kFilterModePoint
-             && state.mip_filter == kFilterModePoint) {
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kPoint
+             && state.mip_filter == FilterMode::kPoint) {
     return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
-  } else if (state.mag_filter == kFilterModeLinear
-             && state.min_filter == kFilterModePoint
-             && state.mip_filter == kFilterModeLinear) {
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kPoint
+             && state.mip_filter == FilterMode::kLinear) {
     return D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
-  } else if (state.mag_filter == kFilterModeLinear
-             && state.min_filter == kFilterModeLinear
-             && state.mip_filter == kFilterModePoint) {
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kPoint) {
     return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
   } else {
     NOTREACHED();
@@ -418,14 +420,14 @@ D3D11_FILTER TranslateSamplerStateFilter(const SamplerState::Options& state) {
 
 D3D11_STENCIL_OP TranslateStencilOper(StencilOper oper) {
   switch (oper) {
-    case kStencilOperKeep: return D3D11_STENCIL_OP_KEEP;
-    case kStencilOperZero: return D3D11_STENCIL_OP_ZERO;
-    case kStencilOperReplace: return D3D11_STENCIL_OP_REPLACE;
-    case kStencilOperIncrSat: return D3D11_STENCIL_OP_INCR_SAT;
-    case kStencilOperDecrSat: return D3D11_STENCIL_OP_DECR_SAT;
-    case kStencilOperInvert: return D3D11_STENCIL_OP_INVERT;
-    case kStencilOperIncr: return D3D11_STENCIL_OP_INCR;
-    case kStencilOperDecr: return D3D11_STENCIL_OP_DECR;
+    case StencilOper::kKeep: return D3D11_STENCIL_OP_KEEP;
+    case StencilOper::kZero: return D3D11_STENCIL_OP_ZERO;
+    case StencilOper::kReplace: return D3D11_STENCIL_OP_REPLACE;
+    case StencilOper::kIncrSat: return D3D11_STENCIL_OP_INCR_SAT;
+    case StencilOper::kDecrSat: return D3D11_STENCIL_OP_DECR_SAT;
+    case StencilOper::kInvert: return D3D11_STENCIL_OP_INVERT;
+    case StencilOper::kIncr: return D3D11_STENCIL_OP_INCR;
+    case StencilOper::kDecr: return D3D11_STENCIL_OP_DECR;
     default: NOTREACHED();
       return D3D11_STENCIL_OP_KEEP;
   }

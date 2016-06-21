@@ -9,13 +9,13 @@
 
 namespace azer {
 SamplerState::Options::Options()
-    : wrap_u(kTexAddrModeWrap),
-      wrap_v(kTexAddrModeWrap),
-      wrap_w(kTexAddrModeWrap),
-      mag_filter(kFilterModeLinear),
-      min_filter(kFilterModeLinear),
-      mip_filter(kFilterModeLinear),
-      compare_func(kCompareFuncNever),
+    : wrap_u(TexAddressMode::kWrap),
+      wrap_v(TexAddressMode::kWrap),
+      wrap_w(TexAddressMode::kWrap),
+      mag_filter(FilterMode::kLinear),
+      min_filter(FilterMode::kLinear),
+      mip_filter(FilterMode::kLinear),
+      compare_func(CompareFunc::kNever),
       border_color(0.0f, 0.0f, 0.0f, 0.0f),
       max_anisotropy(4) {
 }
@@ -31,7 +31,7 @@ Texture::Options::Options()
       usage(kBufferDefault),
       cpu_access(kCPUNoAccess),
       target(kBindTargetUnknown),
-      type(kTex2D),
+      type(TexType::k2D),
       diminison(1),
       mipmap_level(1),
       genmipmap(false) {
@@ -57,7 +57,7 @@ bool Texture::Save(const ::base::FilePath& path) {
   bitmap.allocPixels();
 
   uint8_t* pixels = (uint8_t*)bitmap.getPixels();
-  MapData mapdata = map(kReadOnly);
+  MapData mapdata = map(MapType::kReadOnly);
   if (mapdata.pdata == NULL) {
     return false;
   }
@@ -77,7 +77,7 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   opt.genmipmap = true;
   opt.format = kTexRGBA8UNorm;
   opt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
-  opt.type = kTex2D;
+  opt.type = TexType::k2D;
   return opt;
 }
 

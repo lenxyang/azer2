@@ -50,7 +50,8 @@ bool D3DIndicesBuffer::Init(const IndicesData* data) {
 HardwareBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
   DCHECK(options_.usage & kBufferDynamic
          || options_.usage & kBufferStaging);
-  DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
+  DCHECK(options_.cpu_access & kCPUWrite ||
+         options_.cpu_access & kCPURead);
   HRESULT hr;
   DCHECK(!locked_) << "Indices Buffer("") has been locked";
   ID3D11Device* d3d_device = render_system_->GetDevice();

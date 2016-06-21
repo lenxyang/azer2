@@ -31,7 +31,7 @@ FillMode TranslateD3DFillMode(D3D11_FILL_MODE mode);
 D3D11_CULL_MODE TranslateCullingMode(CullingMode mode);
 CullingMode TranslateD3DCullingMode(D3D11_CULL_MODE mode);
 
-D3D11_TEXTURE_ADDRESS_MODE TranslateTexWrapMode(AddressMode mode);
+D3D11_TEXTURE_ADDRESS_MODE TranslateTexWrapMode(TexAddressMode mode);
 
 D3D11_BLEND TranslateBlending(Blending::Blend type);
 D3D11_BLEND_OP TranslateBlendingOper(Blending::Oper oper);

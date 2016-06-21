@@ -73,9 +73,9 @@ struct AZER_EXPORT SampleDesc {
 class AZER_EXPORT SamplerState : public ::base::RefCounted<Texture> {
  public:
   struct AZER_EXPORT Options {
-    AddressMode wrap_u;
-    AddressMode wrap_v;
-    AddressMode wrap_w;
+    TexAddressMode wrap_u;
+    TexAddressMode wrap_v;
+    TexAddressMode wrap_w;
     FilterMode mag_filter;
     FilterMode min_filter;
     FilterMode mip_filter;

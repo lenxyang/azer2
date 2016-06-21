@@ -63,24 +63,24 @@ bool D3DResTextureView::Init() {
 
   D3DTexture* tex = ((D3DTexture*)texture());
   const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
-  TexType textype = (options().type == kUnkonwnTexType) ?
+  TexType textype = (options().type == TexType::kUnknown) ?
 	  tex->options().type : options().type;
   view_desc.Format = texdesc.Format;
   if (options().format != kTexFormatUndefined) {
     view_desc.Format = TranslateTexFormat(options().format);
   }
   switch (textype) {
-    case kTex2D:
+    case TexType::k2D:
       view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
       view_desc.Texture2D.MipLevels = texdesc.MipLevels;
       view_desc.Texture2D.MostDetailedMip = 0;
       break;
-    case kTexCubemap: 
+    case TexType::kCubemap: 
       view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
       view_desc.TextureCube.MipLevels = texdesc.MipLevels;
       view_desc.TextureCube.MostDetailedMip = 0;
       break;
-    case kTex2DArray:
+    case TexType::k2DArray:
       if (texture()->options().sample_desc.count > 1) {
         view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
       } else {
