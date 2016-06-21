@@ -8,14 +8,13 @@ namespace azer {
 namespace detail {
 uint32_t  TranslateFormat(int32_t type) {
   switch (type) {
-    case DXGI_FORMAT_R8G8B8A8_UNORM: return kTexRGBAn8;
-    case DXGI_FORMAT_R32_FLOAT: return kTexR32;
-    case DXGI_FORMAT_R32G32_FLOAT: return kTexRG32;
-    case DXGI_FORMAT_R32G32B32_FLOAT: return kTexRGB32;
-    case DXGI_FORMAT_R32G32B32A32_FLOAT: return kTexRGBAf;
-    case DXGI_FORMAT_B8G8R8A8_UNORM: return kTexBGRAn8;
-    case DXGI_FORMAT_R8G8B8A8_UINT: return kTexRGBA8;
-    case DXGI_FORMAT_R32G32B32A32_UINT: return kTexRGBA32;
+    case DXGI_FORMAT_R8G8B8A8_UNORM: return kTexRGBA8UNorm;
+    case DXGI_FORMAT_R8G8B8A8_UINT: return kTexRGBA8Uint;
+    case DXGI_FORMAT_R32_FLOAT: return kTexR32Float;
+    case DXGI_FORMAT_R32G32_FLOAT: return kTexRG32Float;
+    case DXGI_FORMAT_R32G32B32_FLOAT: return kTexRGB32Float;
+    case DXGI_FORMAT_R32G32B32A32_FLOAT: return kTexRGBA32Float;
+    case DXGI_FORMAT_R32G32B32A32_UINT: return kTexRGBA32Uint;
     case DXGI_FORMAT_D24_UNORM_S8_UINT: return kTexDepth24nStencil8u;
     case DXGI_FORMAT_BC1_UNORM: return kTexDXBC1n;
     case DXGI_FORMAT_BC1_UNORM_SRGB: return kTexDXBC1nSRGB;

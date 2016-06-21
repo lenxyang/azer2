@@ -22,7 +22,7 @@ bool D3DSwapChain::Init(Surface* surface)  {
 
 RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   Texture::Options opt;
-  opt.format = kTexRGBAn8;
+  opt.format = kTexRGBA8UNorm;
   opt.size = gfx::Size(surface->GetBounds().size());
   opt.target = (kBindTargetRenderTarget);
   opt.sample_desc.count = surface->sample_desc().count;

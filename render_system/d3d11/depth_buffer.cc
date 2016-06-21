@@ -164,10 +164,6 @@ bool D3DDepthBuffer::Init(D3DTexture* tex) {
     dvsd.Flags |= D3D11_DSV_READ_ONLY_STENCIL;
   }
 
-  if (tex->options().format == kTexR32) {
-    dvsd.Format = DXGI_FORMAT_D32_FLOAT;
-  }
-
   if (tex->options().sample_desc.count > 1) {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
   } else {

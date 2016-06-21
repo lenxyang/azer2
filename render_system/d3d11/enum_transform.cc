@@ -85,9 +85,9 @@ DataFormat TranslateD3DFormat(DXGI_FORMAT type) {
 
 TexFormat TranslateD3DTexFormat(DXGI_FORMAT type) {
   switch (type) {
-    case DXGI_FORMAT_R8G8B8A8_UNORM: return kTexRGBAn8;
-    case DXGI_FORMAT_R32G32B32A32_UINT: return kTexRGBAn32;
-    case DXGI_FORMAT_R32G32B32A32_FLOAT: return kTexRGBAf;
+    case DXGI_FORMAT_R8G8B8A8_UNORM: return kTexRGBA8UNorm;
+    case DXGI_FORMAT_R32G32B32A32_UINT: return kTexRGBA32Uint;
+    case DXGI_FORMAT_R32G32B32A32_FLOAT: return kTexRGBA32Float;
     case DXGI_FORMAT_D24_UNORM_S8_UINT: return kTexDepth24nStencil8u;
     default:
       DCHECK(false) << "Unsupport type: " << (int32_t)type;
@@ -97,32 +97,32 @@ TexFormat TranslateD3DTexFormat(DXGI_FORMAT type) {
 
 DXGI_FORMAT TranslateTexFormat(TexFormat type) {
   switch (type) {
-    case kTexRGBAn8: return DXGI_FORMAT_R8G8B8A8_UNORM;
-    case kTexRGBA8:  return DXGI_FORMAT_R8G8B8A8_UINT;
-    case kTexRGBAf: return DXGI_FORMAT_R32G32B32A32_FLOAT;
-    case kTexR32: return DXGI_FORMAT_R32_TYPELESS;
-    case kTexRG32: return DXGI_FORMAT_R32G32_TYPELESS;
-    case kTexRGB32: return DXGI_FORMAT_R32G32B32_TYPELESS;
-    case kTexRGBA32: return DXGI_FORMAT_R32G32B32A32_UINT;
-    case kTexRGBAn32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
+    
+    case kTexRGBA8UNorm:     return DXGI_FORMAT_R8G8B8A8_UNORM;
+    case kTexRGBA8Uint:      return DXGI_FORMAT_R8G8B8A8_UINT;
+    case kTexR32Typeless:    return DXGI_FORMAT_R32_TYPELESS;
+    case kTexRG32Typeless:   return DXGI_FORMAT_R32G32_TYPELESS;
+    case kTexRGB32Typeless:  return DXGI_FORMAT_R32G32B32_TYPELESS;
+    
+    case kTexRGBA32Uint:     return DXGI_FORMAT_R32G32B32A32_UINT;
+    case kTexRGBA32Float:    return DXGI_FORMAT_R32G32B32A32_FLOAT;
     case kTexRGBA32Typeless: return DXGI_FORMAT_R32G32B32A32_TYPELESS;
-    case kTexBGRAn8: return DXGI_FORMAT_B8G8R8A8_UNORM;
-    case kTexR11G11B10f: return DXGI_FORMAT_R11G11B10_FLOAT;
+    case kTexR11G11B10f:     return DXGI_FORMAT_R11G11B10_FLOAT;
     case kTexDepth24nStencil8u: return DXGI_FORMAT_D24_UNORM_S8_UINT;
-    case kTexR24G8: return DXGI_FORMAT_R24G8_TYPELESS;
-    case kTexR24nX8: return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
-    case kTexDXBC1n: return DXGI_FORMAT_BC1_UNORM;
-    case kTexDXBC1nSRGB: return DXGI_FORMAT_BC1_UNORM_SRGB;
-    case kTexDXBC4s: return DXGI_FORMAT_BC4_SNORM;
-    case kTexDXBC4n: return DXGI_FORMAT_BC4_UNORM;
-    case kTexDXBC2n: return DXGI_FORMAT_BC2_UNORM;
-    case kTexDXBC2nSRGB: return DXGI_FORMAT_BC2_UNORM_SRGB;
-    case kTexDXBC3n: return DXGI_FORMAT_BC3_UNORM;
-    case kTexDXBC3nSRGB: return DXGI_FORMAT_BC3_UNORM_SRGB;
-    case kTexDXBC5n: return DXGI_FORMAT_BC5_UNORM;
-    case kTexDXBC5s: return DXGI_FORMAT_BC5_SNORM;
-    case kTexDXBC7n: return DXGI_FORMAT_BC7_UNORM;
-    case kTexDXBC7nSRGB: return DXGI_FORMAT_BC7_UNORM_SRGB;
+    case kTexR24G8:          return DXGI_FORMAT_R24G8_TYPELESS;
+    case kTexR24nX8:         return DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+    case kTexDXBC1n:         return DXGI_FORMAT_BC1_UNORM;
+    case kTexDXBC1nSRGB:     return DXGI_FORMAT_BC1_UNORM_SRGB;
+    case kTexDXBC4s:         return DXGI_FORMAT_BC4_SNORM;
+    case kTexDXBC4n:         return DXGI_FORMAT_BC4_UNORM;
+    case kTexDXBC2n:         return DXGI_FORMAT_BC2_UNORM;
+    case kTexDXBC2nSRGB:     return DXGI_FORMAT_BC2_UNORM_SRGB;
+    case kTexDXBC3n:         return DXGI_FORMAT_BC3_UNORM;
+    case kTexDXBC3nSRGB:     return DXGI_FORMAT_BC3_UNORM_SRGB;
+    case kTexDXBC5n:         return DXGI_FORMAT_BC5_UNORM;
+    case kTexDXBC5s:         return DXGI_FORMAT_BC5_SNORM;
+    case kTexDXBC7n:         return DXGI_FORMAT_BC7_UNORM;
+    case kTexDXBC7nSRGB:     return DXGI_FORMAT_BC7_UNORM_SRGB;
     default:
       DCHECK(false) << "Unsupport type: " << (int32_t)type;
       return DXGI_FORMAT_UNKNOWN;
