@@ -69,6 +69,7 @@ bool D3DResTextureView::Init() {
   if (options().format != kTexFormatUndefined) {
     view_desc.Format = TranslateTexFormat(options().format);
   }
+  bool msaa = (texture()->options().sample_desc.count > 1);
   switch (textype) {
     case TexType::k2D:
       view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -81,16 +82,15 @@ bool D3DResTextureView::Init() {
       view_desc.TextureCube.MostDetailedMip = 0;
       break;
     case TexType::k2DArray:
-      if (texture()->options().sample_desc.count > 1) {
-        view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
+      if (msaa) {
+        view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
       } else {
-        view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+        view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
       }
-      view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
       view_desc.Texture2DArray.MipLevels = texdesc.MipLevels;
       view_desc.Texture2DArray.MostDetailedMip = 0;
       view_desc.Texture2DArray.FirstArraySlice = 0;
-      view_desc.Texture2DArray.ArraySize = tex->diminison();
+      view_desc.Texture2DArray.ArraySize = 1; // tex->options().diminison;
       break;
     default:
       CHECK(false);

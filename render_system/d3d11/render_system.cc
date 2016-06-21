@@ -179,6 +179,8 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   scoped_refptr<D3DTexture> ptr;
   if (opt.type == TexType::k2D) {
     ptr = new D3DTexture2D(opt, this);
+  } else if (opt.type == TexType::kCubemap) {
+    ptr = new D3DTextureCubeMap(opt, this);
   } else if (opt.type == TexType::k2DArray) {
     ptr = new D3DTexture2DArray(opt, this);
   } else {

@@ -55,6 +55,7 @@ class D3DTextureCubeMap : public D3DTexture {
   bool InitFromImage(const ImageData* image) override;
   bool InitTexture();
  protected:
+  void InitTexDesc() override;
   DISALLOW_COPY_AND_ASSIGN(D3DTextureCubeMap);
 };
 
@@ -63,7 +64,6 @@ class D3DTexture2DArray : public D3DTexture {
   D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs);
   bool InitFromImage(const ImageData* image) override;
   bool InitTexture();
-  void InitTexDesc() override;
  protected:
   DISALLOW_COPY_AND_ASSIGN(D3DTexture2DArray);
 };

@@ -114,10 +114,12 @@ const char* GetTexFormatName(TexFormat format) {
     case kTexRGBA32Float: return "kTexRGBA32Float";
     case kTexRGBA32Typeless: return "kTexRGBA32Typeless";
 
-    case kTexR11G11B10f: return "r11g11b10";
-    case kTexDepth24nStencil8u: return "Depth24nStencil8u";
-    case kTexR24G8: return "kTexR24G8";
-    case kTexR24nX8: return "kTexR24nX8";
+    case kTexD24UNormS8Uint: return "kTexD24UNormS8Uint";
+    case kTexR24UNormG8Uint: return "kTexR24UNormG8Uint";
+    case kTexR24UNormX8Typeless: return "kTexR24UNormX8Typeless";
+    case kTexX24TypelessG8Uint: return "kTexX24TypelessG8Uint";
+    case kTexD32Float: return "kTexD32Float";
+
     case kTexDXBC1n: return "kTexDXBC1n";
     case kTexDXBC1nSRGB: return "kTexDXBC1nSRGB";
     case kTexDXBC4s: return "kTexDXBC4s";
@@ -163,10 +165,12 @@ uint32_t SizeofTexFormat(TexFormat format) {
     case kTexRGBA32Uint: return 16;
     case kTexRGBA32Float: return 16;
     case kTexRGBA32Typeless: return 16;
-    case kTexDepth24nStencil8u:
-    case kTexR24G8:
-    case kTexR24nX8:
-      return sizeof(uint32_t);
+    case kTexD24UNormS8Uint:
+    case kTexR24UNormG8Uint:
+    case kTexR24UNormX8Typeless:
+    case kTexX24TypelessG8Uint:
+    case kTexD32Float:
+      return 4;
     case kTexDXBC1n:
     case kTexDXBC1nSRGB:
     case kTexDXBC4n:

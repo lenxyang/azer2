@@ -172,14 +172,14 @@ bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
   return Init(subres);
 }
 
+void D3DTextureCubeMap::InitTexDesc() {
+  D3DTexture::InitTexDesc();
+  tex_desc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+}
+
 // class D3D11TextureCubeMap
 D3DTexture2DArray::D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs)
     : D3DTexture(opt, rs) {
-}
-
-void D3DTexture2DArray::InitTexDesc() {
-  D3DTexture::InitTexDesc();
-  tex_desc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
 }
 
 bool D3DTexture2DArray::InitFromImage(const ImageData* image) {

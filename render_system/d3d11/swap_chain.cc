@@ -33,7 +33,7 @@ RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   RenderTargetPtr rt = render_system_->CreateRenderTarget(
       RenderTarget::Options(), ptr.get());
  
-  opt.format = kTexR24G8;
+  opt.format = kTexR24UNormG8Uint;
   opt.target = kBindTargetDepthStencil | kBindTargetShaderResource;
   scoped_refptr<D3DTexture2D> tex = new D3DTexture2D(opt, render_system_);
   if (!tex->Init(NULL)) {
@@ -41,7 +41,7 @@ RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   }
 
   DepthBuffer::Options dopt;
-  dopt.format = kTexDepth24nStencil8u;
+  dopt.format = kTexD24UNormS8Uint;
   DepthBufferPtr depth = render_system_->CreateDepthBuffer(dopt, tex.get());
   if (!depth.get() || !rt.get()) {
     return RendererPtr();
