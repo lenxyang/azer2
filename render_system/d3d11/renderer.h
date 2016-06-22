@@ -51,8 +51,8 @@ class D3DRenderer : public Renderer {
   void Draw(int32_t num_of_vertices, int32_t first_vertex) override;
   void DrawIndex(int32_t num_of_indices, int32_t first_indices, 
                  int32_t index_base) override;
-  void DrawInstanced(int32_t instance_num, int32_t num_of_vertices, int32_t first_vertex,
-                     int32_t instance_start_index) override;
+  void DrawInstanced(int32_t instance_num, int32_t num_of_vertices, 
+                     int32_t first_vertex, int32_t instance_start_index) override;
   void DrawIndexInstanced(int32_t instance_num, int32_t num_of_indices, 
                           int32_t first_indices, int32_t index_base,
                           int32_t instance_start_index) override;

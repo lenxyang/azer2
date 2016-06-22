@@ -78,15 +78,13 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void SetVertexLayout(VertexLayout* layout) = 0;
   virtual void SetPrimitiveTopology(PrimitiveTopology primitive) = 0;
   virtual void DrawAuto() = 0;
-  virtual void Draw(int32_t num_of_vertices = -1, int32_t first_vertex = 0) = 0;
-  virtual void DrawIndex(int32_t num_of_indices, int32_t first_indices = 0, 
-                         int32_t index_base = 0) = 0;
-  virtual void DrawInstanced(int32_t instance_num, int32_t num_of_vertices = -1,
-                             int32_t first_vertex = 0, 
-                             int32_t instance_start_index = 0) = 0;
-  virtual void DrawIndexInstanced(int32_t instance_num, int32_t num_of_indices = -1,
-                                  int32_t first_indices = 0, int32_t index_base = 0,
-                                  int32_t instance_start_index = 0) = 0;
+  virtual void Draw(int32_t num_of_vertices, int32_t first_vertex) = 0;
+  virtual void DrawIndex(int32_t indices_count, int32_t vbase, int32_t ibase) = 0;
+  virtual void DrawInstanced(int32_t instance_count, int32_t vertices_count,
+                             int32_t vertex_base, int32_t instance_start_index) = 0;
+  virtual void DrawIndexInstanced(int32_t instance_num, int32_t num_of_indices,
+                                  int32_t first_indices, int32_t index_base,
+                                  int32_t instance_start_index) = 0;
   
   const gfx::Size& size() const; 
   virtual void SetViewport(const Viewport& viewport) = 0;

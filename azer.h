@@ -18,6 +18,7 @@
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/gpu_compute_task.h"
 #include "azer/render/indices_buffer.h"
+#include "azer/render/index_pack.h"
 #include "azer/render/rasterizer_state.h"
 #include "azer/render/geometry.h"
 #include "azer/render/render_target.h"
