@@ -1,7 +1,8 @@
 #pragma once
 
-#include "nelf/nelf.h"
 #include "ui/views/view.h"
+#include "ui/views/controls/label.h"
+#include "ui/gfx/geometry/insets.h"
 
 namespace azer {
 class FPSPanel : public views::View {
@@ -9,7 +10,7 @@ class FPSPanel : public views::View {
   FPSPanel();
 
   gfx::Insets GetInsets() const override;
-  void Update(azer::Renderer* renderer, const azer::FrameArgs& args);
+  void Update(const FrameArgs& args);
  private:
   views::Label* avg_fps_label_;
   views::Label* cur_fps_label_;

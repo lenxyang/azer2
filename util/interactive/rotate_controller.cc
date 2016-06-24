@@ -106,9 +106,9 @@ void RotateControllerObj::Render(Renderer* renderer) {
   color_effect_->SetWorld(world_);
 
   ScopedResetBlending scoped_blending(renderer);
+  renderer->SetBlending(env->blending(), 0, 0xffffffff);
   for (uint32_t i = 0; i < arraysize(colors_); ++i) {
     if (i == kSphere) {
-      renderer->SetBlending(env->blending(), 0, 0xffffffff);
       ColorMaterialData mtrl;
       mtrl.diffuse = colors_[i];
       mtrl.ambient = colors_[i] * 0.1f;

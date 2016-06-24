@@ -1,4 +1,4 @@
-#include "azer/ui/fpspanel.h"
+#include "azer/ui/panel/camera_panel.h"
 
 #include "base/logging.h"
 #include "base/strings/stringprintf.h"
@@ -20,7 +20,7 @@ views::Label* CreateLabel() {
   return label;
 }
 
-FPSPanel::FPSPanel() 
+CameraPanel::CameraPanel() 
     : last_update_time_(0.0) {
   SkColor border_color = SkColorSetRGB(0, 0, 0);
   std::unique_ptr<views::RoundRectPainter> painter(
@@ -33,14 +33,23 @@ FPSPanel::FPSPanel()
   SkColor bgcolor = SkColorSetARGB(128, 0, 0, 0);
   set_background(views::Background::CreateSolidBackground(bgcolor));
   SetLayoutManager(new views::BoxLayout(views::BoxLayout::kVertical, 0, 0, 3));
-  avg_fps_label_ = CreateLabel();
-  cur_fps_label_ = CreateLabel();
-  AddChildView(avg_fps_label_);
-  AddChildView(cur_fps_label_);
+  camera_pos_ = CreateLabel();
+  camera_right_ = CreateLabel();
+  camera_up_ = CreateLabel();
+  camera_dir_ = CreateLabel();
+  camera_vmin_ = CreateLabel();
+  camera_vmax_ = CreateLabel();
+  AddChildView(camera_pos_);
+  AddChildView(camera_right_);
+  AddChildView(camera_up_);
+  AddChildView(camera_dir_);
+  AddChildView(camera_vmin_);
+  AddChildView(camera_vmax_);
+
   Layout();
 }
 
-gfx::Insets FPSPanel::GetInsets() const {
+gfx::Insets CameraPanel::GetInsets() const {
   gfx::Insets i = std::move(views::View::GetInsets());
   gfx::Insets insets(i.top() + 5,  
                      i.left() + 5,
@@ -49,15 +58,29 @@ gfx::Insets FPSPanel::GetInsets() const {
   return insets;
 }
 
-void FPSPanel::Update(Renderer* renderer, const FrameArgs& args) {
+void CameraPanel::Update(const FrameArgs& args) {
   using base::StringPrintf;
   using base::UTF8ToUTF16;
   if (args.time() - last_update_time_ > 1.0f) {
-    avg_fps_label_->SetText(UTF8ToUTF16(StringPrintf(
-        "Average FPS: %f/s", args.total_average_fps())));
-    cur_fps_label_->SetText(UTF8ToUTF16(StringPrintf(
-        "Recent FPS: %f/s", args.recent_average_fps())));
-    last_update_time_ = args.time();
+    Vector3 v = camera.position();
+    std::string posstr   = StringPrintf("Position: (%f, %f, %f)", v.x, v.y, v.z);
+    v = camera.right();
+    std::string rightstr = StringPrintf("Right:    (%f, %f, %f)", v.x, v.y, v.z);
+    v = camera.up();
+    std::string upstr    = StringPrintf("Up:       (%f, %f, %f)", v.x, v.y, v.z);
+    v = camera.directional();
+    std::string dirstr   = StringPrintf("Dir:      (%f, %f, %f)", v.x, v.y, v.z);
+    v = vmin;
+    std::string vminstr  = StringPrintf("VMin:     (%f, %f, %f)", v.x, v.y, v.z);
+    v = vmax;
+    std::string vmaxstr  = StringPrintf("VMax:     (%f, %f, %f)", v.x, v.y, v.z);
+    
+    camera_pos_->SetText(UTF8ToUTF16(postr));
+    camera_right_->SetText(UTF8ToUTF16(righttr));
+    camera_up_->SetText(UTF8ToUTF16(uptr));
+    camera_dir_->SetText(UTF8ToUTF16(dirtr));
+    camera_vmin_->SetText(UTF8ToUTF16(vmintr));
+    camera_vmax_->SetText(UTF8ToUTF16(vmaxtr));
   }
 }
 }  // namespace lord

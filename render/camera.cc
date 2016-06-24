@@ -1,7 +1,8 @@
 #include "azer/render/camera.h"
-#include "azer/math/math.h"
 
 #include <iostream>
+#include "azer/math/math.h"
+#include "azer/render/bounding_volumn.h"
 
 namespace azer {
 
@@ -108,5 +109,37 @@ Vector3 Camera::direction() const {
 
 const Quaternion& Camera::orientation() const {
   return holder().orientation();
+}
+
+void CalcCameraBundingBox(const Camera& camera, float ffar, float fnear,
+                          float aspect, float fov, Vector3* vmin, Vector3* vmax) {
+  const Matrix4 vmat = camera.GetViewMatrix();
+  float fTanFOVX = std::tan(aspect * fov);
+  float fTanFOVY = std::tan(aspect);
+  Vector3 pos[8];
+  Vector3 cdir = camera.direction();
+  pos[0] = camera.position() + 
+      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * fnear;
+  pos[1] = camera.position() + 
+      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * fnear;
+  pos[2] = camera.position() + 
+      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * fnear;
+  pos[3] = camera.position() + 
+      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * fnear;
+
+  pos[4] = camera.position() + 
+      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * ffar;
+  pos[5] = camera.position() + 
+      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * ffar;
+  pos[6] = camera.position() + 
+      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * ffar;
+  pos[7] = camera.position() + 
+      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * ffar;
+
+  
+  azer::InitMinAndVMax(vmin, vmax);
+  for (uint32_t i = 0; i < arraysize(pos); ++i) {
+    azer::UpdateVMinAndVMax(pos[i], vmin, vmax);
+  }
 }
 }  // namespace azer

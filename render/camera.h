@@ -67,5 +67,9 @@ inline std::ostream& operator << (std::ostream& os, const Camera& camera) {
      << ", pos: " << holder.position() << "}";
   return os;
 }
+
+AZER_EXPORT void CalcCameraBundingBox(const Camera& camera, float ffar, float fnear,
+                                      float apsect, float fov, 
+                                      Vector3* vmin, Vector3* vmax);
 }  // namespace azer
 
