@@ -36,7 +36,7 @@ void CameraOverlay::SetBounds(const gfx::RectF& bounds) {
 void CameraOverlay::Update() {
   const TransformHolder& holder = camera_->holder();
   
-  Vector3 position(-holder.direction() * 2.0f);
+  Vector3 position(-holder.directional() * 2.0f);
   Vector3 lookat(0.0f, 0.0f, 0.0f);
   Vector3 up(holder.up());
   Camera camera;

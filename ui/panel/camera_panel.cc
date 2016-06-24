@@ -53,12 +53,12 @@ CameraPanel::CameraPanel()
   AddChildView(camera_right_);
   AddChildView(camera_up_);
   AddChildView(camera_dir_);
+  AddChildView(camera_vmin_);
+  AddChildView(camera_vmax_);
   AddChildView(camera_near_lefttop_);
   AddChildView(camera_near_rightbottom_);
   AddChildView(camera_far_lefttop_);
   AddChildView(camera_far_rightbottom_);
-  AddChildView(camera_vmin_);
-  AddChildView(camera_vmax_);
 
   Layout();
 }
@@ -72,8 +72,8 @@ gfx::Insets CameraPanel::GetInsets() const {
   return insets;
 }
 
-#define SET_LABEL_VERTEX(view, title, vertex)                             \
-  view->SetText(UTF8ToUTF16(StringPrintf("%s: (%.3f, %.3f, %.3f)", title, vertex.x, vertex.y, vertex.z)));
+#define SET_LABEL_VERTEX(view, title, vertex)                    \
+  view->SetText(UTF8ToUTF16(StringPrintf("%s: (%.3f, %.3f, %.3f)", (title),(vertex).x, (vertex).y, (vertex).z)));
   
 
 void CameraPanel::Update(const Camera& camera, const FrameArgs& args) {
@@ -85,14 +85,18 @@ void CameraPanel::Update(const Camera& camera, const FrameArgs& args) {
     Vector3 boundpos[8];
     CalcCameraBundingBox(camera, camera.frustum().get_near(),
                          camera.frustum().get_far(), &vmin, &vmax);
-    CalcCameraBundingPos(camera, 8, boundspos);
+    CalcCameraBundingPos(camera, boundpos);
     Vector3 v = camera.position();
     SET_LABEL_VERTEX(camera_pos_,   "Position: ", camera.position());
     SET_LABEL_VERTEX(camera_right_, "Right:    ", camera.right());
     SET_LABEL_VERTEX(camera_up_,    "Up:       ", camera.up());
-    SET_LABEL_VERTEX(camera_dir_,   "Dir:      ", camera.dir());
+    SET_LABEL_VERTEX(camera_dir_,   "Dir:      ", camera.directional());
     SET_LABEL_VERTEX(camera_vmin_,  "VMin:     ", vmin);
     SET_LABEL_VERTEX(camera_vmax_,  "VMax:     ", vmax);
+    SET_LABEL_VERTEX(camera_near_lefttop_, "NearLT:  ", boundpos[0]);
+    SET_LABEL_VERTEX(camera_near_rightbottom_, "NearRB  ", boundpos[2]);
+    SET_LABEL_VERTEX(camera_far_lefttop_, "FarLT:   ", boundpos[4]);
+    SET_LABEL_VERTEX(camera_far_rightbottom_, "FarRB   ", boundpos[6]);
   }
 }
 }  // namespace lord

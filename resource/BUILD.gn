@@ -16,8 +16,6 @@ static_library("resource") {
   sources = [
     "effect_loader.cc",
     "effect_loader.h",
-    "geometry_loader.cc",
-    "geometry_loader.h",
     "light_loader.cc",
     "light_loader.h",
     "material_loader.cc",
