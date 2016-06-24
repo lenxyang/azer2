@@ -3,7 +3,7 @@
 #include "ui/views/layout/layout_manager.h"
 
 #include "azer/azer.h"
-#include "azer/ui/fpspanel.h"
+#include "azer/ui/panel/fps_panel.h"
 #include "azer/ui/render_loop.h"
 #include "azer/ui/render_subwindow.h"
 #include "azer/ui/render_view.h"
@@ -40,7 +40,7 @@ void SampleMainframe::OnAfterWidgetInit() {
 // override from RenderDelegate
 bool SampleMainframe::Initialize() {
   fpspanel_ = new FPSPanel;
-  fpspanel_->SetBounds(10, 10, 180, 120);
+  fpspanel_->SetBounds(10, 10, 180, 50);
   this->window()->AddChildView(fpspanel_);
   this->window()->SetRenderUI(true);
   window()->GetWidget()->AddObserver(this);
@@ -49,8 +49,7 @@ bool SampleMainframe::Initialize() {
 }
 
 void SampleMainframe::OnUpdate(const FrameArgs& args) {
-  Renderer* renderer = window()->GetRenderer().get();
-  fpspanel_->Update(renderer, args);
+  fpspanel_->Update(args);
   OnUpdateFrame(args);
 }
 

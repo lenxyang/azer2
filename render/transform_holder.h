@@ -49,7 +49,7 @@ class AZER_EXPORT TransformHolder {
 
   Vector3 right() const;
   Vector3 up() const;
-  Vector3 direction() const;
+  Vector3 directional() const;
   void set_orientation(const Quaternion& q);
   const Quaternion& orientation() const { return orientation_;}
 

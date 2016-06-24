@@ -11,7 +11,7 @@ FallbackNativeTheme::~FallbackNativeTheme() {
 SkColor FallbackNativeTheme::GetSystemColor(ColorId color_id) const {
   switch (color_id) {
     case kColorId_LabelBackgroundColor:
-      return SkColorSetRGBA(0, 0, 0, 0);
+      return SkColorSetARGB(0, 0, 0, 0);
     case kColorId_LabelDisabledColor:
       return SkColorSetRGB(149, 149, 149);
     case kColorId_LabelEnabledColor:
@@ -27,7 +27,7 @@ SkColor FallbackNativeTheme::GetSystemColor(ColorId color_id) const {
       return SkColorSetRGB(245, 245, 245);
     
     case kColorId_ButtonBackgroundColor:
-      return SkColorSetRGBA(0, 0, 0, 0);
+      return SkColorSetARGB(0, 0, 0, 0);
     case kColorId_ButtonDisabledColor:
       return SkColorSetRGB(149, 149, 149);
     case kColorId_ButtonHighlightColor:

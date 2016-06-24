@@ -9,15 +9,20 @@
 #include "ui/views/shadow_border.h"
 #include "ui/views/layout/box_layout.h"
 
+#include "azer/render/camera.h"
+#include "azer/render/frame_args.h"
+
 namespace azer {
 using views::Border;
 
+namespace {
 views::Label* CreateLabel() {
   views::Label* label = new views::Label;
   label->SetHorizontalAlignment(gfx::ALIGN_LEFT);
   label->SetAutoColorReadabilityEnabled(false);
   label->SetBackgroundColor(0x00000000);
   return label;
+}
 }
 
 CameraPanel::CameraPanel() 
@@ -37,12 +42,21 @@ CameraPanel::CameraPanel()
   camera_right_ = CreateLabel();
   camera_up_ = CreateLabel();
   camera_dir_ = CreateLabel();
+  camera_near_lefttop_ = CreateLabel();
+  camera_near_rightbottom_ = CreateLabel();
+  camera_far_lefttop_ = CreateLabel();
+  camera_far_rightbottom_ = CreateLabel();
   camera_vmin_ = CreateLabel();
   camera_vmax_ = CreateLabel();
+  
   AddChildView(camera_pos_);
   AddChildView(camera_right_);
   AddChildView(camera_up_);
   AddChildView(camera_dir_);
+  AddChildView(camera_near_lefttop_);
+  AddChildView(camera_near_rightbottom_);
+  AddChildView(camera_far_lefttop_);
+  AddChildView(camera_far_rightbottom_);
   AddChildView(camera_vmin_);
   AddChildView(camera_vmax_);
 
@@ -58,29 +72,27 @@ gfx::Insets CameraPanel::GetInsets() const {
   return insets;
 }
 
-void CameraPanel::Update(const FrameArgs& args) {
+#define SET_LABEL_VERTEX(view, title, vertex)                             \
+  view->SetText(UTF8ToUTF16(StringPrintf("%s: (%.3f, %.3f, %.3f)", title, vertex.x, vertex.y, vertex.z)));
+  
+
+void CameraPanel::Update(const Camera& camera, const FrameArgs& args) {
   using base::StringPrintf;
   using base::UTF8ToUTF16;
-  if (args.time() - last_update_time_ > 1.0f) {
+  if (args.time() - last_update_time_ > 0.2f) {
+    last_update_time_ = args.time();
+    Vector3 vmin, vmax;
+    Vector3 boundpos[8];
+    CalcCameraBundingBox(camera, camera.frustum().get_near(),
+                         camera.frustum().get_far(), &vmin, &vmax);
+    CalcCameraBundingPos(camera, 8, boundspos);
     Vector3 v = camera.position();
-    std::string posstr   = StringPrintf("Position: (%f, %f, %f)", v.x, v.y, v.z);
-    v = camera.right();
-    std::string rightstr = StringPrintf("Right:    (%f, %f, %f)", v.x, v.y, v.z);
-    v = camera.up();
-    std::string upstr    = StringPrintf("Up:       (%f, %f, %f)", v.x, v.y, v.z);
-    v = camera.directional();
-    std::string dirstr   = StringPrintf("Dir:      (%f, %f, %f)", v.x, v.y, v.z);
-    v = vmin;
-    std::string vminstr  = StringPrintf("VMin:     (%f, %f, %f)", v.x, v.y, v.z);
-    v = vmax;
-    std::string vmaxstr  = StringPrintf("VMax:     (%f, %f, %f)", v.x, v.y, v.z);
-    
-    camera_pos_->SetText(UTF8ToUTF16(postr));
-    camera_right_->SetText(UTF8ToUTF16(righttr));
-    camera_up_->SetText(UTF8ToUTF16(uptr));
-    camera_dir_->SetText(UTF8ToUTF16(dirtr));
-    camera_vmin_->SetText(UTF8ToUTF16(vmintr));
-    camera_vmax_->SetText(UTF8ToUTF16(vmaxtr));
+    SET_LABEL_VERTEX(camera_pos_,   "Position: ", camera.position());
+    SET_LABEL_VERTEX(camera_right_, "Right:    ", camera.right());
+    SET_LABEL_VERTEX(camera_up_,    "Up:       ", camera.up());
+    SET_LABEL_VERTEX(camera_dir_,   "Dir:      ", camera.dir());
+    SET_LABEL_VERTEX(camera_vmin_,  "VMin:     ", vmin);
+    SET_LABEL_VERTEX(camera_vmax_,  "VMax:     ", vmax);
   }
 }
 }  // namespace lord

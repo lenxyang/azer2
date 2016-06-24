@@ -5,6 +5,7 @@
 #include "ui/gfx/geometry/insets.h"
 
 namespace azer {
+class FrameArgs;
 class FPSPanel : public views::View {
  public:
   FPSPanel();

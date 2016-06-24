@@ -93,7 +93,7 @@ void TransformHolder::rotate(const Quaternion& q) {
 
 void TransformHolder::walk(float step) {
   Vector3 position = position_;
-  position_ +=  direction() * step;
+  position_ +=  directional() * step;
   PositionChanged(position);
 }
 
@@ -117,7 +117,7 @@ Vector3 TransformHolder::up() const {
   return orientation_ * Vector3::kUnitY;
 }
 
-Vector3 TransformHolder::direction() const {
+Vector3 TransformHolder::directional() const {
   return orientation_ * (-Vector3::kUnitZ);
 }
 

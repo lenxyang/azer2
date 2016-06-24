@@ -1,4 +1,4 @@
-#include "azer/ui/fpspanel.h"
+#include "azer/ui/panel/fps_panel.h"
 
 #include "base/logging.h"
 #include "base/strings/stringprintf.h"
@@ -8,6 +8,8 @@
 #include "ui/views/round_rect_painter.h"
 #include "ui/views/shadow_border.h"
 #include "ui/views/layout/box_layout.h"
+
+#include "azer/render/frame_args.h"
 
 namespace azer {
 using views::Border;

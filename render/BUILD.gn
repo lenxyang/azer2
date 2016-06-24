@@ -37,8 +37,6 @@ source_set("render") {
     "frame_args.h",
     "frustum.cc",
     "frustum.h",
-    "geometry.cc",
-    "geometry.h",
     "gpu_compute_task.cc",
     "gpu_compute_task.h",
     "gpu_constants_table.cc",

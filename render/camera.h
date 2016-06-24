@@ -37,7 +37,7 @@ class AZER_EXPORT Camera {
   const Vector3& position() const;
   Vector3 right() const;
   Vector3 up() const;
-  Vector3 direction() const;
+  Vector3 directional() const;
   const Quaternion& orientation() const;
 
   void Update();
@@ -62,14 +62,14 @@ class AZER_EXPORT Camera {
 
 inline std::ostream& operator << (std::ostream& os, const Camera& camera) {
   const TransformHolder& holder = camera.holder();
-  os << "azer::camera info{ dir:" << holder.direction()
+  os << "azer::camera info{ dir:" << holder.directional()
      << ", up: " << holder.up()
      << ", pos: " << holder.position() << "}";
   return os;
 }
 
+AZER_EXPORT void CalcCameraBundingPos(const Camera& camera, Vector3 pos[8]);
 AZER_EXPORT void CalcCameraBundingBox(const Camera& camera, float ffar, float fnear,
-                                      float apsect, float fov, 
                                       Vector3* vmin, Vector3* vmax);
 }  // namespace azer
 

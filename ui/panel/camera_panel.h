@@ -6,6 +6,8 @@
 
 namespace azer {
 class Camera;
+class FrameArgs;
+
 class CameraPanel : public views::View {
  public:
   CameraPanel();
@@ -17,6 +19,10 @@ class CameraPanel : public views::View {
   views::Label* camera_right_;
   views::Label* camera_up_;
   views::Label* camera_dir_;
+  views::Label* camera_near_lefttop_;
+  views::Label* camera_near_rightbottom_;
+  views::Label* camera_far_lefttop_;
+  views::Label* camera_far_rightbottom_;
   views::Label* camera_vmin_;
   views::Label* camera_vmax_;
   double last_update_time_;
