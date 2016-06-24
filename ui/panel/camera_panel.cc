@@ -73,7 +73,7 @@ gfx::Insets CameraPanel::GetInsets() const {
 }
 
 #define SET_LABEL_VERTEX(view, title, vertex)                    \
-  view->SetText(UTF8ToUTF16(StringPrintf("%s: (%.3f, %.3f, %.3f)", (title),(vertex).x, (vertex).y, (vertex).z)));
+  view->SetText(UTF8ToUTF16(StringPrintf("%s(%.3f, %.3f, %.3f)", (title),(vertex).x, (vertex).y, (vertex).z)));
   
 
 void CameraPanel::Update(const Camera& camera, const FrameArgs& args) {
@@ -93,10 +93,10 @@ void CameraPanel::Update(const Camera& camera, const FrameArgs& args) {
     SET_LABEL_VERTEX(camera_dir_,   "Dir:      ", camera.directional());
     SET_LABEL_VERTEX(camera_vmin_,  "VMin:     ", vmin);
     SET_LABEL_VERTEX(camera_vmax_,  "VMax:     ", vmax);
-    SET_LABEL_VERTEX(camera_near_lefttop_, "NearLT:  ", boundpos[0]);
-    SET_LABEL_VERTEX(camera_near_rightbottom_, "NearRB  ", boundpos[2]);
-    SET_LABEL_VERTEX(camera_far_lefttop_, "FarLT:   ", boundpos[4]);
-    SET_LABEL_VERTEX(camera_far_rightbottom_, "FarRB   ", boundpos[6]);
+    SET_LABEL_VERTEX(camera_near_lefttop_,     "NearLT:   ", boundpos[0]);
+    SET_LABEL_VERTEX(camera_near_rightbottom_, "NearRB    ", boundpos[2]);
+    SET_LABEL_VERTEX(camera_far_lefttop_,      "FarLT:    ", boundpos[4]);
+    SET_LABEL_VERTEX(camera_far_rightbottom_,   "FarRB    ", boundpos[6]);
   }
 }
 }  // namespace lord

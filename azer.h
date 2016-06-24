@@ -20,7 +20,6 @@
 #include "azer/render/indices_buffer.h"
 #include "azer/render/index_pack.h"
 #include "azer/render/rasterizer_state.h"
-#include "azer/render/geometry.h"
 #include "azer/render/render_target.h"
 #include "azer/render/render_system.h"
 #include "azer/render/renderer.h"

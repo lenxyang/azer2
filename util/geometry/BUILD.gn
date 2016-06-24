@@ -19,6 +19,8 @@ static_library("geometry") {
     "plane.h",
     "sphere.cc",
     "sphere.h",
+    "util.cc",
+    "util.h",
   ]
   deps = [
     "//azer",
