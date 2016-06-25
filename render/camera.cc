@@ -118,53 +118,53 @@ void CalcCameraBundingPos(const Camera& camera, Vector3 pos[8]) {
   float fTanFOVX = std::tan(aspect * fov);
   float fTanFOVY = std::tan(aspect);
   Vector3 cdir = camera.directional();
-  float ffar = camera.frustum().get_far();
-  float fnear = camera.frustum().get_near();
+  float zfar = camera.frustum().get_far();
+  float znear = camera.frustum().get_near();
   pos[0] = camera.position() + 
-      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * fnear;
+      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * znear;
   pos[1] = camera.position() + 
-      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * fnear;
+      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * znear;
   pos[2] = camera.position() + 
-      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * fnear;
+      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * znear;
   pos[3] = camera.position() + 
-      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * fnear;
+      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * znear;
 
   pos[4] = camera.position() + 
-      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * ffar;
+      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * zfar;
   pos[5] = camera.position() + 
-      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * ffar;
+      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * zfar;
   pos[6] = camera.position() + 
-      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * ffar;
+      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * zfar;
   pos[7] = camera.position() + 
-      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * ffar;
+      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * zfar;
 }
 
-void CalcCameraBundingBox(const Camera& camera, float ffar, float fnear,
+void CalcCameraBundingBox(const Camera& camera, float znear, float zfar,
                           Vector3* vmin, Vector3* vmax) {
   const Matrix4 vmat = camera.GetViewMatrix();
   float aspect = camera.frustum().aspect();
-  float fov = camera.frustum().fovy().value();
-  float fTanFOVX = std::tan(aspect * fov);
-  float fTanFOVY = std::tan(aspect);
+  Radians fovy = camera.frustum().fovy();
+  float fTanFOVY = azer::tan(fovy);
+  float fTanFOVX = aspect * fTanFOVY;
   Vector3 pos[8];
   Vector3 cdir = camera.directional();
   pos[0] = camera.position() + 
-      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * fnear;
+      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * znear;
   pos[1] = camera.position() + 
-      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * fnear;
+      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * znear;
   pos[2] = camera.position() + 
-      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * fnear;
+      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * znear;
   pos[3] = camera.position() + 
-      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * fnear;
+      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * znear;
 
   pos[4] = camera.position() + 
-      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * ffar;
+      (-camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * zfar;
   pos[5] = camera.position() + 
-      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * ffar;
+      ( camera.right() * fTanFOVX + camera.up() * fTanFOVY + cdir) * zfar;
   pos[6] = camera.position() + 
-      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * ffar;
+      ( camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * zfar;
   pos[7] = camera.position() + 
-      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * ffar;
+      (-camera.right() * fTanFOVX - camera.up() * fTanFOVY + cdir) * zfar;
 
   
   azer::InitMinAndVMax(vmin, vmax);

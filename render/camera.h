@@ -69,7 +69,7 @@ inline std::ostream& operator << (std::ostream& os, const Camera& camera) {
 }
 
 AZER_EXPORT void CalcCameraBundingPos(const Camera& camera, Vector3 pos[8]);
-AZER_EXPORT void CalcCameraBundingBox(const Camera& camera, float ffar, float fnear,
+AZER_EXPORT void CalcCameraBundingBox(const Camera& camera, float znear, float zfar,
                                       Vector3* vmin, Vector3* vmax);
 }  // namespace azer
 
