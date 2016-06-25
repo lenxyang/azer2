@@ -84,11 +84,13 @@ void SwapchainContext::RenderUI() {
   renderer_->SetRasterizerState(rasterizer_state_.get());
   renderer_->SetDepthStencilState(depth_state_.get(), 0);
   Canvas2DPtr canvas = device->GetCanvas();
-  TextureView* texview = canvas->GetTextureView();
-  overlay_->SetTexture(texview);
-  overlay_->SetBounds(gfx::RectF(0.0f, 0.0f, 1.0f, 1.0f));
-  overlay_->SetTexBounds(gfx::RectF(0.0f, 0.0f, 1.0f, 1.0f));
-  overlay_->Render(renderer_.get());
+  if (canvas.get()) {
+    TextureView* texview = canvas->GetTextureView();
+    overlay_->SetTexture(texview);
+    overlay_->SetBounds(gfx::RectF(0.0f, 0.0f, 1.0f, 1.0f));
+    overlay_->SetTexBounds(gfx::RectF(0.0f, 0.0f, 1.0f, 1.0f));
+    overlay_->Render(renderer_.get());
+  }
 }
 
 void SwapchainContext::Present() {
