@@ -38,8 +38,8 @@ Matrix4 PerspectiveRHD3D(Radians fovy, float aspect, float zn, float zf) {
 Matrix4 OrthoProjRH(float width, float height, float zn, float zf) {
   Matrix4 mat = Matrix4::kIdentity;
   const float z_range = (zn - zf);
-  return Matrix4(0.5f * width, 0.0f,          0.0f,              0.0f,
-                 0.0f,         0.5f * height, 0.0f,              0.0f,
+  return Matrix4(0.5f / width, 0.0f,          0.0f,              0.0f,
+                 0.0f,         0.5f / height, 0.0f,              0.0f,
                  0.0f,         0.0f,          1.0f / z_range,    zn / z_range,
                  0.0f,         0.0f,          0.0f,              1.0f);
 }
