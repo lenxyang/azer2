@@ -12,16 +12,9 @@ EntityDataPtr CreateFrustumBox(VertexDesc* desc, const Camera& camera) {
   for (int i = 0; i < arraysize(pos); ++i) {
     posvec[i] = Vector4(pos[i], 1.0f);
   }
-  return CreateHexaHedron(desc, posvec, Matrix4::kIdentity);
-}
-
-EntityDataPtr CreateFrustumBoxFrame(VertexDesc* desc, const Camera& camera) {
-  Vector3 pos[8];
-  CalcCameraBundingPos(camera, pos);
-  Vector4 posvec[8];
-  for (int i = 0; i < arraysize(pos); ++i) {
-    posvec[i] = Vector4(pos[i], 1.0f);
-  }
-  return CreateHexaHedronFrame(desc, posvec, Matrix4::kIdentity);
+  EntityDataPtr data(new EntityData(desc, 1));
+  AppendGeoHexaHedronData(data.get(), posvec, Matrix4::kIdentity);
+  AppendGeoHexaHedronFrameData(data.get(), posvec, Matrix4::kIdentity);
+  return data;
 }
 }  // namespace azer
