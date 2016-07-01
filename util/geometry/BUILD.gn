@@ -12,6 +12,8 @@ static_library("geometry") {
     "cone.h",
     "cylinder.cc",
     "cylinder.h",
+    "frustum.cc",
+    "frustum.h",
     "geometry.h",
     "normal_util.cc",
     "normal_util.h",

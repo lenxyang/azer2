@@ -10,7 +10,7 @@
 
 namespace azer {
 namespace {
-const Vector4 position[] = {
+const Vector4 box_position[] = {
   Vector4(-0.5f,  0.5f,  0.5f, 1.0f),
   Vector4( 0.5f,  0.5f,  0.5f, 1.0f),
   Vector4( 0.5f, -0.5f,  0.5f, 1.0f),
@@ -65,7 +65,7 @@ const Vector2 texcoord0[] = {
   Vector2(1.0f, 1.0f),
 };
 
-Vector4 normal[] = {
+Vector4 box_normal[] = {
   Vector4(0.0f, 0.0f, 1.0f, 0.0f),
   Vector4(1.0f, 0.0f, 0.0f, 0.0f),
   Vector4(0.0f, 0.0f, -1.0f, 0.0f),
@@ -145,8 +145,15 @@ void CalcTriangleListNormal(int32_t base, int32_t vcount, int* indices,
 }  // namespace
 
 
-// Generate Box Geometry 
-Subset CreateBoxVertexData(VertexPack* vpack, const Matrix4& mat) {
+int32_t CreateBoxFrameIndicesData(IndexPack* ipack) {
+  for (uint32_t i = 0; i < arraysize(edge_indices); ++i) {
+    CHECK(ipack->WriteAndAdvance(edge_indices[i]));
+  }
+  return static_cast<int32_t>(arraysize(edge_indices));
+}
+
+Subset AppendGeoHexaHedronSubset(VertexPack* vpack, const Vector4* posvec,
+                                 const Matrix4& mat) {
   VertexPos normal_pos, tex0_pos;
   bool HasNormal = GetSemanticIndex("normal", 0, vpack->desc(), &normal_pos);
   GetSemanticIndex("texcoord", 0, vpack->desc(), &tex0_pos);
@@ -155,7 +162,7 @@ Subset CreateBoxVertexData(VertexPack* vpack, const Matrix4& mat) {
   for (int i = 0; i < static_cast<int>(arraysize(indices)); ++i) {
     int index = indices[i];
     DCHECK(!vpack->end());
-    Vector4 pos = mat * position[index];
+    Vector4 pos = mat * posvec[index];
     vpack->WriteVector3Or4(pos, VertexPos(0, 0));
     UpdateVertexBounds(pos, &subset.vmin, &subset.vmax);
     vpack->WriteVector2(texcoord0[index], tex0_pos);
@@ -164,36 +171,21 @@ Subset CreateBoxVertexData(VertexPack* vpack, const Matrix4& mat) {
   subset.vertex_count = vpack->index() - subset.vertex_base;
 
   if (HasNormal) {
-    vpack->move(subset.vertex_base); 
-    for (int i = 0; i < static_cast<int>(arraysize(indices)); i += 6) {
-      int index = i / arraysize(normal);
-      for (int j = 0; j < 6; ++j) { 
-        Vector4 n = mat * normal[index];
-        vpack->WriteVector3Or4(n, normal_pos);
-        vpack->next(1);
-      }
-    }
+    CalcTriangleListNormal(subset.vertex_base, subset.vertex_count, 
+                           indices, vpack);
   }
 
   return subset;
-}
-
-int32_t CreateBoxFrameIndicesData(IndexPack* ipack) {
-  for (uint32_t i = 0; i < arraysize(edge_indices); ++i) {
-    CHECK(ipack->WriteAndAdvance(edge_indices[i]));
-  }
-  return static_cast<int32_t>(arraysize(edge_indices));
 }
 
 Subset AppendGeoBoxSubset(VertexPack* vp, IndexPack* ipack, 
                           const Matrix4& mat) {
-  Subset subset = CreateBoxVertexData(vp, mat);
-  return subset;
+  return AppendGeoHexaHedronSubset(vp, box_position, mat);
 }
 
 Subset AppendGeoBoxFrameSubset(VertexPack* vp, IndexPack* ipack, 
-                          const Matrix4& mat) {
-  Subset subset = CreateBoxVertexData(vp, mat);
+                               const Matrix4& mat) {
+  Subset subset = AppendGeoHexaHedronSubset(vp, box_position, mat);
   subset.index_base = ipack->index();
   subset.index_count = CreateBoxFrameIndicesData(ipack);
   subset.primitive = kLineList;
@@ -212,6 +204,19 @@ void AppendGeoBoxData(EntityData* data, const Matrix4& mat) {
   data->AddSubset(sub);
 }
 
+void AppendGeoHexaHedronData(EntityData* data, const Vector4* vecpos, 
+                             const Matrix4& mat) {
+  VertexPack vpack(data->vdata());
+  IndexPack ipack(data->idata());
+  const int32_t kVertexCount = CalcBoxVertexCount();
+  const int32_t kIndexCount = 0;
+  data->vdata()->extend(kVertexCount);
+  data->idata()->extend(kIndexCount);
+  vpack.move(data->vdata()->vertex_count() - kVertexCount);
+  Subset sub = AppendGeoHexaHedronSubset(&vpack, vecpos, mat);
+  data->AddSubset(sub);
+}
+
 void AppendGeoBoxFrameData(EntityData* data, const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
@@ -225,6 +230,24 @@ void AppendGeoBoxFrameData(EntityData* data, const Matrix4& mat) {
   data->AddSubset(sub);
 }
 
+EntityDataPtr CreateHexaHedron(VertexDesc* desc, const Vector4* vecpos, 
+                               Matrix4& mat) {
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
+  AppendGeoHexaHedronData(data.get(), vecpos, mat);
+  return data;
+}
+
+EntityDataPtr CreateHexaHedronFrame(VertexDesc* desc, const Vector4* vecpos,
+                                    const Matrix4& mat) {
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
+  AppendGeoHexaHedronData(data.get(), vecpos, mat);
+  return data;
+}
+
 
 EntityDataPtr CreateBox(VertexDesc* desc, const Matrix4& mat) {
   VertexDataPtr vdata(new VertexData(desc, 1));
@@ -235,10 +258,6 @@ EntityDataPtr CreateBox(VertexDesc* desc, const Matrix4& mat) {
 }
 
 EntityDataPtr CreateBoxFrame(VertexDesc* desc, const Matrix4& mat) {
-  VertexDataPtr vdata(new VertexData(desc, 1));
-  IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
-  AppendGeoBoxFrameData(data.get(), mat);
-  return data;
+  return CreateHexaHedronFrame(desc, box_position, mat);
 }
 }  // namespace azer
