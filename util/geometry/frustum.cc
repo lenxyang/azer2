@@ -12,7 +12,10 @@ EntityDataPtr CreateFrustumBox(VertexDesc* desc, const Camera& camera) {
   for (int i = 0; i < arraysize(pos); ++i) {
     posvec[i] = Vector4(pos[i], 1.0f);
   }
-  EntityDataPtr data(new EntityData(desc, 1));
+
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoHexaHedronData(data.get(), posvec, Matrix4::kIdentity);
   AppendGeoHexaHedronFrameData(data.get(), posvec, Matrix4::kIdentity);
   return data;
