@@ -20,10 +20,9 @@ namespace azer {
 class AZER_EXPORT Camera {
  public:
   Camera();
-  Camera(const Frustum& frustum);
-  explicit Camera(const Vector3& pos);
+  explicit Camera(const Frustum& frustum);
+  Camera(float width, float height, float znear, float zfar);
   Camera(const Vector3& pos, const Vector3& lookat, const Vector3& up);
-  Camera& operator = (const Camera& camera);
 
   void reset(const Vector3& pos, const Vector3& lookat, const Vector3& up);
 
@@ -60,6 +59,41 @@ class AZER_EXPORT Camera {
   TransformHolder holder_;
 };
 
+class AZER_EXPORT CameraCullingHelper {
+ public:
+  explicit CameraCullingHelper(const Camera& camera);
+  // index of plane
+  enum {
+    kNearPlane = 0,
+    kFarPlane,
+    kLeftPlane,
+    kRightPlane,
+    kTopPlane,
+    kBottomPlane,
+  };
+
+  enum CheckVisibleOption {
+    kCheckNearPlane      = 0x00000001,
+    kCheckFarPlane       = 0x00000002,
+    kCheckLeftPlane      = 0x00000004,
+    kCheckRightPlane     = 0x00000008,
+    kCheckTopPlane       = 0x00000010,
+    kCheckBottomPlane    = 0x00000020,
+    kCheckWithoutHeight  = 0x0000000F,
+    kCheckAll            = 0x0000003F,
+  };
+  VisibleState IsVisible(const Vector3& point, CheckVisibleOption opt) const;
+  VisibleState IsVisible(const Vector3& point) const;
+  VisibleState IsVisible(const Vector3& center, const Vector3& halfsize) const;
+
+  // recalc frustum plane of camera
+  void UpdatePlane();
+ private:
+  const Camera& camera_;
+  std::vector<Plane> planes_;
+  DISALLOW_COPY_AND_ASSIGN(CameraCullingHelper);
+};
+
 inline std::ostream& operator << (std::ostream& os, const Camera& camera) {
   const TransformHolder& holder = camera.holder();
   os << "azer::camera info{ dir:" << holder.directional()
@@ -68,8 +102,10 @@ inline std::ostream& operator << (std::ostream& os, const Camera& camera) {
   return os;
 }
 
+AZER_EXPORT void CalcCameraBundingPos(const Camera& camera, float znear, float zfar, 
+                                      Vector3 pos[8]);
 AZER_EXPORT void CalcCameraBundingPos(const Camera& camera, Vector3 pos[8]);
-AZER_EXPORT void CalcCameraBundingBox(const Camera& camera, float znear, float zfar,
-                                      Vector3* vmin, Vector3* vmax);
+AZER_EXPORT void CalcCameraAABB(const Camera& camera, float znear, float zfar,
+                                Vector3* vmin, Vector3* vmax);
 }  // namespace azer
 

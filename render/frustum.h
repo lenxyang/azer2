@@ -12,62 +12,47 @@ namespace azer {
 class Camera;
 class AxisAlignedBoundingBox;
 
+enum {
+  kOrthognalFrustum,
+  kPerspectiveFrustum,
+};
+
 class AZER_EXPORT Frustum {
-public:
-  Frustum(Camera* camera);
+ public:
+  // Perspective Projection
+  // default Radians(kPI / 4.0f), aspect=4/3
+  Frustum(Radians fovy, float apsect, float z_near = 1.0f, float z_far = 1000.0f);
 
-  Frustum(Camera* camera, Radians fovy, float apsect,
-           float z_near = 1.0f, float z_far = 1000.0f);
-  Frustum& operator = (const Frustum& frustum);
+  // Orthognal Projection
+  Frustum(float width, float height, float znear, float zfar);
+  Frustum(const Frustum &frustum);
 
-  void set_fovy(Radians fovy) { fovY_ = fovy; GenProjMatrix();}
-  void set_far(float _far) { far_ = _far; GenProjMatrix();}
-  void set_near(float _near) { near_ = _near; GenProjMatrix();}
-  void set_aspect(float aspect) { aspect_ = aspect; GenProjMatrix();}
+  int type() const { return type_;}
 
-  Radians fovy() const { return fovY_;}
-  float aspect() const { return aspect_;}
-  float get_near() const { return near_;}
-  float get_far() const { return far_;}
+  void set_fovy(Radians fovy);
+  void set_far(float _far);
+  void set_near(float _near);
+  void set_aspect(float aspect);
+  void set_width(float height);
+  void set_height(float width);
+
+  float znear() const { return near_;}
+  float zfar() const { return far_;}
+  Radians fovy() const { CHECK_EQ(type(), kPerspectiveFrustum); return fovY_;}
+  float aspect() const { CHECK_EQ(type(), kPerspectiveFrustum); return aspect_;}
+  float width() const { CHECK_EQ(type(), kOrthognalFrustum); return width_;}
+  float height() const { CHECK_EQ(type(), kOrthognalFrustum); return height_;}
   
+  void UpdateProjMatrix();
   const Matrix4& projection() const { return projection_;}
-
-  // index of plane
-  enum {
-    kNearPlane = 0,
-    kFarPlane,
-    kLeftPlane,
-    kRightPlane,
-    kTopPlane,
-    kBottomPlane,
-  };
-
-  enum CheckVisibleOption {
-    kCheckNearPlane      = 0x00000001,
-    kCheckFarPlane       = 0x00000002,
-    kCheckLeftPlane      = 0x00000004,
-    kCheckRightPlane     = 0x00000008,
-    kCheckTopPlane       = 0x00000010,
-    kCheckBottomPlane    = 0x00000020,
-    kCheckWithoutHeight  = 0x0000000F,
-    kCheckAll            = 0x0000003F,
-  };
-  VisibleState IsVisible(const Vector3& point, CheckVisibleOption opt) const;
-  VisibleState IsVisible(const Vector3& point) const;
-  VisibleState IsVisible(const Vector3& center, const Vector3& halfsize) const;
-
-  // recalc frustum plane of camera
-  void UpdatePlane();
-  const Camera* camera() const { return camera_;}
  private:
-  void GenProjMatrix();
   Radians fovY_;
   float aspect_;
   float near_;
   float far_;
-  Camera* camera_;  
+  float width_;
+  float height_;
+  const int type_;
   azer::Matrix4 projection_;
-
-  std::vector<Plane> planes_;
 };
 }  // namespace azer

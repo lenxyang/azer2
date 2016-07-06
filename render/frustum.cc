@@ -5,103 +5,83 @@
 
 namespace azer {
 
-Frustum::Frustum(Camera* camera)
-    : fovY_(Radians((float)(kPI / 4.0f)))
-    , aspect_(4.0f / 3.0f)
-    , near_(1.0f)
-    , far_(1000.0f)
-    , camera_(camera) {
-  planes_.resize(6);
+Frustum::Frustum(Radians fovy, float apsect, float z_near, float z_far)
+    : fovY_(fovy),
+      aspect_(apsect),
+      near_(z_near),
+      far_(z_far),
+      width_(1.0f),
+      height_(1.0f),
+      type_(kPerspectiveFrustum) {
   GenProjMatrix();
 }
 
-Frustum::Frustum(Camera* camera, Radians fovy, float apsect, float z_near,
-                 float z_far)
-    : fovY_(fovy)
-    , aspect_(apsect)
-    , near_(z_near)
-    , far_(z_far)
-    , camera_(camera) {
-  planes_.resize(6);
+Frustum::Frustum(float width, float height, float znear, float zfar)
+    : fovY_(Radians(10.0f)),
+      aspect_(1.0f),
+      near_(znear),
+      far_(zfar),
+      width_(1.0f),
+      height_(1.0f),
+      type_(kOrthognalFrustum) {
   GenProjMatrix();
 }
 
-void Frustum::GenProjMatrix() {
-  projection_ = PerspectiveRHD3D(fovY_, aspect_, near_, far_);
+Frustum::Frustum(const Frustum &frustum)
+    : fovY_(frustum.fovY_),
+      aspect_(frustum.aspect_),
+      near_(frustum.near_),
+      far_(frustum.far_),
+      width_(frustum.width_),
+      height_(frustum.height_),
+      type_(frustum.type_) {
 }
 
-VisibleState Frustum::IsVisible(const Vector3& point) const {
-  return IsVisible(point, kCheckAll);
-}
-
-Frustum& Frustum::operator = (const Frustum& frustum) {
-  set_far(frustum.get_far());
-  set_near(frustum.get_near());
-  set_aspect(frustum.aspect());
-  set_fovy(frustum.fovy());
-  return *this;
-}
-
-void Frustum::UpdatePlane() {
-  DCHECK(NULL != camera_);
-  const Matrix4& combo = camera_->GetProjViewMatrix();
-  
-  planes_[kNearPlane].normal().x = combo[3][0] + combo[2][0];
-  planes_[kNearPlane].normal().y = combo[3][1] + combo[2][1];
-  planes_[kNearPlane].normal().z = combo[3][2] + combo[2][2];
-  planes_[kNearPlane].d()        = combo[3][3] + combo[2][3];
-
-  planes_[kFarPlane].normal().x = combo[3][0] - combo[2][0];
-  planes_[kFarPlane].normal().y = combo[3][1] - combo[2][1];
-  planes_[kFarPlane].normal().z = combo[3][2] - combo[2][2];
-  planes_[kFarPlane].d()        = combo[3][3] - combo[2][3];
-
-  planes_[kLeftPlane].normal().x = combo[3][0] + combo[0][0];
-  planes_[kLeftPlane].normal().y = combo[3][1] + combo[0][1];
-  planes_[kLeftPlane].normal().z = combo[3][2] + combo[0][2];
-  planes_[kLeftPlane].d()        = combo[3][3] + combo[0][3];
-
-  planes_[kRightPlane].normal().x = combo[3][0] - combo[0][0];
-  planes_[kRightPlane].normal().y = combo[3][1] - combo[0][1];
-  planes_[kRightPlane].normal().z = combo[3][2] - combo[0][2];
-  planes_[kRightPlane].d()        = combo[3][3] - combo[0][3];
-
-  planes_[kTopPlane].normal().x = combo[3][0] - combo[1][0];
-  planes_[kTopPlane].normal().y = combo[3][1] - combo[1][1];
-  planes_[kTopPlane].normal().z = combo[3][2] - combo[1][2];
-  planes_[kTopPlane].d()        = combo[3][3] - combo[1][3];
-
-  planes_[kBottomPlane].normal().x = combo[3][0] + combo[1][0];
-  planes_[kBottomPlane].normal().y = combo[3][1] + combo[1][1];
-  planes_[kBottomPlane].normal().z = combo[3][2] + combo[1][2];
-  planes_[kBottomPlane].d()        = combo[3][3] + combo[1][3];
-
-  for (int i = 0; i < 6; ++i) {
-    planes_[i].Normalize();
+void Frustum::UpdateProjMatrix() {
+  switch (type()) {
+    case kPerspectiveFrustum: 
+      projection_ = std::move(PerspectiveRHD3D(fovY_, aspect_, near_, far_));
+      break;
+    case kOrthognalFrustum:
+      projection_ = std::move(OrthoProjRH(width_, height_, near_, far_));
+      break;
+    default:
+      CHECK(false) << "Unknown Frustum type: " << type();
+      break;
   }
 }
 
-VisibleState Frustum::IsVisible(const Vector3& point,
-                                CheckVisibleOption opt) const {
-  for (int i = 0; i < 6; ++i) {
-    if (opt & (1 << 0)) {
-      if (planes_[i].GetSide(point) == Plane::kNegative) {
-        return kNoneVisible;
-      }
-    }
-  }
-
-  return kFullyVisible;
+void Frustum::set_far(float _far) { 
+  far_ = _far; 
+  UpdateProjMatrix();
 }
 
-VisibleState Frustum::IsVisible(const Vector3& center,
-                                const Vector3& halfsize) const {
-  for (int i = 0; i < 6; ++i) {
-    if (planes_[i].GetSide(center, halfsize) == Plane::kNegative) {
-      return kNoneVisible;
-    }
-  }
-
-  return kPartialVisible;
+void Frustum::set_near(float _near) { 
+  near_ = _near; 
+  UpdateProjMatrix();
 }
+
+void Frustum::set_fovy(Radians fovy) { 
+  CHECK_EQ(type(), kPerspectiveFrustum);
+  fovY_ = fovy; 
+  UpdateProjMatrix();
+}
+
+void Frustum::set_aspect(float aspect) { 
+  CHECK_EQ(type(), kPerspectiveFrustum);
+  aspect_ = aspect; 
+  UpdateProjMatrix();
+}
+
+void Frustum::set_width(float height) { 
+  CHECK_EQ(type(), kOrthognalFrustum); 
+  height_ = height; 
+  UpdateProjMatrix();
+}
+void Frustum::set_height(float width) { 
+  CHECK_EQ(type(), kOrthognalFrustum); 
+  width_ = width; 
+  UpdateProjMatrix();
+}
+
 }  // namespace azer

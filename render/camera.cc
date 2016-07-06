@@ -6,33 +6,23 @@
 
 namespace azer {
 
-Camera::Camera() : frustum_(this) {
+Camera::Camera() 
+    : frustum_(Radians(kPI / 4.0f), 4.0f /3.0f, 1.0f, 1000.0f) {
   Update();
+}
+
+Camera::Camera(float width, float height, float znear, float zfar) 
+    : frustum_(1.0f, 1.0f, 1.0f, 1000.0f) {
 }
 
 Camera::Camera(const Frustum& frustum)
-    : frustum_(this, frustum.fovy(), frustum.aspect(), frustum.get_near(),
-                frustum.get_far()) {
+    : frustum_(frustum) {
   Update();
 }
 
-Camera::Camera(const Vector3& pos)
-    : frustum_(this) {
-  Update();
-}
-
-Camera::Camera(const Vector3& pos, const Vector3& lookat,
-               const Vector3& up)
-    : frustum_(this) {
+Camera::Camera(const Vector3& pos, const Vector3& lookat, const Vector3& up)
+    : frustum_(Radians(kPI / 4.0f), 4.0f /3.0f, 1.0f, 1000.0f) {
   reset(pos, lookat, up);
-}
-
-Camera& Camera::operator = (const Camera& camera) {
-  reset(camera.holder_.position(),
-        camera.holder_.position() + camera.holder_.directional(),
-        camera.holder_.up());
-  frustum_ = camera.frustum();
-  return *this;
 }
 
 void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up) {
@@ -88,7 +78,6 @@ void Camera::SetDirection(const Vector3& dir) {
 
 void Camera::Update() {
   GenMatrices();
-  frustum_.UpdatePlane();
 }
 
 const Vector3& Camera::position() const {
@@ -109,6 +98,78 @@ Vector3 Camera::directional() const {
 
 const Quaternion& Camera::orientation() const {
   return holder().orientation();
+}
+
+// class CameraCullingHelper
+CameraCullingHelper::CameraCullingHelper(const Camera& camera)
+    : camera_(camera) {
+  planes_.resize(6);
+}
+
+void CameraCullingHelper::UpdatePlane() {
+  const Matrix4& combo = camera_.GetProjViewMatrix();
+  
+  planes_[kNearPlane].normal().x = combo[3][0] + combo[2][0];
+  planes_[kNearPlane].normal().y = combo[3][1] + combo[2][1];
+  planes_[kNearPlane].normal().z = combo[3][2] + combo[2][2];
+  planes_[kNearPlane].d()        = combo[3][3] + combo[2][3];
+
+  planes_[kFarPlane].normal().x = combo[3][0] - combo[2][0];
+  planes_[kFarPlane].normal().y = combo[3][1] - combo[2][1];
+  planes_[kFarPlane].normal().z = combo[3][2] - combo[2][2];
+  planes_[kFarPlane].d()        = combo[3][3] - combo[2][3];
+
+  planes_[kLeftPlane].normal().x = combo[3][0] + combo[0][0];
+  planes_[kLeftPlane].normal().y = combo[3][1] + combo[0][1];
+  planes_[kLeftPlane].normal().z = combo[3][2] + combo[0][2];
+  planes_[kLeftPlane].d()        = combo[3][3] + combo[0][3];
+
+  planes_[kRightPlane].normal().x = combo[3][0] - combo[0][0];
+  planes_[kRightPlane].normal().y = combo[3][1] - combo[0][1];
+  planes_[kRightPlane].normal().z = combo[3][2] - combo[0][2];
+  planes_[kRightPlane].d()        = combo[3][3] - combo[0][3];
+
+  planes_[kTopPlane].normal().x = combo[3][0] - combo[1][0];
+  planes_[kTopPlane].normal().y = combo[3][1] - combo[1][1];
+  planes_[kTopPlane].normal().z = combo[3][2] - combo[1][2];
+  planes_[kTopPlane].d()        = combo[3][3] - combo[1][3];
+
+  planes_[kBottomPlane].normal().x = combo[3][0] + combo[1][0];
+  planes_[kBottomPlane].normal().y = combo[3][1] + combo[1][1];
+  planes_[kBottomPlane].normal().z = combo[3][2] + combo[1][2];
+  planes_[kBottomPlane].d()        = combo[3][3] + combo[1][3];
+
+  for (int i = 0; i < 6; ++i) {
+    planes_[i].Normalize();
+  }
+}
+
+VisibleState CameraCullingHelper::IsVisible(const Vector3& point) const {
+  return IsVisible(point, kCheckAll);
+}
+
+VisibleState CameraCullingHelper::IsVisible(const Vector3& point,
+                                            CheckVisibleOption opt) const {
+  for (int i = 0; i < 6; ++i) {
+    if (opt & (1 << 0)) {
+      if (planes_[i].GetSide(point) == Plane::kNegative) {
+        return kNoneVisible;
+      }
+    }
+  }
+
+  return kFullyVisible;
+}
+
+VisibleState CameraCullingHelper::IsVisible(const Vector3& center,
+                                            const Vector3& halfsize) const {
+  for (int i = 0; i < 6; ++i) {
+    if (planes_[i].GetSide(center, halfsize) == Plane::kNegative) {
+      return kNoneVisible;
+    }
+  }
+
+  return kPartialVisible;
 }
 
 void CalcCameraBundingPos(const Camera& camera, float znear, float zfar, 
@@ -134,12 +195,12 @@ void CalcCameraBundingPos(const Camera& camera, float znear, float zfar,
 }
 
 void CalcCameraBundingPos(const Camera& camera, Vector3 pos[8]) {
-  CalcCameraBundingPos(camera, camera.frustum().get_near(), 
-                       camera.frustum().get_far(), pos);
+  CalcCameraBundingPos(camera, camera.frustum().znear(), 
+                       camera.frustum().zfar(), pos);
 }
 
-void CalcCameraBundingBox(const Camera& camera, float znear, float zfar,
-                          Vector3* vmin, Vector3* vmax) {
+void CalcCameraAABB(const Camera& camera, float znear, float zfar, Vector3* vmin, 
+                    Vector3* vmax) {
   Vector3 pos[8];
   CalcCameraBundingPos(camera, znear, zfar, pos);
   azer::InitMinAndVMax(vmin, vmax);

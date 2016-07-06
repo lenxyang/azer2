@@ -16,6 +16,8 @@ static_library("interactive") {
     "dirlight_controller.h",
     "env.cc",
     "env.h",
+    "frustum.cc",
+    "frustum.h",
     "graypoint.cc",
     "graypoint.h",
     "gridline.cc",
