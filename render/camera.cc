@@ -244,4 +244,25 @@ void CalcCameraAABB(const Camera& camera, Vector3* vmin, Vector3* vmax) {
     azer::UpdateVMinAndVMax(pos[i], vmin, vmax);
   }
 }
+
+void CalcCameraSphere(const Camera& camera, Vector3* center, float* rad) {
+  CHECK_EQ(camera.frustum().type(), kOrthognalFrustum);
+  Vector3 cdir = camera.directional();
+  Vector3 right = camera.right();
+  Vector3 up = camera.up();
+  Vector3 cpos = camera.position();
+ 
+  float tan_fovy = 0.0f, tan_fovx = 0.0f;
+  float aspect = camera.frustum().aspect();
+  Degree fovy = Degree(camera.frustum().fovy());
+  tan_fovy = azer::tan(fovy);
+  tan_fovx = aspect * tan_fovy; 
+
+  float zfar = camera.frustum().zfar();
+  float znear = camera.frustum().znear();
+
+  Vector3 corner = cpos + (-right * tan_fovx + up * tan_fovy + cdir) * zfar;  
+  *center = cpos + cdir * (znear + (znear + zfar) * 0.5);
+  *rad = center->distance(corner);
+}
 }  // namespace azer
