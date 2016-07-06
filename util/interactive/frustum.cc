@@ -23,7 +23,7 @@ FrustumBox::FrustumBox()
   blend_desc.desc[0].alpha_oper = Blending::kAdd;
   blend_desc.desc[0].mask = Blending::kWriteColor;
   blend_desc.desc[0].enable = true;
-  blend_desc.alpha_to_converage = true;
+  blend_desc.alpha_to_converage = false;
   blending_ = rs->CreateBlending(blend_desc);
 
   InteractiveEnv* env = InteractiveEnv::GetInstance();

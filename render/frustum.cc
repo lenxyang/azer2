@@ -31,8 +31,8 @@ Frustum::Frustum(float width, float height, float znear, float zfar)
       aspect_(1.0f),
       near_(znear),
       far_(zfar),
-      width_(1.0f),
-      height_(1.0f),
+      width_(width),
+      height_(height),
       type_(kOrthognalFrustum) {
   UpdateProjMatrix();
 }
