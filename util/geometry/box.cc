@@ -11,14 +11,14 @@
 namespace azer {
 namespace {
 const Vector4 box_position[] = {
-  Vector4(-0.5f,  0.5f,  0.5f, 1.0f),
-  Vector4( 0.5f,  0.5f,  0.5f, 1.0f),
-  Vector4( 0.5f, -0.5f,  0.5f, 1.0f),
-  Vector4(-0.5f, -0.5f,  0.5f, 1.0f),
-  Vector4(-0.5f,  0.5f, -0.5f, 1.0f),
-  Vector4( 0.5f,  0.5f, -0.5f, 1.0f),
-  Vector4( 0.5f, -0.5f, -0.5f, 1.0f),
-  Vector4(-0.5f, -0.5f, -0.5f, 1.0f),
+  Vector4(-0.5f,  0.5f,  0.5f, 1.0f), // near-left-top
+  Vector4( 0.5f,  0.5f,  0.5f, 1.0f), // near-right-top
+  Vector4( 0.5f, -0.5f,  0.5f, 1.0f), // near-right-bottom
+  Vector4(-0.5f, -0.5f,  0.5f, 1.0f), // near-left-bottom
+  Vector4(-0.5f,  0.5f, -0.5f, 1.0f),  // far-left-top
+  Vector4( 0.5f,  0.5f, -0.5f, 1.0f),  // far-right-top
+  Vector4( 0.5f, -0.5f, -0.5f, 1.0f),  // far-right-bottom
+  Vector4(-0.5f, -0.5f, -0.5f, 1.0f),  // far-left-bottom
 };
 
 const Vector2 texcoord0[] = {
@@ -80,9 +80,10 @@ int indices[] = {0, 2, 1, 0, 3, 2,  // front
                  4, 3, 0, 4, 7, 3,  // left
                  4, 1, 5, 4, 0, 1,  // top
                  3, 6, 2, 3, 7, 6}; // bottom
-int32_t edge_indices[] = {0, 2, 2, 1, 1, 4, 4, 0,
-                          0, 14, 2, 8, 1, 7, 4, 13,
-                          14, 8, 8, 7, 7, 13, 13, 14};
+int32_t edge_indices[] = {0, 1, 1, 2, 2, 3, 3, 0,
+                          0, 4, 1, 5, 2, 6, 7, 3,
+                          4, 5, 5, 6, 6, 7, 7, 4,};
+                          
 int32_t CalcBoxVertexCount() { return static_cast<int32_t>(arraysize(indices));}
 int32_t CalcBoxIndexCount() { return 0;}
 int32_t CalcBoxFrameIndexCount() { return static_cast<int32_t>(
@@ -183,9 +184,23 @@ Subset AppendGeoBoxSubset(VertexPack* vp, IndexPack* ipack,
   return AppendGeoHexaHedronSubset(vp, box_position, mat);
 }
 
-Subset AppendGeoHexaHedronFrameSubset(VertexPack* vp, IndexPack* ipack, 
+Subset AppendGeoHexaHedronFrameSubset(VertexPack* vpack, IndexPack* ipack, 
                                       const Vector4* vecpos, const Matrix4& mat) {
-  Subset subset = AppendGeoHexaHedronSubset(vp, vecpos, mat);
+  VertexPos normal_pos, tex0_pos;
+  GetSemanticIndex("normal", 0, vpack->desc(), &normal_pos);
+  GetSemanticIndex("texcoord", 0, vpack->desc(), &tex0_pos);
+  Subset subset;
+  subset.vertex_base = vpack->index();
+  for (int i = 0; i < 8; ++i) {
+    Vector4 pos = mat * vecpos[i];
+    vpack->WriteVector3Or4(pos, VertexPos(0, 0));
+    UpdateVertexBounds(pos, &subset.vmin, &subset.vmax);
+    vpack->WriteVector3Or4(Vector4(0, 0, 0, 0), normal_pos);
+    vpack->WriteVector2(Vector2(0, 0), tex0_pos);
+    vpack->next(1);
+  }
+  subset.vertex_count = vpack->index() - subset.vertex_base;
+
   subset.index_base = ipack->index();
   subset.index_count = CreateBoxFrameIndicesData(ipack);
   subset.primitive = kLineList;
@@ -217,7 +232,7 @@ void AppendGeoHexaHedronFrameData(EntityData* data, const Vector4* posvec,
                                   const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  const int32_t kVertexCount = CalcBoxVertexCount();
+  const int32_t kVertexCount = 8;
   const int32_t kIndexCount = CalcBoxFrameIndexCount();
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);

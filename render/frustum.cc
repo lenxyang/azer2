@@ -6,7 +6,7 @@
 namespace azer {
 
 Frustum::Frustum(Camera* camera)
-    : fovY_(Radians((float)(kPI / 3.0f)))
+    : fovY_(Radians((float)(kPI / 4.0f)))
     , aspect_(4.0f / 3.0f)
     , near_(1.0f)
     , far_(1000.0f)

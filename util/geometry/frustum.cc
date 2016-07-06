@@ -16,8 +16,8 @@ EntityDataPtr CreateFrustumBox(VertexDesc* desc, const Camera& camera) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
   EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
-  AppendGeoHexaHedronData(data.get(), posvec, Matrix4::kIdentity);
   AppendGeoHexaHedronFrameData(data.get(), posvec, Matrix4::kIdentity);
+  AppendGeoHexaHedronData(data.get(), posvec, Matrix4::kIdentity);
   return data;
 }
 }  // namespace azer
