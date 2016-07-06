@@ -24,6 +24,8 @@ class AZER_EXPORT Camera {
   Camera(float width, float height, float znear, float zfar);
   Camera(const Vector3& pos, const Vector3& lookat, const Vector3& up);
 
+  Camera& operator = (const Camera& camera);
+
   void reset(const Vector3& pos, const Vector3& lookat, const Vector3& up);
 
   void SetLookAt(const Vector3& lookat);
@@ -102,10 +104,7 @@ inline std::ostream& operator << (std::ostream& os, const Camera& camera) {
   return os;
 }
 
-AZER_EXPORT void CalcCameraBundingPos(const Camera& camera, float znear, float zfar, 
-                                      Vector3 pos[8]);
 AZER_EXPORT void CalcCameraBundingPos(const Camera& camera, Vector3 pos[8]);
-AZER_EXPORT void CalcCameraAABB(const Camera& camera, float znear, float zfar,
-                                Vector3* vmin, Vector3* vmax);
+AZER_EXPORT void CalcCameraAABB(const Camera& camera, Vector3* vmin, Vector3* vmax);
 }  // namespace azer
 

@@ -25,6 +25,14 @@ Camera::Camera(const Vector3& pos, const Vector3& lookat, const Vector3& up)
   reset(pos, lookat, up);
 }
 
+Camera& Camera::operator = (const Camera& camera) {
+  view_mat_ = camera.view_mat_;
+  proj_view_mat_ = camera.proj_view_mat_;
+  frustum_ = camera.frustum_;
+  holder_ = camera.holder_;
+  return *this;
+}
+
 void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up) {
   Matrix4 mat = LookAtRH(pos, lookat, up);
   holder_.SetPosition(pos);
@@ -172,37 +180,65 @@ VisibleState CameraCullingHelper::IsVisible(const Vector3& center,
   return kPartialVisible;
 }
 
-void CalcCameraBundingPos(const Camera& camera, float znear, float zfar, 
-                          Vector3 pos[8]) {
-  const Matrix4 vmat = camera.GetViewMatrix();
+void CalcPropectiveCameraBoundsPox(const Camera& camera, Vector3 pos[8]) {
+  CHECK_EQ(camera.frustum().type(), kPerspectiveFrustum);
+  float zfar = camera.frustum().zfar();
+  float znear = camera.frustum().znear();
+  float tan_fovy = 0.0f, tan_fovx = 0.0f;
   float aspect = camera.frustum().aspect();
   Degree fovy = Degree(camera.frustum().fovy());
-  float fTanFOVY = azer::tan(fovy);
-  float fTanFOVX = aspect * fTanFOVY;
+  tan_fovy = azer::tan(fovy);
+  tan_fovx = aspect * tan_fovy;
+
   Vector3 cdir = camera.directional();
   Vector3 right = camera.right();
   Vector3 up = camera.up();
   Vector3 cpos = camera.position();
-  pos[0] = cpos + (-right * fTanFOVX + up * fTanFOVY + cdir) * znear;
-  pos[1] = cpos + ( right * fTanFOVX + up * fTanFOVY + cdir) * znear;
-  pos[2] = cpos + ( right * fTanFOVX - up * fTanFOVY + cdir) * znear;
-  pos[3] = cpos + (-right * fTanFOVX - up * fTanFOVY + cdir) * znear;
+  pos[0] = cpos + (-right * tan_fovx + up * tan_fovy + cdir) * znear;
+  pos[1] = cpos + ( right * tan_fovx + up * tan_fovy + cdir) * znear;
+  pos[2] = cpos + ( right * tan_fovx - up * tan_fovy + cdir) * znear;
+  pos[3] = cpos + (-right * tan_fovx - up * tan_fovy + cdir) * znear;
 
-  pos[4] = cpos + (-right * fTanFOVX + up * fTanFOVY + cdir) * zfar;
-  pos[5] = cpos + ( right * fTanFOVX + up * fTanFOVY + cdir) * zfar;
-  pos[6] = cpos + ( right * fTanFOVX - up * fTanFOVY + cdir) * zfar;
-  pos[7] = cpos + (-right * fTanFOVX - up * fTanFOVY + cdir) * zfar;
+  pos[4] = cpos + (-right * tan_fovx + up * tan_fovy + cdir) * zfar;
+  pos[5] = cpos + ( right * tan_fovx + up * tan_fovy + cdir) * zfar;
+  pos[6] = cpos + ( right * tan_fovx - up * tan_fovy + cdir) * zfar;
+  pos[7] = cpos + (-right * tan_fovx - up * tan_fovy + cdir) * zfar;
+}
+
+void CalcOrthognalCameraBoundsPox(const Camera& camera, Vector3 pos[8]) {
+  CHECK_EQ(camera.frustum().type(), kOrthognalFrustum);
+  float zfar = camera.frustum().zfar();
+  float znear = camera.frustum().znear();
+  Vector3 cdir = camera.directional();
+  Vector3 right = camera.right();
+  Vector3 up = camera.up();
+  Vector3 cpos = camera.position();
+  float width = camera.frustum().width();
+  float height = camera.frustum().height();
+  Vector3 nearpos = cpos + cdir * znear;
+  Vector3 farpos = cpos + cdir * zfar;
+  pos[0] = nearpos + (-right * width + up * height + cdir);
+  pos[1] = nearpos + ( right * width + up * height + cdir);
+  pos[2] = nearpos + ( right * width - up * height + cdir);
+  pos[3] = nearpos + (-right * width - up * height + cdir);
+
+  pos[4] = farpos + (-right * width + up * height + cdir);
+  pos[5] = farpos + ( right * width + up * height + cdir);
+  pos[6] = farpos + ( right * width - up * height + cdir);
+  pos[7] = farpos + (-right * width - up * height + cdir);
 }
 
 void CalcCameraBundingPos(const Camera& camera, Vector3 pos[8]) {
-  CalcCameraBundingPos(camera, camera.frustum().znear(), 
-                       camera.frustum().zfar(), pos);
+  if (camera.frustum().type() == kPerspectiveFrustum) {
+    CalcPropectiveCameraBoundsPox(camera, pos);
+  } else {
+    CalcOrthognalCameraBoundsPox(camera, pos);
+  }
 }
 
-void CalcCameraAABB(const Camera& camera, float znear, float zfar, Vector3* vmin, 
-                    Vector3* vmax) {
+void CalcCameraAABB(const Camera& camera, Vector3* vmin, Vector3* vmax) {
   Vector3 pos[8];
-  CalcCameraBundingPos(camera, znear, zfar, pos);
+  CalcCameraBundingPos(camera, pos);
   azer::InitMinAndVMax(vmin, vmax);
   for (uint32_t i = 0; i < arraysize(pos); ++i) {
     azer::UpdateVMinAndVMax(pos[i], vmin, vmax);

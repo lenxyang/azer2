@@ -13,6 +13,7 @@ class Camera;
 class AxisAlignedBoundingBox;
 
 enum {
+  kUnknownFrustum,
   kOrthognalFrustum,
   kPerspectiveFrustum,
 };
@@ -21,11 +22,14 @@ class AZER_EXPORT Frustum {
  public:
   // Perspective Projection
   // default Radians(kPI / 4.0f), aspect=4/3
+  Frustum();
   Frustum(Radians fovy, float apsect, float z_near = 1.0f, float z_far = 1000.0f);
 
   // Orthognal Projection
   Frustum(float width, float height, float znear, float zfar);
   Frustum(const Frustum &frustum);
+
+  Frustum& operator = (const Frustum& frustum); 
 
   int type() const { return type_;}
 
@@ -52,7 +56,7 @@ class AZER_EXPORT Frustum {
   float far_;
   float width_;
   float height_;
-  const int type_;
+  int type_;
   azer::Matrix4 projection_;
 };
 }  // namespace azer

@@ -5,6 +5,16 @@
 
 namespace azer {
 
+Frustum::Frustum() 
+    : fovY_(Radians(kPI * 4)),
+      aspect_(4.0f / 3.0f),
+      near_(1.0f),
+      far_(1000.0f),
+      width_(1.0f),
+      height_(1.0f),
+      type_(kUnknownFrustum) {
+}
+
 Frustum::Frustum(Radians fovy, float apsect, float z_near, float z_far)
     : fovY_(fovy),
       aspect_(apsect),
@@ -27,14 +37,20 @@ Frustum::Frustum(float width, float height, float znear, float zfar)
   UpdateProjMatrix();
 }
 
-Frustum::Frustum(const Frustum &frustum)
-    : fovY_(frustum.fovY_),
-      aspect_(frustum.aspect_),
-      near_(frustum.near_),
-      far_(frustum.far_),
-      width_(frustum.width_),
-      height_(frustum.height_),
-      type_(frustum.type_) {
+Frustum::Frustum(const Frustum &frustum) {
+  *this = frustum;
+}
+
+Frustum& Frustum::operator = (const Frustum &frustum) {
+  fovY_ = frustum.fovY_;
+  aspect_ = frustum.aspect_;
+  near_ = frustum.near_;
+  far_ = frustum.far_;
+  width_ = frustum.width_;
+  height_ = frustum.height_;
+  type_ = frustum.type_;
+  projection_ = frustum.projection_;
+  return *this;
 }
 
 void Frustum::UpdateProjMatrix() {

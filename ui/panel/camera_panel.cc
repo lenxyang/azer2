@@ -83,8 +83,7 @@ void CameraPanel::Update(const Camera& camera, const FrameArgs& args) {
     last_update_time_ = args.time();
     Vector3 vmin, vmax;
     Vector3 boundpos[8];
-    CalcCameraAABB(camera, camera.frustum().znear(), camera.frustum().zfar(),
-                   &vmin, &vmax);
+    CalcCameraAABB(camera, &vmin, &vmax);
     CalcCameraBundingPos(camera, boundpos);
     Vector3 v = camera.position();
     SET_LABEL_VERTEX(camera_pos_,   "Position: ", camera.position());
