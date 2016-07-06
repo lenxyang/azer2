@@ -13,7 +13,7 @@ Frustum::Frustum(Radians fovy, float apsect, float z_near, float z_far)
       width_(1.0f),
       height_(1.0f),
       type_(kPerspectiveFrustum) {
-  GenProjMatrix();
+  UpdateProjMatrix();
 }
 
 Frustum::Frustum(float width, float height, float znear, float zfar)
@@ -24,7 +24,7 @@ Frustum::Frustum(float width, float height, float znear, float zfar)
       width_(1.0f),
       height_(1.0f),
       type_(kOrthognalFrustum) {
-  GenProjMatrix();
+  UpdateProjMatrix();
 }
 
 Frustum::Frustum(const Frustum &frustum)
