@@ -7,7 +7,9 @@
 #include "azer/util/interactive/env.h"
 
 namespace azer {
-FrustumBox::FrustumBox() {
+FrustumBox::FrustumBox()
+    : color_(Vector3(0.4f, 0.0f, 0.0f)),
+      alpha_(0.2f) {
   RenderSystem* rs = RenderSystem::Current();
   rasterizer_ptr_ = rs->CreateRasterizerState();
   rasterizer_ptr_->SetCullingMode(kCullNone);
@@ -21,7 +23,7 @@ FrustumBox::FrustumBox() {
   blend_desc.desc[0].alpha_oper = Blending::kAdd;
   blend_desc.desc[0].mask = Blending::kWriteColor;
   blend_desc.desc[0].enable = true;
-  blend_desc.alpha_to_converage = false;
+  blend_desc.alpha_to_converage = true;
   blending_ = rs->CreateBlending(blend_desc);
 
   InteractiveEnv* env = InteractiveEnv::GetInstance();
@@ -43,11 +45,11 @@ void FrustumBox::Render(const Camera& camera, Renderer* renderer) {
     renderer->SetBlending(blending_.get(), 0, 0xffffffff);
     color_effect_->SetPV(camera.GetProjViewMatrix());
     color_effect_->SetWorld(Matrix4::kIdentity);
-    color_effect_->SetAmbient(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+    color_effect_->SetAmbient(Vector4(color_, 1.0f));
     renderer->BindEffect(color_effect_.get());
     frustum_box_->DrawSub(0, renderer);
 
-    color_effect_->SetAmbient(Vector4(1.0f, 0.0f, 0.0f, 0.2f));
+    color_effect_->SetAmbient(Vector4(color_, alpha_));
     renderer->BindEffect(color_effect_.get());
     frustum_box_->DrawSub(1, renderer);
   }

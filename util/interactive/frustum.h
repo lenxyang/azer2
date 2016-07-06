@@ -13,9 +13,13 @@ class VertexDesc;
 class FrustumBox {
  public:
   FrustumBox();
+  void set_alpha(float v) { alpha_ = v;}
+  void set_color(const Vector3& col) { color_ = col;}
   void Update(const Camera& camera, float zfar = -1.0f);
   void Render(const Camera& camera, Renderer* renderer);
  private:
+  Vector3 color_;
+  float alpha_;
   EntityPtr frustum_box_;
   scoped_refptr<AmbientColorEffect> color_effect_;
   RasterizerStatePtr rasterizer_ptr_;
