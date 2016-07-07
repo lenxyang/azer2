@@ -40,7 +40,9 @@ void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up)
   Vector3 yaxis(mat[1][0], mat[1][1], mat[1][2]);
   Vector3 zaxis(mat[2][0], mat[2][1], mat[2][2]);
   holder_.set_orientation(Quaternion::FromAxis(xaxis, yaxis, zaxis));
-  Update();
+  view_mat_ = mat;
+  proj_view_mat_ = std::move(frustum_.projection() * view_mat_);
+  // Update();
 }
 
 void Camera::GenMatrices() {
@@ -187,8 +189,8 @@ void CalcPropectiveCameraBoundsPox(const Camera& camera, Vector3 pos[8]) {
   float tan_fovy = 0.0f, tan_fovx = 0.0f;
   float aspect = camera.frustum().aspect();
   Degree fovy = Degree(camera.frustum().fovy());
-  tan_fovy = azer::tan(fovy);
-  tan_fovx = aspect * tan_fovy;
+  tan_fovx = azer::tan(fovy * aspect);
+  tan_fovy = azer::tan(Radians(aspect));
 
   Vector3 cdir = camera.directional();
   Vector3 right = camera.right();
@@ -255,8 +257,8 @@ void CalcCameraSphere(const Camera& camera, Vector3* center, float* rad) {
   float tan_fovy = 0.0f, tan_fovx = 0.0f;
   float aspect = camera.frustum().aspect();
   Degree fovy = Degree(camera.frustum().fovy());
-  tan_fovy = azer::tan(fovy);
-  tan_fovx = aspect * tan_fovy; 
+  tan_fovx = azer::tan(fovy * aspect);
+  tan_fovy = azer::tan(Radians(aspect));
 
   float zfar = camera.frustum().zfar();
   float znear = camera.frustum().znear();
