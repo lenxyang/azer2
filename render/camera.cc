@@ -148,6 +148,10 @@ void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up)
   // UpdateMatrix();
 }
 
+void Camera::set_direction(const Vector3& dir) {
+  CHECK(false);
+}
+
 void Camera::set_orientation(const Quaternion& orientation) {
   modified_ = true;
   holder_.set_orientation(orientation);
@@ -181,16 +185,6 @@ void Camera::GenMatrices() {
 
 void Camera::SetLookAt(const Vector3& lookat) {
   reset(holder_.position(), lookat, holder_.up());
-}
-
-void Camera::SetDirection(const Vector3& dir) {
-  // do nothing
-  if (dir.length() == 0) { return;}
-
-  // adjust for Right hand
-  DCHECK_FLOAT_EQ(dir.length(), 1.0f);
-  Vector3 zaxis = -dir;
-  CHECK(false);
 }
 
 void Camera::UpdateMatrix() {

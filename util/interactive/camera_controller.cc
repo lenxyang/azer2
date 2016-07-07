@@ -98,7 +98,7 @@ void CameraController::OnDragEnd(const ui::MouseEvent& event) {
 }
 
 void CameraController::RotateCamera(const gfx::Point& prev, const gfx::Point& cur) {
-  camera()->SetOrientation(origin_orient_);
+  camera()->set_orientation(origin_orient_);
   Degree to_yaw = Degree(cur.x() - prev.x()) * 0.2f;
   // holder->yaw(to_yaw);
   camera()->rotate(azer::Vector3(0.0f, 1.0f, 0.0f), to_yaw);

@@ -27,6 +27,7 @@ class AZER_EXPORT Camera {
   Camera& operator = (const Camera& camera);
 
   void reset(const Vector3& pos, const Vector3& lookat, const Vector3& up);
+  void SetLookAt(const Vector3& pos);
   void set_direction(const Vector3& dir);
   void set_orientation(const Quaternion& orientation);
   void UpdateMatrix();
