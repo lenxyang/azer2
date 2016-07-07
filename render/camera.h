@@ -27,10 +27,10 @@ class AZER_EXPORT Camera {
   Camera& operator = (const Camera& camera);
 
   void reset(const Vector3& pos, const Vector3& lookat, const Vector3& up);
-
   void SetLookAt(const Vector3& lookat);
   void SetDirection(const Vector3& dir);
   void SetOrientation(const Quaternion& orientation);
+  void UpdateMatrix();
 
   const Matrix4& GetViewMatrix() const { return view_mat_;}
   const Matrix4& GetProjViewMatrix() const { return proj_view_mat_;}
@@ -41,12 +41,34 @@ class AZER_EXPORT Camera {
   Vector3 directional() const;
   const Quaternion& orientation() const;
 
-  void Update();
-  TransformHolder* mutable_holder() { return &holder_;}
+  // TransformHolder's member
   const TransformHolder& holder() const { return holder_;}
+  void pitch(const Radians angle);
+  void yaw(const Radians angle);
+  void roll(const Radians angle);
+  void pitch(const Degree angle);
+  void yaw(const Degree angle);
+  void roll(const Degree angle);
+  void rotate(const Vector3& axis, const Degree angle);
+  void rotate(const Vector3& axis, const Radians angle);
+  void rotate(const Quaternion& q);
+  void fly(float step);
+  void walk(float step);
+  void strafe(float step);
 
+  // frustum function
   const Frustum& frustum() const { return frustum_;}
-  Frustum* mutable_frustum() { return &frustum_;}
+  void set_fovy(Radians fovy);
+  void set_far(float _far);
+  void set_near(float _near);
+  void set_aspect(float aspect);
+  void set_width(float height);
+  void set_height(float width);
+  void set_orthoganl_frustum(float width, float width, float znear, float zfar);
+  float znear() const { return frustum_.znear();}
+  float zfar() const { return frustum_.zfar();}
+  Radians fovy() const { return frustum_.fovy();}
+  float aspect() const { return frustum_.aspect();}
   friend std::ostream& operator << (std::ostream& os, const Camera& camera);
  protected:
   // generate camera transform matrix
@@ -59,6 +81,7 @@ class AZER_EXPORT Camera {
   Matrix4 proj_view_mat_;
   Frustum frustum_;
   TransformHolder holder_;
+  bool modified_;
 };
 
 class AZER_EXPORT CameraCullingHelper {

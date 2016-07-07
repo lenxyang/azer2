@@ -58,5 +58,6 @@ class AZER_EXPORT Frustum {
   float height_;
   int type_;
   azer::Matrix4 projection_;
+  bool modified_;
 };
 }  // namespace azer

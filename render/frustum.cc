@@ -12,7 +12,8 @@ Frustum::Frustum()
       far_(1000.0f),
       width_(1.0f),
       height_(1.0f),
-      type_(kUnknownFrustum) {
+      type_(kUnknownFrustum),
+      modified_(false) {
 }
 
 Frustum::Frustum(Radians fovy, float apsect, float z_near, float z_far)
@@ -22,7 +23,8 @@ Frustum::Frustum(Radians fovy, float apsect, float z_near, float z_far)
       far_(z_far),
       width_(1.0f),
       height_(1.0f),
-      type_(kPerspectiveFrustum) {
+      type_(kPerspectiveFrustum),
+      modified_(false) {
   UpdateProjMatrix();
 }
 
@@ -33,7 +35,8 @@ Frustum::Frustum(float width, float height, float znear, float zfar)
       far_(zfar),
       width_(width),
       height_(height),
-      type_(kOrthognalFrustum) {
+      type_(kOrthognalFrustum),
+      modified_(false) {
   UpdateProjMatrix();
 }
 
@@ -50,6 +53,7 @@ Frustum& Frustum::operator = (const Frustum &frustum) {
   height_ = frustum.height_;
   type_ = frustum.type_;
   projection_ = frustum.projection_;
+  modified_ = frustum.modified_;
   return *this;
 }
 
@@ -65,38 +69,45 @@ void Frustum::UpdateProjMatrix() {
       CHECK(false) << "Unknown Frustum type: " << type();
       break;
   }
+  modified_ = false;
 }
 
 void Frustum::set_far(float _far) { 
   far_ = _far; 
+  modified_ = true;
   UpdateProjMatrix();
 }
 
 void Frustum::set_near(float _near) { 
   near_ = _near; 
+  modified_ = true;
   UpdateProjMatrix();
 }
 
 void Frustum::set_fovy(Radians fovy) { 
   CHECK_EQ(type(), kPerspectiveFrustum);
   fovY_ = fovy; 
+  modified_ = true;
   UpdateProjMatrix();
 }
 
 void Frustum::set_aspect(float aspect) { 
   CHECK_EQ(type(), kPerspectiveFrustum);
   aspect_ = aspect; 
+  modified_ = true;
   UpdateProjMatrix();
 }
 
 void Frustum::set_width(float height) { 
   CHECK_EQ(type(), kOrthognalFrustum); 
   height_ = height; 
+  modified_ = true;
   UpdateProjMatrix();
 }
 void Frustum::set_height(float width) { 
   CHECK_EQ(type(), kOrthognalFrustum); 
   width_ = width; 
+  modified_ = true;
   UpdateProjMatrix();
 }
 

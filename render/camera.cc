@@ -7,21 +7,26 @@
 namespace azer {
 
 Camera::Camera() 
-    : frustum_(Radians(kPI / 4.0f), 4.0f /3.0f, 1.0f, 1000.0f) {
-  Update();
+    : frustum_(Radians(kPI / 4.0f), 4.0f /3.0f, 1.0f, 1000.0f),
+      modified_(false) {
+  UpdateMatrix();
 }
 
 Camera::Camera(float width, float height, float znear, float zfar) 
-    : frustum_(1.0f, 1.0f, 1.0f, 1000.0f) {
+    : frustum_(1.0f, 1.0f, 1.0f, 1000.0f),
+      modified_(false) {
+  UpdateMatrix();
 }
 
 Camera::Camera(const Frustum& frustum)
-    : frustum_(frustum) {
-  Update();
+    : frustum_(frustum),
+      modified_(false) {
+  UpdateMatrix();
 }
 
 Camera::Camera(const Vector3& pos, const Vector3& lookat, const Vector3& up)
-    : frustum_(Radians(kPI / 4.0f), 4.0f /3.0f, 1.0f, 1000.0f) {
+    : frustum_(Radians(kPI / 4.0f), 4.0f /3.0f, 1.0f, 1000.0f),
+      modified_(false) {
   reset(pos, lookat, up);
 }
 
@@ -30,7 +35,104 @@ Camera& Camera::operator = (const Camera& camera) {
   proj_view_mat_ = camera.proj_view_mat_;
   frustum_ = camera.frustum_;
   holder_ = camera.holder_;
+  modified_ = camera.modified_;
   return *this;
+}
+
+void Camera::pitch(const Radians angle) {
+  modified_ = true;
+  holder_.pitch(angle);
+}
+
+void Camera::yaw(const Radians angle) {
+  modified_ = true;
+  holder_.yaw(angle);
+}
+
+void Camera::roll(const Radians angle) {
+  modified_ = true;
+  holder_.roll(angle);
+}
+
+void Camera::pitch(const Degree angle) {
+  modified_ = true;
+  holder_.pitch(angle);
+}
+
+void Camera::yaw(const Degree angle) {
+  modified_ = true;
+  holder_.yaw(angle);
+}
+
+void Camera::roll(const Degree angle) {
+  modified_ = true;
+  holder_.roll(angle);
+}
+
+void Camera::rotate(const Vector3& axis, const Degree angle) {
+  modified_ = true;
+  holder_.rotate(axis, angle);
+}
+
+void Camera::rotate(const Vector3& axis, const Radians angle) {
+  modified_ = true;
+  holder_.rotate(axis, angle);
+}
+
+void Camera::rotate(const Quaternion& q) {
+  modified_ = true;
+  holder_.rotate(q);
+}
+
+void Camera::fly(float step) {
+  modified_ = true;
+  holder_.fly(step);
+}
+
+void Camera::walk(float step) {
+  modified_ = true;
+  holder_.walk(step);
+}
+
+void Camera::strafe(float step) {
+  modified_ = true;
+  holder_.strafe(step);
+}
+
+void Camera::set_orthoganl_frustum(float width, float width, 
+                                   float znear, float zfar) {
+  frustum_ = Frustum(width, width, znear, zfar);
+  modified_ = true;
+}
+
+void Camera::set_fovy(Radians fovy) {
+  modified_ = true;
+  frustum_.set_fovy(fovy);
+}
+
+void Camera::set_far(float _far) {
+  modified_ = true;
+  frustum_.set_far(far);
+}
+
+void Camera::set_near(float _near) {
+  modified_ = true;
+  frustum_.set_near(near);
+}
+
+void Camera::set_aspect(float aspect) {
+  modified_ = true;
+  frustum_.set_aspect(aspect);
+}
+
+void Camera::set_width(float height) {
+  modified_ = true;
+  frustum_.set_width(width);
+}
+
+void Camera::set_height(float width) {
+  modified_ = true;
+  frustum_.set_height(height);
 }
 
 void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up) {
@@ -42,11 +144,11 @@ void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up)
   holder_.set_orientation(Quaternion::FromAxis(xaxis, yaxis, zaxis));
   view_mat_ = mat;
   proj_view_mat_ = std::move(frustum_.projection() * view_mat_);
-  // Update();
+  modified_ = false;
+  // UpdateMatrix();
 }
 
 void Camera::GenMatrices() {
-
   // TODO
   // View matrix is:
   //
@@ -65,10 +167,8 @@ void Camera::GenMatrices() {
   view[1][3] = trans.y;
   view[2][3] = trans.z;
   */
-  
-  view_mat_ = std::move(LookDirRH(holder_.position(), holder_.directional(), 
-                                  holder_.up()));
-  proj_view_mat_ = std::move(frustum_.projection() * view_mat_);
+
+  UpdateMatrix();
 }
 
 
@@ -86,8 +186,9 @@ void Camera::SetDirection(const Vector3& dir) {
   CHECK(false);
 }
 
-void Camera::Update() {
+void Camera::UpdateMatrix() {
   GenMatrices();
+  modified_ = false;
 }
 
 const Vector3& Camera::position() const {
@@ -108,6 +209,20 @@ Vector3 Camera::directional() const {
 
 const Quaternion& Camera::orientation() const {
   return holder().orientation();
+}
+
+const Matrix4& Camera::GetViewMatrix() const { 
+  if (modified_) {
+    const_cast<Camera*>(this)->UpdateMatrix();
+  }
+  return view_mat_;
+}
+
+const Matrix4& GetProjViewMatrix() const { 
+  if (modified_) {
+    const_cast<Camera*>(this)->UpdateMatrix();
+  }
+  return proj_view_mat_;
 }
 
 // class CameraCullingHelper
@@ -190,7 +305,7 @@ void CalcPropectiveCameraBoundsPox(const Camera& camera, Vector3 pos[8]) {
   float aspect = camera.frustum().aspect();
   Degree fovy = Degree(camera.frustum().fovy());
   tan_fovx = azer::tan(fovy * aspect);
-  tan_fovy = azer::tan(Radians(aspect));
+  tan_fovy = azer::tan(fovy);
 
   Vector3 cdir = camera.directional();
   Vector3 right = camera.right();
@@ -258,7 +373,7 @@ void CalcCameraSphere(const Camera& camera, Vector3* center, float* rad) {
   float aspect = camera.frustum().aspect();
   Degree fovy = Degree(camera.frustum().fovy());
   tan_fovx = azer::tan(fovy * aspect);
-  tan_fovy = azer::tan(Radians(aspect));
+  tan_fovy = azer::tan(fovy);
 
   float zfar = camera.frustum().zfar();
   float znear = camera.frustum().znear();
