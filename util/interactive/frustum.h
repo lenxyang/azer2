@@ -16,6 +16,7 @@ class FrustumBox {
   void set_alpha(float v) { alpha_ = v;}
   void set_color(const Vector3& col) { color_ = col;}
   void Update(const Camera& camera, float zfar = -1.0f);
+  void Update(const Matrix4& pvw);
   void Render(const Camera& camera, Renderer* renderer);
  private:
   Vector3 color_;

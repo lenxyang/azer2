@@ -7,6 +7,48 @@
 #include "azer/util/interactive/env.h"
 
 namespace azer {
+
+EntityDataPtr CreateFrustumBox(VertexDesc* desc, const Camera& camera) {
+  Vector3 pos[8];
+  CalcCameraBundingPos(camera, pos);
+  Vector4 posvec[8];
+  for (int i = 0; i < arraysize(pos); ++i) {
+    posvec[i] = Vector4(pos[i], 1.0f);
+  }
+
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
+  AppendGeoHexaHedronFrameData(data.get(), posvec, Matrix4::kIdentity);
+  AppendGeoHexaHedronData(data.get(), posvec, Matrix4::kIdentity);
+  return data;
+}
+
+EntityDataPtr CreateFrustumBoxByMatrix(VertexDesc* desc, const Matrix4& pvw) {
+  Vector4 posvec[8];
+  Vector4 projvec[8] = {
+    Vector4(-1.0f,  1.0f, 0.0f, 1.0f),
+    Vector4( 1.0f,  1.0f, 0.0f, 1.0f),
+    Vector4( 1.0f, -1.0f, 0.0f, 1.0f),
+    Vector4(-1.0f, -1.0f, 0.0f, 1.0f),
+    Vector4(-1.0f,  1.0f, 1.0f, 1.0f),
+    Vector4( 1.0f,  1.0f, 1.0f, 1.0f),
+    Vector4( 1.0f, -1.0f, 1.0f, 1.0f),
+    Vector4(-1.0f, -1.0f, 1.0f, 1.0f),
+  };
+  Matrix4 inv = pvw.InverseCopy();
+  for (int i = 0; i < arraysize(projvec); ++i) {
+    posvec[i] = std::move(inv * projvec[i]);
+  }
+
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
+  AppendGeoHexaHedronFrameData(data.get(), posvec, Matrix4::kIdentity);
+  AppendGeoHexaHedronData(data.get(), posvec, Matrix4::kIdentity);
+  return data;
+}
+
 FrustumBox::FrustumBox()
     : color_(Vector3(0.4f, 0.0f, 0.0f)),
       alpha_(0.2f) {
@@ -37,6 +79,11 @@ void FrustumBox::Update(const Camera& camera, float zfar) {
   frustum_box_ = new Entity(data.get());
 }
 
+void FrustumBox::Update(const Matrix4& pvw) {
+  EntityDataPtr data = CreateFrustumBoxByMatrix(color_effect_->vertex_desc(), pvw);
+  frustum_box_ = new Entity(data.get());
+}
+
 void FrustumBox::Render(const Camera& camera, Renderer* renderer) {
   if (frustum_box_.get()) {
     ScopedRasterizerState scoped_raster(renderer);
@@ -53,21 +100,5 @@ void FrustumBox::Render(const Camera& camera, Renderer* renderer) {
     renderer->BindEffect(color_effect_.get());
     frustum_box_->DrawSub(1, renderer);
   }
-}
-
-EntityDataPtr CreateFrustumBox(VertexDesc* desc, const Camera& camera) {
-  Vector3 pos[8];
-  CalcCameraBundingPos(camera, pos);
-  Vector4 posvec[8];
-  for (int i = 0; i < arraysize(pos); ++i) {
-    posvec[i] = Vector4(pos[i], 1.0f);
-  }
-
-  VertexDataPtr vdata(new VertexData(desc, 1));
-  IndicesDataPtr idata(new IndicesData(1));
-  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
-  AppendGeoHexaHedronFrameData(data.get(), posvec, Matrix4::kIdentity);
-  AppendGeoHexaHedronData(data.get(), posvec, Matrix4::kIdentity);
-  return data;
 }
 }  // namespace azer
