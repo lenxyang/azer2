@@ -41,7 +41,7 @@ void CameraOverlay::Update() {
   Vector3 up(holder.up());
   Camera camera;
   camera.reset(position, lookat, up);
-  camera.mutable_frustum()->set_aspect(1.0f);
+  camera.set_aspect(1.0f);
   world_ = Matrix4::kIdentity;
 
   Renderer* texrd = renderer_.get();

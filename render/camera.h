@@ -27,13 +27,12 @@ class AZER_EXPORT Camera {
   Camera& operator = (const Camera& camera);
 
   void reset(const Vector3& pos, const Vector3& lookat, const Vector3& up);
-  void SetLookAt(const Vector3& lookat);
-  void SetDirection(const Vector3& dir);
-  void SetOrientation(const Quaternion& orientation);
+  void set_direction(const Vector3& dir);
+  void set_orientation(const Quaternion& orientation);
   void UpdateMatrix();
 
-  const Matrix4& GetViewMatrix() const { return view_mat_;}
-  const Matrix4& GetProjViewMatrix() const { return proj_view_mat_;}
+  const Matrix4& GetViewMatrix() const;
+  const Matrix4& GetProjViewMatrix() const;
 
   const Vector3& position() const;
   Vector3 right() const;
@@ -59,12 +58,12 @@ class AZER_EXPORT Camera {
   // frustum function
   const Frustum& frustum() const { return frustum_;}
   void set_fovy(Radians fovy);
-  void set_far(float _far);
-  void set_near(float _near);
+  void set_far(float zfar);
+  void set_near(float znear);
   void set_aspect(float aspect);
   void set_width(float height);
   void set_height(float width);
-  void set_orthoganl_frustum(float width, float width, float znear, float zfar);
+  void set_orthoganl_frustum(float width, float height, float znear, float zfar);
   float znear() const { return frustum_.znear();}
   float zfar() const { return frustum_.zfar();}
   Radians fovy() const { return frustum_.fovy();}

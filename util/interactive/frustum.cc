@@ -74,7 +74,7 @@ FrustumBox::FrustumBox()
 void FrustumBox::Update(const Camera& camera, float zfar) {
   float farval = (zfar > 0 ? zfar : camera.frustum().zfar());
   Camera newcamera = camera;
-  newcamera.mutable_frustum()->set_far(farval);
+  newcamera.set_far(farval);
   EntityDataPtr data = CreateFrustumBox(color_effect_->vertex_desc(), newcamera);
   frustum_box_ = new Entity(data.get());
 }

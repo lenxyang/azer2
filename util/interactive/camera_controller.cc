@@ -98,23 +98,20 @@ void CameraController::OnDragEnd(const ui::MouseEvent& event) {
 }
 
 void CameraController::RotateCamera(const gfx::Point& prev, const gfx::Point& cur) {
-  TransformHolder* holder = camera()->mutable_holder();
-  holder->set_orientation(origin_orient_);
+  camera()->SetOrientation(origin_orient_);
   Degree to_yaw = Degree(cur.x() - prev.x()) * 0.2f;
   // holder->yaw(to_yaw);
-  holder->rotate(azer::Vector3(0.0f, 1.0f, 0.0f), to_yaw);
+  camera()->rotate(azer::Vector3(0.0f, 1.0f, 0.0f), to_yaw);
   Degree to_pitch = Degree(cur.y() - prev.y()) * 0.1;
-  holder->pitch(to_pitch);
+  camera()->pitch(to_pitch);
 }
 
 void CameraController::UpdateFrame(const azer::FrameArgs& args) {
   DCHECK(camera());
   float unit = args.delta().InSecondsF() * move_speed_;
-  TransformHolder* holder = camera()->mutable_holder();
-  holder->strafe((posx_ - negx_) * unit);
-  holder->walk((posz_ - negz_) * unit);
-  holder->fly((posy_ - negy_)* unit);
-  camera()->Update();
+  camera()->strafe((posx_ - negx_) * unit);
+  camera()->walk((posz_ - negz_) * unit);
+  camera()->fly((posy_ - negy_)* unit);
 }
 
 const Camera* CameraController::camera() const {

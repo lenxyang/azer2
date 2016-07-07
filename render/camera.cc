@@ -99,9 +99,9 @@ void Camera::strafe(float step) {
   holder_.strafe(step);
 }
 
-void Camera::set_orthoganl_frustum(float width, float width, 
+void Camera::set_orthoganl_frustum(float width, float height, 
                                    float znear, float zfar) {
-  frustum_ = Frustum(width, width, znear, zfar);
+  frustum_ = Frustum(width, height, znear, zfar);
   modified_ = true;
 }
 
@@ -110,14 +110,14 @@ void Camera::set_fovy(Radians fovy) {
   frustum_.set_fovy(fovy);
 }
 
-void Camera::set_far(float _far) {
+void Camera::set_far(float zfar) {
   modified_ = true;
-  frustum_.set_far(far);
+  frustum_.set_far(zfar);
 }
 
-void Camera::set_near(float _near) {
+void Camera::set_near(float znear) {
   modified_ = true;
-  frustum_.set_near(near);
+  frustum_.set_near(znear);
 }
 
 void Camera::set_aspect(float aspect) {
@@ -125,12 +125,12 @@ void Camera::set_aspect(float aspect) {
   frustum_.set_aspect(aspect);
 }
 
-void Camera::set_width(float height) {
+void Camera::set_width(float width) {
   modified_ = true;
   frustum_.set_width(width);
 }
 
-void Camera::set_height(float width) {
+void Camera::set_height(float height) {
   modified_ = true;
   frustum_.set_height(height);
 }
@@ -146,6 +146,11 @@ void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up)
   proj_view_mat_ = std::move(frustum_.projection() * view_mat_);
   modified_ = false;
   // UpdateMatrix();
+}
+
+void Camera::set_orientation(const Quaternion& orientation) {
+  modified_ = true;
+  holder_.set_orientation(orientation);
 }
 
 void Camera::GenMatrices() {
@@ -168,7 +173,9 @@ void Camera::GenMatrices() {
   view[2][3] = trans.z;
   */
 
-  UpdateMatrix();
+  view_mat_ = std::move(LookDirRH(holder_.position(), holder_.directional(), 
+                                  holder_.up()));
+  proj_view_mat_ = std::move(frustum_.projection() * view_mat_);
 }
 
 
@@ -218,7 +225,7 @@ const Matrix4& Camera::GetViewMatrix() const {
   return view_mat_;
 }
 
-const Matrix4& GetProjViewMatrix() const { 
+const Matrix4& Camera::GetProjViewMatrix() const { 
   if (modified_) {
     const_cast<Camera*>(this)->UpdateMatrix();
   }
