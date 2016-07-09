@@ -61,6 +61,8 @@ source_set("render") {
     "render_target.cc",
     "render_target.h",
     "renderer.cc",
+    "structured_buffer.cc",
+    "structured_buffer.h",
     "transform_holder.cc",
     "transform_holder.h",
     "shader.cc",

@@ -20,6 +20,7 @@
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/shader.h"
+#include "azer/render_system/d3d11/structured_buffer.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/texture_view.h"
@@ -226,6 +227,27 @@ BlendingPtr D3DRenderSystem::CreateBlending(const Blending::BlendDesc& desc) {
     return blending;
   } else {
     return BlendingPtr();
+  }
+}
+
+StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
+    const StructuredGpuBuffer::Options& opt, int count, int strip) {
+  scoped_refptr<D3DStructuredGpuBuffer> buf(new D3DStructuredGpuBuffer(
+      opt, count, strip));
+  if (buf->Init(this)) {
+    return buf;
+  } else {
+    return NULL;
+  }
+}
+StructuredGpuBufferViewPtr D3DRenderSystem::CreateStructuredBuffer(
+    const StructuredGpuBufferView::Options& opt, StructuredGpuBuffer* buffer) {
+  scoped_refptr<D3DUAStructuredGpuBufferView> ptr(
+      new D3DUAStructuredGpuBufferView(opt, buffer));
+  if (ptr->Init(this)) {
+    return ptr;
+  } else {
+    return NULL;
   }
 }
 

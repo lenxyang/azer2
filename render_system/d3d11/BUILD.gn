@@ -34,6 +34,8 @@ shared_library("d3d11") {
     "sampler_state.h",
     "shader.cc",
     "shader.h",
+    "structured_buffer.cc",
+    "structured_buffer.h",
     "swap_chain.cc",
     "swap_chain.h",
     "technique.cc",

@@ -55,6 +55,11 @@ class D3DRenderSystem : public RenderSystem {
   // RenderTarget* CreateRenderTarget(const Texture::Options& opt);
   // DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
 
+  StructuredGpuBufferPtr CreateStructuredBuffer(
+      const StructuredGpuBuffer::Options& opt, int count, int strip) override;
+  StructuredGpuBufferViewPtr CreateStructuredBuffer(
+      const StructuredGpuBufferView::Options& opt, StructuredGpuBuffer* buffer) override;
+
   ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) override;
   GpuComputeTaskDispatcherPtr CreateDispatcher() override;
   TechniquePtr CreateTechnique() override;
