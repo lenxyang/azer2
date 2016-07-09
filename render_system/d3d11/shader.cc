@@ -134,7 +134,7 @@ bool D3DGeometryShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
     const int32_t kMaxEntry = 64;
     D3D11_SO_DECLARATION_ENTRY pDecl[kMaxEntry];
     memset(pDecl, 0, sizeof(pDecl));
-    DCHECK_LT(vertex_desc()->element_count(), sizeof(pDecl));
+    DCHECK_LT(vertex_desc()->element_count(), static_cast<int>(sizeof(pDecl)));
     for (int32_t i = 0; i < vertex_desc()->element_count(); ++i) {
       const VertexDesc::Desc* desc = vertex_desc()->descs() + i;
       pDecl[i].SemanticName = desc->name;

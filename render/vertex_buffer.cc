@@ -83,7 +83,7 @@ std::ostream& operator << (std::ostream& os, const azer::VertexDesc& vertex_data
 }
 
 int32_t VertexDesc::offset(const int32_t index) const {
-  DCHECK_LT(index, offsets_idx_.size());
+  DCHECK_LT(index, static_cast<int32_t>(offsets_idx_.size()));
   return offsets_idx_[index];
 }
 

@@ -5,7 +5,7 @@ namespace azer {
 
 int32_t GpuConstantsTable::offset(int32_t index) const {
   DCHECK_GE(index, 0);
-  DCHECK_LT(index, constants_.size());
+  DCHECK_LT(index, static_cast<int32_t>(constants_.size()));
   return constants_[index].offset;
 }
 
@@ -52,7 +52,7 @@ GpuConstantsTable::GpuConstantsTable(int32_t num, const Desc* desc)
 void GpuConstantsTable::SetArrayItem(int32_t idx, int32_t arridx, const void* value,
                                      int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
-  DCHECK(idx >= 0 && idx < constants_.size());
+  DCHECK(idx >= 0 && idx < static_cast<int>(constants_.size()));
   DCHECK(arridx >= 0 && arridx < constants_[idx].desc.num);
   const Variable& variable = constants_[idx];
   DCHECK_EQ(size, variable.element_size);
@@ -62,7 +62,7 @@ void GpuConstantsTable::SetArrayItem(int32_t idx, int32_t arridx, const void* va
 void GpuConstantsTable::SetArrayMultiItem(int32_t idx, int32_t arridx, const void* value,
                                           int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
-  DCHECK(idx >= 0 && idx < constants_.size());
+  DCHECK(idx >= 0 && idx < static_cast<int>(constants_.size()));
   DCHECK(arridx >= 0 && arridx < constants_[idx].desc.num);
   const Variable& variable = constants_[idx];
   DCHECK_LE(variable.element_size * arridx + size, variable.size);
@@ -72,7 +72,7 @@ void GpuConstantsTable::SetArrayMultiItem(int32_t idx, int32_t arridx, const voi
 void GpuConstantsTable::SetValueWithOffset(int32_t idx, int32_t offset,
                                            const void* value, int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
-  DCHECK(idx >= 0 && idx < constants_.size());
+  DCHECK(idx >= 0 && idx < static_cast<int>(constants_.size()));
   const Variable& variable = constants_[idx];
   DCHECK_LE(size, variable.size);
   SetData(variable.offset + offset, value, size);

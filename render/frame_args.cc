@@ -31,7 +31,7 @@ void FrameArgs::Update() {
   recent_frames_time_consumed_.push_back(delta_);
   recent_seconds_ += delta_.InSecondsF();
   total_seconds_ += delta_.InSecondsF();
-  if (recent_frames_time_consumed_.size() > max_frame_stored_) {
+  if (static_cast<int>(recent_frames_time_consumed_.size()) > max_frame_stored_) {
     recent_seconds_ -= recent_frames_time_consumed_.front().InSecondsF();
     recent_frames_time_consumed_.pop_front();
   }

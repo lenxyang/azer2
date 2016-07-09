@@ -41,12 +41,12 @@ inline Matrix4::Matrix4(const Vector4& row1, const Vector4& row2,
 }
 
 inline float* Matrix4::operator[] (size_t row) {
-  CHECK_LT(row, 4);
+  CHECK_LT(row, 4u);
   return m_[row];
 }
 
 inline const float* Matrix4::operator[] (size_t row) const {
-  CHECK_LT(row, 4);
+  CHECK_LT(row, 4u);
   return m_[row];
 }
 

@@ -52,7 +52,7 @@ void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata) {
   }
 
   vpack.first();
-  for (int i = 0; i < normals.size(); ++i) {
+  for (int i = 0; i < static_cast<int>(normals.size()); ++i) {
     Vector4 normal = normals[i] / used[i];
     normal.Normalize();
     vpack.WriteVector3Or4(normal, npos);
@@ -102,12 +102,12 @@ void CalcTriangleListNormal(SlotVertexData* vbd, int* indices) {
     normals[idx3] += normal;
   }
 
-  for (int i = 0; i < normals.size(); ++i) {
+  for (size_t i = 0; i < normals.size(); ++i) {
     normals[i] /= used[i];
   }
 
   vpack.first();
-  for (int i = 0; i < normals.size(); ++i) {
+  for (size_t i = 0; i < normals.size(); ++i) {
     Vector4 normal = normals[i] / used[i];
     normal.Normalize();
     vpack.WriteVector3Or4(normal, npos);

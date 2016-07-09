@@ -55,7 +55,7 @@ void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata,
   }
 
   vpack.move(subset.vertex_base);
-  for (int i = 0; i < normals.size(); ++i) {
+  for (int i = 0; i < static_cast<int>(normals.size()); ++i) {
     Vector4 normal = normals[i] / used[i];
     normal.Normalize();
     vpack.WriteVector3Or4(normal, npos);

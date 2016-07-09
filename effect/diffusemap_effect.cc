@@ -58,7 +58,7 @@ void DiffuseMapEffect::SetMaterial(const DiffuseMapMaterialData& mtrl) {
 }
 
 void DiffuseMapEffect::SetLights(const LightPtr* value, int32_t count) {
-  DCHECK_LT(count, sizeof(lights_));
+  DCHECK_LT(count, static_cast<int>(sizeof(lights_)));
   light_count_ = count;
   for (int32_t i = 0; i < count; ++i) {
     Light* light = (value + i)->get();

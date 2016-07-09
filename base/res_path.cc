@@ -184,7 +184,7 @@ Slice ResPath::BaseName() const {
   }
   
   size_t last_dir = slice.find_last_of(kSeperatorStr);
-  if (last_dir == static_cast<int>(slice.length()) - 1) {
+  if (last_dir == slice.length() - 1) {
     return Slice();
   } else if (last_dir != StringType::npos) {
     return slice.substr(last_dir + 1);
