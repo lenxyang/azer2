@@ -31,10 +31,10 @@ bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {
   ID3D11Device* d3ddevice = rs->GetDevice();
   D3D11_BUFFER_DESC desc = {0};
   ZeroMemory(&desc, sizeof(desc));
-  bufferDesc.BindFlags = TranslateBindTarget(options().target());
-  bufferDesc.StructureByteStride = strip();
-  bufferDesc.ByteWidth = size();
-  bufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+  desc.BindFlags = TranslateBindTarget(options().target);
+  desc.StructureByteStride = strip();
+  desc.ByteWidth = this->size();
+  desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
   hr = d3ddevice->CreateBuffer(&desc, NULL, &bufobj_);;
   return true;
 }
@@ -53,12 +53,13 @@ D3DUAStructuredGpuBufferView::~D3DUAStructuredGpuBufferView() {
 bool D3DUAStructuredGpuBufferView::Init(D3DRenderSystem* rs) {
   HRESULT hr;
   D3DStructuredGpuBuffer* buffer = (D3DStructuredGpuBuffer*)(this->buffer());
-  D3D11_UNORDERED_ACCESS_VIEW_DESC desc = {0};
-  DescUAV.Format = DXGI_FORMAT_UNKNOWN;
-  DescUAV.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
-  DescUAV.Buffer.NumElements = buffer->count();
+  D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
+  memset(&desc, 0, sizeof(desc));
+  desc.Format = DXGI_FORMAT_UNKNOWN;
+  desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+  desc.Buffer.NumElements = buffer->count();
   ID3D11Device* d3ddevice = rs->GetDevice();
-  hr = d3ddevice->CreateShaderResourceView(buffer->object(), &desc, &unorder_view_);
+  hr = d3ddevice->CreateUnorderedAccessView(buffer->object(), &desc, &unorder_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateShaderResourceView failed");
   return true;
 }

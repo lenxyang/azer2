@@ -28,11 +28,11 @@ class D3DVertexLayout : public VertexLayout {
 
 class D3DVertexBuffer : public VertexBuffer {
  public:
-  D3DVertexBuffer(const HBufferOptions &opt, D3DRenderSystem* rs);
+  D3DVertexBuffer(const GpuBufferOptions &opt);
   virtual ~D3DVertexBuffer();
-  bool Init(SlotVertexData* dataptr);
+  bool Init(SlotVertexData* dataptr, D3DRenderSystem* rs);
 
-  HardwareBufferDataPtr map(MapType flags) override;
+  GpuBufferDataPtr map(MapType flags) override;
   void unmap() override;
 
   bool Initialized() const { return NULL != buffer_;}
@@ -40,9 +40,6 @@ class D3DVertexBuffer : public VertexBuffer {
  private:
   bool locked_;
   ID3D11Buffer* buffer_;
-  D3DRenderSystem* render_system_;
-  friend class D3DRenderSystem;
-  friend class D3DRenderer;
   friend class D3DVertexBufferGroup;
   DISALLOW_COPY_AND_ASSIGN(D3DVertexBuffer);
 };

@@ -74,10 +74,9 @@ const StringType& D3DRenderSystem::short_name() const {
 }
 
 VertexBufferPtr D3DRenderSystem::CreateVertexBuffer(
-    const HBufferOptions& opt, SlotVertexData* dataptr) {
-  scoped_refptr<D3DVertexBuffer> vertex_buffer(
-      new D3DVertexBuffer(opt, this));
-  if (vertex_buffer->Init(dataptr)) {
+    const GpuBufferOptions& opt, SlotVertexData* dataptr) {
+  scoped_refptr<D3DVertexBuffer> vertex_buffer(new D3DVertexBuffer(opt));
+  if (vertex_buffer->Init(dataptr, this)) {
     return vertex_buffer;
   } else {
     return VertexBufferPtr();
@@ -90,10 +89,9 @@ VertexBufferGroupPtr D3DRenderSystem::CreateVertexBufferGroup(VertexDesc* desc) 
 }
 
 IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
-    const HBufferOptions& opt, IndicesData* dataptr) {
-  scoped_refptr<D3DIndicesBuffer> indices_buffer(
-      new D3DIndicesBuffer(opt, this));
-  if (indices_buffer->Init(dataptr)) {
+    const GpuBufferOptions& opt, IndicesData* dataptr) {
+  scoped_refptr<D3DIndicesBuffer> indices_buffer(new D3DIndicesBuffer(opt));
+  if (indices_buffer->Init(dataptr, this)) {
     return indices_buffer;
   } else {
     return IndicesBufferPtr();
@@ -231,7 +229,7 @@ BlendingPtr D3DRenderSystem::CreateBlending(const Blending::BlendDesc& desc) {
 }
 
 StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
-    const StructuredGpuBuffer::Options& opt, int count, int strip) {
+    const GpuBufferOptions& opt, int count, int strip) {
   scoped_refptr<D3DStructuredGpuBuffer> buf(new D3DStructuredGpuBuffer(
       opt, count, strip));
   if (buf->Init(this)) {

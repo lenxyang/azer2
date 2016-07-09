@@ -38,7 +38,7 @@ class D3DRenderer : public Renderer {
                            int32_t count, TextureViewPtr* texture) override;
   void SetShaderSamplerState(RenderPipelineStage stage, int index, 
                              int32_t count, SamplerStatePtr* sampler) override;
-  void SetStreamOutTargets(HardwareBuffer** buffer, int count, int offset) override;
+  void SetStreamOutTargets(GpuBuffer** buffer, int count, int offset) override;
   void ResetShader(RenderPipelineStage stage) override;
 
   void Clear(const azer::Vector4& color) override;

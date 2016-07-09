@@ -8,23 +8,22 @@
 
 namespace azer {
 namespace d3d11 {
-D3DIndicesBuffer::D3DIndicesBuffer(const HBufferOptions& opt, D3DRenderSystem* rs)
+D3DIndicesBuffer::D3DIndicesBuffer(const GpuBufferOptions& opt)
     : IndicesBuffer(opt)
     , locked_(false)
-    , buffer_(NULL)
-    , render_system_(rs) {
+    , buffer_(NULL) {
 }
 
 D3DIndicesBuffer::~D3DIndicesBuffer() {
   SAFE_RELEASE(buffer_);
 }
 
-bool D3DIndicesBuffer::Init(const IndicesData* data) {
+bool D3DIndicesBuffer::Init(const IndicesData* data, D3DRenderSystem* rs) {
   DCHECK(NULL == buffer_);
   DCHECK(data != NULL);
   DCHECK(indices_count_ == -1 && type_ == kIndexUndefined);
 
-  ID3D11Device* d3d_device = render_system_->GetDevice();
+  ID3D11Device* d3d_device = rs->GetDevice();
 
   D3D11_BUFFER_DESC indices_buffer_desc;
   ZeroMemory(&indices_buffer_desc, sizeof(indices_buffer_desc));
@@ -47,14 +46,15 @@ bool D3DIndicesBuffer::Init(const IndicesData* data) {
   return true;
 }
 
-HardwareBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
+GpuBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   DCHECK(options_.usage & kBufferDynamic
          || options_.usage & kBufferStaging);
   DCHECK(options_.cpu_access & kCPUWrite ||
          options_.cpu_access & kCPURead);
   HRESULT hr;
   DCHECK(!locked_) << "Indices Buffer("") has been locked";
-  ID3D11Device* d3d_device = render_system_->GetDevice();
+  ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
   d3d_device->GetImmediateContext(&d3d_context);
   ScopedRefCOM autocom(d3d_context);
@@ -66,7 +66,7 @@ HardwareBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
     return NULL;
   }
 
-  HardwareBufferDataPtr data(new HardwareBufferData);
+  GpuBufferDataPtr data(new GpuBufferData);
   SetLockDataPtr(mapped.pData, data.get());
   SetLockDataRowSize(mapped.RowPitch, data.get());
   SetLockDataColumnNum(mapped.DepthPitch, data.get());
@@ -75,8 +75,9 @@ HardwareBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
 }
 
 void D3DIndicesBuffer::unmap() {
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   DCHECK(locked_) << "Indices Buffer has not been locked";
-  ID3D11Device* d3d_device = render_system_->GetDevice();
+  ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
   d3d_device->GetImmediateContext(&d3d_context);
   ScopedRefCOM autocom(d3d_context);

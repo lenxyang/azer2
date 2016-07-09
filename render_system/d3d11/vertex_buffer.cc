@@ -149,19 +149,18 @@ bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
 }
 
 // class D3DVertexBuffer
-D3DVertexBuffer::D3DVertexBuffer(const HBufferOptions &opt, D3DRenderSystem* rs)
+D3DVertexBuffer::D3DVertexBuffer(const GpuBufferOptions &opt)
     : VertexBuffer(opt)
     , locked_(false)
-    , buffer_(NULL)
-    , render_system_(rs) {
+    , buffer_(NULL) {
 }
 
 D3DVertexBuffer::~D3DVertexBuffer() {
   SAFE_RELEASE(buffer_);
 }
-bool D3DVertexBuffer::Init(SlotVertexData* dataptr) {
+bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
   DCHECK(element_size_ == -1 && buffer_size_ == -1 && vertex_count_ == -1);
-  ID3D11Device* d3d_device = render_system_->GetDevice();
+  ID3D11Device* d3d_device = rs->GetDevice();
 
   // attention
   // If the bind flag is D3D11_BIND_CONSTANT_BUFFER, you must set the
@@ -188,18 +187,19 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr) {
   vertex_count_ = dataptr->vertex_count();
 
   layout_ = new D3DVertexLayout(dataptr->vertex_desc());
-  CHECK(layout_->Init(render_system_));
+  CHECK(layout_->Init(rs));
   return true;
 }
 
-HardwareBufferDataPtr D3DVertexBuffer::map(MapType flags) {
+GpuBufferDataPtr D3DVertexBuffer::map(MapType flags) {
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   DCHECK(options_.usage & kBufferDynamic
          || options_.usage & kBufferStaging);
   DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
 
   HRESULT hr;
   DCHECK(!locked_) << "Vertex Buffer(" << options_.name << ") has been locked";
-  ID3D11Device* d3d_device = render_system_->GetDevice();
+  ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
   d3d_device->GetImmediateContext(&d3d_context);
   ScopedRefCOM autocom(d3d_context);
@@ -211,7 +211,7 @@ HardwareBufferDataPtr D3DVertexBuffer::map(MapType flags) {
     return NULL;
   }
 
-  HardwareBufferDataPtr data(new HardwareBufferData);
+  GpuBufferDataPtr data(new GpuBufferData);
   SetLockDataPtr(mapped.pData, data.get());
   SetLockDataRowSize(mapped.RowPitch, data.get());
   SetLockDataColumnNum(mapped.DepthPitch, data.get());
@@ -220,8 +220,9 @@ HardwareBufferDataPtr D3DVertexBuffer::map(MapType flags) {
 }
 
 void D3DVertexBuffer::unmap() {
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   DCHECK(locked_) << "Vertex Buffer(" << options_.name << ") has not been locked";
-  ID3D11Device* d3d_device = render_system_->GetDevice();
+  ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
   d3d_device->GetImmediateContext(&d3d_context);
   ScopedRefCOM autocom(d3d_context);

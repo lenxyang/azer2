@@ -12,7 +12,11 @@ StructuredGpuBuffer::StructuredGpuBuffer(const GpuBufferOptions& options,
 StructuredGpuBuffer::~StructuredGpuBuffer() {
 }
 
-StructuredBufferView::StructuredBufferView(const Options& opt, 
+// class StructuredGpuBufferView
+StructuredGpuBufferView::Options::Options() {
+}
+
+StructuredGpuBufferView::StructuredGpuBufferView(const Options& opt, 
                                            StructuredGpuBuffer* buffer)
     : options_(opt),
       buffer_(buffer) {

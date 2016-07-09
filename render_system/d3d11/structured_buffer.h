@@ -1,5 +1,6 @@
 #pragma once
 
+#include "azer/render_system/d3d11/d3d11.h"
 #include "azer/render/structured_buffer.h"
 
 namespace azer {

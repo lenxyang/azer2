@@ -81,7 +81,7 @@ class AZER_EXPORT RenderSystem {
                                            Texture* tex) = 0;
   virtual SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) = 0;
   virtual StructuredGpuBufferPtr CreateStructuredBuffer(
-      const StructuredGpuBuffer::Options& opt, int count, int strip) = 0;
+      const GpuBufferOptions& opt, int count, int strip) = 0;
   virtual StructuredGpuBufferViewPtr CreateStructuredBuffer(
       const StructuredGpuBufferView::Options& opt, StructuredGpuBuffer* buffer) = 0;
 

@@ -4,11 +4,12 @@
 #include "azer/render/resource_view.h"
 
 namespace azer {
-
+class StructuredGpuBufferView;
 class StructuredGpuBuffer;
 typedef scoped_refptr<StructuredGpuBuffer> StructuredGpuBufferPtr;
+typedef scoped_refptr<StructuredGpuBufferView> StructuredGpuBufferViewPtr;
 
-class StructuredGpuBuffer : public GpuBuffer {
+class AZER_EXPORT StructuredGpuBuffer : public GpuBuffer {
  public:
   ~StructuredGpuBuffer() override;
 
@@ -18,19 +19,21 @@ class StructuredGpuBuffer : public GpuBuffer {
 
   virtual GpuBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
- private:
+ protected:
   StructuredGpuBuffer(const GpuBufferOptions& options, int count, int strip);
-
+ private:
   const int size_;
   const int strip_;
   const int count_;
   DISALLOW_COPY_AND_ASSIGN(StructuredGpuBuffer);
 };
 
-class StructuredGpuBufferView : public ResourceView {
+class AZER_EXPORT StructuredGpuBufferView : public ResourceView {
  public:
-  struct Options {
+  struct AZER_EXPORT Options {
     int type;
+
+    Options();
   };
   ~StructuredGpuBufferView() override;
 
