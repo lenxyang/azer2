@@ -15,6 +15,9 @@ SamplerState::Options::Options()
       mag_filter(FilterMode::kLinear),
       min_filter(FilterMode::kLinear),
       mip_filter(FilterMode::kLinear),
+      comp_mag_filter(FilterMode::kLinear),
+      comp_min_filter(FilterMode::kLinear),
+      comp_mip_filter(FilterMode::kLinear),
       compare_func(CompareFunc::kNever),
       border_color(0.0f, 0.0f, 0.0f, 0.0f),
       max_anisotropy(4) {

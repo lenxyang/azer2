@@ -83,6 +83,9 @@ class AZER_EXPORT SamplerState : public ::base::RefCounted<Texture> {
     FilterMode min_filter;
     FilterMode mip_filter;
     CompareFunc compare_func;
+    FilterMode comp_mag_filter;
+    FilterMode comp_min_filter;
+    FilterMode comp_mip_filter;
     Vector4 border_color;
     int max_anisotropy;
  

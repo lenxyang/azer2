@@ -6,6 +6,81 @@
 
 namespace azer {
 namespace d3d11 {
+
+namespace {
+D3D11_FILTER TranslateSamplerStateCompFilter(const SamplerState::Options& state) {
+  DCHECK_NE(state.compare_func, CompareFunc::kNever);
+  if (state.comp_mag_filter == FilterMode::kPoint
+      && state.comp_min_filter == FilterMode::kPoint
+      && state.comp_mip_filter == FilterMode::kPoint) {
+    return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+  } else if (state.comp_mag_filter == FilterMode::kLinear
+             && state.comp_min_filter == FilterMode::kLinear
+             && state.comp_mip_filter == FilterMode::kLinear) {
+    return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+  } else if (state.comp_mag_filter == FilterMode::kPoint
+             && state.comp_min_filter == FilterMode::kLinear
+             && state.comp_mip_filter == FilterMode::kPoint) {
+    return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
+  } else if (state.comp_mag_filter == FilterMode::kPoint
+             && state.comp_min_filter == FilterMode::kLinear
+             && state.comp_mip_filter == FilterMode::kLinear) {
+    return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
+  } else if (state.comp_mag_filter == FilterMode::kLinear
+             && state.comp_min_filter == FilterMode::kPoint
+             && state.comp_mip_filter == FilterMode::kPoint) {
+    return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT;
+  } else if (state.comp_mag_filter == FilterMode::kLinear
+             && state.comp_min_filter == FilterMode::kPoint
+             && state.comp_mip_filter == FilterMode::kLinear) {
+    return D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+  } else if (state.comp_mag_filter == FilterMode::kLinear
+             && state.comp_min_filter == FilterMode::kLinear
+             && state.comp_mip_filter == FilterMode::kPoint) {
+    return D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+  } else {
+    NOTREACHED();
+    return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+  }
+}
+
+D3D11_FILTER TranslateSamplerStateFilter(const SamplerState::Options& state) {
+  if (state.mag_filter == FilterMode::kPoint
+      && state.min_filter == FilterMode::kPoint
+      && state.mip_filter == FilterMode::kPoint) {
+    return D3D11_FILTER_MIN_MAG_MIP_POINT;
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kLinear) {
+    return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+  } else if (state.mag_filter == FilterMode::kPoint
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kPoint) {
+    return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+  } else if (state.mag_filter == FilterMode::kPoint
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kLinear) {
+    return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kPoint
+             && state.mip_filter == FilterMode::kPoint) {
+    return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kPoint
+             && state.mip_filter == FilterMode::kLinear) {
+    return D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+  } else if (state.mag_filter == FilterMode::kLinear
+             && state.min_filter == FilterMode::kLinear
+             && state.mip_filter == FilterMode::kPoint) {
+    return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+  } else {
+    NOTREACHED();
+    return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+  }
+}
+}  // namespace
+
+
 D3DSamplerState::D3DSamplerState(const Options& opt, D3DRenderSystem* rs)
     : SamplerState(opt), 
       sampler_state_(NULL),
