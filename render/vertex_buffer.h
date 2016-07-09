@@ -6,7 +6,7 @@
 
 #include "azer/base/export.h"
 #include "azer/render/common.h"
-#include "azer/render/hardware_buffer.h"
+#include "azer/render/gpu_buffer.h"
 
 namespace azer {
 
@@ -143,15 +143,15 @@ class AZER_EXPORT VertexLayout : public ::base::RefCounted<VertexLayout> {
   DISALLOW_COPY_AND_ASSIGN(VertexLayout);
 };
 
-class AZER_EXPORT VertexBuffer : public HardwareBuffer {
+class AZER_EXPORT VertexBuffer : public GpuBuffer {
  public:
-  explicit VertexBuffer(const HBufferOptions &opt);
+  explicit VertexBuffer(const GpuBufferOptions &opt);
   virtual ~VertexBuffer();
 
   /**
    * 从 Lockable 继承的借口
    */
-  virtual HardwareBufferDataPtr map(MapType flags) = 0;
+  virtual GpuBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
 
   int32_t vertex_count() const;
@@ -199,5 +199,5 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
 AZER_EXPORT int32_t VertexTypeSize(DataFormat type);
 AZER_EXPORT std::string DumpVertexDesc(const VertexDesc* desc);
 AZER_EXPORT VertexBufferGroupPtr CreateVertexBufferGroup(
-    const HBufferOptions& opt, VertexData* vdata);
+    const GpuBufferOptions& opt, VertexData* vdata);
 }  // namespace azer

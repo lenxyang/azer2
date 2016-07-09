@@ -8,7 +8,7 @@
 #include "azer/math/math.h"
 #include "azer/base/export.h"
 #include "azer/render/common.h"
-#include "azer/render/hardware_buffer.h"
+#include "azer/render/gpu_buffer.h"
 
 namespace azer {
 
@@ -46,7 +46,7 @@ class GpuConstantsType {
 
 AZER_EXPORT int32_t GpuTableItemTypeSize(const GpuConstantsType::Type type);
 
-class AZER_EXPORT GpuConstantsTable : public HardwareBuffer {
+class AZER_EXPORT GpuConstantsTable : public GpuBuffer {
  public:
   struct Desc {
     char name[64];
@@ -90,7 +90,7 @@ class AZER_EXPORT GpuConstantsTable : public HardwareBuffer {
   int32_t size() const { return size_;}
  protected:
   GpuConstantsTable(int32_t num, const Desc* desc);
-  HardwareBufferDataPtr map(MapType flags) override;
+  GpuBufferDataPtr map(MapType flags) override;
   void unmap() override;
 
   struct Variable {

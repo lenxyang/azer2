@@ -73,7 +73,7 @@ struct AZER_EXPORT SampleDesc {
   SampleDesc();
 };
 
-class AZER_EXPORT SamplerState : public ::base::RefCounted<Texture> {
+class AZER_EXPORT SamplerState : public ::base::RefCounted<SamplerState> {
  public:
   struct AZER_EXPORT Options {
     TexAddressMode wrap_u;

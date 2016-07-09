@@ -5,7 +5,7 @@
 
 #include "azer/base/export.h"
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/hardware_buffer.h"
+#include "azer/render/gpu_buffer.h"
 
 namespace azer {
 class IndicesData;
@@ -45,13 +45,13 @@ class AZER_EXPORT IndicesData : public ::base::RefCounted<IndicesData> {
   DISALLOW_COPY_AND_ASSIGN(IndicesData);
 };
 
-class AZER_EXPORT IndicesBuffer : public HardwareBuffer {
+class AZER_EXPORT IndicesBuffer : public GpuBuffer {
  public:
-  IndicesBuffer(const HBufferOptions& opt);
+  IndicesBuffer(const GpuBufferOptions& opt);
 
   virtual ~IndicesBuffer();
 
-  virtual HardwareBufferDataPtr map(MapType flags) = 0;
+  virtual GpuBufferDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
   IndexType type() const { return type_;}
   int32_t indices_count() const { return indices_count_;}
