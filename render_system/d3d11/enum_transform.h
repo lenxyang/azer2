@@ -17,17 +17,9 @@ D3D11_CPU_ACCESS_FLAG TranslateCPUAccess(CPUAccess access);
 DXGI_FORMAT TranslateFormat(DataFormat type);
 DXGI_FORMAT TranslateTexFormat(TexFormat type);
 
-D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(PrimitiveTopology topology);
-
 DXGI_FORMAT TranslateIndexType(IndexType type);
 
 D3D11_BIND_FLAG TranslateBindTarget(uint32_t target);
-
-D3D11_FILL_MODE TranslateFillMode(FillMode mode);
-FillMode TranslateD3DFillMode(D3D11_FILL_MODE mode);
-
-D3D11_CULL_MODE TranslateCullingMode(CullingMode mode);
-CullingMode TranslateD3DCullingMode(D3D11_CULL_MODE mode);
 
 D3D11_TEXTURE_ADDRESS_MODE TranslateTexWrapMode(TexAddressMode mode);
 

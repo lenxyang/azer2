@@ -118,52 +118,6 @@ DXGI_FORMAT TranslateTexFormat(TexFormat type) {
   }
 }
 
-D3D_PRIMITIVE_TOPOLOGY TranslatePrimitiveTopology(
-    PrimitiveTopology topology) {
-  switch(topology) {
-    case kPointList: return D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
-    case kLineStrip: return D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;
-    case kLineList: return D3D_PRIMITIVE_TOPOLOGY_LINELIST;
-    case kTriangleStrip: return D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-    case kTriangleList: return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-    case kControlPoint1: return D3D11_PRIMITIVE_TOPOLOGY_1_CONTROL_POINT_PATCHLIST;
-    case kControlPoint2: return D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
-    case kControlPoint3: return D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
-    case kControlPoint4: return D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST;
-    case kControlPoint5: return D3D11_PRIMITIVE_TOPOLOGY_5_CONTROL_POINT_PATCHLIST;
-    case kControlPoint6: return D3D11_PRIMITIVE_TOPOLOGY_6_CONTROL_POINT_PATCHLIST;
-    case kControlPoint7: return D3D11_PRIMITIVE_TOPOLOGY_7_CONTROL_POINT_PATCHLIST;
-    case kControlPoint8: return D3D11_PRIMITIVE_TOPOLOGY_8_CONTROL_POINT_PATCHLIST;
-    case kControlPoint9: return D3D11_PRIMITIVE_TOPOLOGY_9_CONTROL_POINT_PATCHLIST;
-    case kControlPoint10: return D3D11_PRIMITIVE_TOPOLOGY_10_CONTROL_POINT_PATCHLIST;
-    case kControlPoint11: return D3D11_PRIMITIVE_TOPOLOGY_11_CONTROL_POINT_PATCHLIST;
-    case kControlPoint12: return D3D11_PRIMITIVE_TOPOLOGY_12_CONTROL_POINT_PATCHLIST;
-    case kControlPoint13: return D3D11_PRIMITIVE_TOPOLOGY_13_CONTROL_POINT_PATCHLIST;
-    case kControlPoint14: return D3D11_PRIMITIVE_TOPOLOGY_14_CONTROL_POINT_PATCHLIST;
-    case kControlPoint15: return D3D11_PRIMITIVE_TOPOLOGY_15_CONTROL_POINT_PATCHLIST;
-    case kControlPoint16: return D3D11_PRIMITIVE_TOPOLOGY_16_CONTROL_POINT_PATCHLIST;
-    case kControlPoint17: return D3D11_PRIMITIVE_TOPOLOGY_17_CONTROL_POINT_PATCHLIST;
-    case kControlPoint18: return D3D11_PRIMITIVE_TOPOLOGY_18_CONTROL_POINT_PATCHLIST;
-    case kControlPoint19: return D3D11_PRIMITIVE_TOPOLOGY_19_CONTROL_POINT_PATCHLIST;
-    case kControlPoint20: return D3D11_PRIMITIVE_TOPOLOGY_20_CONTROL_POINT_PATCHLIST;
-    case kControlPoint21: return D3D11_PRIMITIVE_TOPOLOGY_21_CONTROL_POINT_PATCHLIST;
-    case kControlPoint22: return D3D11_PRIMITIVE_TOPOLOGY_22_CONTROL_POINT_PATCHLIST;
-    case kControlPoint23: return D3D11_PRIMITIVE_TOPOLOGY_23_CONTROL_POINT_PATCHLIST;
-    case kControlPoint24: return D3D11_PRIMITIVE_TOPOLOGY_24_CONTROL_POINT_PATCHLIST;
-    case kControlPoint25: return D3D11_PRIMITIVE_TOPOLOGY_26_CONTROL_POINT_PATCHLIST;
-    case kControlPoint26: return D3D11_PRIMITIVE_TOPOLOGY_26_CONTROL_POINT_PATCHLIST;
-    case kControlPoint27: return D3D11_PRIMITIVE_TOPOLOGY_27_CONTROL_POINT_PATCHLIST;
-    case kControlPoint28: return D3D11_PRIMITIVE_TOPOLOGY_28_CONTROL_POINT_PATCHLIST;
-    case kControlPoint29: return D3D11_PRIMITIVE_TOPOLOGY_29_CONTROL_POINT_PATCHLIST;
-    case kControlPoint30: return D3D11_PRIMITIVE_TOPOLOGY_30_CONTROL_POINT_PATCHLIST;
-    case kControlPoint31: return D3D11_PRIMITIVE_TOPOLOGY_31_CONTROL_POINT_PATCHLIST;
-    case kControlPoint32: return D3D11_PRIMITIVE_TOPOLOGY_32_CONTROL_POINT_PATCHLIST;
-    default:
-      DCHECK(false) << "Unsupport type: " << (int32_t)topology;
-      return D3D_PRIMITIVE_TOPOLOGY_UNDEFINED;
-  }
-}
-
 DXGI_FORMAT TranslateIndexType(IndexType type) {
   switch(type) {
     case kIndexUint8: return DXGI_FORMAT_R8_UINT;
@@ -201,40 +155,6 @@ D3D11_BIND_FLAG TranslateBindTarget(uint32_t target) {
     flags |= D3D11_BIND_STREAM_OUTPUT;
   }
   return (D3D11_BIND_FLAG)flags;
-}
-
-D3D11_FILL_MODE TranslateFillMode(FillMode mode) {
-  switch(mode) {
-    case kWireFrame: return D3D11_FILL_WIREFRAME;
-    case kSolid: return D3D11_FILL_SOLID;
-    default: DCHECK(false); return (D3D11_FILL_MODE)0;
-  }
-}
-
-FillMode TranslateD3DFillMode(D3D11_FILL_MODE mode) {
-  switch(mode) {
-    case D3D11_FILL_WIREFRAME: return kWireFrame;
-    case D3D11_FILL_SOLID: return kSolid;
-    default: DCHECK(false); return (FillMode)0;
-  }
-}
-
-D3D11_CULL_MODE TranslateCullingMode(CullingMode mode) {
-  switch (mode) {
-    case kCullNone: return D3D11_CULL_NONE;
-    case kCullFront: return D3D11_CULL_FRONT;
-    case kCullBack: return D3D11_CULL_BACK;
-    default: CHECK(false); return (D3D11_CULL_MODE)0;
-  }
-}
-
-CullingMode TranslateD3DCullingMode(D3D11_CULL_MODE mode) {
-  switch (mode) {
-    case D3D11_CULL_NONE: return kCullNone;
-    case D3D11_CULL_FRONT: return kCullFront;
-    case D3D11_CULL_BACK: return kCullBack;
-    default: CHECK(false); return (CullingMode)0;
-  }
 }
 
 D3D11_TEXTURE_ADDRESS_MODE TranslateTexWrapMode(TexAddressMode mode) {

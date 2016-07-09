@@ -14,6 +14,40 @@ ID3D11Device* GetDevice() {
   DCHECK(d3drs);
   return d3drs->GetDevice();
 }
+
+D3D11_FILL_MODE TranslateFillMode(FillMode mode) {
+  switch(mode) {
+    case kWireFrame: return D3D11_FILL_WIREFRAME;
+    case kSolid: return D3D11_FILL_SOLID;
+    default: DCHECK(false); return (D3D11_FILL_MODE)0;
+  }
+}
+
+FillMode TranslateD3DFillMode(D3D11_FILL_MODE mode) {
+  switch(mode) {
+    case D3D11_FILL_WIREFRAME: return kWireFrame;
+    case D3D11_FILL_SOLID: return kSolid;
+    default: DCHECK(false); return (FillMode)0;
+  }
+}
+
+D3D11_CULL_MODE TranslateCullingMode(CullingMode mode) {
+  switch (mode) {
+    case kCullNone: return D3D11_CULL_NONE;
+    case kCullFront: return D3D11_CULL_FRONT;
+    case kCullBack: return D3D11_CULL_BACK;
+    default: CHECK(false); return (D3D11_CULL_MODE)0;
+  }
+}
+
+CullingMode TranslateD3DCullingMode(D3D11_CULL_MODE mode) {
+  switch (mode) {
+    case D3D11_CULL_NONE: return kCullNone;
+    case D3D11_CULL_FRONT: return kCullFront;
+    case D3D11_CULL_BACK: return kCullBack;
+    default: CHECK(false); return (CullingMode)0;
+  }
+}
 }
 
 D3DRasterizerState::D3DRasterizerState()
