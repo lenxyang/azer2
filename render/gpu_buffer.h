@@ -10,24 +10,23 @@
 namespace azer {
 
 class Renderer;
-class GpuBufferData;
+class GpuBufferLockData;
 class GpuBuffer;
-typedef scoped_refptr<GpuBufferData> GpuBufferDataPtr;
+typedef scoped_refptr<GpuBufferLockData> GpuBufferLockDataPtr;
 
-class AZER_EXPORT GpuBufferData: public ::base::RefCounted<GpuBufferData> {
+class AZER_EXPORT GpuBufferLockData: public ::base::RefCounted<GpuBufferLockData> {
  public:
-  GpuBufferData();
+  GpuBufferLockData(uint8_t* data, int row_size, int column);
   uint8_t* data_ptr() const { return data_;}
-  int32_t row_size() const { return row_size_;}
-  int32_t column_num() const { return column_num_;}
+  int row_size() const { return row_size_;}
+  int column_num() const { return column_num_;}
+  int size() const { return row_size_ * column_num_;}
  private:
   uint8_t* data_;
-  int32_t row_size_;
-  int32_t column_num_;
-  int32_t size_;
-
-  friend class GpuBuffer;
-  DISALLOW_COPY_AND_ASSIGN(GpuBufferData);
+  int row_size_;
+  int column_num_;
+  int size_;
+  DISALLOW_COPY_AND_ASSIGN(GpuBufferLockData);
 };
 
 struct AZER_EXPORT GpuBufferOptions {
@@ -43,19 +42,9 @@ class AZER_EXPORT GpuBuffer : public ::base::RefCounted<GpuBuffer> {
   GpuBuffer(const GpuBufferOptions& opt);
   virtual ~GpuBuffer();
 
-  virtual GpuBufferDataPtr map(MapType flags) = 0;
+  virtual GpuBufferLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
  protected:
-  void SetLockDataPtr(void* ptr, GpuBufferData* data) {
-    data->data_ = (uint8_t*)ptr;
-  }
-  void SetLockDataRowSize(int32_t size, GpuBufferData* data) {
-    data->row_size_ = size;
-  }
-  void SetLockDataColumnNum(int32_t num, GpuBufferData* data) {
-    data->column_num_ = num;
-  }
-
   const GpuBufferOptions& options() const { return options_;}
  protected:
   const GpuBufferOptions options_;
@@ -74,7 +63,7 @@ class AZER_EXPORT AutoBufferLock {
     }
   }
  private:
-  GpuBufferDataPtr data_;
+  GpuBufferLockDataPtr data_;
   GpuBuffer* hbuffer_;
   DISALLOW_COPY_AND_ASSIGN(AutoBufferLock);
 };

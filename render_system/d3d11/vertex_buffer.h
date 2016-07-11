@@ -33,7 +33,7 @@ class D3DVertexBuffer : public VertexBuffer {
   virtual ~D3DVertexBuffer();
   bool Init(SlotVertexData* dataptr, D3DRenderSystem* rs);
 
-  GpuBufferDataPtr map(MapType flags) override;
+  GpuBufferLockDataPtr map(MapType flags) override;
   void unmap() override;
 
   bool Initialized() const { return NULL != buffer_;}

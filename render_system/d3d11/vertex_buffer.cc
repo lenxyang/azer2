@@ -192,7 +192,7 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
   return true;
 }
 
-GpuBufferDataPtr D3DVertexBuffer::map(MapType flags) {
+GpuBufferLockDataPtr D3DVertexBuffer::map(MapType flags) {
   map_helper_.reset(new GpuBufferMapHelper(options(), buffer_));
   return map_helper_->map(flags);
 }
@@ -200,7 +200,7 @@ GpuBufferDataPtr D3DVertexBuffer::map(MapType flags) {
 void D3DVertexBuffer::unmap() {
   CHECK(map_helper_.get());
   map_helper_->unmap();
-  map_helper_->reset();
+  map_helper_.reset();
 }
 
 // class D3DVertexBufferGroup

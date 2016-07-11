@@ -9,7 +9,7 @@ class GpuBufferMapHelper {
  public:
   GpuBufferMapHelper(const GpuBufferOptions& options, ID3D11Buffer* buffer);
   ~GpuBufferMapHelper();
-  GpuBufferDataPtr map(MapType flags);
+  GpuBufferLockDataPtr map(MapType flags);
   void unmap();
  private:
   bool locked_;

@@ -151,7 +151,7 @@ class AZER_EXPORT VertexBuffer : public GpuBuffer {
   /**
    * 从 Lockable 继承的借口
    */
-  virtual GpuBufferDataPtr map(MapType flags) = 0;
+  virtual GpuBufferLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
 
   int32_t vertex_count() const;

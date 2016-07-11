@@ -13,7 +13,7 @@ class D3DIndicesBuffer : public IndicesBuffer {
   D3DIndicesBuffer(const GpuBufferOptions& opt);
   ~D3DIndicesBuffer() override;
 
-  GpuBufferDataPtr map(MapType flags) override;
+  GpuBufferLockDataPtr map(MapType flags) override;
   void unmap() override;
 
   bool Initialized() { return NULL != buffer_;}

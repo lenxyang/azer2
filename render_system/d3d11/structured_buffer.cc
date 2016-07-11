@@ -18,7 +18,7 @@ D3DStructuredGpuBuffer::~D3DStructuredGpuBuffer() {
   SAFE_RELEASE(bufobj_);
 }
 
-GpuBufferDataPtr D3DStructuredGpuBuffer::map(MapType flags) {
+GpuBufferLockDataPtr D3DStructuredGpuBuffer::map(MapType flags) {
   map_helper_.reset(new GpuBufferMapHelper(options(), bufobj_));
   return map_helper_->map(flags);
 }
@@ -26,7 +26,7 @@ GpuBufferDataPtr D3DStructuredGpuBuffer::map(MapType flags) {
 void D3DStructuredGpuBuffer::unmap() {
   CHECK(map_helper_.get());
   map_helper_->unmap();
-  map_helper_->reset();
+  map_helper_.reset();
 }
 
 bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {

@@ -47,7 +47,7 @@ bool D3DIndicesBuffer::Init(const IndicesData* data, D3DRenderSystem* rs) {
   return true;
 }
 
-GpuBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
+GpuBufferLockDataPtr D3DIndicesBuffer::map(MapType flags) {
   map_helper_.reset(new GpuBufferMapHelper(options(), buffer_));
   return map_helper_->map(flags);
 }
@@ -55,7 +55,7 @@ GpuBufferDataPtr D3DIndicesBuffer::map(MapType flags) {
 void D3DIndicesBuffer::unmap() {
   CHECK(map_helper_.get());
   map_helper_->unmap();
-  map_helper_->reset();
+  map_helper_.reset();
 }
 }  // namespace d3d11
 }  // namespace azer

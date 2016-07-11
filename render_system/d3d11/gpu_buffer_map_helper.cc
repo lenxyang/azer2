@@ -1,12 +1,15 @@
 #include "azer/render_system/d3d11/gpu_buffer_map_helper.h"
 
 #include "base/logging.h"
+#include "azer/render/gpu_buffer.h"
+#include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
 
 namespace azer {
 namespace d3d11 {
 
-GpuBufferMapHelper(const GpuBufferOptions& options, ID3D11Buffer* buffer) 
+GpuBufferMapHelper::GpuBufferMapHelper(const GpuBufferOptions& options,
+                                       ID3D11Buffer* buffer) 
     : options_(options),
       buffer_(buffer),
       locked_(false)  {
@@ -15,10 +18,10 @@ GpuBufferMapHelper(const GpuBufferOptions& options, ID3D11Buffer* buffer)
 
 GpuBufferMapHelper::~GpuBufferMapHelper() {
   CHECK(locked_) << "lock not freed";
-  SAFE_RELEASE(buffer);
+  SAFE_RELEASE(buffer_);
 }
 
-GpuBufferDataPtr GpuBufferMapHelper::map(MapType flags) {
+GpuBufferLockDataPtr GpuBufferMapHelper::map(MapType flags) {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   DCHECK(options_.usage & kBufferDynamic
          || options_.usage & kBufferStaging);
@@ -38,10 +41,9 @@ GpuBufferDataPtr GpuBufferMapHelper::map(MapType flags) {
     return NULL;
   }
 
-  GpuBufferDataPtr data(new GpuBufferData);
-  SetLockDataPtr(mapped.pData, data.get());
-  SetLockDataRowSize(mapped.RowPitch, data.get());
-  SetLockDataColumnNum(mapped.DepthPitch, data.get());
+  GpuBufferLockDataPtr data(new GpuBufferLockData((uint8_t*)mapped.pData,
+                                                  mapped.RowPitch,
+                                                  mapped.DepthPitch));
   locked_ = true;
   return data;
 }
