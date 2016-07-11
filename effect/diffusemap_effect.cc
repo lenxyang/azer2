@@ -54,7 +54,7 @@ void DiffuseMapEffect::SetWorld(const Matrix4& value) { world_ = value;}
 void DiffuseMapEffect::SetCameraPos(const Vector4& pos) { camerapos_ = pos;}
 void DiffuseMapEffect::SetMaterial(const DiffuseMapMaterialData& mtrl) {
   mtrl_ = mtrl;
-  SaveShaderResTexture(kPixelStage, 0, mtrl_.diffusemap.get());
+  SaveShaderResource(kPixelStage, 0, mtrl_.diffusemap.get());
 }
 
 void DiffuseMapEffect::SetLights(const LightPtr* value, int32_t count) {

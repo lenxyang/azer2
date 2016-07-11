@@ -7,6 +7,7 @@
 namespace azer {
 class Camera;
 class TextBillboardEffect;
+class TextureView;
 
 class GrayPoint {
  public:

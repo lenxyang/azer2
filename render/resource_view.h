@@ -7,6 +7,8 @@ namespace azer {
 class AZER_EXPORT ResourceView : public ::base::RefCounted<ResourceView> {
  public:
   enum Type {
+    kRenderTargetView,
+    kDepthBufferView,
     kTextureView,
     kStructuredBufferView,
   };
@@ -19,4 +21,6 @@ class AZER_EXPORT ResourceView : public ::base::RefCounted<ResourceView> {
   Type type_;
   DISALLOW_COPY_AND_ASSIGN(ResourceView);
 };
+
+typedef scoped_refptr<ResourceView> ResourceViewPtr;
 }  // namespace azer

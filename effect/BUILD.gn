@@ -11,8 +11,8 @@ source_set("effect") {
     "light.cc",
     "light.h",
     "base_material.h",
-    "stage_texture.cc",
-    "stage_texture.h",
+    "stage_res_container.cc",
+    "stage_res_container.h",
   ]
 
   deps = [

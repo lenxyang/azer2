@@ -8,7 +8,7 @@
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/shader.h"
 #include "azer/render/technique.h"
-#include "azer/effect/stage_texture.h"
+#include "azer/effect/stage_res_container.h"
 
 namespace azer {
 class Effect;
@@ -46,15 +46,15 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void SetVertexDesc(VertexDesc* desc);
   
   // 刷新所有的 GpuConstantTable
-  void FlushGpuVariables(int32_t flush_mode, Renderer* renderer);
+  void FlushGpuVariables(int flush_mode, Renderer* renderer);
 
   void Apply(Renderer* renderer);
   void OnRenderBegin(Renderer* renderer);
   void OnRenderEnd(Renderer* renderer);
   void OnRenderNewObject(Renderer* renderer);
  protected:
-  void SaveShaderResTexture(int32_t stage, int32_t index, TextureView* tex);
-  void BindTexture(int32_t mode, Renderer* renderer);
+  void SaveShaderResource(int stage, int index, ResourceView* tex);
+  void BindTexture(int mode, Renderer* renderer);
   virtual void InitGpuConstantTable() {};
   virtual void ApplyGpuConstantTable(Renderer* renderer) {}
   void BindConstantsTable(Renderer* renderer);
@@ -67,7 +67,7 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
 
   TechniquePtr technique_;
   std::vector<GpuVariable> gpu_table_;
-  StageTexContainer tex_container_;
+  StageResContainer tex_container_;
   VertexDescPtr vertex_desc_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };

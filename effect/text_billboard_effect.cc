@@ -85,6 +85,6 @@ void TextBillboardEffect::ApplyGpuConstantTable(Renderer* renderer) {
 
 void TextBillboardEffect::SetTexture(TextureView* tex) {
   tex_ = tex;
-  SaveShaderResTexture(kPixelStage, 0, tex);
+  SaveShaderResource(kPixelStage, 0, tex);
 }
 }  // namespace azer

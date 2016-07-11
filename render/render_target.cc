@@ -6,7 +6,8 @@ RenderTarget::Options::Options()
 }
 
 RenderTarget::RenderTarget(const Options& opt, bool default_rt)
-    : default_render_target_(default_rt),
+    : ResourceView(ResourceView::kRenderTargetView),
+      default_render_target_(default_rt),
       options_(opt) {
 }
 

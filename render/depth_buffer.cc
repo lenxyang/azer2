@@ -16,7 +16,8 @@ DepthStencilState::~DepthStencilState() {}
 
 // class DepthBuffer
 DepthBuffer::DepthBuffer(const Options& opt) 
-    : options_(opt) {
+    : ResourceView(ResourceView::kDepthBufferView),
+      options_(opt) {
 }
 
 DepthBuffer::~DepthBuffer() {}

@@ -40,8 +40,9 @@ void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 }
 
+
 void OverlayEffect::SetTexture(TextureView* texture) {
   texture_ = texture;
-  SaveShaderResTexture(kPixelStage, 0, texture);
+  SaveShaderResource(kPixelStage, 0, texture);
 }
 }  // namespace azer

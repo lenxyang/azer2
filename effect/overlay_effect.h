@@ -4,9 +4,10 @@
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/light.h"
 #include "azer/render/texture.h"
+#include "azer/render/texture_view.h"
 
 namespace azer {
-class Texture;
+class Resource;
 
 class OverlayEffect : public Effect {
  public:

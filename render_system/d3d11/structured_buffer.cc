@@ -29,13 +29,13 @@ void D3DStructuredGpuBuffer::unmap() {
 bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {
   HRESULT hr;
   ID3D11Device* d3ddevice = rs->GetDevice();
-  D3D11_BUFFER_DESC desc = {0};
+  D3D11_BUFFER_DESC desc;
   ZeroMemory(&desc, sizeof(desc));
   desc.BindFlags = TranslateBindTarget(options().target);
   desc.StructureByteStride = strip();
   desc.ByteWidth = this->size();
   desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-  hr = d3ddevice->CreateBuffer(&desc, NULL, &bufobj_);;
+  hr = d3ddevice->CreateBuffer(&desc, NULL, &bufobj_);
   return true;
 }
 
@@ -54,7 +54,7 @@ bool D3DUAStructuredGpuBufferView::Init(D3DRenderSystem* rs) {
   HRESULT hr;
   D3DStructuredGpuBuffer* buffer = (D3DStructuredGpuBuffer*)(this->buffer());
   D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
-  memset(&desc, 0, sizeof(desc));
+  ZeroMemory(&desc, sizeof(desc));
   desc.Format = DXGI_FORMAT_UNKNOWN;
   desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
   desc.Buffer.NumElements = buffer->count();

@@ -42,7 +42,7 @@ void SkyboxEffect::ApplyGpuConstantTable(Renderer* renderer) {
 
 void SkyboxEffect::SetTexture(TextureView* texture) {
   cubemap_ = texture;
-  SaveShaderResTexture(kPixelStage, 0, texture);
+  SaveShaderResource(kPixelStage, 0, texture);
 }
 
 }  // namespace azer

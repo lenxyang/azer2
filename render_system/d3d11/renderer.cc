@@ -12,6 +12,7 @@
 #include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
+#include "azer/render_system/d3d11/structured_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/technique.h"
@@ -273,7 +274,7 @@ void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int index,
   }
 }
 
-void D3DRenderer::ResetStageTexture(RenderPipelineStage stage) {
+void D3DRenderer::ResetStageResource(RenderPipelineStage stage) {
   const int count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   ID3D11ShaderResourceView* views[count] = {0};
   DCHECK(NULL != d3d_context_);
@@ -331,12 +332,12 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index,
   const int kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
-  TextureViewPtr* cur = (TextureViewPtr*)texture;
+  ResourceViewPtr* cur = (ResourceViewPtr*)res;
   for (int i = 0; i < count; ++i, ++cur) {
-    if (res->type() == ResourceView::kTextureView) {
+    if ((*cur)->view_type() == ResourceView::kTextureView) {
       D3DResTextureView* tex = (D3DResTextureView*)(cur->get());
       views[i] = tex ? tex->GetResourceView() : NULL;
-    } else if (res->type() == ResourceView::kStructuredBufferView) {
+    } else if ((*cur)->view_type() == ResourceView::kStructuredBufferView) {
       D3DStructuredGpuBufferView* tex = (D3DStructuredGpuBufferView*)(cur->get());
       views[i] = tex ? tex->GetResourceView() : NULL;
     }
@@ -363,16 +364,17 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index,
 }
 
 void D3DRenderer::SetShaderUAResource(RenderPipelineStage stage, int index, 
-                                    int count, ResourceViewPtr* res) {
+                                      int count, ResourceViewPtr* res) {
   const int kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
-  ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
+  ID3D11UnorderedAccessView* views[kMaxShaderTexCount] = {0};
   TextureViewPtr* cur = (TextureViewPtr*)res;
   for (int i = 0; i < count; ++i, ++cur) {
-    if (res->type() == ResourceView::kTextureView) {
+    if ((*cur)->view_type() == ResourceView::kTextureView) {
+      
       D3DUAResTextureView* tex = (D3DUAResTextureView*)(cur->get());
       views[i] = tex ? tex->GetResourceView() : NULL;
-    } else if (res->type() == ResourceView::kStructuredBufferView) {
+    } else if ((*cur)->view_type() == ResourceView::kStructuredBufferView) {
       D3DUAStructuredGpuBufferView* tex = (D3DUAStructuredGpuBufferView*)(
           cur->get());
       views[i] = tex ? tex->GetResourceView() : NULL;
@@ -380,22 +382,15 @@ void D3DRenderer::SetShaderUAResource(RenderPipelineStage stage, int index,
   }
   
   switch (stage) {
+    case kComputeStage:
+      d3d_context_->CSSetUnorderedAccessViews(index, count, views, (UINT*)&views);
+      break;
     case kVertexStage: 
-      d3d_context_->VSSetUnorderedAccessViews(index, count, views);
-      break;
     case kHullStage: 
-      d3d_context_->HSSetUnorderedAccessViews(index, count, views);
-      break;
     case kDomainStage: 
-      d3d_context_->DSSetUnorderedAccessViews(index, count, views);
-      break;
     case kGeometryStage: 
-      d3d_context_->GSSetUnorderedAccessViews(index, count, views);
-      break;
-    case kPixelStage: 
-      d3d_context_->PSSetUnorderedAccessViews(index, count, views);
-      break;
-    default: CHECK(false);
+    case kPixelStage:
+    default: CHECK(false) << "UnorderedAccess just support ComputeStage";
   }
 }
 
