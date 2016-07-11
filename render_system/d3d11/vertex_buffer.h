@@ -8,6 +8,7 @@
 namespace azer {
 namespace d3d11 {
 class D3DBlob;
+class GpuBufferMapHelper;
 
 class D3DVertexLayout : public VertexLayout {
  public:
@@ -40,6 +41,7 @@ class D3DVertexBuffer : public VertexBuffer {
  private:
   bool locked_;
   ID3D11Buffer* buffer_;
+  std::unique_ptr<GpuBufferMapHelper> map_helper_;
   friend class D3DVertexBufferGroup;
   DISALLOW_COPY_AND_ASSIGN(D3DVertexBuffer);
 };

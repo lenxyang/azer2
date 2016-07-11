@@ -1,8 +1,9 @@
 #include "azer/render_system/d3d11/structured_buffer.h"
 
-#include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
+#include "azer/render_system/d3d11/gpu_buffer_map_helper.h"
+#include "azer/render_system/d3d11/render_system.h"
 
 namespace azer {
 namespace d3d11 {
@@ -18,12 +19,14 @@ D3DStructuredGpuBuffer::~D3DStructuredGpuBuffer() {
 }
 
 GpuBufferDataPtr D3DStructuredGpuBuffer::map(MapType flags) {
-  CHECK(false);
-  return GpuBufferDataPtr();
+  map_helper_.reset(new GpuBufferMapHelper(options(), bufobj_));
+  return map_helper_->map(flags);
 }
 
 void D3DStructuredGpuBuffer::unmap() {
-  CHECK(false);
+  CHECK(map_helper_.get());
+  map_helper_->unmap();
+  map_helper_->reset();
 }
 
 bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {

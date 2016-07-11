@@ -18,6 +18,7 @@ class D3DStructuredGpuBuffer : public StructuredGpuBuffer {
   bool Init(D3DRenderSystem* rs);
  private:
   ID3D11Buffer* bufobj_;
+  std::unique_ptr<GpuBufferMapHelper> map_helper_;
   DISALLOW_COPY_AND_ASSIGN(D3DStructuredGpuBuffer);
 };
 
