@@ -17,27 +17,18 @@ GpuComputeTask::GpuComputeTask(const ShaderInfo& info)
 GpuComputeTask::~GpuComputeTask() {}
 
 void GpuComputeTask::Reset() {
-  memset(input_, 0, sizeof(input_));
-  memset(output_, 0, sizeof(output_));
-  input_count_ = 0;
-  output_count_ = 0;
 }
 
-void GpuComputeTask::SetInputTexture(int32_t index, TextureView* tex) {
-  DCHECK_LT(index, input_count_);
-  input_[index] = tex;
+void GpuComputeTask::SetInputResource(int index, ResourceView* tex) {
+  input_.SetResource(kComputeStage, index, tex);
 }
+
+void GpuComputeTask::SetInputUAResource(int index, ResourceView* tex) {
+  uainput_.SetResource(kComputeStage, index, tex);
+}
+
 void GpuComputeTask::SetOutputTexture(int32_t index, TextureView* tex) {
-  DCHECK_LT(index, output_count_);
-  output_[index] = tex;
-}
-
-TextureView* GpuComputeTask::GetInputAt(int32_t index) {
-  return input_[index];
-}
-
-TextureView* GpuComputeTask::GetOutputAt(int32_t index) {
-  return output_[index];
+  output_.SetResource(kComputeStage, index, tex);
 }
 
 GpuComputeTaskDispatcher::GpuComputeTaskDispatcher() {}

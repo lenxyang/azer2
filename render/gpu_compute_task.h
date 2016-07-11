@@ -20,29 +20,21 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   explicit GpuComputeTask(const ShaderInfo& info);
   virtual ~GpuComputeTask();
 
-  int input_count() const { return input_count_;}
-  int output_count() const { return output_count_;}
-  void SetInputCount(int32_t count) { input_count_ = count;}
-  void SetOutputCount(int32_t count) { output_count_ = count;}
-  void SetInputTexture(int32_t index, TextureView* tex);
-  void SetInputUAView(int32_t index, TextureView* tex);
-  void SetOutputTexture(int32_t index, TextureView* tex);
+  void SetInputResource(int index, ResourceView* tex);
+  void SetInputUAResource(int index, ResourceView* tex);
+  void SetOutputTexture(int index, TextureView* tex);
   void Reset();
-
-  TextureView* GetInputAt(int32_t index);
-  TextureView* GetOutputAt(int32_t index);
   Shader* gpu_program() { return gpu_program_.get();}
   GpuConstantsTable* constants_table() { return constants_table_.get();}
 
-  static const int32_t kMaxInput = 32;
-  static const int32_t kMaxOutput = 32;
+  static const int kMaxInput = 32;
+  static const int kMaxOutput = 32;
  protected:
   scoped_refptr<Shader> gpu_program_;
   scoped_refptr<GpuConstantsTable> constants_table_;
-  TextureView* input_[kMaxInput];
-  TextureView* output_[kMaxOutput];
-  int32_t input_count_;
-  int32_t output_count_;
+  StageResContainer input_;
+  StageResContainer uainput_;
+  StageResContainer output_;
   ShaderInfo shader_info_;
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTask);
 };
