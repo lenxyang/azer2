@@ -238,7 +238,7 @@ StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
     return NULL;
   }
 }
-StructuredGpuBufferViewPtr D3DRenderSystem::CreateStructuredBuffer(
+StructuredGpuBufferViewPtr D3DRenderSystem::CreateStructuredBufferView(
     const StructuredGpuBufferView::Options& opt, StructuredGpuBuffer* buffer) {
   scoped_refptr<D3DUAStructuredGpuBufferView> ptr(
       new D3DUAStructuredGpuBufferView(opt, buffer));

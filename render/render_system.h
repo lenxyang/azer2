@@ -82,7 +82,7 @@ class AZER_EXPORT RenderSystem {
   virtual SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) = 0;
   virtual StructuredGpuBufferPtr CreateStructuredBuffer(
       const GpuBufferOptions& opt, int count, int strip) = 0;
-  virtual StructuredGpuBufferViewPtr CreateStructuredBuffer(
+  virtual StructuredGpuBufferViewPtr CreateStructuredBufferView(
       const StructuredGpuBufferView::Options& opt, StructuredGpuBuffer* buffer) = 0;
 
   // create Shader

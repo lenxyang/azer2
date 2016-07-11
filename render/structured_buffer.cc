@@ -18,7 +18,8 @@ StructuredGpuBufferView::Options::Options() {
 
 StructuredGpuBufferView::StructuredGpuBufferView(const Options& opt, 
                                            StructuredGpuBuffer* buffer)
-    : options_(opt),
+    : ResourceView(ResourceView::kTextureView),
+      options_(opt),
       buffer_(buffer) {
 }
 

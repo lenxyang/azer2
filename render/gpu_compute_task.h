@@ -6,6 +6,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/shader.h"
+#include "azer/render/resource_view.h"
 
 namespace azer {
 class Shader;
@@ -24,6 +25,7 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   void SetInputCount(int32_t count) { input_count_ = count;}
   void SetOutputCount(int32_t count) { output_count_ = count;}
   void SetInputTexture(int32_t index, TextureView* tex);
+  void SetInputUAView(int32_t index, TextureView* tex);
   void SetOutputTexture(int32_t index, TextureView* tex);
   void Reset();
 

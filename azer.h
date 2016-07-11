@@ -23,6 +23,7 @@
 #include "azer/render/render_target.h"
 #include "azer/render/render_system.h"
 #include "azer/render/renderer.h"
+#include "azer/render/structured_buffer.h"
 #include "azer/render/technique.h"
 #include "azer/render/texture_view.h"
 #include "azer/render/vertex_buffer.h"
