@@ -56,14 +56,16 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void BindVertexBufferGroup(VertexBufferGroup* vbg) = 0;
   virtual void BindIndicesBuffer(IndicesBuffer* ib) = 0;
   virtual void ResetStageTexture(RenderPipelineStage stage) = 0;
-  virtual void SetShaderResTexture(RenderPipelineStage stage, int index, 
-                                   int32_t count, TextureViewPtr* texture) = 0;
+  virtual void SetShaderResource(RenderPipelineStage stage, int index, 
+                                 int count, ResourceViewPtr* texture) = 0;
+  virtual void SetShaderUAResource(RenderPipelineStage stage, int index, 
+                                   int count, ResourceViewPtr* texture) = 0;
   virtual void SetShaderSamplerState(RenderPipelineStage stage, int index, 
-                                     int32_t count, SamplerStatePtr* sampler) = 0;
-  virtual void BindConstantsTable(RenderPipelineStage stage, int32_t index,
+                                     int count, SamplerStatePtr* sampler) = 0;
+  virtual void BindConstantsTable(RenderPipelineStage stage, int index,
                                   GpuConstantsTable* table) = 0;
   virtual void SetStreamOutTargets(GpuBuffer** buffer, int count, int off) = 0;
-  virtual void SetBlending(Blending* blending, float* factor, uint32_t mask) = 0;
+  virtual void SetBlending(Blending* blending, float* factor, uint mask) = 0;
   virtual void ResetBlending() = 0;
   virtual void Reset() = 0;
 
@@ -78,20 +80,20 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void SetVertexLayout(VertexLayout* layout) = 0;
   virtual void SetPrimitiveTopology(PrimitiveTopology primitive) = 0;
   virtual void DrawAuto() = 0;
-  virtual void Draw(int32_t num_of_vertices, int32_t first_vertex) = 0;
-  virtual void DrawIndex(int32_t indices_count, int32_t vbase, int32_t ibase) = 0;
-  virtual void DrawInstanced(int32_t instance_count, int32_t vertices_count,
-                             int32_t vertex_base, int32_t instance_start_index) = 0;
-  virtual void DrawIndexInstanced(int32_t instance_num, int32_t num_of_indices,
-                                  int32_t first_indices, int32_t index_base,
-                                  int32_t instance_start_index) = 0;
+  virtual void Draw(int num_of_vertices, int first_vertex) = 0;
+  virtual void DrawIndex(int indices_count, int vbase, int ibase) = 0;
+  virtual void DrawInstanced(int instance_count, int vertices_count,
+                             int vertex_base, int instance_start_index) = 0;
+  virtual void DrawIndexInstanced(int instance_num, int num_of_indices,
+                                  int first_indices, int index_base,
+                                  int instance_start_index) = 0;
   
   const gfx::Size& size() const; 
   virtual void SetViewport(const Viewport& viewport) = 0;
   virtual const Viewport& GetViewport() const  = 0;
 
   DepthBuffer* GetDepthBuffer() { return depth_.get();}
-  RenderTarget* GetRenderTarget(int32_t index) { return targets_[index].get();}
+  RenderTarget* GetRenderTarget(int index) { return targets_[index].get();}
   typedef std::vector<RenderTargetPtr> RenderTargetVec;
   RenderTargetVec* GetAllRenderTargets() { return &targets_;}
   RenderSystem* GetRenderSystem() { return render_system_;}

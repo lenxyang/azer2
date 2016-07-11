@@ -31,13 +31,15 @@ class D3DRenderer : public Renderer {
   void BindVertexBuffer(VertexBuffer* vb) override;
   void BindVertexBufferGroup(VertexBufferGroup* vbg) override;
   void BindIndicesBuffer(IndicesBuffer* ib) override;
-  void BindConstantsTable(RenderPipelineStage stage, int32_t index,
+  void BindConstantsTable(RenderPipelineStage stage, int index,
                           GpuConstantsTable* table) override;
   void ResetStageTexture(RenderPipelineStage stage) override;
-  void SetShaderResTexture(RenderPipelineStage stage, int index, 
-                           int32_t count, TextureViewPtr* texture) override;
+  void SetShaderResource(RenderPipelineStage stage, int index, 
+                         int count, ResourceViewPtr* texture) override;
+  void SetShaderUAResource(RenderPipelineStage stage, int index, 
+                           int count, ResourceViewPtr* texture) override;
   void SetShaderSamplerState(RenderPipelineStage stage, int index, 
-                             int32_t count, SamplerStatePtr* sampler) override;
+                             int count, SamplerStatePtr* sampler) override;
   void SetStreamOutTargets(GpuBuffer** buffer, int count, int offset) override;
   void ResetShader(RenderPipelineStage stage) override;
 
@@ -48,14 +50,14 @@ class D3DRenderer : public Renderer {
   void SetPrimitiveTopology(PrimitiveTopology primitive) override;
   void SetVertexLayout(VertexLayout* layout) override;
   void DrawAuto() override;
-  void Draw(int32_t num_of_vertices, int32_t first_vertex) override;
-  void DrawIndex(int32_t num_of_indices, int32_t first_indices, 
-                 int32_t index_base) override;
-  void DrawInstanced(int32_t instance_num, int32_t num_of_vertices, 
-                     int32_t first_vertex, int32_t instance_start_index) override;
-  void DrawIndexInstanced(int32_t instance_num, int32_t num_of_indices, 
-                          int32_t first_indices, int32_t index_base,
-                          int32_t instance_start_index) override;
+  void Draw(int num_of_vertices, int first_vertex) override;
+  void DrawIndex(int num_of_indices, int first_indices, 
+                 int index_base) override;
+  void DrawInstanced(int instance_num, int num_of_vertices, 
+                     int first_vertex, int instance_start_index) override;
+  void DrawIndexInstanced(int instance_num, int num_of_indices, 
+                          int first_indices, int index_base,
+                          int instance_start_index) override;
 
   void SetViewport(const Viewport& viewport) override;
   const Viewport& GetViewport() const override;
@@ -75,8 +77,6 @@ class D3DRenderer : public Renderer {
  protected:
   void InitRasterizerState();
   void InitForRenderTarget();
-  void SetShaderResource(RenderPipelineStage stage, uint32_t first, uint32_t num,
-                         ID3D11ShaderResourceView** view);
 
   D3DRenderSystem* d3d11_render_system_;
   Viewport viewport_;
