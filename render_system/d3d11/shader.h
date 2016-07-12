@@ -28,7 +28,7 @@ class D3DVertexShader : public D3DShader {
  public:
   D3DVertexShader(VertexDesc* desc, const ShaderInfo& info);
   ~D3DVertexShader() override;
-  ID3D11VertexShader* resource() { return resource_;}
+  ID3D11VertexShader* handle() { return resource_;}
  private:
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
   ID3D11VertexShader* resource_;
@@ -43,7 +43,7 @@ class D3DPixelShader : public D3DShader {
   D3DPixelShader(const ShaderInfo& info);
   ~D3DPixelShader() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
-  ID3D11PixelShader* resource() { return resource_;}
+  ID3D11PixelShader* handle() { return resource_;}
  private:
   ID3D11PixelShader* resource_;
   friend class D3DTechnique;
@@ -57,7 +57,7 @@ class D3DGeometryShader : public D3DShader {
   virtual ~D3DGeometryShader();
   bool Init(RenderSystem* rs) override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
-  ID3D11GeometryShader* resource() { return resource_;}
+  ID3D11GeometryShader* handle() { return resource_;}
  private:
   ID3D11GeometryShader* resource_;
   friend class D3DTechnique;
@@ -69,7 +69,7 @@ class D3DHullShader : public D3DShader {
   D3DHullShader(const ShaderInfo& info);
   ~D3DHullShader() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
-  ID3D11HullShader* resource() { return resource_;}
+  ID3D11HullShader* handle() { return resource_;}
  private:
   ID3D11HullShader* resource_;
   friend class D3DTechnique;
@@ -81,7 +81,7 @@ class D3DDomainShader : public D3DShader {
   D3DDomainShader(const ShaderInfo& info);
   ~D3DDomainShader() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
-  ID3D11DomainShader* resource() { return resource_;}
+  ID3D11DomainShader* handle() { return resource_;}
  private:
   ID3D11DomainShader* resource_;
   friend class D3DTechnique;
@@ -93,7 +93,7 @@ class D3DComputeShader : public D3DShader {
   D3DComputeShader(const ShaderInfo& info);
   ~D3DComputeShader() override;
   bool InitResource(ID3D11Device* d3d_device, ID3DBlob* blob) override;
-  ID3D11ComputeShader* resource() { return resource_;}
+  ID3D11ComputeShader* handle() { return resource_;}
  private:
   ID3D11ComputeShader* resource_;
   friend class D3DTechnique;

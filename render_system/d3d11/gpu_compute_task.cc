@@ -28,8 +28,6 @@ void D3DGpuComputeTaskDispatcher::Reset() {
 
 void D3DGpuComputeTaskDispatcher::Dispatch(const GpuTaskParams params) {
   /*
-  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
-  ID3D11DeviceContext* context = rs->GetContext();
   D3DComputeShader* program = (D3DComputeShader*)task->gpu_program();
   input_.Bind(renderer);
   for (int32_t i = 0; i < task->input_count(); ++i) {
@@ -44,10 +42,13 @@ void D3DGpuComputeTaskDispatcher::Dispatch(const GpuTaskParams params) {
   context->CSSetShader(program->resource(), 0, 0);
   context->CSSetShaderResources(0, task->input_count(), resview_);
   context->CSSetUnorderedAccessViews(0, task->output_count(), uavview_, 0);
-  context->Dispatch(params.thread_group_x, params.thread_group_y,
-                    params.thread_group_z);
+  
   Reset();
   */
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  ID3D11DeviceContext* context = rs->GetContext();
+  context->Dispatch(params.thread_group_x, params.thread_group_y,
+                    params.thread_group_z);
 }
 }  // namespace d3d11
 }  // namespace azer

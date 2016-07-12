@@ -203,16 +203,50 @@ void D3DRenderer::ClearDepthAndStencil(bool clear_depth, bool clear_stencil,
   depth->Clear(this, clear_depth, clear_stencil, depth_val, stencil_val);
 }
 
+void D3DRenderer::SetShader(int stage, Shader* shader) {
+  switch (stage) {
+    case kVertexStage:
+      d3d_context_->VSSetShader((D3DVertexShader*)shader->handle(), 0, 0);
+      break;
+    case kGeometryStage:
+      d3d_context_->GSSetShader((D3DGeometryShader*)shader->handle(), 0, 0);
+      break;
+    case kDomainStage:
+      d3d_context_->SSSetShader((D3DDomainShader*)shader->handle(), 0, 0);
+      break;
+    case kHullStage:
+      d3d_context_->HSSetShader((D3DHullShader*)shader->handle(), 0, 0);
+      break;
+    case kComputeStage:
+      d3d_context_->CSSetShader((D3DComputeShader*)shader->handle(), 0, 0);
+      break;
+    case kPixelStage:
+      d3d_context_->PSSetShader((D3DPixelShader*)shader->handle(), 0, 0);
+      break;
+    default:
+      CHECK(false) << "No such GpuProgram Type: " << (int)stage;
+  }
+}
+
 void D3DRenderer::ResetShader(RenderPipelineStage stage) {
   switch (stage) {
     case kVertexStage:
       d3d_context_->VSSetShader(NULL, 0, 0);
       break;
-    case kPixelStage:
-      d3d_context_->PSSetShader(NULL, 0, 0);
-      break;
     case kGeometryStage:
       d3d_context_->GSSetShader(NULL, 0, 0);
+      break;
+    case kDomainStage:
+      d3d_context_->SSSetShader(NULL, 0, 0);
+      break;
+    case kHullStage:
+      d3d_context_->HSSetShader(NULL, 0, 0);
+      break;
+    case kComputeStage:
+      d3d_context_->CSSetShader(NULL, 0, 0);
+      break;
+    case kPixelStage:
+      d3d_context_->PSSetShader(NULL, 0, 0);
       break;
     default:
       CHECK(false) << "No such GpuProgram Type: " << (int)stage;

@@ -31,11 +31,13 @@ struct AZER_EXPORT ShaderInfo {
   int32_t stage;
   int32_t format;
   std::string code;
+  std::string name;
   std::string path;
   std::string version;
   std::string entry;
   std::string defines;
   std::string includes;
+  std::string options;
 };
 
 class AZER_EXPORT Shader : public ::base::RefCounted<Shader> {

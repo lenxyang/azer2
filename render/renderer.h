@@ -22,6 +22,7 @@ class GpuConstantsTable;
 class IndicesBuffer;
 class RenderSystem;
 class RasterizerState;
+class Shader;
 class Texture;
 class TextureView;
 class VertexBuffer;
@@ -76,6 +77,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
                                     float depth_val = 1.0,
                                     int stencil_val = 0) = 0;
 
+  virtual void SetShader(int stage, Shader* shader) = 0;
   virtual void ResetShader(RenderPipelineStage stage) = 0;
   virtual void SetVertexLayout(VertexLayout* layout) = 0;
   virtual void SetPrimitiveTopology(PrimitiveTopology primitive) = 0;

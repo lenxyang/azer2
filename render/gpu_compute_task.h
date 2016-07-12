@@ -24,7 +24,7 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
 
   void SetResource(int index, ResourceView* tex);
   void SetUAResource(int index, ResourceView* tex);
-  void Reset();
+  void Reset(Renderer* renderer);
   void Bind(Renderer* renderer);
   Shader* gpu_program() { return gpu_program_.get();}
   GpuConstantsTable* constants_table() { return constants_table_.get();}

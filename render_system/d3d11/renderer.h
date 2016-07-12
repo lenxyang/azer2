@@ -42,6 +42,7 @@ class D3DRenderer : public Renderer {
                              int count, SamplerStatePtr* sampler) override;
   void SetStreamOutTargets(GpuBuffer** buffer, int count, int offset) override;
   void ResetShader(RenderPipelineStage stage) override;
+  void SetShader(int stage, Shader* shader) override;
 
   void Clear(const azer::Vector4& color) override;
   void ClearDepthAndStencil(bool clear_depth, bool clear_stencil, float depth_val, 
