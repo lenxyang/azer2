@@ -89,7 +89,6 @@ class AZER_EXPORT RenderSystem {
   // Vertex Gpu Program need to help check "Vertex Layout"
   //
   virtual ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) = 0;
-  virtual GpuComputeTaskDispatcherPtr CreateDispatcher() = 0;
   virtual bool reset() = 0;
 
   Context2D* GetContext2D() { return context2d_.get();}

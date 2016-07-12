@@ -59,6 +59,7 @@ class D3DRenderer : public Renderer {
   void DrawIndexInstanced(int instance_num, int num_of_indices, 
                           int first_indices, int index_base,
                           int instance_start_index) override;
+  void DispatchComputeTask(const GpuTaskParams& params) override;
 
   void SetViewport(const Viewport& viewport) override;
   const Viewport& GetViewport() const override;

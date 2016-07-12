@@ -34,6 +34,10 @@ typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
 typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
 typedef scoped_refptr<TextureView> TextureViewPtr;
 
+struct GpuTaskParams {
+  Vector3 thread_group;
+};
+
 
 class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
  public:
@@ -89,6 +93,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void DrawIndexInstanced(int instance_num, int num_of_indices,
                                   int first_indices, int index_base,
                                   int instance_start_index) = 0;
+  virtual void DispatchComputeTask(const GpuTaskParams& params) = 0;
   
   const gfx::Size& size() const; 
   virtual void SetViewport(const Viewport& viewport) = 0;

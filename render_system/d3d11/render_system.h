@@ -61,7 +61,6 @@ class D3DRenderSystem : public RenderSystem {
       const StructuredGpuBufferView::Options& opt, StructuredGpuBuffer* buffer) override;
 
   ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) override;
-  GpuComputeTaskDispatcherPtr CreateDispatcher() override;
   TechniquePtr CreateTechnique() override;
 
   bool reset() override;

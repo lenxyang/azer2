@@ -12,7 +12,6 @@
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/gpu_compute_task.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
@@ -212,11 +211,6 @@ SamplerStatePtr D3DRenderSystem::CreateSamplerState(
   } else {
     return SamplerStatePtr();
   }
-}
-
-GpuComputeTaskDispatcherPtr D3DRenderSystem::CreateDispatcher() {
-  GpuComputeTaskDispatcherPtr ptr(new D3DGpuComputeTaskDispatcher);
-  return ptr;
 }
 
 BlendingPtr D3DRenderSystem::CreateBlending(const Blending::BlendDesc& desc) {

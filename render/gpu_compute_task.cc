@@ -59,6 +59,4 @@ void GpuComputeTask::SetUAResource(int index, ResourceView* tex) {
   shader_uaresource_[index] = tex;
 }
 
-// class GpuComputeTaskDispatcher
-GpuComputeTaskDispatcher::GpuComputeTaskDispatcher() {}
 }  // namespace azer

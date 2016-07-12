@@ -1,6 +1,8 @@
 #include "azer/render_system/d3d11/shader.h"
 
 #include <d3dcompiler.h>
+#include "base/strings/string_util.h"
+#include "base/strings/string_split.h"
 #include "azer/base/string.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
@@ -208,18 +210,39 @@ bool D3DComputeShader::InitResource(ID3D11Device* d3ddevice, ID3DBlob* blob) {
   return true;
 }
 
-const DWORD kCommflags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR 
+const uint32_t kCommflags = D3DCOMPILE_PACK_MATRIX_ROW_MAJOR 
     | D3DCOMPILE_ENABLE_STRICTNESS;
 
-#if defined(_DEBUG)
-const DWORD kCompileFlags =
+const uint32_t kDefaultCompileFlags =
     D3DCOMPILE_DEBUG
     | D3DCOMPILE_PREFER_FLOW_CONTROL
     | D3DCOMPILE_SKIP_OPTIMIZATION
     | kCommflags;
-#else
-const DWORD kCompileFlags = D3DCOMPILE_SKIP_VALIDATION | kCommflags;
-#endif
+
+const uint32_t CalcFlags(const std::string& options) {
+  uint32_t flags = kDefaultCompileFlags;
+  std::vector<std::string> vec = base::SplitString(
+      options, ",", ::base::TRIM_WHITESPACE, ::base::SPLIT_WANT_NONEMPTY);
+  for (auto iter = vec.begin(); iter != vec.end(); ++iter) {
+    if (*iter == "release") {
+      flags ^= D3DCOMPILE_DEBUG;
+    }
+    if (*iter == "debug") {
+      flags |= D3DCOMPILE_DEBUG;
+    }
+    if (*iter == "strictness") {
+      flags |= D3DCOMPILE_ENABLE_STRICTNESS;
+    }
+    if (*iter == "prefer_flow_control") {
+      flags |= D3DCOMPILE_PREFER_FLOW_CONTROL;
+    }
+    if (*iter == "optimization") {
+      flags ^= D3DCOMPILE_SKIP_OPTIMIZATION;
+    }
+  }
+
+  return flags;
+}
 
 const char* DefaultShaderEntryForStage(RenderPipelineStage stage) {
   switch (stage) {
@@ -255,6 +278,7 @@ ID3DBlob* CompileHLSL(const ShaderInfo& info, std::string* error_msg) {
   ID3DBlob* blob = NULL;
   ID3DBlob* msgblob = NULL;
   HRESULT hr;
+  const uint32_t compile_flags = CalcFlags(info.options);
   hr = D3DCompile(info.code.c_str(),
                   info.code.length(),
                   source_path.c_str(),
@@ -262,7 +286,7 @@ ID3DBlob* CompileHLSL(const ShaderInfo& info, std::string* error_msg) {
                   D3D_COMPILE_STANDARD_FILE_INCLUDE, // pIncludes
                   entry_name, // pEntryPointer
                   target,
-                  kCompileFlags,
+                  compile_flags,
                   0,
                   &blob,
                   &msgblob);

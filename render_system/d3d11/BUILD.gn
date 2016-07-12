@@ -15,8 +15,6 @@ shared_library("d3d11") {
     "enum_transform.h",
     "gpu_buffer_map_helper.cc",
     "gpu_buffer_map_helper.h",
-    "gpu_compute_task.cc",
-    "gpu_compute_task.h",
     "gpu_constants_table.cc",
     "gpu_constants_table.h",
     "indices_buffer.cc",

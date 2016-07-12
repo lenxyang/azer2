@@ -26,6 +26,14 @@ enum ShaderType {
   kBinaryShader,
 };
 
+/**
+ * options:
+ *   "debug"
+ *   "optimization"
+ *   "strictness"
+ *   "prefer_flow_control"
+ *
+ **/
 struct AZER_EXPORT ShaderInfo {
   ShaderInfo();
   int32_t stage;

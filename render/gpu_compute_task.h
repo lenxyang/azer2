@@ -5,6 +5,7 @@
 
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/math/vector3.h"
 #include "azer/effect/stage_res_container.h"
 #include "azer/render/shader.h"
 #include "azer/render/resource_view.h"
@@ -39,20 +40,4 @@ protected:
 };
 
 typedef scoped_refptr<GpuComputeTask> GpuComputeTaskPtr;
-
-struct GpuTaskParams {
-  uint32_t thread_group_x;
-  uint32_t thread_group_y;
-  uint32_t thread_group_z;
-};
-
-class AZER_EXPORT GpuComputeTaskDispatcher :
-      public ::base::RefCounted<GpuComputeTaskDispatcher> {
- public:
-  GpuComputeTaskDispatcher();
-  virtual void Dispatch(const GpuTaskParams params) = 0;
- private:
-  DISALLOW_COPY_AND_ASSIGN(GpuComputeTaskDispatcher);
-};
-typedef scoped_refptr<GpuComputeTaskDispatcher> GpuComputeTaskDispatcherPtr;
 }  // namespace azer
