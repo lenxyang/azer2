@@ -6,13 +6,14 @@
 namespace azer {
 namespace d3d11 {
 class D3DRenderSystem;
+class GpuBufferMapHelper;
 
 class D3DIndicesBuffer : public IndicesBuffer {
  public:
   D3DIndicesBuffer(const GpuBufferOptions& opt);
   ~D3DIndicesBuffer() override;
 
-  GpuBufferDataPtr map(MapType flags) override;
+  GpuBufferLockDataPtr map(MapType flags) override;
   void unmap() override;
 
   bool Initialized() { return NULL != buffer_;}
@@ -21,6 +22,7 @@ class D3DIndicesBuffer : public IndicesBuffer {
  private:
   bool locked_;
   ID3D11Buffer* buffer_;
+  std::unique_ptr<GpuBufferMapHelper> map_helper_;
   DISALLOW_COPY_AND_ASSIGN(D3DIndicesBuffer);
 };
 }  // namespace d3d11

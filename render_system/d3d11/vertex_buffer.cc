@@ -7,6 +7,7 @@
 #include "azer/base/string.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
+#include "azer/render_system/d3d11/gpu_buffer_map_helper.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
 
@@ -191,43 +192,15 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
   return true;
 }
 
-GpuBufferDataPtr D3DVertexBuffer::map(MapType flags) {
-  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
-  DCHECK(options_.usage & kBufferDynamic
-         || options_.usage & kBufferStaging);
-  DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
-
-  HRESULT hr;
-  DCHECK(!locked_) << "Vertex Buffer(" << options_.name << ") has been locked";
-  ID3D11Device* d3d_device = rs->GetDevice();
-  ID3D11DeviceContext* d3d_context = NULL;
-  d3d_device->GetImmediateContext(&d3d_context);
-  ScopedRefCOM autocom(d3d_context);
-  D3D11_MAPPED_SUBRESOURCE mapped;
-  D3D11_MAP d3d11_map = TranslateMapType(flags);
-  hr = d3d_context->Map(buffer_, 0, d3d11_map, 0, &mapped);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "D3D11 VertexBuffer: Map failed, desc: " << HRMessage(hr);
-    return NULL;
-  }
-
-  GpuBufferDataPtr data(new GpuBufferData);
-  SetLockDataPtr(mapped.pData, data.get());
-  SetLockDataRowSize(mapped.RowPitch, data.get());
-  SetLockDataColumnNum(mapped.DepthPitch, data.get());
-  locked_ = true;
-  return data;
+GpuBufferLockDataPtr D3DVertexBuffer::map(MapType flags) {
+  map_helper_.reset(new GpuBufferMapHelper(options(), buffer_));
+  return map_helper_->map(flags);
 }
 
 void D3DVertexBuffer::unmap() {
-  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
-  DCHECK(locked_) << "Vertex Buffer(" << options_.name << ") has not been locked";
-  ID3D11Device* d3d_device = rs->GetDevice();
-  ID3D11DeviceContext* d3d_context = NULL;
-  d3d_device->GetImmediateContext(&d3d_context);
-  ScopedRefCOM autocom(d3d_context);
-  d3d_context->Unmap(buffer_, 0);
-  locked_ = false;
+  CHECK(map_helper_.get());
+  map_helper_->unmap();
+  map_helper_.reset();
 }
 
 // class D3DVertexBufferGroup

@@ -1,10 +1,11 @@
 #include "azer/render/gpu_buffer.h"
 
 namespace azer {
-GpuBufferData::GpuBufferData()
-    : data_(0), row_size_(-1), size_(-1) {
+GpuBufferLockData::GpuBufferLockData(uint8_t* data, int row_size, int column)
+    : data_(data), row_size_(row_size), column_num_(column) {
 }
 
+// class GpuBufferOptions
 GpuBufferOptions::GpuBufferOptions()
     : usage(kBufferDefault),
       cpu_access(kCPUNoAccess),

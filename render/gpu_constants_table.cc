@@ -78,9 +78,9 @@ void GpuConstantsTable::SetValueWithOffset(int32_t idx, int32_t offset,
   SetData(variable.offset + offset, value, size);
 }
 
-GpuBufferDataPtr GpuConstantsTable::map(MapType flags) {
+GpuBufferLockDataPtr GpuConstantsTable::map(MapType flags) {
   NOTIMPLEMENTED();
-  return GpuBufferDataPtr();
+  return GpuBufferLockDataPtr();
 }
 void GpuConstantsTable::unmap() {
   NOTIMPLEMENTED();

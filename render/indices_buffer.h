@@ -51,7 +51,7 @@ class AZER_EXPORT IndicesBuffer : public GpuBuffer {
 
   virtual ~IndicesBuffer();
 
-  virtual GpuBufferDataPtr map(MapType flags) = 0;
+  virtual GpuBufferLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
   IndexType type() const { return type_;}
   int32_t indices_count() const { return indices_count_;}
