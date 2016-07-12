@@ -1,9 +1,9 @@
 #include "azer/render/structured_buffer.h"
 
 namespace azer {
-StructuredGpuBuffer::StructuredGpuBuffer(const GpuBufferOptions& options, 
+StructuredGpuBuffer::StructuredGpuBuffer(const GpuResOptions& options, 
                                          int count, int strip)
-    : GpuBuffer(options, GpuBufferType::kStructuredBuffer),
+    : GpuBuffer(options, GpuResType::kStructuredBuffer),
       size_(count * strip),
       strip_(strip),
       count_(count) {

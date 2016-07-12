@@ -67,9 +67,9 @@ class AZER_EXPORT RenderSystem {
 
   // create gpu buffers
   virtual VertexBufferGroupPtr CreateVertexBufferGroup(VertexDesc* desc) = 0;
-  virtual VertexBufferPtr CreateVertexBuffer(const GpuBufferOptions& opt,
+  virtual VertexBufferPtr CreateVertexBuffer(const GpuResOptions& opt,
                                              SlotVertexData* vdata) = 0;
-  virtual IndicesBufferPtr CreateIndicesBuffer(const GpuBufferOptions& opt,
+  virtual IndicesBufferPtr CreateIndicesBuffer(const GpuResOptions& opt,
                                                IndicesData* idata) = 0;
   virtual GpuConstantsTablePtr CreateGpuConstantsTable(
       int32_t num, const GpuConstantsTable::Desc* desc) = 0;
@@ -79,7 +79,7 @@ class AZER_EXPORT RenderSystem {
   virtual TexturePtr CreateTexture(const Texture::Options& opt,
                                    const ImageData* image) = 0;
   virtual StructuredGpuBufferPtr CreateStructuredBuffer(
-      const GpuBufferOptions& opt, int count, int strip) = 0;
+      const GpuResOptions& opt, int count, int strip) = 0;
   virtual SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) = 0;
   virtual TextureViewPtr CreateTextureView(const TextureView::Options& opt, 
                                            Texture* tex) = 0;

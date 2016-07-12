@@ -7,17 +7,17 @@
 namespace azer {
 namespace d3d11 {
 class D3DRenderSystem;
-class GpuBufferMapHelper;
+class GpuResLockHelper;
 
 class D3DIndicesBuffer : public IndicesBuffer {
  public:
-  D3DIndicesBuffer(const GpuBufferOptions& opt);
+  D3DIndicesBuffer(const GpuResOptions& opt);
   ~D3DIndicesBuffer() override;
 
-  GpuBufferLockDataPtr map(MapType flags) override;
+  GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
-  NativeGpuBufferHandle native_handle() override {
-    return (NativeGpuBufferHandle)buffer();
+  NativeGpuResourceHandle native_handle() override {
+    return (NativeGpuResourceHandle)buffer();
   }
 
   bool Initialized() { return NULL != buffer_;}
@@ -27,7 +27,7 @@ class D3DIndicesBuffer : public IndicesBuffer {
  private:
   bool locked_;
   ID3D11Buffer* buffer_;
-  std::unique_ptr<GpuBufferMapHelper> map_helper_;
+  std::unique_ptr<GpuResLockHelper> map_helper_;
   DISALLOW_COPY_AND_ASSIGN(D3DIndicesBuffer);
 };
 }  // namespace d3d11

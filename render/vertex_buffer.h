@@ -145,13 +145,13 @@ class AZER_EXPORT VertexLayout : public ::base::RefCounted<VertexLayout> {
 
 class AZER_EXPORT VertexBuffer : public GpuBuffer {
  public:
-  explicit VertexBuffer(const GpuBufferOptions &opt);
+  explicit VertexBuffer(const GpuResOptions &opt);
   virtual ~VertexBuffer();
 
   /**
    * 从 Lockable 继承的借口
    */
-  virtual GpuBufferLockDataPtr map(MapType flags) = 0;
+  virtual GpuResLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
 
   int32_t vertex_count() const;
@@ -199,5 +199,5 @@ class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGrou
 AZER_EXPORT int32_t VertexTypeSize(DataFormat type);
 AZER_EXPORT std::string DumpVertexDesc(const VertexDesc* desc);
 AZER_EXPORT VertexBufferGroupPtr CreateVertexBufferGroup(
-    const GpuBufferOptions& opt, VertexData* vdata);
+    const GpuResOptions& opt, VertexData* vdata);
 }  // namespace azer

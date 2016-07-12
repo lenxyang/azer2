@@ -271,8 +271,8 @@ VertexDesc* VertexData::vertex_desc() {
   return desc_.get();
 }
 
-VertexBuffer::VertexBuffer(const GpuBufferOptions &opt)
-    : GpuBuffer(opt, GpuBufferType::kVertexBuffer)
+VertexBuffer::VertexBuffer(const GpuResOptions &opt)
+    : GpuBuffer(opt, GpuResType::kVertexBuffer)
     , element_size_(-1)
     , buffer_size_(-1)
     , vertex_count_(-1) {
@@ -357,7 +357,7 @@ std::string DumpVertexDesc(const VertexDesc* desc) {
 }
 
 
-VertexBufferGroupPtr CreateVertexBufferGroup(const GpuBufferOptions& opt,
+VertexBufferGroupPtr CreateVertexBufferGroup(const GpuResOptions& opt,
                                              VertexData* vdata) {
   RenderSystem* rs = RenderSystem::Current();
   VertexBufferGroupPtr group(rs->CreateVertexBufferGroup(vdata->vertex_desc()));

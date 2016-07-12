@@ -12,7 +12,7 @@
 #include "azer/render_system/d3d11/common.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/gpu_buffer_map_helper.h"
+#include "azer/render_system/d3d11/gpu_res_lock_helper.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
 
@@ -30,8 +30,8 @@ D3DTexture::~D3DTexture() {
   SAFE_RELEASE(texres_);
 }
 
-NativeGpuBufferHandle D3DTexture::native_handle() {
-  return (NativeGpuBufferHandle)texres_;
+NativeGpuResourceHandle D3DTexture::native_handle() {
+  return (NativeGpuResourceHandle)texres_;
 }
 
 void D3DTexture::InitTexDesc() {
@@ -77,8 +77,8 @@ void D3DTexture::Detach() {
 }
 
 // reference: MSDN "How to: Use dynamic resources"
-GpuBufferLockDataPtr D3DTexture::map(MapType flags) {
-  map_helper_.reset(new GpuTexLockHelper(buffer_options(), texres_));
+GpuResLockDataPtr D3DTexture::map(MapType flags) {
+  map_helper_.reset(new GpuResLockHelper(buffer_options(), texres_));
   return map_helper_->map(flags);
 }
 

@@ -9,7 +9,7 @@
 namespace azer {
 namespace d3d11 {
 class D3DBlob;
-class GpuBufferMapHelper;
+class GpuResLockHelper;
 
 class D3DVertexLayout : public VertexLayout {
  public:
@@ -30,22 +30,22 @@ class D3DVertexLayout : public VertexLayout {
 
 class D3DVertexBuffer : public VertexBuffer {
  public:
-  D3DVertexBuffer(const GpuBufferOptions &opt);
+  D3DVertexBuffer(const GpuResOptions &opt);
   virtual ~D3DVertexBuffer();
   bool Init(SlotVertexData* dataptr, D3DRenderSystem* rs);
 
-  GpuBufferLockDataPtr map(MapType flags) override;
+  GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
 
   bool Initialized() const { return NULL != buffer_;}
   ID3D11Buffer* buffer() { return buffer_;}
-  NativeGpuBufferHandle native_handle() override {
-    return (NativeGpuBufferHandle)buffer();
+  NativeGpuResourceHandle native_handle() override {
+    return (NativeGpuResourceHandle)buffer();
   }
  private:
   bool locked_;
   ID3D11Buffer* buffer_;
-  std::unique_ptr<GpuBufferMapHelper> map_helper_;
+  std::unique_ptr<GpuResLockHelper> map_helper_;
   friend class D3DVertexBufferGroup;
   DISALLOW_COPY_AND_ASSIGN(D3DVertexBuffer);
 };

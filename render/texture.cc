@@ -45,8 +45,8 @@ SampleDesc::SampleDesc()
 }
 
 namespace {
-GpuBufferOptions FromTexOptions(const Texture::Options& opt) {
-  GpuBufferOptions o;
+GpuResOptions FromTexOptions(const Texture::Options& opt) {
+  GpuResOptions o;
   o.usage = opt.usage;
   o.cpu_access = opt.cpu_access;
   o.target = opt.target;
@@ -55,7 +55,7 @@ GpuBufferOptions FromTexOptions(const Texture::Options& opt) {
 }
 
 Texture::Texture(const Options& opt) 
-    : GpuBuffer(FromTexOptions(opt), GpuBufferType::kTexture),
+    : GpuBuffer(FromTexOptions(opt), GpuResType::kTexture),
       options_(opt) {
 }
 
@@ -73,7 +73,7 @@ bool Texture::Save(const ::base::FilePath& path) {
   bitmap.allocPixels();
 
   uint8_t* pixels = (uint8_t*)bitmap.getPixels();
-  GpuBufferLockDataPtr dataptr = this->map(MapType::kWriteDiscard);
+  GpuResLockDataPtr dataptr = this->map(MapType::kWriteDiscard);
   if (dataptr->data_ptr() == NULL) {
     return false;
   }

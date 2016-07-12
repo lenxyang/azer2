@@ -3,13 +3,13 @@
 #include "azer/render/indices_buffer.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/gpu_buffer_map_helper.h"
+#include "azer/render_system/d3d11/gpu_res_lock_helper.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
 
 namespace azer {
 namespace d3d11 {
-D3DIndicesBuffer::D3DIndicesBuffer(const GpuBufferOptions& opt)
+D3DIndicesBuffer::D3DIndicesBuffer(const GpuResOptions& opt)
     : IndicesBuffer(opt)
     , locked_(false)
     , buffer_(NULL) {
@@ -48,8 +48,8 @@ bool D3DIndicesBuffer::Init(const IndicesData* data, D3DRenderSystem* rs) {
   return true;
 }
 
-GpuBufferLockDataPtr D3DIndicesBuffer::map(MapType flags) {
-  map_helper_.reset(new GpuBufferMapHelper(buffer_options(), buffer_));
+GpuResLockDataPtr D3DIndicesBuffer::map(MapType flags) {
+  map_helper_.reset(new GpuResLockHelper(buffer_options(), buffer_));
   return map_helper_->map(flags);
 }
 

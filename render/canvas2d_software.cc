@@ -40,7 +40,7 @@ uint32_t SoftwareCanvas2D::GetTexID() {
 
 bool SoftwareCanvas2D::UpdateTexture() {
   DCHECK(NULL != texture_.get());
-  GpuBufferLockDataPtr mapdata = texture_->map(MapType::kWriteDiscard);
+  GpuResLockDataPtr mapdata = texture_->map(MapType::kWriteDiscard);
   if (mapdata.get() && mapdata->data_ptr()) {
     SkImageInfo imageinfo = SkImageInfo::Make(skcanvas_->imageInfo().width(),
                                               skcanvas_->imageInfo().height(),

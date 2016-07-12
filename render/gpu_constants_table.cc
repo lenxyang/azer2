@@ -33,7 +33,7 @@ int32_t GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
 }
 
 GpuConstantsTable::GpuConstantsTable(int32_t num, const Desc* desc)
-    : GpuBuffer(kShaderConstsTableBufferOpt(), GpuBufferType::kConstantTable) {
+    : GpuBuffer(kShaderConstsTableBufferOpt(), GpuResType::kConstantTable) {
   uint32_t offset = 0;
   const Desc* curr = desc;
   for (int32_t i = 0; i < num; ++i, ++curr) {
@@ -78,9 +78,9 @@ void GpuConstantsTable::SetValueWithOffset(int32_t idx, int32_t offset,
   SetData(variable.offset + offset, value, size);
 }
 
-GpuBufferLockDataPtr GpuConstantsTable::map(MapType flags) {
+GpuResLockDataPtr GpuConstantsTable::map(MapType flags) {
   NOTIMPLEMENTED();
-  return GpuBufferLockDataPtr();
+  return GpuResLockDataPtr();
 }
 void GpuConstantsTable::unmap() {
   NOTIMPLEMENTED();

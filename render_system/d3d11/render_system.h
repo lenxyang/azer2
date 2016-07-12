@@ -38,9 +38,9 @@ class D3DRenderSystem : public RenderSystem {
   RendererPtr CreateRenderer(RenderTargetPtrs* targets, DepthBuffer* depth) override;
   BlendingPtr CreateBlending(const Blending::BlendDesc& desc) override;
   VertexBufferGroupPtr CreateVertexBufferGroup(VertexDesc* desc) override;
-  VertexBufferPtr CreateVertexBuffer(const GpuBufferOptions& opt,
+  VertexBufferPtr CreateVertexBuffer(const GpuResOptions& opt,
                                      SlotVertexData* data) override;
-  IndicesBufferPtr CreateIndicesBuffer(const GpuBufferOptions& opt,
+  IndicesBufferPtr CreateIndicesBuffer(const GpuResOptions& opt,
                                        IndicesData*) override;
   GpuConstantsTablePtr CreateGpuConstantsTable(
       int32_t num, const GpuConstantsTable::Desc* desc) override;
@@ -55,7 +55,7 @@ class D3DRenderSystem : public RenderSystem {
   UATextureViewPtr CreateUATextureView(const UATextureView::Options& opt, 
                                        Texture* tex) override;
   StructuredGpuBufferPtr CreateStructuredBuffer(
-      const GpuBufferOptions& opt, int count, int strip) override;
+      const GpuResOptions& opt, int count, int strip) override;
   ShaderResViewPtr CreateStructureBufferShaderResView(GpuBuffer* buffer) override;
   UnorderAccessResViewPtr CreateUAStructBufferResView(GpuBuffer* buffer) override;
 

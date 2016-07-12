@@ -90,7 +90,7 @@ class AZER_EXPORT GpuConstantsTable : public GpuBuffer {
   int32_t size() const { return size_;}
  protected:
   GpuConstantsTable(int32_t num, const Desc* desc);
-  GpuBufferLockDataPtr map(MapType flags) override;
+  GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
 
   struct Variable {

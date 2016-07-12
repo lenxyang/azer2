@@ -7,7 +7,7 @@
 #include "azer/base/string.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/gpu_buffer_map_helper.h"
+#include "azer/render_system/d3d11/gpu_res_lock_helper.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
 
@@ -150,7 +150,7 @@ bool D3DVertexLayout::Init(RenderSystem* rs, ID3DBlob* blob) {
 }
 
 // class D3DVertexBuffer
-D3DVertexBuffer::D3DVertexBuffer(const GpuBufferOptions &opt)
+D3DVertexBuffer::D3DVertexBuffer(const GpuResOptions &opt)
     : VertexBuffer(opt)
     , locked_(false)
     , buffer_(NULL) {
@@ -192,8 +192,8 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
   return true;
 }
 
-GpuBufferLockDataPtr D3DVertexBuffer::map(MapType flags) {
-  map_helper_.reset(new GpuBufferMapHelper(buffer_options(), buffer_));
+GpuResLockDataPtr D3DVertexBuffer::map(MapType flags) {
+  map_helper_.reset(new GpuResLockHelper(buffer_options(), buffer_));
   return map_helper_->map(flags);
 }
 

@@ -17,10 +17,10 @@ class AZER_EXPORT StructuredGpuBuffer : public GpuBuffer {
   int count() const { return count_;}
   int strip() const { return strip_;}
 
-  virtual GpuBufferLockDataPtr map(MapType flags) = 0;
+  virtual GpuResLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
  protected:
-  StructuredGpuBuffer(const GpuBufferOptions& options, int count, int strip);
+  StructuredGpuBuffer(const GpuResOptions& options, int count, int strip);
  private:
   const int size_;
   const int strip_;
