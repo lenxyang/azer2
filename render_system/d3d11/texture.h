@@ -9,14 +9,16 @@ namespace azer {
 namespace d3d11 {
 class D3DRenderer;
 class D3DRenderSystem;
+class GpuTexLockHelper;
 
 class D3DTexture: public Texture {
  public:
   D3DTexture(const Options& opt, D3DRenderSystem* rs);
 
   virtual ~D3DTexture();
-  MapData map(MapType type) override;
+  GpuBufferLockDataPtr map(MapType type) override;
   void unmap() override;
+  NativeGpuBufferHandle native_handle() override;
 
   bool Init(const D3D11_SUBRESOURCE_DATA* data);
   bool Initialized() const { return NULL != texres_;}
@@ -33,10 +35,7 @@ class D3DTexture: public Texture {
   D3DRenderSystem* render_system_;
   D3D11_TEXTURE2D_DESC tex_desc_;
   int32_t diminison_;
-
-#ifdef DEBUG
-  bool mapped_;
-#endif
+  std::unique_ptr<GpuTexLockHelper> map_helper_;
   DISALLOW_COPY_AND_ASSIGN(D3DTexture);
 };
 

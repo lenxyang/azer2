@@ -10,10 +10,11 @@
 #include "base/strings/string16.h"
 #include "azer/base/image.h"
 #include "azer/render_system/d3d11/common.h"
+#include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
+#include "azer/render_system/d3d11/gpu_buffer_map_helper.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
-#include "azer/render_system/d3d11/dx3d_util.h"
 
 namespace azer {
 namespace d3d11 {
@@ -23,13 +24,14 @@ D3DTexture::D3DTexture(const Options& opt, D3DRenderSystem* rs)
       texres_(NULL),
       render_system_(rs),
       diminison_(0) {
-#ifdef DEBUG
-  mapped_ = false;
-#endif
 }
 
 D3DTexture::~D3DTexture() {
   SAFE_RELEASE(texres_);
+}
+
+NativeGpuBufferHandle D3DTexture::native_handle() {
+  return (NativeGpuBufferHandle)texres_;
 }
 
 void D3DTexture::InitTexDesc() {
@@ -75,39 +77,15 @@ void D3DTexture::Detach() {
 }
 
 // reference: MSDN "How to: Use dynamic resources"
-Texture::MapData D3DTexture::map(MapType maptype) {
-  DCHECK(NULL != texres_);
-  MapData mapdata;
-  ZeroMemory(&mapdata, sizeof(mapdata));
-  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-
-  D3D11_MAPPED_SUBRESOURCE mapped;
-  ZeroMemory(&mapped, sizeof(D3D11_MAPPED_SUBRESOURCE));
-  HRESULT hr = d3d_context->Map(texres_, 0, TranslateMapType(maptype), 0, &mapped);
-  if (FAILED(hr)) {
-    LOG(ERROR) << "Map Texture failed.";
-    return mapdata;
-  }
-  
-  mapdata.pdata = (uint8_t*)mapped.pData;
-  mapdata.row_pitch = mapped.RowPitch;
-  mapdata.depth_pitch = mapped.DepthPitch;
-
-#ifdef DEBUG
-  DCHECK(!mapped_);
-  mapped_ = true;
-#endif
-  return mapdata;
+GpuBufferLockDataPtr D3DTexture::map(MapType flags) {
+  map_helper_.reset(new GpuTexLockHelper(buffer_options(), texres_));
+  return map_helper_->map(flags);
 }
 
 void D3DTexture::unmap() {
-#ifdef DEBUG
-  DCHECK(mapped_);
-  mapped_ = false;
-#endif
-  DCHECK(NULL != texres_);
-  ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-  d3d_context->Unmap(texres_, 0);
+  CHECK(map_helper_.get());
+  map_helper_->unmap();
+  map_helper_.reset();
 }
 
 bool D3DTexture::CopyTo(Texture* texture) {
@@ -125,7 +103,8 @@ bool D3DTexture::CopyTo(Texture* texture) {
   if (options().sample_desc.count == tex->options().sample_desc.count) {
     ID3D11DeviceContext* d3d_context = render_system_->GetContext();
     d3d_context->CopyResource(tex->texres_, texres_);
-  } else if (options().sample_desc.count > 1 && tex->options().sample_desc.count == 1) {
+  } else if (options().sample_desc.count > 1 
+             && tex->options().sample_desc.count == 1) {
     ID3D11DeviceContext* d3d_context = render_system_->GetContext();
     d3d_context->ResolveSubresource(
         tex->texres_, 0, texres_, 0, TranslateTexFormat(tex->options().format));

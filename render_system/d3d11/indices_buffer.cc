@@ -28,10 +28,11 @@ bool D3DIndicesBuffer::Init(const IndicesData* data, D3DRenderSystem* rs) {
 
   D3D11_BUFFER_DESC indices_buffer_desc;
   ZeroMemory(&indices_buffer_desc, sizeof(indices_buffer_desc));
-  indices_buffer_desc.Usage = TranslateUsage(options_.usage);
+  indices_buffer_desc.Usage = TranslateUsage(buffer_options().usage);
   indices_buffer_desc.ByteWidth = data->size();
   indices_buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-  indices_buffer_desc.CPUAccessFlags = TranslateCPUAccess(options_.cpu_access);;
+  indices_buffer_desc.CPUAccessFlags = TranslateCPUAccess(
+      buffer_options().cpu_access);
   indices_buffer_desc.MiscFlags = 0;
 
   D3D11_SUBRESOURCE_DATA d3d_vdata;
@@ -48,7 +49,7 @@ bool D3DIndicesBuffer::Init(const IndicesData* data, D3DRenderSystem* rs) {
 }
 
 GpuBufferLockDataPtr D3DIndicesBuffer::map(MapType flags) {
-  map_helper_.reset(new GpuBufferMapHelper(options(), buffer_));
+  map_helper_.reset(new GpuBufferMapHelper(buffer_options(), buffer_));
   return map_helper_->map(flags);
 }
 

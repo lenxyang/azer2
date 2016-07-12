@@ -46,9 +46,9 @@ class AZER_EXPORT GpuBuffer : public ::base::RefCounted<GpuBuffer> {
   virtual void unmap() = 0;
   virtual NativeGpuBufferHandle native_handle() = 0;
  protected:
-  const GpuBufferOptions& options() const { return options_;}
- protected:
-  const GpuBufferOptions options_;
+  const GpuBufferOptions& buffer_options() const { return buffer_options_;}
+ private:
+  const GpuBufferOptions buffer_options_;
   DISALLOW_COPY_AND_ASSIGN(GpuBuffer);
 };
 

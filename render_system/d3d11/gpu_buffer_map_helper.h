@@ -17,5 +17,18 @@ class GpuBufferMapHelper {
   const GpuBufferOptions options_;
   DISALLOW_COPY_AND_ASSIGN(GpuBufferMapHelper);
 };
+
+class GpuTexLockHelper {
+ public:
+  GpuTexLockHelper(const GpuBufferOptions& options, ID3D11Resource* buffer);
+  ~GpuTexLockHelper();
+  GpuBufferLockDataPtr map(MapType flags);
+  void unmap();
+ private:
+  bool locked_;
+  ID3D11Resource* buffer_;
+  const GpuBufferOptions options_;
+  DISALLOW_COPY_AND_ASSIGN(GpuTexLockHelper);
+};
 }  // namespace d3d11
 }  // namespace azer

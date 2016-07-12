@@ -19,7 +19,7 @@ D3DStructuredGpuBuffer::~D3DStructuredGpuBuffer() {
 }
 
 GpuBufferLockDataPtr D3DStructuredGpuBuffer::map(MapType flags) {
-  map_helper_.reset(new GpuBufferMapHelper(options(), bufobj_));
+  map_helper_.reset(new GpuBufferMapHelper(buffer_options(), bufobj_));
   return map_helper_->map(flags);
 }
 
@@ -34,7 +34,7 @@ bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {
   ID3D11Device* d3ddevice = rs->GetDevice();
   D3D11_BUFFER_DESC desc;
   ZeroMemory(&desc, sizeof(desc));
-  desc.BindFlags = TranslateBindTarget(options().target);
+  desc.BindFlags = TranslateBindTarget(buffer_options().target);
   desc.StructureByteStride = strip();
   desc.ByteWidth = this->size();
   desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;

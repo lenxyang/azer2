@@ -44,7 +44,20 @@ SampleDesc::SampleDesc()
     : count(1), quality(0) {
 }
 
-Texture::Texture(const Options& opt) : options_(opt) {}
+namespace {
+GpuBufferOptions FromTexOptions(const Texture::Options& opt) {
+  GpuBufferOptions o;
+  o.usage = opt.usage;
+  o.cpu_access = opt.cpu_access;
+  o.target = opt.target;
+  return o;
+}
+}
+
+Texture::Texture(const Options& opt) 
+    : GpuBuffer((FromTexOptions(opt))),
+      options_(opt) {
+}
 
 const gfx::Size& Texture::size() const {
   return options_.size;
@@ -60,17 +73,17 @@ bool Texture::Save(const ::base::FilePath& path) {
   bitmap.allocPixels();
 
   uint8_t* pixels = (uint8_t*)bitmap.getPixels();
-  MapData mapdata = map(MapType::kReadOnly);
-  if (mapdata.pdata == NULL) {
+  GpuBufferLockDataPtr dataptr = this->map(MapType::kWriteDiscard);
+  if (dataptr->data_ptr() == NULL) {
     return false;
   }
 
-  uint32_t row_pitch = mapdata.row_pitch;
+  uint32_t row_pitch = dataptr->row_size();
   for (int32_t i = 0; i < options_.size.height(); ++i) {
-    memcpy(pixels, mapdata.pdata + i * row_pitch, row_pitch);
+    memcpy(pixels, dataptr->data_ptr() + i * row_pitch, row_pitch);
     pixels += row_pitch;
   }
-  unmap();
+  this->unmap();
   return SaveSkBitmap(bitmap, path);
 }
 

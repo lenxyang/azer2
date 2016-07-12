@@ -10,6 +10,7 @@
 #include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/render/common.h"
+#include "azer/render/gpu_buffer.h"
 
 namespace azer {
 
@@ -102,7 +103,7 @@ class AZER_EXPORT SamplerState : public ::base::RefCounted<SamplerState> {
   DISALLOW_COPY_AND_ASSIGN(SamplerState);
 };
 
-class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
+class AZER_EXPORT Texture : public GpuBuffer {
  public:
   struct AZER_EXPORT Options {
     gfx::Size size;
@@ -121,22 +122,7 @@ class AZER_EXPORT Texture : public ::base::RefCounted<Texture> {
   explicit Texture(const Options& opt);
   virtual ~Texture() {}
 
-  /**
-   * Note: map 返回 MapData 结构体，返回的数据当中 width 和 depth
-   * 不一定和 option 当中制定的大小是一致的
-   * 导致这个问题的原因是，有可能 GPU 采用更大的对其方式
-   * 因此操作内存时，应以 MapData 给定的数据为准，不要使用 Options 的数据
-   */
-  struct MapData {
-    uint8_t* pdata;
-    uint32_t row_pitch;
-    uint32_t depth_pitch;
-  };
-
-
   const gfx::Size& size() const;
-  virtual MapData map(MapType maptype) = 0;
-  virtual void unmap() = 0;
   virtual bool InitFromImage(const ImageData* image) = 0;
   virtual bool CopyTo(Texture* texture) = 0;
   

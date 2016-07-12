@@ -170,9 +170,9 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
 
   D3D11_BUFFER_DESC vb_desc;
   ZeroMemory(&vb_desc, sizeof(vb_desc));
-  vb_desc.Usage = TranslateUsage(options_.usage);
-  vb_desc.BindFlags = TranslateBindTarget(options_.target);
-  vb_desc.CPUAccessFlags = TranslateCPUAccess(options_.cpu_access);
+  vb_desc.Usage = TranslateUsage(buffer_options().usage);
+  vb_desc.BindFlags = TranslateBindTarget(buffer_options().target);
+  vb_desc.CPUAccessFlags = TranslateCPUAccess(buffer_options().cpu_access);
   vb_desc.MiscFlags = 0;
   vb_desc.ByteWidth = dataptr->buffer_size();
 
@@ -193,7 +193,7 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
 }
 
 GpuBufferLockDataPtr D3DVertexBuffer::map(MapType flags) {
-  map_helper_.reset(new GpuBufferMapHelper(options(), buffer_));
+  map_helper_.reset(new GpuBufferMapHelper(buffer_options(), buffer_));
   return map_helper_->map(flags);
 }
 

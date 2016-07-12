@@ -9,6 +9,7 @@
 #include "base/logging.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
+#include "azer/render/common.h"
 #include "azer/render/render_system.h"
 
 namespace azer {
@@ -39,15 +40,15 @@ uint32_t SoftwareCanvas2D::GetTexID() {
 
 bool SoftwareCanvas2D::UpdateTexture() {
   DCHECK(NULL != texture_.get());
-  Texture::MapData mapdata = texture_->map(MapType::kWriteDiscard);
-  if (mapdata.pdata) {
+  GpuBufferLockDataPtr mapdata = texture_->map(MapType::kWriteDiscard);
+  if (mapdata.get() && mapdata->data_ptr()) {
     SkImageInfo imageinfo = SkImageInfo::Make(skcanvas_->imageInfo().width(),
                                               skcanvas_->imageInfo().height(),
                                               kRGBA_8888_SkColorType,
                                               kOpaque_SkAlphaType);
     CHECK(skcanvas_->readPixels(imageinfo,
-                                mapdata.pdata, 
-                                mapdata.row_pitch, 0, 0));
+                                mapdata->data_ptr(), 
+                                mapdata->row_size(), 0, 0));
   }
   texture_->unmap();
   return true;

@@ -14,7 +14,7 @@ GpuBufferOptions::GpuBufferOptions()
 }
 
 GpuBuffer::GpuBuffer(const GpuBufferOptions& opt) 
-    : options_(opt) {
+    : buffer_options_(opt) {
 }
 
 GpuBuffer::~GpuBuffer() {
