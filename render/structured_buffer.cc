@@ -12,21 +12,4 @@ StructuredGpuBuffer::StructuredGpuBuffer(const GpuBufferOptions& options,
 StructuredGpuBuffer::~StructuredGpuBuffer() {
 }
 
-// class StructuredGpuBufferView
-StructuredGpuBufferView::Options::Options() {
-}
-
-StructuredGpuBufferView::StructuredGpuBufferView(const Options& opt, 
-                                                 StructuredGpuBuffer* buffer)
-    : ResourceView(ResourceView::kTextureView),
-      options_(opt),
-      buffer_(buffer) {
-}
-
-StructuredGpuBufferView::~StructuredGpuBufferView() {
-}
-
-StructuredGpuBuffer* StructuredGpuBufferView::buffer() { 
-  return buffer_.get(); 
-}
 }  // namespace azer

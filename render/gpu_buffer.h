@@ -13,6 +13,7 @@ class Renderer;
 class GpuBufferLockData;
 class GpuBuffer;
 typedef scoped_refptr<GpuBufferLockData> GpuBufferLockDataPtr;
+typedef scoped_refptr<GpuBuffer> GpuBufferPtr;
 
 class AZER_EXPORT GpuBufferLockData: public ::base::RefCounted<GpuBufferLockData> {
  public:

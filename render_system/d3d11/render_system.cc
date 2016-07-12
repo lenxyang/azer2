@@ -232,6 +232,14 @@ StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
     return NULL;
   }
 }
+
+ShaderResViewPtr D3DRenderSystem::CreateShaderResView(
+    const ShaderResView::Options& opt, GpuBuffer* buffer) {
+}
+
+UnorderAccessResViewPtr D3DRenderSystem::CreateUnorderAccessResView(
+    const UnorderAccessResView::Options& opt, GpuBuffer* buffer) {
+}
 StructuredGpuBufferViewPtr D3DRenderSystem::CreateStructuredBufferView(
     const StructuredGpuBufferView::Options& opt, StructuredGpuBuffer* buffer) {
   scoped_refptr<D3DUAStructuredGpuBufferView> ptr(

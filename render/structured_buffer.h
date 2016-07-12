@@ -28,22 +28,4 @@ class AZER_EXPORT StructuredGpuBuffer : public GpuBuffer {
   DISALLOW_COPY_AND_ASSIGN(StructuredGpuBuffer);
 };
 
-class AZER_EXPORT StructuredGpuBufferView : public ResourceView {
- public:
-  struct AZER_EXPORT Options {
-    int type;
-
-    Options();
-  };
-  ~StructuredGpuBufferView() override;
-
-  const Options& options() const { return options_;}
-  StructuredGpuBuffer* buffer();
- protected:
-  StructuredGpuBufferView(const Options& opt, StructuredGpuBuffer* buffer);
- private:
-  const Options options_;
-  scoped_refptr<StructuredGpuBuffer> buffer_;
-  DISALLOW_COPY_AND_ASSIGN(StructuredGpuBufferView);
-};
 }  // namepace azer

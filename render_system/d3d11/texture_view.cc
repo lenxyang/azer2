@@ -120,7 +120,6 @@ bool D3DUAResTextureView::Init() {
   desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
   desc.Texture2D.MipSlice = 0;
 
-  
   HRESULT hr = d3d_device->CreateUnorderedAccessView(
       tex->GetResource(), &desc, &uav_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateUnorderedAccessView failed ");

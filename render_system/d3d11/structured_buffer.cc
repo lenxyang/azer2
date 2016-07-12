@@ -42,29 +42,5 @@ bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {
   return true;
 }
 
-// class D3DUAStructuredGpuBufferView
-D3DUAStructuredGpuBufferView::D3DUAStructuredGpuBufferView(
-    const Options& opt, StructuredGpuBuffer* buffer)
-    : StructuredGpuBufferView(opt, buffer),
-      unorder_view_(NULL) {
-}
-
-D3DUAStructuredGpuBufferView::~D3DUAStructuredGpuBufferView() {
-  SAFE_RELEASE(unorder_view_);
-}
-
-bool D3DUAStructuredGpuBufferView::Init(D3DRenderSystem* rs) {
-  HRESULT hr;
-  D3DStructuredGpuBuffer* buffer = (D3DStructuredGpuBuffer*)(this->buffer());
-  D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
-  ZeroMemory(&desc, sizeof(desc));
-  desc.Format = DXGI_FORMAT_UNKNOWN;
-  desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
-  desc.Buffer.NumElements = buffer->count();
-  ID3D11Device* d3ddevice = rs->GetDevice();
-  hr = d3ddevice->CreateUnorderedAccessView(buffer->object(), &desc, &unorder_view_);
-  HRESULT_HANDLE(hr, ERROR, "CreateShaderResourceView failed");
-  return true;
-}
 }  // namespace d3d11
 }  // namespace azer
