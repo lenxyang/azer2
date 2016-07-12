@@ -30,7 +30,7 @@ void Effect::Apply(Renderer* renderer) {
   ApplyGpuConstantTable(renderer);
   BindConstantsTable(renderer);
   DCHECK(technique_.get() != NULL);
-  technique_->Use(renderer);
+  technique_->Bind(renderer);
 
   tex_container_.Bind(renderer);
   FlushGpuVariables(kUpdateAll, renderer);
@@ -45,7 +45,7 @@ void Effect::OnRenderNewObject(Renderer* renderer) {
 
 void Effect::OnRenderBegin(Renderer* renderer) {
   DCHECK(technique_.get() != NULL);
-  technique_->Use(renderer);
+  technique_->Bind(renderer);
   BindConstantsTable(renderer);
   tex_container_.Bind(renderer);
 }

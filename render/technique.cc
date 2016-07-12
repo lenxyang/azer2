@@ -72,6 +72,25 @@ Shader* Technique::GetShader(int stage) {
   return pline_[stage].get();
 }
 
+void Technique::Bind(Renderer* renderer) {
+  int stages[] = {
+    kVertexStage,
+    kHullStage,
+    kDomainStage,
+    kGeometryStage,
+    kComputeStage,
+    kPixelStage,
+  };
+  for (size_t i = 0; i < arraysize(stages); ++i) {
+    int stage = stages[i];
+    if (pline_[stage].get()) {
+      renderer->SetShader(stage, pline_[stage].get());
+    } else {
+      renderer->ResetShader((RenderPipelineStage)stage);
+    }
+  }
+}
+
 TechniquePtr CreateTechnique(const TechSource& source) {
   RenderSystem* rs = RenderSystem::Current();
   TechniquePtr tech = rs->CreateTechnique();  
@@ -93,4 +112,5 @@ TechniquePtr CreateTechnique(const TechSource& source) {
   }
   return tech;
 }
+
 }  // namespace azer

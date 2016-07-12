@@ -11,14 +11,9 @@ class D3DRenderSystem;
 
 class D3DTechnique : public Technique {
  public:
-  D3DTechnique(D3DRenderSystem* rs)
-      : render_system_(rs) {
-  }
-
+  D3DTechnique() {}
   TechniquePtr CopyTechnique() override;
-  void Use(Renderer*) override;
  private:
-  D3DRenderSystem* render_system_;
   DISALLOW_COPY_AND_ASSIGN(D3DTechnique);
 };
 }  // namespace d3d11

@@ -136,7 +136,7 @@ ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc
 }
 
 TechniquePtr D3DRenderSystem::CreateTechnique() {
-  TechniquePtr ptr (new D3DTechnique(this));
+  TechniquePtr ptr (new D3DTechnique());
   return ptr;
 }
 

@@ -53,7 +53,7 @@ class AZER_EXPORT Technique : public ::base::RefCounted<Technique> {
   virtual ~Technique();
   VertexDesc* vertex_desc();
 
-  virtual void Use(Renderer*) = 0;
+  void Bind(Renderer* renderer);
   virtual TechniquePtr CopyTechnique() = 0;
 
   void AddShader(Shader* shader);

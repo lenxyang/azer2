@@ -15,7 +15,6 @@ GpuComputeTask::GpuComputeTask(const ShaderInfo& info, int rescount, int uacount
   CHECK(gpu_program_.get()) << "Failed to CreateShader [" << info.path << "]";
   shader_resource_.resize(rescount);
   shader_uaresource_.resize(uacount);
-  Reset();
 }
 
 GpuComputeTask::~GpuComputeTask() {}
@@ -28,15 +27,15 @@ void GpuComputeTask::Bind(Renderer* renderer) {
   if (shader_uaresource_.size() > 0u) {
     renderer->SetShaderUAResource(kComputeStage, 0,
                                   static_cast<int>(shader_uaresource_.size()),
-                                  &shader_uaresource_[index]);
+                                  &(shader_uaresource_[0]));
   } else {
     renderer->SetShaderUAResource(kComputeStage, 0, 0, NULL);
   }
 
   if (shader_resource_.size() > 0u) {
     renderer->SetShaderResource(kComputeStage, 0,
-                                  static_cast<int>(shader_resource_.size()),
-                                  &shader_resource_[index]);
+                                static_cast<int>(shader_resource_.size()),
+                                &(shader_resource_[0]));
   } else {
     renderer->SetShaderResource(kComputeStage, 0, 0, NULL);
   }
