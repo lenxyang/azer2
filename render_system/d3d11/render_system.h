@@ -56,8 +56,8 @@ class D3DRenderSystem : public RenderSystem {
                                        Texture* tex) override;
   StructuredGpuBufferPtr CreateStructuredBuffer(
       const GpuBufferOptions& opt, int count, int strip) override;
-  ShaderResViewPtr CreateShaderResView(GpuBuffer* buffer) override;
-  UnorderAccessResViewPtr CreateUnorderAccessResView(GpuBuffer* buffer) override;
+  ShaderResViewPtr CreateStructureBufferShaderResView(GpuBuffer* buffer) override;
+  UnorderAccessResViewPtr CreateUAStructBufferResView(GpuBuffer* buffer) override;
 
   ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) override;
   TechniquePtr CreateTechnique() override;

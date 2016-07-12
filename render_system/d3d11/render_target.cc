@@ -49,9 +49,9 @@ bool D3DRenderTarget::Init(D3DTexture* tex) {
   return true;
 }
 
-NativeGpuResourceViewHandler D3DRenderTarget::native_handle() {
+NativeGpuResourceViewHandle D3DRenderTarget::native_handle() {
   CHECK(false);
-  return (NativeGpuResourceViewHandler)target_;
+  return (NativeGpuResourceViewHandle)target_;
 }
 }  // namespace d3d11
 }  // namespace azer

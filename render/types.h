@@ -2,5 +2,5 @@
 
 namespace azer {
 typedef void* NativeGpuBufferHandle;
-typedef void* NativeGpuResourceViewHandler;
+typedef void* NativeGpuResourceViewHandle;
 }  // namespace azer

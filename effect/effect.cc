@@ -36,7 +36,7 @@ void Effect::Apply(Renderer* renderer) {
   FlushGpuVariables(kUpdateAll, renderer);
 }
 
-void Effect::SaveShaderResource(int stage, int index, ResourceView* tex) {
+void Effect::SaveShaderResource(int stage, int index, ShaderResView* tex) {
   tex_container_.SetResource(stage, index, tex);
 }
 

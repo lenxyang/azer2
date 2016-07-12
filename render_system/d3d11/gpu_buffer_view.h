@@ -8,34 +8,34 @@ namespace d3d11 {
 class D3DRenderSystem;
 class GpuBufferMapHelper;
 
-class D3DShaderResView: public ShaderResView {
+class D3DStructuredBufferResView: public ShaderResView {
  public:
-  D3DShaderResView(const Options& opt, GpuBuffer* buffer);
-  ~D3DShaderResView() override;
+  D3DStructuredBufferResView(GpuBuffer* buffer);
+  ~D3DStructuredBufferResView() override;
 
   bool Init(D3DRenderSystem* rs);
   ID3D11ShaderResourceView* GetResourceView() { return res_view_;}
-  NativeGpuResourceViewHandler native_handle() override {
-    return (NativeGpuResourceViewHandler)GetResourceView();
+  NativeGpuResourceViewHandle native_handle() override {
+    return (NativeGpuResourceViewHandle)GetResourceView();
   }
  private:
   ID3D11ShaderResourceView* res_view_;
-  DISALLOW_COPY_AND_ASSIGN(D3DShaderResView);
+  DISALLOW_COPY_AND_ASSIGN(D3DStructuredBufferResView);
 };
 
-class D3DUnorderAccessResView: public UnorderAccessResView {
+class D3DUAStructuredBufferResView: public UnorderAccessResView {
  public:
-  D3DUnorderAccessResView(const Options& opt, GpuBuffer* buffer);
-  ~D3DUnorderAccessResView() override;
+  D3DUAStructuredBufferResView(GpuBuffer* buffer);
+  ~D3DUAStructuredBufferResView() override;
 
   bool Init(D3DRenderSystem* rs);
   ID3D11UnorderedAccessView* GetResourceView() { return unorder_view_;}
-  NativeGpuResourceViewHandler native_handle() override {
-    return (NativeGpuResourceViewHandler)GetResourceView();
+  NativeGpuResourceViewHandle native_handle() override {
+    return (NativeGpuResourceViewHandle)GetResourceView();
   }
  private:
   ID3D11UnorderedAccessView* unorder_view_;
-  DISALLOW_COPY_AND_ASSIGN(D3DUnorderAccessResView);
+  DISALLOW_COPY_AND_ASSIGN(D3DUAStructuredBufferResView);
 };
 
 }  // namespace d3d11

@@ -2,25 +2,27 @@
 
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/render/types.h"
 
 namespace azer {
+enum class ResViewType {
+  kRenderTarget = 1,
+  kDepthBuffer,
+  kTexture,
+  kUATexture,
+  kStructuredBuffer,
+  kUAStructuredBuffer,
+};
+
 class AZER_EXPORT ResourceView : public ::base::RefCounted<ResourceView> {
  public:
-  enum Type {
-    kRenderTargetView,
-    kDepthBufferView,
-    kTextureView,
-    kUATextureView,
-    kStructuredBufferView,
-  };
-  
-  explicit ResourceView(Type type) : type_(type){}
+  explicit ResourceView(ResViewType type) : type_(type){}
   virtual ~ResourceView() {}
 
-  Type view_type() const { return type_;}
-  virtual NativeGpuResourceViewHandler native_handle() = 0;
+  ResViewType view_type() const { return type_;}
+  virtual NativeGpuResourceViewHandle native_handle() = 0;
  private:
-  Type type_;
+  ResViewType type_;
   DISALLOW_COPY_AND_ASSIGN(ResourceView);
 };
 

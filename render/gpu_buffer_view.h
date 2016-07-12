@@ -8,7 +8,8 @@ typedef scoped_refptr<GpuBuffer> GpuBufferPtr;
 
 class AZER_EXPORT ShaderResView : public ResourceView {
  public:
-  ShaderResView(GpuBuffer* buffer);
+  ShaderResView(ResViewType type, GpuBuffer* buffer);
+  GpuBuffer* buffer() { return buffer_.get();}
  private:
   GpuBufferPtr buffer_;
   DISALLOW_COPY_AND_ASSIGN(ShaderResView);
@@ -16,7 +17,9 @@ class AZER_EXPORT ShaderResView : public ResourceView {
 
 class AZER_EXPORT UnorderAccessResView : public ResourceView {
  public:
-  UnorderAccessResView(GpuBuffer* buffer);
+  explicit UnorderAccessResView(GpuBuffer* buffer);
+  UnorderAccessResView(ResViewType type, GpuBuffer* buffer);
+  GpuBuffer* buffer() { return buffer_.get();}
  private:
   GpuBufferPtr buffer_;
   DISALLOW_COPY_AND_ASSIGN(UnorderAccessResView);

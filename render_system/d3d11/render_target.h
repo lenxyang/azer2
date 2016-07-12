@@ -25,7 +25,7 @@ class D3DRenderTarget : public RenderTarget {
 
   bool Init(D3DTexture* tex);
   ID3D11RenderTargetView* GetD3DRenderTargetView() { return target_;}
-  NativeGpuResourceViewHandler native_handle() override;
+  NativeGpuResourceViewHandle native_handle() override;
  protected:
   ID3D11RenderTargetView* target_;
   ID3D11Resource* texres_;

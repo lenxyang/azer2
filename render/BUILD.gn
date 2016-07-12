@@ -43,6 +43,8 @@ source_set("render") {
     "gpu_constants_table.h",
     "gpu_buffer.cc",
     "gpu_buffer.h",
+    "gpu_buffer_view.cc",
+    "gpu_buffer_view.h",
     "hierarchy_transform.h",
     "indices_buffer.cc",
     "indices_buffer.h",

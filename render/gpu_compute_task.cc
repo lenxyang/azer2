@@ -49,12 +49,12 @@ void GpuComputeTask::Bind(Renderer* renderer) {
   renderer->SetShader(kComputeStage, gpu_program_.get());
 }
 
-void GpuComputeTask::SetResource(int index, ResourceView* tex) {
+void GpuComputeTask::SetResource(int index, ShaderResView* tex) {
   CHECK_LT(index, static_cast<int>(shader_resource_.size()));
   shader_resource_[index] = tex;
 }
 
-void GpuComputeTask::SetUAResource(int index, ResourceView* tex) {
+void GpuComputeTask::SetUAResource(int index, UnorderAccessResView* tex) {
   CHECK_LT(index, static_cast<int>(shader_uaresource_.size()));
   shader_uaresource_[index] = tex;
 }

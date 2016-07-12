@@ -3,7 +3,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
-#include "azer/render/resource_view.h"
+#include "azer/render/gpu_buffer_view.h"
 
 namespace azer {
 
@@ -13,7 +13,7 @@ struct AZER_EXPORT StageResource {
   int stage;
   int count;
   int mode;
-  ResourceViewPtr tex[32];
+  ShaderResViewPtr tex[32];
 
   StageResource();
 };
@@ -23,7 +23,7 @@ class AZER_EXPORT StageResContainer {
   StageResContainer();
   ~StageResContainer();
 
-  void SetResource(int stage, int count, ResourceView* tex);
+  void SetResource(int stage, int count, ShaderResView* tex);
   void Bind(Renderer* renderer);
   void Reset(Renderer* renderer);
  private:

@@ -46,7 +46,7 @@ class D3DDepthBuffer : public DepthBuffer {
              int stencil_val);
 
   ID3D11DepthStencilView* GetD3DDepthStencilView() { return target_;}
-  NativeGpuResourceViewHandler native_handle() override;
+  NativeGpuResourceViewHandle native_handle() override;
  private:
   ID3D11DepthStencilView* target_;
   ID3D11Resource* texres_;

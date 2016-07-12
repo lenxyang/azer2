@@ -13,6 +13,8 @@ shared_library("d3d11") {
     "depth_buffer.h",
     "enum_transform.cc",
     "enum_transform.h",
+    "gpu_buffer_view.cc",
+    "gpu_buffer_view.h",
     "gpu_buffer_map_helper.cc",
     "gpu_buffer_map_helper.h",
     "gpu_constants_table.cc",

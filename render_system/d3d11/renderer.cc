@@ -377,14 +377,14 @@ void D3DRenderer::SetShaderSamplerState(RenderPipelineStage stage, int index,
 }
 
 void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index, 
-                                    int count, ResourceViewPtr* res) {
+                                    int count, ShaderResViewPtr* resarr) {
   const int kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
-  ResourceViewPtr* cur = (ResourceViewPtr*)res;
+  ShaderResViewPtr* cur = (ShaderResViewPtr*)resarr;
   for (int i = 0; i < count; ++i, ++cur) {
-    D3DShaderResView* tex = (D3DShaderResView*)(cur->get());
-    views[i] = tex ? tex->GetResourceView() : NULL;
+    views[i] = cur->get() ?
+        (ID3D11ShaderResourceView*)((*cur)->native_handle()) : NULL;
   }
   
   switch (stage) {
@@ -408,14 +408,14 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index,
 }
 
 void D3DRenderer::SetShaderUAResource(RenderPipelineStage stage, int index, 
-                                      int count, UnorderAccessResView* res) {
+                                      int count, UnorderAccessResViewPtr* resarr) {
   const int kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11UnorderedAccessView* views[kMaxShaderTexCount] = {0};
-  TextureViewPtr* cur = (TextureViewPtr*)res;
+  TextureViewPtr* cur = (TextureViewPtr*)resarr;
   for (int i = 0; i < count; ++i, ++cur) {
-    D3DUnorderAccessResView* tex = (D3DUnorderAccessResView*)(cur->get());
-    views[i] = tex ? tex->GetResourceView() : NULL;
+    views[i] = cur->get() ?
+        (ID3D11UnorderedAccessView*)((*cur)->native_handle()) : NULL;
   }
   
   switch (stage) {

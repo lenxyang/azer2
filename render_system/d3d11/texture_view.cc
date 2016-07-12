@@ -9,7 +9,7 @@ namespace azer {
 namespace d3d11 {
 // class D3DResTextureView
 D3DResTextureView::D3DResTextureView(const Options& options, Texture* tex) 
-    : ShaderResView(options, tex),
+    : TextureView(options, tex),
       res_view_(NULL) {
 }
 
@@ -99,6 +99,10 @@ bool D3DUAResTextureView::Init(D3DRenderSystem* rs) {
       tex->GetResource(), &desc, &uav_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateUnorderedAccessView failed ");
   return true;
+}
+
+void D3DUAResTextureView::GenerateMips(int32_t level) {
+  CHECK(false) << "unsupport";
 }
 }  // namespace azer
 }  // namespace d3d11

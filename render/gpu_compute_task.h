@@ -2,11 +2,11 @@
 
 #include <vector>
 
-
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/math/vector3.h"
 #include "azer/effect/stage_res_container.h"
+#include "azer/render/gpu_buffer_view.h"
 #include "azer/render/shader.h"
 #include "azer/render/resource_view.h"
 
@@ -23,8 +23,8 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   GpuComputeTask(const ShaderInfo& info, int rescour, int uacount);
   virtual ~GpuComputeTask();
 
-  void SetResource(int index, ResourceView* tex);
-  void SetUAResource(int index, ResourceView* tex);
+  void SetResource(int index, ShaderResView* tex);
+  void SetUAResource(int index, UnorderAccessResView* tex);
   void Reset(Renderer* renderer);
   void Bind(Renderer* renderer);
   Shader* gpu_program() { return gpu_program_.get();}
@@ -33,8 +33,8 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
 protected:
   scoped_refptr<Shader> gpu_program_;
   scoped_refptr<GpuConstantsTable> constants_table_;
-  std::vector<ResourceViewPtr> shader_resource_;
-  std::vector<ResourceViewPtr> shader_uaresource_;
+  std::vector<ShaderResViewPtr> shader_resource_;
+  std::vector<UnorderAccessResViewPtr> shader_uaresource_;
   ShaderInfo shader_info_;
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTask);
 };

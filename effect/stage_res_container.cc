@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "base/logging.h"
 #include "azer/render/common.h"
+#include "azer/render/gpu_buffer_view.h"
 #include "azer/render/renderer.h"
 
 namespace azer {
@@ -24,7 +25,7 @@ StageResContainer::StageResContainer() {
 StageResContainer::~StageResContainer() {
 }
 
-void StageResContainer::SetResource(int stage, int index, ResourceView* tex) {
+void StageResContainer::SetResource(int stage, int index, ShaderResView* tex) {
   StageResource& s = GetStage(stage);
   s.count = std::max(s.count, index + 1);
   s.tex[index] = tex;

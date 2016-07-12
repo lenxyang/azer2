@@ -34,7 +34,9 @@ class VertexLayout;
 typedef scoped_refptr<DepthBuffer> DepthBufferPtr;
 typedef scoped_refptr<DepthStencilState> DepthStencilStatePtr;
 typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
+typedef scoped_refptr<ShaderResView> ShaderResViewPtr;
 typedef scoped_refptr<TextureView> TextureViewPtr;
+typedef scoped_refptr<UnorderAccessResView> UnorderAccessResViewPtr;
 
 struct GpuTaskParams {
   Vector3 thread_group;
@@ -64,9 +66,9 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void BindIndicesBuffer(IndicesBuffer* ib) = 0;
   virtual void ResetStageResource(RenderPipelineStage stage) = 0;
   virtual void SetShaderResource(RenderPipelineStage stage, int index, 
-                                 int count, ShaderResView* resview) = 0;
+                                 int count, ShaderResViewPtr* resview) = 0;
   virtual void SetShaderUAResource(RenderPipelineStage stage, int index, 
-                                   int count, UnorderAccessResView* resview) = 0;
+                                   int count, UnorderAccessResViewPtr* resview) = 0;
   virtual void SetShaderSamplerState(RenderPipelineStage stage, int index, 
                                      int count, SamplerStatePtr* sampler) = 0;
   virtual void BindConstantsTable(RenderPipelineStage stage, int index,
