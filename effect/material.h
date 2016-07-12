@@ -3,7 +3,7 @@
 #include "azer/effect/base_material.h"
 #include "azer/math/vector4.h"
 #include "azer/render/texture.h"
-#include "azer/render/shader_resource_view.h"
+#include "azer/render/texture_view.h"
 
 namespace azer {
 struct ColorMaterialData {

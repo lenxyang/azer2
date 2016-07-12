@@ -17,7 +17,7 @@ GpuBufferMapHelper::GpuBufferMapHelper(const GpuBufferOptions& options,
 }
 
 GpuBufferMapHelper::~GpuBufferMapHelper() {
-  CHECK(locked_) << "lock not freed";
+  CHECK(!locked_) << "lock not freed";
   SAFE_RELEASE(buffer_);
 }
 
@@ -66,12 +66,10 @@ GpuTexLockHelper::GpuTexLockHelper(const GpuBufferOptions& options,
     : options_(options),
       buffer_(buffer),
       locked_(false)  {
-  buffer->AddRef();
 }
 
 GpuTexLockHelper::~GpuTexLockHelper() {
-  CHECK(locked_) << "lock not freed";
-  SAFE_RELEASE(buffer_);
+  CHECK(!locked_) << "lock not freed";
 }
 
 GpuBufferLockDataPtr GpuTexLockHelper::map(MapType flags) {
