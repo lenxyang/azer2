@@ -1,5 +1,6 @@
 #pragma once
 
+#include "azer/render/common.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render_system/d3d11/d3d11.h"
 
@@ -15,9 +16,13 @@ class D3DIndicesBuffer : public IndicesBuffer {
 
   GpuBufferLockDataPtr map(MapType flags) override;
   void unmap() override;
+  NativeGpuBufferHandle native_handle() override {
+    return (NativeGpuBufferHandle)buffer();
+  }
 
   bool Initialized() { return NULL != buffer_;}
   ID3D11Buffer* buffer() { return buffer_;}
+
   bool Init(const IndicesData* data, D3DRenderSystem* rs);
  private:
   bool locked_;

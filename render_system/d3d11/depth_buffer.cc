@@ -207,5 +207,10 @@ void D3DDepthBuffer::Clear(D3DRenderer* renderer, bool clear_depth,
                                      depth_val, // depth value (clamp(0.0, 1.0)
                                      stencil_val);   // stencil value
 }
+
+NativeGpuResourceViewHandler D3DDepthBuffer::native_handle() {
+  CHECK(false);
+  return (NativeGpuResourceViewHandler)target_;
+}
 }  // namespace d3d11
 }  // namespace azer

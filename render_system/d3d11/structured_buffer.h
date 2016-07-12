@@ -18,6 +18,9 @@ class D3DStructuredGpuBuffer : public StructuredGpuBuffer {
   ID3D11Buffer* object() { return bufobj_;}
 
   bool Init(D3DRenderSystem* rs);
+  NativeGpuBufferHandle native_handle() override {
+    return (NativeGpuBufferHandle)object();
+  }
  private:
   ID3D11Buffer* bufobj_;
   std::unique_ptr<GpuBufferMapHelper> map_helper_;
@@ -31,6 +34,9 @@ class D3DStructuredGpuBufferView: public StructuredGpuBufferView {
 
   bool Init(D3DRenderSystem* rs);
   ID3D11ShaderResourceView* GetResourceView() { return res_view_;}
+  NativeGpuResourceViewHandler native_handle() override {
+    return (NativeGpuResourceViewHandler)GetResourceView();
+  }
  private:
   ID3D11ShaderResourceView* res_view_;
   DISALLOW_COPY_AND_ASSIGN(D3DStructuredGpuBufferView);
@@ -43,6 +49,9 @@ class D3DUAStructuredGpuBufferView: public StructuredGpuBufferView {
 
   bool Init(D3DRenderSystem* rs);
   ID3D11UnorderedAccessView* GetResourceView() { return unorder_view_;}
+  NativeGpuResourceViewHandler native_handle() override {
+    return (NativeGpuResourceViewHandler)GetResourceView();
+  }
  private:
   ID3D11UnorderedAccessView* unorder_view_;
   DISALLOW_COPY_AND_ASSIGN(D3DUAStructuredGpuBufferView);

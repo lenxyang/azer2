@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include "azer/render/common.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
@@ -38,6 +39,9 @@ class D3DVertexBuffer : public VertexBuffer {
 
   bool Initialized() const { return NULL != buffer_;}
   ID3D11Buffer* buffer() { return buffer_;}
+  NativeGpuBufferHandle native_handle() override {
+    return (NativeGpuBufferHandle)buffer();
+  }
  private:
   bool locked_;
   ID3D11Buffer* buffer_;

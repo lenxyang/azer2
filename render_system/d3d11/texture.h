@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/logging.h"
+#include "azer/render/common.h"
 #include "azer/render/texture.h"
 #include "azer/render_system/d3d11/d3d11.h"
 
@@ -16,6 +17,7 @@ class D3DTexture: public Texture {
   virtual ~D3DTexture();
   MapData map(MapType type) override;
   void unmap() override;
+
   bool Init(const D3D11_SUBRESOURCE_DATA* data);
   bool Initialized() const { return NULL != texres_;}
   void Attach(ID3D11Texture2D* tex);

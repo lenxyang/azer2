@@ -5,36 +5,35 @@
 
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
+#include "azer/effect/stage_res_container.h"
 #include "azer/render/shader.h"
 #include "azer/render/resource_view.h"
 
 namespace azer {
-class Shader;
 class GpuConstantsTable;
+class Renderer;
+class Shader;
+struct ShaderInfo;
 class Texture;
 class TextureView;
-struct ShaderInfo;
 
 class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
  public:
-  explicit GpuComputeTask(const ShaderInfo& info);
+  GpuComputeTask(const ShaderInfo& info, int rescour, int uacount);
   virtual ~GpuComputeTask();
 
-  void SetInputResource(int index, ResourceView* tex);
-  void SetInputUAResource(int index, ResourceView* tex);
-  void SetOutputTexture(int index, TextureView* tex);
+  void SetResource(int index, ResourceView* tex);
+  void SetUAResource(int index, ResourceView* tex);
   void Reset();
+  void Bind(Renderer* renderer);
   Shader* gpu_program() { return gpu_program_.get();}
   GpuConstantsTable* constants_table() { return constants_table_.get();}
-
-  static const int kMaxInput = 32;
-  static const int kMaxOutput = 32;
- protected:
+  static const int kMaxResourceCount = 32;
+protected:
   scoped_refptr<Shader> gpu_program_;
   scoped_refptr<GpuConstantsTable> constants_table_;
-  StageResContainer input_;
-  StageResContainer uainput_;
-  StageResContainer output_;
+  std::vector<ResourceViewPtr> shader_resource_;
+  std::vector<ResourceViewPtr> shader_uaresource_;
   ShaderInfo shader_info_;
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTask);
 };
@@ -51,8 +50,7 @@ class AZER_EXPORT GpuComputeTaskDispatcher :
       public ::base::RefCounted<GpuComputeTaskDispatcher> {
  public:
   GpuComputeTaskDispatcher();
-  virtual void Reset() = 0;
-  virtual void Dispatch(GpuComputeTask* task, const GpuTaskParams params) = 0;
+  virtual void Dispatch(const GpuTaskParams params) = 0;
  private:
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTaskDispatcher);
 };

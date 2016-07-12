@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <ostream>
 #include "azer/base/export.h"
+#include "azer/render/types.h"
 
 namespace azer {
 

@@ -13,7 +13,7 @@ D3DGpuComputeTaskDispatcher::D3DGpuComputeTaskDispatcher() {
   memset(resview_, 0, sizeof(resview_));
   memset(uavview_, 0, sizeof(uavview_));
 }
-
+  /*
 void D3DGpuComputeTaskDispatcher::Reset() {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   ID3D11ShaderResourceView* null_srv[] = {NULL};
@@ -23,12 +23,15 @@ void D3DGpuComputeTaskDispatcher::Reset() {
   context->CSSetUnorderedAccessViews(0, 1, null_uav, 0);
   context->CSSetShader(0, 0, 0);
 }
+  */
 
-void D3DGpuComputeTaskDispatcher::Dispatch(GpuComputeTask* task,
-                                           const GpuTaskParams params) {
+
+void D3DGpuComputeTaskDispatcher::Dispatch(const GpuTaskParams params) {
+  /*
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   ID3D11DeviceContext* context = rs->GetContext();
   D3DComputeShader* program = (D3DComputeShader*)task->gpu_program();
+  input_.Bind(renderer);
   for (int32_t i = 0; i < task->input_count(); ++i) {
     resview_[i] = ((D3DResTextureView*)task->GetInputAt(i))->GetResourceView();
     DCHECK(resview_[i] != NULL);
@@ -44,6 +47,7 @@ void D3DGpuComputeTaskDispatcher::Dispatch(GpuComputeTask* task,
   context->Dispatch(params.thread_group_x, params.thread_group_y,
                     params.thread_group_z);
   Reset();
+  */
 }
 }  // namespace d3d11
 }  // namespace azer

@@ -14,7 +14,10 @@ class D3DGpuConstantsTable : public GpuConstantsTable {
   D3DGpuConstantsTable(int32_t num, const Desc* desc);
   ~D3DGpuConstantsTable() override;
 
-  virtual void flush(Renderer*) override;
+  void flush(Renderer*) override;
+  NativeGpuBufferHandle native_handle() override {
+    return (NativeGpuBufferHandle)buffer_;
+  }
  private:
   ID3D11Buffer* buffer_;
   bool Init(D3DRenderSystem* rs);

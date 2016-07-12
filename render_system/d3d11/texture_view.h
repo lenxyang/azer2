@@ -25,6 +25,9 @@ class D3DResTextureView : public D3DTextureView {
   bool Init() override;
   ID3D11ShaderResourceView* GetResourceView() { return res_view_;}
   void GenerateMips(int32_t level) override;
+  NativeGpuResourceViewHandler native_handle() override {
+    return (NativeGpuResourceViewHandler)GetResourceView();
+  }
  private:
   ID3D11ShaderResourceView* res_view_;
   DISALLOW_COPY_AND_ASSIGN(D3DResTextureView);
@@ -37,6 +40,9 @@ class D3DUAResTextureView : public D3DTextureView {
 
   bool Init() override;
   ID3D11UnorderedAccessView* GetResourceView() { return uav_view_;}
+  NativeGpuResourceViewHandler native_handle() override {
+    return (NativeGpuResourceViewHandler)GetResourceView();
+  }
  private:
   ID3D11UnorderedAccessView* uav_view_;
   DISALLOW_COPY_AND_ASSIGN(D3DUAResTextureView);
