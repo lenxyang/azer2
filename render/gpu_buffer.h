@@ -37,10 +37,20 @@ struct AZER_EXPORT GpuBufferOptions {
   GpuBufferOptions();
 };
 
+enum class GpuBufferType {
+  kVertexBuffer = 1,
+  kIndicesBuffer,
+  kStructuredBuffer,
+  kConstantTable,
+  kTexture,
+};
+
 class AZER_EXPORT GpuBuffer : public ::base::RefCounted<GpuBuffer> {
  public:
-  GpuBuffer(const GpuBufferOptions& opt);
+  GpuBuffer(const GpuBufferOptions& opt, GpuBufferType type);
   virtual ~GpuBuffer();
+
+  GpuBufferType buffer_type() const { return buffer_type_;}
 
   virtual GpuBufferLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
@@ -49,6 +59,7 @@ class AZER_EXPORT GpuBuffer : public ::base::RefCounted<GpuBuffer> {
   const GpuBufferOptions& buffer_options() const { return buffer_options_;}
  private:
   const GpuBufferOptions buffer_options_;
+  const GpuBufferType buffer_type_;
   DISALLOW_COPY_AND_ASSIGN(GpuBuffer);
 };
 

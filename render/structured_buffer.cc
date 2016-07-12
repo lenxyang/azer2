@@ -3,7 +3,7 @@
 namespace azer {
 StructuredGpuBuffer::StructuredGpuBuffer(const GpuBufferOptions& options, 
                                          int count, int strip)
-    : GpuBuffer(options),
+    : GpuBuffer(options, GpuBufferType::kStructuredBuffer),
       size_(count * strip),
       strip_(strip),
       count_(count) {

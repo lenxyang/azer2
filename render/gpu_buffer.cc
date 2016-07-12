@@ -13,8 +13,9 @@ GpuBufferOptions::GpuBufferOptions()
   memset(name, 0, sizeof(name));
 }
 
-GpuBuffer::GpuBuffer(const GpuBufferOptions& opt) 
-    : buffer_options_(opt) {
+GpuBuffer::GpuBuffer(const GpuBufferOptions& opt, GpuBufferType type) 
+    : buffer_options_(opt),
+      buffer_type_(type) {
 }
 
 GpuBuffer::~GpuBuffer() {
