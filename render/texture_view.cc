@@ -16,4 +16,16 @@ TextureView::TextureView(const Options& opt, Texture* tex)
   DCHECK(tex->options().target & kBindTargetShaderResource);
 }
 
+// class Options
+UATextureView::Options::Options() 
+    : format(TexFormat::kUndefined),
+      type(TexType::kUnknown) {
+}
+UATextureView::UATextureView(const Options& opt, Texture* tex)
+    : ResourceView(ResourceView::kUATextureView),
+      tex_(tex), 
+      options_(opt) {
+  DCHECK(tex->options().target & kBindTargetShaderResource);
+}
+
 }  // namespace azer

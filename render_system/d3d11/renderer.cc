@@ -9,6 +9,7 @@
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
+#include "azer/render_system/d3d11/gpu_buffer_view.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
@@ -376,19 +377,14 @@ void D3DRenderer::SetShaderSamplerState(RenderPipelineStage stage, int index,
 }
 
 void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index, 
-                                      int count, ResourceViewPtr* res) {
+                                    int count, ResourceViewPtr* res) {
   const int kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11ShaderResourceView* views[kMaxShaderTexCount] = {0};
   ResourceViewPtr* cur = (ResourceViewPtr*)res;
   for (int i = 0; i < count; ++i, ++cur) {
-    if ((*cur)->view_type() == ResourceView::kTextureView) {
-      D3DResTextureView* tex = (D3DResTextureView*)(cur->get());
-      views[i] = tex ? tex->GetResourceView() : NULL;
-    } else if ((*cur)->view_type() == ResourceView::kStructuredBufferView) {
-      D3DStructuredGpuBufferView* tex = (D3DStructuredGpuBufferView*)(cur->get());
-      views[i] = tex ? tex->GetResourceView() : NULL;
-    }
+    D3DShaderResView* tex = (D3DShaderResView*)(cur->get());
+    views[i] = tex ? tex->GetResourceView() : NULL;
   }
   
   switch (stage) {
@@ -412,21 +408,14 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index,
 }
 
 void D3DRenderer::SetShaderUAResource(RenderPipelineStage stage, int index, 
-                                      int count, ResourceViewPtr* res) {
+                                      int count, UnorderAccessResView* res) {
   const int kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11UnorderedAccessView* views[kMaxShaderTexCount] = {0};
   TextureViewPtr* cur = (TextureViewPtr*)res;
   for (int i = 0; i < count; ++i, ++cur) {
-    if ((*cur)->view_type() == ResourceView::kTextureView) {
-      
-      D3DUAResTextureView* tex = (D3DUAResTextureView*)(cur->get());
-      views[i] = tex ? tex->GetResourceView() : NULL;
-    } else if ((*cur)->view_type() == ResourceView::kStructuredBufferView) {
-      D3DUAStructuredGpuBufferView* tex = (D3DUAStructuredGpuBufferView*)(
-          cur->get());
-      views[i] = tex ? tex->GetResourceView() : NULL;
-    }
+    D3DUnorderAccessResView* tex = (D3DUnorderAccessResView*)(cur->get());
+    views[i] = tex ? tex->GetResourceView() : NULL;
   }
   
   switch (stage) {

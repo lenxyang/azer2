@@ -10,6 +10,7 @@ class AZER_EXPORT ResourceView : public ::base::RefCounted<ResourceView> {
     kRenderTargetView,
     kDepthBufferView,
     kTextureView,
+    kUATextureView,
     kStructuredBufferView,
   };
   

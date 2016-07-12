@@ -49,18 +49,15 @@ class D3DRenderSystem : public RenderSystem {
   TexturePtr CreateTexture(const Texture::Options& opt) override;
   TexturePtr CreateTexture(const Texture::Options& opt,
                            const ImageData* image) override;
+  SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) override;
   TextureViewPtr CreateTextureView(const TextureView::Options& opt, 
                                    Texture* tex) override;
-  SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) override;
-  // RenderTarget* CreateRenderTarget(const Texture::Options& opt);
-  // DepthBuffer* CreateDepthBuffer(const Texture::Options& opt);
-
+  UATextureViewPtr CreateUATextureView(const UATextureView::Options& opt, 
+                                       Texture* tex) override;
   StructuredGpuBufferPtr CreateStructuredBuffer(
       const GpuBufferOptions& opt, int count, int strip) override;
-  ShaderResViewPtr CreateShaderResView(const ShaderResView::Options& opt, 
-                                       GpuBuffer* buffer) override;
-  UnorderAccessResViewPtr CreateUnorderAccessResView(
-      const UnorderAccessResView::Options& opt, GpuBuffer* buffer) override;
+  ShaderResViewPtr CreateShaderResView(GpuBuffer* buffer) override;
+  UnorderAccessResViewPtr CreateUnorderAccessResView(GpuBuffer* buffer) override;
 
   ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) override;
   TechniquePtr CreateTechnique() override;

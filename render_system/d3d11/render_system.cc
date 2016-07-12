@@ -12,6 +12,7 @@
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
+#include "azer/render_system/d3d11/gpu_buffer_view.h"
 #include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
@@ -193,16 +194,6 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
   }
 }
 
-TextureViewPtr D3DRenderSystem::CreateTextureView(const TextureView::Options& opt, 
-                                                  Texture* tex) {
-  scoped_refptr<D3DTextureView> ptr(new D3DResTextureView(opt, tex));
-  if (ptr->Init()) {
-    return ptr;
-  } else {
-    return TextureViewPtr();
-  }
-}
-
 SamplerStatePtr D3DRenderSystem::CreateSamplerState(
     const SamplerState::Options& opt) {
   scoped_refptr<D3DSamplerState> ptr(new D3DSamplerState(opt, this));
@@ -210,6 +201,26 @@ SamplerStatePtr D3DRenderSystem::CreateSamplerState(
     return ptr;
   } else {
     return SamplerStatePtr();
+  }
+}
+
+TextureViewPtr D3DRenderSystem::CreateTextureView(const TextureView::Options& opt, 
+                                                  Texture* tex) {
+  scoped_refptr<D3DTextureView> ptr(new D3DResTextureView(opt, tex));
+  if (ptr->Init(this)) {
+    return ptr;
+  } else {
+    return TextureViewPtr();
+  }
+}
+
+UATextureViewPtr D3DRenderSystem::UACreateTextureView(
+    const UATextureView::Options& opt, Texture* tex) {
+  scoped_refptr<D3DUAResTextureView> ptr(new D3DUAResTextureView(opt, tex));
+  if (ptr->Init(this)) {
+    return ptr;
+  } else {
+    return UATextureViewPtr();
   }
 }
 
@@ -235,15 +246,17 @@ StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
 
 ShaderResViewPtr D3DRenderSystem::CreateShaderResView(
     const ShaderResView::Options& opt, GpuBuffer* buffer) {
+  scoped_refptr<D3DShaderResView> ptr(new D3DShaderResView(opt, buffer));
+  if (ptr->Init(this)) {
+    return ptr;
+  } else {
+    return NULL;
+  }
 }
 
 UnorderAccessResViewPtr D3DRenderSystem::CreateUnorderAccessResView(
-    const UnorderAccessResView::Options& opt, GpuBuffer* buffer) {
-}
-StructuredGpuBufferViewPtr D3DRenderSystem::CreateStructuredBufferView(
-    const StructuredGpuBufferView::Options& opt, StructuredGpuBuffer* buffer) {
-  scoped_refptr<D3DUAStructuredGpuBufferView> ptr(
-      new D3DUAStructuredGpuBufferView(opt, buffer));
+    const UnorderAccessResView::Options& opt, GpuBuffer* buf) {
+  scoped_refptr<D3DUnorderAccessResView> ptr(new D3DUnorderAccessResView(opt, buf));
   if (ptr->Init(this)) {
     return ptr;
   } else {

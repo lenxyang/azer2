@@ -4,14 +4,12 @@
 
 namespace azer {
 ShaderResView::ShaderResView(const Options& options, GpuBuffer* buffer)
-    : buffer_(buffer),
-      options_(options) {
+    : buffer_(buffer) {
   DCHECK(buffer->buffer_options().target & kBindTargetShaderResource);
 }
 
 UnorderAccessResView::UnorderAccessResView(const Options& options, GpuBuffer* buffer)
-    : buffer_(buffer),
-      options_(options) {
+    : buffer_(buffer) {
   DCHECK(buffer->buffer_options().target & kBindTargetUnorderedAccess);
 }
 }  // namespace azer

@@ -23,8 +23,10 @@ class IndicesBuffer;
 class RenderSystem;
 class RasterizerState;
 class Shader;
+class ShaderResView;
 class Texture;
 class TextureView;
+class UnorderAccessResView;
 class VertexBuffer;
 class VertexBufferGroup;
 class VertexLayout;
@@ -62,9 +64,9 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void BindIndicesBuffer(IndicesBuffer* ib) = 0;
   virtual void ResetStageResource(RenderPipelineStage stage) = 0;
   virtual void SetShaderResource(RenderPipelineStage stage, int index, 
-                                 int count, ResourceViewPtr* texture) = 0;
+                                 int count, ShaderResView* resview) = 0;
   virtual void SetShaderUAResource(RenderPipelineStage stage, int index, 
-                                   int count, ResourceViewPtr* texture) = 0;
+                                   int count, UnorderAccessResView* resview) = 0;
   virtual void SetShaderSamplerState(RenderPipelineStage stage, int index, 
                                      int count, SamplerStatePtr* sampler) = 0;
   virtual void BindConstantsTable(RenderPipelineStage stage, int index,

@@ -7,32 +7,9 @@
 
 namespace azer {
 namespace d3d11 {
-D3DTextureView::D3DTextureView(const Options& options, Texture* tex)
-    : TextureView(options, tex) {
-  DCHECK(CheckTexFormatCapability());
-  D3DTexture* t = (D3DTexture*)tex;
-  t->GetResource()->AddRef();
-}
-
-D3DTextureView::~D3DTextureView() {
-  ID3D11Resource* res = ((D3DTexture*)texture())->GetResource();
-  SAFE_RELEASE(res);
-}
-
-void D3DTextureView::GenerateMips(int32_t level) {
-  CHECK(false);
-}
-
-bool D3DTextureView::CheckTexFormatCapability() {
-  if (! (texture()->options().target & kBindTargetShaderResource)) {
-    return false;
-  }
-  return true;
-}
-
 // class D3DResTextureView
 D3DResTextureView::D3DResTextureView(const Options& options, Texture* tex) 
-    : D3DTextureView(options, tex),
+    : ShaderResView(options, tex),
       res_view_(NULL) {
 }
 
@@ -50,8 +27,7 @@ void D3DResTextureView::GenerateMips(int32_t level) {
   d3d_context->GenerateMips(res_view_);
 }
 
-bool D3DResTextureView::Init() {
-  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+bool D3DResTextureView::Init(D3DRenderSystem* rs) {
   ID3D11Device* d3d_device = rs->GetDevice();
   D3D11_SHADER_RESOURCE_VIEW_DESC view_desc = {
     DXGI_FORMAT_UNKNOWN,
@@ -103,7 +79,7 @@ bool D3DResTextureView::Init() {
 }
 
 D3DUAResTextureView::D3DUAResTextureView(const Options& options, Texture* tex) 
-    : D3DTextureView(options, tex),
+    : UATextureView(options, tex),
       uav_view_(NULL) {
 }
 
@@ -111,8 +87,7 @@ D3DUAResTextureView::~D3DUAResTextureView() {
   SAFE_RELEASE(uav_view_);
 }
 
-bool D3DUAResTextureView::Init() {
-  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+bool D3DUAResTextureView::Init(D3DRenderSystem* rs) {
   D3DTexture* tex = (D3DTexture*)texture();
   ID3D11Device* d3d_device = rs->GetDevice();
   D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
