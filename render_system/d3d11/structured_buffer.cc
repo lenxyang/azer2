@@ -19,7 +19,7 @@ D3DStructuredGpuBuffer::~D3DStructuredGpuBuffer() {
 }
 
 GpuResLockDataPtr D3DStructuredGpuBuffer::map(MapType flags) {
-  map_helper_.reset(new GpuResLockHelper(buffer_options(), bufobj_));
+  map_helper_.reset(new GpuResLockHelper(resource_options(), bufobj_));
   return map_helper_->map(flags);
 }
 
@@ -29,12 +29,25 @@ void D3DStructuredGpuBuffer::unmap() {
   map_helper_.reset();
 }
 
+bool D3DStructuredGpuBuffer::CopyTo(GpuResource* res) {
+  D3DStructuredGpuBuffer* target = (D3DStructuredGpuBuffer*)res;
+  if(target->size() != this->size()
+     || target->strip() != this->strip()
+     || target->count() != this->count()) {
+    return false;
+  }
+
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  ID3D11DeviceContext* d3d_context = rs->GetContext();
+  d3d_context->CopyResource(target->object(), this->object());
+  return true;
+}
+
 bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs, const uint8_t* data) {
   HRESULT hr;
   ID3D11Device* d3ddevice = rs->GetDevice();
   D3D11_BUFFER_DESC desc;
-  ZeroMemory(&desc, sizeof(desc));
-  desc.BindFlags = TranslateBindTarget(buffer_options().target);
+  GenBufferDesc(resource_options(), &desc);
   desc.StructureByteStride = strip();
   desc.ByteWidth = this->size();
   desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;

@@ -123,8 +123,6 @@ class AZER_EXPORT Texture : public GpuResource {
   virtual ~Texture() {}
 
   const gfx::Size& size() const;
-  virtual bool InitFromImage(const ImageData* image) = 0;
-  virtual bool CopyTo(Texture* texture) = 0;
   
   // save the texture into file
   // for debug

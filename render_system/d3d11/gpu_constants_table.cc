@@ -52,5 +52,10 @@ void D3DGpuConstantsTable::flush(Renderer* renderer) {
   d3d_context->UpdateSubresource(buffer_, 0, NULL, data_.get(), 0, 0);
 }
 
+bool D3DGpuConstantsTable::CopyTo(GpuResource* res) {
+  CHECK(false);
+  return false;
+}
+
 }  // namespace d3d11
 }  // namespace azer

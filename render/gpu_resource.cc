@@ -14,8 +14,8 @@ GpuResOptions::GpuResOptions()
 }
 
 GpuResource::GpuResource(const GpuResOptions& opt, GpuResType type) 
-    : buffer_options_(opt),
-      buffer_type_(type) {
+    : resource_options_(opt),
+      resource_type_(type) {
 }
 
 GpuResource::~GpuResource() {
@@ -37,5 +37,17 @@ const GpuResOptions& kShaderConstsTableBufferOpt() {
   static GpuResOptions opt;
   opt.target = kBindTargetContantBuffer;
   return opt;
+}
+
+std::ostream& operator << (std::ostream& os, const GpuResType& res) {
+  switch (res) {
+    case GpuResType::kVertexBuffer: os << "VertexBufferRes"; break;
+    case GpuResType::kIndicesBuffer: os << "IndexBufferRes"; break;
+    case GpuResType::kStructuredBuffer: os << "StructureBufferRes"; break;
+    case GpuResType::kConstantTable: os << "ConstantTableRes"; break;
+    case GpuResType::kTexture: os << "TextureRes"; break;
+    default: CHECK(false) << "No such GpuResType: " << (int)res;
+  }
+  return os;
 }
 }  // namespace azer

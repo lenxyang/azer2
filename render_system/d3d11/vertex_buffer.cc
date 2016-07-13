@@ -169,11 +169,7 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
   // to D3D11_REQ_CONSTANT_BUFFER_ELEMENT_COUNT.
 
   D3D11_BUFFER_DESC vb_desc;
-  ZeroMemory(&vb_desc, sizeof(vb_desc));
-  vb_desc.Usage = TranslateUsage(buffer_options().usage);
-  vb_desc.BindFlags = TranslateBindTarget(buffer_options().target);
-  vb_desc.CPUAccessFlags = TranslateCPUAccess(buffer_options().cpu_access);
-  vb_desc.MiscFlags = 0;
+  GenBufferDesc(resource_options(), &vb_desc);
   vb_desc.ByteWidth = dataptr->buffer_size();
 
   D3D11_SUBRESOURCE_DATA d3d_vdata;
@@ -193,7 +189,7 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
 }
 
 GpuResLockDataPtr D3DVertexBuffer::map(MapType flags) {
-  map_helper_.reset(new GpuResLockHelper(buffer_options(), buffer_));
+  map_helper_.reset(new GpuResLockHelper(resource_options(), buffer_));
   return map_helper_->map(flags);
 }
 
@@ -201,6 +197,11 @@ void D3DVertexBuffer::unmap() {
   CHECK(map_helper_.get());
   map_helper_->unmap();
   map_helper_.reset();
+}
+
+bool D3DVertexBuffer::CopyTo(GpuResource* buffer)  {
+  CHECK(false);
+  return false;
 }
 
 // class D3DVertexBufferGroup

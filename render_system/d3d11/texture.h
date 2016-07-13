@@ -19,6 +19,7 @@ class D3DTexture: public Texture {
   GpuResLockDataPtr map(MapType type) override;
   void unmap() override;
   NativeGpuResourceHandle native_handle() override;
+  virtual bool InitFromImage(const ImageData* image) = 0;
 
   bool Init(const D3D11_SUBRESOURCE_DATA* data);
   bool Initialized() const { return NULL != texres_;}
@@ -27,7 +28,7 @@ class D3DTexture: public Texture {
 
   ID3D11Resource* GetResource() { return texres_;}
   int32_t diminison() const { return diminison_;}
-  bool CopyTo(Texture* texture) override;
+  bool CopyTo(GpuResource* texres) override;
   const D3D11_TEXTURE2D_DESC& desc() const { return tex_desc_;}
  protected:
   virtual void InitTexDesc();

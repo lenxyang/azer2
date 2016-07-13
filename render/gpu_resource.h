@@ -46,20 +46,23 @@ enum class GpuResType {
   kTexture,
 };
 
+AZER_EXPORT std::ostream& operator << (std::ostream& os, const GpuResType& res);
+
 class AZER_EXPORT GpuResource : public ::base::RefCounted<GpuResource> {
  public:
   GpuResource(const GpuResOptions& opt, GpuResType type);
   virtual ~GpuResource();
 
-  GpuResType buffer_type() const { return buffer_type_;}
+  GpuResType resource_type() const { return resource_type_;}
 
   virtual GpuResLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
+  virtual bool CopyTo(GpuResource* res) = 0;
   virtual NativeGpuResourceHandle native_handle() = 0;
-  const GpuResOptions& buffer_options() const { return buffer_options_;}
+  const GpuResOptions& resource_options() const { return resource_options_;}
  private:
-  const GpuResOptions buffer_options_;
-  const GpuResType buffer_type_;
+  const GpuResOptions resource_options_;
+  const GpuResType resource_type_;
   DISALLOW_COPY_AND_ASSIGN(GpuResource);
 };
 

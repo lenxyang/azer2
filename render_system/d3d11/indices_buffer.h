@@ -16,6 +16,7 @@ class D3DIndicesBuffer : public IndicesBuffer {
 
   GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
+  bool CopyTo(GpuResource* res) override;
   NativeGpuResourceHandle native_handle() override {
     return (NativeGpuResourceHandle)buffer();
   }

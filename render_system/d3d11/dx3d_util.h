@@ -4,9 +4,10 @@
 #include <memory>
 #include <string>
 
-#include "azer/render_system/d3d11/d3d11.h"
 #include "base/strings/string16.h"
+#include "azer/render_system/d3d11/d3d11.h"
 #include "azer/base/string.h"
+#include "azer/render/gpu_resource.h"
 
 namespace azer {
 namespace d3d11 {
@@ -47,6 +48,8 @@ class ScopedRefCOM {
 
 class D3DRenderSystem;
 void ReportDeviceObjects(D3DRenderSystem* rs);
+
+void GenBufferDesc(const GpuResOptions& options, D3D11_BUFFER_DESC* desc);
 }  // namespace d3d11
 }  // namespace base
 

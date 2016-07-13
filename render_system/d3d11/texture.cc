@@ -78,7 +78,7 @@ void D3DTexture::Detach() {
 
 // reference: MSDN "How to: Use dynamic resources"
 GpuResLockDataPtr D3DTexture::map(MapType flags) {
-  map_helper_.reset(new GpuResLockHelper(buffer_options(), texres_));
+  map_helper_.reset(new GpuResLockHelper(resource_options(), texres_));
   return map_helper_->map(flags);
 }
 
@@ -88,8 +88,9 @@ void D3DTexture::unmap() {
   map_helper_.reset();
 }
 
-bool D3DTexture::CopyTo(Texture* texture) {
-  D3DTexture* tex = (D3DTexture*)texture;
+bool D3DTexture::CopyTo(GpuResource* texres) {
+  DCHECK_EQ(texres->resource_type(), GpuResType::kTexture);
+  D3DTexture* tex = (D3DTexture*)texres;
   if (tex->options().type != options().type) {
     DLOG(INFO) << "cannot Copy Texture to diffuse type texture.";
     return false;

@@ -16,6 +16,7 @@ class D3DStructuredGpuBuffer : public StructuredGpuBuffer {
 
   GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
+  bool CopyTo(GpuResource* res) override;
   ID3D11Buffer* object() { return bufobj_;}
 
   bool Init(D3DRenderSystem* rs, const uint8_t* data);

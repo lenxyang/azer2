@@ -4,11 +4,12 @@
 #include <tchar.h>
 #include <comdef.h>
 
-#include "azer/base/string.h"
 #include "base/logging.h"
 #include "base/strings/string16.h"
 #include "base/strings/utf_string_conversions.h"
+#include "azer/base/string.h"
 #include "azer/render_system/d3d11/render_system.h"
+#include "azer/render_system/d3d11/enum_transform.h"
 
 namespace azer {
 namespace d3d11 {
@@ -44,6 +45,14 @@ void ReportDeviceObjects(D3DRenderSystem* rs) {
     debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
     SAFE_RELEASE(device);
   }
+}
+
+void GenBufferDesc(const GpuResOptions& options, D3D11_BUFFER_DESC* desc) {
+  ZeroMemory(desc, sizeof(D3D11_BUFFER_DESC));
+  desc->Usage = TranslateUsage(options.usage);
+  desc->BindFlags = TranslateBindTarget(options.target);
+  desc->CPUAccessFlags = TranslateCPUAccess(options.cpu_access);
+  desc->MiscFlags = 0;
 }
 }  // namespace d3d11
 }

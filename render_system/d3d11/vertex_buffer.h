@@ -36,6 +36,7 @@ class D3DVertexBuffer : public VertexBuffer {
 
   GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
+  bool CopyTo(GpuResource* res) override;
 
   bool Initialized() const { return NULL != buffer_;}
   ID3D11Buffer* buffer() { return buffer_;}
