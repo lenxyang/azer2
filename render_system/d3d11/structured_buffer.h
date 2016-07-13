@@ -30,7 +30,7 @@ class D3DStructuredGpuBuffer : public StructuredGpuBuffer {
 
 class D3DStructuredBufferResView: public ShaderResView {
  public:
-  D3DStructuredBufferResView(GpuBuffer* buffer);
+  D3DStructuredBufferResView(GpuResource* buffer);
   ~D3DStructuredBufferResView() override;
 
   bool Init(D3DRenderSystem* rs);
@@ -45,7 +45,7 @@ class D3DStructuredBufferResView: public ShaderResView {
 
 class D3DUAStructuredBufferResView: public UnorderAccessResView {
  public:
-  D3DUAStructuredBufferResView(GpuBuffer* buffer);
+  D3DUAStructuredBufferResView(GpuResource* buffer);
   ~D3DUAStructuredBufferResView() override;
 
   bool Init(D3DRenderSystem* rs);

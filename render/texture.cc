@@ -55,7 +55,7 @@ GpuResOptions FromTexOptions(const Texture::Options& opt) {
 }
 
 Texture::Texture(const Options& opt) 
-    : GpuBuffer(FromTexOptions(opt), GpuResType::kTexture),
+    : GpuResource(FromTexOptions(opt), GpuResType::kTexture),
       options_(opt) {
 }
 

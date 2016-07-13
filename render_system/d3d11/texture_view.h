@@ -24,10 +24,10 @@ class D3DResTextureView : public TextureView {
   DISALLOW_COPY_AND_ASSIGN(D3DResTextureView);
 };
 
-class D3DUAResTextureView : public UATextureView {
+class D3DTextureUAResView : public TextureUAView {
  public:
-  D3DUAResTextureView(const Options& options, Texture* tex);
-  ~D3DUAResTextureView() override;
+  D3DTextureUAResView(const Options& options, Texture* tex);
+  ~D3DTextureUAResView() override;
   void GenerateMips(int32_t level) override;
 
   bool Init(D3DRenderSystem* rs);
@@ -37,7 +37,7 @@ class D3DUAResTextureView : public UATextureView {
   }
  private:
   ID3D11UnorderedAccessView* uav_view_;
-  DISALLOW_COPY_AND_ASSIGN(D3DUAResTextureView);
+  DISALLOW_COPY_AND_ASSIGN(D3DTextureUAResView);
 };
 }  // namespace d3d11
 }  // namespace azer

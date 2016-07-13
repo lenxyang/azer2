@@ -143,7 +143,7 @@ class AZER_EXPORT VertexLayout : public ::base::RefCounted<VertexLayout> {
   DISALLOW_COPY_AND_ASSIGN(VertexLayout);
 };
 
-class AZER_EXPORT VertexBuffer : public GpuBuffer {
+class AZER_EXPORT VertexBuffer : public GpuResource {
  public:
   explicit VertexBuffer(const GpuResOptions &opt);
   virtual ~VertexBuffer();

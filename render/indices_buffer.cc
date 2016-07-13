@@ -81,7 +81,7 @@ uint8_t* IndicesData::pointer() {
 
 // class IndicesBuffer
 IndicesBuffer::IndicesBuffer(const GpuResOptions& opt)
-    : GpuBuffer(opt, GpuResType::kIndicesBuffer)
+    : GpuResource(opt, GpuResType::kIndicesBuffer)
     , indices_count_(-1)
     , type_(kIndexUndefined) {
 }

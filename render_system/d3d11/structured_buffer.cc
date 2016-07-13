@@ -44,7 +44,7 @@ bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {
 
 
 // class D3DUAStructuredGpuBufferView
-D3DStructuredBufferResView::D3DStructuredBufferResView(GpuBuffer* buffer)
+D3DStructuredBufferResView::D3DStructuredBufferResView(GpuResource* buffer)
     : ShaderResView(ResViewType::kStructuredBuffer, buffer),
       res_view_(NULL) {
 }
@@ -74,7 +74,7 @@ bool D3DStructuredBufferResView::Init(D3DRenderSystem* rs) {
 }
 
 // class D3DUAStructuredGpuBufferView
-D3DUAStructuredBufferResView::D3DUAStructuredBufferResView(GpuBuffer* buffer)
+D3DUAStructuredBufferResView::D3DUAStructuredBufferResView(GpuResource* buffer)
     : UnorderAccessResView(ResViewType::kUAStructuredBuffer, buffer),
       unorder_view_(NULL) {
 }

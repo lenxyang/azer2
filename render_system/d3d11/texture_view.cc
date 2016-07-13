@@ -78,16 +78,16 @@ bool D3DResTextureView::Init(D3DRenderSystem* rs) {
   return true;
 }
 
-D3DUAResTextureView::D3DUAResTextureView(const Options& options, Texture* tex) 
-    : UATextureView(options, tex),
+D3DTextureUAResView::D3DTextureUAResView(const Options& options, Texture* tex) 
+    : TextureUAView(options, tex),
       uav_view_(NULL) {
 }
 
-D3DUAResTextureView::~D3DUAResTextureView() {
+D3DTextureUAResView::~D3DTextureUAResView() {
   SAFE_RELEASE(uav_view_);
 }
 
-bool D3DUAResTextureView::Init(D3DRenderSystem* rs) {
+bool D3DTextureUAResView::Init(D3DRenderSystem* rs) {
   D3DTexture* tex = (D3DTexture*)texture();
   ID3D11Device* d3d_device = rs->GetDevice();
   D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
@@ -101,7 +101,7 @@ bool D3DUAResTextureView::Init(D3DRenderSystem* rs) {
   return true;
 }
 
-void D3DUAResTextureView::GenerateMips(int32_t level) {
+void D3DTextureUAResView::GenerateMips(int32_t level) {
   CHECK(false) << "unsupport";
 }
 }  // namespace azer

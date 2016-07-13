@@ -103,7 +103,7 @@ class AZER_EXPORT SamplerState : public ::base::RefCounted<SamplerState> {
   DISALLOW_COPY_AND_ASSIGN(SamplerState);
 };
 
-class AZER_EXPORT Texture : public GpuBuffer {
+class AZER_EXPORT Texture : public GpuResource {
  public:
   struct AZER_EXPORT Options {
     gfx::Size size;

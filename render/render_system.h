@@ -83,10 +83,10 @@ class AZER_EXPORT RenderSystem {
   virtual SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) = 0;
   virtual TextureViewPtr CreateTextureView(const TextureView::Options& opt, 
                                            Texture* tex) = 0;
-  virtual UATextureViewPtr CreateTextureUAView(const UATextureView::Options& opt, 
+  virtual TextureUAViewPtr CreateTextureUAView(const TextureUAView::Options& opt, 
                                                Texture* tex) = 0;
-  virtual ShaderResViewPtr CreateStructBufferShaderResView(GpuBuffer* buffer) = 0;
-  virtual UnorderAccessResViewPtr CreateStructBufferUAResView(GpuBuffer* buffer) = 0;
+  virtual ShaderResViewPtr CreateStructBufferShaderResView(GpuResource* buf) = 0;
+  virtual UnorderAccessResViewPtr CreateStructBufferUAResView(GpuResource* buf) = 0;
 
   // create Shader
   // Vertex Gpu Program need to help check "Vertex Layout"

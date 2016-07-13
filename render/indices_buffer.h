@@ -45,7 +45,7 @@ class AZER_EXPORT IndicesData : public ::base::RefCounted<IndicesData> {
   DISALLOW_COPY_AND_ASSIGN(IndicesData);
 };
 
-class AZER_EXPORT IndicesBuffer : public GpuBuffer {
+class AZER_EXPORT IndicesBuffer : public GpuResource {
  public:
   IndicesBuffer(const GpuResOptions& opt);
 

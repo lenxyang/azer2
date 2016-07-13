@@ -11,9 +11,9 @@ namespace azer {
 
 class Renderer;
 class GpuResLockData;
-class GpuBuffer;
+class GpuResource;
 typedef scoped_refptr<GpuResLockData> GpuResLockDataPtr;
-typedef scoped_refptr<GpuBuffer> GpuBufferPtr;
+typedef scoped_refptr<GpuResource> GpuResourcePtr;
 
 class AZER_EXPORT GpuResLockData: public ::base::RefCounted<GpuResLockData> {
  public:
@@ -46,10 +46,10 @@ enum class GpuResType {
   kTexture,
 };
 
-class AZER_EXPORT GpuBuffer : public ::base::RefCounted<GpuBuffer> {
+class AZER_EXPORT GpuResource : public ::base::RefCounted<GpuResource> {
  public:
-  GpuBuffer(const GpuResOptions& opt, GpuResType type);
-  virtual ~GpuBuffer();
+  GpuResource(const GpuResOptions& opt, GpuResType type);
+  virtual ~GpuResource();
 
   GpuResType buffer_type() const { return buffer_type_;}
 
@@ -60,12 +60,12 @@ class AZER_EXPORT GpuBuffer : public ::base::RefCounted<GpuBuffer> {
  private:
   const GpuResOptions buffer_options_;
   const GpuResType buffer_type_;
-  DISALLOW_COPY_AND_ASSIGN(GpuBuffer);
+  DISALLOW_COPY_AND_ASSIGN(GpuResource);
 };
 
 class AZER_EXPORT AutoBufferLock {
  public:
-  AutoBufferLock(GpuBuffer* hbuffer, MapType flags, Renderer* renderer)
+  AutoBufferLock(GpuResource* hbuffer, MapType flags, Renderer* renderer)
       : hbuffer_(hbuffer) {
     data_ = hbuffer_->map(flags);
   }
@@ -76,7 +76,7 @@ class AZER_EXPORT AutoBufferLock {
   }
  private:
   GpuResLockDataPtr data_;
-  GpuBuffer* hbuffer_;
+  GpuResource* hbuffer_;
   DISALLOW_COPY_AND_ASSIGN(AutoBufferLock);
 };
 

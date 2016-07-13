@@ -213,13 +213,13 @@ TextureViewPtr D3DRenderSystem::CreateTextureView(const TextureView::Options& op
   }
 }
 
-UATextureViewPtr D3DRenderSystem::CreateTextureUAView(
-    const UATextureView::Options& opt, Texture* tex) {
-  scoped_refptr<D3DUAResTextureView> ptr(new D3DUAResTextureView(opt, tex));
+TextureUAViewPtr D3DRenderSystem::CreateTextureUAView(
+    const TextureUAView::Options& opt, Texture* tex) {
+  scoped_refptr<D3DTextureUAResView> ptr(new D3DTextureUAResView(opt, tex));
   if (ptr->Init(this)) {
     return ptr;
   } else {
-    return UATextureViewPtr();
+    return TextureUAViewPtr();
   }
 }
 
@@ -244,7 +244,7 @@ StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
 }
 
 ShaderResViewPtr D3DRenderSystem::CreateStructBufferShaderResView(
-    GpuBuffer* buffer) {
+    GpuResource* buffer) {
   scoped_refptr<D3DStructuredBufferResView> ptr(
       new D3DStructuredBufferResView(buffer));
   if (ptr->Init(this)) {
@@ -255,7 +255,7 @@ ShaderResViewPtr D3DRenderSystem::CreateStructBufferShaderResView(
 }
 
 UnorderAccessResViewPtr D3DRenderSystem::CreateStructBufferUAResView(
-    GpuBuffer* buf) {
+    GpuResource* buf) {
   scoped_refptr<D3DUAStructuredBufferResView> ptr(
       new D3DUAStructuredBufferResView(buf));
   if (ptr->Init(this)) {

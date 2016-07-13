@@ -17,7 +17,7 @@ class Blending;
 class Effect;
 class DepthBuffer;
 class DepthStencilState;
-class GpuBuffer;
+class GpuResource;
 class GpuConstantsTable;
 class IndicesBuffer;
 class RenderSystem;
@@ -73,7 +73,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
                                      int count, SamplerStatePtr* sampler) = 0;
   virtual void BindConstantsTable(RenderPipelineStage stage, int index,
                                   GpuConstantsTable* table) = 0;
-  virtual void SetStreamOutTargets(GpuBuffer** buffer, int count, int off) = 0;
+  virtual void SetStreamOutTargets(GpuResource** buffer, int count, int off) = 0;
   virtual void SetBlending(Blending* blending, float* factor, uint32_t mask) = 0;
   virtual void ResetBlending() = 0;
   virtual void Reset() = 0;

@@ -17,11 +17,11 @@ TextureView::TextureView(const Options& opt, Texture* tex)
 }
 
 // class Options
-UATextureView::Options::Options() 
+TextureUAView::Options::Options() 
     : format(TexFormat::kUndefined),
       type(TexType::kUnknown) {
 }
-UATextureView::UATextureView(const Options& opt, Texture* tex)
+TextureUAView::TextureUAView(const Options& opt, Texture* tex)
     : UnorderAccessResView(ResViewType::kTexture, tex),
       tex_(tex), 
       options_(opt) {

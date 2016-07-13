@@ -3,25 +3,25 @@
 #include "azer/render/resource_view.h"
 
 namespace azer {
-class GpuBuffer;
-typedef scoped_refptr<GpuBuffer> GpuBufferPtr;
+class GpuResource;
+typedef scoped_refptr<GpuResource> GpuResourcePtr;
 
 class AZER_EXPORT ShaderResView : public ResourceView {
  public:
-  ShaderResView(ResViewType type, GpuBuffer* buffer);
-  GpuBuffer* buffer() { return buffer_.get();}
+  ShaderResView(ResViewType type, GpuResource* buffer);
+  GpuResource* buffer() { return buffer_.get();}
  private:
-  GpuBufferPtr buffer_;
+  GpuResourcePtr buffer_;
   DISALLOW_COPY_AND_ASSIGN(ShaderResView);
 };
 
 class AZER_EXPORT UnorderAccessResView : public ResourceView {
  public:
-  explicit UnorderAccessResView(GpuBuffer* buffer);
-  UnorderAccessResView(ResViewType type, GpuBuffer* buffer);
-  GpuBuffer* buffer() { return buffer_.get();}
+  explicit UnorderAccessResView(GpuResource* buffer);
+  UnorderAccessResView(ResViewType type, GpuResource* buffer);
+  GpuResource* buffer() { return buffer_.get();}
  private:
-  GpuBufferPtr buffer_;
+  GpuResourcePtr buffer_;
   DISALLOW_COPY_AND_ASSIGN(UnorderAccessResView);
 };
 

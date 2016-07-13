@@ -33,7 +33,7 @@ int32_t GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
 }
 
 GpuConstantsTable::GpuConstantsTable(int32_t num, const Desc* desc)
-    : GpuBuffer(kShaderConstsTableBufferOpt(), GpuResType::kConstantTable) {
+    : GpuResource(kShaderConstsTableBufferOpt(), GpuResType::kConstantTable) {
   uint32_t offset = 0;
   const Desc* curr = desc;
   for (int32_t i = 0; i < num; ++i, ++curr) {

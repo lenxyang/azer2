@@ -52,12 +52,12 @@ class D3DRenderSystem : public RenderSystem {
   SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) override;
   TextureViewPtr CreateTextureView(const TextureView::Options& opt, 
                                    Texture* tex) override;
-  UATextureViewPtr CreateTextureUAView(const UATextureView::Options& opt, 
+  TextureUAViewPtr CreateTextureUAView(const TextureUAView::Options& opt, 
                                        Texture* tex) override;
   StructuredGpuBufferPtr CreateStructuredBuffer(
       const GpuResOptions& opt, int count, int strip) override;
-  ShaderResViewPtr CreateStructBufferShaderResView(GpuBuffer* buffer) override;
-  UnorderAccessResViewPtr CreateStructBufferUAResView(GpuBuffer* buffer) override;
+  ShaderResViewPtr CreateStructBufferShaderResView(GpuResource* buffer) override;
+  UnorderAccessResViewPtr CreateStructBufferUAResView(GpuResource* buffer) override;
 
   ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) override;
   TechniquePtr CreateTechnique() override;

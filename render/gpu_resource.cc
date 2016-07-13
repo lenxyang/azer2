@@ -13,12 +13,12 @@ GpuResOptions::GpuResOptions()
   memset(name, 0, sizeof(name));
 }
 
-GpuBuffer::GpuBuffer(const GpuResOptions& opt, GpuResType type) 
+GpuResource::GpuResource(const GpuResOptions& opt, GpuResType type) 
     : buffer_options_(opt),
       buffer_type_(type) {
 }
 
-GpuBuffer::~GpuBuffer() {
+GpuResource::~GpuResource() {
 }
 
 const GpuResOptions& kVertexBufferOpt() {

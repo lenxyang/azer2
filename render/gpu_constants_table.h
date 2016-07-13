@@ -46,7 +46,7 @@ class GpuConstantsType {
 
 AZER_EXPORT int32_t GpuTableItemTypeSize(const GpuConstantsType::Type type);
 
-class AZER_EXPORT GpuConstantsTable : public GpuBuffer {
+class AZER_EXPORT GpuConstantsTable : public GpuResource {
  public:
   struct Desc {
     char name[64];
