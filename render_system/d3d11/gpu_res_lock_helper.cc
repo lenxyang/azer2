@@ -27,16 +27,16 @@ GpuResLockDataPtr GpuResLockHelper::map(MapType flags) {
   DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
 
   HRESULT hr;
-  DCHECK(!locked_) << "Vertex Buffer(" << options_.name << ") has been locked";
+  DCHECK(!locked_) << "GpuResLock(" << options_.name << ") has been locked";
   ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
   d3d_device->GetImmediateContext(&d3d_context);
   ScopedRefCOM autocom(d3d_context);
-  D3D11_MAPPED_SUBRESOURCE mapped;
+  D3D11_MAPPED_SUBRESOURCE mapped = { 0 };
   D3D11_MAP d3d11_map = TranslateMapType(flags);
   hr = d3d_context->Map(buffer_, 0, d3d11_map, 0, &mapped);
   if (FAILED(hr)) {
-    LOG(ERROR) << "D3D11 VertexBuffer: Map failed, desc: " << HRMessage(hr);
+    LOG(ERROR) << "D3D11 GpuResLock: Map failed, desc: " << HRMessage(hr);
     return NULL;
   }
 
@@ -49,7 +49,7 @@ GpuResLockDataPtr GpuResLockHelper::map(MapType flags) {
 
 void GpuResLockHelper::unmap() {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
-  DCHECK(locked_) << "Vertex Buffer(" << options_.name << ") has not been locked";
+  DCHECK(locked_) << "GpuResLock(" << options_.name << ") has not been locked";
   ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
   d3d_device->GetImmediateContext(&d3d_context);
