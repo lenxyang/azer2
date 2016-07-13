@@ -1,4 +1,4 @@
-#include "azer/render/gpu_buffer.h"
+#include "azer/render/gpu_resource.h"
 
 namespace azer {
 GpuResLockData::GpuResLockData(uint8_t* data, int row_size, int column)
@@ -34,7 +34,7 @@ const GpuResOptions& kIndicesBufferOpt() {
 }
 
 const GpuResOptions& kShaderConstsTableBufferOpt() {
-  static GpuResOptions opt;
+  static GpuGpuOptions opt;
   opt.target = kBindTargetContantBuffer;
   return opt;
 }

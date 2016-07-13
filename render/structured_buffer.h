@@ -4,10 +4,8 @@
 #include "azer/render/resource_view.h"
 
 namespace azer {
-class StructuredGpuBufferView;
 class StructuredGpuBuffer;
 typedef scoped_refptr<StructuredGpuBuffer> StructuredGpuBufferPtr;
-typedef scoped_refptr<StructuredGpuBufferView> StructuredGpuBufferViewPtr;
 
 class AZER_EXPORT StructuredGpuBuffer : public GpuBuffer {
  public:
