@@ -1,6 +1,6 @@
 #include "azer/math/ray.h"
 
-#include "azer/math/vector3.h"
+#include "azer/math/math.h"
 
 namespace azer {
 Ray::Ray(const Vector3& pos, const Vector3& dir)

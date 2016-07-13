@@ -1,7 +1,8 @@
 #include "azer/math/matrix4.h"
-#include "azer/math/projection.h"
-#include "base/logging.h"
 
+#include "base/logging.h"
+#include "azer/math/projection.h"
+#include "azer/math/math.h"
 
 namespace azer {
 
