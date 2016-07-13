@@ -1,6 +1,7 @@
 #include "azer/render/structured_buffer.h"
 
 namespace azer {
+// class StructuredGpuBuffer
 StructuredGpuBuffer::StructuredGpuBuffer(const GpuResOptions& options, 
                                          int count, int strip)
     : GpuResource(options, GpuResType::kStructuredBuffer),

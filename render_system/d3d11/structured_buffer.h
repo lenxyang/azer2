@@ -18,7 +18,7 @@ class D3DStructuredGpuBuffer : public StructuredGpuBuffer {
   void unmap() override;
   ID3D11Buffer* object() { return bufobj_;}
 
-  bool Init(D3DRenderSystem* rs);
+  bool Init(D3DRenderSystem* rs, const uint8_t* data);
   NativeGpuResourceHandle native_handle() override {
     return (NativeGpuResourceHandle)object();
   }

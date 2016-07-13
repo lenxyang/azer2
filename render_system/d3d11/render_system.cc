@@ -236,7 +236,18 @@ StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
     const GpuResOptions& opt, int count, int strip) {
   scoped_refptr<D3DStructuredGpuBuffer> buf(new D3DStructuredGpuBuffer(
       opt, count, strip));
-  if (buf->Init(this)) {
+  if (buf->Init(this, NULL)) {
+    return buf;
+  } else {
+    return NULL;
+  }
+}
+
+StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBufferWithData(
+    const GpuResOptions& opt, int count, int strip, const uint8_t* data) {
+  scoped_refptr<D3DStructuredGpuBuffer> buf(new D3DStructuredGpuBuffer(
+      opt, count, strip));
+  if (buf->Init(this, data)) {
     return buf;
   } else {
     return NULL;

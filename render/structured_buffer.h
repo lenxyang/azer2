@@ -6,6 +6,7 @@ namespace azer {
 class StructuredGpuBuffer;
 typedef scoped_refptr<StructuredGpuBuffer> StructuredGpuBufferPtr;
 
+// class StructuredGpuBuffer
 class AZER_EXPORT StructuredGpuBuffer : public GpuResource {
  public:
   ~StructuredGpuBuffer() override;

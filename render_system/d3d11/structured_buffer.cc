@@ -29,7 +29,7 @@ void D3DStructuredGpuBuffer::unmap() {
   map_helper_.reset();
 }
 
-bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {
+bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs, const uint8_t* data) {
   HRESULT hr;
   ID3D11Device* d3ddevice = rs->GetDevice();
   D3D11_BUFFER_DESC desc;
@@ -38,7 +38,17 @@ bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs) {
   desc.StructureByteStride = strip();
   desc.ByteWidth = this->size();
   desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-  hr = d3ddevice->CreateBuffer(&desc, NULL, &bufobj_);
+
+  if (data) {
+    D3D11_SUBRESOURCE_DATA subdata;
+    ZeroMemory(&subdata, sizeof(subdata));
+    subdata.pSysMem = data;
+    hr = d3ddevice->CreateBuffer(&desc, &subdata, &bufobj_);
+    HRESULT_HANDLE(hr, ERROR, "CreateStructuredGpuBuffer failed");
+  } else {
+    hr = d3ddevice->CreateBuffer(&desc, NULL, &bufobj_);
+    HRESULT_HANDLE(hr, ERROR, "CreateStructuredGpuBuffer failed");
+  }
   return true;
 }
 

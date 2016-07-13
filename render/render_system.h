@@ -80,6 +80,8 @@ class AZER_EXPORT RenderSystem {
                                    const ImageData* image) = 0;
   virtual StructuredGpuBufferPtr CreateStructuredBuffer(
       const GpuResOptions& opt, int count, int strip) = 0;
+  virtual StructuredGpuBufferPtr CreateStructuredBufferWithData(
+      const GpuResOptions& o, int count, int strip, const uint8_t* data) = 0;
   virtual SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) = 0;
   virtual TextureViewPtr CreateTextureView(const TextureView::Options& opt, 
                                            Texture* tex) = 0;
