@@ -1,6 +1,6 @@
-#include "azer/render/gpu_buffer_view.h"
+#include "azer/render/gpu_resource_view.h"
 
-#include "azer/render/gpu_buffer.h"
+#include "azer/render/gpu_resource.h"
 
 namespace azer {
 ShaderResView::ShaderResView(ResViewType type, GpuBuffer* buffer)

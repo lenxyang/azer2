@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "base/logging.h"
 #include "azer/render/common.h"
-#include "azer/render/gpu_buffer_view.h"
+#include "azer/render/gpu_resource_view.h"
 #include "azer/render/renderer.h"
 
 namespace azer {

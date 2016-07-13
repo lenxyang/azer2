@@ -1,7 +1,7 @@
 #include "azer/render_system/d3d11/gpu_res_lock_helper.h"
 
 #include "base/logging.h"
-#include "azer/render/gpu_buffer.h"
+#include "azer/render/gpu_resource.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
 

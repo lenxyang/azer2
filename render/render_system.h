@@ -10,7 +10,7 @@
 #include "azer/base/string.h"
 #include "azer/render/blending.h"
 #include "azer/render/gpu_constants_table.h"
-#include "azer/render/gpu_buffer_view.h"
+#include "azer/render/gpu_resource_view.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/render_capability.h"
 #include "azer/render/renderer.h"

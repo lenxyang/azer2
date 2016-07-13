@@ -8,7 +8,7 @@
 #include "azer/math/math.h"
 #include "azer/base/export.h"
 #include "azer/render/common.h"
-#include "azer/render/gpu_buffer.h"
+#include "azer/render/gpu_resource.h"
 
 namespace azer {
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "azer/render/gpu_buffer.h"
-#include "azer/render/resource_view.h"
+#include "azer/render/gpu_resource.h"
 
 namespace azer {
 class StructuredGpuBuffer;

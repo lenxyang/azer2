@@ -5,7 +5,7 @@
 
 #include "azer/base/export.h"
 #include "azer/render/vertex_buffer.h"
-#include "azer/render/gpu_buffer.h"
+#include "azer/render/gpu_resource.h"
 
 namespace azer {
 class IndicesData;

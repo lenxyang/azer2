@@ -1,7 +1,7 @@
 #pragma once
 
 #include "azer/render_system/d3d11/d3d11.h"
-#include "azer/render/gpu_buffer_view.h"
+#include "azer/render/gpu_resource_view.h"
 #include "azer/render/structured_buffer.h"
 
 namespace azer {

@@ -3,7 +3,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/render/texture.h"
-#include "azer/render/gpu_buffer_view.h"
+#include "azer/render/gpu_resource_view.h"
 
 namespace azer {
 

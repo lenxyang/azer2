@@ -34,7 +34,7 @@ const GpuResOptions& kIndicesBufferOpt() {
 }
 
 const GpuResOptions& kShaderConstsTableBufferOpt() {
-  static GpuGpuOptions opt;
+  static GpuResOptions opt;
   opt.target = kBindTargetContantBuffer;
   return opt;
 }

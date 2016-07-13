@@ -6,7 +6,7 @@
 #include "azer/base/export.h"
 #include "azer/math/vector3.h"
 #include "azer/effect/stage_res_container.h"
-#include "azer/render/gpu_buffer_view.h"
+#include "azer/render/gpu_resource_view.h"
 #include "azer/render/shader.h"
 #include "azer/render/resource_view.h"
 
