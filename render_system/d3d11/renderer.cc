@@ -299,22 +299,28 @@ void D3DRenderer::DispatchComputeTask(const GpuTaskParams& params) {
 
 void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int index,
                                      GpuConstantsTable* table) {
+  const int count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
   D3DGpuConstantsTable* constants = (D3DGpuConstantsTable*)table;
+  ID3D11Buffer* buffers[count] = {0};
+  buffers[0] = (constants != NULL) ? constants->buffer_ : NULL;
   switch (stage) {
     case kVertexStage:
-      d3d_context_->VSSetConstantBuffers(index, 1, &(constants->buffer_));
+      d3d_context_->VSSetConstantBuffers(index, 1, buffers);
       break;
     case kGeometryStage:
-      d3d_context_->GSSetConstantBuffers(index, 1, &(constants->buffer_));
+      d3d_context_->GSSetConstantBuffers(index, 1, buffers);
       break;
     case kHullStage:
-      d3d_context_->HSSetConstantBuffers(index, 1, &(constants->buffer_));
+      d3d_context_->HSSetConstantBuffers(index, 1, buffers);
       break;
     case kDomainStage:
-      d3d_context_->DSSetConstantBuffers(index, 1, &(constants->buffer_));
+      d3d_context_->DSSetConstantBuffers(index, 1, buffers);
+      break;
+    case kComputeStage:
+      d3d_context_->CSSetConstantBuffers(index, 1, buffers);
       break;
     case kPixelStage:
-      d3d_context_->PSSetConstantBuffers(index, 1, &(constants->buffer_));
+      d3d_context_->PSSetConstantBuffers(index, 1, buffers);
       break;
     default:
       CHECK(false);
@@ -330,11 +336,17 @@ void D3DRenderer::ResetStageResource(RenderPipelineStage stage) {
     case kVertexStage:
       d3d_context_->VSSetShaderResources(0, count, views);
       break;
+    case kGeometryStage:
+      d3d_context_->GSSetShaderResources(0, count, views);
+      break;
     case kHullStage:
       d3d_context_->HSSetShaderResources(0, count, views);
       break;
     case kDomainStage:
       d3d_context_->DSSetShaderResources(0, count, views);
+      break;
+    case kComputeStage:
+      d3d_context_->CSSetShaderResources(0, count, views);
       break;
     case kPixelStage:
       d3d_context_->PSSetShaderResources(0, count, views);
@@ -398,6 +410,9 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index,
       break;
     case kGeometryStage: 
       d3d_context_->GSSetShaderResources(index, count, views);
+      break;
+    case kComputeStage:
+      d3d_context_->CSSetShaderResources(index, count, views);
       break;
     case kPixelStage: 
       d3d_context_->PSSetShaderResources(index, count, views);

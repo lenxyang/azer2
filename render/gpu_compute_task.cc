@@ -46,6 +46,7 @@ void GpuComputeTask::Bind(Renderer* renderer) {
     renderer->BindConstantsTable(kComputeStage, 0, NULL);
   }
 
+  DCHECK(gpu_program_.get()) << "Shader Program cannot be NULL";
   renderer->SetShader(kComputeStage, gpu_program_.get());
 }
 

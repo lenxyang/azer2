@@ -65,18 +65,13 @@ D3DStructuredBufferResView::~D3DStructuredBufferResView() {
 
 bool D3DStructuredBufferResView::Init(D3DRenderSystem* rs) {
   HRESULT hr;
-  D3D11_SHADER_RESOURCE_VIEW_DESC desc = {
-    DXGI_FORMAT_UNKNOWN,
-    D3D11_SRV_DIMENSION_BUFFER,
-    0,
-    0,
-  };
-
   D3DStructuredGpuBuffer* buf = (D3DStructuredGpuBuffer*)buffer();
+  D3D11_SHADER_RESOURCE_VIEW_DESC desc;
   ZeroMemory(&desc, sizeof(desc));
-  // desc.Format = DXGI_FORMAT_UNKNOWN;
-  //  desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+  desc.Format = DXGI_FORMAT_UNKNOWN;
+  desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
   desc.Buffer.NumElements = buf->count();
+  desc.Buffer.ElementWidth = buf->strip();
   ID3D11Device* d3ddevice = rs->GetDevice();
   hr = d3ddevice->CreateShaderResourceView(buf->object(), &desc, &res_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateShaderResourceView failed");
