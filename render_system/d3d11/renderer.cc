@@ -330,7 +330,9 @@ void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int index,
 
 void D3DRenderer::ResetStageResource(RenderPipelineStage stage) {
   const int count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+  const int uacount = D3D11_1_UAV_SLOT_COUNT;
   ID3D11ShaderResourceView* views[count] = {0};
+  ID3D11UnorderedAccessView* uaviews[uacount] = { 0 };
   DCHECK(NULL != d3d_context_);
   switch (stage) {
     case kVertexStage:
@@ -347,6 +349,7 @@ void D3DRenderer::ResetStageResource(RenderPipelineStage stage) {
       break;
     case kComputeStage:
       d3d_context_->CSSetShaderResources(0, count, views);
+      d3d_context_->CSSetUnorderedAccessViews(0, uacount, uaviews, NULL);
       break;
     case kPixelStage:
       d3d_context_->PSSetShaderResources(0, count, views);

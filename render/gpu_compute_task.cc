@@ -23,6 +23,7 @@ GpuComputeTask::~GpuComputeTask() {}
 
 void GpuComputeTask::Reset(Renderer* renderer) {
   renderer->ResetShader(kComputeStage);
+  renderer->ResetStageResource(kComputeStage);
 }
 
 void GpuComputeTask::Bind(Renderer* renderer) {
@@ -31,7 +32,7 @@ void GpuComputeTask::Bind(Renderer* renderer) {
                                   static_cast<int>(shader_uaresource_.size()),
                                   &(shader_uaresource_[0]));
   } else {
-    renderer->SetShaderUAResource(kComputeStage, 0, 0, NULL);
+    renderer->SetShaderUAResource(kComputeStage, 0, 1, NULL);
   }
 
   if (shader_resource_.size() > 0u) {
@@ -39,7 +40,7 @@ void GpuComputeTask::Bind(Renderer* renderer) {
                                 static_cast<int>(shader_resource_.size()),
                                 &(shader_resource_[0]));
   } else {
-    renderer->SetShaderResource(kComputeStage, 0, 0, NULL);
+    renderer->SetShaderResource(kComputeStage, 0, 1, NULL);
   }
 
   for (int i = 0; i < constants_table_.size(); ++i) {
