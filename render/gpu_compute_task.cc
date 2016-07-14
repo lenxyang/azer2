@@ -8,13 +8,15 @@
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
-GpuComputeTask::GpuComputeTask(const ShaderInfo& info, int rescount, int uacount)
+GpuComputeTask::GpuComputeTask(const ShaderInfo& info, int rescount, int uacount,
+                               int table_count)
     : shader_info_(info) {
   DCHECK_EQ(info.stage, kComputeStage);
   gpu_program_ = RenderSystem::Current()->CreateShader(info, NULL);
   CHECK(gpu_program_.get()) << "Failed to CreateShader [" << info.path << "]";
   shader_resource_.resize(rescount);
   shader_uaresource_.resize(uacount);
+  constants_table_.resize(table_count);
 }
 
 GpuComputeTask::~GpuComputeTask() {}
@@ -40,10 +42,9 @@ void GpuComputeTask::Bind(Renderer* renderer) {
     renderer->SetShaderResource(kComputeStage, 0, 0, NULL);
   }
 
-  if (constants_table_.get()) {
-    renderer->BindConstantsTable(kComputeStage, 0, constants_table_.get());
-  } else {
-    renderer->BindConstantsTable(kComputeStage, 0, NULL);
+  for (int i = 0; i < constants_table_.size(); ++i) {
+    GpuConstantsTable* table = constants_table_[i].get();
+    renderer->BindConstantsTable(kComputeStage, i, table);
   }
 
   DCHECK(gpu_program_.get()) << "Shader Program cannot be NULL";
@@ -58,6 +59,14 @@ void GpuComputeTask::SetResource(int index, ShaderResView* tex) {
 void GpuComputeTask::SetUAResource(int index, UnorderAccessResView* tex) {
   CHECK_LT(index, static_cast<int>(shader_uaresource_.size()));
   shader_uaresource_[index] = tex;
+}
+
+GpuConstantsTable* GpuComputeTask::constants_table(int i) {
+  return constants_table_[i].get();
+}
+
+void GpuComputeTask::SetGpuConstantsTable(int index, GpuConstantsTable* table) {
+  constants_table_[index] = table;
 }
 
 }  // namespace azer
