@@ -39,7 +39,7 @@ typedef scoped_refptr<TextureView> TextureViewPtr;
 typedef scoped_refptr<UnorderAccessResView> UnorderAccessResViewPtr;
 
 struct GpuTaskParams {
-  Vector3 thread_group;
+  IntVec3 thread_group;
 };
 
 
