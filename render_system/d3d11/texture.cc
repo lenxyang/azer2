@@ -141,7 +141,7 @@ D3DTextureCubeMap::D3DTextureCubeMap(const Options& opt,
 
 bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  D3D11_SUBRESOURCE_DATA subres[6];
+  D3D11_SUBRESOURCE_DATA subres[6] = { 0 };
   for (int i = 0; i < 6; ++i) {
     const ImageLevelData* data = image->GetLevelData(i);
 

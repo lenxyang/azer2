@@ -8,7 +8,7 @@
 namespace azer {
 EntityPtr CreateGeoPointsList(PrimitiveTopology primitive,
                               const Vector3* points, int count,
-                               VertexDesc* desc, const Matrix4& mat);
+                              VertexDesc* desc, const Matrix4& mat);
 
 // util
 void CalcIndexedTriangleNormal(VertexData* vbd, IndicesData* idata);
