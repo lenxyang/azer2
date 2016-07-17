@@ -151,6 +151,10 @@ D3D11_BIND_FLAG TranslateBindTarget(uint32_t target) {
     flags |= D3D11_BIND_VERTEX_BUFFER;
   }
 
+  if (target & kBindTargetIndicesBuffer) {
+    flags |= D3D11_BIND_INDEX_BUFFER;
+  }
+
   if (target & kBindTargetStreamOut) {
     flags |= D3D11_BIND_STREAM_OUTPUT;
   }
