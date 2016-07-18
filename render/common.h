@@ -215,7 +215,7 @@ enum BindTarget {
   kBindTargetShaderResource    = 0x0008L,
   kBindTargetRenderTarget      = 0x0020L,
   kBindTargetDepthStencil      = 0x0040L,
-  kBindTargetUnorderedAccess   = 0x0080L,
+  kBindTargetUnorderAccess   = 0x0080L,
   kBindTargetVertexBuffer      = 0x0100L,
   kBindTargetIndicesBuffer     = 0x0200L,
   kBindTargetStreamOut         = 0x0400L,

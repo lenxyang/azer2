@@ -110,6 +110,31 @@ const char* GetTexFormatName(TexFormat format) {
     case TexFormat::kRGBA8Uint: return "kTexRGBA8Uint";
     case TexFormat::kRGBA8UNorm: return "kTexRGBA8UNorm";
 
+    case TexFormat::kR16Sint: return "kR16Sint";
+    case TexFormat::kR16SNorm: return "kR16SNorm";
+    case TexFormat::kR16Uint: return "kR16Uint";
+    case TexFormat::kR16UNorm: return "kR16UNorm";
+    case TexFormat::kR16Float: return "kR16Float";
+    case TexFormat::kR16Typeless: return "kR16Typeless";
+    case TexFormat::kRG16Sint: return "kRG16Sint";
+    case TexFormat::kRG16SNorm: return "kRG16SNorm";
+    case TexFormat::kRG16Uint: return "kRG16Uint";
+    case TexFormat::kRG16UNorm: return "kRG16UNorm";
+    case TexFormat::kRG16Float: return "kRG16Float";
+    case TexFormat::kRG16Typeless: return "kRG16Typeless";
+    case TexFormat::kRGB16Sint: return "kRGB16Sint";
+    case TexFormat::kRGB16SNorm: return "kRGB16SNorm";
+    case TexFormat::kRGB16Uint: return "kRGB16Uint";
+    case TexFormat::kRGB16UNorm: return "kRGB16UNorm";
+    case TexFormat::kRGB16Float: return "kRGB16Float";
+    case TexFormat::kRGB16Typeless: return "kRGB16Typeless";
+    case TexFormat::kRGBA16Sint: return "kRGBA16Sint";
+    case TexFormat::kRGBA16SNorm: return "kRGBA16SNorm";
+    case TexFormat::kRGBA16Uint: return "kRGBA16Uint";
+    case TexFormat::kRGBA16UNorm: return "kRGBA16UNorm";
+    case TexFormat::kRGBA16Float: return "kRGBA16Float";
+    case TexFormat::kRGBA16Typeless: return "kRGBA16Typeless";
+
     case TexFormat::kR32Sint: return "kTexR32Sint";
     case TexFormat::kR32Uint: return "kTexR32Uint";
     case TexFormat::kR32Float: return "kTexR32Float";
@@ -187,6 +212,34 @@ uint32_t SizeofTexFormat(TexFormat format) {
     case TexFormat::kX24TypelessG8Uint:
     case TexFormat::kD32Float:
       return 4;
+    case TexFormat::kR16Sint:
+    case TexFormat::kR16SNorm:
+    case TexFormat::kR16Uint:
+    case TexFormat::kR16UNorm:
+    case TexFormat::kR16Float:
+    case TexFormat::kR16Typeless:
+      return 2;
+    case TexFormat::kRG16Sint:
+    case TexFormat::kRG16SNorm:
+    case TexFormat::kRG16Uint:
+    case TexFormat::kRG16UNorm:
+    case TexFormat::kRG16Float:
+    case TexFormat::kRG16Typeless:
+      return 4;
+    case TexFormat::kRGB16Sint:
+    case TexFormat::kRGB16SNorm:
+    case TexFormat::kRGB16Uint:
+    case TexFormat::kRGB16UNorm:
+    case TexFormat::kRGB16Float:
+    case TexFormat::kRGB16Typeless:
+      return 6;
+    case TexFormat::kRGBA16Sint:
+    case TexFormat::kRGBA16SNorm:
+    case TexFormat::kRGBA16Uint:
+    case TexFormat::kRGBA16UNorm:
+    case TexFormat::kRGBA16Float:
+    case TexFormat::kRGBA16Typeless:
+      return 8;
     case TexFormat::kDXBC1n:
     case TexFormat::kDXBC1nSRGB:
     case TexFormat::kDXBC4n:

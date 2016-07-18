@@ -79,6 +79,32 @@ DXGI_FORMAT TranslateTexFormat(TexFormat type) {
     case TexFormat::kBGRA8UNorm:     return DXGI_FORMAT_B8G8R8A8_UNORM;
     case TexFormat::kRGBA8UNorm:     return DXGI_FORMAT_R8G8B8A8_UNORM;
     case TexFormat::kRGBA8Uint:      return DXGI_FORMAT_R8G8B8A8_UINT;
+    case TexFormat::kR16Sint:        return DXGI_FORMAT_R16_SINT;
+    case TexFormat::kR16SNorm:       return DXGI_FORMAT_R16_SNORM;
+    case TexFormat::kR16Uint:        return DXGI_FORMAT_R16_UINT;
+    case TexFormat::kR16UNorm:       return DXGI_FORMAT_R16_UNORM;
+    case TexFormat::kR16Float:       return DXGI_FORMAT_R16_FLOAT;
+    case TexFormat::kR16Typeless:    return DXGI_FORMAT_R16_TYPELESS;
+    case TexFormat::kRG16Sint:       return DXGI_FORMAT_R16G16_SINT;
+    case TexFormat::kRG16SNorm:      return DXGI_FORMAT_R16G16_SNORM;
+    case TexFormat::kRG16Uint:       return DXGI_FORMAT_R16G16_UINT;
+    case TexFormat::kRG16UNorm:      return DXGI_FORMAT_R16G16_UNORM;
+    case TexFormat::kRG16Float:      return DXGI_FORMAT_R16G16_FLOAT;
+    case TexFormat::kRG16Typeless:   return DXGI_FORMAT_R16G16_TYPELESS;
+      /*
+    case TexFormat::kRGB16Sint:      return DXGI_FORMAT_R16G16B16_SINT;
+    case TexFormat::kRGB16SNorm:     return DXGI_FORMAT_R16G16B16_SNORM;
+    case TexFormat::kRGB16Uint:      return DXGI_FORMAT_R16G16B16_UINT;
+    case TexFormat::kRGB16UNorm:     return DXGI_FORMAT_R16G16B16_UNORM;
+    case TexFormat::kRGB16Float:     return DXGI_FORMAT_R16G16B16_FLOAT;
+    case TexFormat::kRGB16Typeless:  return DXGI_FORMAT_R16G16B16_TYPELESS;
+      */
+    case TexFormat::kRGBA16Sint:     return DXGI_FORMAT_R16G16B16A16_SINT;
+    case TexFormat::kRGBA16SNorm:    return DXGI_FORMAT_R16G16B16A16_SNORM;
+    case TexFormat::kRGBA16Uint:     return DXGI_FORMAT_R16G16B16A16_UINT;
+    case TexFormat::kRGBA16UNorm:    return DXGI_FORMAT_R16G16B16A16_UNORM;
+    case TexFormat::kRGBA16Float:    return DXGI_FORMAT_R16G16B16A16_FLOAT;
+    case TexFormat::kRGBA16Typeless: return DXGI_FORMAT_R16G16B16A16_TYPELESS;
     case TexFormat::kR32Sint:        return DXGI_FORMAT_R32_SINT;
     case TexFormat::kR32Uint:        return DXGI_FORMAT_R32_UINT;
     case TexFormat::kR32Float:       return DXGI_FORMAT_R32_FLOAT;
@@ -143,7 +169,7 @@ D3D11_BIND_FLAG TranslateBindTarget(uint32_t target) {
     flags |= D3D11_BIND_DEPTH_STENCIL;
   }
 
-  if (target & kBindTargetUnorderedAccess) {
+  if (target & kBindTargetUnorderAccess) {
     flags |= D3D11_BIND_UNORDERED_ACCESS;
   }
 

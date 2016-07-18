@@ -11,6 +11,7 @@ TexFormat  TranslateFormat(int32_t type) {
     case DXGI_FORMAT_B8G8R8A8_UNORM:     return TexFormat::kBGRA8UNorm;
     case DXGI_FORMAT_R8G8B8A8_UNORM:     return TexFormat::kRGBA8UNorm;
     case DXGI_FORMAT_R8G8B8A8_UINT:      return TexFormat::kRGBA8Uint;
+    case DXGI_FORMAT_R16G16B16A16_FLOAT: return TexFormat::kRGBA16Float;
     case DXGI_FORMAT_R32_FLOAT:          return TexFormat::kR32Float;
     case DXGI_FORMAT_R32G32_FLOAT:       return TexFormat::kRG32Float;
     case DXGI_FORMAT_R32G32B32_FLOAT:    return TexFormat::kRGB32Float;

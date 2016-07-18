@@ -14,6 +14,6 @@ ShaderResView::ShaderResView(ResViewType type, GpuResource* buffer)
 UnorderAccessResView::UnorderAccessResView(ResViewType type, GpuResource* buffer)
     : ResourceView(type),
       buffer_(buffer) {
-  DCHECK(buffer->resource_options().target & kBindTargetUnorderedAccess);
+  DCHECK(buffer->resource_options().target & kBindTargetUnorderAccess);
 }
 }  // namespace azer
