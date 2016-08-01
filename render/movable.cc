@@ -113,7 +113,7 @@ Vector3 MovableObject::direction() const {
 }
 
 azer::Matrix4 MovableObject::world() const {
-  return std::move(Translate(position_)) *
+  return std::move(Transform::Translate(position_)) *
       std::move(orientation_.ToMatrix());
 }
 

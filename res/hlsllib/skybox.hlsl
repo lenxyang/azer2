@@ -13,13 +13,13 @@ struct VSInput {
 };
 
 
-cbuffer vs_buffer : register(cb0) {
+cbuffer vs_buffer : register(b0) {
    float4x4 pv;
    float4x4 world;
 };
 
 TextureCube cube : register(t0);
-SamplerState texsampler;
+SamplerState texsampler : register(s0);
 
 VsOutput vs_main(VSInput input) {
   VsOutput o;

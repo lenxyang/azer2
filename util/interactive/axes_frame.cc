@@ -68,7 +68,8 @@ AxesFrame::AxesFrame() {
 AxesFrame::~AxesFrame() {}
 
 void AxesFrame::Update(const Camera* camera) {
-  Matrix4 world = std::move(Translate(position_) * Scale(scale_));
+  Matrix4 world = std::move(Transform::Translate(position_) *
+                            Transform::Scale(scale_));
   effect_->SetPV(camera->GetProjViewMatrix());
   effect_->SetWorld(world);
   texeffect_->SetWorld(world);

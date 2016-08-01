@@ -35,7 +35,7 @@ GrayPoint::~GrayPoint() {
 }
 
 void GrayPoint::Render(const Camera& camera, Renderer* renderer) {
-  Matrix4 world = std::move(Translate(position_));
+  Matrix4 world = std::move(Transform::Translate(position_));
   effect_->SetWorld(world);
   effect_->SetPV(camera.GetProjViewMatrix());
   effect_->SetDiffuse(color_);

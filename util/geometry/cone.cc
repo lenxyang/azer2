@@ -45,7 +45,7 @@ void AppendGeoConeData(EntityData* data, const GeoConeParam& p, const Matrix4& m
   IndexPack ipack(data->idata());
   vpack.move(data->vdata()->vertex_count() - kVertexCount);
   ipack.move(data->idata()->count() - kIndexCount);
-  Matrix4 round_mat = std::move(mat * RotateX(Degree(180.0)));
+  Matrix4 round_mat = std::move(mat * std::move(Transform::RotateX(Degree(180.0))));
   sub = AppendGeoRoundData(&vpack, &ipack, p.radius, p.slice, round_mat);
   data->AddSubset(sub);
 

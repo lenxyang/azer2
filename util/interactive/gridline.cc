@@ -51,7 +51,7 @@ Gridline::~Gridline() {
 }
   
 void Gridline::Update(const Camera& camera) {
-  world_ = Translate(position_);
+  world_ = Transform::Translate(position_);
   pv_ = camera.GetProjViewMatrix();
 }
 

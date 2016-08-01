@@ -21,7 +21,7 @@ BoundingBoxObj::BoundingBoxObj() {
 void BoundingBoxObj::SetCorner(const Vector3& min, const Vector3& max) {
   Vector3 position = (min + max) * 0.5f;
   Vector3 scale(max.x - min.x, max.y - min.y, max.z - min.z);
-  world_ = std::move(Translate(position) * Scale(scale));
+  world_ = std::move(Transform::Translate(position) * Transform::Scale(scale));
 }
 
 void BoundingBoxObj::Update(const Camera* camera) {

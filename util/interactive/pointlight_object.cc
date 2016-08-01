@@ -39,8 +39,8 @@ void PointLightObject::Render(const Camera& camera, Renderer* renderer) {
   mtrl.specular = mtrl.diffuse = color_;
   mtrl.alpha = alpha_;
 
-  Matrix4 world = std::move(Translate(position_)) * 
-      std::move(Scale(range_, range_, range_));
+  Matrix4 world = std::move(Transform::Translate(position_)) * 
+      std::move(Transform::Scale(range_, range_, range_));
   ScopedResetBlending scoped_blending(renderer);
   ScopedRasterizerState scoped_raster(renderer);
   renderer->SetRasterizerState(env->noncull_rasterizer_state());

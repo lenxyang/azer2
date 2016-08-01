@@ -42,9 +42,9 @@ void ArrowObject::set_color(const Vector4& c) {
 
 void ArrowObject::Render(const Camera& camera, Renderer* renderer) {
   InteractiveEnv* env = InteractiveEnv::GetInstance();
-  Matrix4 world_ = std::move(Translate(position_))
+  Matrix4 world_ = std::move(Transform::Translate(position_))
       * std::move(orientation_.ToMatrix())
-      * std::move(Scale(scale_));
+      * std::move(Transform::Scale(scale_));
   
   ColorMaterialData mtrl;
   mtrl.diffuse = color_;

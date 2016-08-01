@@ -38,9 +38,9 @@ void RotateControllerObj::AppendRoundData(EntityData* data) {
   GeoSphereParam param;
   param.slice = 64;
   param.stack = 32;
-  Matrix4 xroundmat = RotateZ(Degree(90.0f));
+  Matrix4 xroundmat = Transform::RotateZ(Degree(90.0f));
   Matrix4 yroundmat = Matrix4::kIdentity;
-  Matrix4 zroundmat = RotateX(Degree(-90.0f));
+  Matrix4 zroundmat = Transform::RotateX(Degree(-90.0f));
   AppendGeoSphereData(data, param, Matrix4::kIdentity);
   AppendGeoCircleSubset(data, param.radius + kCirclekMargin, 1024, xroundmat);
   AppendGeoCircleSubset(data, param.radius + kCirclekMargin, 1024, yroundmat);
@@ -92,8 +92,8 @@ void RotateControllerObj::ResetColor() {
 }
 
 void RotateControllerObj::Update(const Camera& camera, const Vector3& position) {
-  Matrix4 mat = std::move(Scale(scale_));
-  world_ = std::move(std::move(Translate(position)) * mat);
+  Matrix4 mat = std::move(Transform::Scale(scale_));
+  world_ = std::move(std::move(Transform::Translate(position)) * mat);
   pv_ = std::move(camera.GetProjViewMatrix());
 }
 

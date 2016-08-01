@@ -25,8 +25,8 @@ SpotLightObject::SpotLightObject(Light* light)
   VertexDataPtr vdata(new VertexData(effect_->vertex_desc(), 1));
   IndicesDataPtr idata(new IndicesData(1));
   EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
-  Matrix4 rot = std::move(RotateX(Degree(-90.0f)));
-  Matrix4 world = std::move(Translate(0.0f, 0.0f, -kTotalHeight));
+  Matrix4 rot = std::move(Transform::RotateX(Degree(-90.0f)));
+  Matrix4 world = std::move(Transform::Translate(0.0f, 0.0f, -kTotalHeight));
   {
     GeoCylinderParam param;
     param.bottom_radius = param.top_radius = 0.1f;
@@ -40,7 +40,7 @@ SpotLightObject::SpotLightObject(Light* light)
     param.top_radius = 0.25f;
     param.bottom_radius = param.top_radius * 0.5f;
     param.height = kConeHeight;
-    Matrix4 mat = world * rot * Translate(0.0f, kCylinderHeight, 0.0f);
+    Matrix4 mat = world * rot * Transform::Translate(0.0f, kCylinderHeight, 0.0f);
     AppendGeoCylinderSubset(data.get(), param, mat);
   }
 
@@ -55,9 +55,9 @@ void SpotLightObject::Render(const Camera& camera, Renderer* renderer) {
 
   Quaternion quad;
   CalcSceneOrientForZDirection(light_->directional(), &quad);
-  Matrix4 world = std::move(Translate(light_->position()))
+  Matrix4 world = std::move(Transform::Translate(light_->position()))
       * std::move(quad.ToMatrix())
-      * std::move(Scale(scale_));
+      * std::move(Transform::Scale(scale_));
   
   ColorMaterialData mtrl;
   mtrl.diffuse = light_->diffuse();
@@ -128,7 +128,7 @@ void SpotLightDirectionalObject::InitBarrel() {
   float outer_sine = std::sqrt(1 - phi_ * phi_);
   float outer_radius = range_ * outer_sine / phi_;
 
-  Matrix4 mat = std::move(RotateX(Degree(-90.0f)));
+  Matrix4 mat = std::move(Transform::RotateX(Degree(-90.0f)));
   GeoCylinderParam p;
   p.height = range_;
   p.stack = 5;
@@ -154,7 +154,7 @@ void SpotLightDirectionalObject::InitBarrel() {
 
 void SpotLightDirectionalObject::Update(const Camera& camera) {
   pv_ = camera.GetProjViewMatrix();
-  world_ = std::move(Translate(position_) * orientation_.ToMatrix());
+  world_ = std::move(Transform::Translate(position_) * orientation_.ToMatrix());
 }
 
 void SpotLightDirectionalObject::Render(Renderer* renderer) {

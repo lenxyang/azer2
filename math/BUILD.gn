@@ -20,8 +20,6 @@ static_library("math") {
     "plane.cc",
     "plane.h",
     "plane_inl.h",
-    "projection.cc",
-    "projection.h",
     "quaternion.cc",
     "quaternion.h",
     "quaternion_inl.h",

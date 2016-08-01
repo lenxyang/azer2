@@ -136,7 +136,7 @@ void Camera::set_height(float height) {
 }
 
 void Camera::reset(const Vector3& pos, const Vector3& lookat, const Vector3& up) {
-  Matrix4 mat = LookAtRH(pos, lookat, up);
+  Matrix4 mat = Transform::LookAtRH(pos, lookat, up);
   holder_.SetPosition(pos);
   Vector3 xaxis(mat[0][0], mat[0][1], mat[0][2]);
   Vector3 yaxis(mat[1][0], mat[1][1], mat[1][2]);
@@ -177,8 +177,8 @@ void Camera::GenMatrices() {
   view[2][3] = trans.z;
   */
 
-  view_mat_ = std::move(LookDirRH(holder_.position(), holder_.directional(), 
-                                  holder_.up()));
+  view_mat_ = std::move(
+      Transform::LookDirRH(holder_.position(), holder_.directional(), holder_.up()));
   proj_view_mat_ = std::move(frustum_.projection() * view_mat_);
 }
 

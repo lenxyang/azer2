@@ -37,9 +37,11 @@ EntityDataPtr TranslateControlObj::InitAxesConeData(VertexDesc* desc) {
   GeoConeParam p;
   p.radius = 0.03f;
   p.height = 0.25f;
-  Matrix4 xmat = RotateZ(Degree(90.0f)) * Translate(0.0f, 1.0f, 0.0f);
-  Matrix4 ymat = Translate(0.0f, 1.0f, 0.0f);
-  Matrix4 zmat = RotateX(Degree(-90.0f)) * Translate(0.0f, 1.0f, 0.0f);
+  Matrix4 xmat = Transform::RotateZ(Degree(90.0f))
+      * Transform::Translate(0.0f, 1.0f, 0.0f);
+  Matrix4 ymat = Transform::Translate(0.0f, 1.0f, 0.0f);
+  Matrix4 zmat = Transform::RotateX(Degree(-90.0f))
+      * Transform::Translate(0.0f, 1.0f, 0.0f);
   AppendGeoConeData(data.get(), p, xmat);
   AppendGeoConeData(data.get(), p, ymat);
   AppendGeoConeData(data.get(), p, zmat);
@@ -164,8 +166,8 @@ void TranslateControlObj::ResetColor() {
 }
 
 void TranslateControlObj::Update(const Camera& camera, const Vector3& position) {
-  Matrix4 mat = std::move(Scale(scale_));
-  world_ = std::move(std::move(Translate(position)) * mat);
+  Matrix4 mat = std::move(Transform::Scale(scale_));
+  world_ = std::move(std::move(Transform::Translate(position)) * mat);
   pv_ = camera.GetProjViewMatrix();
 }
 

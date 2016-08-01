@@ -102,11 +102,11 @@ void AppendGeoCylinderSubset(EntityData* data, const GeoCylinderParam& p,
     vpack.move(data->vdata()->vertex_count() - kVertexCount);
     ipack.move(data->idata()->count() - kIndexCount);
 
-    Matrix4 mat1 = std::move(mat * RotateX(Degree(180.0)));
+    Matrix4 mat1 = std::move(mat * Transform::RotateX(Degree(180.0)));
     Subset sub = AppendGeoRoundData(&vpack, &ipack, p.bottom_radius, p.slice, mat1);
     data->AddSubset(sub);
 
-    Matrix4 mat2 = std::move(mat * Translate(0.0f, p.height, 0.0f));
+    Matrix4 mat2 = std::move(mat * Transform::Translate(0.0f, p.height, 0.0f));
     sub = AppendGeoRoundData(&vpack, &ipack, p.top_radius, p.slice, mat2);
     data->AddSubset(sub);
   }

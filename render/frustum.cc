@@ -60,10 +60,10 @@ Frustum& Frustum::operator = (const Frustum &frustum) {
 void Frustum::UpdateProjMatrix() {
   switch (type()) {
     case kPerspectiveFrustum: 
-      projection_ = std::move(PerspectiveRHD3D(fovY_, aspect_, near_, far_));
+      projection_ = std::move(Transform::PerspectiveRH(fovY_, aspect_, near_, far_));
       break;
     case kOrthognalFrustum:
-      projection_ = std::move(OrthoProjRH(width_, height_, near_, far_));
+      projection_ = std::move(Transform::OrthoProjRH(width_, height_, near_, far_));
       break;
     default:
       CHECK(false) << "Unknown Frustum type: " << type();

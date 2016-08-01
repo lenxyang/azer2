@@ -122,9 +122,9 @@ Vector3 TransformHolder::directional() const {
 }
 
 Matrix4 TransformHolder::GenWorldMatrix() const {
-  return std::move(std::move(Translate(position_)) *
+  return std::move(std::move(Transform::Translate(position_)) *
                    std::move(orientation_.ToMatrix())) *
-      std::move(Scale(scale_));
+      std::move(Transform::Scale(scale_));
 }
 
 void TransformHolder::PositionChanged(const Vector3& origin_position) {

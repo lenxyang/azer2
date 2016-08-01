@@ -15,13 +15,13 @@ EntityDataPtr CreateArrow(VertexDesc* desc) {
   VertexDataPtr vdata(new VertexData(desc, 1));
   IndicesDataPtr idata(new IndicesData(1));
   EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
-  Matrix4 rot = std::move(RotateX(Degree(-90.0f)));
+  Matrix4 rot = std::move(Transform::RotateX(Degree(-90.0f)));
 
   GeoConeParam cone_param;
   cone_param.height = 0.25f;
   cone_param.radius = 0.125f;
   cone_param.slice = 64;
-  Matrix4 cone_mat = rot * Translate(0.0f, 0.75f, 0.0f);
+  Matrix4 cone_mat = rot * Transform::Translate(0.0f, 0.75f, 0.0f);
   AppendGeoConeData(data.get(), cone_param, cone_mat);
 
   GeoCylinderParam cylinder_param;

@@ -45,7 +45,6 @@ inline float isnan(float x) {
 #include "azer/math/matrix4.h"
 #include "azer/math/plane.h"
 #include "azer/math/transform.h"
-#include "azer/math/projection.h"
 #include "azer/math/light_model.h"
 #include "azer/math/quaternion.h"
 #include "azer/math/float_util.h"
