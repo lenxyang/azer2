@@ -146,7 +146,7 @@ bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
     const ImageLevelData* data = image->GetLevelData(i);
 
     subres[i].pSysMem = data->dim_data(0);
-    subres[i].SysMemPitch = data->dim_data_size();
+    subres[i].SysMemPitch = data->row_bytes();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
   return Init(subres);
