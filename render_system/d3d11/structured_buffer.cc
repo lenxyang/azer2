@@ -62,9 +62,15 @@ bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs, const uint8_t* data) {
     hr = d3ddevice->CreateBuffer(&desc, NULL, &bufobj_);
     HRESULT_HANDLE(hr, ERROR, "CreateStructuredGpuBuffer failed");
   }
+
   return true;
 }
 
+void D3DStructuredGpuBuffer::SetName(const std::string& name) {
+  DCHECK(bufobj_);
+  bufobj_->SetPrivateData(WKPDID_D3DDebugObjectName,
+                          (UINT)name.length(), name.c_str());
+}
 
 // class D3DUAStructuredGpuBufferView
 D3DStructuredBufferResView::D3DStructuredBufferResView(GpuResource* buffer)

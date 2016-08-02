@@ -195,6 +195,12 @@ bool D3DDepthBuffer::Init(D3DTexture* tex) {
   return true;
 }
 
+void D3DDepthBuffer::SetName(const std::string& name) {
+  DCHECK(target_);
+  target_->SetPrivateData(WKPDID_D3DDebugObjectName,
+                          (UINT)name.length(), name.c_str());
+}
+
 void D3DDepthBuffer::Clear(D3DRenderer* renderer, bool clear_depth,
                            bool clear_stencil, float depth_val, int stencil_val) {
   DCHECK(target_ != NULL);

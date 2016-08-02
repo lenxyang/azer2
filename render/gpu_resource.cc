@@ -10,7 +10,6 @@ GpuResOptions::GpuResOptions()
     : usage(kBufferDefault),
       cpu_access(kCPUNoAccess),
       target(kBindTargetUnknown) {
-  memset(name, 0, sizeof(name));
 }
 
 GpuResource::GpuResource(const GpuResOptions& opt, GpuResType type) 

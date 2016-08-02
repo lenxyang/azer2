@@ -14,6 +14,7 @@ class D3DStructuredGpuBuffer : public StructuredGpuBuffer {
   D3DStructuredGpuBuffer(const GpuResOptions& options, int count, int strip);
   ~D3DStructuredGpuBuffer() override;
 
+  void SetName(const std::string& name) override;
   GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
   bool CopyTo(GpuResource* res) override;

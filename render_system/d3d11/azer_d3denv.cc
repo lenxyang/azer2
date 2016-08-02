@@ -20,9 +20,8 @@ bool InternalD3DEnvironment::InitD3DDevice() {
   // Create our SwapChain
   HRESULT hr;
   D3D_FEATURE_LEVEL featureLevels[] = {
+    D3D_FEATURE_LEVEL_11_1,
     D3D_FEATURE_LEVEL_11_0,
-    D3D_FEATURE_LEVEL_10_1,
-    D3D_FEATURE_LEVEL_10_0,
   };
 
   hr = D3D11CreateDevice(NULL,
@@ -34,9 +33,7 @@ bool InternalD3DEnvironment::InitD3DDevice() {
                          &d3d_device_,
                          &feature_level_,
                          &d3d_context_);
-  if (FAILED(hr)) {
-    return false;
-  }
+  HRESULT_HANDLE(hr, ERROR, "Create D3D11Device Failed ");
 
   if (!InitDXGI()) {
     return false;

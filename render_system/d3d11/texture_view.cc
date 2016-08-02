@@ -11,6 +11,7 @@ namespace d3d11 {
 D3DResTextureView::D3DResTextureView(const Options& options, Texture* tex) 
     : TextureView(options, tex),
       res_view_(NULL) {
+  CHECK(tex != NULL) << "Texture cannot be NULL";
 }
 
 D3DResTextureView::~D3DResTextureView() {

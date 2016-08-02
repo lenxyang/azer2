@@ -185,7 +185,14 @@ bool D3DVertexBuffer::Init(SlotVertexData* dataptr, D3DRenderSystem* rs) {
 
   layout_ = new D3DVertexLayout(dataptr->vertex_desc());
   CHECK(layout_->Init(rs));
+
   return true;
+}
+
+void D3DVertexBuffer::SetName(const std::string& name) {
+  DCHECK(buffer_);
+  buffer_->SetPrivateData(WKPDID_D3DDebugObjectName,
+                          (UINT)name.length(), name.c_str());
 }
 
 GpuResLockDataPtr D3DVertexBuffer::map(MapType flags) {

@@ -14,6 +14,7 @@ class D3DGpuConstantsTable : public GpuConstantsTable {
   D3DGpuConstantsTable(int32_t num, const Desc* desc);
   ~D3DGpuConstantsTable() override;
 
+  void SetName(const std::string& name) override;
   void flush(Renderer*) override;
   bool CopyTo(GpuResource* res) override;
   NativeGpuResourceHandle native_handle() override {

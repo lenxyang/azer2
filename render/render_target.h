@@ -12,6 +12,7 @@ namespace azer {
 class AZER_EXPORT RenderTarget : public ResourceView {
  public:
   struct AZER_EXPORT Options {
+    char name[128];
     TexFormat format;
 
     Options();
@@ -20,6 +21,7 @@ class AZER_EXPORT RenderTarget : public ResourceView {
   RenderTarget(const Options& opt, bool default_rt = false);
   virtual ~RenderTarget();
 
+  virtual void SetName(const std::string& name) = 0;
   virtual void Clear(const azer::Vector4& color) = 0;
 
   Texture* GetTexture() { return texture_.get();}

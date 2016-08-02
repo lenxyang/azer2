@@ -44,6 +44,13 @@ bool D3DIndicesBuffer::Init(const IndicesData* data, D3DRenderSystem* rs) {
   return true;
 }
 
+void D3DIndicesBuffer::SetName(const std::string& name) {
+  DCHECK(buffer_);
+  buffer_->SetPrivateData(WKPDID_D3DDebugObjectName,
+                          (UINT)name.length(), name.c_str());
+}
+
+
 GpuResLockDataPtr D3DIndicesBuffer::map(MapType flags) {
   map_helper_.reset(new GpuResLockHelper(resource_options(), buffer_));
   return map_helper_->map(flags);

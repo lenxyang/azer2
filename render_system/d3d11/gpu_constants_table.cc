@@ -33,6 +33,12 @@ bool D3DGpuConstantsTable::Init(D3DRenderSystem* rs) {
   return true;
 }
 
+void D3DGpuConstantsTable::SetName(const std::string& name) {
+  DCHECK(buffer_);
+  buffer_->SetPrivateData(WKPDID_D3DDebugObjectName,
+                          (UINT)name.length(), name.c_str());
+}
+
 void D3DGpuConstantsTable::flush(Renderer* renderer) {
   DCHECK(buffer_ != NULL);
   ID3D11DeviceContext* d3d_context = ((D3DRenderer*)renderer)->GetContext();

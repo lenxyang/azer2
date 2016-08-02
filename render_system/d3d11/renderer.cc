@@ -426,7 +426,7 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index,
 
 void D3DRenderer::SetShaderUAResource(RenderPipelineStage stage, int index, 
                                       int count, UnorderAccessResViewPtr* resarr) {
-  const int kMaxShaderTexCount = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
+  const int kMaxShaderTexCount = D3D11_1_UAV_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11UnorderedAccessView* views[kMaxShaderTexCount] = {0};
   TextureViewPtr* cur = (TextureViewPtr*)resarr;

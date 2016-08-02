@@ -21,7 +21,8 @@ class D3DRenderTarget : public RenderTarget {
                   D3DRenderSystem* render_system);
   virtual ~D3DRenderTarget();
   
-  virtual void Clear(const azer::Vector4& color);
+  void SetName(const std::string& name) override;
+  void Clear(const azer::Vector4& color) override;
 
   bool Init(D3DTexture* tex);
   ID3D11RenderTargetView* GetD3DRenderTargetView() { return target_;}

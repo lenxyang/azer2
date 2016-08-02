@@ -16,6 +16,7 @@ class D3DTexture: public Texture {
   D3DTexture(const Options& opt, D3DRenderSystem* rs);
 
   virtual ~D3DTexture();
+  void SetName(const std::string& name) override;
   GpuResLockDataPtr map(MapType type) override;
   void unmap() override;
   NativeGpuResourceHandle native_handle() override;

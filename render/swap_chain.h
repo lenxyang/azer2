@@ -18,6 +18,7 @@ class AZER_EXPORT SwapChain : public ::base::RefCounted<SwapChain> {
   SwapChain() {}
   virtual ~SwapChain() {}
 
+  virtual void SetName(const std::string& name) = 0;
   virtual bool resize(Surface* surface) = 0;
   virtual bool reset(Surface* surface) = 0;
   virtual bool Present() = 0;

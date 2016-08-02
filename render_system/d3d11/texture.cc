@@ -64,6 +64,12 @@ bool D3DTexture::Init(const D3D11_SUBRESOURCE_DATA* data) {
   return true;
 }
 
+void D3DTexture::SetName(const std::string& name) {
+  DCHECK(texres_);
+  texres_->SetPrivateData(WKPDID_D3DDebugObjectName,
+                          (UINT)name.length(), name.c_str());
+}
+
 void D3DTexture::Attach(ID3D11Texture2D* tex) { 
   DCHECK(texres_ == NULL);
   DCHECK(tex != NULL);

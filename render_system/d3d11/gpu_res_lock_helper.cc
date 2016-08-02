@@ -27,7 +27,6 @@ GpuResLockDataPtr GpuResLockHelper::map(MapType flags) {
   DCHECK(options_.cpu_access & kCPUWrite || options_.cpu_access & kCPURead);
 
   HRESULT hr;
-  DCHECK(!locked_) << "GpuResLock(" << options_.name << ") has been locked";
   ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
   d3d_device->GetImmediateContext(&d3d_context);
@@ -49,7 +48,6 @@ GpuResLockDataPtr GpuResLockHelper::map(MapType flags) {
 
 void GpuResLockHelper::unmap() {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
-  DCHECK(locked_) << "GpuResLock(" << options_.name << ") has not been locked";
   ID3D11Device* d3d_device = rs->GetDevice();
   ID3D11DeviceContext* d3d_context = NULL;
   d3d_device->GetImmediateContext(&d3d_context);

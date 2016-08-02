@@ -3,6 +3,7 @@
 namespace azer {
 RenderTarget::Options::Options() 
     : format(TexFormat::kUndefined) {
+  memset(name, 0, sizeof(name));
 }
 
 RenderTarget::RenderTarget(const Options& opt, bool default_rt)

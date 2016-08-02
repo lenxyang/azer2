@@ -1,5 +1,6 @@
 #include "azer/render_system/d3d11/swap_chain.h"
 
+#include "base/strings/stringprintf.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/render_target.h"
@@ -47,10 +48,17 @@ RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
     return RendererPtr();
   }
 
+  tex->SetName(::base::StringPrintf("Swapchain Render Texture"));
+  rt->SetName(::base::StringPrintf("Swapchain Render Target"));
+  depth->SetName(::base::StringPrintf("Swapchain Depth"));
+
   RenderTargetPtrs targets;
   targets.push_back(rt);
   RendererPtr renderer = render_system_->CreateRenderer(&targets, depth.get());
   return renderer;
+}
+
+void D3DSwapChain::SetName(const std::string& name) {
 }
 
 bool D3DSwapChain::resize(Surface* surface) {

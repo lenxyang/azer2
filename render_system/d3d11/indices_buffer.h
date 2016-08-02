@@ -14,6 +14,7 @@ class D3DIndicesBuffer : public IndicesBuffer {
   D3DIndicesBuffer(const GpuResOptions& opt);
   ~D3DIndicesBuffer() override;
 
+  void SetName(const std::string& name) override;
   GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
   bool CopyTo(GpuResource* res) override;

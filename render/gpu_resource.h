@@ -31,7 +31,6 @@ class AZER_EXPORT GpuResLockData: public ::base::RefCounted<GpuResLockData> {
 };
 
 struct AZER_EXPORT GpuResOptions {
-  char name[128];
   BufferUsage usage;
   CPUAccess cpu_access;  // defined render_system
   uint32_t target;
@@ -55,6 +54,7 @@ class AZER_EXPORT GpuResource : public ::base::RefCounted<GpuResource> {
 
   GpuResType resource_type() const { return resource_type_;}
 
+  virtual void SetName(const std::string& name) = 0;
   virtual GpuResLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
   virtual bool CopyTo(GpuResource* res) = 0;

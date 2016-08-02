@@ -34,6 +34,7 @@ class D3DVertexBuffer : public VertexBuffer {
   virtual ~D3DVertexBuffer();
   bool Init(SlotVertexData* dataptr, D3DRenderSystem* rs);
 
+  void SetName(const std::string& name) override;
   GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
   bool CopyTo(GpuResource* res) override;

@@ -46,7 +46,14 @@ bool D3DRenderTarget::Init(D3DTexture* tex) {
   DCHECK(TranslateBindTarget(tex->options().target) & D3D11_BIND_RENDER_TARGET);
   hr = d3d_device->CreateRenderTargetView(resource, NULL, &target_);
   HRESULT_HANDLE(hr, ERROR, "CreateRenderTargetView failed ");
+
   return true;
+}
+
+void D3DRenderTarget::SetName(const std::string& name) {
+  DCHECK(target_);
+  target_->SetPrivateData(WKPDID_D3DDebugObjectName,
+                          (UINT)name.length(), name.c_str());
 }
 
 NativeGpuResourceViewHandle D3DRenderTarget::native_handle() {

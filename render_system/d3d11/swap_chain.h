@@ -19,6 +19,7 @@ class D3DSwapChain : public SwapChain {
   virtual ~D3DSwapChain();
 
   bool Init(Surface* surface);
+  void SetName(const std::string& name) override;
   virtual bool reset(Surface* surface) override;
   virtual bool resize(Surface* surface) override;
   virtual bool Present() override;
