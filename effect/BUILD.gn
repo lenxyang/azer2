@@ -13,6 +13,8 @@ source_set("effect") {
     "base_material.h",
     "stage_res_container.cc",
     "stage_res_container.h",
+    "shader_closure.cc",
+    "shader_closure.h",
   ]
 
   deps = [

@@ -20,11 +20,9 @@ void TextBillboardEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
                             offsetof(vs_cbuffer, world), 1),
   };
-  GpuVariable v;
-  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
-  v.stage = kVertexStage;
-  v.type = kUpdatePerFrame;
-  gpu_table_.push_back(v);
+  GpuConstantsTablePtr table;
+  table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  SetGpuConstantsTable(kVertexStage, 0, table.get());
 
   GpuConstantsTable::Desc gs_table_desc[] = {
     GpuConstantsTable::Desc("pv", GpuConstantsType::kMatrix4,
@@ -36,20 +34,16 @@ void TextBillboardEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("param", GpuConstantsType::kVector4,
                             offsetof(gs_cbuffer, param), 1),
   };
-  v.table = rs->CreateGpuConstantsTable(arraysize(gs_table_desc), gs_table_desc);
-  v.stage = kGeometryStage;
-  v.type = kUpdatePerFrame;
-  gpu_table_.push_back(v);
+  table = rs->CreateGpuConstantsTable(arraysize(gs_table_desc), gs_table_desc);
+  SetGpuConstantsTable(kGeometryStage, 0, table.get());
 
   // generate GpuTable init for stage kPixelStage
   GpuConstantsTable::Desc ps_table_desc[] = {
     GpuConstantsTable::Desc("diffuse", GpuConstantsType::kVector4,
                             offsetof(ps_cbuffer, diffuse), 1),
   };
-  v.table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
-  v.stage = kPixelStage;
-  v.type = kUpdatePerFrame;
-  gpu_table_.push_back(v);
+  table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
+  SetGpuConstantsTable(kPixelStage, 0, table.get());
 }
 
 void TextBillboardEffect::SetBillboard(float width, float height) {
@@ -59,25 +53,19 @@ void TextBillboardEffect::SetBillboard(float width, float height) {
 
 void TextBillboardEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuVariable gv = gpu_table_[0];
-    CHECK_EQ(gv.stage, kVertexStage);
-    GpuConstantsTable* tb = gv.table.get();
+    GpuConstantsTable* tb = GetShaderClosure(kVertexStage)->table(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &world_, sizeof(Matrix4));
   }
   {
-    GpuVariable gv = gpu_table_[1];
-    CHECK_EQ(gv.stage, kGeometryStage);
-    GpuConstantsTable* tb = gv.table.get();
+    GpuConstantsTable* tb = GetShaderClosure(kGeometryStage)->table(0);
     tb->SetValue(0, &pv_, sizeof(pv_));
     tb->SetValue(1, &viewup_, sizeof(viewup_));
     tb->SetValue(2, &viewpos_, sizeof(viewpos_));
     tb->SetValue(3, &param_, sizeof(param_));
   }
   {
-    GpuVariable gv = gpu_table_[2];
-    CHECK_EQ(gv.stage, kPixelStage);
-    GpuConstantsTable* tb = gv.table.get();
+    GpuConstantsTable* tb = GetShaderClosure(kPixelStage)->table(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &diffuse_, sizeof(diffuse_));
   }

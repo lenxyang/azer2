@@ -8,6 +8,7 @@
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/shader.h"
 #include "azer/render/technique.h"
+#include "azer/effect/shader_closure.h"
 #include "azer/effect/stage_res_container.h"
 
 namespace azer {
@@ -46,6 +47,8 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void SetVertexDesc(VertexDesc* desc);
   
   // 刷新所有的 GpuConstantTable
+  void SetShaderClosure(ShaderClosure* closure);
+  ShaderClosure* GetShaderClosure(int stage);
   void FlushGpuVariables(int flush_mode, Renderer* renderer);
 
   void Apply(Renderer* renderer);
@@ -53,21 +56,15 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void OnRenderEnd(Renderer* renderer);
   void OnRenderNewObject(Renderer* renderer);
  protected:
+  void BindConstantsTable(Renderer* renderer);
   void SaveShaderResource(int stage, int index, ShaderResView* tex);
-  void BindTexture(int mode, Renderer* renderer);
+  void SetGpuConstantsTable(int stage, int index, GpuConstantsTable* table);
+  virtual void InitShaderClosure(Technique* technique) {}
   virtual void InitGpuConstantTable() {};
   virtual void ApplyGpuConstantTable(Renderer* renderer) {}
-  void BindConstantsTable(Renderer* renderer);
 
-  struct GpuVariable {
-    int stage;
-    int type;
-    GpuConstantsTablePtr table;    
-  };
-
+  std::vector<ShaderClosurePtr> shaders_;
   TechniquePtr technique_;
-  std::vector<GpuVariable> gpu_table_;
-  StageResContainer tex_container_;
   VertexDescPtr vertex_desc_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
 };

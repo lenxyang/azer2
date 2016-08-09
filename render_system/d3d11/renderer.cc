@@ -330,7 +330,7 @@ void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int index,
 
 void D3DRenderer::ResetStageResource(RenderPipelineStage stage) {
   const int count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
-  const int uacount = D3D11_1_UAV_SLOT_COUNT;
+  const int uacount = 8; // D3D11_1_UAV_SLOT_COUNT;
   ID3D11ShaderResourceView* views[count] = {0};
   ID3D11UnorderedAccessView* uaviews[uacount] = { 0 };
   DCHECK(NULL != d3d_context_);
@@ -426,7 +426,7 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index,
 
 void D3DRenderer::SetShaderUAResource(RenderPipelineStage stage, int index, 
                                       int count, UnorderAccessResViewPtr* resarr) {
-  const int kMaxShaderTexCount = D3D11_1_UAV_SLOT_COUNT;
+  const int kMaxShaderTexCount = 8; // D3D11_1_UAV_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11UnorderedAccessView* views[kMaxShaderTexCount] = {0};
   TextureViewPtr* cur = (TextureViewPtr*)resarr;

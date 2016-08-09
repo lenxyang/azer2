@@ -9,7 +9,9 @@
 
 
 namespace azer {
-Effect::Effect() {}
+Effect::Effect() {
+  shaders_.resize((int)kRenderPipelineStageNum);
+}
 
 Effect::~Effect() {}
 
@@ -26,18 +28,31 @@ void Effect::SetVertexDesc(VertexDesc* desc) {
   vertex_desc_ = desc;
 }
 
+ShaderClosure* Effect::GetShaderClosure(int stage) {
+  return shaders_[stage].get();
+}
+
+void Effect::SetShaderClosure(ShaderClosure* closure) {
+  shaders_[(int)closure->stage()] = closure;
+}
+
 void Effect::Apply(Renderer* renderer) {
   ApplyGpuConstantTable(renderer);
-  BindConstantsTable(renderer);
+  // BindConstantsTable(renderer);
+  // technique_->Bind(renderer);
   DCHECK(technique_.get() != NULL);
-  technique_->Bind(renderer);
 
-  tex_container_.Bind(renderer);
-  FlushGpuVariables(kUpdateAll, renderer);
+  FlushGpuVariables(0, renderer);
 }
 
 void Effect::SaveShaderResource(int stage, int index, ShaderResView* tex) {
-  tex_container_.SetResource(stage, index, tex);
+  CHECK(shaders_[stage].get());
+  shaders_[stage]->SetResource(index, 1, tex);
+}
+
+void Effect::SetGpuConstantsTable(int stage, int index, GpuConstantsTable* table) {
+  CHECK(shaders_[stage].get());
+  shaders_[stage]->SetGpuConstantsTable(stage, index, table);
 }
 
 void Effect::OnRenderNewObject(Renderer* renderer) {
@@ -45,28 +60,26 @@ void Effect::OnRenderNewObject(Renderer* renderer) {
 
 void Effect::OnRenderBegin(Renderer* renderer) {
   DCHECK(technique_.get() != NULL);
-  technique_->Bind(renderer);
-  BindConstantsTable(renderer);
-  tex_container_.Bind(renderer);
+  // technique_->Bind(renderer);
+  // BindConstantsTable(renderer);
+  // shaders_[stage]->Bind(renderer);
+  for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
+    if (!iter->get()) continue;
+    (*iter)->Bind(renderer);
+  }
 }
 
 void Effect::OnRenderEnd(Renderer* renderer) {
-  tex_container_.Reset(renderer);
-}
-
-void Effect::BindConstantsTable(Renderer* renderer) {
-  for (auto iter = gpu_table_.begin(); iter != gpu_table_.end(); ++iter) {
-    GpuConstantsTable* table = iter->table.get();
-    DCHECK(table);
-    renderer->BindConstantsTable((RenderPipelineStage)iter->stage, 0, table);
+  for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
+    if (!iter->get()) continue;
+    (*iter)->Reset(renderer);
   }
 }
 
 void Effect::FlushGpuVariables(int type, Renderer* renderer) {
-  for (auto iter = gpu_table_.begin(); iter != gpu_table_.end(); ++iter) {
-    GpuConstantsTable* table = iter->table.get();
-    DCHECK(table);
-    table->flush(renderer);
+  for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
+    if (!iter->get()) continue;
+    (*iter)->UpdateShaderParams(renderer);
   }
 }
 

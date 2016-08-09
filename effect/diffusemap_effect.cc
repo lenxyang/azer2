@@ -24,11 +24,9 @@ void DiffuseMapEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("camerapos", GpuConstantsType::kVector4,
                             offsetof(vs_cbuffer, camerapos), 1),
   };
-  GpuVariable v;
-  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
-  v.stage = kVertexStage;
-  v.type = kUpdatePerFrame;
-  gpu_table_.push_back(v);
+  GpuConstantsTablePtr table;
+  table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  SetGpuConstantsTable(kVertexStage, 0, table.get());
 
   // generate GpuTable init for stage kPixelStage
   GpuConstantsTable::Desc ps_table_desc[] = {
@@ -43,10 +41,8 @@ void DiffuseMapEffect::InitGpuConstantTable() {
     GpuConstantsTable::Desc("lights", offsetof(ps_cbuffer, lights),
                             sizeof(UniverseLight), 4),
   };
-  v.table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
-  v.stage = kPixelStage;
-  v.type = kUpdatePerFrame;
-  gpu_table_.push_back(v);
+  table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
+  SetGpuConstantsTable(kPixelStage, 0, table.get());
 }
 
 void DiffuseMapEffect::SetPV(const Matrix4& value) { pv_ = value;}
@@ -73,18 +69,14 @@ void DiffuseMapEffect::SetLightData(const UniverseLight* value, int32_t count) {
 
 void DiffuseMapEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuVariable gv = gpu_table_[0];
-    CHECK_EQ(gv.stage, kVertexStage);
-    GpuConstantsTable* tb = gv.table.get();
+    GpuConstantsTable* tb = GetShaderClosure(kVertexStage)->table(0);
+    DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
     tb->SetValue(2, &camerapos_, sizeof(Vector4));
   }
   {
-    GpuVariable gv = gpu_table_[1];
-    CHECK_EQ(gv.stage, kPixelStage);
-    GpuConstantsTable* tb = gv.table.get();
-    
+    GpuConstantsTable* tb = GetShaderClosure(kPixelStage)->table(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &mtrl_.ambient_scalar, sizeof(float));
     tb->SetValue(1, &mtrl_.specular_scalar, sizeof(float));

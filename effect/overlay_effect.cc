@@ -22,18 +22,14 @@ void OverlayEffect::InitGpuConstantTable() {
                             sizeof(Vector4), 1),
   };
 
-  GpuVariable v;
-  v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
-  v.stage = kVertexStage;
-  v.type = kUpdatePerFrame;
-  gpu_table_.push_back(v);
+  GpuConstantsTablePtr table;
+  table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+  SetGpuConstantsTable(kVertexStage, 0, table.get());
 }
 
 void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuVariable gv = gpu_table_[0];
-    CHECK_EQ(gv.stage, kVertexStage);
-    GpuConstantsTable* tb = gv.table.get();
+    GpuConstantsTable* tb = GetShaderClosure(kVertexStage)->table(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &bounds_, sizeof(Vector4));
     tb->SetValue(1, &texbounds_, sizeof(Vector4));
