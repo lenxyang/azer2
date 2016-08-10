@@ -40,7 +40,7 @@ class TextBillboardEffect : public Effect {
   static Effect* CreateObject() { return new TextBillboardEffect;}
  protected:
   void ApplyGpuConstantTable(Renderer* renderer) override;
-  ShaderClosurePtr InitShaderClosure(int stage, Shader* shader) override;
+  ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
 
   Matrix4 pv_;
   Matrix4 world_;

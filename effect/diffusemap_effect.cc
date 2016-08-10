@@ -13,7 +13,8 @@ DiffuseMapEffect::DiffuseMapEffect() : light_count_(0) {}
 DiffuseMapEffect::~DiffuseMapEffect() {}
 const char* DiffuseMapEffect::GetEffectName() const { return kEffectName;}
 
-ShaderClosurePtr DiffuseMapEffect::InitShaderClosure(int stage, Shader* shader) {
+ShaderClosurePtr DiffuseMapEffect::InitShaderClosure(RenderPipelineStage stage,
+                                                     Shader* shader) {
   RenderSystem* rs = RenderSystem::Current();
   ShaderClosurePtr closure(new ShaderClosure(stage));
   GpuConstantsTablePtr table;

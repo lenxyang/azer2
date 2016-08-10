@@ -70,7 +70,8 @@ ColorEffect::ColorEffect() : light_count_(0) {}
 ColorEffect::~ColorEffect() {}
 const char* ColorEffect::GetEffectName() const { return kEffectName;}
 
-ShaderClosurePtr ColorEffect::InitShaderClosure(int stage, Shader* shader) {
+ShaderClosurePtr ColorEffect::InitShaderClosure(RenderPipelineStage stage,
+                                                Shader* shader) {
   RenderSystem* rs = RenderSystem::Current();
   ShaderClosurePtr closure(new ShaderClosure(stage));
   GpuConstantsTablePtr table;

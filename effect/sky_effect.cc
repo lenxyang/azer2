@@ -15,23 +15,34 @@ SkyboxEffect::SkyboxEffect() {}
 SkyboxEffect::~SkyboxEffect() {}
 const char* SkyboxEffect::GetEffectName() const { return kEffectName; }
 
-void SkyboxEffect::InitGpuConstantTable() {
+ShaderClosurePtr SkyboxEffect::InitShaderClosure(RenderPipelineStage stage,
+                                                 Shader* shader) {
   RenderSystem* rs = RenderSystem::Current();
-  // generate GpuTable init for stage kVertexStage
-  GpuConstantsTable::Desc vs_table_desc[] = {
-    GpuConstantsTable::Desc("pv", GpuConstantsType::kMatrix4,
-                            offsetof(vs_cbuffer, pv), 1),
-    GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
-                            offsetof(vs_cbuffer, world), 1),
-  };
   GpuConstantsTablePtr table;
-  table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
-  SetGpuConstantsTable(kVertexStage, 0, table.get());
+  ShaderClosurePtr closure(new ShaderClosure(stage));
+  if (stage == kVertexStage) {
+    // generate GpuTable init for stage kVertexStage
+    GpuConstantsTable::Desc vs_table_desc[] = {
+      GpuConstantsTable::Desc("pv", GpuConstantsType::kMatrix4,
+                              offsetof(vs_cbuffer, pv), 1),
+      GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
+                              offsetof(vs_cbuffer, world), 1),
+    };
+  
+    table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+    closure->SetGpuConstantsTable(kVertexStage, 0, table.get());
+    closure->SetShader(shader, 1, 0, 0);
+  } else if (stage == kPixelStage) {
+    closure->SetShader(shader, 0, 0, 0);
+  } else {
+    CHECK(false) << "unsupport stage: " << stage;
+  }
+  return closure;
 }
 
 void SkyboxEffect::ApplyGpuConstantTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = GetShaderClosure(kVertexStage)->table(0);
+    GpuConstantsTable* tb = GetShaderClosure(kVertexStage)->table_at(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
