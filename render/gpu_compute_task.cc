@@ -8,8 +8,8 @@
 #include "azer/render/vertex_buffer.h"
 
 namespace azer {
-GpuComputeTask::GpuComputeTask(const ShaderInfo& info, int rescount, int uacount,
-                               int table_count)
+GpuComputeTask::GpuComputeTask(const ShaderInfo& info, int table_count,
+                               int rescount, int uacount)
     : shader_info_(info) {
   DCHECK_EQ(info.stage, kComputeStage);
   gpu_program_ = RenderSystem::Current()->CreateShader(info, NULL);

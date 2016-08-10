@@ -41,7 +41,6 @@ enum class GpuResType {
   kVertexBuffer = 1,
   kIndicesBuffer,
   kStructuredBuffer,
-  kConstantTable,
   kTexture,
 };
 
@@ -85,5 +84,4 @@ class AZER_EXPORT AutoBufferLock {
 
 AZER_EXPORT const GpuResOptions& kVertexBufferOpt();
 AZER_EXPORT const GpuResOptions& kIndicesBufferOpt();
-AZER_EXPORT const GpuResOptions& kShaderConstsTableBufferOpt();
 }  // namespace azer

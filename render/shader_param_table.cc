@@ -24,11 +24,15 @@ ShaderParamTable::ShaderParamTable(int32_t num, const Desc* desc) {
 
   RenderSystem* rs = RenderSystem::Current();
   CHECK(rs) << "RenderSystem Not Initialized";
-  gpu_buffer_ = rs->CreateStructuredBuffer(kShaderConstsTableBufferOpt(), 1, size_);
+  static GpuResOptions resopt;
+  resopt.target = kBindTargetIndicesBuffer;
+  gpu_buffer_ = rs->CreateStructuredBuffer(resopt, 1, size_);
   CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }
 
 void ShaderParamTable::flush(Renderer* renderer) {
+  DCHECK(gpu_buffer_.get()) << "GpuBuffer cannot be NULL";
+  gpu_buffer_->UpdateData(data_.get(), size_);
 }
 
 int32_t ShaderParamTable::offset(int32_t index) const {

@@ -53,6 +53,7 @@ void Effect::SetShaderClosure(ShaderClosure* closure) {
 }
 
 void Effect::Apply(Renderer* renderer) {
+  ApplyShaderParamTable(renderer);
   for (int i = 0; i < (int)kRenderPipelineStageNum; ++i) {
     if (shaders_[i].get()) {
       shaders_[i]->Bind(renderer);

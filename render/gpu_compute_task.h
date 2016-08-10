@@ -5,7 +5,6 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/math/vector3.h"
-#include "azer/effect/stage_res_container.h"
 #include "azer/render/gpu_resource_view.h"
 #include "azer/render/shader.h"
 #include "azer/render/resource_view.h"
@@ -21,8 +20,7 @@ typedef scoped_refptr<ShaderParamTable> ShaderParamTablePtr;
 
 class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
  public:
-  GpuComputeTask(const ShaderInfo& info, int rescour, int uacount,
-                 int table_count = 1);
+  GpuComputeTask(const ShaderInfo& info, int table_count, int rescour, int uacount);
   virtual ~GpuComputeTask();
 
   void SetResource(int index, ShaderResView* tex);

@@ -32,18 +32,11 @@ const GpuResOptions& kIndicesBufferOpt() {
   return opt;
 }
 
-const GpuResOptions& kShaderConstsTableBufferOpt() {
-  static GpuResOptions opt;
-  opt.target = kBindTargetContantBuffer;
-  return opt;
-}
-
 std::ostream& operator << (std::ostream& os, const GpuResType& res) {
   switch (res) {
     case GpuResType::kVertexBuffer: os << "VertexBufferRes"; break;
     case GpuResType::kIndicesBuffer: os << "IndexBufferRes"; break;
     case GpuResType::kStructuredBuffer: os << "StructureBufferRes"; break;
-    case GpuResType::kConstantTable: os << "ConstantTableRes"; break;
     case GpuResType::kTexture: os << "TextureRes"; break;
     default: CHECK(false) << "No such GpuResType: " << (int)res;
   }
