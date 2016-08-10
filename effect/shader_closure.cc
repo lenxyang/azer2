@@ -46,6 +46,7 @@ void ShaderClosure::UpdateShaderParam(Renderer* renderer) {
 }
 
 void ShaderClosure::Bind(Renderer* renderer) {
+  UpdateShaderParam(renderer);
   if (!shader_res_.empty()) {
     renderer->SetShaderResource(
         stage(), 0, static_cast<int>(shader_uares_.size()), &shader_res_.front());

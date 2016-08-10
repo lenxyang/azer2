@@ -48,17 +48,20 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   // 刷新所有的 ShaderParamTable
   void SetShaderClosure(ShaderClosure* closure);
   ShaderClosure* GetShaderClosure(int stage);
-  void FlushGpuVariables(int flush_mode, Renderer* renderer);
+  void UpdateGpuParams(int type, Renderer* renderer);
 
   void Apply(Renderer* renderer);
   void OnRenderBegin(Renderer* renderer);
   void OnRenderEnd(Renderer* renderer);
   void OnRenderNewObject(Renderer* renderer);
  protected:
-  void BindShaderParamTable(Renderer* renderer);
   void SaveShaderResource(int stage, int index, ShaderResView* tex);
   void SetShaderParamTable(int stage, int index, ShaderParamTable* table);
+
+  // 为每一个 shader 创建 ShaderClosure
   virtual ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader*);
+
+  // 设置 shader 的参数的值
   virtual void ApplyShaderParamTable(Renderer* renderer);
 
   std::vector<ShaderClosurePtr> shaders_;

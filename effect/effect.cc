@@ -53,12 +53,11 @@ void Effect::SetShaderClosure(ShaderClosure* closure) {
 }
 
 void Effect::Apply(Renderer* renderer) {
-  ApplyShaderParamTable(renderer);
-  // BindShaderParamTable(renderer);
-  // technique_->Bind(renderer);
-  DCHECK(technique_.get() != NULL);
-
-  FlushGpuVariables(0, renderer);
+  for (int i = 0; i < (int)kRenderPipelineStageNum; ++i) {
+    if (shaders_[i].get()) {
+      shaders_[i]->Bind(renderer);
+    }
+  }
 }
 
 void Effect::SaveShaderResource(int stage, int index, ShaderResView* tex) {
@@ -92,10 +91,10 @@ void Effect::OnRenderEnd(Renderer* renderer) {
   }
 }
 
-void Effect::FlushGpuVariables(int type, Renderer* renderer) {
+void Effect::UpdateGpuParams(int type, Renderer* renderer) {
   for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
-    if (!iter->get()) continue;
-    (*iter)->UpdateShaderParam(renderer);
+    if (iter->get()) 
+      (*iter)->UpdateShaderParam(renderer);
   }
 }
 
