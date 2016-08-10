@@ -32,8 +32,8 @@ ShaderClosurePtr NormalLineEffect::InitShaderClosure(RenderPipelineStage stage,
     };
   
     table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else if (stage == kPixelStage) {
 
     // generate GpuTable init for stage kPixelStage
@@ -41,8 +41,8 @@ ShaderClosurePtr NormalLineEffect::InitShaderClosure(RenderPipelineStage stage,
       ShaderParamTable::Desc("color", ShaderParamType::kVector4, 0, 1),
     };
     table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else {
     CHECK(false);
   }

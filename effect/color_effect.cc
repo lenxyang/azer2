@@ -30,7 +30,7 @@ ShaderClosurePtr AmbientColorEffect::InitShaderClosure(RenderPipelineStage stage
     
     closure->SetShader(shader, 1, 0, 0);
     table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(0, 1, table.get());
+    closure->SetShaderParamTable(0, table.get());
   } else if (stage == kPixelStage) {
     // generate GpuTable init for stage kPixelStage
     ShaderParamTable::Desc ps_table_desc[] = {
@@ -40,7 +40,7 @@ ShaderClosurePtr AmbientColorEffect::InitShaderClosure(RenderPipelineStage stage
 
     table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
     closure->SetShader(shader, 1, 0, 0);
-    closure->SetShaderParamTable(stage, 0, table.get());
+    closure->SetShaderParamTable(0, table.get());
   } else {
     CHECK(false) << "not support stage: " << stage;
   }
@@ -85,8 +85,8 @@ ShaderClosurePtr ColorEffect::InitShaderClosure(RenderPipelineStage stage,
     };
     
     table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else if (stage == kPixelStage) {
     // generate GpuTable init for stage kPixelStage
     ShaderParamTable::Desc ps_table_desc[] = {
@@ -98,8 +98,8 @@ ShaderClosurePtr ColorEffect::InitShaderClosure(RenderPipelineStage stage,
                               offsetof(ps_cbuffer, light_count), 1),
     };
     table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else {
     CHECK(false);
   }

@@ -63,12 +63,12 @@ void Effect::Apply(Renderer* renderer) {
 
 void Effect::SaveShaderResource(int stage, int index, ShaderResView* tex) {
   CHECK(shaders_[stage].get());
-  shaders_[stage]->SetResource(index, 1, tex);
+  shaders_[stage]->SetResource(index, tex);
 }
 
 void Effect::SetShaderParamTable(int stage, int index, ShaderParamTable* table) {
   CHECK(shaders_[stage].get());
-  shaders_[stage]->SetShaderParamTable(stage, index, table);
+  shaders_[stage]->SetShaderParamTable(index, table);
 }
 
 void Effect::OnRenderNewObject(Renderer* renderer) {

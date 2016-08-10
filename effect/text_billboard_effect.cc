@@ -25,8 +25,8 @@ ShaderClosurePtr TextBillboardEffect::InitShaderClosure(RenderPipelineStage stag
     };
   
     table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else if (stage == kGeometryStage) {
 
     ShaderParamTable::Desc gs_table_desc[] = {
@@ -40,8 +40,8 @@ ShaderClosurePtr TextBillboardEffect::InitShaderClosure(RenderPipelineStage stag
                               offsetof(gs_cbuffer, param), 1),
     };
     table = new ShaderParamTable(arraysize(gs_table_desc), gs_table_desc);
-    closure->SetShaderParamTable(kGeometryStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else if (stage == kPixelStage) {
 
     // generate GpuTable init for stage kPixelStage
@@ -50,8 +50,8 @@ ShaderClosurePtr TextBillboardEffect::InitShaderClosure(RenderPipelineStage stag
                               offsetof(ps_cbuffer, diffuse), 1),
     };
     table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 1, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else {
     CHECK(false) << "unsupport stage: " << stage;
   }

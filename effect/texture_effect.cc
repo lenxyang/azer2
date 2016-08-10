@@ -28,8 +28,8 @@ ShaderClosurePtr TextureEffect::InitShaderClosure(RenderPipelineStage stage,
                               offsetof(vs_cbuffer, camerapos), 1),
     };
     table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else if (stage == kPixelStage) {
     // generate GpuTable init for stage kPixelStage
     ShaderParamTable::Desc ps_table_desc[] = {
@@ -45,8 +45,8 @@ ShaderClosurePtr TextureEffect::InitShaderClosure(RenderPipelineStage stage,
                               sizeof(UniverseLight), arraysize(lights_)),
     };
     table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 1, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else {
     CHECK(false) << "unsupport stage: " << stage;
   }

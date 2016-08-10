@@ -24,29 +24,19 @@ void ShaderClosure::SetShader(Shader* shader, int table_count, int res_count,
   shader_uares_.resize(uares_count);
 }
 
-void ShaderClosure::SetResource(int index, int count, ShaderResView* tex) {
-  CHECK_LT(index + count, shader_res_.size());
-  ShaderResViewPtr* cur = &shader_res_.front() + index;
-  for (int i = 0; i < count; ++i, ++cur) {
-    (*cur) = tex;
-  }
+void ShaderClosure::SetResource(int index, ShaderResView* tex) {
+  CHECK_LT(index, shader_res_.size());
+  shader_res_[index] = tex;
 }
 
-void ShaderClosure::SetUAResource(int index, int count, UnorderAccessResView* tex) {
-  CHECK_LT(index + count, shader_uares_.size());
-  UnorderAccessResViewPtr* cur = &shader_uares_.front() + index;
-  for (int i = 0; i < count; ++i, ++cur) {
-    (*cur) = tex;
-  }
+void ShaderClosure::SetUAResource(int index, UnorderAccessResView* tex) {
+  CHECK_LT(index, shader_uares_.size());
+  shader_uares_[index] = tex;
 }
 
-void ShaderClosure::SetShaderParamTable(int index, int count, 
-                                         ShaderParamTable* table) {
-  CHECK_LT(index + count, table_.size());
-  ShaderParamTablePtr* cur = &table_.front() + index;
-  for (int i = 0; i < count; ++i, ++cur) {
-    (*cur) = table;
-  }
+void ShaderClosure::SetShaderParamTable(int index, ShaderParamTable* table) {
+  CHECK_LT(index, table_.size());
+  table_[index] = table;
 }
 
 void ShaderClosure::UpdateShaderParam(Renderer* renderer) {

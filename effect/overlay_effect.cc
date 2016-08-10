@@ -26,10 +26,10 @@ ShaderClosurePtr OverlayEffect::InitShaderClosure(RenderPipelineStage stage,
 
     ShaderParamTablePtr table;
     table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
   } else if (stage == kPixelStage) {
-    closure->SetShader(shader, 1, 0, 0);
+    closure->SetShader(shader, 0, 1, 0);
   } else {
     CHECK(false) << "Unsupport Stage";
   }

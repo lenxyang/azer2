@@ -29,7 +29,7 @@ ShaderClosurePtr SkyboxEffect::InitShaderClosure(RenderPipelineStage stage,
     };
   
     table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(kVertexStage, 0, table.get());
+    closure->SetShaderParamTable(0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
     closure->SetShader(shader, 0, 0, 0);
