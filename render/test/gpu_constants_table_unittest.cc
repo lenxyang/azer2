@@ -6,15 +6,15 @@
 
 using namespace azer;
 
-class DummyGpuConstantsTable : azer::GpuConstantsTable {
+class DummyShaderParamTable : azer::ShaderParamTable {
  public:
   virtual void flush() {
   }
 };
 
-TEST(GpuConstantsTable, SetValue) {
+TEST(ShaderParamTable, SetValue) {
 }
 
-TEST(GpuConstantsTable, SetLight) {
+TEST(ShaderParamTable, SetLight) {
 }
 

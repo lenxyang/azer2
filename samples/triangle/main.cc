@@ -38,11 +38,11 @@ class SimpleEffect : public Effect {
   void SetWorld(const Matrix4& value) { world_ = value;}
   void SetColor(const Vector4& value) {color_ = value;}
  protected:
-  void ApplyGpuConstantTable(Renderer* renderer) override {
+  void ApplyShaderParamTable(Renderer* renderer) override {
     {
       Matrix4 pvw = std::move(pv_ * world_);
       GpuVariable var = gpu_table_[0];
-      GpuConstantsTable* tb = var.table.get();
+      ShaderParamTable* tb = var.table.get();
       DCHECK_EQ(var.stage, kVertexStage);
       DCHECK(tb != NULL);
       tb->SetValue(0, &pvw, sizeof(Matrix4));
@@ -50,34 +50,34 @@ class SimpleEffect : public Effect {
     }
     {
       GpuVariable var = gpu_table_[1];
-      GpuConstantsTable* tb = var.table.get();
+      ShaderParamTable* tb = var.table.get();
       DCHECK(tb != NULL);
       DCHECK_EQ(var.stage, kPixelStage);
       tb->SetValue(0, &color_, sizeof(Vector4));
     }
   }
-  void InitGpuConstantTable() override {
+  void InitShaderParamTable() override {
     RenderSystem* rs = RenderSystem::Current();
     // generate GpuTable init for stage kVertexStage
-    GpuConstantsTable::Desc vs_table_desc[] = {
-      GpuConstantsTable::Desc("pvw", GpuConstantsType::kMatrix4,
+    ShaderParamTable::Desc vs_table_desc[] = {
+      ShaderParamTable::Desc("pvw", ShaderParamType::kMatrix4,
                               offsetof(vs_cbuffer, pvw), 1),
-      GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
+      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
                               offsetof(vs_cbuffer, world), 1),
     };
 
     GpuVariable v;
-    v.table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
+    v.table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     v.stage = kVertexStage;
     v.type = kUpdatePerFrame;
     gpu_table_.push_back(v);
     // generate GpuTable init for stage kPixelStage
-    GpuConstantsTable::Desc ps_table_desc[] = {
-      GpuConstantsTable::Desc("color", GpuConstantsType::kVector4,
+    ShaderParamTable::Desc ps_table_desc[] = {
+      ShaderParamTable::Desc("color", ShaderParamType::kVector4,
                               offsetof(ps_cbuffer, color), 1),
     };
 
-    v.table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
+    v.table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
     v.stage = kPixelStage;
     v.type = kUpdatePerFrame;
     gpu_table_.push_back(v);

@@ -26,17 +26,17 @@ class HaredwareSkinnedMeshEffect: public azer::Effect {
   #pragma pack(pop)
 
   void SetBones(const azer::Matrix4* value, int num) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+    azer::ShaderParamsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(0, value, sizeof(azer::Matrix4) * num);
   }
   void SetWorld(const azer::Matrix4& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+    azer::ShaderParamsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(1, &value, sizeof(azer::Matrix4));
   }
   void SetProjView(const azer::Matrix4& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+    azer::ShaderParamsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(2, &value, sizeof(azer::Matrix4));
   }

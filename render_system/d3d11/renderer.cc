@@ -9,10 +9,10 @@
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/structured_buffer.h"
+#include "azer/render_system/d3d11/shader_param_table.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/technique.h"
@@ -297,10 +297,10 @@ void D3DRenderer::DispatchComputeTask(const GpuTaskParams& params) {
                     params.thread_group.z);
 }
 
-void D3DRenderer::BindConstantsTable(RenderPipelineStage stage, int index,
-                                     GpuConstantsTable* table) {
+void D3DRenderer::BindShaderParamTable(RenderPipelineStage stage, int index,
+                                     ShaderParamTable* table) {
   const int count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
-  D3DGpuConstantsTable* constants = (D3DGpuConstantsTable*)table;
+  D3DShaderParamTable* constants = (D3DShaderParamTable*)table;
   ID3D11Buffer* buffers[count] = {0};
   buffers[0] = (constants != NULL) ? constants->buffer_ : NULL;
   switch (stage) {

@@ -30,13 +30,13 @@ DiffuseEffect::~DiffuseEffect() {
 void DiffuseEffect::Init() {
   InitTechnique();
   // generate GpuTable init for stage azer::kVertexStage
-  azer::GpuConstantsTable::Desc vs_table_desc[] = {
-    azer::GpuConstantsTable::Desc("pvw", azer::GpuConstantsType::kMatrix4,
+  azer::ShaderParamTable::Desc vs_table_desc[] = {
+    azer::ShaderParamTable::Desc("pvw", azer::ShaderParamType::kMatrix4,
          offsetof(vs_cbuffer, pvw), 1),
-    azer::GpuConstantsTable::Desc("shadowmap_pvw", azer::GpuConstantsType::kMatrix4,
+    azer::ShaderParamTable::Desc("shadowmap_pvw", azer::ShaderParamType::kMatrix4,
          offsetof(vs_cbuffer, shadowmap_pvw), 1),
   };
-  gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
+  gpu_table_[azer::kVertexStage].reset(render_system_->CreateShaderParamTable(
       arraysize(vs_table_desc), vs_table_desc));
 }
 

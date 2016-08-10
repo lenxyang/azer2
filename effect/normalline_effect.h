@@ -31,7 +31,7 @@ class NormalLineEffect : public Effect {
   void SetNormalLineLength(float len) { line_length_ = len;}
   static Effect* CreateObject() { return new NormalLineEffect;}
  protected:
-  void ApplyGpuConstantTable(Renderer* renderer) override;
+  void ApplyShaderParamTable(Renderer* renderer) override;
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
 
   Matrix4 pv_;

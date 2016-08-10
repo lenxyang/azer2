@@ -34,15 +34,15 @@ HaredwareSkinnedMeshEffect::~HaredwareSkinnedMeshEffect() {
 void HaredwareSkinnedMeshEffect::Init() {
   InitTechnique();
   // generate GpuTable init for stage azer::kVertexStage
-  azer::GpuConstantsTable::Desc vs_table_desc[] = {
-    azer::GpuConstantsTable::Desc("bone", azer::GpuConstantsType::kMatrix4,
+  azer::ShaderParamTable::Desc vs_table_desc[] = {
+    azer::ShaderParamTable::Desc("bone", azer::ShaderParamType::kMatrix4,
          offsetof(vs_cbuffer, bone), 100),
-    azer::GpuConstantsTable::Desc("world", azer::GpuConstantsType::kMatrix4,
+    azer::ShaderParamTable::Desc("world", azer::ShaderParamType::kMatrix4,
          offsetof(vs_cbuffer, world), 1),
-    azer::GpuConstantsTable::Desc("pv", azer::GpuConstantsType::kMatrix4,
+    azer::ShaderParamTable::Desc("pv", azer::ShaderParamType::kMatrix4,
          offsetof(vs_cbuffer, pv), 1),
   };
-  gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
+  gpu_table_[azer::kVertexStage].reset(render_system_->CreateShaderParamTable(
       arraysize(vs_table_desc), vs_table_desc));
 }
 

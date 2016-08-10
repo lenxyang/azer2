@@ -2,8 +2,8 @@
 
 #include "base/logging.h"
 #include "azer/render/render_system.h"
-#include "azer/render/gpu_constants_table.h"
 #include "azer/render/shader.h"
+#include "azer/render/shader_param_table.h"
 #include "azer/render/texture.h"
 #include "azer/render/vertex_buffer.h"
 
@@ -44,8 +44,8 @@ void GpuComputeTask::Bind(Renderer* renderer) {
   }
 
   for (int i = 0; i < constants_table_.size(); ++i) {
-    GpuConstantsTable* table = constants_table_[i].get();
-    renderer->BindConstantsTable(kComputeStage, i, table);
+    ShaderParamTable* table = constants_table_[i].get();
+    renderer->BindShaderParamTable(kComputeStage, i, table);
   }
 
   DCHECK(gpu_program_.get()) << "Shader Program cannot be NULL";
@@ -62,11 +62,11 @@ void GpuComputeTask::SetUAResource(int index, UnorderAccessResView* tex) {
   shader_uaresource_[index] = tex;
 }
 
-GpuConstantsTable* GpuComputeTask::constants_table(int i) {
+ShaderParamTable* GpuComputeTask::constants_table(int i) {
   return constants_table_[i].get();
 }
 
-void GpuComputeTask::SetGpuConstantsTable(int index, GpuConstantsTable* table) {
+void GpuComputeTask::SetShaderParamTable(int index, ShaderParamTable* table) {
   constants_table_[index] = table;
 }
 

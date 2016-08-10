@@ -39,7 +39,7 @@ class TextBillboardEffect : public Effect {
   void SetDiffuse(const Vector4& v) { diffuse_ = v;}
   static Effect* CreateObject() { return new TextBillboardEffect;}
  protected:
-  void ApplyGpuConstantTable(Renderer* renderer) override;
+  void ApplyShaderParamTable(Renderer* renderer) override;
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
 
   Matrix4 pv_;

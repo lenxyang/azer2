@@ -33,12 +33,12 @@ class effect: public azer::Effect {
   #pragma pack(pop)
 
   void SetLight(const afx__SpotLight& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kPixelStage].get();
+    azer::ShaderParamsTable* tb = gpu_table_[(int)azer::kPixelStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &value, sizeof(afx__SpotLight));
   }
   void set_ps_mtrl(const Material& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kPixelStage].get();
+    azer::ShaderParamsTable* tb = gpu_table_[(int)azer::kPixelStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(1, &value, sizeof(Material));
   }

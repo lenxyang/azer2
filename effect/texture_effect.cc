@@ -16,37 +16,37 @@ const char* TextureEffect::GetEffectName() const { return kEffectName;}
 ShaderClosurePtr TextureEffect::InitShaderClosure(RenderPipelineStage stage,
                                                   Shader* shader) {
   RenderSystem* rs = RenderSystem::Current();
-  GpuConstantsTablePtr table;
+  ShaderParamTablePtr table;
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kVertexStage) {
     // generate GpuTable init for stage kVertexStage
-    GpuConstantsTable::Desc vs_table_desc[] = {
-      GpuConstantsTable::Desc("pv", GpuConstantsType::kMatrix4,
+    ShaderParamTable::Desc vs_table_desc[] = {
+      ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
                               offsetof(vs_cbuffer, pv), 1),
-      GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
+      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
                               offsetof(vs_cbuffer, world), 1),
-      GpuConstantsTable::Desc("camerapos", GpuConstantsType::kVector4,
+      ShaderParamTable::Desc("camerapos", ShaderParamType::kVector4,
                               offsetof(vs_cbuffer, camerapos), 1),
     };
-    table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetGpuConstantsTable(kVertexStage, 0, table.get());
+    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
     // generate GpuTable init for stage kPixelStage
-    GpuConstantsTable::Desc ps_table_desc[] = {
-      GpuConstantsTable::Desc("ambient_scalar", GpuConstantsType::kFloat,
+    ShaderParamTable::Desc ps_table_desc[] = {
+      ShaderParamTable::Desc("ambient_scalar", ShaderParamType::kFloat,
                               offsetof(ps_cbuffer, ambient_scalar), 1),
-      GpuConstantsTable::Desc("specular_scalar", GpuConstantsType::kFloat,
+      ShaderParamTable::Desc("specular_scalar", ShaderParamType::kFloat,
                               offsetof(ps_cbuffer, specular_scalar), 1),
-      GpuConstantsTable::Desc("alpha", GpuConstantsType::kFloat,
+      ShaderParamTable::Desc("alpha", ShaderParamType::kFloat,
                               offsetof(ps_cbuffer, alpha), 1),
-      GpuConstantsTable::Desc("light_count", GpuConstantsType::kInt,
+      ShaderParamTable::Desc("light_count", ShaderParamType::kInt,
                               offsetof(ps_cbuffer, light_count), 1),
-      GpuConstantsTable::Desc("lights", offsetof(ps_cbuffer, lights),
+      ShaderParamTable::Desc("lights", offsetof(ps_cbuffer, lights),
                               sizeof(UniverseLight), arraysize(lights_)),
     };
-    table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetGpuConstantsTable(kPixelStage, 0, table.get());
+    table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    closure->SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 1, 0);
   } else {
     CHECK(false) << "unsupport stage: " << stage;
@@ -81,16 +81,16 @@ void TextureEffect::SetLightData(const UniverseLight* value, int32_t count) {
   light_count_ = count;
 }
 
-void TextureEffect::ApplyGpuConstantTable(Renderer* renderer) {
+void TextureEffect::ApplyShaderParamTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = GetShaderClosure(kVertexStage)->table_at(0);
+    ShaderParamTable* tb = GetShaderClosure(kVertexStage)->table_at(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
     tb->SetValue(2, &camerapos_, sizeof(Vector4));
   }
   {
-    GpuConstantsTable* tb = GetShaderClosure(kPixelStage)->table_at(0);
+    ShaderParamTable* tb = GetShaderClosure(kPixelStage)->table_at(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &mtrl_.ambient_scalar, sizeof(float));
     tb->SetValue(1, &mtrl_.specular_scalar, sizeof(float));

@@ -32,22 +32,22 @@ PoingLightEffect::~PoingLightEffect() {
 void PoingLightEffect::Init() {
   InitTechnique();
   // generate GpuTable init for stage azer::kVertexStage
-  azer::GpuConstantsTable::Desc vs_table_desc[] = {
-    azer::GpuConstantsTable::Desc("pvw", azer::GpuConstantsType::kMatrix4,
+  azer::ShaderParamTable::Desc vs_table_desc[] = {
+    azer::ShaderParamTable::Desc("pvw", azer::ShaderParamType::kMatrix4,
          offsetof(vs_cbuffer, pvw), 1),
-    azer::GpuConstantsTable::Desc("world", azer::GpuConstantsType::kMatrix4,
+    azer::ShaderParamTable::Desc("world", azer::ShaderParamType::kMatrix4,
          offsetof(vs_cbuffer, world), 1),
   };
-  gpu_table_[azer::kVertexStage].reset(render_system_->CreateGpuConstantsTable(
+  gpu_table_[azer::kVertexStage].reset(render_system_->CreateShaderParamTable(
       arraysize(vs_table_desc), vs_table_desc));
   // generate GpuTable init for stage azer::kPixelStage
-  azer::GpuConstantsTable::Desc ps_table_desc[] = {
-    azer::GpuConstantsTable::Desc("diffuse", azer::GpuConstantsType::kVector4,
+  azer::ShaderParamTable::Desc ps_table_desc[] = {
+    azer::ShaderParamTable::Desc("diffuse", azer::ShaderParamType::kVector4,
          offsetof(ps_cbuffer, diffuse), 1),
-    azer::GpuConstantsTable::Desc("light", offsetof(ps_cbuffer, light),
+    azer::ShaderParamTable::Desc("light", offsetof(ps_cbuffer, light),
          sizeof(PointLight), 1),
   };
-  gpu_table_[azer::kPixelStage].reset(render_system_->CreateGpuConstantsTable(
+  gpu_table_[azer::kPixelStage].reset(render_system_->CreateShaderParamTable(
       arraysize(ps_table_desc), ps_table_desc));
 }
 

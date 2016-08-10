@@ -1,30 +1,30 @@
-#include "azer/render/gpu_constants_table.h"
+#include "azer/render/shader_param_table.h"
 #include "azer/base/align.h"
 
 namespace azer {
 
-int32_t GpuConstantsTable::offset(int32_t index) const {
+int32_t ShaderParamTable::offset(int32_t index) const {
   DCHECK_GE(index, 0);
   DCHECK_LT(index, static_cast<int32_t>(constants_.size()));
   return constants_[index].offset;
 }
 
-void GpuConstantsTable::SetValue(int32_t idx, const void* value, int32_t size) {
+void ShaderParamTable::SetValue(int32_t idx, const void* value, int32_t size) {
   return SetValueWithOffset(idx, 0, value, size);
 }
 
-void GpuConstantsTable::SetMatrix(int32_t idx, const Matrix4* matrices,
+void ShaderParamTable::SetMatrix(int32_t idx, const Matrix4* matrices,
                                   int num) {
   return SetValue(idx, (const void*)matrices, sizeof(Matrix4) * num);
 }
 
-void GpuConstantsTable::SetData(int offset, const void* value, int32_t size) {
+void ShaderParamTable::SetData(int offset, const void* value, int32_t size) {
   memcpy(data_.get() + offset, value, size);
   DCHECK_LE(offset + size, this->size());
 }
 
-int32_t GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
-  if (desc.type == GpuConstantsType::kSelfDefined) {
+int32_t GpuTableItemDescSize(const ShaderParamTable::Desc& desc) {
+  if (desc.type == ShaderParamType::kSelfDefined) {
     DCHECK_NE(desc.element_size, -1);
     return desc.element_size;
   } else {
@@ -32,7 +32,7 @@ int32_t GpuTableItemDescSize(const GpuConstantsTable::Desc& desc) {
   }
 }
 
-GpuConstantsTable::GpuConstantsTable(int32_t num, const Desc* desc)
+ShaderParamTable::ShaderParamTable(int32_t num, const Desc* desc)
     : GpuResource(kShaderConstsTableBufferOpt(), GpuResType::kConstantTable) {
   uint32_t offset = 0;
   const Desc* curr = desc;
@@ -49,7 +49,7 @@ GpuConstantsTable::GpuConstantsTable(int32_t num, const Desc* desc)
   data_.reset(new uint8_t[size_]);
 }
 
-void GpuConstantsTable::SetArrayItem(int32_t idx, int32_t arridx, const void* value,
+void ShaderParamTable::SetArrayItem(int32_t idx, int32_t arridx, const void* value,
                                      int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
   DCHECK(idx >= 0 && idx < static_cast<int>(constants_.size()));
@@ -59,7 +59,7 @@ void GpuConstantsTable::SetArrayItem(int32_t idx, int32_t arridx, const void* va
   SetData(variable.offset + size * arridx, value, size);
 }
 
-void GpuConstantsTable::SetArrayMultiItem(int32_t idx, int32_t arridx, const void* value,
+void ShaderParamTable::SetArrayMultiItem(int32_t idx, int32_t arridx, const void* value,
                                           int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
   DCHECK(idx >= 0 && idx < static_cast<int>(constants_.size()));
@@ -69,7 +69,7 @@ void GpuConstantsTable::SetArrayMultiItem(int32_t idx, int32_t arridx, const voi
   SetData(variable.offset + size * arridx, value, size);
 }
 
-void GpuConstantsTable::SetValueWithOffset(int32_t idx, int32_t offset,
+void ShaderParamTable::SetValueWithOffset(int32_t idx, int32_t offset,
                                            const void* value, int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
   DCHECK(idx >= 0 && idx < static_cast<int>(constants_.size()));
@@ -78,34 +78,34 @@ void GpuConstantsTable::SetValueWithOffset(int32_t idx, int32_t offset,
   SetData(variable.offset + offset, value, size);
 }
 
-GpuResLockDataPtr GpuConstantsTable::map(MapType flags) {
+GpuResLockDataPtr ShaderParamTable::map(MapType flags) {
   NOTIMPLEMENTED();
   return GpuResLockDataPtr();
 }
-void GpuConstantsTable::unmap() {
+void ShaderParamTable::unmap() {
   NOTIMPLEMENTED();
 }
 
-int32_t GpuTableItemTypeSize(const GpuConstantsType::Type type) {
+int32_t GpuTableItemTypeSize(const ShaderParamType::Type type) {
   switch(type) {
-    case GpuConstantsType::kFloat: return sizeof(float);
-    case GpuConstantsType::kVector2: return sizeof(azer::Vector2);
-    case GpuConstantsType::kVector3: return sizeof(azer::Vector3);
-    case GpuConstantsType::kVector4: return sizeof(azer::Vector4);
-    case GpuConstantsType::kInt: return sizeof(uint32_t);
-    case GpuConstantsType::kIntVec2: return sizeof(uint32_t) * 2;
-    case GpuConstantsType::kIntVec3: return sizeof(uint32_t) * 3;
-    case GpuConstantsType::kIntVec4: return sizeof(uint32_t) * 4;
-    case GpuConstantsType::kMatrix3: return sizeof(azer::Matrix3);
-    case GpuConstantsType::kMatrix4: return sizeof(azer::Matrix4);
-    case GpuConstantsType::kSampler1D: return sizeof(uint32_t);
-    case GpuConstantsType::kSampler2D: return sizeof(uint32_t);
-    case GpuConstantsType::kSampler3D: return sizeof(uint32_t);
-    case GpuConstantsType::kSamplerCube: return sizeof(uint32_t);
-    case GpuConstantsType::kSelfDefined:
+    case ShaderParamType::kFloat: return sizeof(float);
+    case ShaderParamType::kVector2: return sizeof(azer::Vector2);
+    case ShaderParamType::kVector3: return sizeof(azer::Vector3);
+    case ShaderParamType::kVector4: return sizeof(azer::Vector4);
+    case ShaderParamType::kInt: return sizeof(uint32_t);
+    case ShaderParamType::kIntVec2: return sizeof(uint32_t) * 2;
+    case ShaderParamType::kIntVec3: return sizeof(uint32_t) * 3;
+    case ShaderParamType::kIntVec4: return sizeof(uint32_t) * 4;
+    case ShaderParamType::kMatrix3: return sizeof(azer::Matrix3);
+    case ShaderParamType::kMatrix4: return sizeof(azer::Matrix4);
+    case ShaderParamType::kSampler1D: return sizeof(uint32_t);
+    case ShaderParamType::kSampler2D: return sizeof(uint32_t);
+    case ShaderParamType::kSampler3D: return sizeof(uint32_t);
+    case ShaderParamType::kSamplerCube: return sizeof(uint32_t);
+    case ShaderParamType::kSelfDefined:
       return -1;
     default:
-      CHECK(false) << "No such GpuConstantType: " << (int32_t)type;
+      CHECK(false) << "No such ShaderParamType: " << (int32_t)type;
       return 0;
   }
 }

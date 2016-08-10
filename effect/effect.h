@@ -12,10 +12,10 @@
 
 namespace azer {
 class Effect;
-class GpuConstantsTable;
+class ShaderParamTable;
 class Renderer;
 class RenderSystem;
-typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
+typedef scoped_refptr<ShaderParamTable> ShaderParamTablePtr;
 typedef scoped_refptr<Effect> EffectPtr;
 
 /**
@@ -45,7 +45,7 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   const VertexDesc* vertex_desc() const;
   void SetVertexDesc(VertexDesc* desc);
   
-  // 刷新所有的 GpuConstantTable
+  // 刷新所有的 ShaderParamTable
   void SetShaderClosure(ShaderClosure* closure);
   ShaderClosure* GetShaderClosure(int stage);
   void FlushGpuVariables(int flush_mode, Renderer* renderer);
@@ -55,11 +55,11 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void OnRenderEnd(Renderer* renderer);
   void OnRenderNewObject(Renderer* renderer);
  protected:
-  void BindConstantsTable(Renderer* renderer);
+  void BindShaderParamTable(Renderer* renderer);
   void SaveShaderResource(int stage, int index, ShaderResView* tex);
-  void SetGpuConstantsTable(int stage, int index, GpuConstantsTable* table);
+  void SetShaderParamTable(int stage, int index, ShaderParamTable* table);
   virtual ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader*);
-  virtual void ApplyGpuConstantTable(Renderer* renderer);
+  virtual void ApplyShaderParamTable(Renderer* renderer);
 
   std::vector<ShaderClosurePtr> shaders_;
   TechniquePtr technique_;

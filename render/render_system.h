@@ -9,12 +9,12 @@
 #include "azer/base/export.h"
 #include "azer/base/string.h"
 #include "azer/render/blending.h"
-#include "azer/render/gpu_constants_table.h"
 #include "azer/render/gpu_resource_view.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/render_capability.h"
 #include "azer/render/renderer.h"
 #include "azer/render/shader.h"
+#include "azer/render/shader_param_table.h"
 #include "azer/render/swap_chain.h"
 #include "azer/render/surface.h"
 #include "azer/render/structured_buffer.h"
@@ -27,7 +27,7 @@ namespace azer {
 class Canvas2D;
 class Context2D;
 class GpuComputeTaskDispatcher;
-class GpuConstantsTable;
+class ShaderParamTable;
 class ImageData;
 class RenderTarget;
 class Technique;
@@ -35,7 +35,7 @@ class RasterizerState;
 
 typedef scoped_refptr<Blending> BlendingPtr;
 typedef scoped_refptr<GpuComputeTaskDispatcher> GpuComputeTaskDispatcherPtr;
-typedef scoped_refptr<GpuConstantsTable> GpuConstantsTpablePtr;;
+typedef scoped_refptr<ShaderParamTable> ShaderParamTpablePtr;;
 typedef scoped_refptr<Renderer> RendererPtr;
 typedef scoped_refptr<RenderTarget> RenderTargetPtr;
 typedef scoped_refptr<RasterizerState> RasterizerStatePtr;
@@ -71,8 +71,8 @@ class AZER_EXPORT RenderSystem {
                                              SlotVertexData* vdata) = 0;
   virtual IndicesBufferPtr CreateIndicesBuffer(const GpuResOptions& opt,
                                                IndicesData* idata) = 0;
-  virtual GpuConstantsTablePtr CreateGpuConstantsTable(
-      int32_t num, const GpuConstantsTable::Desc* desc) = 0;
+  virtual ShaderParamTablePtr CreateShaderParamTable(
+      int32_t num, const ShaderParamTable::Desc* desc) = 0;
 
   // textures functions
   virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;

@@ -12,13 +12,13 @@
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/gpu_constants_table.h"
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/rasterizer_state.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/shader.h"
+#include "azer/render_system/d3d11/shader_param_table.h"
 #include "azer/render_system/d3d11/structured_buffer.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
@@ -139,13 +139,13 @@ TechniquePtr D3DRenderSystem::CreateTechnique() {
   return ptr;
 }
 
-GpuConstantsTablePtr D3DRenderSystem::CreateGpuConstantsTable(
-    int32_t num, const GpuConstantsTable::Desc* desc) {
-  scoped_refptr<D3DGpuConstantsTable> tableptr = new D3DGpuConstantsTable(num, desc);
+ShaderParamTablePtr D3DRenderSystem::CreateShaderParamTable(
+    int32_t num, const ShaderParamTable::Desc* desc) {
+  scoped_refptr<D3DShaderParamTable> tableptr = new D3DShaderParamTable(num, desc);
   if (tableptr->Init(this)) {
     return tableptr;
   } else {
-    return GpuConstantsTablePtr();
+    return ShaderParamTablePtr();
   }
 }
 

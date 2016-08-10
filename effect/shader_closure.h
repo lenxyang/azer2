@@ -5,7 +5,7 @@
 
 #include "base/memory/ref_counted.h"
 #include "azer/render/common.h"
-#include "azer/render/gpu_constants_table.h"
+#include "azer/render/shader_param_table.h"
 #include "azer/render/gpu_resource_view.h"
 
 namespace azer {
@@ -21,15 +21,15 @@ class AZER_EXPORT ShaderClosure : public ::base::RefCounted<ShaderClosure> {
   void SetShader(Shader* shader, int table_count, int res_count, int uares_count);
   void SetResource(int index, int count, ShaderResView* tex);
   void SetUAResource(int index, int count, UnorderAccessResView* tex);
-  void SetGpuConstantsTable(int index, int count, GpuConstantsTable* table);
+  void SetShaderParamTable(int index, int count, ShaderParamTable* table);
 
   int table_count() const { return static_cast<int>(table_.size());}
-  GpuConstantsTable* table_at(int index);
-  void UpdateShaderParams(Renderer* renderer);
+  ShaderParamTable* table_at(int index);
+  void UpdateShaderParam(Renderer* renderer);
   void Bind(Renderer* renderer);
   void Reset(Renderer* renderer);
  protected:
-  std::vector<GpuConstantsTablePtr> table_;
+  std::vector<ShaderParamTablePtr> table_;
   std::vector<ShaderResViewPtr> shader_res_;
   std::vector<UnorderAccessResViewPtr> shader_uares_;
   ShaderPtr shader_;

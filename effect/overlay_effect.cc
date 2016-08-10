@@ -19,15 +19,15 @@ ShaderClosurePtr OverlayEffect::InitShaderClosure(RenderPipelineStage stage,
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kVertexStage) {
     // generate GpuTable init for stage kVertexStage
-    GpuConstantsTable::Desc vs_table_desc[] = {
-      GpuConstantsTable::Desc("bounds", GpuConstantsType::kVector4, 0, 1),
-      GpuConstantsTable::Desc("texbounds", GpuConstantsType::kVector4,
+    ShaderParamTable::Desc vs_table_desc[] = {
+      ShaderParamTable::Desc("bounds", ShaderParamType::kVector4, 0, 1),
+      ShaderParamTable::Desc("texbounds", ShaderParamType::kVector4,
                               sizeof(Vector4), 1),
     };
 
-    GpuConstantsTablePtr table;
-    table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetGpuConstantsTable(kVertexStage, 0, table.get());
+    ShaderParamTablePtr table;
+    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
     closure->SetShader(shader, 1, 0, 0);
@@ -37,9 +37,9 @@ ShaderClosurePtr OverlayEffect::InitShaderClosure(RenderPipelineStage stage,
   return closure;
 }
 
-void OverlayEffect::ApplyGpuConstantTable(Renderer* renderer) {
+void OverlayEffect::ApplyShaderParamTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = GetShaderClosure(kVertexStage)->table_at(0);
+    ShaderParamTable* tb = GetShaderClosure(kVertexStage)->table_at(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &bounds_, sizeof(Vector4));
     tb->SetValue(1, &texbounds_, sizeof(Vector4));

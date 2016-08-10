@@ -25,12 +25,12 @@ class DiffuseEffect: public azer::Effect {
   #pragma pack(pop)
 
   void SetPVW(const azer::Matrix4& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+    azer::ShaderParamsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(0, &value, sizeof(azer::Matrix4));
   }
   void SetShadowPVW(const azer::Matrix4& value) {
-    azer::GpuConstantsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
+    azer::ShaderParamsTable* tb = gpu_table_[(int)azer::kVertexStage].get();
     DCHECK(tb != NULL);
     tb->SetValue(1, &value, sizeof(azer::Matrix4));
   }

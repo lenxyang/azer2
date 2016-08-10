@@ -37,7 +37,7 @@ class TextureEffect : public Effect {
   void SetMaterial(const TextureMaterialData& mtrl);
   static Effect* CreateObject() { return new TextureEffect;}
  protected:
-  void ApplyGpuConstantTable(Renderer* renderer) override;
+  void ApplyShaderParamTable(Renderer* renderer) override;
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
 
   Matrix4 pv_;

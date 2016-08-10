@@ -37,7 +37,7 @@ class DiffuseMapEffect : public Effect {
   void SetMaterial(const DiffuseMapMaterialData& mtrl);
   static Effect* CreateObject() { return new DiffuseMapEffect;}
  protected:
-  void ApplyGpuConstantTable(Renderer* renderer) override;
+  void ApplyShaderParamTable(Renderer* renderer) override;
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
 
   Matrix4 pv_;

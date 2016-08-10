@@ -11,13 +11,13 @@
 #include "azer/render/resource_view.h"
 
 namespace azer {
-class GpuConstantsTable;
+class ShaderParamTable;
 class Renderer;
 class Shader;
 class Texture;
 class TextureView;
 struct ShaderInfo;
-typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
+typedef scoped_refptr<ShaderParamTable> ShaderParamTablePtr;
 
 class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
  public:
@@ -30,12 +30,12 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   void Reset(Renderer* renderer);
   void Bind(Renderer* renderer);
   Shader* gpu_program() { return gpu_program_.get();}
-  GpuConstantsTable* constants_table(int i);
-  void SetGpuConstantsTable(int index, GpuConstantsTable* table);
+  ShaderParamTable* constants_table(int i);
+  void SetShaderParamTable(int index, ShaderParamTable* table);
   static const int kMaxResourceCount = 32;
 protected:
   scoped_refptr<Shader> gpu_program_;
-  std::vector<GpuConstantsTablePtr> constants_table_;
+  std::vector<ShaderParamTablePtr> constants_table_;
   std::vector<ShaderResViewPtr> shader_resource_;
   std::vector<UnorderAccessResViewPtr> shader_uaresource_;
   ShaderInfo shader_info_;

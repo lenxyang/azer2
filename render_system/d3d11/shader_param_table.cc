@@ -1,4 +1,4 @@
-#include "azer/render_system/d3d11/gpu_constants_table.h"
+#include "azer/render_system/d3d11/shader_param_table.h"
 
 #include "base/logging.h"
 #include "azer/render_system/d3d11/render_system.h"
@@ -7,16 +7,16 @@
 
 namespace azer {
 namespace d3d11 {
-D3DGpuConstantsTable::D3DGpuConstantsTable(int32_t num, const Desc* desc)
-    : GpuConstantsTable(num, desc)
+D3DShaderParamTable::D3DShaderParamTable(int32_t num, const Desc* desc)
+    : ShaderParamTable(num, desc)
     , buffer_(NULL) {
 }
 
-D3DGpuConstantsTable::~D3DGpuConstantsTable() {
+D3DShaderParamTable::~D3DShaderParamTable() {
   SAFE_RELEASE(buffer_);
 }
 
-bool D3DGpuConstantsTable::Init(D3DRenderSystem* rs) {
+bool D3DShaderParamTable::Init(D3DRenderSystem* rs) {
   D3D11_BUFFER_DESC cbbd;
   ID3D11Device* d3d_device = rs->GetDevice();
   
@@ -33,13 +33,13 @@ bool D3DGpuConstantsTable::Init(D3DRenderSystem* rs) {
   return true;
 }
 
-void D3DGpuConstantsTable::SetName(const std::string& name) {
+void D3DShaderParamTable::SetName(const std::string& name) {
   DCHECK(buffer_);
   buffer_->SetPrivateData(WKPDID_D3DDebugObjectName,
                           (UINT)name.length(), name.c_str());
 }
 
-void D3DGpuConstantsTable::flush(Renderer* renderer) {
+void D3DShaderParamTable::flush(Renderer* renderer) {
   DCHECK(buffer_ != NULL);
   ID3D11DeviceContext* d3d_context = ((D3DRenderer*)renderer)->GetContext();
   // if use map and unmap, usage must be D3D11_USAGE_DYNAMIC and
@@ -48,7 +48,7 @@ void D3DGpuConstantsTable::flush(Renderer* renderer) {
   D3D11_MAPPED_SUBRESOURCE mapped;
   HRESULT hr = d3d_context->Map(buffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
   if (FAILED(hr)) {
-    LOG(ERROR) << "Failed to map GpuConstantsTable.";
+    LOG(ERROR) << "Failed to map ShaderParamTable.";
     return;
   }
 
@@ -58,7 +58,7 @@ void D3DGpuConstantsTable::flush(Renderer* renderer) {
   d3d_context->UpdateSubresource(buffer_, 0, NULL, data_.get(), 0, 0);
 }
 
-bool D3DGpuConstantsTable::CopyTo(GpuResource* res) {
+bool D3DShaderParamTable::CopyTo(GpuResource* res) {
   CHECK(false);
   return false;
 }

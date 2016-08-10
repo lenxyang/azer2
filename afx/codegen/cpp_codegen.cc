@@ -19,7 +19,7 @@ namespace {
 const char* StageName(RenderPipelineStage stage);
 const char* StagePrefix(RenderPipelineStage stage);
 std::string GpuTableDescVarName(RenderPipelineStage stage);
-const char* GpuConstantTypeFromUniform(const TypePtr& typeptr);
+const char* ShaderParamTypeFromUniform(const TypePtr& typeptr);
 std::string GetTexVarName(ASTNode* node, RenderPipelineStage stage);
 bool IsSelfDefinedStruct(const TypePtr& typeptr);
 std::string GetSemanticName(const std::string& name);
@@ -88,7 +88,7 @@ std::string CppCodeGen::GenStageUniforms(RenderPipelineStage stage,
     ss << "  void " << funcname << "(const " << UniformTypeName(decl);
     if (typeptr->IsArray()) {
       ss << "* value, int num) {\n"
-         << "    azer::GpuConstantsTable* tb = gpu_table_[(int)"
+         << "    azer::ShaderParamTable* tb = gpu_table_[(int)"
          << StageName(stage) << "].get();\n"
          << "    DCHECK(tb != NULL);\n"
          << "    tb->SetValue(" << index << ", value, "
@@ -96,7 +96,7 @@ std::string CppCodeGen::GenStageUniforms(RenderPipelineStage stage,
          << "  }\n";
     } else {
       ss << "& value) {\n"
-         << "    azer::GpuConstantsTable* tb = gpu_table_[(int)"
+         << "    azer::ShaderParamTable* tb = gpu_table_[(int)"
          << StageName(stage) << "].get();\n"
          << "    DCHECK(tb != NULL);\n"
          << "    tb->SetValue(" << index << ", &value, "
@@ -125,7 +125,7 @@ std::string CppCodeGen::GenStageGpuTableDesc(RenderPipelineStage stage,
                                              const ASTNodeVec& uniforms) {
   if (uniforms.size() == 0u) return "";
   std::stringstream ss;
-  ss << "  azer::GpuConstantsTable::Desc " << GpuTableDescVarName(stage)
+  ss << "  azer::ShaderParamTable::Desc " << GpuTableDescVarName(stage)
      << "[] = {\n";
   for (auto iter = uniforms.begin(); iter != uniforms.end(); ++iter) {
     DCHECK((*iter)->IsDeclarationNode());
@@ -135,8 +135,8 @@ std::string CppCodeGen::GenStageGpuTableDesc(RenderPipelineStage stage,
     TypePtr type = symbol->GetType();
     DCHECK(!type->IsTexture());
     if (!IsSelfDefinedStruct(type)) {
-      ss << "    azer::GpuConstantsTable::Desc(\"" << symbol->symbolname() << "\", "
-         << GpuConstantTypeFromUniform(type) << ",\n"
+      ss << "    azer::ShaderParamTable::Desc(\"" << symbol->symbolname() << "\", "
+         << ShaderParamTypeFromUniform(type) << ",\n"
          << "         offsetof(" << StagePrefix(stage) << "_cbuffer, "
          << symbol->symbolname() << "), "
          << (type->IsArray() ? type->GetDim(0) : 1) << "),\n";
@@ -145,7 +145,7 @@ std::string CppCodeGen::GenStageGpuTableDesc(RenderPipelineStage stage,
       DCHECK(typed != NULL);
       StructDeclNode* decl = typed->GetStructDecl();
       DCHECK(decl != NULL);
-      ss << "    azer::GpuConstantsTable::Desc(\"" << symbol->symbolname()
+      ss << "    azer::ShaderParamTable::Desc(\"" << symbol->symbolname()
          << "\", offsetof(" << StagePrefix(stage) << "_cbuffer, "
          << symbol->symbolname() << "),\n"
          << "         sizeof(" << GetStructTypeName(decl) << "), "
@@ -165,7 +165,7 @@ std::string CppCodeGen::GenStageGpuTable(RenderPipelineStage stage,
   ss << "  // generate GpuTable init for stage " << StageName(stage) << "\n";
   ss << std::move(GenStageGpuTableDesc(stage, uniforms));
   ss << "  gpu_table_[" << StageName(stage) << "]"
-     << " = render_system_->CreateGpuConstantsTable(\n"
+     << " = render_system_->CreateShaderParamTable(\n"
      << "      arraysize(" << GpuTableDescVarName(stage) << "), "
      << GpuTableDescVarName(stage) << ");\n";
   return ss.str();
@@ -307,10 +307,10 @@ std::string CppCodeGen::GenInit(const Technique& tech) {
      << "  DCHECK(!sources[azer::kVertexStage].code.empty());\n"
      << "  DCHECK(!sources[azer::kPixelStage].code.empty());\n"
      << "  InitTechnique(sources);\n"
-     << "  InitGpuConstantTable();\n"
+     << "  InitShaderParamTable();\n"
      << "  return true;\n"
      << "}\n\n"
-     << "void " << GetClassName(tech) << "::InitGpuConstantTable() {\n"
+     << "void " << GetClassName(tech) << "::InitShaderParamTable() {\n"
      << std::move(GenGpuTableInit(tech))
      << "}\n";
   return ss.str();
@@ -530,7 +530,7 @@ void CppCodeGen::GenHeadCode(const Technique& tech) {
      << "  static const azer::VertexDesc::Desc kVertexDesc[];\n"
      << " protected:\n"
      << "  void InitTechnique(const ShaderPrograms& source);\n"
-     << "  void InitGpuConstantTable();\n"
+     << "  void InitShaderParamTable();\n"
      << "  virtual void UseTexture(azer::Renderer* renderer) override;\n"
      << GenAllTextureMember(tech) << "\n"
      << "  DECLARE_EFFECT_DYNCREATE(" << classname << ");\n"
@@ -742,33 +742,33 @@ inline bool IsSelfDefinedStruct(const TypePtr& typeptr) {
   }
 }
 
-const char* GpuConstantTypeFromUniform(const TypePtr& typeptr) {
+const char* ShaderParamTypeFromUniform(const TypePtr& typeptr) {
   if (typeptr->IsStructure()) {
     /** 内置类型 */
     if (typeptr->struct_name() == "afx::DirectionalLight") {
-      return "azer::GpuConstantsType::kDirectionalLight";
+      return "azer::ShaderParamType::kDirectionalLight";
     } else if (typeptr->struct_name() == "afx::PointLight") {
-      return "azer::GpuConstantsType::kPointLight";
+      return "azer::ShaderParamType::kPointLight";
     } else if (typeptr->struct_name() == "afx::SpotLight") {
-      return "azer::GpuConstantsType::kSpotLight";
+      return "azer::ShaderParamType::kSpotLight";
     } else if (typeptr->struct_name() == "afx::Material") {
-      return "azer::GpuConstantsType::kMaterial";
+      return "azer::ShaderParamType::kMaterial";
     } else {
       NOTREACHED();
       return "";
     }
   } else {
     switch (typeptr->type()) {
-      case kInt32:   return "azer::GpuConstantsType::kInt";
-      case kUint32:  return "azer::GpuConstantsType::kUint";
-      case kBoolean: return "azer::GpuConstantsType::kBool";
-      case kFloat:   return "azer::GpuConstantsType::kFloat";
-      case kVector2: return "azer::GpuConstantsType::kVector2";
-      case kVector3: return "azer::GpuConstantsType::kVector3";
-      case kVector4: return "azer::GpuConstantsType::kVector4";
-      case kMatrix2: return "azer::GpuConstantsType::kMatrix2";
-      case kMatrix3: return "azer::GpuConstantsType::kMatrix3";
-      case kMatrix4: return "azer::GpuConstantsType::kMatrix4";
+      case kInt32:   return "azer::ShaderParamType::kInt";
+      case kUint32:  return "azer::ShaderParamType::kUint";
+      case kBoolean: return "azer::ShaderParamType::kBool";
+      case kFloat:   return "azer::ShaderParamType::kFloat";
+      case kVector2: return "azer::ShaderParamType::kVector2";
+      case kVector3: return "azer::ShaderParamType::kVector3";
+      case kVector4: return "azer::ShaderParamType::kVector4";
+      case kMatrix2: return "azer::ShaderParamType::kMatrix2";
+      case kMatrix3: return "azer::ShaderParamType::kMatrix3";
+      case kMatrix4: return "azer::ShaderParamType::kMatrix4";
       case kTexture1D:
       case kTexture2D:
       case kTexture3D:

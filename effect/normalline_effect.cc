@@ -19,30 +19,30 @@ const char* NormalLineEffect::GetEffectName() const { return kEffectName; }
 ShaderClosurePtr NormalLineEffect::InitShaderClosure(RenderPipelineStage stage,
                                                      Shader* shader) {
   RenderSystem* rs = RenderSystem::Current();
-  GpuConstantsTablePtr table;
+  ShaderParamTablePtr table;
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kVertexStage) {
     // generate GpuTable init for stage kVertexStage
-    GpuConstantsTable::Desc vs_table_desc[] = {
-      GpuConstantsTable::Desc("pv", GpuConstantsType::kMatrix4,
+    ShaderParamTable::Desc vs_table_desc[] = {
+      ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
                               offsetof(vs_cbuffer, pv), 1),
-      GpuConstantsTable::Desc("world", GpuConstantsType::kMatrix4,
+      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
                               offsetof(vs_cbuffer, world), 1),
-      GpuConstantsTable::Desc("linelength", GpuConstantsType::kFloat,
+      ShaderParamTable::Desc("linelength", ShaderParamType::kFloat,
                               offsetof(vs_cbuffer, linelength), 1),
     };
   
-    table = rs->CreateGpuConstantsTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetGpuConstantsTable(kVertexStage, 0, table.get());
+    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
 
     // generate GpuTable init for stage kPixelStage
-    GpuConstantsTable::Desc ps_table_desc[] = {
-      GpuConstantsTable::Desc("color", GpuConstantsType::kVector4, 0, 1),
+    ShaderParamTable::Desc ps_table_desc[] = {
+      ShaderParamTable::Desc("color", ShaderParamType::kVector4, 0, 1),
     };
-    table = rs->CreateGpuConstantsTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetGpuConstantsTable(kPixelStage, 0, table.get());
+    table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    closure->SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else {
     CHECK(false);
@@ -50,9 +50,9 @@ ShaderClosurePtr NormalLineEffect::InitShaderClosure(RenderPipelineStage stage,
   return closure;
 }
 
-void NormalLineEffect::ApplyGpuConstantTable(Renderer* renderer) {
+void NormalLineEffect::ApplyShaderParamTable(Renderer* renderer) {
   {
-    GpuConstantsTable* tb = GetShaderClosure(kVertexStage)->table_at(0);
+    ShaderParamTable* tb = GetShaderClosure(kVertexStage)->table_at(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &pv_, sizeof(Matrix4));
     tb->SetValue(1, &world_, sizeof(Matrix4));
@@ -60,7 +60,7 @@ void NormalLineEffect::ApplyGpuConstantTable(Renderer* renderer) {
   }
 
   {
-    GpuConstantsTable* tb = GetShaderClosure(kPixelStage)->table_at(0);
+    ShaderParamTable* tb = GetShaderClosure(kPixelStage)->table_at(0);
     DCHECK(tb != NULL);
     tb->SetValue(0, &color_, sizeof(Vector4));
   }

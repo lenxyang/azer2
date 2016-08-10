@@ -3,7 +3,7 @@
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_params_provider.h"
 #include "azer/render/gpu_resource_view.h"
-#include "azer/render/gpu_constants_table.h"
+#include "azer/render/shader_param_table.h"
 
 namespace azer {
 // EffectAdapterContext

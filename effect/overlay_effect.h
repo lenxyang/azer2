@@ -28,7 +28,7 @@ class OverlayEffect : public Effect {
   void SetTexture(TextureView* texture);
   static Effect* CreateObject() { return new OverlayEffect;}
  protected:
-  void ApplyGpuConstantTable(Renderer* renderer) override;
+  void ApplyShaderParamTable(Renderer* renderer) override;
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
 
   Vector4 bounds_;

@@ -14,7 +14,7 @@ namespace azer {
 
 class Renderer;
 
-class GpuConstantsType {
+class ShaderParamType {
  public:
   enum Type {
     kFloat = 1,
@@ -44,25 +44,25 @@ class GpuConstantsType {
   };
 };
 
-AZER_EXPORT int32_t GpuTableItemTypeSize(const GpuConstantsType::Type type);
+AZER_EXPORT int32_t GpuTableItemTypeSize(const ShaderParamType::Type type);
 
-class AZER_EXPORT GpuConstantsTable : public GpuResource {
+class AZER_EXPORT ShaderParamTable : public GpuResource {
  public:
   struct Desc {
     char name[64];
-    GpuConstantsType::Type type;
+    ShaderParamType::Type type;
     int element_size;
     int32_t num;
     uint32_t offset;
 
-    Desc(const char* n, GpuConstantsType::Type t, int32_t off, int elenum)
+    Desc(const char* n, ShaderParamType::Type t, int32_t off, int elenum)
         : type(t), element_size(-1),  num(elenum), offset(off) {
       strncpy(name, n, sizeof(name) - 1);
       element_size = GpuTableItemTypeSize(t);
     }
 
     Desc(const char* n, int32_t off, int size, int elenum)
-        : type(GpuConstantsType::kSelfDefined)
+        : type(ShaderParamType::kSelfDefined)
         , element_size(size), num(elenum), offset(off) {
       strncpy(name, n, sizeof(name) - 1);
     }
@@ -76,7 +76,7 @@ class AZER_EXPORT GpuConstantsTable : public GpuResource {
     }
   };
 
-  virtual ~GpuConstantsTable() {}
+  virtual ~ShaderParamTable() {}
   virtual void flush(Renderer*) = 0;
 
   // set value to gpu constants
@@ -89,7 +89,7 @@ class AZER_EXPORT GpuConstantsTable : public GpuResource {
   int32_t offset(int32_t index) const;
   int32_t size() const { return size_;}
  protected:
-  GpuConstantsTable(int32_t num, const Desc* desc);
+  ShaderParamTable(int32_t num, const Desc* desc);
   GpuResLockDataPtr map(MapType flags) override;
   void unmap() override;
 
@@ -110,9 +110,9 @@ class AZER_EXPORT GpuConstantsTable : public GpuResource {
   std::vector<Variable> constants_;
   std::unique_ptr<uint8_t[]> data_;
   int32_t size_;
-  DISALLOW_COPY_AND_ASSIGN(GpuConstantsTable);
+  DISALLOW_COPY_AND_ASSIGN(ShaderParamTable);
 };
 
-typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
-AZER_EXPORT int32_t GpuTableItemDescSize(const GpuConstantsTable::Desc& desc);
+typedef scoped_refptr<ShaderParamTable> ShaderParamTablePtr;
+AZER_EXPORT int32_t GpuTableItemDescSize(const ShaderParamTable::Desc& desc);
 }  // namespace

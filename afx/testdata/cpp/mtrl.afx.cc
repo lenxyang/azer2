@@ -32,13 +32,13 @@ effect::~effect() {
 void effect::Init() {
   InitTechnique();
   // generate GpuTable init for stage azer::kPixelStage
-  azer::GpuConstantsTable::Desc ps_table_desc[] = {
-    azer::GpuConstantsTable::Desc("light1", azer::GpuConstantsType::kSpotLight,
+  azer::ShaderParamTable::Desc ps_table_desc[] = {
+    azer::ShaderParamTable::Desc("light1", azer::ShaderParamType::kSpotLight,
          offsetof(ps_cbuffer, light1), 1),
-    azer::GpuConstantsTable::Desc("mtrl", offsetof(ps_cbuffer, mtrl),
+    azer::ShaderParamTable::Desc("mtrl", offsetof(ps_cbuffer, mtrl),
          sizeof(Material), 1),
   };
-  gpu_table_[azer::kPixelStage].reset(render_system_->CreateGpuConstantsTable(
+  gpu_table_[azer::kPixelStage].reset(render_system_->CreateShaderParamTable(
       arraysize(ps_table_desc), ps_table_desc));
 }
 

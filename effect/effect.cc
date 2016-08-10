@@ -2,7 +2,7 @@
 
 #include "base/logging.h"
 #include "azer/effect/shader_closure.h"
-#include "azer/render/gpu_constants_table.h"
+#include "azer/render/shader_param_table.h"
 #include "azer/render/render_system.h"
 #include "azer/render/common.h"
 #include "azer/render/renderer.h"
@@ -23,7 +23,8 @@ bool Effect::Init(const TechSource& sources) {
   for (int i = 0; i < (int)kRenderPipelineStageNum; ++i) {
     Shader* shader = technique_->GetShader(i);
     if (shader != NULL) {
-      ShaderClosurePtr closure = InitShaderClosure(i, shader);
+      RenderPipelineStage stage = (RenderPipelineStage)i;
+      ShaderClosurePtr closure = InitShaderClosure(stage, shader);
       shaders_[i] = closure;
     }
   }
@@ -39,10 +40,10 @@ ShaderClosure* Effect::GetShaderClosure(int stage) {
   return shaders_[stage].get();
 }
 
-void Effect::ApplyGpuConstantTable(Renderer* renderer) {
+void Effect::ApplyShaderParamTable(Renderer* renderer) {
 }
 
-ShaderClosurePtr Effect::InitShaderClosure(int stage, Shader* shader) {
+ShaderClosurePtr Effect::InitShaderClosure(RenderPipelineStage stage, Shader* shader) {
   CHECK(false);
   return ShaderClosurePtr();
 }
@@ -52,8 +53,8 @@ void Effect::SetShaderClosure(ShaderClosure* closure) {
 }
 
 void Effect::Apply(Renderer* renderer) {
-  ApplyGpuConstantTable(renderer);
-  // BindConstantsTable(renderer);
+  ApplyShaderParamTable(renderer);
+  // BindShaderParamTable(renderer);
   // technique_->Bind(renderer);
   DCHECK(technique_.get() != NULL);
 
@@ -65,9 +66,9 @@ void Effect::SaveShaderResource(int stage, int index, ShaderResView* tex) {
   shaders_[stage]->SetResource(index, 1, tex);
 }
 
-void Effect::SetGpuConstantsTable(int stage, int index, GpuConstantsTable* table) {
+void Effect::SetShaderParamTable(int stage, int index, ShaderParamTable* table) {
   CHECK(shaders_[stage].get());
-  shaders_[stage]->SetGpuConstantsTable(stage, index, table);
+  shaders_[stage]->SetShaderParamTable(stage, index, table);
 }
 
 void Effect::OnRenderNewObject(Renderer* renderer) {
@@ -76,7 +77,7 @@ void Effect::OnRenderNewObject(Renderer* renderer) {
 void Effect::OnRenderBegin(Renderer* renderer) {
   DCHECK(technique_.get() != NULL);
   // technique_->Bind(renderer);
-  // BindConstantsTable(renderer);
+  // BindShaderParamTable(renderer);
   // shaders_[stage]->Bind(renderer);
   for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
     if (!iter->get()) continue;
@@ -94,7 +95,7 @@ void Effect::OnRenderEnd(Renderer* renderer) {
 void Effect::FlushGpuVariables(int type, Renderer* renderer) {
   for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
     if (!iter->get()) continue;
-    (*iter)->UpdateShaderParams(renderer);
+    (*iter)->UpdateShaderParam(renderer);
   }
 }
 

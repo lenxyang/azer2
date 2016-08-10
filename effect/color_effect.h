@@ -31,7 +31,7 @@ class AmbientColorEffect : public Effect {
   static Effect* CreateObject() { return new AmbientColorEffect;}
  protected:
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
-  void ApplyGpuConstantTable(Renderer* renderer) override;
+  void ApplyShaderParamTable(Renderer* renderer) override;
   
   Matrix4 pv_;
   Matrix4 world_;
@@ -70,7 +70,7 @@ class ColorEffect : public Effect {
   void SetMaterial(const ColorMaterialData& mtrl);
   static Effect* CreateObject() { return new ColorEffect;}
  protected:
-  void ApplyGpuConstantTable(Renderer* renderer) override;
+  void ApplyShaderParamTable(Renderer* renderer) override;
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
 
   Matrix4 pv_;

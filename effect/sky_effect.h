@@ -25,7 +25,7 @@ class SkyboxEffect : public Effect {
   void SetTexture(TextureView* texture);
   static Effect* CreateObject() { return new SkyboxEffect;}
  protected:
-  void ApplyGpuConstantTable(Renderer* renderer) override;
+  void ApplyShaderParamTable(Renderer* renderer) override;
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
 
   Matrix4 pv_;
