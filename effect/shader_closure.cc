@@ -12,7 +12,7 @@ ShaderClosure::ShaderClosure(RenderPipelineStage stage)
     : stage_(stage) {
 }
 
-GpuConstantsTable* ShaderClosure::table(int index) {
+GpuConstantsTable* ShaderClosure::table_at(int index) {
   return table_[index].get();
 }
 

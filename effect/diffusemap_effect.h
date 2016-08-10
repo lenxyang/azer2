@@ -38,7 +38,7 @@ class DiffuseMapEffect : public Effect {
   static Effect* CreateObject() { return new DiffuseMapEffect;}
  protected:
   void ApplyGpuConstantTable(Renderer* renderer) override;
-  void InitGpuConstantTable() override;
+  ShaderClosurePtr InitShaderClosure(int stage, Shader* shader) override;
 
   Matrix4 pv_;
   Matrix4 world_;

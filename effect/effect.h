@@ -9,7 +9,6 @@
 #include "azer/render/shader.h"
 #include "azer/render/technique.h"
 #include "azer/effect/shader_closure.h"
-#include "azer/effect/stage_res_container.h"
 
 namespace azer {
 class Effect;
@@ -59,9 +58,8 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void BindConstantsTable(Renderer* renderer);
   void SaveShaderResource(int stage, int index, ShaderResView* tex);
   void SetGpuConstantsTable(int stage, int index, GpuConstantsTable* table);
-  virtual void InitShaderClosure(Technique* technique) {}
-  virtual void InitGpuConstantTable() {};
-  virtual void ApplyGpuConstantTable(Renderer* renderer) {}
+  virtual ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader*);
+  virtual void ApplyGpuConstantTable(Renderer* renderer);
 
   std::vector<ShaderClosurePtr> shaders_;
   TechniquePtr technique_;

@@ -5,19 +5,15 @@
 
 #include "base/memory/ref_counted.h"
 #include "azer/render/common.h"
+#include "azer/render/gpu_constants_table.h"
+#include "azer/render/gpu_resource_view.h"
 
 namespace azer {
-class GpuConstantsTable;
 class Shader;
-class ShaderResView;
 class Renderer;
-class UnorderAccessResView;
 typedef scoped_refptr<Shader> ShaderPtr;
-typedef scoped_refptr<GpuConstantsTable> GpuConstantsTablePtr;
-typedef scoped_refptr<ShaderResView> ShaderResViewPtr;
-typedef scoped_refptr<UnorderAccessResView> UnorderAccessResViewPtr;
 
-class ShaderClosure : public ::base::RefCounted<ShaderClosure> {
+class AZER_EXPORT ShaderClosure : public ::base::RefCounted<ShaderClosure> {
  public:
   explicit ShaderClosure(RenderPipelineStage stage);
 
@@ -27,7 +23,8 @@ class ShaderClosure : public ::base::RefCounted<ShaderClosure> {
   void SetUAResource(int index, int count, UnorderAccessResView* tex);
   void SetGpuConstantsTable(int index, int count, GpuConstantsTable* table);
 
-  GpuConstantsTable* table(int index);
+  int table_count() const { return static_cast<int>(table_.size());}
+  GpuConstantsTable* table_at(int index);
   void UpdateShaderParams(Renderer* renderer);
   void Bind(Renderer* renderer);
   void Reset(Renderer* renderer);

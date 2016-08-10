@@ -6,6 +6,7 @@
 #include "base/strings/string_split.h"
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
+#include "azer/render/gpu_constants_table.h"
 
 namespace azer {
 RepositoryNode::RepositoryNode(const StringType& name)

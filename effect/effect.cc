@@ -1,12 +1,12 @@
 #include "azer/effect/effect.h"
 
 #include "base/logging.h"
+#include "azer/effect/shader_closure.h"
 #include "azer/render/gpu_constants_table.h"
 #include "azer/render/render_system.h"
 #include "azer/render/common.h"
 #include "azer/render/renderer.h"
 #include "azer/render/technique.h"
-
 
 namespace azer {
 Effect::Effect() {
@@ -19,7 +19,14 @@ bool Effect::Init(const TechSource& sources) {
   vertex_desc_ = sources.vertex_desc();
   DCHECK(vertex_desc_);
   technique_ = CreateTechnique(sources);
-  InitGpuConstantTable();
+  shaders_.resize(kRenderPipelineStageNum);
+  for (int i = 0; i < (int)kRenderPipelineStageNum; ++i) {
+    Shader* shader = technique_->GetShader(i);
+    if (shader != NULL) {
+      ShaderClosurePtr closure = InitShaderClosure(i, shader);
+      shaders_[i] = closure;
+    }
+  }
   return true;
 }
 
@@ -30,6 +37,14 @@ void Effect::SetVertexDesc(VertexDesc* desc) {
 
 ShaderClosure* Effect::GetShaderClosure(int stage) {
   return shaders_[stage].get();
+}
+
+void Effect::ApplyGpuConstantTable(Renderer* renderer) {
+}
+
+ShaderClosurePtr Effect::InitShaderClosure(int stage, Shader* shader) {
+  CHECK(false);
+  return ShaderClosurePtr();
 }
 
 void Effect::SetShaderClosure(ShaderClosure* closure) {

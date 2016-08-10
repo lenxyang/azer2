@@ -4,6 +4,7 @@
 #include "base/strings/utf_string_conversions.h"
 #include "azer/base/config_node.h"
 #include "azer/base/file_system.h"
+#include "azer/render/gpu_constants_table.h"
 
 namespace azer {
 namespace {
