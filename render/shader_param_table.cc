@@ -1,7 +1,35 @@
 #include "azer/render/shader_param_table.h"
+
 #include "azer/base/align.h"
+#include "azer/render/renderer.h"
+#include "azer/render/render_system.h"
+#include "azer/render/structured_buffer.h"
 
 namespace azer {
+
+ShaderParamTable::ShaderParamTable(int32_t num, const Desc* desc) {
+  uint32_t offset = 0;
+  const Desc* curr = desc;
+  for (int32_t i = 0; i < num; ++i, ++curr) {
+    const int32_t size = GpuTableItemDescSize(*curr);
+    const int32_t total_size = size * curr->num;
+    DCHECK_LE(offset, curr->offset);
+    offset = curr->offset;
+    DCHECK(offset != -1);
+    constants_.push_back(Variable(*curr, size, total_size, offset));
+    offset += total_size;
+  }
+  size_ = AZER_ALIGN_64(offset);
+  data_.reset(new uint8_t[size_]);
+
+  RenderSystem* rs = RenderSystem::Current();
+  CHECK(rs) << "RenderSystem Not Initialized";
+  gpu_buffer_ = rs->CreateStructuredBuffer(kShaderConstsTableBufferOpt(), 1, size_);
+  CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
+}
+
+void ShaderParamTable::flush(Renderer* renderer) {
+}
 
 int32_t ShaderParamTable::offset(int32_t index) const {
   DCHECK_GE(index, 0);
@@ -32,23 +60,6 @@ int32_t GpuTableItemDescSize(const ShaderParamTable::Desc& desc) {
   }
 }
 
-ShaderParamTable::ShaderParamTable(int32_t num, const Desc* desc)
-    : GpuResource(kShaderConstsTableBufferOpt(), GpuResType::kConstantTable) {
-  uint32_t offset = 0;
-  const Desc* curr = desc;
-  for (int32_t i = 0; i < num; ++i, ++curr) {
-    const int32_t size = GpuTableItemDescSize(*curr);
-    const int32_t total_size = size * curr->num;
-    DCHECK_LE(offset, curr->offset);
-    offset = curr->offset;
-    DCHECK(offset != -1);
-    constants_.push_back(Variable(*curr, size, total_size, offset));
-    offset += total_size;
-  }
-  size_ = AZER_ALIGN_64(offset);
-  data_.reset(new uint8_t[size_]);
-}
-
 void ShaderParamTable::SetArrayItem(int32_t idx, int32_t arridx, const void* value,
                                      int32_t size) {
   DCHECK_GT(constants_.size(), 0u);
@@ -76,14 +87,6 @@ void ShaderParamTable::SetValueWithOffset(int32_t idx, int32_t offset,
   const Variable& variable = constants_[idx];
   DCHECK_LE(size, variable.size);
   SetData(variable.offset + offset, value, size);
-}
-
-GpuResLockDataPtr ShaderParamTable::map(MapType flags) {
-  NOTIMPLEMENTED();
-  return GpuResLockDataPtr();
-}
-void ShaderParamTable::unmap() {
-  NOTIMPLEMENTED();
 }
 
 int32_t GpuTableItemTypeSize(const ShaderParamType::Type type) {

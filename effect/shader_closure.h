@@ -5,8 +5,8 @@
 
 #include "base/memory/ref_counted.h"
 #include "azer/render/common.h"
-#include "azer/render/shader_param_table.h"
 #include "azer/render/gpu_resource_view.h"
+#include "azer/render/shader_param_table.h"
 
 namespace azer {
 class Shader;

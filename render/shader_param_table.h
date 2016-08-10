@@ -9,10 +9,14 @@
 #include "azer/base/export.h"
 #include "azer/render/common.h"
 #include "azer/render/gpu_resource.h"
+#include "azer/render/gpu_resource_view.h"
+#include "azer/render/structured_buffer.h"
 
 namespace azer {
 
 class Renderer;
+class StructuredGpuBuffer;
+class ShaderResView;
 
 class ShaderParamType {
  public:
@@ -46,7 +50,7 @@ class ShaderParamType {
 
 AZER_EXPORT int32_t GpuTableItemTypeSize(const ShaderParamType::Type type);
 
-class AZER_EXPORT ShaderParamTable : public GpuResource {
+class AZER_EXPORT ShaderParamTable : public ::base::RefCounted<ShaderParamTable> {
  public:
   struct Desc {
     char name[64];
@@ -76,8 +80,11 @@ class AZER_EXPORT ShaderParamTable : public GpuResource {
     }
   };
 
+  ShaderParamTable(int32_t num, const Desc* desc);
   virtual ~ShaderParamTable() {}
-  virtual void flush(Renderer*) = 0;
+
+  StructuredGpuBuffer* gpu_buffer() { return gpu_buffer_.get();}
+  void flush(Renderer*);
 
   // set value to gpu constants
   void SetValue(int32_t idx, const void* value, int32_t size);
@@ -89,10 +96,6 @@ class AZER_EXPORT ShaderParamTable : public GpuResource {
   int32_t offset(int32_t index) const;
   int32_t size() const { return size_;}
  protected:
-  ShaderParamTable(int32_t num, const Desc* desc);
-  GpuResLockDataPtr map(MapType flags) override;
-  void unmap() override;
-
   struct Variable {
     Desc desc;
     int32_t size;
@@ -110,6 +113,7 @@ class AZER_EXPORT ShaderParamTable : public GpuResource {
   std::vector<Variable> constants_;
   std::unique_ptr<uint8_t[]> data_;
   int32_t size_;
+  scoped_refptr<StructuredGpuBuffer> gpu_buffer_;
   DISALLOW_COPY_AND_ASSIGN(ShaderParamTable);
 };
 

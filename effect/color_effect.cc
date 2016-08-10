@@ -14,7 +14,6 @@ const char* AmbientColorEffect::GetEffectName() const { return kEffectName;}
 
 ShaderClosurePtr AmbientColorEffect::InitShaderClosure(RenderPipelineStage stage,
                                                        Shader* shader) {
-  RenderSystem* rs = RenderSystem::Current();
   ShaderParamTablePtr table;
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kPixelStage) {
@@ -30,7 +29,7 @@ ShaderClosurePtr AmbientColorEffect::InitShaderClosure(RenderPipelineStage stage
 
     
     closure->SetShader(shader, 1, 0, 0);
-    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     closure->SetShaderParamTable(0, 1, table.get());
   } else if (stage == kPixelStage) {
     // generate GpuTable init for stage kPixelStage
@@ -39,7 +38,7 @@ ShaderClosurePtr AmbientColorEffect::InitShaderClosure(RenderPipelineStage stage
                               sizeof(Vector4), 1),
     };
 
-    table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
     closure->SetShader(shader, 1, 0, 0);
     closure->SetShaderParamTable(stage, 0, table.get());
   } else {
@@ -72,7 +71,6 @@ const char* ColorEffect::GetEffectName() const { return kEffectName;}
 
 ShaderClosurePtr ColorEffect::InitShaderClosure(RenderPipelineStage stage,
                                                 Shader* shader) {
-  RenderSystem* rs = RenderSystem::Current();
   ShaderClosurePtr closure(new ShaderClosure(stage));
   ShaderParamTablePtr table;
   if (stage == kVertexStage) {
@@ -86,7 +84,7 @@ ShaderClosurePtr ColorEffect::InitShaderClosure(RenderPipelineStage stage,
                               offsetof(vs_cbuffer, camerapos), 1),
     };
     
-    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
@@ -99,7 +97,7 @@ ShaderClosurePtr ColorEffect::InitShaderClosure(RenderPipelineStage stage,
       ShaderParamTable::Desc("light_count", ShaderParamType::kInt,
                               offsetof(ps_cbuffer, light_count), 1),
     };
-    table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
     SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else {

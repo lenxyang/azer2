@@ -5,5 +5,6 @@ executable("triangle") {
   deps = [
     "//azer/ui",
     "//azer",
+    "//azer/util/geometry",
   ]
 }

@@ -15,7 +15,6 @@ const char* DiffuseMapEffect::GetEffectName() const { return kEffectName;}
 
 ShaderClosurePtr DiffuseMapEffect::InitShaderClosure(RenderPipelineStage stage,
                                                      Shader* shader) {
-  RenderSystem* rs = RenderSystem::Current();
   ShaderClosurePtr closure(new ShaderClosure(stage));
   ShaderParamTablePtr table;
   if (stage == kVertexStage) {
@@ -29,7 +28,7 @@ ShaderClosurePtr DiffuseMapEffect::InitShaderClosure(RenderPipelineStage stage,
                               offsetof(vs_cbuffer, camerapos), 1),
     };
     
-    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
@@ -46,7 +45,7 @@ ShaderClosurePtr DiffuseMapEffect::InitShaderClosure(RenderPipelineStage stage,
       ShaderParamTable::Desc("lights", offsetof(ps_cbuffer, lights),
                               sizeof(UniverseLight), 4),
     };
-    table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
     closure->SetShaderParamTable(0, 1, table.get());
     closure->SetShader(shader, 1, 1, 0);
   } else {

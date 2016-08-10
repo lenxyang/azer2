@@ -18,6 +18,14 @@ D3DStructuredGpuBuffer::~D3DStructuredGpuBuffer() {
   SAFE_RELEASE(bufobj_);
 }
 
+void D3DStructuredGpuBuffer::UpdateData(const uint8_t* data, int64_t size) {
+  DCHECK(bufobj_) << "StructedGpuBuffer Not Initialized";
+  DCHECK_EQ(size, this->size());
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  ID3D11DeviceContext* d3d_context = rs->GetContext();
+  d3d_context->UpdateSubresource(bufobj_, 0, NULL, data, 0, 0);
+}
+
 GpuResLockDataPtr D3DStructuredGpuBuffer::map(MapType flags) {
   map_helper_.reset(new GpuResLockHelper(resource_options(), bufobj_));
   return map_helper_->map(flags);

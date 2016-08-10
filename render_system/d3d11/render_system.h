@@ -42,9 +42,6 @@ class D3DRenderSystem : public RenderSystem {
                                      SlotVertexData* data) override;
   IndicesBufferPtr CreateIndicesBuffer(const GpuResOptions& opt,
                                        IndicesData*) override;
-  ShaderParamTablePtr CreateShaderParamTable(
-      int32_t num, const ShaderParamTable::Desc* desc) override;
-
   // texutre functions
   TexturePtr CreateTexture(const Texture::Options& opt) override;
   TexturePtr CreateTexture(const Texture::Options& opt,

@@ -71,9 +71,6 @@ class AZER_EXPORT RenderSystem {
                                              SlotVertexData* vdata) = 0;
   virtual IndicesBufferPtr CreateIndicesBuffer(const GpuResOptions& opt,
                                                IndicesData* idata) = 0;
-  virtual ShaderParamTablePtr CreateShaderParamTable(
-      int32_t num, const ShaderParamTable::Desc* desc) = 0;
-
   // textures functions
   virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;
   virtual TexturePtr CreateTexture(const Texture::Options& opt,

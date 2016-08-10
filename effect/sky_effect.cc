@@ -1,7 +1,7 @@
 #include "azer/effect/sky_effect.h"
 
 #include "base/strings/utf_string_conversions.h"
-#include "azer/render/gpu_constants_table.h"
+#include "azer/render/shader_param_table.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
 
@@ -17,7 +17,6 @@ const char* SkyboxEffect::GetEffectName() const { return kEffectName; }
 
 ShaderClosurePtr SkyboxEffect::InitShaderClosure(RenderPipelineStage stage,
                                                  Shader* shader) {
-  RenderSystem* rs = RenderSystem::Current();
   ShaderParamTablePtr table;
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kVertexStage) {
@@ -29,7 +28,7 @@ ShaderClosurePtr SkyboxEffect::InitShaderClosure(RenderPipelineStage stage,
                               offsetof(vs_cbuffer, world), 1),
     };
   
-    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {

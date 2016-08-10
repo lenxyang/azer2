@@ -7,4 +7,4 @@
 #include "azer/util/geometry/cylinder.h"
 #include "azer/util/geometry/plane.h"
 #include "azer/util/geometry/sphere.h"
-
+#include "azer/util/geometry/util.h"

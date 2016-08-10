@@ -18,7 +18,6 @@
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/shader.h"
-#include "azer/render_system/d3d11/shader_param_table.h"
 #include "azer/render_system/d3d11/structured_buffer.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
@@ -137,16 +136,6 @@ ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc
 TechniquePtr D3DRenderSystem::CreateTechnique() {
   TechniquePtr ptr (new D3DTechnique());
   return ptr;
-}
-
-ShaderParamTablePtr D3DRenderSystem::CreateShaderParamTable(
-    int32_t num, const ShaderParamTable::Desc* desc) {
-  scoped_refptr<D3DShaderParamTable> tableptr = new D3DShaderParamTable(num, desc);
-  if (tableptr->Init(this)) {
-    return tableptr;
-  } else {
-    return ShaderParamTablePtr();
-  }
 }
 
 TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,

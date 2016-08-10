@@ -15,7 +15,6 @@ const char* TextBillboardEffect::GetEffectName() const { return kEffectName;}
 
 ShaderClosurePtr TextBillboardEffect::InitShaderClosure(RenderPipelineStage stage,
                                                         Shader* shader) {
-  RenderSystem* rs = RenderSystem::Current();
   ShaderParamTablePtr table;
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kVertexStage) {
@@ -25,7 +24,7 @@ ShaderClosurePtr TextBillboardEffect::InitShaderClosure(RenderPipelineStage stag
                               offsetof(vs_cbuffer, world), 1),
     };
   
-    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kGeometryStage) {
@@ -40,7 +39,7 @@ ShaderClosurePtr TextBillboardEffect::InitShaderClosure(RenderPipelineStage stag
       ShaderParamTable::Desc("param", ShaderParamType::kVector4,
                               offsetof(gs_cbuffer, param), 1),
     };
-    table = rs->CreateShaderParamTable(arraysize(gs_table_desc), gs_table_desc);
+    table = new ShaderParamTable(arraysize(gs_table_desc), gs_table_desc);
     closure->SetShaderParamTable(kGeometryStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
@@ -50,7 +49,7 @@ ShaderClosurePtr TextBillboardEffect::InitShaderClosure(RenderPipelineStage stag
       ShaderParamTable::Desc("diffuse", ShaderParamType::kVector4,
                               offsetof(ps_cbuffer, diffuse), 1),
     };
-    table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
     closure->SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 1, 0);
   } else {

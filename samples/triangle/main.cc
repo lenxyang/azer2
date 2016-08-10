@@ -7,6 +7,7 @@
 #include "azer/ui/window.h"
 #include "azer/ui/desktop_window_context.h"
 #include "azer/util/interactive/interactive.h"
+#include "azer/util/geometry/geometry.h"
 
 using base::FilePath;
 using base::UTF8ToUTF16;
@@ -41,46 +42,47 @@ class SimpleEffect : public Effect {
   void ApplyShaderParamTable(Renderer* renderer) override {
     {
       Matrix4 pvw = std::move(pv_ * world_);
-      GpuVariable var = gpu_table_[0];
-      ShaderParamTable* tb = var.table.get();
-      DCHECK_EQ(var.stage, kVertexStage);
+      ShaderParamTable* tb = GetShaderClosure(kVertexStage)->table_at(0);
       DCHECK(tb != NULL);
       tb->SetValue(0, &pvw, sizeof(Matrix4));
       tb->SetValue(1, &world_, sizeof(Matrix4));
     }
     {
-      GpuVariable var = gpu_table_[1];
-      ShaderParamTable* tb = var.table.get();
+      ShaderParamTable* tb = GetShaderClosure(kPixelStage)->table_at(0);
       DCHECK(tb != NULL);
-      DCHECK_EQ(var.stage, kPixelStage);
       tb->SetValue(0, &color_, sizeof(Vector4));
     }
   }
-  void InitShaderParamTable() override {
-    RenderSystem* rs = RenderSystem::Current();
-    // generate GpuTable init for stage kVertexStage
-    ShaderParamTable::Desc vs_table_desc[] = {
-      ShaderParamTable::Desc("pvw", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, pvw), 1),
-      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, world), 1),
-    };
 
-    GpuVariable v;
-    v.table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    v.stage = kVertexStage;
-    v.type = kUpdatePerFrame;
-    gpu_table_.push_back(v);
-    // generate GpuTable init for stage kPixelStage
-    ShaderParamTable::Desc ps_table_desc[] = {
-      ShaderParamTable::Desc("color", ShaderParamType::kVector4,
-                              offsetof(ps_cbuffer, color), 1),
-    };
+  ShaderClosurePtr InitShaderClosure(RenderPipelineStage stage, Shader* shader) {
+    ShaderClosurePtr closure(new ShaderClosure(stage));
+    ShaderParamTablePtr table;
+    if (stage == kVertexStage) {
+      // generate GpuTable init for stage kVertexStage
+      ShaderParamTable::Desc vs_table_desc[] = {
+        ShaderParamTable::Desc("pvw", ShaderParamType::kMatrix4,
+                               offsetof(vs_cbuffer, pvw), 1),
+        ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
+                               offsetof(vs_cbuffer, world), 1),
+      };
 
-    v.table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    v.stage = kPixelStage;
-    v.type = kUpdatePerFrame;
-    gpu_table_.push_back(v);
+      table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+      closure->SetShaderParamTable(kVertexStage, 0, table.get());
+      closure->SetShader(shader, 1, 0, 0);
+    } else if(stage == kPixelStage) {
+      // generate GpuTable init for stage kPixelStage
+      ShaderParamTable::Desc ps_table_desc[] = {
+        ShaderParamTable::Desc("color", ShaderParamType::kVector4,
+                               offsetof(ps_cbuffer, color), 1),
+      };
+
+      table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+      closure->SetShaderParamTable(kVertexStage, 0, table.get());
+      closure->SetShader(shader, 1, 0, 0);
+    } else {
+      CHECK(false);
+    }
+    return closure;
   }
 
   Matrix4 pv_;

@@ -18,7 +18,6 @@ const char* NormalLineEffect::GetEffectName() const { return kEffectName; }
 
 ShaderClosurePtr NormalLineEffect::InitShaderClosure(RenderPipelineStage stage,
                                                      Shader* shader) {
-  RenderSystem* rs = RenderSystem::Current();
   ShaderParamTablePtr table;
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kVertexStage) {
@@ -32,7 +31,7 @@ ShaderClosurePtr NormalLineEffect::InitShaderClosure(RenderPipelineStage stage,
                               offsetof(vs_cbuffer, linelength), 1),
     };
   
-    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
@@ -41,7 +40,7 @@ ShaderClosurePtr NormalLineEffect::InitShaderClosure(RenderPipelineStage stage,
     ShaderParamTable::Desc ps_table_desc[] = {
       ShaderParamTable::Desc("color", ShaderParamType::kVector4, 0, 1),
     };
-    table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
     closure->SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else {

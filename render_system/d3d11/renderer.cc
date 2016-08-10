@@ -12,7 +12,6 @@
 #include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/structured_buffer.h"
-#include "azer/render_system/d3d11/shader_param_table.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/technique.h"
@@ -298,11 +297,11 @@ void D3DRenderer::DispatchComputeTask(const GpuTaskParams& params) {
 }
 
 void D3DRenderer::BindShaderParamTable(RenderPipelineStage stage, int index,
-                                     ShaderParamTable* table) {
+                                       ShaderParamTable* table) {
   const int count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
-  D3DShaderParamTable* constants = (D3DShaderParamTable*)table;
+  D3DStructuredGpuBuffer* strbuf = (D3DStructuredGpuBuffer*)table->gpu_buffer();
   ID3D11Buffer* buffers[count] = {0};
-  buffers[0] = (constants != NULL) ? constants->buffer_ : NULL;
+  buffers[0] = (strbuf != NULL) ? strbuf->object() : NULL;
   switch (stage) {
     case kVertexStage:
       d3d_context_->VSSetConstantBuffers(index, 1, buffers);

@@ -72,7 +72,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
   virtual void SetShaderSamplerState(RenderPipelineStage stage, int index, 
                                      int count, SamplerStatePtr* sampler) = 0;
   virtual void BindShaderParamTable(RenderPipelineStage stage, int index,
-                                  ShaderParamTable* table) = 0;
+                                    ShaderParamTable* table) = 0;
   virtual void SetStreamOutTargets(GpuResource** buffer, int count, int off) = 0;
   virtual void SetBlending(Blending* blending, float* factor, uint32_t mask) = 0;
   virtual void ResetBlending() = 0;

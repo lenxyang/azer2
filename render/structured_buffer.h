@@ -17,6 +17,7 @@ class AZER_EXPORT StructuredGpuBuffer : public GpuResource {
 
   virtual GpuResLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
+  virtual void UpdateData(const uint8_t* data, int64_t size) = 0;
  protected:
   StructuredGpuBuffer(const GpuResOptions& options, int count, int strip);
  private:

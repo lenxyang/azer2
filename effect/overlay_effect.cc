@@ -15,7 +15,6 @@ const char* OverlayEffect::GetEffectName() const { return kEffectName;}
 
 ShaderClosurePtr OverlayEffect::InitShaderClosure(RenderPipelineStage stage,
                                                   Shader* shader) {
-  RenderSystem* rs = RenderSystem::Current();
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kVertexStage) {
     // generate GpuTable init for stage kVertexStage
@@ -26,7 +25,7 @@ ShaderClosurePtr OverlayEffect::InitShaderClosure(RenderPipelineStage stage,
     };
 
     ShaderParamTablePtr table;
-    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {

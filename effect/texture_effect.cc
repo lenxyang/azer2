@@ -15,7 +15,6 @@ const char* TextureEffect::GetEffectName() const { return kEffectName;}
 
 ShaderClosurePtr TextureEffect::InitShaderClosure(RenderPipelineStage stage,
                                                   Shader* shader) {
-  RenderSystem* rs = RenderSystem::Current();
   ShaderParamTablePtr table;
   ShaderClosurePtr closure(new ShaderClosure(stage));
   if (stage == kVertexStage) {
@@ -28,7 +27,7 @@ ShaderClosurePtr TextureEffect::InitShaderClosure(RenderPipelineStage stage,
       ShaderParamTable::Desc("camerapos", ShaderParamType::kVector4,
                               offsetof(vs_cbuffer, camerapos), 1),
     };
-    table = rs->CreateShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
     closure->SetShaderParamTable(kVertexStage, 0, table.get());
     closure->SetShader(shader, 1, 0, 0);
   } else if (stage == kPixelStage) {
@@ -45,7 +44,7 @@ ShaderClosurePtr TextureEffect::InitShaderClosure(RenderPipelineStage stage,
       ShaderParamTable::Desc("lights", offsetof(ps_cbuffer, lights),
                               sizeof(UniverseLight), arraysize(lights_)),
     };
-    table = rs->CreateShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
     closure->SetShaderParamTable(kPixelStage, 0, table.get());
     closure->SetShader(shader, 1, 1, 0);
   } else {

@@ -32,7 +32,7 @@ class D3DRenderer : public Renderer {
   void BindVertexBufferGroup(VertexBufferGroup* vbg) override;
   void BindIndicesBuffer(IndicesBuffer* ib) override;
   void BindShaderParamTable(RenderPipelineStage stage, int index,
-                          ShaderParamTable* table) override;
+                            ShaderParamTable* table) override;
   void ResetStageResource(RenderPipelineStage stage) override;
   void SetShaderResource(RenderPipelineStage stage, int index, 
                          int count, ShaderResViewPtr* resarr) override;
