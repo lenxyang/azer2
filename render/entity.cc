@@ -71,10 +71,9 @@ Entity::Entity(VertexBufferGroup* vbg) {
 
 Entity::Entity(EntityData* data) {
   InitMinAndVMax(&vmin_, &vmax_);
-  RenderSystem* rs = RenderSystem::Current();
   vbg_ = CreateVertexBufferGroup(kVertexBufferOpt(), data->vdata());
   if (data->idata())
-    ib_ = rs->CreateIndicesBuffer(kIndicesBufferOpt(), data->idata());
+    ib_ = new IndicesBuffer(data->idata());
   subset_ = data->subset();
 }
 

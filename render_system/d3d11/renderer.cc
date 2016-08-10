@@ -9,7 +9,6 @@
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/structured_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
@@ -152,11 +151,11 @@ void D3DRenderer::BindVertexBufferGroup(VertexBufferGroup* vbg) {
 
 void D3DRenderer::BindIndicesBuffer(IndicesBuffer* vib) {
   if (vib) {
-    DCHECK(typeid(*vib) == typeid(D3DIndicesBuffer));
-    D3DIndicesBuffer* ib = static_cast<D3DIndicesBuffer*>(vib);
-    d3d_context_->IASetIndexBuffer(ib->buffer(), TranslateIndexType(ib->type()), 0);
+    D3DStructuredGpuBuffer* strbuf = (D3DStructuredGpuBuffer*)vib->gpu_buffer();
+    ID3D11Buffer* buffer = strbuf->object();
+    d3d_context_->IASetIndexBuffer(buffer, TranslateIndexType(vib->type()), 0);
   } else {
-    // d3d_context_->IASetIndexBuffer(NULL, NULL, 0);
+    d3d_context_->IASetIndexBuffer(NULL, DXGI_FORMAT_R16_UINT, 0);
   }
 }
 

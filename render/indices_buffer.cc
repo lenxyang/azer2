@@ -80,10 +80,27 @@ uint8_t* IndicesData::pointer() {
 }
 
 // class IndicesBuffer
-IndicesBuffer::IndicesBuffer(const GpuResOptions& opt)
-    : GpuResource(opt, GpuResType::kIndicesBuffer)
-    , indices_count_(-1)
-    , type_(kIndexUndefined) {
+IndicesBuffer::IndicesBuffer(const IndicesData* data)
+    : indices_count_(data->count()),
+      type_(data->type()) {
+  RenderSystem* rs = RenderSystem::Current();
+  CHECK(rs) << "RenderSystem Not Initialized";
+  static GpuResOptions resopt;
+  resopt.target = kBindTargetIndicesBuffer;
+  gpu_buffer_ = rs->CreateStructuredBufferWithData(
+      resopt, 1, data->size(), data->pointer());
+  CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
+}
+
+IndicesBuffer::IndicesBuffer(const GpuResOptions& opt, const IndicesData* data)
+    : indices_count_(data->count()),
+      type_(data->type()) {
+  RenderSystem* rs = RenderSystem::Current();
+  CHECK(rs) << "RenderSystem Not Initialized";
+  CHECK(opt.target & kBindTargetIndicesBuffer);
+  gpu_buffer_ = rs->CreateStructuredBufferWithData(
+      opt, 1, data->size(), data->pointer());
+  CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }
 
 IndicesBuffer::~IndicesBuffer() {

@@ -172,7 +172,6 @@ const aiScene* MeshLoadUtil::LoadScene(const azer::ResPath& path,
 }
 
 EntityVecPtr MeshLoadUtil::LoadVertexData(const ResPath& path, VertexDesc* desc) {
-  RenderSystem* rs = RenderSystem::Current();
   uint32_t flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals 
       | aiProcess_FlipUVs;
   Assimp::Importer importer;
@@ -190,8 +189,7 @@ EntityVecPtr MeshLoadUtil::LoadVertexData(const ResPath& path, VertexDesc* desc)
     MeshData data = LoadMeshData(scene->mMeshes[i], desc);
     VertexBufferGroupPtr vbg = CreateVertexBufferGroup(
         kVertexBufferOpt(), data.vdata.get());
-    IndicesBufferPtr ib = rs->CreateIndicesBuffer(
-        kIndicesBufferOpt(), data.idata.get());
+    IndicesBufferPtr ib(new IndicesBuffer(data.idata.get()));
     EntityPtr entity(new Entity(vbg.get(), ib.get()));
     entity->set_vmin(data.vmin);
     entity->set_vmax(data.vmax);
@@ -202,7 +200,6 @@ EntityVecPtr MeshLoadUtil::LoadVertexData(const ResPath& path, VertexDesc* desc)
 }
 
 MeshPtr MeshLoadUtil::Load(const ResPath& path, VertexDesc* desc) {
-  RenderSystem* rs = RenderSystem::Current();
   uint32_t flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals 
       | aiProcess_FlipUVs;
   Assimp::Importer importer;
@@ -222,8 +219,7 @@ MeshPtr MeshLoadUtil::Load(const ResPath& path, VertexDesc* desc) {
     MeshData data = LoadMeshData(scene->mMeshes[i], desc);
     VertexBufferGroupPtr vbg = CreateVertexBufferGroup(
         kVertexBufferOpt(), data.vdata.get());
-    IndicesBufferPtr ib = rs->CreateIndicesBuffer(
-        kIndicesBufferOpt(), data.idata.get());
+    IndicesBufferPtr ib(new IndicesBuffer(data.idata.get()));
     EntityPtr entity(new Entity(vbg.get(), ib.get()));
     entity->set_vmin(data.vmin);
     entity->set_vmax(data.vmax);

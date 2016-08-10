@@ -40,8 +40,6 @@ class D3DRenderSystem : public RenderSystem {
   VertexBufferGroupPtr CreateVertexBufferGroup(VertexDesc* desc) override;
   VertexBufferPtr CreateVertexBuffer(const GpuResOptions& opt,
                                      SlotVertexData* data) override;
-  IndicesBufferPtr CreateIndicesBuffer(const GpuResOptions& opt,
-                                       IndicesData*) override;
   // texutre functions
   TexturePtr CreateTexture(const Texture::Options& opt) override;
   TexturePtr CreateTexture(const Texture::Options& opt,

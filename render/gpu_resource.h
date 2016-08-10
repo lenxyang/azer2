@@ -38,10 +38,11 @@ struct AZER_EXPORT GpuResOptions {
 };
 
 enum class GpuResType {
-  kVertexBuffer = 1,
-  kIndicesBuffer,
-  kStructuredBuffer,
-  kTexture,
+  kVertexBuffer      = 0x0001,
+  kIndicesBuffer     = 0x0002,
+  kStructuredBuffer  = 0x0004,
+  kConstantTable     = 0x0008,
+  kTexture           = 0x0010,
 };
 
 AZER_EXPORT std::ostream& operator << (std::ostream& os, const GpuResType& res);
@@ -84,4 +85,5 @@ class AZER_EXPORT AutoBufferLock {
 
 AZER_EXPORT const GpuResOptions& kVertexBufferOpt();
 AZER_EXPORT const GpuResOptions& kIndicesBufferOpt();
+AZER_EXPORT const GpuResOptions& kShaderConstsTableBufferOpt();
 }  // namespace azer

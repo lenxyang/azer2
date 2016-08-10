@@ -37,6 +37,7 @@ std::ostream& operator << (std::ostream& os, const GpuResType& res) {
     case GpuResType::kVertexBuffer: os << "VertexBufferRes"; break;
     case GpuResType::kIndicesBuffer: os << "IndexBufferRes"; break;
     case GpuResType::kStructuredBuffer: os << "StructureBufferRes"; break;
+    case GpuResType::kConstantTable: os << "kConstantTable"; break;
     case GpuResType::kTexture: os << "TextureRes"; break;
     default: CHECK(false) << "No such GpuResType: " << (int)res;
   }

@@ -56,9 +56,11 @@ bool D3DStructuredGpuBuffer::Init(D3DRenderSystem* rs, const uint8_t* data) {
   ID3D11Device* d3ddevice = rs->GetDevice();
   D3D11_BUFFER_DESC desc;
   GenBufferDesc(resource_options(), &desc);
-  desc.StructureByteStride = strip();
   desc.ByteWidth = this->size();
-  desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+  if ((uint32_t)resource_type() & (uint32_t)GpuResType::kStructuredBuffer) {
+    desc.StructureByteStride = strip();
+    desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+  }
 
   if (data) {
     D3D11_SUBRESOURCE_DATA subdata;

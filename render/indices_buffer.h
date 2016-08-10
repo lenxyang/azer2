@@ -4,8 +4,8 @@
 
 
 #include "azer/base/export.h"
-#include "azer/render/vertex_buffer.h"
 #include "azer/render/gpu_resource.h"
+#include "azer/render/structured_buffer.h"
 
 namespace azer {
 class IndicesData;
@@ -45,19 +45,20 @@ class AZER_EXPORT IndicesData : public ::base::RefCounted<IndicesData> {
   DISALLOW_COPY_AND_ASSIGN(IndicesData);
 };
 
-class AZER_EXPORT IndicesBuffer : public GpuResource {
+class AZER_EXPORT IndicesBuffer : public ::base::RefCounted<IndicesBuffer> {
  public:
-  IndicesBuffer(const GpuResOptions& opt);
+  IndicesBuffer(const IndicesData* data);
+  IndicesBuffer(const GpuResOptions& opt, const IndicesData* data);
 
   virtual ~IndicesBuffer();
 
-  virtual GpuResLockDataPtr map(MapType flags) = 0;
-  virtual void unmap() = 0;
   IndexType type() const { return type_;}
   int32_t indices_count() const { return indices_count_;}
+  StructuredGpuBuffer* gpu_buffer() { return gpu_buffer_.get();}
  protected:
-  int32_t indices_count_;
-  IndexType type_;
+  const int32_t indices_count_;
+  const IndexType type_;
+  scoped_refptr<StructuredGpuBuffer> gpu_buffer_;
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);
 };
 

@@ -12,7 +12,6 @@
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
-#include "azer/render_system/d3d11/indices_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/rasterizer_state.h"
 #include "azer/render_system/d3d11/renderer.h"
@@ -84,16 +83,6 @@ VertexBufferPtr D3DRenderSystem::CreateVertexBuffer(
 VertexBufferGroupPtr D3DRenderSystem::CreateVertexBufferGroup(VertexDesc* desc) {
   scoped_refptr<D3DVertexBufferGroup> ptr(new D3DVertexBufferGroup(desc, this));
   return ptr;
-}
-
-IndicesBufferPtr D3DRenderSystem::CreateIndicesBuffer(
-    const GpuResOptions& opt, IndicesData* dataptr) {
-  scoped_refptr<D3DIndicesBuffer> indices_buffer(new D3DIndicesBuffer(opt));
-  if (indices_buffer->Init(dataptr, this)) {
-    return indices_buffer;
-  } else {
-    return IndicesBufferPtr();
-  }
 }
 
 ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc) {
