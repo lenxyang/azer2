@@ -1,7 +1,9 @@
 group("triangle") {
   deps = [
     ":vertex_triangle",
+    ":index_triangle",
     ":ndc_triangle",
+    ":entity_triangle",
   ]
 }
 
@@ -19,6 +21,26 @@ executable("ndc_triangle") {
 executable("vertex_triangle") {
   output_name = "azer_samples_vertex_triangle"
   sources = [ "vertex_triangle.cc", ]
+  deps = [
+    "//azer/ui",
+    "//azer",
+    "//azer/util/geometry",
+  ]
+}
+
+executable("index_triangle") {
+  output_name = "azer_samples_index_triangle"
+  sources = [ "index_triangle.cc", ]
+  deps = [
+    "//azer/ui",
+    "//azer",
+    "//azer/util/geometry",
+  ]
+}
+
+executable("entity_triangle") {
+  output_name = "azer_samples_index_triangle"
+  sources = [ "entity_triangle.cc", ]
   deps = [
     "//azer/ui",
     "//azer",
