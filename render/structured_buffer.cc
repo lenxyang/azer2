@@ -12,20 +12,44 @@ StructuredGpuBuffer::StructuredGpuBuffer(int count, int strip)
   static GpuResOptions resopt;
   resopt.target = kBindTargetShaderResource | kBindTargetUnorderAccess;
   resopt.type = GpuResType::kStructuredBuffer;
-  InitGpuBuffer(resopt, count, strip);
+  InitGpuBuffer(resopt, count, strip, NULL);
 }
-StructuredGpuBuffer::StructuredGpuBuffer(const GpuResOptions& options, 
+
+StructuredGpuBuffer::StructuredGpuBuffer(int count, int strip, const uint8_t* data)
+    : size_(count * strip),
+      strip_(strip),
+      count_(count) {
+  static GpuResOptions resopt;
+  resopt.target = kBindTargetShaderResource | kBindTargetUnorderAccess;
+  resopt.type = GpuResType::kStructuredBuffer;
+  InitGpuBuffer(resopt, count, strip, data);
+}
+
+
+StructuredGpuBuffer::StructuredGpuBuffer(const GpuResOptions& resopt, 
                                          int count, int strip)
     : size_(count * strip),
       strip_(strip),
       count_(count) {
+  DCHECK(resopt.type == GpuResType::kStructuredBuffer);
+  InitGpuBuffer(resopt, count, strip, NULL);
+}
+
+StructuredGpuBuffer::StructuredGpuBuffer(const GpuResOptions& resopt, 
+                                         int count, int strip, const uint8_t* data)
+    : size_(count * strip),
+      strip_(strip),
+      count_(count) {
+  DCHECK(resopt.type == GpuResType::kStructuredBuffer);
+  InitGpuBuffer(resopt, count, strip, data);
 }
 
 StructuredGpuBuffer::~StructuredGpuBuffer() {
 }
 
 void StructuredGpuBuffer::InitGpuBuffer(const GpuResOptions& options,
-                                        int count, int strip) {
+                                        int count, int strip,
+                                        const uint8_t* data) {
   RenderSystem* rs = RenderSystem::Current();
   CHECK(rs) << "RenderSystem Not Initialized";
   gpu_buffer_ = rs->CreateBuffer(options, 1, size());

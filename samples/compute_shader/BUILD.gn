@@ -4,3 +4,13 @@ group("compute_shader") {
     ":sum",
   ]
 }
+
+executable("sum") {
+  output_name = "azer_samples_cs_sum"
+  sources = [ "sum.cc", ]
+  deps = [
+    "//azer/ui",
+    "//azer",
+    "//azer/util/geometry",
+  ]
+}

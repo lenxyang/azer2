@@ -42,6 +42,8 @@ shared_library("d3d11") {
     "texture.h",
     "vertex_buffer.cc",
     "vertex_buffer.h",
+    "vertex_layout.cc",
+    "vertex_layout.h",
   ]
   deps = [
     "//azer",

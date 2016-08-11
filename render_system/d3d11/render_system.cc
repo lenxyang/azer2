@@ -21,6 +21,7 @@
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/texture_view.h"
+#include "azer/render_system/d3d11/vertex_layout.h"
 #include "azer/render_system/d3d11/vertex_buffer.h"
 
 namespace azer {

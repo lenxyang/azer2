@@ -80,6 +80,8 @@ source_set("render") {
     "texture.h",
     "vertex_buffer.cc",
     "vertex_buffer.h",
+    "vertex_layout.cc",
+    "vertex_layout.h",
     "vertex_pack.cc",
     "vertex_pack.h",
     "viewport.cc",

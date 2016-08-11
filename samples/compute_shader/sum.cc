@@ -3,11 +3,14 @@
 #include <iostream>
 #include "base/files/file_util.h"
 
-#include "azer/util/interactive/interactive.h"
-#include "azer/ui/sample_mainframe.h"
+#include "azer/azer.h"
+#include "azer/ui/chromium_env.h"
 #include "azer/ui/render_loop.h"
-#include "azer/util/geometry/util.h"
-#include "dxut/dxut.h"
+#include "azer/ui/sample_mainframe.h"
+#include "azer/ui/window.h"
+#include "azer/ui/desktop_window_context.h"
+#include "azer/util/interactive/interactive.h"
+#include "azer/util/geometry/geometry.h"
 
 using base::FilePath;
 using base::UTF8ToUTF16;
@@ -21,9 +24,10 @@ class MyRenderWindow : public azer::SampleMainframe {
   void OnUpdateFrame(const FrameArgs& args) override;
   void OnRenderFrame(const FrameArgs& args, Renderer* renderer) override;
  private:
-  azer::StructuredGpuBufferPtr input1_, input2_, output_, toread_;
+  azer::StructuredGpuBufferPtr input1_, input2_, output_;
+  azer::GpuBufferPtr toread_;
   azer::ShaderResViewPtr input1_view_, input2_view_;
-  azer::UnorderAccessResViewPtr output_view_;
+  azer::UnorderAccessViewPtr output_view_;
   scoped_refptr<GpuComputeTask> compute_task_;
   DISALLOW_COPY_AND_ASSIGN(MyRenderWindow);
 };
@@ -55,7 +59,7 @@ void MyRenderWindow::OnInit() {
   struct_opt.cpu_access = kCPURead;
   struct_opt.usage = kBufferStaging;
   struct_opt.target = 0;
-  toread_ = new StructuredGpuBuffer(struct_opt, 4 * 4, (int)sizeof(float));
+  toread_ = rs->CreateBuffer(struct_opt, 4 * 4, (int)sizeof(float));
 
   // 
   std::unique_ptr<float> init_data(new float[64 * 64]);
@@ -72,15 +76,15 @@ void MyRenderWindow::OnInit() {
   input2_ = new StructuredGpuBuffer(struct_opt, 64 * 64, (int)sizeof(float), 
                                     (uint8_t*)init_data.get());
 
-  input1_view_ = rs->CreateBufferShaderResView(input1_.get());
-  input2_view_ = rs->CreateBufferShaderResView(input2_.get());
-  output_view_ = rs->CreateBufferUAView(output_.get());
+  input1_view_ = rs->CreateBufferShaderResView(input1_->gpu_buffer());
+  input2_view_ = rs->CreateBufferShaderResView(input2_->gpu_buffer());
+  output_view_ = rs->CreateBufferUAView(output_->gpu_buffer());
 
   ShaderInfo shader;
-  shader.path = "hlsldc/basic/compute_shader/sum.cs.hlsl";
+  shader.path = "azer/samples/compute_shader/sum.cs.hlsl";
   shader.stage = kComputeStage;
   CHECK(::base::ReadFileToString(FilePath(UTF8ToUTF16(shader.path)), &shader.code));
-  compute_task_ = new GpuComputeTask(shader, 2, 1);
+  compute_task_ = new GpuComputeTask(shader, 1, 2, 1);
   compute_task_->SetResource(0, input1_view_.get());
   compute_task_->SetResource(1, input2_view_.get());
   compute_task_->SetUAResource(0, output_view_.get());
@@ -101,7 +105,7 @@ void MyRenderWindow::OnRenderFrame(const FrameArgs& args, Renderer* renderer) {
   params.thread_group.z = 1;
   renderer->DispatchComputeTask(params);
 
-  output_->CopyTo(toread_.get());
+  output_->gpu_buffer()->CopyTo(toread_.get());
   GpuResLockDataPtr lockdata = toread_->map(MapType::kReadOnly);
   float* data = (float*)lockdata->data_ptr();
   for (int i = 0; i < 4; ++i) {

@@ -11,7 +11,10 @@ class AZER_EXPORT StructuredGpuBuffer :
       public ::base::RefCounted<StructuredGpuBuffer> {
  public:
   StructuredGpuBuffer(int count, int strip);
+  StructuredGpuBuffer(int count, int strip, const uint8_t* data);
   StructuredGpuBuffer(const GpuResOptions& options, int count, int strip);
+  StructuredGpuBuffer(const GpuResOptions& options, int count, int strip,
+                      const uint8_t* data);
   ~StructuredGpuBuffer();
 
   int size() const { return size_;}
@@ -19,7 +22,8 @@ class AZER_EXPORT StructuredGpuBuffer :
   int strip() const { return strip_;}
   GpuBuffer* gpu_buffer() { return gpu_buffer_.get();}
  private:
-  void InitGpuBuffer(const GpuResOptions& options, int count, int strip);
+  void InitGpuBuffer(const GpuResOptions& options, int count, int strip,
+                     const uint8_t* data);
 
   const int size_;
   const int strip_;

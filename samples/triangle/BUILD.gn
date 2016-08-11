@@ -39,7 +39,7 @@ executable("index_triangle") {
 }
 
 executable("entity_triangle") {
-  output_name = "azer_samples_index_triangle"
+  output_name = "azer_samples_entity_triangle"
   sources = [ "entity_triangle.cc", ]
   deps = [
     "//azer/ui",
