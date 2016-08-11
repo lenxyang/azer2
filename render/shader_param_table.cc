@@ -3,7 +3,7 @@
 #include "azer/base/align.h"
 #include "azer/render/renderer.h"
 #include "azer/render/render_system.h"
-#include "azer/render/structured_buffer.h"
+#include "azer/render/gpu_buffer.h"
 
 namespace azer {
 
@@ -26,7 +26,7 @@ ShaderParamTable::ShaderParamTable(int32_t num, const Desc* desc) {
   CHECK(rs) << "RenderSystem Not Initialized";
   static GpuResOptions resopt;
   resopt.target = kBindTargetContantBuffer;
-  gpu_buffer_ = rs->CreateStructuredBuffer(resopt, 1, size_);
+  gpu_buffer_ = rs->CreateBuffer(resopt, 1, size_);
   CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }
 

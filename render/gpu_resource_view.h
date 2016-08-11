@@ -15,16 +15,16 @@ class AZER_EXPORT ShaderResView : public ResourceView {
   DISALLOW_COPY_AND_ASSIGN(ShaderResView);
 };
 
-class AZER_EXPORT UnorderAccessResView : public ResourceView {
+class AZER_EXPORT UnorderAccessView : public ResourceView {
  public:
-  explicit UnorderAccessResView(GpuResource* buffer);
-  UnorderAccessResView(ResViewType type, GpuResource* buffer);
+  explicit UnorderAccessView(GpuResource* buffer);
+  UnorderAccessView(ResViewType type, GpuResource* buffer);
   GpuResource* buffer() { return buffer_.get();}
  private:
   GpuResourcePtr buffer_;
-  DISALLOW_COPY_AND_ASSIGN(UnorderAccessResView);
+  DISALLOW_COPY_AND_ASSIGN(UnorderAccessView);
 };
 
 typedef scoped_refptr<ShaderResView> ShaderResViewPtr;
-typedef scoped_refptr<UnorderAccessResView> UnorderAccessResViewPtr;
+typedef scoped_refptr<UnorderAccessView> UnorderAccessViewPtr;
 }  // namespace azer

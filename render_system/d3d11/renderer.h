@@ -37,7 +37,7 @@ class D3DRenderer : public Renderer {
   void SetShaderResource(RenderPipelineStage stage, int index, 
                          int count, ShaderResViewPtr* resarr) override;
   void SetShaderUAResource(RenderPipelineStage stage, int index, 
-                           int count, UnorderAccessResViewPtr* resarr) override;
+                           int count, UnorderAccessViewPtr* resarr) override;
   void SetShaderSamplerState(RenderPipelineStage stage, int index, 
                              int count, SamplerStatePtr* sampler) override;
   void SetStreamOutTargets(GpuResource** buffer, int count, int offset) override;

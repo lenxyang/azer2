@@ -1,9 +1,10 @@
 #pragma once
 
-#include "azer/render/gpu_types.h"
+#include "azer/render/native_types.h"
 #include "azer/render/gpu_resource.h"
 
 namespace azer {
+
 // class GpuBuffer
 class AZER_EXPORT GpuBuffer : public GpuResource {
  public:
@@ -25,4 +26,5 @@ class AZER_EXPORT GpuBuffer : public GpuResource {
   DISALLOW_COPY_AND_ASSIGN(GpuBuffer);
 };
 
+typedef scoped_refptr<GpuBuffer> GpuBufferPtr;
 }  // namespace azer

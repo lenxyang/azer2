@@ -9,12 +9,12 @@ GpuResLockData::GpuResLockData(uint8_t* data, int row_size, int column)
 GpuResOptions::GpuResOptions()
     : usage(kBufferDefault),
       cpu_access(kCPUNoAccess),
-      target(kBindTargetUnknown) {
+      target(kBindTargetUnknown),
+      type(GpuResType::kUnknown) {
 }
 
-GpuResource::GpuResource(const GpuResOptions& opt, GpuResType type) 
-    : resource_options_(opt),
-      resource_type_(type) {
+GpuResource::GpuResource(const GpuResOptions& opt) 
+    : resource_options_(opt) {
 }
 
 GpuResource::~GpuResource() {
@@ -23,12 +23,6 @@ GpuResource::~GpuResource() {
 const GpuResOptions& kVertexBufferOpt() {
   static GpuResOptions opt;
   opt.target = kBindTargetVertexBuffer;
-  return opt;
-}
-
-const GpuResOptions& kIndicesBufferOpt() {
-  static GpuResOptions opt;
-  opt.target = kBindTargetIndicesBuffer;
   return opt;
 }
 

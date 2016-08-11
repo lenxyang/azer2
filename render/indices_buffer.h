@@ -5,7 +5,7 @@
 
 #include "azer/base/export.h"
 #include "azer/render/gpu_resource.h"
-#include "azer/render/structured_buffer.h"
+#include "azer/render/gpu_buffer.h"
 
 namespace azer {
 class IndicesData;
@@ -54,11 +54,11 @@ class AZER_EXPORT IndicesBuffer : public ::base::RefCounted<IndicesBuffer> {
 
   IndexType type() const { return type_;}
   int32_t indices_count() const { return indices_count_;}
-  StructuredGpuBuffer* gpu_buffer() { return gpu_buffer_.get();}
+  GpuBuffer* gpu_buffer() { return gpu_buffer_.get();}
  protected:
   const int32_t indices_count_;
   const IndexType type_;
-  scoped_refptr<StructuredGpuBuffer> gpu_buffer_;
+  scoped_refptr<GpuBuffer> gpu_buffer_;
   DISALLOW_COPY_AND_ASSIGN(IndicesBuffer);
 };
 

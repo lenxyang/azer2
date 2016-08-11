@@ -2,7 +2,7 @@
 
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
-#include "azer/render/types.h"
+#include "azer/render/native_types.h"
 
 namespace azer {
 enum class ResViewType {
@@ -10,8 +10,8 @@ enum class ResViewType {
   kDepthBuffer,
   kTexture,
   kUATexture,
-  kStructuredBuffer,
-  kUAStructuredBuffer,
+  kBufferResView,
+  kBufferUAView,
 };
 
 class AZER_EXPORT ResourceView : public ::base::RefCounted<ResourceView> {

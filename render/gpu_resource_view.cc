@@ -11,7 +11,7 @@ ShaderResView::ShaderResView(ResViewType type, GpuResource* buffer)
 }
 
 
-UnorderAccessResView::UnorderAccessResView(ResViewType type, GpuResource* buffer)
+UnorderAccessView::UnorderAccessView(ResViewType type, GpuResource* buffer)
     : ResourceView(type),
       buffer_(buffer) {
   DCHECK(buffer->resource_options().target & kBindTargetUnorderAccess);

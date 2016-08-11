@@ -22,7 +22,7 @@ TextureUAView::Options::Options()
       type(TexType::kUnknown) {
 }
 TextureUAView::TextureUAView(const Options& opt, Texture* tex)
-    : UnorderAccessResView(ResViewType::kTexture, tex),
+    : UnorderAccessView(ResViewType::kTexture, tex),
       tex_(tex), 
       options_(opt) {
   DCHECK(tex->options().target & kBindTargetShaderResource);

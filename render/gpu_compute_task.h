@@ -24,7 +24,7 @@ class AZER_EXPORT GpuComputeTask : public ::base::RefCounted<GpuComputeTask> {
   virtual ~GpuComputeTask();
 
   void SetResource(int index, ShaderResView* tex);
-  void SetUAResource(int index, UnorderAccessResView* tex);
+  void SetUAResource(int index, UnorderAccessView* tex);
   void Reset(Renderer* renderer);
   void Bind(Renderer* renderer);
   Shader* gpu_program() { return gpu_program_.get();}
@@ -35,7 +35,7 @@ protected:
   scoped_refptr<Shader> gpu_program_;
   std::vector<ShaderParamTablePtr> constants_table_;
   std::vector<ShaderResViewPtr> shader_resource_;
-  std::vector<UnorderAccessResViewPtr> shader_uaresource_;
+  std::vector<UnorderAccessViewPtr> shader_uaresource_;
   ShaderInfo shader_info_;
   DISALLOW_COPY_AND_ASSIGN(GpuComputeTask);
 };

@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <ostream>
 #include "azer/base/export.h"
-#include "azer/render/types.h"
+#include "azer/render/native_types.h"
 
 namespace azer {
 

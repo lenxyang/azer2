@@ -20,7 +20,7 @@ class AZER_EXPORT ShaderClosure : public ::base::RefCounted<ShaderClosure> {
   RenderPipelineStage stage() const { return stage_;}
   void SetShader(Shader* shader, int table_count, int res_count, int uares_count);
   void SetResource(int index, ShaderResView* tex);
-  void SetUAResource(int index, UnorderAccessResView* tex);
+  void SetUAResource(int index, UnorderAccessView* tex);
   void SetShaderParamTable(int index, ShaderParamTable* table);
 
   int table_count() const { return static_cast<int>(table_.size());}
@@ -31,7 +31,7 @@ class AZER_EXPORT ShaderClosure : public ::base::RefCounted<ShaderClosure> {
  protected:
   std::vector<ShaderParamTablePtr> table_;
   std::vector<ShaderResViewPtr> shader_res_;
-  std::vector<UnorderAccessResViewPtr> shader_uares_;
+  std::vector<UnorderAccessViewPtr> shader_uares_;
   ShaderPtr shader_;
   const RenderPipelineStage stage_;
   DISALLOW_COPY_AND_ASSIGN(ShaderClosure);

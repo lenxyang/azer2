@@ -17,7 +17,7 @@
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/sampler_state.h"
 #include "azer/render_system/d3d11/shader.h"
-#include "azer/render_system/d3d11/structured_buffer.h"
+#include "azer/render_system/d3d11/gpu_buffer.h"
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/texture_view.h"
@@ -210,10 +210,9 @@ BlendingPtr D3DRenderSystem::CreateBlending(const Blending::BlendDesc& desc) {
   }
 }
 
-StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
-    const GpuResOptions& opt, int count, int strip) {
-  scoped_refptr<D3DStructuredGpuBuffer> buf(new D3DStructuredGpuBuffer(
-      opt, count, strip));
+GpuBufferPtr D3DRenderSystem::CreateBuffer(const GpuResOptions& opt, 
+                                           int count, int strip) {
+  scoped_refptr<D3DGpuBuffer> buf(new D3DGpuBuffer(opt, count, strip));
   if (buf->Init(this, NULL)) {
     return buf;
   } else {
@@ -221,10 +220,9 @@ StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBuffer(
   }
 }
 
-StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBufferWithData(
+GpuBufferPtr D3DRenderSystem::CreateBufferWithData(
     const GpuResOptions& opt, int count, int strip, const uint8_t* data) {
-  scoped_refptr<D3DStructuredGpuBuffer> buf(new D3DStructuredGpuBuffer(
-      opt, count, strip));
+  scoped_refptr<D3DGpuBuffer> buf(new D3DGpuBuffer(opt, count, strip));
   if (buf->Init(this, data)) {
     return buf;
   } else {
@@ -232,10 +230,8 @@ StructuredGpuBufferPtr D3DRenderSystem::CreateStructuredBufferWithData(
   }
 }
 
-ShaderResViewPtr D3DRenderSystem::CreateStructBufferShaderResView(
-    GpuResource* buffer) {
-  scoped_refptr<D3DStructuredBufferResView> ptr(
-      new D3DStructuredBufferResView(buffer));
+ShaderResViewPtr D3DRenderSystem::CreateBufferShaderResView(GpuBuffer* buffer) {
+  scoped_refptr<D3DBufferResView> ptr(new D3DBufferResView(buffer));
   if (ptr->Init(this)) {
     return ptr;
   } else {
@@ -243,10 +239,8 @@ ShaderResViewPtr D3DRenderSystem::CreateStructBufferShaderResView(
   }
 }
 
-UnorderAccessResViewPtr D3DRenderSystem::CreateStructBufferUAResView(
-    GpuResource* buf) {
-  scoped_refptr<D3DUAStructuredBufferResView> ptr(
-      new D3DUAStructuredBufferResView(buf));
+UnorderAccessViewPtr D3DRenderSystem::CreateBufferUAView(GpuBuffer* buf) {
+  scoped_refptr<D3DBufferUAView> ptr(new D3DBufferUAView(buf));
   if (ptr->Init(this)) {
     return ptr;
   } else {

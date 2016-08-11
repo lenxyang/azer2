@@ -57,7 +57,7 @@ bool D3DGpuBuffer::Init(D3DRenderSystem* rs, const uint8_t* data) {
   D3D11_BUFFER_DESC desc;
   GenBufferDesc(resource_options(), &desc);
   desc.ByteWidth = this->size();
-  if ((uint32_t)resource_type() & (uint32_t)GpuResType::kBuffer) {
+  if ((uint32_t)resource_type() & (uint32_t)GpuResType::kStructuredBuffer) {
     desc.StructureByteStride = strip();
     desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
   }
@@ -84,7 +84,7 @@ void D3DGpuBuffer::SetName(const std::string& name) {
 
 // class D3DUAGpuBufferView
 D3DBufferResView::D3DBufferResView(GpuResource* buffer)
-    : ShaderResView(ResViewType::kBuffer, buffer),
+    : ShaderResView(ResViewType::kBufferResView, buffer),
       res_view_(NULL) {
 }
 
@@ -109,7 +109,7 @@ bool D3DBufferResView::Init(D3DRenderSystem* rs) {
 
 // class D3DUAGpuBufferView
 D3DBufferUAView::D3DBufferUAView(GpuResource* buffer)
-    : UnorderAccessResView(ResViewType::kUABuffer, buffer),
+    : UnorderAccessView(ResViewType::kBufferUAView, buffer),
       unorder_view_(NULL) {
 }
 

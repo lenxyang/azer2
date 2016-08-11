@@ -17,7 +17,7 @@
 #include "azer/render/shader_param_table.h"
 #include "azer/render/swap_chain.h"
 #include "azer/render/surface.h"
-#include "azer/render/structured_buffer.h"
+#include "azer/render/gpu_buffer.h"
 #include "azer/render/texture_view.h"
 #include "azer/render/vertex_buffer.h"
 #include "ui/gfx/geometry/rect.h"
@@ -77,17 +77,13 @@ class AZER_EXPORT RenderSystem {
   virtual GpuBufferPtr CreateBufferWithData(
       const GpuResOptions& o, int count, int strip, const uint8_t* data) = 0;
 
-  virtual StructuredGpuBufferPtr CreateStructuredBuffer(
-      const GpuResOptions& opt, int count, int strip) = 0;
-  virtual StructuredGpuBufferPtr CreateStructuredBufferWithData(
-      const GpuResOptions& o, int count, int strip, const uint8_t* data) = 0;
   virtual SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) = 0;
   virtual TextureViewPtr CreateTextureView(const TextureView::Options& opt, 
                                            Texture* tex) = 0;
   virtual TextureUAViewPtr CreateTextureUAView(const TextureUAView::Options& opt, 
                                                Texture* tex) = 0;
-  virtual ShaderResViewPtr CreateStructBufferShaderResView(GpuResource* buf) = 0;
-  virtual UnorderAccessResViewPtr CreateStructBufferUAResView(GpuResource* buf) = 0;
+  virtual ShaderResViewPtr CreateBufferShaderResView(GpuBuffer* buf) = 0;
+  virtual UnorderAccessViewPtr CreateBufferUAView(GpuBuffer* buf) = 0;
 
   // create Shader
   // Vertex Gpu Program need to help check "Vertex Layout"

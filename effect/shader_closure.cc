@@ -29,7 +29,7 @@ void ShaderClosure::SetResource(int index, ShaderResView* tex) {
   shader_res_[index] = tex;
 }
 
-void ShaderClosure::SetUAResource(int index, UnorderAccessResView* tex) {
+void ShaderClosure::SetUAResource(int index, UnorderAccessView* tex) {
   CHECK_LT(index, shader_uares_.size());
   shader_uares_[index] = tex;
 }

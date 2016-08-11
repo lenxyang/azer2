@@ -49,12 +49,11 @@ class D3DRenderSystem : public RenderSystem {
                                    Texture* tex) override;
   TextureUAViewPtr CreateTextureUAView(const TextureUAView::Options& opt, 
                                        Texture* tex) override;
-  StructuredGpuBufferPtr CreateStructuredBuffer(
-      const GpuResOptions& opt, int count, int strip) override;
-  StructuredGpuBufferPtr CreateStructuredBufferWithData(
+  GpuBufferPtr CreateBuffer(const GpuResOptions&, int count, int strip) override;
+  GpuBufferPtr CreateBufferWithData(
       const GpuResOptions& o, int count, int strip, const uint8_t* data) override;
-  ShaderResViewPtr CreateStructBufferShaderResView(GpuResource* buffer) override;
-  UnorderAccessResViewPtr CreateStructBufferUAResView(GpuResource* buffer) override;
+  ShaderResViewPtr CreateBufferShaderResView(GpuBuffer* buffer) override;
+  UnorderAccessViewPtr CreateBufferUAView(GpuBuffer* buffer) override;
 
   ShaderPtr CreateShader(const ShaderInfo& info, VertexDesc* desc) override;
   TechniquePtr CreateTechnique() override;

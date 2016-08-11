@@ -28,7 +28,7 @@ class AZER_EXPORT TextureView : public ShaderResView {
   DISALLOW_COPY_AND_ASSIGN(TextureView);
 };
 
-class AZER_EXPORT TextureUAView : public UnorderAccessResView {
+class AZER_EXPORT TextureUAView : public UnorderAccessView {
  public:
   struct AZER_EXPORT Options {
     TexFormat format;            // default: kRGBAn8

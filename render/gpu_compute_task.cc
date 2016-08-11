@@ -57,7 +57,7 @@ void GpuComputeTask::SetResource(int index, ShaderResView* tex) {
   shader_resource_[index] = tex;
 }
 
-void GpuComputeTask::SetUAResource(int index, UnorderAccessResView* tex) {
+void GpuComputeTask::SetUAResource(int index, UnorderAccessView* tex) {
   CHECK_LT(index, static_cast<int>(shader_uaresource_.size()));
   shader_uaresource_[index] = tex;
 }

@@ -30,14 +30,8 @@ class AZER_EXPORT GpuResLockData: public ::base::RefCounted<GpuResLockData> {
   DISALLOW_COPY_AND_ASSIGN(GpuResLockData);
 };
 
-struct AZER_EXPORT GpuResOptions {
-  BufferUsage usage;
-  CPUAccess cpu_access;  // defined render_system
-  uint32_t target;
-  GpuResOptions();
-};
-
 enum class GpuResType {
+  kUnknown           = 0x0000,
   kVertexBuffer      = 0x0001,
   kIndicesBuffer     = 0x0002,
   kStructuredBuffer  = 0x0004,
@@ -45,24 +39,31 @@ enum class GpuResType {
   kTexture           = 0x0010,
 };
 
+struct AZER_EXPORT GpuResOptions {
+  BufferUsage usage;
+  CPUAccess cpu_access;  // defined render_system
+  uint32_t target;
+  GpuResType type;
+  GpuResOptions();
+};
+
 AZER_EXPORT std::ostream& operator << (std::ostream& os, const GpuResType& res);
 
 class AZER_EXPORT GpuResource : public ::base::RefCounted<GpuResource> {
  public:
-  GpuResource(const GpuResOptions& opt, GpuResType type);
+  GpuResource(const GpuResOptions& opt);
   virtual ~GpuResource();
-
-  GpuResType resource_type() const { return resource_type_;}
 
   virtual void SetName(const std::string& name) = 0;
   virtual GpuResLockDataPtr map(MapType flags) = 0;
   virtual void unmap() = 0;
   virtual bool CopyTo(GpuResource* res) = 0;
   virtual NativeGpuResourceHandle native_handle() = 0;
+
+  GpuResType resource_type() const { return resource_options_.type;}
   const GpuResOptions& resource_options() const { return resource_options_;}
  private:
   const GpuResOptions resource_options_;
-  const GpuResType resource_type_;
   DISALLOW_COPY_AND_ASSIGN(GpuResource);
 };
 
@@ -84,6 +85,4 @@ class AZER_EXPORT AutoBufferLock {
 };
 
 AZER_EXPORT const GpuResOptions& kVertexBufferOpt();
-AZER_EXPORT const GpuResOptions& kIndicesBufferOpt();
-AZER_EXPORT const GpuResOptions& kShaderConstsTableBufferOpt();
 }  // namespace azer

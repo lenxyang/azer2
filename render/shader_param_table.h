@@ -10,7 +10,7 @@
 #include "azer/render/common.h"
 #include "azer/render/gpu_resource.h"
 #include "azer/render/gpu_resource_view.h"
-#include "azer/render/structured_buffer.h"
+#include "azer/render/gpu_buffer.h"
 
 namespace azer {
 
@@ -83,7 +83,7 @@ class AZER_EXPORT ShaderParamTable : public ::base::RefCounted<ShaderParamTable>
   ShaderParamTable(int32_t num, const Desc* desc);
   virtual ~ShaderParamTable() {}
 
-  StructuredGpuBuffer* gpu_buffer() { return gpu_buffer_.get();}
+  GpuBuffer* gpu_buffer() { return gpu_buffer_.get();}
   void flush(Renderer*);
 
   // set value to gpu constants
@@ -113,7 +113,7 @@ class AZER_EXPORT ShaderParamTable : public ::base::RefCounted<ShaderParamTable>
   std::vector<Variable> constants_;
   std::unique_ptr<uint8_t[]> data_;
   int32_t size_;
-  scoped_refptr<StructuredGpuBuffer> gpu_buffer_;
+  scoped_refptr<GpuBuffer> gpu_buffer_;
   DISALLOW_COPY_AND_ASSIGN(ShaderParamTable);
 };
 

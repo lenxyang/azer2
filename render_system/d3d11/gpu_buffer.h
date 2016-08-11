@@ -2,7 +2,7 @@
 
 #include "azer/render_system/d3d11/d3d11.h"
 #include "azer/render/gpu_resource_view.h"
-#include "azer/render/structured_buffer.h"
+#include "azer/render/gpu_buffer.h"
 
 namespace azer {
 namespace d3d11 {
@@ -46,7 +46,7 @@ class D3DBufferResView: public ShaderResView {
   DISALLOW_COPY_AND_ASSIGN(D3DBufferResView);
 };
 
-class D3DBufferUAView: public UnorderAccessResView {
+class D3DBufferUAView: public UnorderAccessView {
  public:
   D3DBufferUAView(GpuResource* buffer);
   ~D3DBufferUAView() override;

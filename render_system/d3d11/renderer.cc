@@ -8,9 +8,9 @@
 #include "azer/render/render_system.h"
 #include "azer/render_system/d3d11/blending.h"
 #include "azer/render_system/d3d11/depth_buffer.h"
+#include "azer/render_system/d3d11/gpu_buffer.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/sampler_state.h"
-#include "azer/render_system/d3d11/structured_buffer.h"
 #include "azer/render_system/d3d11/render_target.h"
 #include "azer/render_system/d3d11/renderer.h"
 #include "azer/render_system/d3d11/technique.h"
@@ -151,7 +151,7 @@ void D3DRenderer::BindVertexBufferGroup(VertexBufferGroup* vbg) {
 
 void D3DRenderer::BindIndicesBuffer(IndicesBuffer* vib) {
   if (vib) {
-    D3DStructuredGpuBuffer* strbuf = (D3DStructuredGpuBuffer*)vib->gpu_buffer();
+    D3DGpuBuffer* strbuf = (D3DGpuBuffer*)vib->gpu_buffer();
     ID3D11Buffer* buffer = strbuf->object();
     d3d_context_->IASetIndexBuffer(buffer, TranslateIndexType(vib->type()), 0);
   } else {
@@ -297,7 +297,7 @@ void D3DRenderer::DispatchComputeTask(const GpuTaskParams& params) {
 void D3DRenderer::BindShaderParamTable(RenderPipelineStage stage, int index,
                                        ShaderParamTable* table) {
   const int count = D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT;
-  D3DStructuredGpuBuffer* strbuf = (D3DStructuredGpuBuffer*)table->gpu_buffer();
+  D3DGpuBuffer* strbuf = (D3DGpuBuffer*)table->gpu_buffer();
   ID3D11Buffer* buffers[count] = {0};
   buffers[0] = (strbuf != NULL) ? strbuf->object() : NULL;
   switch (stage) {
@@ -422,7 +422,7 @@ void D3DRenderer::SetShaderResource(RenderPipelineStage stage, int index,
 }
 
 void D3DRenderer::SetShaderUAResource(RenderPipelineStage stage, int index, 
-                                      int count, UnorderAccessResViewPtr* resarr) {
+                                      int count, UnorderAccessViewPtr* resarr) {
   const int kMaxShaderTexCount = 8; // D3D11_1_UAV_SLOT_COUNT;
   DCHECK_LT(count, kMaxShaderTexCount);
   ID3D11UnorderedAccessView* views[kMaxShaderTexCount] = {0};
