@@ -73,6 +73,10 @@ class AZER_EXPORT RenderSystem {
   virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;
   virtual TexturePtr CreateTexture(const Texture::Options& opt,
                                    const ImageData* image) = 0;
+  virtual GpuBufferPtr CreateBuffer(const GpuResOptions&, int count, int strip) = 0;
+  virtual GpuBufferPtr CreateBufferWithData(
+      const GpuResOptions& o, int count, int strip, const uint8_t* data) = 0;
+
   virtual StructuredGpuBufferPtr CreateStructuredBuffer(
       const GpuResOptions& opt, int count, int strip) = 0;
   virtual StructuredGpuBufferPtr CreateStructuredBufferWithData(

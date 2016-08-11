@@ -15,6 +15,8 @@ shared_library("d3d11") {
     "enum_transform.h",
     "gpu_res_lock_helper.cc",
     "gpu_res_lock_helper.h",
+    "gpu_buffer.cc",
+    "gpu_buffer.h",
     "plugin.cc",
     "plugin.h",
     "rasterizer_state.cc",

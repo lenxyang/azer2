@@ -159,8 +159,7 @@ void D3DRenderer::BindIndicesBuffer(IndicesBuffer* vib) {
   }
 }
 
-void D3DRenderer::SetStreamOutTargets(GpuResource** buffer, int count, 
-                                      int offset) {
+void D3DRenderer::SetStreamOutTargets(GpuResource** buffer, int count, int offset) {
   const int kMaxBufferCount = 64;
   DCHECK_LT(count, kMaxBufferCount);
   ID3D11Buffer* buffers[kMaxBufferCount] = { 0 };
