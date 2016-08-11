@@ -184,6 +184,10 @@ D3D11_BIND_FLAG TranslateBindTarget(uint32_t target) {
   if (target & kBindTargetStreamOut) {
     flags |= D3D11_BIND_STREAM_OUTPUT;
   }
+
+  if (target & kBindTargetContantBuffer) {
+    flags |= D3D11_BIND_CONSTANT_BUFFER;
+  }
   return (D3D11_BIND_FLAG)flags;
 }
 

@@ -56,6 +56,7 @@ bool D3DGpuBuffer::Init(D3DRenderSystem* rs, const uint8_t* data) {
   ID3D11Device* d3ddevice = rs->GetDevice();
   D3D11_BUFFER_DESC desc;
   GenBufferDesc(resource_options(), &desc);
+
   desc.ByteWidth = this->size();
   if ((uint32_t)resource_type() & (uint32_t)GpuResType::kStructuredBuffer) {
     desc.StructureByteStride = strip();

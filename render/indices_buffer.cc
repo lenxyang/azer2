@@ -87,6 +87,7 @@ IndicesBuffer::IndicesBuffer(const IndicesData* data)
   CHECK(rs) << "RenderSystem Not Initialized";
   static GpuResOptions resopt;
   resopt.target = kBindTargetIndicesBuffer;
+  resopt.type = GpuResType::kIndicesBuffer;
   gpu_buffer_ = rs->CreateBufferWithData(resopt, 1, data->size(), data->pointer());
   CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }

@@ -272,7 +272,7 @@ VertexDesc* VertexData::vertex_desc() {
 }
 
 VertexBuffer::VertexBuffer(const GpuResOptions &opt)
-    : GpuResource(opt, GpuResType::kVertexBuffer)
+    : GpuResource(opt)
     , element_size_(-1)
     , buffer_size_(-1)
     , vertex_count_(-1) {

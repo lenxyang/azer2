@@ -50,12 +50,13 @@ GpuResOptions FromTexOptions(const Texture::Options& opt) {
   o.usage = opt.usage;
   o.cpu_access = opt.cpu_access;
   o.target = opt.target;
+  o.type = GpuResType::kTexture;
   return o;
 }
 }
 
 Texture::Texture(const Options& opt) 
-    : GpuResource(FromTexOptions(opt), GpuResType::kTexture),
+    : GpuResource(FromTexOptions(opt)),
       options_(opt) {
 }
 

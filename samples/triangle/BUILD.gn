@@ -1,7 +1,24 @@
+group("triangle") {
+  deps = [
+    ":vertex_triangle",
+    ":ndc_triangle",
+  ]
+}
 
-executable("triangle") {
-  output_name = "azer_samples_triangle"
-  sources = [ "main.cc", ]
+
+executable("ndc_triangle") {
+  output_name = "azer_samples_ndc_triangle"
+  sources = [ "ndc_triangle.cc", ]
+  deps = [
+    "//azer/ui",
+    "//azer",
+    "//azer/util/geometry",
+  ]
+}
+
+executable("vertex_triangle") {
+  output_name = "azer_samples_vertex_triangle"
+  sources = [ "vertex_triangle.cc", ]
   deps = [
     "//azer/ui",
     "//azer",
