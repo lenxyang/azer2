@@ -37,9 +37,7 @@ class D3DRenderSystem : public RenderSystem {
 
   RendererPtr CreateRenderer(RenderTargetPtrs* targets, DepthBuffer* depth) override;
   BlendingPtr CreateBlending(const Blending::BlendDesc& desc) override;
-  VertexBufferGroupPtr CreateVertexBufferGroup(VertexDesc* desc) override;
-  VertexBufferPtr CreateVertexBuffer(const GpuResOptions& opt,
-                                     SlotVertexData* data) override;
+  VertexLayoutPtr CreateVertexLayout(VertexDesc* desc) override;
   // texutre functions
   TexturePtr CreateTexture(const Texture::Options& opt) override;
   TexturePtr CreateTexture(const Texture::Options& opt,

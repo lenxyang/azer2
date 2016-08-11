@@ -171,7 +171,7 @@ EntityPtr CreateGeoPointsList(PrimitiveTopology primitive, const Vector3* points
     vpack.next(1);
   }
 
-  VertexBufferGroupPtr vb = CreateVertexBufferGroup(kVertexBufferOpt(), vdata.get());
+  VertexBufferGroupPtr vb = new VertexBufferGroup(vdata.get());
   EntityPtr entity(new Entity(vb.get()));
   entity->set_vmin(vmin);
   entity->set_vmax(vmax);

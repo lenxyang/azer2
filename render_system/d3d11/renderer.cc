@@ -16,7 +16,6 @@
 #include "azer/render_system/d3d11/technique.h"
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/texture_view.h"
-#include "azer/render_system/d3d11/vertex_buffer.h"
 #include "azer/render_system/d3d11/vertex_layout.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 
@@ -126,14 +125,12 @@ void D3DRenderer::ResetBlending() {
   d3d_context_->OMSetBlendState(NULL, NULL, 0xffffffff);
 }
 
-void D3DRenderer::BindVertexBuffer(VertexBuffer* vvb) {
-  if (vvb) {
-    DCHECK(typeid(*vvb) == typeid(D3DVertexBuffer));
-    D3DVertexBuffer* vb = static_cast<D3DVertexBuffer*>(vvb);
+void D3DRenderer::BindVertexBuffer(VertexBuffer* vb) {
+  if (vb) {
     D3DVertexLayout* layout = static_cast<D3DVertexLayout*>(vb->vertex_layout());
     UINT stride = vb->element_size();
     UINT offset = 0;
-    ID3D11Buffer* buf = vb->buffer();
+    ID3D11Buffer* buf = (ID3D11Buffer*)(vb->gpu_buffer()->native_handle());
     d3d_context_->IASetInputLayout(layout->input_layout());
     d3d_context_->IASetVertexBuffers(0, 1, &buf, &stride, &offset);
   } else {
@@ -142,12 +139,11 @@ void D3DRenderer::BindVertexBuffer(VertexBuffer* vvb) {
 }
 
 void D3DRenderer::BindVertexBufferGroup(VertexBufferGroup* vbg) {
-  DCHECK(typeid(*vbg) == typeid(D3DVertexBufferGroup));
-  D3DVertexBufferGroup* vg = static_cast<D3DVertexBufferGroup*>(vbg);
-  D3DVertexLayout* layout = static_cast<D3DVertexLayout*>(vg->vertex_layout());
+  D3DVertexLayout* layout = (D3DVertexLayout*)(vbg->vertex_layout());
   d3d_context_->IASetInputLayout(layout->input_layout());
-  d3d_context_->IASetVertexBuffers(0, vg->vertex_buffer_count(),
-                                   vg->buffer(), vg->strides(), vg->offsets());
+  d3d_context_->IASetVertexBuffers(0, vbg->vertex_buffer_count(),
+                                   (ID3D11Buffer**)vbg->handle(),
+                                   vbg->stride(), vbg->offset());
 }
 
 void D3DRenderer::BindIndicesBuffer(IndicesBuffer* vib) {
@@ -160,15 +156,14 @@ void D3DRenderer::BindIndicesBuffer(IndicesBuffer* vib) {
   }
 }
 
-void D3DRenderer::SetStreamOutTargets(GpuResource** buffer, int count, int offset) {
+void D3DRenderer::SetStreamOutTargets(VertexBuffer** buffer, int count, int offset) {
   const int kMaxBufferCount = 64;
   DCHECK_LT(count, kMaxBufferCount);
   ID3D11Buffer* buffers[kMaxBufferCount] = { 0 };
   uint32_t offsets[kMaxBufferCount] = { 0 };
   for (int i = 0; i < count; ++i) {
-    DCHECK(dynamic_cast<D3DVertexBuffer*>(*(buffer + i)));
-    D3DVertexBuffer* vb = static_cast<D3DVertexBuffer*>(*(buffer + i));
-    buffers[i] = vb->buffer();
+    VertexBuffer* vb = buffer[i];
+    buffers[i] = (ID3D11Buffer*)vb->gpu_buffer()->native_handle();
   }
 
   d3d_context_->SOSetTargets(count, buffers, offsets);

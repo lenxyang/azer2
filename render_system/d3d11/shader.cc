@@ -6,7 +6,6 @@
 #include "azer/base/string.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
-#include "azer/render_system/d3d11/vertex_buffer.h"
 #include "azer/render_system/d3d11/vertex_layout.h"
 
 namespace azer {

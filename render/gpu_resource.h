@@ -84,5 +84,4 @@ class AZER_EXPORT AutoBufferLock {
   DISALLOW_COPY_AND_ASSIGN(AutoBufferLock);
 };
 
-AZER_EXPORT const GpuResOptions& kVertexBufferOpt();
 }  // namespace azer

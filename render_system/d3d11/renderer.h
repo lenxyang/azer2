@@ -40,7 +40,7 @@ class D3DRenderer : public Renderer {
                            int count, UnorderAccessViewPtr* resarr) override;
   void SetShaderSamplerState(RenderPipelineStage stage, int index, 
                              int count, SamplerStatePtr* sampler) override;
-  void SetStreamOutTargets(GpuResource** buffer, int count, int offset) override;
+  void SetStreamOutTargets(VertexBuffer** buffer, int count, int offset) override;
   void ResetShader(RenderPipelineStage stage) override;
   void SetShader(int stage, Shader* shader) override;
 

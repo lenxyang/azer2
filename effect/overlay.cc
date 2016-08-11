@@ -58,7 +58,7 @@ Overlay::Overlay() {
     vpack.next(1);
   }
 
-  vb_ = rs->CreateVertexBuffer(kVertexBufferOpt(), vdata.get());
+  vb_ = new VertexBuffer(vdata.get());
   state_ = rs->CreateRasterizerState();
   state_->SetCullingMode(kCullNone);
   blending_ = g_blending_instance.Pointer()->blending();

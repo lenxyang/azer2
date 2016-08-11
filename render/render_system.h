@@ -66,9 +66,7 @@ class AZER_EXPORT RenderSystem {
   virtual TechniquePtr CreateTechnique() = 0;
 
   // create gpu buffers
-  virtual VertexBufferGroupPtr CreateVertexBufferGroup(VertexDesc* desc) = 0;
-  virtual VertexBufferPtr CreateVertexBuffer(const GpuResOptions& opt,
-                                             SlotVertexData* vdata) = 0;
+  virtual VertexLayoutPtr CreateVertexLayout(VertexDesc* desc) = 0;
   // textures functions
   virtual TexturePtr CreateTexture(const Texture::Options& opt) = 0;
   virtual TexturePtr CreateTexture(const Texture::Options& opt,

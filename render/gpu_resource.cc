@@ -20,12 +20,6 @@ GpuResource::GpuResource(const GpuResOptions& opt)
 GpuResource::~GpuResource() {
 }
 
-const GpuResOptions& kVertexBufferOpt() {
-  static GpuResOptions opt;
-  opt.target = kBindTargetVertexBuffer;
-  return opt;
-}
-
 std::ostream& operator << (std::ostream& os, const GpuResType& res) {
   switch (res) {
     case GpuResType::kVertexBuffer: os << "VertexBufferRes"; break;

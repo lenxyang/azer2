@@ -22,7 +22,6 @@
 #include "azer/render_system/d3d11/texture.h"
 #include "azer/render_system/d3d11/texture_view.h"
 #include "azer/render_system/d3d11/vertex_layout.h"
-#include "azer/render_system/d3d11/vertex_buffer.h"
 
 namespace azer {
 namespace d3d11 {
@@ -71,19 +70,10 @@ const StringType& D3DRenderSystem::short_name() const {
   return short_name_;
 }
 
-VertexBufferPtr D3DRenderSystem::CreateVertexBuffer(
-    const GpuResOptions& opt, SlotVertexData* dataptr) {
-  scoped_refptr<D3DVertexBuffer> vertex_buffer(new D3DVertexBuffer(opt));
-  if (vertex_buffer->Init(dataptr, this)) {
-    return vertex_buffer;
-  } else {
-    return VertexBufferPtr();
-  }
-}
-
-VertexBufferGroupPtr D3DRenderSystem::CreateVertexBufferGroup(VertexDesc* desc) {
-  scoped_refptr<D3DVertexBufferGroup> ptr(new D3DVertexBufferGroup(desc, this));
-  return ptr;
+VertexLayoutPtr D3DRenderSystem::CreateVertexLayout(VertexDesc* desc) {
+  VertexLayoutPtr layout = new D3DVertexLayout(desc);
+  CHECK(layout->Init(this));
+  return layout;
 }
 
 ShaderPtr D3DRenderSystem::CreateShader(const ShaderInfo& info, VertexDesc* desc) {
