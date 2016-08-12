@@ -121,9 +121,21 @@ TechniquePtr D3DRenderSystem::CreateTechnique() {
 TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
                                           const ImageData* img) {
   Texture::Options texopt = opt;
-  texopt.size = gfx::Size(img->width(), img->height());
-  texopt.format = (TexFormat)img->data_format();
-  texopt.type = (TexType)img->textype();
+  if (img) {
+    if (texopt.size.width() == 0 && texopt.size.height() == 0) {
+      texopt.size = gfx::Size(img->width(), img->height());
+    }
+    if (texopt.format != TexFormat::kUndefined) {
+      texopt.format = (TexFormat)img->data_format();
+    }
+    if (texopt.type != TexType::kUnknown) {
+      texopt.type = (TexType)img->textype();
+    }
+    CHECK_EQ(texopt.size.width(), img->width());
+    CHECK_EQ(texopt.size.height(), img->height());
+    CHECK_EQ(texopt.format, (TexFormat)img->data_format());
+    CHECK_EQ(texopt.type, (TexType)img->textype());
+  }
   scoped_refptr<D3DTexture> tex;
   if (texopt.type == TexType::k2D) {
     tex = new D3DTexture2D(texopt, this);
@@ -135,31 +147,14 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
     NOTREACHED();
     return TexturePtr();
   }
-  if (tex->InitFromImage(img)) {
-    return tex;
+  bool ret = false;
+  if (img) {
+    ret = tex->InitFromImage(img);
   } else {
-    return TexturePtr();
-  }
-}
-
-TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt) {
-  scoped_refptr<D3DTexture> ptr;
-  if (opt.type == TexType::k2D) {
-    ptr = new D3DTexture2D(opt, this);
-  } else if (opt.type == TexType::kCubemap) {
-    ptr = new D3DTextureCubeMap(opt, this);
-  } else if (opt.type == TexType::k2DArray) {
-    ptr = new D3DTexture2DArray(opt, this);
-  } else {
-    CHECK(false) << "Unsupport Texture Type: " << opt.type;
-    return TexturePtr();
+    ret = tex->Init(NULL);
   }
 
-  if (ptr->Init(NULL)) {
-    return ptr;
-  } else {
-    return TexturePtr();
-  }
+  return (ret ? tex : TexturePtr());
 }
 
 SamplerStatePtr D3DRenderSystem::CreateSamplerState(
@@ -202,17 +197,8 @@ BlendingPtr D3DRenderSystem::CreateBlending(const Blending::BlendDesc& desc) {
 }
 
 GpuBufferPtr D3DRenderSystem::CreateBuffer(const GpuResOptions& opt, 
-                                           int count, int strip) {
-  scoped_refptr<D3DGpuBuffer> buf(new D3DGpuBuffer(opt, count, strip));
-  if (buf->Init(this, NULL)) {
-    return buf;
-  } else {
-    return NULL;
-  }
-}
-
-GpuBufferPtr D3DRenderSystem::CreateBufferWithData(
-    const GpuResOptions& opt, int count, int strip, const uint8_t* data) {
+                                           int count, int strip,
+                                           const uint8_t* data) {
   scoped_refptr<D3DGpuBuffer> buf(new D3DGpuBuffer(opt, count, strip));
   if (buf->Init(this, data)) {
     return buf;

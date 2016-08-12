@@ -27,7 +27,7 @@ ShaderParamTable::ShaderParamTable(int32_t num, const Desc* desc) {
   static GpuResOptions resopt;
   resopt.target = kBindTargetContantBuffer;
   resopt.type = GpuResType::kConstantTable;
-  gpu_buffer_ = rs->CreateBuffer(resopt, 1, size_);
+  gpu_buffer_ = rs->CreateBuffer(resopt, 1, size_, NULL);
   CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }
 

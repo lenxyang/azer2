@@ -88,7 +88,7 @@ IndicesBuffer::IndicesBuffer(const IndicesData* data)
   static GpuResOptions resopt;
   resopt.target = kBindTargetIndicesBuffer;
   resopt.type = GpuResType::kIndicesBuffer;
-  gpu_buffer_ = rs->CreateBufferWithData(resopt, 1, data->size(), data->pointer());
+  gpu_buffer_ = rs->CreateBuffer(resopt, 1, data->size(), data->pointer());
   CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }
 
@@ -98,7 +98,7 @@ IndicesBuffer::IndicesBuffer(const GpuResOptions& opt, const IndicesData* data)
   RenderSystem* rs = RenderSystem::Current();
   CHECK(rs) << "RenderSystem Not Initialized";
   CHECK(opt.target & kBindTargetIndicesBuffer);
-  gpu_buffer_ = rs->CreateBufferWithData(opt, 1, data->size(), data->pointer());
+  gpu_buffer_ = rs->CreateBuffer(opt, 1, data->size(), data->pointer());
   CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }
 

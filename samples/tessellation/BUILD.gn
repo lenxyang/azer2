@@ -1,0 +1,33 @@
+
+group("tessellation") {
+  deps = [
+    ":triangle",
+    ":quad",
+  ]
+}
+
+executable("triangle") {
+  output_name = "azer_samples_tessellation_triangle"
+  sources = [
+    "triangle.cc",
+  ]
+
+  deps = [
+    "//azer",
+    "//azer/util/geometry",
+    "//azer/ui",
+  ]
+}
+
+executable("quad") {
+  output_name = "azer_samples_tessellation_quad"
+  sources = [
+    "quad.cc",
+  ]
+
+  deps = [
+    "//azer",
+    "//azer/util/geometry",
+    "//azer/ui",
+  ]
+}

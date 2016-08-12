@@ -39,7 +39,6 @@ class D3DRenderSystem : public RenderSystem {
   BlendingPtr CreateBlending(const Blending::BlendDesc& desc) override;
   VertexLayoutPtr CreateVertexLayout(VertexDesc* desc) override;
   // texutre functions
-  TexturePtr CreateTexture(const Texture::Options& opt) override;
   TexturePtr CreateTexture(const Texture::Options& opt,
                            const ImageData* image) override;
   SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) override;
@@ -47,9 +46,8 @@ class D3DRenderSystem : public RenderSystem {
                                    Texture* tex) override;
   TextureUAViewPtr CreateTextureUAView(const TextureUAView::Options& opt, 
                                        Texture* tex) override;
-  GpuBufferPtr CreateBuffer(const GpuResOptions&, int count, int strip) override;
-  GpuBufferPtr CreateBufferWithData(
-      const GpuResOptions& o, int count, int strip, const uint8_t* data) override;
+  GpuBufferPtr CreateBuffer(const GpuResOptions&, int count, int strip,
+                            const uint8_t* data) override;
   ShaderResViewPtr CreateBufferShaderResView(GpuBuffer* buffer) override;
   UnorderAccessViewPtr CreateBufferUAView(GpuBuffer* buffer) override;
 

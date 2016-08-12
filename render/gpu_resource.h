@@ -32,11 +32,13 @@ class AZER_EXPORT GpuResLockData: public ::base::RefCounted<GpuResLockData> {
 
 enum class GpuResType {
   kUnknown           = 0x0000,
-  kVertexBuffer      = 0x0001,
-  kIndicesBuffer     = 0x0002,
-  kStructuredBuffer  = 0x0004,
-  kConstantTable     = 0x0008,
-  kTexture           = 0x0010,
+  kCommonBuffer      = 0x0001,
+  kVertexBuffer      = 0x0010,
+  kIndicesBuffer     = 0x0020,
+  kStructuredBuffer  = 0x0040,
+  kConstantTable     = 0x0080,
+  kTexture           = 0x0100,
+    
 };
 
 struct AZER_EXPORT GpuResOptions {

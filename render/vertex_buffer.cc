@@ -161,8 +161,7 @@ void VertexBuffer::InitGpuBuffer(const GpuResOptions& options,
   RenderSystem* rs = RenderSystem::Current();
   CHECK(rs) << "RenderSystem Not Initialized";
   layout_ = rs->CreateVertexLayout(vdata->vertex_desc());
-  gpu_buffer_ = rs->CreateBufferWithData(options, 1, vdata->buffer_size(),
-                                         vdata->pointer());
+  gpu_buffer_ = rs->CreateBuffer(options, 1, vdata->buffer_size(), vdata->pointer());
   CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }
 

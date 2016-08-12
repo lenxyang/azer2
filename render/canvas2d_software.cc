@@ -61,7 +61,7 @@ bool SoftwareCanvas2D::InitTexture() {
   opt.usage = kBufferDynamic;
   opt.cpu_access = kCPUWrite;
   RenderSystem* rs = RenderSystem::Current();
-  texture_ = rs->CreateTexture(opt);
+  texture_ = rs->CreateTexture(opt, NULL);
   if (!texture_.get()) {
     return false;
   }

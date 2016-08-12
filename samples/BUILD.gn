@@ -3,5 +3,6 @@ group("samples") {
   deps = [
     "triangle",
     "compute_shader",
+    "tessellation",
   ]
 }

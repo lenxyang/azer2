@@ -52,7 +52,7 @@ void StructuredGpuBuffer::InitGpuBuffer(const GpuResOptions& options,
                                         const uint8_t* data) {
   RenderSystem* rs = RenderSystem::Current();
   CHECK(rs) << "RenderSystem Not Initialized";
-  gpu_buffer_ = rs->CreateBuffer(options, 1, size());
+  gpu_buffer_ = rs->CreateBuffer(options, count, strip, data);
   CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
 }
 }  // namespace azer
