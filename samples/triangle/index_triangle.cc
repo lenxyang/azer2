@@ -150,7 +150,7 @@ class MyRenderWindow : public azer::SampleMainframe {
   SimpleEffectPtr effect_;
   azer::Camera camera_;
   VertexBufferPtr vb_;
-  IndexBufferPtr ib_;
+  IndicesBufferPtr ib_;
   DISALLOW_COPY_AND_ASSIGN(MyRenderWindow);
 };
 
@@ -195,9 +195,6 @@ void MyRenderWindow::OnInit() {
   CHECK(ipack.WriteAndAdvance(0));
   CHECK(ipack.WriteAndAdvance(1));
   CHECK(ipack.WriteAndAdvance(2));
-  EntityDataPtr edata(new EntityData(vdata.get(), idata.get()));
-  edata->AddSubset(Subset(0, 3, 0, 3));
-  entity_ = new Entity(edata.get());
 }
 
 void MyRenderWindow::OnUpdateFrame(const FrameArgs& args) {
@@ -212,5 +209,4 @@ void MyRenderWindow::OnRenderFrame(const FrameArgs& args, Renderer* renderer) {
   effect_->SetWorld(Matrix4::kIdentity);
   effect_->SetColor(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
   renderer->BindEffect(effect_.get());
-  entity_->Draw(renderer);
 }
