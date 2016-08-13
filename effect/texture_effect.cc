@@ -13,44 +13,42 @@ TextureEffect::TextureEffect() : light_count_(0) {}
 TextureEffect::~TextureEffect() {}
 const char* TextureEffect::GetEffectName() const { return kEffectName;}
 
-ShaderClosurePtr TextureEffect::InitShaderClosure(RenderPipelineStage stage,
-                                                  Shader* shader) {
+ShaderClosurePtr TextureEffect::InitVertexStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+  // generate GpuTable init for stage kVertexStage
+  ShaderParamTable::Desc vs_table_desc[] = {
+    ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, pv), 1),
+    ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, world), 1),
+    ShaderParamTable::Desc("camerapos", ShaderParamType::kVector4,
+                           offsetof(vs_cbuffer, camerapos), 1),
+  };
   ShaderParamTablePtr table;
-  ShaderClosurePtr closure(new ShaderClosure(stage));
-  if (stage == kVertexStage) {
-    // generate GpuTable init for stage kVertexStage
-    ShaderParamTable::Desc vs_table_desc[] = {
-      ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, pv), 1),
-      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, world), 1),
-      ShaderParamTable::Desc("camerapos", ShaderParamType::kVector4,
-                              offsetof(vs_cbuffer, camerapos), 1),
-    };
-    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShader(shader, 1, 0, 0);
-    closure->SetShaderParamTable(0, table.get());
-  } else if (stage == kPixelStage) {
-    // generate GpuTable init for stage kPixelStage
-    ShaderParamTable::Desc ps_table_desc[] = {
-      ShaderParamTable::Desc("ambient_scalar", ShaderParamType::kFloat,
-                              offsetof(ps_cbuffer, ambient_scalar), 1),
-      ShaderParamTable::Desc("specular_scalar", ShaderParamType::kFloat,
-                              offsetof(ps_cbuffer, specular_scalar), 1),
-      ShaderParamTable::Desc("alpha", ShaderParamType::kFloat,
-                              offsetof(ps_cbuffer, alpha), 1),
-      ShaderParamTable::Desc("light_count", ShaderParamType::kInt,
-                              offsetof(ps_cbuffer, light_count), 1),
-      ShaderParamTable::Desc("lights", offsetof(ps_cbuffer, lights),
-                              sizeof(UniverseLight), arraysize(lights_)),
-    };
-    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetShader(shader, 1, 1, 0);
-    closure->SetShaderParamTable(0, table.get());
-  } else {
-    CHECK(false) << "unsupport stage: " << stage;
-  }
-
+  table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+  closure->SetShader(shader, 1, 0, 0);
+  closure->SetShaderParamTable(0, table.get());
+  return closure;
+}
+ShaderClosurePtr TextureEffect::InitPixelStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+  // generate GpuTable init for stage kPixelStage
+  ShaderParamTable::Desc ps_table_desc[] = {
+    ShaderParamTable::Desc("ambient_scalar", ShaderParamType::kFloat,
+                           offsetof(ps_cbuffer, ambient_scalar), 1),
+    ShaderParamTable::Desc("specular_scalar", ShaderParamType::kFloat,
+                           offsetof(ps_cbuffer, specular_scalar), 1),
+    ShaderParamTable::Desc("alpha", ShaderParamType::kFloat,
+                           offsetof(ps_cbuffer, alpha), 1),
+    ShaderParamTable::Desc("light_count", ShaderParamType::kInt,
+                           offsetof(ps_cbuffer, light_count), 1),
+    ShaderParamTable::Desc("lights", offsetof(ps_cbuffer, lights),
+                           sizeof(UniverseLight), arraysize(lights_)),
+  };
+  ShaderParamTablePtr table;
+  table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+  closure->SetShader(shader, 1, 1, 0);
+  closure->SetShaderParamTable(0, table.get());
   return closure;
 }
 

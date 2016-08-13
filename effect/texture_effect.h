@@ -38,7 +38,8 @@ class TextureEffect : public Effect {
   static Effect* CreateObject() { return new TextureEffect;}
  protected:
   void ApplyShaderParamTable(Renderer* renderer) override;
-  ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
+  ShaderClosurePtr InitVertexStage(Shader* shader) override;
+  ShaderClosurePtr InitPixelStage(Shader* shader) override;
 
   Matrix4 pv_;
   Matrix4 world_;

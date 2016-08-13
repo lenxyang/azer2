@@ -29,7 +29,8 @@ class OverlayEffect : public Effect {
   static Effect* CreateObject() { return new OverlayEffect;}
  protected:
   void ApplyShaderParamTable(Renderer* renderer) override;
-  ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader* shader) override;
+  ShaderClosurePtr InitVertexStage(Shader* shader) override;
+  ShaderClosurePtr InitPixelStage(Shader* shader) override;
 
   Vector4 bounds_;
   Vector4 texbounds_;

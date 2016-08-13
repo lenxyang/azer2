@@ -15,27 +15,26 @@ SkyboxEffect::SkyboxEffect() {}
 SkyboxEffect::~SkyboxEffect() {}
 const char* SkyboxEffect::GetEffectName() const { return kEffectName; }
 
-ShaderClosurePtr SkyboxEffect::InitShaderClosure(RenderPipelineStage stage,
-                                                 Shader* shader) {
+ShaderClosurePtr SkyboxEffect::InitVertexStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
   ShaderParamTablePtr table;
-  ShaderClosurePtr closure(new ShaderClosure(stage));
-  if (stage == kVertexStage) {
-    // generate GpuTable init for stage kVertexStage
-    ShaderParamTable::Desc vs_table_desc[] = {
-      ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, pv), 1),
-      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, world), 1),
-    };
+  // generate GpuTable init for stage kVertexStage
+  ShaderParamTable::Desc vs_table_desc[] = {
+    ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, pv), 1),
+    ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, world), 1),
+  };
   
-    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(0, table.get());
-    closure->SetShader(shader, 1, 0, 0);
-  } else if (stage == kPixelStage) {
-    closure->SetShader(shader, 0, 0, 0);
-  } else {
-    CHECK(false) << "unsupport stage: " << stage;
-  }
+  table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+  closure->SetShaderParamTable(0, table.get());
+  closure->SetShader(shader, 1, 0, 0);
+  return closure;
+}
+
+ShaderClosurePtr SkyboxEffect::InitPixelStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+  closure->SetShader(shader, 0, 0, 0);
   return closure;
 }
 

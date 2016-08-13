@@ -59,13 +59,13 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   void SetShaderParamTable(int stage, int index, ShaderParamTable* table);
 
   // 为每一个 shader 创建 ShaderClosure
-  virtual ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader*);
-  virtual ShaderClosurePtr InitVertexStage(RenderPipelineStage stage, Shader*);
-  virtual ShaderClosurePtr InitHullStage(RenderPipelineStage stage, Shader*);
-  virtual ShaderClosurePtr InitDomainStage(RenderPipelineStage stage, Shader*);
-  virtual ShaderClosurePtr InitGeometryStage(RenderPipelineStage stage, Shader*);
-  virtual ShaderClosurePtr InitPixelStage(RenderPipelineStage stage, Shader*);
-  virtual ShaderClosurePtr InitComputeStage(RenderPipelineStage stage, Shader*);
+  ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader*);
+  virtual ShaderClosurePtr InitVertexStage(Shader* shader);
+  virtual ShaderClosurePtr InitHullStage(Shader* shader);
+  virtual ShaderClosurePtr InitDomainStage(Shader* shader);
+  virtual ShaderClosurePtr InitGeometryStage(Shader* shader);
+  virtual ShaderClosurePtr InitPixelStage(Shader* shader);
+  virtual ShaderClosurePtr InitComputeStage(Shader* shader);
 
   // 设置 shader 的参数的值
   virtual void ApplyShaderParamTable(Renderer* renderer);

@@ -45,44 +45,44 @@ void Effect::ApplyShaderParamTable(Renderer* renderer) {
 
 ShaderClosurePtr Effect::InitShaderClosure(RenderPipelineStage stage, Shader* shader) {
   switch (stage) {
-    case kVertexStage: return InitVertexStage(stage, shader);
-    case kHullStage: return InitHullStage(stage, shader);
-    case kDomainStage: return InitDomainStage(stage, shader);
-    case kGeometryStage: return InitGeometryStage(stage, shader);
-    case kPixelStage: return InitPixelStage(stage, shader);
-    case kComputeStage: return InitComputeStage(stage, shader);
+    case kVertexStage: return InitVertexStage(shader);
+    case kHullStage: return InitHullStage(shader);
+    case kDomainStage: return InitDomainStage(shader);
+    case kGeometryStage: return InitGeometryStage(shader);
+    case kPixelStage: return InitPixelStage(shader);
+    case kComputeStage: return InitComputeStage(shader);
     default: CHECK(false) << "Not Invalid stage: " << stage;
       return ShaderClosurePtr();
   }
 }
 
-ShaderClosurePtr Effect::InitVertexStage(RenderPipelineStage stage, Shader* sd) {
-  CHECK(false) << "Unsupport stage: " << stage;
+ShaderClosurePtr Effect::InitVertexStage(Shader* shader) {
+  CHECK(false) << "Unsupport stage: " << kVertexStage;
   return ShaderClosurePtr();
 }
 
-ShaderClosurePtr Effect::InitHullStage(RenderPipelineStage stage, Shader* sd) {
-  CHECK(false) << "Unsupport stage: " << stage;
+ShaderClosurePtr Effect::InitHullStage(Shader* shader) {
+  CHECK(false) << "Unsupport stage: " << kHullStage;
   return ShaderClosurePtr();
 }
 
-ShaderClosurePtr Effect::InitDomainStage(RenderPipelineStage stage, Shader* sd) {
-  CHECK(false) << "Unsupport stage: " << stage;
+ShaderClosurePtr Effect::InitDomainStage(Shader* shader) {
+  CHECK(false) << "Unsupport stage: " << kDomainStage;
   return ShaderClosurePtr();
 }
 
-ShaderClosurePtr Effect::InitGeometryStage(RenderPipelineStage stage, Shader* sd) {
-  CHECK(false) << "Unsupport stage: " << stage;
+ShaderClosurePtr Effect::InitGeometryStage(Shader* shader) {
+  CHECK(false) << "Unsupport stage: " << kGeometryStage;
   return ShaderClosurePtr();
 }
 
-ShaderClosurePtr Effect::InitPixelStage(RenderPipelineStage stage, Shader* sd) {
-  CHECK(false) << "Unsupport stage: " << stage;
+ShaderClosurePtr Effect::InitPixelStage(Shader* shader) {
+  CHECK(false) << "Unsupport stage: " << kPixelStage;
   return ShaderClosurePtr();
 }
 
-ShaderClosurePtr Effect::InitComputeStage(RenderPipelineStage stage, Shader* sd) {
-  CHECK(false) << "Unsupport stage: " << stage;
+ShaderClosurePtr Effect::InitComputeStage(Shader* shader) {
+  CHECK(false) << "Unsupport stage: " << kComputeStage;
   return ShaderClosurePtr();
 }
 

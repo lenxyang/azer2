@@ -12,39 +12,38 @@ AmbientColorEffect::AmbientColorEffect() {}
 AmbientColorEffect::~AmbientColorEffect() {}
 const char* AmbientColorEffect::GetEffectName() const { return kEffectName;}
 
-ShaderClosurePtr AmbientColorEffect::InitShaderClosure(RenderPipelineStage stage,
-                                                       Shader* shader) {
+ShaderClosurePtr AmbientColorEffect::InitVertexStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
   ShaderParamTablePtr table;
-  ShaderClosurePtr closure(new ShaderClosure(stage));
-  if (stage == kPixelStage) {
-    // generate GpuTable init for stage kVertexStage
-    ShaderParamTable::Desc vs_table_desc[] = {
-      ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, pv), 1),
-      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, world), 1),
-      ShaderParamTable::Desc("camerapos", ShaderParamType::kVector4,
-                              offsetof(vs_cbuffer, camerapos), 1),
-    };
+  // generate GpuTable init for stage kVertexStage
+  ShaderParamTable::Desc vs_table_desc[] = {
+    ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, pv), 1),
+    ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, world), 1),
+    ShaderParamTable::Desc("camerapos", ShaderParamType::kVector4,
+                           offsetof(vs_cbuffer, camerapos), 1),
+  };
 
     
-    closure->SetShader(shader, 1, 0, 0);
-    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShaderParamTable(0, table.get());
-  } else if (stage == kPixelStage) {
-    // generate GpuTable init for stage kPixelStage
-    ShaderParamTable::Desc ps_table_desc[] = {
-      ShaderParamTable::Desc("ambient", offsetof(ps_cbuffer, ambient),
-                              sizeof(Vector4), 1),
-    };
+  closure->SetShader(shader, 1, 0, 0);
+  table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+  closure->SetShaderParamTable(0, table.get());
+  return closure;
+}
 
-    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetShader(shader, 1, 0, 0);
-    closure->SetShaderParamTable(0, table.get());
-  } else {
-    CHECK(false) << "not support stage: " << stage;
-  }
+ShaderClosurePtr AmbientColorEffect::InitPixelStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+  ShaderParamTablePtr table;
+  // generate GpuTable init for stage kPixelStage
+  ShaderParamTable::Desc ps_table_desc[] = {
+    ShaderParamTable::Desc("ambient", offsetof(ps_cbuffer, ambient),
+                           sizeof(Vector4), 1),
+  };
 
+  table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+  closure->SetShader(shader, 1, 0, 0);
+  closure->SetShaderParamTable(0, table.get());
   return closure;
 }
 
@@ -69,41 +68,40 @@ ColorEffect::ColorEffect() : light_count_(0) {}
 ColorEffect::~ColorEffect() {}
 const char* ColorEffect::GetEffectName() const { return kEffectName;}
 
-ShaderClosurePtr ColorEffect::InitShaderClosure(RenderPipelineStage stage,
-                                                Shader* shader) {
-  ShaderClosurePtr closure(new ShaderClosure(stage));
+ShaderClosurePtr ColorEffect::InitVertexStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
   ShaderParamTablePtr table;
-  if (stage == kVertexStage) {
-    // generate GpuTable init for stage kVertexStage
-    ShaderParamTable::Desc vs_table_desc[] = {
-      ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, pv), 1),
-      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, world), 1),
-      ShaderParamTable::Desc("camerapos", ShaderParamType::kVector4,
-                              offsetof(vs_cbuffer, camerapos), 1),
-    };
+  // generate GpuTable init for stage kVertexStage
+  ShaderParamTable::Desc vs_table_desc[] = {
+    ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, pv), 1),
+    ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, world), 1),
+    ShaderParamTable::Desc("camerapos", ShaderParamType::kVector4,
+                           offsetof(vs_cbuffer, camerapos), 1),
+  };
     
-    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShader(shader, 1, 0, 0);
-    closure->SetShaderParamTable(0, table.get());
-  } else if (stage == kPixelStage) {
-    // generate GpuTable init for stage kPixelStage
-    ShaderParamTable::Desc ps_table_desc[] = {
-      ShaderParamTable::Desc("mtrl", offsetof(ps_cbuffer, mtrl),
-                              sizeof(ColorMaterialData), 1),
-      ShaderParamTable::Desc("lights", offsetof(ps_cbuffer, lights),
-                              sizeof(UniverseLight), 4),
-      ShaderParamTable::Desc("light_count", ShaderParamType::kInt,
-                              offsetof(ps_cbuffer, light_count), 1),
-    };
-    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetShader(shader, 1, 0, 0);
-    closure->SetShaderParamTable(0, table.get());
-  } else {
-    CHECK(false);
-  }
+  table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+  closure->SetShader(shader, 1, 0, 0);
+  closure->SetShaderParamTable(0, table.get());
+  return closure;
+}
 
+ShaderClosurePtr ColorEffect::InitPixelStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+  ShaderParamTablePtr table;
+  // generate GpuTable init for stage kPixelStage
+  ShaderParamTable::Desc ps_table_desc[] = {
+    ShaderParamTable::Desc("mtrl", offsetof(ps_cbuffer, mtrl),
+                           sizeof(ColorMaterialData), 1),
+    ShaderParamTable::Desc("lights", offsetof(ps_cbuffer, lights),
+                           sizeof(UniverseLight), 4),
+    ShaderParamTable::Desc("light_count", ShaderParamType::kInt,
+                           offsetof(ps_cbuffer, light_count), 1),
+  };
+  table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+  closure->SetShader(shader, 1, 0, 0);
+  closure->SetShaderParamTable(0, table.get());
   return closure;
 }
 

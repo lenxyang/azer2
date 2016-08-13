@@ -13,48 +13,52 @@ TextBillboardEffect::TextBillboardEffect() {}
 TextBillboardEffect::~TextBillboardEffect() {}
 const char* TextBillboardEffect::GetEffectName() const { return kEffectName;}
 
-ShaderClosurePtr TextBillboardEffect::InitShaderClosure(RenderPipelineStage stage,
-                                                        Shader* shader) {
+ShaderClosurePtr TextBillboardEffect::InitVertexStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
   ShaderParamTablePtr table;
-  ShaderClosurePtr closure(new ShaderClosure(stage));
-  if (stage == kVertexStage) {
-    // generate GpuTable init for stage kVertexStage
-    ShaderParamTable::Desc vs_table_desc[] = {
-      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
-                              offsetof(vs_cbuffer, world), 1),
-    };
+  // generate GpuTable init for stage kVertexStage
+  ShaderParamTable::Desc vs_table_desc[] = {
+    ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
+                           offsetof(vs_cbuffer, world), 1),
+  };
   
-    table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
-    closure->SetShader(shader, 1, 0, 0);
-    closure->SetShaderParamTable(0, table.get());
-  } else if (stage == kGeometryStage) {
+  table = new ShaderParamTable(arraysize(vs_table_desc), vs_table_desc);
+  closure->SetShader(shader, 1, 0, 0);
+  closure->SetShaderParamTable(0, table.get());
+  return closure;
+}
 
-    ShaderParamTable::Desc gs_table_desc[] = {
-      ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
-                              offsetof(gs_cbuffer, pv), 1),
-      ShaderParamTable::Desc("viewup", ShaderParamType::kVector4,
-                              offsetof(gs_cbuffer, viewup), 1),
-      ShaderParamTable::Desc("viewpos", ShaderParamType::kVector4,
-                              offsetof(gs_cbuffer, viewpos), 1),
-      ShaderParamTable::Desc("param", ShaderParamType::kVector4,
-                              offsetof(gs_cbuffer, param), 1),
-    };
-    table = new ShaderParamTable(arraysize(gs_table_desc), gs_table_desc);
-    closure->SetShader(shader, 1, 0, 0);
-    closure->SetShaderParamTable(0, table.get());
-  } else if (stage == kPixelStage) {
+ShaderClosurePtr TextBillboardEffect::InitPixelStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+  ShaderParamTablePtr table;
+  // generate GpuTable init for stage kPixelStage
+  ShaderParamTable::Desc ps_table_desc[] = {
+    ShaderParamTable::Desc("diffuse", ShaderParamType::kVector4,
+                           offsetof(ps_cbuffer, diffuse), 1),
+  };
+  table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+  closure->SetShader(shader, 1, 1, 0);
+  closure->SetShaderParamTable(0, table.get());
 
-    // generate GpuTable init for stage kPixelStage
-    ShaderParamTable::Desc ps_table_desc[] = {
-      ShaderParamTable::Desc("diffuse", ShaderParamType::kVector4,
-                              offsetof(ps_cbuffer, diffuse), 1),
-    };
-    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-    closure->SetShader(shader, 1, 1, 0);
-    closure->SetShaderParamTable(0, table.get());
-  } else {
-    CHECK(false) << "unsupport stage: " << stage;
-  }
+  return closure;
+}
+
+ShaderClosurePtr TextBillboardEffect::InitGeometryStage(Shader* shader) {
+  ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+  ShaderParamTablePtr table;
+  ShaderParamTable::Desc gs_table_desc[] = {
+    ShaderParamTable::Desc("pv", ShaderParamType::kMatrix4,
+                           offsetof(gs_cbuffer, pv), 1),
+    ShaderParamTable::Desc("viewup", ShaderParamType::kVector4,
+                           offsetof(gs_cbuffer, viewup), 1),
+    ShaderParamTable::Desc("viewpos", ShaderParamType::kVector4,
+                           offsetof(gs_cbuffer, viewpos), 1),
+    ShaderParamTable::Desc("param", ShaderParamType::kVector4,
+                           offsetof(gs_cbuffer, param), 1),
+  };
+  table = new ShaderParamTable(arraysize(gs_table_desc), gs_table_desc);
+  closure->SetShader(shader, 1, 0, 0);
+  closure->SetShaderParamTable(0, table.get());
   return closure;
 }
 

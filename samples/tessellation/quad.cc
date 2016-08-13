@@ -69,51 +69,58 @@ class TessEffect : public azer::Effect {
       tb->SetValue(0, &color_, sizeof(Vector4));
     }
   }
-  ShaderClosurePtr InitShaderClosure(RenderPipelineStage stage, Shader* shader) {
-    ShaderClosurePtr closure(new ShaderClosure(stage));
-    ShaderParamTablePtr table;
-    if (stage == kVertexStage) {
-      closure->SetShader(shader, 0, 0, 0);
-    } else if (stage == kDomainStage) {
-      // generate GpuTable init for stage kVertexStage
-      ShaderParamTable::Desc ds_table_desc[] = {
-        ShaderParamTable::Desc("pvw", ShaderParamType::kMatrix4,
-                               offsetof(ds_cbuffer, pvw), 1),
-        ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
-                               offsetof(ds_cbuffer, world), 1),
-      };
-      ShaderParamTablePtr table;
-      table = new ShaderParamTable(arraysize(ds_table_desc), ds_table_desc);
-      closure->SetShader(shader, 1, 0, 0);
-      closure->SetShaderParamTable(0, table.get());
-    } else if (stage == kHullStage) {
-
-      // generate GpuTable init for stage kPixelStage
-      ShaderParamTable::Desc hs_table_desc[] = {
-        ShaderParamTable::Desc("edge", ShaderParamType::kVector4,
-                               offsetof(hs_cbuffer, edge), 1),
-        ShaderParamTable::Desc("inside", ShaderParamType::kVector4,
-                               offsetof(hs_cbuffer, inside), 1),
-      };
-      table = new ShaderParamTable(arraysize(hs_table_desc), hs_table_desc);
-      closure->SetShader(shader, 1, 0, 0);
-      closure->SetShaderParamTable(0, table.get());
-    } else if (stage == kPixelStage) {
-
-      // generate GpuTable init for stage kPixelStage
-      ShaderParamTable::Desc ps_table_desc[] = {
-        ShaderParamTable::Desc("color", ShaderParamType::kVector4,
-                               offsetof(ps_cbuffer, color), 1),
-      };
-      table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
-      closure->SetShader(shader, 1, 0, 0);
-      closure->SetShaderParamTable(0, table.get());
-    } else {
-      CHECK(false);
-    }
+  ShaderClosurePtr InitVertexStage(Shader* shader) override {
+    ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+    closure->SetShader(shader, 0, 0, 0);
     return closure;
   }
 
+  ShaderClosurePtr InitPixelStage(Shader* shader) override {
+    ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+    ShaderParamTablePtr table;
+    // generate GpuTable init for stage kPixelStage
+    ShaderParamTable::Desc ps_table_desc[] = {
+      ShaderParamTable::Desc("color", ShaderParamType::kVector4,
+                             offsetof(ps_cbuffer, color), 1),
+    };
+    table = new ShaderParamTable(arraysize(ps_table_desc), ps_table_desc);
+    closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
+    return closure;
+  }
+
+  ShaderClosurePtr InitHullStage(Shader* shader) override {
+    ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+    ShaderParamTablePtr table;
+    // generate GpuTable init for stage kPixelStage
+    ShaderParamTable::Desc hs_table_desc[] = {
+      ShaderParamTable::Desc("edge", ShaderParamType::kVector4,
+                             offsetof(hs_cbuffer, edge), 1),
+      ShaderParamTable::Desc("inside", ShaderParamType::kVector4,
+                             offsetof(hs_cbuffer, inside), 1),
+    };
+    table = new ShaderParamTable(arraysize(hs_table_desc), hs_table_desc);
+    closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
+    return closure;
+  }
+
+  ShaderClosurePtr InitDomainStage(Shader* shader) override {
+    ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+    // generate GpuTable init for stage kVertexStage
+    ShaderParamTable::Desc ds_table_desc[] = {
+      ShaderParamTable::Desc("pvw", ShaderParamType::kMatrix4,
+                             offsetof(ds_cbuffer, pvw), 1),
+      ShaderParamTable::Desc("world", ShaderParamType::kMatrix4,
+                             offsetof(ds_cbuffer, world), 1),
+    };
+    ShaderParamTablePtr table;
+    table = new ShaderParamTable(arraysize(ds_table_desc), ds_table_desc);
+    closure->SetShader(shader, 1, 0, 0);
+    closure->SetShaderParamTable(0, table.get());
+    return closure;
+  }
+  
   azer::Matrix4 pv_;
   azer::Matrix4 world_;
   Vector4 color_;

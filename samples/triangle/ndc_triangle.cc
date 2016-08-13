@@ -22,19 +22,17 @@ class SimpleEffect : public Effect {
   const char* GetEffectName() const override { return kEffectName;}
  protected:
   void ApplyShaderParamTable(Renderer* renderer) override {}
-  ShaderClosurePtr InitShaderClosure(RenderPipelineStage stage, Shader* shader) {
-    ShaderClosurePtr closure(new ShaderClosure(stage));
-    ShaderParamTablePtr table;
-    if (stage == kVertexStage) {
-      closure->SetShader(shader, 0, 0, 0);
-    } else if(stage == kPixelStage) {
-      closure->SetShader(shader, 0, 0, 0);
-    } else {
-      CHECK(false);
-    }
+  ShaderClosurePtr InitVertexStage(Shader* shader) {
+    ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+    closure->SetShader(shader, 0, 0, 0);
     return closure;
   }
 
+  ShaderClosurePtr InitPixelStage(Shader* shader) {
+    ShaderClosurePtr closure(new ShaderClosure(shader->stage()));
+    closure->SetShader(shader, 0, 0, 0);
+    return closure;
+  }
   DISALLOW_COPY_AND_ASSIGN(SimpleEffect);
 };
 const char SimpleEffect::kEffectName[] = "SimpleEffect";
