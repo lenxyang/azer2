@@ -187,8 +187,7 @@ EntityVecPtr MeshLoadUtil::LoadVertexData(const ResPath& path, VertexDesc* desc)
   Vector3 vmax = Vector3(-999999.9f, -999999.9f, -999999.9f);
   for (uint32_t i = 0; i < scene->mNumMeshes; ++i) {
     MeshData data = LoadMeshData(scene->mMeshes[i], desc);
-    VertexBufferGroupPtr vbg = CreateVertexBufferGroup(
-        kVertexBufferOpt(), data.vdata.get());
+    VertexBufferGroupPtr vbg = new VertexBufferGroup(data.vdata.get());
     IndicesBufferPtr ib(new IndicesBuffer(data.idata.get()));
     EntityPtr entity(new Entity(vbg.get(), ib.get()));
     entity->set_vmin(data.vmin);
@@ -217,8 +216,7 @@ MeshPtr MeshLoadUtil::Load(const ResPath& path, VertexDesc* desc) {
     MeshPartPtr part = new MeshPart(NULL);
     const aiMesh* paiMesh = scene->mMeshes[i];
     MeshData data = LoadMeshData(scene->mMeshes[i], desc);
-    VertexBufferGroupPtr vbg = CreateVertexBufferGroup(
-        kVertexBufferOpt(), data.vdata.get());
+    VertexBufferGroupPtr vbg = new VertexBufferGroup(data.vdata.get());
     IndicesBufferPtr ib(new IndicesBuffer(data.idata.get()));
     EntityPtr entity(new Entity(vbg.get(), ib.get()));
     entity->set_vmin(data.vmin);
