@@ -51,9 +51,9 @@ EntityData::~EntityData() {
 }
 
 // class Entity
-Entity::Entity(VertexDesc* desc) {
+Entity::Entity(VertexDesc* desc, int slot_count) {
   InitMinAndVMax(&vmin_, &vmax_);
-  vbg_ = new VertexBufferGroup(desc);
+  vbg_ = new VertexBufferGroup(desc, slot_count);
 }
 
 Entity::Entity(VertexBuffer* vb) {

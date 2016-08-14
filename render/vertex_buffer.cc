@@ -186,7 +186,7 @@ VertexBufferGroup::VertexBufferGroup(VertexDesc* vdesc, int slot_count)
   RenderSystem* rs = RenderSystem::Current();
   CHECK(rs) << "RenderSystem Not Initialized";
   layout_ = rs->CreateVertexLayout(vdesc);
-  vextor_.resize(slot_count);
+  vector_.resize(slot_count);
 }
 
 VertexBufferGroup::VertexBufferGroup(VertexData* vdata)

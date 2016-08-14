@@ -50,7 +50,7 @@ class AZER_EXPORT EntityData : public ::base::RefCounted<EntityData> {
 // class Entity
 class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
  public:
-  explicit Entity(VertexDesc* desc);
+  explicit Entity(VertexDesc* desc, int slot_count);
   explicit Entity(VertexBufferGroup* vb);
   explicit Entity(EntityData* data);
   Entity(VertexBuffer* vb);
