@@ -58,7 +58,7 @@ Entity::Entity(VertexDesc* desc) {
 
 Entity::Entity(VertexBuffer* vb) {
   InitMinAndVMax(&vmin_, &vmax_);
-  vbg_ = new VertexBufferGroup(vb->vertex_desc());
+  vbg_ = new VertexBufferGroup(vb->vertex_desc(), 1);
   SetVertexBuffer(vb, 0);
 }
 

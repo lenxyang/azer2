@@ -97,7 +97,7 @@ class AZER_EXPORT VertexBuffer : public ::base::RefCounted<VertexBuffer> {
 
 class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGroup> {
 public:
-  explicit VertexBufferGroup(VertexDesc* vdesc);
+  explicit VertexBufferGroup(VertexDesc* vdesc, int slot_count);
   explicit VertexBufferGroup(VertexData* vdata);
   ~VertexBufferGroup();
 

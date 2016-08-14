@@ -180,12 +180,13 @@ VertexDesc* VertexBuffer::vertex_desc() {
 
 
 // class VertexBufferGroup
-VertexBufferGroup::VertexBufferGroup(VertexDesc* vdesc)
+VertexBufferGroup::VertexBufferGroup(VertexDesc* vdesc, int slot_count)
     : vdesc_(vdesc),
       vertex_count_(-1) {
   RenderSystem* rs = RenderSystem::Current();
   CHECK(rs) << "RenderSystem Not Initialized";
   layout_ = rs->CreateVertexLayout(vdesc);
+  vextor_.resize(slot_count);
 }
 
 VertexBufferGroup::VertexBufferGroup(VertexData* vdata)
