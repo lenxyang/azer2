@@ -196,11 +196,20 @@ VertexBufferGroup::VertexBufferGroup(VertexData* vdata)
   CHECK(rs) << "RenderSystem Not Initialized";
   layout_ = rs->CreateVertexLayout(vdata->vertex_desc());
   int slot_count = vdata->vertex_desc()->slot_count();
+  vector_.resize(slot_count);
   for (int i = 0; i < slot_count; ++i) {
     SlotVertexData* slot_data = vdata->vertex_data_at(i);
     VertexBufferPtr vb(new VertexBuffer(slot_data));
-    add_vertex_buffer(vb.get());
+    set_vertex_buffer_at(vb.get(), i);
   }
+}
+
+VertexBufferGroup::VertexBufferGroup(VertexBuffer* vb)
+    : vdesc_(vb->vertex_desc()),
+      vertex_count_(vb->vertex_count()) {
+  layout_ = vb->vertex_layout();
+  vector_.resize(1);
+  set_vertex_buffer_at(vb, 0);
 }
 
 VertexBufferGroup::~VertexBufferGroup() {
@@ -224,22 +233,19 @@ VertexBuffer* VertexBufferGroup::vertex_buffer_at(int index) {
   return vector_[index].get();
 }
 
-void VertexBufferGroup::add_vertex_buffer(VertexBuffer* vb) {
+void VertexBufferGroup::set_vertex_buffer_at(VertexBuffer* vb, int index) {
   DCHECK(vertex_buffer_count() <= vdesc_->slot_count());
-  add_vertex_buffer_at(vb, vertex_buffer_count());
-}
-
-void VertexBufferGroup::add_vertex_buffer_at(VertexBuffer* vb, int index) {
-  DCHECK(vertex_buffer_count() <= vdesc_->slot_count());
-  DCHECK(vertex_count_ == -1 || vb->vertex_desc()->descs()[0].instance_data_step > 0
+  DCHECK(vertex_count_ == -1 || vertex_desc()->descs()[0].instance_data_step > 0
      || vertex_count_ == vb->vertex_count());
+  DCHECK_GT(vector_.size(), index);
   vertex_count_ = vb->vertex_count();
-  vector_.insert(vector_.begin() + index, vb);
+  vector_[index] = vb;
   OnVertexBufferChanged();
 }
 
-void VertexBufferGroup::remove_vertex_buffer_at(int index) {
-  vector_.erase(vector_.begin() + index);
+void VertexBufferGroup::reset_vertex_buffer_at(int index) {
+  DCHECK_GT(vector_.size(), index);
+  vector_[index] = NULL;
   OnVertexBufferChanged();
 }
 

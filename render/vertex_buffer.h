@@ -97,17 +97,17 @@ class AZER_EXPORT VertexBuffer : public ::base::RefCounted<VertexBuffer> {
 
 class AZER_EXPORT VertexBufferGroup : public ::base::RefCounted<VertexBufferGroup> {
 public:
-  explicit VertexBufferGroup(VertexDesc* vdesc, int slot_count);
   explicit VertexBufferGroup(VertexData* vdata);
+  explicit VertexBufferGroup(VertexBuffer* vb);
+  VertexBufferGroup(VertexDesc* vdesc, int slot_count);
   ~VertexBufferGroup();
 
   bool validate() const;
   int vertex_count() const { return vertex_count_;}
   int vertex_buffer_count() const { return static_cast<int>(vector_.size());}
   VertexBuffer* vertex_buffer_at(int index);
-  void add_vertex_buffer(VertexBuffer* vb);
-  void add_vertex_buffer_at(VertexBuffer* vb, int index);
-  void remove_vertex_buffer_at(int index);
+  void set_vertex_buffer_at(VertexBuffer* vb, int index);
+  void reset_vertex_buffer_at(int index);
   std::vector<VertexBufferPtr>* get_vb_vector();
 
   VertexDesc* vertex_desc();

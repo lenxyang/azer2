@@ -77,7 +77,8 @@ Entity::Entity(EntityData* data) {
 
 Entity::Entity(VertexBuffer* vb, IndicesBuffer* ib) {
   InitMinAndVMax(&vmin_, &vmax_);
-  SetVertexBuffer(vb, 0);
+  vbg_ = new VertexBufferGroup(vb->vertex_desc(), 1);
+  vbg_->set_vertex_buffer_at(vb, 0);
   ib_ = ib;
 }
 
@@ -115,7 +116,7 @@ const Subset& Entity::subset_at(int32_t index) const {
 }
 
 void Entity::SetVertexBuffer(VertexBuffer* vb, int32_t index) {
-  vbg_->add_vertex_buffer_at(vb, index);
+  vbg_->set_vertex_buffer_at(vb, index);
 }
 
 void Entity::SetIndicesBuffer(IndicesBuffer* ib) {
