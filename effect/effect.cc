@@ -43,7 +43,8 @@ ShaderClosure* Effect::GetShaderClosure(int stage) {
 void Effect::ApplyShaderParamTable(Renderer* renderer) {
 }
 
-ShaderClosurePtr Effect::InitShaderClosure(RenderPipelineStage stage, Shader* shader) {
+ShaderClosurePtr Effect::InitShaderClosure(RenderPipelineStage stage, 
+                                           Shader* shader) {
   switch (stage) {
     case kVertexStage: return InitVertexStage(shader);
     case kHullStage: return InitHullStage(shader);
