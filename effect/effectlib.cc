@@ -18,6 +18,7 @@
 #include "azer/effect/sky_effect.h"
 #include "azer/effect/texture_effect.h"
 #include "azer/effect/text_billboard_effect.h"
+#include "azer/render/render_system.h"
 #include "azer/res/grit/hlsllib.h"
 
 namespace azer {
@@ -112,6 +113,15 @@ Effect* EffectLib::GetEffect(const std::string& name) {
   } else {
     return LoadEffect(name);
   }
+}
+
+SamplerStatePtr EffectLib::default_sampler_state() {
+  if (sampler_state_.get()  == NULL) {
+    RenderSystem* rs = RenderSystem::Current();
+    SamplerState::Options sampler_options;
+    sampler_state_ = rs->CreateSamplerState(sampler_options); 
+  }
+  return sampler_state_;
 }
 
 namespace {

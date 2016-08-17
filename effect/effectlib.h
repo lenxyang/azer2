@@ -6,6 +6,7 @@
 #include "base/files/file_path.h"
 #include "base/memory/ref_counted.h"
 #include "azer/base/resource_pack.h"
+#include "azer/render/texture.h"
 
 namespace azer {
 
@@ -17,12 +18,14 @@ class EffectLib {
   EffectLib(ResourcePack* pack);
 
   static EffectLib* instance();
-
   Effect* GetEffect(const std::string& name);
+  Effect* LoadEffect(const std::string& name);
+  SamplerStatePtr default_sampler_state();
   EffectAdapterContext* adapter_context() { return adapter_context_.get();}
  private:
-  Effect* LoadEffect(const std::string& name);
   bool InitAdapterContext();
+
+  SamplerStatePtr sampler_state_;
   std::map<std::string, scoped_refptr<Effect> > effects_;
   ResourcePack* resource_pack_;
   std::unique_ptr<EffectAdapterContext> adapter_context_;

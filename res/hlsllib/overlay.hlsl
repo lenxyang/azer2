@@ -12,7 +12,7 @@ cbuffer vs_buffer : register(b0) {
 
 Texture2D tex : register(t0);
 Texture2DMS<float4> mstex : register(t0);
-SamplerState sample_state;
+SamplerState sample_state : register(s0);
 
 VsOutput vs_main(uint vertex_id : SV_VertexID) {
   VsOutput output;

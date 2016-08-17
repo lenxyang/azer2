@@ -31,6 +31,7 @@ class Overlay : public ::base::RefCounted<Overlay> {
   void UseBlending(BlendingPtr ptr) {blending_ = ptr;}
   void ResetBlending() { blending_ = NULL;}
  protected:
+  SamplerStatePtr sampler_state_;
   BlendingPtr blending_;
   VertexBufferPtr vb_;
   OverlayEffectPtr effect_;

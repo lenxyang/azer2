@@ -64,6 +64,8 @@ Overlay::Overlay() {
   blending_ = g_blending_instance.Pointer()->blending();
   bounds_ = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
   texbounds_ = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+
+  sampler_state_ = EffectLib::instance()->default_sampler_state();
 }
 
 Overlay::~Overlay() {}
@@ -84,6 +86,7 @@ void Overlay::Render(Renderer* renderer) {
 void Overlay::Draw(Renderer* renderer) {
   renderer->BindVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleStrip);
+  renderer->SetShaderSamplerState(kPixelStage, 0, 1, &sampler_state_);
   renderer->Draw(4, 0);
 }
 

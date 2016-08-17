@@ -9,7 +9,9 @@ using base::UTF8ToUTF16;
 
 IMPLEMENT_EFFECT_DYNCREATE(TextureEffect);
 const char TextureEffect::kEffectName[] = "azer::TextureEffect";
-TextureEffect::TextureEffect() : light_count_(0) {}
+TextureEffect::TextureEffect() : light_count_(0) {
+}
+
 TextureEffect::~TextureEffect() {}
 const char* TextureEffect::GetEffectName() const { return kEffectName;}
 

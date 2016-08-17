@@ -39,6 +39,7 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
 
   virtual const char* GetEffectName() const = 0;
   virtual bool Init(const TechSource& programs);
+
   Technique* technique();
   void SetTechnique(Technique* technique);
   VertexDesc* vertex_desc();
