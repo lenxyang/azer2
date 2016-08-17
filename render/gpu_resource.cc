@@ -1,8 +1,15 @@
 #include "azer/render/gpu_resource.h"
 
 namespace azer {
-GpuResLockData::GpuResLockData(uint8_t* data, int row_size, int column)
-    : data_(data), row_size_(row_size), column_num_(column) {
+GpuResLockData::GpuResLockData(uint8_t* data, int row_size, int column,
+                               ::base::Callback<void()> callback)
+    : data_(data), row_size_(row_size), column_num_(column),
+      release_callback_(callback) {
+}
+
+GpuResLockData::~GpuResLockData() {
+  DCHECK(!release_callback_.is_null());
+  release_callback_.Run();
 }
 
 // class GpuResOptions

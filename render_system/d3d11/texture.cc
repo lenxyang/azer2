@@ -84,14 +84,15 @@ void D3DTexture::Detach() {
 
 // reference: MSDN "How to: Use dynamic resources"
 GpuResLockDataPtr D3DTexture::map(MapType flags) {
-  map_helper_.reset(new GpuResLockHelper(resource_options(), texres_));
+  map_helper_ = new GpuResLockHelper(resource_options(), texres_);
   return map_helper_->map(flags);
 }
 
 void D3DTexture::unmap() {
+  CHECK(false) << "always should not called";
   CHECK(map_helper_.get());
   map_helper_->unmap();
-  map_helper_.reset();
+  map_helper_ = NULL;
 }
 
 bool D3DTexture::CopyTo(GpuResource* texres) {

@@ -50,7 +50,6 @@ bool SoftwareCanvas2D::UpdateTexture() {
                                 mapdata->data_ptr(), 
                                 mapdata->row_size(), 0, 0));
   }
-  texture_->unmap();
   return true;
 }
 

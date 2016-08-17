@@ -79,6 +79,7 @@ void Overlay::Render(Renderer* renderer) {
   effect_->SetBounds(bounds_);
   effect_->SetTexBounds(texbounds_);
   effect_->SetTexture(texture_.get());
+  renderer->SetShaderSamplerState(kPixelStage, 0, 1, &sampler_state_);
   renderer->BindEffect(effect_.get());
   Draw(renderer);
 }
@@ -86,7 +87,6 @@ void Overlay::Render(Renderer* renderer) {
 void Overlay::Draw(Renderer* renderer) {
   renderer->BindVertexBuffer(vb_.get());
   renderer->SetPrimitiveTopology(kTriangleStrip);
-  renderer->SetShaderSamplerState(kPixelStage, 0, 1, &sampler_state_);
   renderer->Draw(4, 0);
 }
 
@@ -105,6 +105,4 @@ void Overlay::SetBounds(const gfx::RectF& rect) {
 void Overlay::SetTexBounds(const gfx::RectF& rect) {
   texbounds_ = Vector4(rect.x(), rect.y(), rect.width(), rect.height());
 }
-
-Effect* Overlay::effect() { return effect_.get();}
 }  // namespace azer

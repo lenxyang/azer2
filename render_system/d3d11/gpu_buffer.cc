@@ -27,14 +27,15 @@ void D3DGpuBuffer::UpdateData(const uint8_t* data, int64_t size) {
 }
 
 GpuResLockDataPtr D3DGpuBuffer::map(MapType flags) {
-  map_helper_.reset(new GpuResLockHelper(resource_options(), bufobj_));
+  map_helper_ = new GpuResLockHelper(resource_options(), bufobj_);
   return map_helper_->map(flags);
 }
 
 void D3DGpuBuffer::unmap() {
+  CHECK(false) << "always should not called";
   CHECK(map_helper_.get());
   map_helper_->unmap();
-  map_helper_.reset();
+  map_helper_ = NULL;
 }
 
 bool D3DGpuBuffer::CopyTo(GpuResource* res) {

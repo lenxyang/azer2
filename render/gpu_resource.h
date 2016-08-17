@@ -4,6 +4,7 @@
 
 
 #include "base/memory/ref_counted.h"
+#include "base/callback.h"
 #include "azer/base/export.h"
 #include "azer/render/common.h"
 
@@ -17,7 +18,9 @@ typedef scoped_refptr<GpuResource> GpuResourcePtr;
 
 class AZER_EXPORT GpuResLockData: public ::base::RefCounted<GpuResLockData> {
  public:
-  GpuResLockData(uint8_t* data, int row_size, int column);
+  GpuResLockData(uint8_t* data, int row_size, int column,
+                 ::base::Callback<void()> release);
+  ~GpuResLockData();
   uint8_t* data_ptr() const { return data_;}
   int row_size() const { return row_size_;}
   int column_num() const { return column_num_;}
@@ -27,6 +30,7 @@ class AZER_EXPORT GpuResLockData: public ::base::RefCounted<GpuResLockData> {
   int row_size_;
   int column_num_;
   int size_;
+  ::base::Callback<void(void)> release_callback_;
   DISALLOW_COPY_AND_ASSIGN(GpuResLockData);
 };
 
@@ -67,23 +71,6 @@ class AZER_EXPORT GpuResource : public ::base::RefCounted<GpuResource> {
  private:
   const GpuResOptions resource_options_;
   DISALLOW_COPY_AND_ASSIGN(GpuResource);
-};
-
-class AZER_EXPORT AutoBufferLock {
- public:
-  AutoBufferLock(GpuResource* hbuffer, MapType flags, Renderer* renderer)
-      : hbuffer_(hbuffer) {
-    data_ = hbuffer_->map(flags);
-  }
-  ~AutoBufferLock() {
-    if (data_.get()) {
-      hbuffer_->unmap();
-    }
-  }
- private:
-  GpuResLockDataPtr data_;
-  GpuResource* hbuffer_;
-  DISALLOW_COPY_AND_ASSIGN(AutoBufferLock);
 };
 
 }  // namespace azer

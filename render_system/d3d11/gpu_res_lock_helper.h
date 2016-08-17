@@ -5,7 +5,7 @@
 
 namespace azer {
 namespace d3d11 {
-class GpuResLockHelper {
+class GpuResLockHelper : public ::base::RefCounted<GpuResLockHelper> {
  public:
   GpuResLockHelper(const GpuResOptions& options, ID3D11Resource* buffer);
   ~GpuResLockHelper();
@@ -17,5 +17,7 @@ class GpuResLockHelper {
   const GpuResOptions options_;
   DISALLOW_COPY_AND_ASSIGN(GpuResLockHelper);
 };
+
+typedef scoped_refptr<GpuResLockHelper> GpuResLockHelperPtr;
 }  // namespace d3d11
 }  // namespace azer

@@ -4,12 +4,12 @@
 #include "azer/render/common.h"
 #include "azer/render/texture.h"
 #include "azer/render_system/d3d11/d3d11.h"
+#include "azer/render_system/d3d11/gpu_res_lock_helper.h"
 
 namespace azer {
 namespace d3d11 {
 class D3DRenderer;
 class D3DRenderSystem;
-class GpuResLockHelper;
 
 class D3DTexture: public Texture {
  public:
@@ -37,7 +37,7 @@ class D3DTexture: public Texture {
   D3DRenderSystem* render_system_;
   D3D11_TEXTURE2D_DESC tex_desc_;
   int32_t diminison_;
-  std::unique_ptr<GpuResLockHelper> map_helper_;
+  GpuResLockHelperPtr map_helper_;
   DISALLOW_COPY_AND_ASSIGN(D3DTexture);
 };
 

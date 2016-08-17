@@ -1,13 +1,13 @@
 #pragma once
 
-#include "azer/render_system/d3d11/d3d11.h"
 #include "azer/render/gpu_resource_view.h"
 #include "azer/render/gpu_buffer.h"
+#include "azer/render_system/d3d11/d3d11.h"
+#include "azer/render_system/d3d11/gpu_res_lock_helper.h"
 
 namespace azer {
 namespace d3d11 {
 class D3DRenderSystem;
-class GpuResLockHelper;
 
 class D3DGpuBuffer : public GpuBuffer {
  public:
@@ -27,7 +27,7 @@ class D3DGpuBuffer : public GpuBuffer {
   }
  private:
   ID3D11Buffer* bufobj_;
-  std::unique_ptr<GpuResLockHelper> map_helper_;
+  GpuResLockHelperPtr map_helper_;
   DISALLOW_COPY_AND_ASSIGN(D3DGpuBuffer);
 };
 

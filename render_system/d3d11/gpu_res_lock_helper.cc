@@ -1,6 +1,8 @@
 #include "azer/render_system/d3d11/gpu_res_lock_helper.h"
 
 #include "base/logging.h"
+#include "base/bind.h"
+#include "base/callback.h"
 #include "azer/render/gpu_resource.h"
 #include "azer/render_system/d3d11/enum_transform.h"
 #include "azer/render_system/d3d11/render_system.h"
@@ -39,9 +41,11 @@ GpuResLockDataPtr GpuResLockHelper::map(MapType flags) {
     return NULL;
   }
 
+  ::base::Callback<void()> callback = ::base::Bind(&GpuResLockHelper::unmap, this);
   GpuResLockDataPtr data(new GpuResLockData((uint8_t*)mapped.pData,
                                             mapped.RowPitch,
-                                            mapped.DepthPitch));
+                                            mapped.DepthPitch,
+                                            callback));
   locked_ = true;
   return data;
 }

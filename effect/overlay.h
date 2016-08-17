@@ -21,7 +21,6 @@ class Overlay : public ::base::RefCounted<Overlay> {
   Overlay();
   virtual ~Overlay();
 
-  Effect* effect();
   void Draw(Renderer* rs);
   void Render(Renderer* rs);
 
