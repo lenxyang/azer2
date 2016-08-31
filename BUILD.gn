@@ -24,6 +24,11 @@ shared_library("azer") {
     "//ui/gfx/geometry",
     "//ui/views",
   ]
+
+  public_configs = [
+    "//azer/build/config:azer_code",
+    "//build/config/compiler:rtti"
+  ]
 }
 
 test("unittests") {

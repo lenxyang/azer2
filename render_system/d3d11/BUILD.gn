@@ -53,7 +53,7 @@ shared_library("d3d11") {
   defines = ["BUILD_D3D11_AZER_RENDER_SYSTEM"]
   configs += [
     "//azer/build/config:d3d11",
-    "//azer/build/config:utf8src",
+    "//azer/build/config:azer_code",
     "//build/config/compiler:rtti",
   ]
   defpath = rebase_path("../render_system.def", root_build_dir)

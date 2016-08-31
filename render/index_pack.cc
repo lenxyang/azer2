@@ -2,6 +2,7 @@
 
 #include <limits>
 #include "base/logging.h"
+#include "azer/render/entity.h"
 
 namespace azer {
 IndexPack::IndexPack(IndicesData* data) 
@@ -9,12 +10,18 @@ IndexPack::IndexPack(IndicesData* data)
       offset_(0) {
 }
 
-void IndexPack::move(int32_t step) {
+IndexPack::IndexPack(EntityData* data) 
+    : idata_(data->idata()),
+      offset_(0) {
+  CHECK(data && data->idata());
+}
+
+void IndexPack::move(int step) {
   offset_ = step * step_size();
   DCHECK(current() < pointer() + idata_->size());
 }
 
-bool IndexPack::advance(int32_t step) const {
+bool IndexPack::advance(int step) const {
   offset_ += step * step_size();
   return current() < pointer() + idata_->size();
 }
@@ -23,7 +30,7 @@ int32_t IndexPack::index() const {
   return offset_ / step_size();
 }
 
-void IndexPack::write(int32_t value) {
+void IndexPack::write(int value) {
   switch (type()) {
     case kIndexUint16:
       DCHECK(value < std::numeric_limits<uint16_t>::max());
@@ -41,7 +48,7 @@ void IndexPack::write(int32_t value) {
   }
 }
 
-uint32_t IndexPack::value(int32_t index) const {
+uint32_t IndexPack::value(int index) const {
   const uint8_t* ptr = pointer() + (step_size() * index);
   uint32_t value;
   switch (type()) {
@@ -81,7 +88,7 @@ uint32_t IndexPack::value() const {
   return value;
 }
 
-bool IndexPack::WriteAndAdvance(int32_t value) {
+bool IndexPack::WriteAndAdvance(int value) {
   if (current() - pointer() < idata_->size()) {
     write(value);
     advance();

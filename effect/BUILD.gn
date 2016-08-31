@@ -27,7 +27,7 @@ source_set("effect") {
     "//ui/views",    
   ]
 
-  configs += ["//azer/build/config:utf8src",
+  configs += ["//azer/build/config:azer_code",
               "//build/config/compiler:rtti",
               "//azer/base:build_render_config"
               ]
@@ -67,7 +67,7 @@ static_library("effectlib") {
     "//azer/util/images",
   ]
 
-  public_configs = ["//azer/build/config:utf8src",
+  public_configs = ["//azer/build/config:azer_code",
                     "//build/config/compiler:rtti"
                     ]
 }

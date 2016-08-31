@@ -48,7 +48,7 @@ static_library("interactive") {
     "//azer/util/geometry",
   ]
 
-  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/build/config:azer_code"]
   # configs += ["//azer/base:build_render_config"]
   # visibility = ["//azer"]
 }

@@ -38,7 +38,7 @@ static_library("math") {
   ]
 
   deps = ["//base:base"]
-  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/build/config:azer_code"]
 }
 
 test("math_unittest") {
@@ -56,5 +56,5 @@ test("math_unittest") {
     "//base/test:run_all_unittests",
     ":math",
   ]
-  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/build/config:azer_code"]
 }

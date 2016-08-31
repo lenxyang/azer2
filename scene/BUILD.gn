@@ -18,7 +18,7 @@ source_set("scene") {
     "//base",
   ]
 
-  configs += ["//azer/build/config:utf8src"]
+  configs += ["//azer/build/config:azer_code"]
   configs += ["//azer/base:build_render_config"]
   visibility = ["//azer"]
 }

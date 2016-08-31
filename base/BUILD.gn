@@ -1,11 +1,5 @@
 import("//testing/test.gni")
 
-config("base_config") {
-  if (is_win) {
-    cflags = ["/wd4819"]
-  }
-}
-
 config("build_render_config") {
   defines = ["BUILD_AZER_RENDER"]
 }
@@ -51,8 +45,8 @@ source_set("base") {
   ]
 
   visibility = ["//azer"]
-  public_configs = [":base_config"]
   configs += [":build_render_config"]
+  configs += ["//azer/build/config:azer_code"]
 }
 
 static_library("test_support") {

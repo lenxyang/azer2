@@ -3,19 +3,22 @@
 #include "azer/render/indices_buffer.h"
 
 namespace azer {
+class EntityData;
+
 class AZER_EXPORT IndexPack {
  public:
-  IndexPack(IndicesData* data);
+  explicit IndexPack(IndicesData* data);
+  explicit IndexPack(EntityData* data);
 
-  bool WriteAndAdvance(int32_t value);
+  bool WriteAndAdvance(int value);
   bool ReadAndAdvance(uint32_t *value) const;
   uint32_t ReadAndAdvanceOrDie() const;
 
-  void write(int32_t value);
-  void move(int32_t step);
-  bool advance(int32_t step = 1) const;
+  void write(int value);
+  void move(int step);
+  bool advance(int step = 1) const;
   uint32_t value() const;
-  uint32_t value(int32_t index) const;
+  uint32_t value(int index) const;
 
   IndexType type() const { return idata_->type();}
   int32_t index() const;

@@ -15,17 +15,17 @@ typedef scoped_refptr<Entity> EntityPtr;
 typedef scoped_refptr<EntityVec> EntityVecPtr;
 
 struct AZER_EXPORT Subset {
-  int32_t vertex_base;
-  int32_t vertex_count;
-  int32_t index_base;
-  int32_t index_count;
+  int vertex_base;
+  int vertex_count;
+  int index_base;
+  int index_count;
   PrimitiveTopology primitive;
   Vector3 vmin;
   Vector3 vmax;
 
   Subset();
-  Subset(int32_t vbase, int32_t vcount, int32_t ibase, int32_t icount);
-  Subset(int32_t vbase, int32_t vcount, int32_t ibase, int32_t icount, PrimitiveTopology type);
+  Subset(int vbase, int vcount, int ibase, int icount);
+  Subset(int vbase, int vcount, int ibase, int icount, PrimitiveTopology type);
 };
 typedef std::vector<Subset> Subsets;
 
@@ -33,7 +33,8 @@ class AZER_EXPORT EntityData : public ::base::RefCounted<EntityData> {
  public:
   explicit EntityData(VertexData* vdata);
   EntityData(VertexData* vdata, IndicesData* idata);
-  EntityData(VertexDesc* desc, int32_t count);
+  EntityData(VertexDesc* desc, int vertex_count);
+  EntityData(VertexDesc* desc, int vertex_count, int index_count);
   ~EntityData();
   
   void AddSubset(const Subset& sub) { subset_.push_back(sub);}
@@ -58,19 +59,19 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   Entity(VertexBufferGroup* vb, IndicesBuffer* ib);
   ~Entity();
   
-  void SetVertexBuffer(VertexBuffer* vb, int32_t index);
+  void SetVertexBuffer(VertexBuffer* vb, int index);
   void SetIndicesBuffer(IndicesBuffer* ib);
-  VertexBuffer* vertex_buffer_at(int32_t index);
+  VertexBuffer* vertex_buffer_at(int index);
   VertexBufferGroup* vertex_buffer_group() { return vbg_.get();}
   IndicesBuffer* indices_buffer() { return ib_.get();}
   const VertexDesc* vertex_desc() const;
   void AddSubset(const Subset& subset);
-  void RemoveSubset(int32_t index);
-  int32_t subset_count() const;
-  const Subset& subset_at(int32_t index) const;
+  void RemoveSubset(int index);
+  int subset_count() const;
+  const Subset& subset_at(int index) const;
 
   void Draw(Renderer* renderer) const;
-  void DrawSub(int32_t index, Renderer* renderer) const;
+  void DrawSub(int index, Renderer* renderer) const;
 
   EntityPtr DeepCopy();
   const Vector3& vmin() { return vmin_;}
@@ -95,9 +96,9 @@ class AZER_EXPORT EntityVec : public ::base::RefCounted<EntityVec> {
   EntityVec();
 
   Entity* AddEntity(Entity* ptr);
-  void RemoveEntityAt(int32_t index);
-  Entity* entity_at(int32_t index) { return vec_[index].get();}
-  int32_t entity_count() { return static_cast<int32_t>(vec_.size());}
+  void RemoveEntityAt(int index);
+  Entity* entity_at(int index) { return vec_[index].get();}
+  int entity_count() { return static_cast<int>(vec_.size());}
   EntityVecPtr DeepCopy();
 
   const Vector3& vmin() { return vmin_;}
