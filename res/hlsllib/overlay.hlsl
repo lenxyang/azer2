@@ -43,3 +43,10 @@ float4 ps_main(VsOutput input) : SV_TARGET {
 float4 ps_main_ms(VsOutput input) : SV_TARGET {
   return mstex.Load(input.texcoord, 0);
 };
+
+float4 depth_ps_main(VsOutput v) : SV_TARGET {
+  float d = tex.Sample(sample_state, v.texcoord).r;
+  // should not use Load, because it not always [0-1]
+  // float d = tex.Load(int3(v.pos.xy, 0));
+  return float4(d, d, d, 1.0);
+}

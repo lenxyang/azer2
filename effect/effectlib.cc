@@ -76,6 +76,8 @@ EffectData effect_data[] = {
    HLSLLIB_SKYBOX, "vs_main", 0, 0, 0, "ps_main"},
   {"OverlayEffect", OverlayEffect::kEffectName, 2,
    HLSLLIB_OVERLAY, "vs_main", 0, 0, 0, "ps_main"},
+  {"DepthOverlayEffect", OverlayEffect::kEffectName, 2,
+   HLSLLIB_OVERLAY, "vs_main", 0, 0, 0, "depth_ps_main"},
   {"MSOverlayEffect", OverlayEffect::kEffectName, 2,
    HLSLLIB_OVERLAY, "vs_main", 0, 0, 0, "ps_main_ms"},
 };

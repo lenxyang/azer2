@@ -41,5 +41,16 @@ class Overlay : public ::base::RefCounted<Overlay> {
   DISALLOW_COPY_AND_ASSIGN(Overlay);
 };
 
+class MSOverlay: public Overlay {
+ public:
+  MSOverlay();
+};
+
+
+class DepthOverlay: public Overlay {
+ public:
+  DepthOverlay();
+};
+
 typedef scoped_refptr<Overlay> OverlayPtr;
 }  // namespace azer

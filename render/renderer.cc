@@ -68,7 +68,12 @@ void Renderer::SetRenderTargets(std::vector<RenderTargetPtr>* targets) {
 }
 
 const gfx::Size& Renderer::size() const {
-  return targets_[0]->size();
+  if (!targets_.empty()) {
+    return targets_[0]->size();
+  } else {
+    CHECK(depth_.get() != NULL);
+    return depth_->size();
+  }
 }
 
 RendererPtr CreateCommonRenderer(const gfx::Size& size) {

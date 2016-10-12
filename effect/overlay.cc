@@ -91,11 +91,7 @@ void Overlay::Draw(Renderer* renderer) {
 }
 
 void Overlay::SetTexture(TextureView* tex) { 
-  if (tex->texture()->options().sample_desc.count > 1) {
-    effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("MSOverlayEffect");
-  } else {
-    effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("OverlayEffect");
-  }
+  // if (tex->texture()->options().sample_desc.count > 1) {
   texture_ = tex;
 }
 void Overlay::SetBounds(const gfx::RectF& rect) {
@@ -104,5 +100,15 @@ void Overlay::SetBounds(const gfx::RectF& rect) {
 
 void Overlay::SetTexBounds(const gfx::RectF& rect) {
   texbounds_ = Vector4(rect.x(), rect.y(), rect.width(), rect.height());
+}
+
+// class DepthOverlay
+DepthOverlay::DepthOverlay() {
+  effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("DepthOverlayEffect");
+  blending_ = NULL;
+}
+
+MSOverlay::MSOverlay() {
+  effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("MSOverlayEffect");
 }
 }  // namespace azer
