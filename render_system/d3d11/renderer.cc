@@ -197,26 +197,44 @@ void D3DRenderer::ClearDepthAndStencil(bool clear_depth, bool clear_stencil,
 }
 
 void D3DRenderer::SetShader(int stage, Shader* shader) {
-  DCHECK_EQ(shader->stage(), stage);
-  switch (shader->stage()) {
-    case kVertexStage:
-      d3d_context_->VSSetShader(((D3DVertexShader*)shader)->handle(), 0, 0);
+  DCHECK(shader == NULL || shader->stage() == stage);
+  switch (stage) {
+    case kVertexStage: {
+      ID3D11VertexShader* handle = shader ? ((D3DVertexShader*)shader)->handle()
+          : NULL;
+      d3d_context_->VSSetShader(handle, 0, 0);
       break;
-    case kGeometryStage:
-      d3d_context_->GSSetShader(((D3DGeometryShader*)shader)->handle(), 0, 0);
+    }
+    case kGeometryStage: {
+      ID3D11GeometryShader* handle = shader ? ((D3DGeometryShader*)shader)->handle()
+          : NULL;
+      d3d_context_->GSSetShader(handle, 0, 0);
       break;
-    case kDomainStage:
-      d3d_context_->DSSetShader(((D3DDomainShader*)shader)->handle(), 0, 0);
+    }
+    case kDomainStage: {
+      ID3D11DomainShader* handle = shader ? ((D3DDomainShader*)shader)->handle()
+          : NULL;
+      d3d_context_->DSSetShader(handle, 0, 0);
       break;
-    case kHullStage:
-      d3d_context_->HSSetShader(((D3DHullShader*)shader)->handle(), 0, 0);
+    }
+    case kHullStage: {
+      ID3D11HullShader* handle = shader ? ((D3DHullShader*)shader)->handle() 
+          : NULL;
+      d3d_context_->HSSetShader(handle, 0, 0);
       break;
-    case kComputeStage:
-      d3d_context_->CSSetShader(((D3DComputeShader*)shader)->handle(), 0, 0);
+    }
+    case kComputeStage: {
+      ID3D11ComputeShader* handle = shader ? ((D3DComputeShader*)shader)->handle()
+          : NULL;
+      d3d_context_->CSSetShader(handle, 0, 0);
       break;
-    case kPixelStage:
-      d3d_context_->PSSetShader(((D3DPixelShader*)shader)->handle(), 0, 0);
+    }
+    case kPixelStage: {
+      ID3D11PixelShader* handle = shader ? ((D3DPixelShader*)shader)->handle()
+          : NULL;
+      d3d_context_->PSSetShader(handle, 0, 0);
       break;
+    }
     default:
       CHECK(false) << "No such GpuProgram Type: " << (int)stage;
   }

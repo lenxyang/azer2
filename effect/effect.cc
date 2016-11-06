@@ -91,11 +91,27 @@ void Effect::SetShaderClosure(ShaderClosure* closure) {
   shaders_[(int)closure->stage()] = closure;
 }
 
+bool IsProgramableStage(int stage) {
+  switch (stage) {
+    case kVertexStage: 
+    case kHullStage:
+    case kDomainStage:
+    case kComputeStage: 
+    case kGeometryStage:
+    case kPixelStage:
+      return true;
+    default:
+      return false;
+  }
+}
+
 void Effect::Apply(Renderer* renderer) {
   ApplyShaderParamTable(renderer);
   for (int i = 0; i < (int)kRenderPipelineStageNum; ++i) {
     if (shaders_[i].get()) {
       shaders_[i]->Bind(renderer);
+    } else if (IsProgramableStage(i)) {
+      renderer->SetShader(i, NULL);
     }
   }
 }
@@ -119,8 +135,9 @@ void Effect::OnRenderBegin(Renderer* renderer) {
   // BindShaderParamTable(renderer);
   // shaders_[stage]->Bind(renderer);
   for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
-    if (!iter->get()) continue;
-    (*iter)->Bind(renderer);
+    if (iter->get()) {
+      (*iter)->Bind(renderer);
+    }
   }
 }
 
