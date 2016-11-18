@@ -66,7 +66,7 @@ inline Plane::Side Plane::GetSide(const Vector3& center,
 }
 
 inline Vector3 Plane::intersect(const Ray& ray) const {
-  return ray.position() + ray.directional() * distance(ray);
+  return ray.origin() + ray.directional() * distance(ray);
 }
 
 inline bool Plane::belong(const Vector3& pt) const {

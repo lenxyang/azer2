@@ -19,9 +19,9 @@ float Plane::distance(const Ray& ray) const {
       << ray.directional().length();
   float cos_val = normal_.dot(ray.directional());
   if (cos_val != 0.0) {
-    Vector3 ddir = point_ - ray.position();
+    Vector3 ddir = point_ - ray.origin();
     float dir = ddir.dot(ray.directional()) >= 0.0f ? 1.0 : -1.0f;
-    return dir * std::abs(distance(ray.position()) / cos_val);
+    return dir * std::abs(distance(ray.origin()) / cos_val);
   } else {
     return std::numeric_limits<float>::signaling_NaN();
   }

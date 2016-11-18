@@ -4,7 +4,7 @@
 
 namespace azer {
 Ray::Ray(const Vector3& pos, const Vector3& dir)
-    : position_(pos),
+    : origin_(pos),
       directional_(dir) {
 }
   
@@ -13,7 +13,7 @@ Ray::Ray(const Ray& ray) {
 }
 
 Ray& Ray::operator = (const Ray& ray) {
-  this->position_ = ray.position_;
+  this->origin_ = ray.origin_;
   this->directional_ = ray.directional_;
   return *this;
 }

@@ -11,9 +11,9 @@ class Ray {
   Ray& operator = (const Ray& ray);
 
   const Vector3& directional() const { return directional_;}
-  const Vector3& position() const { return position_;}
+  const Vector3& origin() const { return origin_;}
  private:
-  Vector3 position_;
+  Vector3 origin_;
   Vector3 directional_;
 };
 }  // namespace azer
