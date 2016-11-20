@@ -15,10 +15,12 @@ typedef scoped_refptr<Entity> EntityPtr;
 typedef scoped_refptr<EntityVec> EntityVecPtr;
 
 struct AZER_EXPORT Subset {
+  std::string name;
   int vertex_base;
   int vertex_count;
   int index_base;
   int index_count;
+  int mtrl_index;
   PrimitiveTopology primitive;
   Vector3 vmin;
   Vector3 vmax;

@@ -12,6 +12,7 @@ Subset::Subset()
       vertex_count(0),
       index_base(0),
       index_count(0),
+      mtrl_index(-1),
       primitive(kTriangleList) {
   InitMinAndVMax(&vmin, &vmax);
 }
@@ -21,6 +22,7 @@ Subset::Subset(int vbase, int vcount, int ibase, int icount)
       vertex_count(vcount),
       index_base(ibase),
       index_count(icount),
+      mtrl_index(-1),
       primitive(kTriangleList) {
   InitMinAndVMax(&vmin, &vmax);
 }
@@ -31,6 +33,7 @@ Subset::Subset(int vbase, int vcount, int ibase, int icount,
       vertex_count(vcount),
       index_base(ibase),
       index_count(icount),
+      mtrl_index(-1),
       primitive(type) {
   InitMinAndVMax(&vmin, &vmax);
 }
