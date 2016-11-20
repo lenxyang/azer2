@@ -39,8 +39,6 @@ static_library("effectlib") {
     "color_effect.h",
     "diffusemap_effect.cc",
     "diffusemap_effect.h",
-    "diffusemap_effect_adapter.cc",
-    "diffusemap_effect_adapter.h",
     "effectlib.cc",
     "effectlib.h",
     "material.cc",
@@ -57,8 +55,6 @@ static_library("effectlib") {
     "text_billboard_effect.h",
     "texture_effect.cc",
     "texture_effect.h",
-    "texture_effect_adapter.cc",
-    "texture_effect_adapter.h",
   ]
 
   deps = [

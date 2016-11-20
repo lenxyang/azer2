@@ -6,8 +6,6 @@
 #include "base/logging.h"
 
 #include "azer/azer.h"
-#include "azer/scene/render_node.h"
-#include "azer/scene/scene_node.h"
 
 namespace azer {
 IMPLEMENT_EFFECT_DYNCREATE(NormalLineEffect);

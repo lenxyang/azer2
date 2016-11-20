@@ -41,37 +41,4 @@ struct TextureMaterialData {
   TextureMaterialData();
 };
 
-class DiffuseMapMaterial : public BaseMaterial {
- public:
-  static const char kEffectProviderName[];
-  const char* GetProviderName() const override { return kEffectProviderName;}
-  DiffuseMapMaterial();
-  ~DiffuseMapMaterial() override;
-
-  DiffuseMapMaterialData* mutable_data() { return &data_;}
-  const DiffuseMapMaterialData& data() const { return data_;}
-  bool Init(const ConfigNode* node, ResourceLoadContext* ctx) override;
-  static EffectParamsProvider* CreateObject() { return new DiffuseMapMaterial;}
- private:
-  DiffuseMapMaterialData data_;
-  DISALLOW_COPY_AND_ASSIGN(DiffuseMapMaterial);
-};
-
-class TextureMaterial : public BaseMaterial {
- public:
-  static const char kEffectProviderName[];
-  const char* GetProviderName() const override { return kEffectProviderName;}
-  TextureMaterial();
-  ~TextureMaterial() override;
-
-  void SetData(const TextureMaterialData& data) { data_ = data;}
-  TextureMaterialData* mutable_data() { return &data_;}
-  const TextureMaterialData& data() const { return data_;}
-  bool Init(const ConfigNode* node, ResourceLoadContext* ctx) override;
-  static EffectParamsProvider* CreateObject() { return new TextureMaterial;}
- private:
-  TextureMaterialData data_;
-  DISALLOW_COPY_AND_ASSIGN(TextureMaterial);
-};
-
 }  // namespace azer

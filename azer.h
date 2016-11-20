@@ -1,8 +1,6 @@
 #pragma once
 
-#include "azer/base/file_system.h"
 #include "azer/base/image.h"
-#include "azer/base/resource_loader.h"
 #include "azer/effect/effect.h"
 #include "azer/effect/effect_creator.h"
 #include "azer/effect/effect_params_adapter.h"
@@ -32,8 +30,3 @@
 #include "azer/render/scoped_render_target.h"
 #include "azer/render/render_system_loader.h"
 
-#include "azer/scene/render_node.h"
-#include "azer/scene/scene_node_picking.h"
-#include "azer/scene/render_env_node.h"
-#include "azer/scene/scene_node_traverse.h"
-#include "azer/scene/scene_tree_render.h"
