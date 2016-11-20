@@ -1,9 +1,8 @@
 #include "azer/util/interactive/env.h"
 
 #include "base/files/file_path.h"
-#include "azer/effect/effect.h"
+#include "azer/render/effect.h"
 #include "azer/effect/effectlib.h"
-#include "azer/effect/effect_params_adapter.h"
 #include "azer/util/images/image.h"
 #include "azer/res/reslib.h"
 #include "azer/render/render_system.h"

@@ -21,4 +21,10 @@ DiffuseMapMaterialData::DiffuseMapMaterialData()
       specular_scalar(1.0f), 
       alpha(1.0f) {
 }
+
+TextureMaterialData::TextureMaterialData()
+    : ambient_scalar(0.1f),
+      specular_scalar(1.0f), 
+      alpha(1.0f) {
+}
 }  // namespace azer

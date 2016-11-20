@@ -1,6 +1,6 @@
 #pragma once
 
-#include "azer/effect/effect.h"
+#include "azer/render/effect.h"
 #include "azer/render/blending.h"
 #include "azer/util/interactive/graypoint.h"
 #include "azer/util/geometry/sphere.h"

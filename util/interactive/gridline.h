@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base/memory/ref_counted.h"
-#include "azer/effect/effect.h"
+#include "azer/render/effect.h"
 #include "azer/effect/color_effect.h"
 #include "azer/math/vector3.h"
 #include "azer/math/vector4.h" 

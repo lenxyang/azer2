@@ -1,7 +1,7 @@
 #pragma once
 
-#include "azer/effect/effect.h"
-#include "azer/effect/effect_creator.h"
+#include "azer/render/effect.h"
+#include "azer/render/effect_creator.h"
 #include "azer/effect/light.h"
 #include "azer/render/texture.h"
 #include "azer/render/texture_view.h"

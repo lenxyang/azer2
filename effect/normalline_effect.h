@@ -1,8 +1,8 @@
 #pragma once
 
 #include "azer/math/math.h"
-#include "azer/effect/effect.h"
-#include "azer/effect/effect_creator.h"
+#include "azer/render/effect.h"
+#include "azer/render/effect_creator.h"
 
 namespace azer {
 class NormalLineEffect : public Effect {

@@ -1,7 +1,7 @@
-#include "azer/effect/effect.h"
+#include "azer/render/effect.h"
 
 #include "base/logging.h"
-#include "azer/effect/shader_closure.h"
+#include "azer/render/shader_closure.h"
 #include "azer/render/shader_param_table.h"
 #include "azer/render/render_system.h"
 #include "azer/render/common.h"

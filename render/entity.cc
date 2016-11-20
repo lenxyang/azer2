@@ -192,36 +192,4 @@ void Entity::Draw(Renderer* renderer) const {
     }
   }
 }
-// class EntityVec
-EntityVec::EntityVec() {}
-
-Entity* EntityVec::AddEntity(Entity* ptr) {
-  vec_.push_back(ptr);
-  UpdateVMinAndVMax(ptr->vmin(), &vmin_, &vmax_);
-  UpdateVMinAndVMax(ptr->vmax(), &vmin_, &vmax_);
-  return ptr;
-}
-
-void EntityVec::RemoveEntityAt(int index) {
-  DCHECK(index < static_cast<int>(vec_.size()));
-  vec_.erase(vec_.begin() + index);
-  UpdateMinAndMax();
-}
-
-EntityVecPtr EntityVec::DeepCopy() {
-  EntityVecPtr ptr = new EntityVec;
-  for (uint32_t i = 0; i < vec_.size(); ++i) {
-    EntityPtr newptr = vec_[i]->DeepCopy();
-    ptr->AddEntity(newptr.get());
-  }
-  return ptr;
-}
-
-void EntityVec::UpdateMinAndMax() {
-  for (auto iter = vec_.begin(); iter != vec_.end(); ++iter) {
-    Entity* entity = iter->get();
-    UpdateVMinAndVMax(entity->vmin(), &vmin_, &vmax_);
-    UpdateVMinAndVMax(entity->vmax(), &vmin_, &vmax_);
-  }
-}
 }  // namespace azer

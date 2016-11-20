@@ -69,4 +69,5 @@ class AZER_EXPORT Shader : public ::base::RefCounted<Shader> {
 
 AZER_EXPORT CharType* ShaderSuffix(ShaderType type);
 AZER_EXPORT bool LoadShader(int stage, const std::string& path, ShaderInfo* shader);
+AZER_EXPORT bool LoadShader(int stage, const std::string& path, TechSource* tech);
 }  // namespace azer

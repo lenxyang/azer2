@@ -1,7 +1,7 @@
 #include "azer/util/interactive/axes_frame.h"
 
 #include "base/logging.h"
-#include "azer/effect/effect.h"
+#include "azer/render/effect.h"
 #include "azer/effect/color_effect.h"
 #include "azer/effect/text_billboard_effect.h"
 #include "azer/render/camera.h"

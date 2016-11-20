@@ -8,7 +8,7 @@
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/shader.h"
 #include "azer/render/technique.h"
-#include "azer/effect/shader_closure.h"
+#include "azer/render/shader_closure.h"
 
 namespace azer {
 class Effect;

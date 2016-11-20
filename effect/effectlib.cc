@@ -8,11 +8,11 @@
 #include "azer/render/blending.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/technique.h"
-#include "azer/effect/effect.h"
-#include "azer/effect/effect_creator.h"
+#include "azer/render/effect.h"
+#include "azer/render/effect_creator.h"
+#include "azer/effect/effect_params_adapter.h"
 #include "azer/effect/color_effect.h"
 #include "azer/effect/diffusemap_effect.h"
-#include "azer/effect/diffusemap_effect_adapter.h"
 #include "azer/effect/normalline_effect.h"
 #include "azer/effect/overlay_effect.h"
 #include "azer/effect/sky_effect.h"
@@ -205,9 +205,6 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
 }
 
 bool EffectLib::InitAdapterContext() {
-  adapter_context_.reset(new EffectAdapterContext);
-  adapter_context_->RegisteAdapter(new DiffuseMapEffect_DiffuseMapMaterial_Adapter);
-  adapter_context_->RegisteAdapter(new DiffuseMapEffect_RenderNode_Adapter);
   return true;
 }
 }  // namespace azer

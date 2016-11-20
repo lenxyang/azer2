@@ -1,4 +1,4 @@
-#include "azer/effect/shader_closure.h"
+#include "azer/render/shader_closure.h"
 
 #include "azer/render/gpu_resource.h"
 #include "azer/render/gpu_resource_view.h"

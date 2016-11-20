@@ -5,6 +5,7 @@
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
 #include "azer/math/math.h"
+#include "azer/render/common.h"
 #include "base/observer_list.h"
 
 namespace azer {
@@ -60,9 +61,6 @@ struct AZER_EXPORT SpotLight {
   SpotLight();
 };
 
-typedef float float2[2];
-typedef float float3[3];
-typedef float float4[4];
 struct UniverseLight {
   float4 diffuse;
   float4 ambient;

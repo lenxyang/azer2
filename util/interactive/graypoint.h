@@ -2,7 +2,7 @@
 
 #include "azer/math/math.h"
 #include "azer/render/entity.h"
-#include "azer/effect/effect.h"
+#include "azer/render/effect.h"
 
 namespace azer {
 class Camera;

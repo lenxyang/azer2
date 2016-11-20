@@ -1,8 +1,6 @@
 
 source_set("effect") {
   sources = [
-    "effect.cc",
-    "effect.h",
     "effect_params_adapter.cc",
     "effect_params_adapter.h",
     "effect_params_provider.cc",
@@ -11,8 +9,6 @@ source_set("effect") {
     "light.cc",
     "light.h",
     "base_material.h",
-    "shader_closure.cc",
-    "shader_closure.h",
   ]
 
   deps = [

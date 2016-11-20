@@ -3,7 +3,7 @@
 
 #include "base/memory/ref_counted.h"
 #include "azer/base/export.h"
-#include "azer/effect/effect.h"
+#include "azer/render/effect.h"
 #include "azer/render/texture.h"
 #include "azer/render/vertex_buffer.h"
 #include "azer/render/rasterizer_state.h"

@@ -91,25 +91,4 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   std::vector<Subset> subset_;
   DISALLOW_COPY_AND_ASSIGN(Entity);
 };
-
-// class EntityVec
-class AZER_EXPORT EntityVec : public ::base::RefCounted<EntityVec> {
- public:
-  EntityVec();
-
-  Entity* AddEntity(Entity* ptr);
-  void RemoveEntityAt(int index);
-  Entity* entity_at(int index) { return vec_[index].get();}
-  int entity_count() { return static_cast<int>(vec_.size());}
-  EntityVecPtr DeepCopy();
-
-  const Vector3& vmin() { return vmin_;}
-  const Vector3& vmax() { return vmax_;}
- private:
-  void UpdateMinAndMax();
-  std::vector<EntityPtr> vec_;
-  Vector3 vmin_;
-  Vector3 vmax_;
-  DISALLOW_COPY_AND_ASSIGN(EntityVec);
-};
 }  // namespace azer

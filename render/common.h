@@ -5,6 +5,13 @@
 #include "azer/base/export.h"
 #include "azer/render/native_types.h"
 
+typedef float float2[2];
+typedef float float3[3];
+typedef float float4[4];
+typedef float float2x2[2][2];
+typedef float float3x3[3][3];
+typedef float float4x4[4][4];
+
 namespace azer {
 
 enum CullingMode {

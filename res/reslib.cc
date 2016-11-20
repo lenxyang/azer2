@@ -2,7 +2,7 @@
 
 #include "base/files/file_path.h"
 #include "azer/base/resource_pack.h"
-#include "azer/effect/effect.h"
+#include "azer/render/effect.h"
 #include "azer/effect/effectlib.h"
 #include "azer/effect/effect_params_adapter.h"
 #include "azer/util/images/image.h"
