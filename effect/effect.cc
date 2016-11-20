@@ -45,16 +45,30 @@ void Effect::ApplyShaderParamTable(Renderer* renderer) {
 
 ShaderClosurePtr Effect::InitShaderClosure(RenderPipelineStage stage, 
                                            Shader* shader) {
+  ShaderClosurePtr shader_closure;
   switch (stage) {
-    case kVertexStage: return InitVertexStage(shader);
-    case kHullStage: return InitHullStage(shader);
-    case kDomainStage: return InitDomainStage(shader);
-    case kGeometryStage: return InitGeometryStage(shader);
-    case kPixelStage: return InitPixelStage(shader);
-    case kComputeStage: return InitComputeStage(shader);
+    case kVertexStage: 
+      shader_closure = InitVertexStage(shader);
+      break;
+    case kHullStage: 
+      shader_closure = InitHullStage(shader);
+      break;
+    case kDomainStage: 
+      shader_closure = InitDomainStage(shader);
+      break;
+    case kGeometryStage: 
+      shader_closure = InitGeometryStage(shader);
+      break;
+    case kPixelStage: 
+      shader_closure = InitPixelStage(shader);
+      break;
+    case kComputeStage: 
+      shader_closure = InitComputeStage(shader);
+      break;
     default: CHECK(false) << "Not Invalid stage: " << stage;
       return ShaderClosurePtr();
   }
+  OnInitShaderClosure(stage, shader, shader_closure.get());
 }
 
 ShaderClosurePtr Effect::InitVertexStage(Shader* shader) {
@@ -153,6 +167,9 @@ void Effect::UpdateGpuParams(int type, Renderer* renderer) {
     if (iter->get()) 
       (*iter)->UpdateShaderParam(renderer);
   }
+}
+
+void Effect::OnInitShaderClosure(int stage, ShaderClosure* closure, Shader* shader) {
 }
 
 Technique* Effect::technique() { return technique_.get();}

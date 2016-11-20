@@ -61,6 +61,8 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
 
   // 为每一个 shader 创建 ShaderClosure
   ShaderClosurePtr InitShaderClosure(RenderPipelineStage, Shader*);
+  virtual void OnInitShaderClosure(int stage, Shader* shader,
+                                   ShaderClosure* closure);
   virtual ShaderClosurePtr InitVertexStage(Shader* shader);
   virtual ShaderClosurePtr InitHullStage(Shader* shader);
   virtual ShaderClosurePtr InitDomainStage(Shader* shader);
