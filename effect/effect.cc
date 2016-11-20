@@ -69,6 +69,7 @@ ShaderClosurePtr Effect::InitShaderClosure(RenderPipelineStage stage,
       return ShaderClosurePtr();
   }
   OnInitShaderClosure(stage, shader, shader_closure.get());
+  return shader_closure;
 }
 
 ShaderClosurePtr Effect::InitVertexStage(Shader* shader) {
@@ -169,7 +170,7 @@ void Effect::UpdateGpuParams(int type, Renderer* renderer) {
   }
 }
 
-void Effect::OnInitShaderClosure(int stage, ShaderClosure* closure, Shader* shader) {
+void Effect::OnInitShaderClosure(int stage, Shader* shader, ShaderClosure* closure) {
 }
 
 Technique* Effect::technique() { return technique_.get();}

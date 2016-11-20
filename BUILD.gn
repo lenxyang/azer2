@@ -8,7 +8,6 @@ shared_library("azer") {
     "render",
 #    "render/layers",
     "render:render2d",
-    "scene",
   ]
 
   public_deps = [
@@ -35,7 +34,6 @@ test("unittests") {
   testonly = true
   output_name = "azer_unittests"
   deps = [
-    "base:unittests",
     "render:unittests",
     "render/layers:unittests",
     "//base/test:run_all_unittests",
