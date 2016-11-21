@@ -46,7 +46,6 @@ class MSOverlay: public Overlay {
   MSOverlay();
 };
 
-
 class DepthOverlay: public Overlay {
  public:
   DepthOverlay();

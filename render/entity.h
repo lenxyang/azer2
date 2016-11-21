@@ -39,11 +39,14 @@ class AZER_EXPORT EntityData : public ::base::RefCounted<EntityData> {
   EntityData(VertexDesc* desc, int vertex_count, int index_count);
   ~EntityData();
   
+  void set_name(const std::string& name) { name_ = name;}
+  const std::string& name() const { return name_;}
   void AddSubset(const Subset& sub) { subset_.push_back(sub);}
   VertexData* vdata() const { return vdata_.get();}
   IndicesData* idata() const { return idata_.get();}
   const Subsets& subset() const { return subset_;}
  private:
+  std::string name_;
   VertexDataPtr vdata_;
   IndicesDataPtr idata_;
   std::vector<Subset> subset_;
@@ -61,6 +64,8 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
   Entity(VertexBufferGroup* vb, IndicesBuffer* ib);
   ~Entity();
   
+  void set_name(const std::string& name) { name_ = name;}
+  const std::string& name() const { return name_;}
   void SetVertexBuffer(VertexBuffer* vb, int index);
   void SetIndicesBuffer(IndicesBuffer* ib);
   VertexBuffer* vertex_buffer_at(int index);
@@ -84,6 +89,7 @@ class AZER_EXPORT Entity : public ::base::RefCounted<Entity> {
  private:
   void DrawSubset(Renderer* renderer, const Subset& subset) const;
   void DrawIndexSubset(Renderer* renderer, const Subset& subset) const;
+  std::string name_;
   VertexBufferGroupPtr vbg_;
   IndicesBufferPtr ib_;
   Vector3 vmin_;
