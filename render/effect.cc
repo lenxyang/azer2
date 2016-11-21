@@ -20,6 +20,7 @@ bool Effect::Init(const TechSource& sources) {
   DCHECK(vertex_desc_);
   technique_ = CreateTechnique(sources);
   shaders_.resize(kRenderPipelineStageNum);
+  OnBeforeShaderClosureInit();
   for (int i = 0; i < (int)kRenderPipelineStageNum; ++i) {
     Shader* shader = technique_->GetShader(i);
     if (shader != NULL) {
@@ -68,7 +69,7 @@ ShaderClosurePtr Effect::InitShaderClosure(RenderPipelineStage stage,
     default: CHECK(false) << "Not Invalid stage: " << stage;
       return ShaderClosurePtr();
   }
-  OnInitShaderClosure(stage, shader, shader_closure.get());
+  OnAfterShaderClosureInit(stage, shader, shader_closure.get());
   return shader_closure;
 }
 
@@ -170,7 +171,11 @@ void Effect::UpdateGpuParams(int type, Renderer* renderer) {
   }
 }
 
-void Effect::OnInitShaderClosure(int stage, Shader* shader, ShaderClosure* closure) {
+void Effect::OnAfterShaderClosureInit(int stage, Shader* shader, 
+                                      ShaderClosure* closure) {
+}
+
+void Effect::OnBeforeShaderClosureInit() {
 }
 
 Technique* Effect::technique() { return technique_.get();}

@@ -24,17 +24,17 @@ void ShaderClosure::SetShader(Shader* shader, int table_count, int res_count,
   shader_uares_.resize(uares_count);
 }
 
-void ShaderClosure::SetResource(int index, ShaderResView* tex) {
+void ShaderClosure::SetResource(int index, ShaderResViewPtr tex) {
   CHECK_LT(index, shader_res_.size());
   shader_res_[index] = tex;
 }
 
-void ShaderClosure::SetUAResource(int index, UnorderAccessView* tex) {
+void ShaderClosure::SetUAResource(int index, UnorderAccessViewPtr tex) {
   CHECK_LT(index, shader_uares_.size());
   shader_uares_[index] = tex;
 }
 
-void ShaderClosure::SetShaderParamTable(int index, ShaderParamTable* table) {
+void ShaderClosure::SetShaderParamTable(int index, ShaderParamTablePtr table) {
   CHECK_LT(index, table_.size());
   table_[index] = table;
 }
