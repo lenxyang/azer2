@@ -171,8 +171,7 @@ void Effect::UpdateGpuParams(int type, Renderer* renderer) {
   }
 }
 
-void Effect::OnAfterShaderClosureInit(int stage, Shader* shader, 
-                                      ShaderClosure* closure) {
+void Effect::OnAfterShaderClosureInit() {
 }
 
 void Effect::OnBeforeShaderClosureInit() {
