@@ -19,7 +19,7 @@ ShaderParamTable::ShaderParamTable(int32_t num, const Desc* desc) {
     constants_.push_back(Variable(*curr, size, total_size, offset));
     offset += total_size;
   }
-  size_ = AZER_ALIGN_64(offset);
+  size_ = AZER_ALIGN_8(offset);
   data_.reset(new uint8_t[size_]);
 
   RenderSystem* rs = RenderSystem::Current();
@@ -44,6 +44,11 @@ int32_t ShaderParamTable::offset(int32_t index) const {
 
 void ShaderParamTable::SetValue(int32_t idx, const void* value, int32_t size) {
   return SetValueWithOffset(idx, 0, value, size);
+}
+
+void ShaderParamTable::SetWholeData(const void* data, int32_t size) {
+  CHECK_EQ(size, size_);
+  memcpy(data_.get(), data, size);
 }
 
 void ShaderParamTable::SetMatrix(int32_t idx, const Matrix4* matrices,

@@ -29,6 +29,7 @@ bool Effect::Init(const TechSource& sources) {
       shaders_[i] = closure;
     }
   }
+  OnAfterShaderClosureInit();
   return true;
 }
 
@@ -69,7 +70,6 @@ ShaderClosurePtr Effect::InitShaderClosure(RenderPipelineStage stage,
     default: CHECK(false) << "Not Invalid stage: " << stage;
       return ShaderClosurePtr();
   }
-  OnAfterShaderClosureInit(stage, shader, shader_closure.get());
   return shader_closure;
 }
 

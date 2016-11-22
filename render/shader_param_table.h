@@ -87,6 +87,7 @@ class AZER_EXPORT ShaderParamTable : public ::base::RefCounted<ShaderParamTable>
   void flush(Renderer*);
 
   // set value to gpu constants
+  void SetWholeData(const void* data, int32_t size);
   void SetValue(int32_t idx, const void* value, int32_t size);
   void SetValueWithOffset(int32_t idx, int32_t offset, const void* value, int32_t size);
   void SetArrayItem(int32_t idx, int32_t arridx, const void* value, int32_t size);
