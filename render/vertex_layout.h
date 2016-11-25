@@ -56,19 +56,19 @@ class AZER_EXPORT VertexDesc : public ::base::RefCounted<VertexDesc> {
   // debug function
   std::string dump_vertex_data() const;
  private:
+  typedef std::vector<int> OffsetIndex;
   void init(const Desc* desc, int desc_count);
-
   void ReCalc(int strip);
-  std::unique_ptr<Desc[]> desc_;
+ 
+  // for debug, we use static array
+  static const int32_t kMaxDescCount = 32;
+  Desc desc_[kMaxDescCount];
   int vertex_size_;
   int slot_count_;
-
-  typedef std::vector<int> OffsetIndex;
   OffsetIndex offsets_idx_;
   std::vector<int> slot_index_;
   std::vector<int> slot_stride_;
   std::vector<int> slot_element_;
-
   DISALLOW_COPY_AND_ASSIGN(VertexDesc);
 };
 

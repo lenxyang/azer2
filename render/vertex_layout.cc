@@ -11,12 +11,14 @@ namespace azer {
 VertexDesc::VertexDesc(const Desc* desc, int desc_num)
     : vertex_size_(0),
       slot_count_(0) {
+  memset(desc_, 0, sizeof(desc_));
   init(desc, desc_num);
 }
 
 VertexDesc::VertexDesc(const Desc* desc) 
     : vertex_size_(0),
       slot_count_(0) {
+  memset(desc_, 0, sizeof(desc_));
   int desc_num = 0;
   const Desc* cur = desc;
   while (cur->name[0] != '\0') {
@@ -66,15 +68,15 @@ void VertexDesc::init(const Desc* desc, int desc_num) {
 
   slot_count_ = static_cast<int>(slot_stride_.size());
   
-  desc_.reset(new Desc[desc_num]);
-  memcpy(desc_.get(), desc, sizeof(Desc) * desc_num);
+  CHECK_LT(desc_num, kMaxDescCount);
+  memcpy(desc_, desc, sizeof(Desc) * desc_num);
 }
 
 std::ostream& operator << (std::ostream& os, const azer::VertexDesc& vertex_data) {
   os << "Vertex Data: [" << std::endl;
   int desc_num = static_cast<int>(vertex_data.offsets_idx_.size());
   for (int i = 0; i < desc_num; ++i) {
-    const azer::VertexDesc::Desc& desc = vertex_data.desc_.get()[i];
+    const azer::VertexDesc::Desc& desc = vertex_data.desc_[i];
     os << "\t" << desc.name;
   }
   os << "]" << std::endl;
@@ -125,7 +127,7 @@ int VertexDesc::element_count() const {
 }
 
 const VertexDesc::Desc* VertexDesc::descs() const { 
-  return desc_.get(); 
+  return desc_; 
 }
 
 VertexDescPtr VertexDesc::gen_slot_desc(int sindex) const {
@@ -136,7 +138,7 @@ VertexDescPtr VertexDesc::gen_slot_desc(int sindex) const {
     if (slot_index_[i] != sindex) {
       continue;
     }
-    memcpy(desc, desc_.get() + i, sizeof(Desc));
+    memcpy(desc, desc_ + i, sizeof(Desc));
     desc->input_slot = 0;
     desc++;
   }
