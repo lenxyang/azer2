@@ -49,12 +49,14 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   // 刷新所有的 ShaderParamTable
   void SetShaderClosure(ShaderClosure* closure);
   ShaderClosure* GetShaderClosure(int stage);
-  void UpdateGpuParams(int type, Renderer* renderer);
+  
+  /// 更新函数
+  void UpdateRes(int stage, Renderer* renderer);
+  void UpdateAllRes(Renderer* renderer);
+  void UpdateGpuParams(int stage, int index, Renderer* renderer);
+  void UpdateAllGpuParams(Renderer* renderer);
 
   void Apply(Renderer* renderer);
-  void OnRenderBegin(Renderer* renderer);
-  void OnRenderEnd(Renderer* renderer);
-  void OnRenderNewObject(Renderer* renderer);
  protected:
   void SaveShaderResource(int stage, int index, ShaderResView* tex);
   void SetShaderParamTable(int stage, int index, ShaderParamTable* table);
@@ -77,22 +79,5 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   TechniquePtr technique_;
   VertexDescPtr vertex_desc_;
   DISALLOW_COPY_AND_ASSIGN(Effect);
-};
-
-class ScopedEffect {
- public:
-  ScopedEffect(Effect* effect, Renderer* renderer) 
-      : effect_(effect),
-        renderer_(renderer) {
-    effect_->OnRenderBegin(renderer);
-  }
-
-  ~ScopedEffect() {
-    effect_->OnRenderEnd(renderer_);
-  }
- private:
-  Effect* effect_;
-  Renderer* renderer_;
-  DISALLOW_COPY_AND_ASSIGN(ScopedEffect);
 };
 }  // namespace azer

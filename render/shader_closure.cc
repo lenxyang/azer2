@@ -39,25 +39,39 @@ void ShaderClosure::SetShaderParamTable(int index, ShaderParamTablePtr table) {
   table_[index] = table;
 }
 
-void ShaderClosure::UpdateShaderParam(Renderer* renderer) {
+void ShaderClosure::UpdateShaderParam(int index, Renderer* renderer) {
+  DCHECK_LT(index, static_cast<int>(table_.size()));
+  table_[index]->flush(renderer);
+}
+
+void ShaderClosure::UpdateAllShaderParam(Renderer* renderer) {
   for (auto iter = table_.begin(); iter != table_.end(); ++iter) {
     (*iter)->flush(renderer);
   }
 }
 
-void ShaderClosure::Bind(Renderer* renderer) {
-  UpdateShaderParam(renderer);
+void ShaderClosure::UpdateRes(Renderer* renderer) {
   if (!shader_res_.empty()) {
     renderer->SetShaderResource(
         stage(), 0, static_cast<int>(shader_res_.size()), &shader_res_.front());
   }
+}
+void ShaderClosure::UpdateUARes(Renderer* renderer) {
   if (!shader_uares_.empty()) {
     renderer->SetShaderUAResource(
         stage(), 0, static_cast<int>(shader_uares_.size()), &shader_uares_.front());
   }
+}
 
-  for (int i = 0; i < table_.size(); ++i) {
-    renderer->BindShaderParamTable(stage(), i, table_[i].get());
+void ShaderClosure::Bind(Renderer* renderer) {
+  UpdateAllShaderParam(renderer);
+  UpdateRes(renderer);
+  UpdateUARes(renderer);
+
+  for (int i = 0; i < static_cast<int>(table_.size()); ++i) {
+    ShaderParamTable* table = table_[i].get();
+    table->flush(renderer);
+    renderer->BindShaderParamTable(stage(), i, table);
   }
   renderer->SetShader(stage(), shader_.get());
 }

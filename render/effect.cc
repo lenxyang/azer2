@@ -142,33 +142,29 @@ void Effect::SetShaderParamTable(int stage, int index, ShaderParamTable* table) 
   shaders_[stage]->SetShaderParamTable(index, table);
 }
 
-void Effect::OnRenderNewObject(Renderer* renderer) {
+void Effect::UpdateRes(int stage, Renderer* renderer) {
+  CHECK(shaders_[stage].get());
+  shaders_[stage]->UpdateRes(renderer);
 }
 
-void Effect::OnRenderBegin(Renderer* renderer) {
-  DCHECK(technique_.get() != NULL);
-  // technique_->Bind(renderer);
-  // BindShaderParamTable(renderer);
-  // shaders_[stage]->Bind(renderer);
-  for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
-    if (iter->get()) {
-      (*iter)->Bind(renderer);
-    }
-  }
-}
-
-void Effect::OnRenderEnd(Renderer* renderer) {
-  for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
-    if (!iter->get()) continue;
-    (*iter)->Reset(renderer);
-  }
-}
-
-void Effect::UpdateGpuParams(int type, Renderer* renderer) {
+void Effect::UpdateAllRes(Renderer* renderer) {
   for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
     if (iter->get()) 
-      (*iter)->UpdateShaderParam(renderer);
+      (*iter)->UpdateRes(renderer);
   }
+}
+
+void Effect::UpdateAllGpuParams(Renderer* renderer) {
+  for (auto iter = shaders_.begin(); iter != shaders_.end(); ++iter) {
+    if (iter->get()) 
+      (*iter)->UpdateAllShaderParam(renderer);
+  }
+}
+
+void Effect::UpdateGpuParams(int stage, int index, Renderer* renderer) {
+  DCHECK_LT(stage, static_cast<int>(shaders_.size()));
+  DCHECK(shaders_[stage].get());
+  shaders_[stage]->UpdateShaderParam(index, renderer);
 }
 
 void Effect::OnAfterShaderClosureInit() {

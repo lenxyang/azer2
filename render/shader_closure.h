@@ -25,7 +25,10 @@ class AZER_EXPORT ShaderClosure : public ::base::RefCounted<ShaderClosure> {
 
   int table_count() const { return static_cast<int>(table_.size());}
   ShaderParamTable* table_at(int index);
-  void UpdateShaderParam(Renderer* renderer);
+  void UpdateRes(Renderer* renderer);
+  void UpdateUARes(Renderer* renderer);
+  void UpdateShaderParam(int index, Renderer* renderer);
+  void UpdateAllShaderParam(Renderer* renderer);
   void Bind(Renderer* renderer);
   void Reset(Renderer* renderer);
  protected:
