@@ -13,6 +13,7 @@ TextureView::TextureView(const Options& opt, Texture* tex)
     : ShaderResView(ResViewType::kTexture, tex),
       tex_(tex), 
       options_(opt) {
+  DCHECK(tex != NULL);
   DCHECK(tex->options().target & kBindTargetShaderResource);
 }
 

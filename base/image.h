@@ -16,10 +16,15 @@ typedef scoped_refptr<ImageLevelData> ImageLevelDataPtr;
 
 class AZER_EXPORT ImageLevelData : public ::base::RefCounted<ImageLevelData> {
  public:
+  ImageLevelData(int32_t width, int32_t height, int32_t depth, TexFormat format);
+  ImageLevelData(int32_t width, int32_t height, int32_t depth, 
+                 int32_t row_bytes, TexFormat format);
   ImageLevelData(int32_t width, int32_t height, int32_t depth, uint8_t* data, 
                  int32_t data_size, int32_t row_bytes, TexFormat format);
 
+  uint8_t* data() { return data_.get();}
   const uint8_t* data() const { return data_.get();}
+  
   int32_t data_size() const { return data_size_;}
   const uint8_t* dim_data(int32_t depth) const;
   int32_t dim_data_size() const;
@@ -30,6 +35,7 @@ class AZER_EXPORT ImageLevelData : public ::base::RefCounted<ImageLevelData> {
   int32_t depth() const { return depth_;}
   int32_t row_bytes() const { return row_bytes_;}
   TexFormat data_format() const { return data_format_;}
+  uint8_t* data_point(int x, int y, int z);
   
   static uint32_t pixel_size(TexFormat format); 
  private:

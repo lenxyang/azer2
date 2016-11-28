@@ -12,6 +12,28 @@ uint32_t ImageLevelData::pixel_size(TexFormat format) {
 }
 
 ImageLevelData::ImageLevelData(int32_t width, int32_t height, int32_t depth, 
+                               TexFormat format) 
+    : width_(width),
+      height_(height),
+      depth_(depth),
+      row_bytes_(pixel_size(format) * width),
+      data_format_(format) {
+  data_size_ = row_bytes_ * height * depth;
+  data_.reset(new uint8_t[data_size_]);
+}
+
+ImageLevelData::ImageLevelData(int32_t width, int32_t height, int32_t depth, 
+                               int32_t row_bytes, TexFormat format) 
+    : width_(width),
+      height_(height),
+      depth_(depth),
+      row_bytes_(row_bytes),
+      data_format_(format) {
+  data_size_ = row_bytes_ * height * depth;
+  data_.reset(new uint8_t[data_size_]);
+}
+
+ImageLevelData::ImageLevelData(int32_t width, int32_t height, int32_t depth, 
                                uint8_t* data, int32_t data_size, int32_t row_bytes,
                                TexFormat format) 
     : width_(width),
@@ -21,6 +43,7 @@ ImageLevelData::ImageLevelData(int32_t width, int32_t height, int32_t depth,
       data_format_(format),
       data_size_(data_size) {
   DCHECK(valid_params());
+  CHECK_GT(data_size, 0);
   data_.reset(new uint8_t[data_size_]);
   memcpy(data_.get(), data, data_size_);
 }
@@ -61,5 +84,10 @@ TexFormat ImageData::data_format() const {
 const ImageLevelData* ImageData::GetLevelData(int32_t level) const {
   DCHECK_LT(level, static_cast<int32_t>(levels_.size()));
   return levels_[level].get();
+}
+
+uint8_t* ImageLevelData::data_point(int x, int y, int z) {
+  int index = z * row_bytes_ * row_bytes_ + y * row_bytes_ + x;
+  return data() + index;
 }
 }  // namespace azer
