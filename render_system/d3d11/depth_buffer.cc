@@ -143,7 +143,7 @@ D3DDepthBuffer::~D3DDepthBuffer() {
 }
 
 
-bool D3DDepthBuffer::Init(D3DTexture* tex) {
+bool D3DDepthBuffer::Init(D3DTexture2D* tex) {
   DCHECK(!texture_.get());
   DCHECK(tex->options().target & kBindTargetDepthStencil);
   texture_ = tex;

@@ -9,7 +9,7 @@ namespace azer {
 class Surface;
 
 namespace d3d11 {
-class D3DTexture;
+class D3DTexture2D;
 class D3DRenderSystem;
 class D3DRenderer;
 
@@ -41,7 +41,7 @@ class D3DDepthBuffer : public DepthBuffer {
   D3DDepthBuffer(const Options& opt, D3DRenderSystem* rs);
   ~D3DDepthBuffer() override;
 
-  bool Init(D3DTexture* tex);
+  bool Init(D3DTexture2D* tex);
   void SetName(const std::string& name) override;
   void Clear(D3DRenderer*, bool clear_depth, bool clear_stencil, float depth_val,
              int stencil_val);

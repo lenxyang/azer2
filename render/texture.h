@@ -152,6 +152,8 @@ class AZER_EXPORT Texture : public GpuResource {
   // for debug
   bool Save(const ::base::FilePath& path);
   const Options& options() const { return options_;}
+  virtual bool InitFromImage(const ImageData* image) = 0;
+  virtual bool Init() = 0;
  protected:
   Options options_;
   DISALLOW_COPY_AND_ASSIGN(Texture);

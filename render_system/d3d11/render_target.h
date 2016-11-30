@@ -24,7 +24,7 @@ class D3DRenderTarget : public RenderTarget {
   void SetName(const std::string& name) override;
   void Clear(const azer::Vector4& color) override;
 
-  bool Init(D3DTexture* tex);
+  bool Init(D3DTexture2D* tex);
   ID3D11RenderTargetView* GetD3DRenderTargetView() { return target_;}
   NativeGpuResourceViewHandle native_handle() override;
  protected:

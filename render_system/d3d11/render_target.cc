@@ -30,7 +30,7 @@ void D3DRenderTarget::Clear(const azer::Vector4& color) {
   d3d_context->ClearRenderTargetView(target_, (float*)&color);
 }
 
-bool D3DRenderTarget::Init(D3DTexture* tex) {
+bool D3DRenderTarget::Init(D3DTexture2D* tex) {
   DCHECK(!default_render_target_);
   DCHECK(target_ == NULL);
   DCHECK(texres_ == NULL);

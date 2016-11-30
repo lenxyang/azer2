@@ -136,13 +136,15 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
     CHECK_EQ(texopt.format, (TexFormat)img->data_format());
     CHECK_EQ(texopt.type, (TexType)img->textype());
   }
-  scoped_refptr<D3DTexture> tex;
+  scoped_refptr<Texture> tex;
   if (texopt.type == TexType::k2D) {
     tex = new D3DTexture2D(texopt, this);
   } else if (texopt.type == TexType::k2DArray) {
     tex = new D3DTexture2DArray(texopt, this);
   } else if (texopt.type == TexType::kCubemap) {
     tex = new D3DTextureCubeMap(texopt, this);
+  } else if (texopt.type == TexType::k3D) {
+    tex = new D3DTexture3D(texopt, this);
   } else {
     NOTREACHED();
     return TexturePtr();
@@ -151,7 +153,7 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
   if (img) {
     ret = tex->InitFromImage(img);
   } else {
-    ret = tex->Init(NULL);
+    ret = tex->Init();
   }
 
   return (ret ? tex : TexturePtr());
@@ -238,7 +240,7 @@ DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& op
   DCHECK(texture) << "Try Create DepthBuffer With None Texture";
   DCHECK(texture->options().target & kBindTargetDepthStencil);
   scoped_refptr<D3DDepthBuffer> depth(new D3DDepthBuffer(opt, this));
-  if (depth->Init((D3DTexture*)texture)) {
+  if (depth->Init((D3DTexture2D*)texture)) {
     return depth;
   } else {
     return DepthBufferPtr();
@@ -249,7 +251,7 @@ RenderTargetPtr D3DRenderSystem::CreateRenderTarget(
     const RenderTarget::Options& opt, Texture* texture) {
   DCHECK(texture) << "Try Create DepthBuffer With None Texture";
   scoped_refptr<D3DRenderTarget> rt(new D3DRenderTarget(opt, false, this));
-  if (rt->Init((D3DTexture*)texture)) {
+  if (rt->Init((D3DTexture2D*)texture)) {
     return rt;
   } else {
     return RenderTargetPtr();

@@ -38,7 +38,7 @@ bool D3DResTextureView::Init(D3DRenderSystem* rs) {
   };
 
 
-  D3DTexture* tex = ((D3DTexture*)texture());
+  D3DTexture2D* tex = ((D3DTexture2D*)texture());
   const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
   TexType textype = (options().type == TexType::kUnknown) ?
 	  tex->options().type : options().type;
@@ -89,7 +89,7 @@ D3DTextureUAResView::~D3DTextureUAResView() {
 }
 
 bool D3DTextureUAResView::Init(D3DRenderSystem* rs) {
-  D3DTexture* tex = (D3DTexture*)texture();
+  D3DTexture2D* tex = (D3DTexture2D*)texture();
   ID3D11Device* d3d_device = rs->GetDevice();
   D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
   desc.Format = tex->desc().Format;
