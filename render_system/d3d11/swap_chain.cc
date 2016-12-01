@@ -24,7 +24,7 @@ bool D3DSwapChain::Init(Surface* surface)  {
 RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   Texture::Options opt;
   opt.format = TexFormat::kRGBA8UNorm;
-  opt.size = gfx::Size(surface->GetBounds().size());
+  opt.size = TexSize(surface->GetBounds().size());
   opt.target = (kBindTargetRenderTarget);
   opt.sample_desc.count = surface->sample_desc().count;
   opt.sample_desc.quality = surface->sample_desc().quality;

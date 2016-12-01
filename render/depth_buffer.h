@@ -54,7 +54,7 @@ class AZER_EXPORT DepthBuffer : public ResourceView {
   virtual ~DepthBuffer();
 
   virtual void SetName(const std::string& name) = 0;
-  const gfx::Size& size() const; 
+  gfx::Size size() const; 
   Texture* GetTexture() { return texture_.get();}
   const Texture* GetTexture() const { return texture_.get();}
   const Options& options() const { return options_;}

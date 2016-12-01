@@ -56,7 +56,7 @@ bool SoftwareCanvas2D::UpdateTexture() {
 bool SoftwareCanvas2D::InitTexture() {
   Texture::Options opt;
   opt.target = kBindTargetShaderResource;
-  opt.size = gfx::Size(width(), height());
+  opt.size = TexSize(width(), height(), 1);
   opt.usage = kBufferDynamic;
   opt.cpu_access = kCPUWrite;
   RenderSystem* rs = RenderSystem::Current();

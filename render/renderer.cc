@@ -67,7 +67,7 @@ void Renderer::SetRenderTargets(std::vector<RenderTargetPtr>* targets) {
   targets_ = *targets;
 }
 
-const gfx::Size& Renderer::size() const {
+gfx::Size Renderer::size() const {
   if (!targets_.empty()) {
     return targets_[0]->size();
   } else {
@@ -80,7 +80,9 @@ RendererPtr CreateCommonRenderer(const gfx::Size& size) {
   RenderSystem* rs = RenderSystem::Current();
   Texture::Options rdopt, depthopt;
   rdopt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
-  depthopt.size = rdopt.size = size;
+  depthopt.size.width = rdopt.size.width = size.width();
+  depthopt.size.height = rdopt.size.height = size.height();
+  depthopt.size.depth = rdopt.size.depth = 1;
   depthopt.target = kBindTargetDepthStencil;
   depthopt.format = TexFormat::kD24UNormS8Uint;
   TexturePtr rttex = rs->CreateTexture(rdopt, NULL);

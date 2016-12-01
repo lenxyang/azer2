@@ -127,18 +127,32 @@ class AZER_EXPORT SamplerState : public ::base::RefCounted<SamplerState> {
   DISALLOW_COPY_AND_ASSIGN(SamplerState);
 };
 
+struct AZER_EXPORT TexSize {
+  int width;
+  int height;
+  int depth;
+
+  TexSize();
+  TexSize(const gfx::Size& size);
+  TexSize(int width, int height, int depth);
+};
+
+AZER_EXPORT bool operator == (const TexSize& t1, const TexSize& t2);
+AZER_EXPORT bool operator != (const TexSize& t1, const TexSize& t2);
+
+
 class AZER_EXPORT Texture : public GpuResource {
  public:
   struct AZER_EXPORT Options {
-    gfx::Size size;
+    TexSize size;
     SampleDesc sample_desc;
     TexFormat format;            // default: kRGBAn8
     BufferUsage usage;   // default: GraphicBuffer::kDefault
     CPUAccess cpu_access;         // default: kCPUNoAccess
     uint32_t target;
     TexType type;
-    int32_t diminison;
-    int32_t mipmap_level;
+    int diminison;
+    int mipmap_level;
     bool genmipmap;
     Options();
   };
@@ -146,7 +160,7 @@ class AZER_EXPORT Texture : public GpuResource {
   explicit Texture(const Options& opt);
   virtual ~Texture() {}
 
-  const gfx::Size& size() const;
+  const TexSize& size() const;
   
   // save the texture into file
   // for debug

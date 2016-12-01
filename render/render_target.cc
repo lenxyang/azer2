@@ -15,7 +15,7 @@ RenderTarget::RenderTarget(const Options& opt, bool default_rt)
 RenderTarget::~RenderTarget() {
 }
 
-const gfx::Size& RenderTarget::size() const { 
-  return texture_->size();
+gfx::Size RenderTarget::size() const { 
+  return gfx::Size(texture_->size().width, texture_->size().height);
 }
 }  // namespace azer

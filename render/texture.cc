@@ -44,6 +44,34 @@ SampleDesc::SampleDesc()
     : count(1), quality(0) {
 }
 
+// TexSize
+TexSize::TexSize(const gfx::Size& size) {
+  this->width = size.width();
+  this->height = size.height();
+  this->depth = 1;
+}
+
+TexSize::TexSize(int width, int height, int depth) {
+  this->width = width;
+  this->height = height;
+  this->depth = depth;
+}
+
+TexSize::TexSize() {
+  width = height = 0;
+  depth = 1;
+}
+
+bool operator != (const TexSize& t1, const TexSize& t2) {
+  return !(t1 == t2);
+}
+
+bool operator == (const TexSize& t1, const TexSize& t2) {
+  return t1.width == t2.width
+      && t1.height == t2.height
+      && t1.depth == t2.depth;
+}
+
 namespace {
 GpuResOptions FromTexOptions(const Texture::Options& opt) {
   GpuResOptions o;
@@ -60,14 +88,14 @@ Texture::Texture(const Options& opt)
       options_(opt) {
 }
 
-const gfx::Size& Texture::size() const {
+const TexSize& Texture::size() const {
   return options_.size;
 }
 
 bool Texture::Save(const ::base::FilePath& path) {
   SkBitmap bitmap;
-  SkImageInfo info = SkImageInfo::Make(options_.size.width(),
-                                       options_.size.height(),
+  SkImageInfo info = SkImageInfo::Make(options_.size.width,
+                                       options_.size.height,
                                        kRGBA_8888_SkColorType,
                                        kOpaque_SkAlphaType);
   bitmap.setInfo(info);
@@ -80,7 +108,7 @@ bool Texture::Save(const ::base::FilePath& path) {
   }
 
   uint32_t row_pitch = dataptr->row_size();
-  for (int32_t i = 0; i < options_.size.height(); ++i) {
+  for (int32_t i = 0; i < options_.size.height; ++i) {
     memcpy(pixels, dataptr->data_ptr() + i * row_pitch, row_pitch);
     pixels += row_pitch;
   }
@@ -90,7 +118,7 @@ bool Texture::Save(const ::base::FilePath& path) {
 
 Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   Texture::Options opt;
-  opt.size = size;
+  opt.size = TexSize(size.width(), size.height(), 1);
   opt.genmipmap = true;
   opt.format = TexFormat::kRGBA8UNorm;
   opt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);

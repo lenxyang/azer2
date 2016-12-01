@@ -28,7 +28,7 @@ class AZER_EXPORT RenderTarget : public ResourceView {
   const Texture* GetTexture() const { return texture_.get();}
   bool IsDefaultRenderTarget() { return default_render_target_;}
 
-  const gfx::Size& size() const;
+  gfx::Size size() const;
   const Options& options() { return options_;}
  protected:
   const bool default_render_target_;

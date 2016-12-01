@@ -22,7 +22,7 @@ DepthBuffer::DepthBuffer(const Options& opt)
 
 DepthBuffer::~DepthBuffer() {}
 
-const gfx::Size& DepthBuffer::size() const {
-  return GetTexture()->size();
+gfx::Size DepthBuffer::size() const {
+  return gfx::Size(GetTexture()->size().width, GetTexture()->size().height);
 }
 }  // namespace azer

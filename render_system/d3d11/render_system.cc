@@ -122,8 +122,8 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
                                           const ImageData* img) {
   Texture::Options texopt = opt;
   if (img) {
-    if (texopt.size.width() == 0 && texopt.size.height() == 0) {
-      texopt.size = gfx::Size(img->width(), img->height());
+    if (texopt.size.width == 0 && texopt.size.height == 0) {
+      texopt.size = TexSize(img->width(), img->height(), 1);
     }
     if (texopt.format != TexFormat::kUndefined) {
       texopt.format = (TexFormat)img->data_format();
@@ -131,8 +131,8 @@ TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
     if (texopt.type != TexType::kUnknown) {
       texopt.type = (TexType)img->textype();
     }
-    CHECK_EQ(texopt.size.width(), img->width());
-    CHECK_EQ(texopt.size.height(), img->height());
+    CHECK_EQ(texopt.size.width, img->width());
+    CHECK_EQ(texopt.size.height, img->height());
     CHECK_EQ(texopt.format, (TexFormat)img->data_format());
     CHECK_EQ(texopt.type, (TexType)img->textype());
   }

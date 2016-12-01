@@ -99,7 +99,7 @@ class AZER_EXPORT Renderer : public ::base::RefCounted<Renderer> {
                                   int instance_start_index) = 0;
   virtual void DispatchComputeTask(const GpuTaskParams& params) = 0;
   
-  const gfx::Size& size() const; 
+  gfx::Size size() const; 
   virtual void SetViewport(const Viewport& viewport) = 0;
   virtual const Viewport& GetViewport() const  = 0;
 

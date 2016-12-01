@@ -36,8 +36,8 @@ NativeGpuResourceHandle D3DTexture2D::native_handle() {
 
 void D3DTexture2D::InitTexDesc() {
   ZeroMemory(&tex_desc_, sizeof(D3D11_TEXTURE2D_DESC));
-  tex_desc_.Width     = options_.size.width();
-  tex_desc_.Height    = options_.size.height();
+  tex_desc_.Width     = options_.size.width;
+  tex_desc_.Height    = options_.size.height;
   tex_desc_.MipLevels = options_.mipmap_level;
   tex_desc_.ArraySize = options_.diminison;
   tex_desc_.Format    = TranslateTexFormat(options_.format);
@@ -192,6 +192,13 @@ D3DTexture3D::D3DTexture3D(const Options& opt, D3DRenderSystem* rs)
       render_system_(rs) {
 }
 
+D3DTexture3D::~D3DTexture3D() {
+}
+
+bool D3DTexture3D::Init() {
+  return InitFromData(NULL);
+}
+
 bool D3DTexture3D::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
@@ -205,12 +212,54 @@ bool D3DTexture3D::InitFromImage(const ImageData* image) {
 }
 
 bool D3DTexture3D::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
+  HRESULT hr = S_OK;
+  DCHECK(NULL == texres_);
+  ID3D11Device* d3d_device = render_system_->GetDevice();
+  InitTexDesc();
+
+  ID3D11Texture3D* tex = NULL;
+  hr = d3d_device->CreateTexture3D(&tex_desc_, data, &tex);
+  HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
+
+  texres_ = tex;
   return true;
 }
   
 
 void D3DTexture3D::InitTexDesc() {
-  tex_desc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+  ZeroMemory(&tex_desc_, sizeof(tex_desc_));
+  tex_desc_.BindFlags = D3D10_BIND_SHADER_RESOURCE;
+  tex_desc_.CPUAccessFlags = 0;
+  tex_desc_.Depth = options_.size.depth;
+  tex_desc_.Height = options_.size.height;
+  tex_desc_.Width = options_.size.width;
+  tex_desc_.Format = TranslateTexFormat(options_.format);
+  tex_desc_.Usage = TranslateUsage(options_.usage);
+  tex_desc_.MipLevels = 1;
+  tex_desc_.MiscFlags = 0;
+}
+
+GpuResLockDataPtr D3DTexture3D::map(MapType type) {
+  return GpuResLockDataPtr();
+}
+
+void D3DTexture3D::unmap() {
+}
+
+NativeGpuResourceHandle D3DTexture3D::native_handle() {
+  CHECK(false);
+  return NULL;
+}
+
+void D3DTexture3D::SetName(const std::string& name) {
+  DCHECK(texres_);
+  texres_->SetPrivateData(WKPDID_D3DDebugObjectName,
+                          (UINT)name.length(), name.c_str());
+}
+
+bool D3DTexture3D::CopyTo(GpuResource* texres) {
+  CHECK(false);
+  return false;
 }
 }  // namespace d3d11
 }  // namespace azer
