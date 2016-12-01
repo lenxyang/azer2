@@ -20,6 +20,11 @@ class D3DResTextureView : public TextureView {
     return (NativeGpuResourceViewHandle)GetResourceView();
   }
  private:
+  TexType view_type() const;
+  void InitFor2D(D3D11_SHADER_RESOURCE_VIEW_DESC* desc);
+  void InitFor2DArray(D3D11_SHADER_RESOURCE_VIEW_DESC* desc);
+  void InitForCubeMap(D3D11_SHADER_RESOURCE_VIEW_DESC* desc);
+  void InitFor3D(D3D11_SHADER_RESOURCE_VIEW_DESC* desc);
   ID3D11ShaderResourceView* res_view_;
   DISALLOW_COPY_AND_ASSIGN(D3DResTextureView);
 };

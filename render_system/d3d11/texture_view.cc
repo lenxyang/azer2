@@ -29,54 +29,78 @@ void D3DResTextureView::GenerateMips(int32_t level) {
 }
 
 bool D3DResTextureView::Init(D3DRenderSystem* rs) {
-  ID3D11Device* d3d_device = rs->GetDevice();
   D3D11_SHADER_RESOURCE_VIEW_DESC view_desc = {
     DXGI_FORMAT_UNKNOWN,
     D3D11_SRV_DIMENSION_TEXTURE2D,
     0,
     0,
   };
-
-
-  D3DTexture2D* tex = ((D3DTexture2D*)texture());
-  const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
-  TexType textype = (options().type == TexType::kUnknown) ?
-	  tex->options().type : options().type;
-  view_desc.Format = texdesc.Format;
   if (options().format != TexFormat::kUndefined) {
     view_desc.Format = TranslateTexFormat(options().format);
   }
-  bool msaa = (texture()->options().sample_desc.count > 1);
+  ID3D11Device* d3d_device = rs->GetDevice();
+  TexType textype = (options().type == TexType::kUnknown) ?
+      texture()->options().type : options().type;
   switch (textype) {
     case TexType::k2D:
-      view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-      view_desc.Texture2D.MipLevels = texdesc.MipLevels;
-      view_desc.Texture2D.MostDetailedMip = 0;
-      break;
-    case TexType::kCubemap: 
-      view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
-      view_desc.TextureCube.MipLevels = texdesc.MipLevels;
-      view_desc.TextureCube.MostDetailedMip = 0;
-      break;
+      InitFor2D(&view_desc);
+	  break;
+    case TexType::kCubemap:
+      InitForCubeMap(&view_desc);
+	  break;
     case TexType::k2DArray:
-      if (msaa) {
-        view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
-      } else {
-        view_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-      }
-      view_desc.Texture2DArray.MipLevels = texdesc.MipLevels;
-      view_desc.Texture2DArray.MostDetailedMip = 0;
-      view_desc.Texture2DArray.FirstArraySlice = 0;
-      view_desc.Texture2DArray.ArraySize = 1; // tex->options().diminison;
-      break;
+      InitFor2DArray(&view_desc);
+	  break;
+    case TexType::k3D:
+      InitFor3D(&view_desc);
+	  break;
     default:
-      CHECK(false);
+      return false;
   }
 
   HRESULT hr = d3d_device->CreateShaderResourceView(
-      tex->GetResource(), &view_desc, &res_view_);
+      (ID3D11Resource*)texture()->native_handle(), &view_desc, &res_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateResourceView failed for texture");
   return true;
+}
+
+void D3DResTextureView::InitFor2D(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
+  D3DTexture2D* tex = ((D3DTexture2D*)texture());
+  const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
+  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+  desc->Texture2D.MipLevels = texdesc.MipLevels;
+  desc->Texture2D.MostDetailedMip = 0;
+}
+
+void D3DResTextureView::InitFor2DArray(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
+  bool msaa = (texture()->options().sample_desc.count > 1);
+  D3DTexture2D* tex = ((D3DTexture2D*)texture());
+  const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
+  if (msaa) {
+    desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
+  } else {
+    desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+  }
+  desc->Texture2DArray.MipLevels = texdesc.MipLevels;
+  desc->Texture2DArray.MostDetailedMip = 0;
+  desc->Texture2DArray.FirstArraySlice = 0;
+  desc->Texture2DArray.ArraySize = 1; // tex->options().diminison;
+}
+
+void D3DResTextureView::InitForCubeMap(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
+  D3DTexture2D* tex = ((D3DTexture2D*)texture());
+  const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
+  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+  desc->TextureCube.MipLevels = texdesc.MipLevels;
+  desc->TextureCube.MostDetailedMip = 0;
+}
+
+void D3DResTextureView::InitFor3D(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
+  D3DTexture3D* tex = ((D3DTexture3D*)texture());
+  const D3D11_TEXTURE3D_DESC& texdesc = tex->desc();
+  desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE3D;
+  desc->Texture3D.MipLevels = texdesc.MipLevels;
+  desc->Texture3D.MostDetailedMip = 0;
 }
 
 D3DTextureUAResView::D3DTextureUAResView(const Options& options, Texture* tex) 

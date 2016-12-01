@@ -189,10 +189,12 @@ bool D3DTexture2DArray::InitFromImage(const ImageData* image) {
 // class D3D11Texture3D
 D3DTexture3D::D3DTexture3D(const Options& opt, D3DRenderSystem* rs)
     : Texture(opt),
+	  texres_(NULL),
       render_system_(rs) {
 }
 
 D3DTexture3D::~D3DTexture3D() {
+  SAFE_RELEASE(texres_);
 }
 
 bool D3DTexture3D::Init() {
@@ -247,8 +249,7 @@ void D3DTexture3D::unmap() {
 }
 
 NativeGpuResourceHandle D3DTexture3D::native_handle() {
-  CHECK(false);
-  return NULL;
+  return (NativeGpuResourceHandle)texres_;
 }
 
 void D3DTexture3D::SetName(const std::string& name) {
