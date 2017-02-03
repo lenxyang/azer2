@@ -119,7 +119,6 @@ source_set("render") {
 source_set("unittests") {
   testonly = true
   sources = [
-    "../base/tree_node_unittest.cc",
     "test/camera_unittest.cc",
     "test/frustrum_unittest.cc",
     "test/gpu_constants_table_unittest.cc",
