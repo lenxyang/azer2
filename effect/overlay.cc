@@ -46,7 +46,8 @@ Overlay::Overlay() {
     {1.0f, 1.0f},
   };
   RenderSystem* rs = RenderSystem::Current();
-  effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("OverlayEffect");
+  scoped_refptr<Effect> effect = EffectLib::instance()->LoadEffect("OverlayEffect");
+  effect_ = (OverlayEffect*)effect.get();
   SlotVertexDataPtr vdata(new SlotVertexData(effect_->vertex_desc(), 4));
   VertexPos vpos(0, 0), tpos;
   VertexPack vpack(vdata.get());
@@ -64,7 +65,6 @@ Overlay::Overlay() {
   blending_ = g_blending_instance.Pointer()->blending();
   bounds_ = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
   texbounds_ = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
-
   sampler_state_ = EffectLib::instance()->default_sampler_state();
 }
 
@@ -91,7 +91,6 @@ void Overlay::Draw(Renderer* renderer) {
 }
 
 void Overlay::SetTexture(TextureView* tex) { 
-  // if (tex->texture()->options().sample_desc.count > 1) {
   texture_ = tex;
 }
 void Overlay::SetBounds(const gfx::RectF& rect) {
@@ -102,13 +101,11 @@ void Overlay::SetTexBounds(const gfx::RectF& rect) {
   texbounds_ = Vector4(rect.x(), rect.y(), rect.width(), rect.height());
 }
 
-// class DepthOverlay
-DepthOverlay::DepthOverlay() {
-  effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("DepthOverlayEffect");
-  blending_ = NULL;
+VertexDesc* Overlay::vertex_desc() {
+  return vb_->vertex_desc();
 }
 
-MSOverlay::MSOverlay() {
-  effect_ = (OverlayEffect*)EffectLib::instance()->GetEffect("MSOverlayEffect");
+OverlayEffect* Overlay::effect() {
+  return effect_.get();
 }
 }  // namespace azer

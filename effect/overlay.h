@@ -24,6 +24,8 @@ class Overlay : public ::base::RefCounted<Overlay> {
   void Draw(Renderer* rs);
   void Render(Renderer* rs);
 
+  VertexDesc* vertex_desc();
+  OverlayEffect* effect();
   void SetBounds(const gfx::RectF& rect);
   void SetTexBounds(const gfx::RectF& rect);
   void SetTexture(TextureView* tex);
@@ -39,16 +41,6 @@ class Overlay : public ::base::RefCounted<Overlay> {
   Vector4 texbounds_;
   RasterizerStatePtr state_;
   DISALLOW_COPY_AND_ASSIGN(Overlay);
-};
-
-class MSOverlay: public Overlay {
- public:
-  MSOverlay();
-};
-
-class DepthOverlay: public Overlay {
- public:
-  DepthOverlay();
 };
 
 typedef scoped_refptr<Overlay> OverlayPtr;

@@ -113,7 +113,9 @@ Effect* EffectLib::GetEffect(const std::string& name) {
   if (iter != effects_.end()) {
     return iter->second.get();
   } else {
-    return LoadEffect(name);
+    EffectPtr effect = LoadEffect(name);
+    effects_.insert(std::make_pair(name, effect));
+    return effect.get();
   }
 }
 
@@ -185,7 +187,7 @@ void LoadEffectData(EffectData* data, TechSource* source, ResourcePack* res) {
 }
 }
 
-Effect* EffectLib::LoadEffect(const std::string& name) {
+EffectPtr EffectLib::LoadEffect(const std::string& name) {
   for (uint32_t i = 0; i < arraysize(effect_data); ++i) {
     if (std::string(effect_data[i].name) == name) {
       EffectData* data = effect_data + i;
@@ -195,8 +197,7 @@ Effect* EffectLib::LoadEffect(const std::string& name) {
       TechSource tech(desc.get());
       LoadEffectData(data, &tech, resource_pack_);
       CHECK(effect->Init(tech)) << "Effect \"" << name << "\" init failed";
-      effects_.insert(std::make_pair(name, effect));
-      return effect.get();
+      return effect;
     }
   }
 

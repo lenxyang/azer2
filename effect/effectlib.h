@@ -19,7 +19,7 @@ class EffectLib {
 
   static EffectLib* instance();
   Effect* GetEffect(const std::string& name);
-  Effect* LoadEffect(const std::string& name);
+  scoped_refptr<Effect> LoadEffect(const std::string& name);
   SamplerStatePtr default_sampler_state();
   EffectAdapterContext* adapter_context() { return adapter_context_.get();}
  private:
