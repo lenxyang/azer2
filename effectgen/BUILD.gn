@@ -1,0 +1,25 @@
+import("//testing/test.gni")
+
+static_library("effectgen") {
+  sources = [
+    "lexer.cc",
+    "exception.cc",
+  ]
+  deps = [
+    "//base",
+  ]
+}
+
+test("effectgen_tests") {
+  output_name = "effect_codegen_tests"
+  sources = [
+    "lexer_tests.cc",
+  ]
+  deps = [
+    "//testing/gtest",
+    "//base/test:run_all_unittests",
+    ":effectgen",
+  ]
+
+  configs += ["//azer/build/config:azer_code"]
+}
