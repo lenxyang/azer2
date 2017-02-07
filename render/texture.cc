@@ -8,40 +8,14 @@
 #include "azer/render/canvas2d.h"
 
 namespace azer {
-SamplerState::Options::Options()
-    : wrap_u(TexAddressMode::kWrap),
-      wrap_v(TexAddressMode::kWrap),
-      wrap_w(TexAddressMode::kWrap),
-      mag_filter(FilterMode::kLinear),
-      min_filter(FilterMode::kLinear),
-      mip_filter(FilterMode::kLinear),
-      comp_mag_filter(FilterMode::kLinear),
-      comp_min_filter(FilterMode::kLinear),
-      comp_mip_filter(FilterMode::kLinear),
-      compare_func(CompareFunc::kNever),
-      border_color(0.0f, 0.0f, 0.0f, 0.0f),
-      max_anisotropy(4) {
-}
-
-SamplerState::SamplerState(const Options& options)
-    : options_(options) {
-}
-
-SamplerState::~SamplerState() {}
 
 Texture::Options::Options()
     : format(TexFormat::kRGBA8UNorm),
       usage(kBufferDefault),
       cpu_access(kCPUNoAccess),
       target(kBindTargetUnknown),
-      type(TexType::k2D),
-      diminison(1),
       mipmap_level(1),
       genmipmap(false) {
-}
-
-SampleDesc::SampleDesc()
-    : count(1), quality(0) {
 }
 
 // TexSize
@@ -83,9 +57,11 @@ GpuResOptions FromTexOptions(const Texture::Options& opt) {
 }
 }
 
-Texture::Texture(const Options& opt) 
+Texture::Texture(const Options& opt, TexType type, int diminison) 
     : GpuResource(FromTexOptions(opt)),
-      options_(opt) {
+      options_(opt),
+      type_(type),
+      diminison_(diminison) {
 }
 
 const TexSize& Texture::size() const {
@@ -122,8 +98,27 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   opt.genmipmap = true;
   opt.format = TexFormat::kRGBA8UNorm;
   opt.target = (kBindTargetRenderTarget | kBindTargetShaderResource);
-  opt.type = TexType::k2D;
   return opt;
+}
+
+// class Texture2D
+Texture2D::Texture2D(const Options& options)
+    : Texture(options, TexType::k2D, 1) {
+}
+
+// class Texture2DArray
+Texture2DArray::Texture2DArray(const Options& options, int dim)
+    : Texture(options, TexType::k2DArray, dim) {
+}
+
+// class TextureCubemap
+TextureCubemap::TextureCubemap(const Options& options)
+    : Texture(options, TexType::kCubemap, 6) {
+}
+
+// class Texture3D
+Texture3D::Texture3D(const Options& options)
+    : Texture(options, TexType::k3D, 1) {
 }
 
 
@@ -207,7 +202,6 @@ const char* GetTexFormatName(TexFormat format) {
       return "";
   }
 }
-
 
 uint32_t SizeofTexFormat(TexFormat format) {
   switch (format) {

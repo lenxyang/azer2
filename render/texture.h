@@ -113,17 +113,18 @@ class AZER_EXPORT Texture : public GpuResource {
     BufferUsage usage;   // default: GraphicBuffer::kDefault
     CPUAccess cpu_access;         // default: kCPUNoAccess
     uint32_t target;
-    TexType type;
-    int diminison;
     int mipmap_level;
     bool genmipmap;
     Options();
   };
-
-  explicit Texture(const Options& opt);
+protected:
+  Texture(const Options& opt, TexType type, int diminison);
+public:
   virtual ~Texture() {}
 
   const TexSize& size() const;
+  TexType type() const { return type_;}
+  int diminison() const { return diminison_;}
   
   // save the texture into file
   // for debug
@@ -133,7 +134,37 @@ class AZER_EXPORT Texture : public GpuResource {
   virtual bool Init() = 0;
  protected:
   Options options_;
+  TexType type_;
+  int diminison_;
   DISALLOW_COPY_AND_ASSIGN(Texture);
+};
+
+class AZER_EXPORT Texture2D : public Texture {
+ public:
+  explicit Texture2D(const Options& options);
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Texture2D);
+};
+
+class AZER_EXPORT Texture2DArray : public Texture {
+ public:
+  Texture2DArray(const Options& options, int diminison);
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Texture2DArray);
+};
+
+class AZER_EXPORT Texture3D : public Texture {
+ public:
+  Texture3D(const Options& options);
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Texture3D);
+};
+
+class AZER_EXPORT TextureCubemap : public Texture {
+ public:
+  explicit TextureCubemap(const Options& options);
+ private:
+  DISALLOW_COPY_AND_ASSIGN(TextureCubemap);
 };
 
 AZER_EXPORT uint32_t SizeofTexFormat(TexFormat format);

@@ -1,6 +1,11 @@
 #include "azer/render/sampler_state.h"
 
 namespace azer {
+
+SampleDesc::SampleDesc()
+    : count(1), quality(0) {
+}
+
 SamplerState::Options::Options()
     : wrap_u(TexAddressMode::kWrap),
       wrap_v(TexAddressMode::kWrap),

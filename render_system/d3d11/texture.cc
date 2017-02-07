@@ -16,114 +16,94 @@
 #include "azer/render_system/d3d11/render_system.h"
 #include "azer/render_system/d3d11/renderer.h"
 
+#define IMPLEMENT_TEXMEMBER(class_name)                                 \
+void class_name::SetName(const std::string& name) {                     \
+  DCHECK(texres_);                                                      \
+  texres_->SetPrivateData(WKPDID_D3DDebugObjectName,                    \
+                          (UINT)name.length(), name.c_str());           \
+}                                                                       \
+bool class_name::Init() {                                               \
+  return InitFromData(NULL);                                            \
+}
+
+#define IMPLEMENT_ATTACH(class_name)                                    \
+void class_name::Attach(ID3D11Texture2D* tex) {                         \
+  DCHECK(texres_ == NULL);                                              \
+  DCHECK(tex != NULL);                                                  \
+  texres_ = tex;                                                        \
+  texres_->AddRef();                                                    \
+}                                                                       \
+void class_name::Detach() {                                             \
+  SAFE_RELEASE(texres_);                                                \
+  texres_ = NULL;                                                       \
+}
+
+#define IMPLEMENT_COPYTO(class_name)                                    \
+bool class_name::CopyTo(GpuResource* texres) {                          \
+  return TextureCopyTo(this, texres);                                   \
+}
+
+#define IMPLEMENT_TEXMAP(class_name)                               \
+GpuResLockDataPtr class_name::map(MapType flags) {                      \
+  map_helper_ = new GpuResLockHelper(resource_options(), texres_);      \
+  return map_helper_->map(flags);                                       \
+}                                                                       \
+void class_name::unmap() {                                              \
+  CHECK(false) << "always should not called";                           \
+  CHECK(map_helper_.get());                                             \
+  map_helper_->unmap();                                                 \
+  map_helper_ = NULL;                                                   \
+}                                                                       \
+
 namespace azer {
 namespace d3d11 {
 
+namespace {
+bool TextureCopyTo(Texture* src, GpuResource* destres);
+void InitTexture2DDescFromOptions(const Texture::Options& options,
+                                  D3D11_TEXTURE2D_DESC *desc);
+void InitTexture3DDescFromOptions(const Texture::Options& options,
+                                  D3D11_TEXTURE3D_DESC *desc);
+}
+
+IMPLEMENT_TEXMEMBER(D3DTexture2D);
+IMPLEMENT_TEXMAP(D3DTexture2D);
+IMPLEMENT_COPYTO(D3DTexture2D);
+IMPLEMENT_ATTACH(D3DTexture2D);
+
+IMPLEMENT_TEXMEMBER(D3DTexture2DArray);
+IMPLEMENT_TEXMAP(D3DTexture2DArray);
+IMPLEMENT_COPYTO(D3DTexture2DArray);
+IMPLEMENT_ATTACH(D3DTexture2DArray);
+
+IMPLEMENT_TEXMEMBER(D3DTextureCubeMap);
+IMPLEMENT_TEXMAP(D3DTextureCubeMap);
+IMPLEMENT_COPYTO(D3DTextureCubeMap);
+IMPLEMENT_ATTACH(D3DTextureCubeMap);
+
+IMPLEMENT_TEXMEMBER(D3DTexture3D);
+
+// class D3DTexture2D
 D3DTexture2D::D3DTexture2D(const Options& opt, D3DRenderSystem* rs)
-    : Texture(opt),
+    : Texture2D(opt),
       texres_(NULL),
-      render_system_(rs),
-      diminison_(0) {
+      render_system_(rs) {
 }
 
 D3DTexture2D::~D3DTexture2D() {
   SAFE_RELEASE(texres_);
 }
 
-NativeGpuResourceHandle D3DTexture2D::native_handle() {
-  return (NativeGpuResourceHandle)texres_;
-}
-
-void D3DTexture2D::InitTexDesc() {
-  ZeroMemory(&tex_desc_, sizeof(D3D11_TEXTURE2D_DESC));
-  tex_desc_.Width     = options_.size.width;
-  tex_desc_.Height    = options_.size.height;
-  tex_desc_.MipLevels = options_.mipmap_level;
-  tex_desc_.ArraySize = options_.diminison;
-  tex_desc_.Format    = TranslateTexFormat(options_.format);
-  tex_desc_.SampleDesc.Count   = options_.sample_desc.count;
-  tex_desc_.SampleDesc.Quality = options_.sample_desc.quality;
-  tex_desc_.Usage          = TranslateUsage(options_.usage);
-  tex_desc_.BindFlags      = TranslateBindTarget(options_.target);
-  tex_desc_.CPUAccessFlags = TranslateCPUAccess(options_.cpu_access);
-  tex_desc_.MiscFlags      = options_.genmipmap ?  
-      D3D11_RESOURCE_MISC_GENERATE_MIPS : 0;
-}
-
 bool D3DTexture2D::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
+  DCHECK(NULL == native_handle());
   HRESULT hr = S_OK;
-  DCHECK(NULL == texres_);
   ID3D11Device* d3d_device = render_system_->GetDevice();
-  InitTexDesc();
-
   ID3D11Texture2D* tex = NULL;
-  hr = d3d_device->CreateTexture2D(&tex_desc_, data, &tex);
+  InitTexture2DDescFromOptions(options(), &texdesc_);
+  hr = d3d_device->CreateTexture2D(&texdesc_, data, &tex);
   HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
 
   texres_ = tex;
-  return true;
-}
-
-bool D3DTexture2D::Init() {
-  return InitFromData(NULL);
-}
-
-void D3DTexture2D::SetName(const std::string& name) {
-  DCHECK(texres_);
-  texres_->SetPrivateData(WKPDID_D3DDebugObjectName,
-                          (UINT)name.length(), name.c_str());
-}
-
-void D3DTexture2D::Attach(ID3D11Texture2D* tex) { 
-  DCHECK(texres_ == NULL);
-  DCHECK(tex != NULL);
-  texres_ = tex;
-  texres_->AddRef();
-}
-
-void D3DTexture2D::Detach() { 
-  SAFE_RELEASE(texres_);
-  texres_ = NULL; 
-}
-
-// reference: MSDN "How to: Use dynamic resources"
-GpuResLockDataPtr D3DTexture2D::map(MapType flags) {
-  map_helper_ = new GpuResLockHelper(resource_options(), texres_);
-  return map_helper_->map(flags);
-}
-
-void D3DTexture2D::unmap() {
-  CHECK(false) << "always should not called";
-  CHECK(map_helper_.get());
-  map_helper_->unmap();
-  map_helper_ = NULL;
-}
-
-bool D3DTexture2D::CopyTo(GpuResource* texres) {
-  DCHECK_EQ(texres->resource_type(), GpuResType::kTexture);
-  D3DTexture2D* tex = (D3DTexture2D*)texres;
-  if (tex->options().type != options().type) {
-    DLOG(INFO) << "cannot Copy Texture to diffuse type texture.";
-    return false;
-  }
-
-  if (tex->options().size != options().size) {
-    DLOG(INFO) << "cannot Copy Texture to the one with diffuse dimension.";
-    return false;
-  }
-
-  if (options().sample_desc.count == tex->options().sample_desc.count) {
-    ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-    d3d_context->CopyResource(tex->texres_, texres_);
-  } else if (options().sample_desc.count > 1 
-             && tex->options().sample_desc.count == 1) {
-    ID3D11DeviceContext* d3d_context = render_system_->GetContext();
-    d3d_context->ResolveSubresource(
-        tex->texres_, 0, texres_, 0, TranslateTexFormat(tex->options().format));
-  } else {
-    CHECK(false) << "not support";
-  }
-  
   return true;
 }
 
@@ -141,11 +121,9 @@ bool D3DTexture2D::InitFromImage(const ImageData* image) {
   return InitFromData(subres);
 }
 
-
 // class D3D11TextureCubeMap
 D3DTextureCubeMap::D3DTextureCubeMap(const Options& opt, D3DRenderSystem* rs)
-    : D3DTexture2D(opt, rs) {
-  CHECK_EQ(opt.diminison, 6);
+    : TextureCubemap(opt) {
 }
 
 bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
@@ -158,47 +136,64 @@ bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
     subres[i].SysMemPitch = data->row_bytes();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
+
   return InitFromData(subres);
 }
 
-void D3DTextureCubeMap::InitTexDesc() {
-  D3DTexture2D::InitTexDesc();
-  tex_desc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+bool D3DTextureCubeMap::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
+  DCHECK(NULL == native_handle());
+  HRESULT hr = S_OK;
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  ID3D11Device* d3d_device = rs->GetDevice();
+  InitTexture2DDescFromOptions(options(), &texdesc_);
+  texdesc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+  
+  hr = d3d_device->CreateTexture2D(&texdesc_, data, &texres_);
+  HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
+  return true;
 }
 
 // class D3D11TextureCubeMap
 D3DTexture2DArray::D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs)
-    : D3DTexture2D(opt, rs) {
+    : Texture2DArray(opt, opt.size.depth) {
 }
 
 bool D3DTexture2DArray::InitFromImage(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
   D3D11_SUBRESOURCE_DATA subres[kTex2DArrayMaxDepth] = { 0 };
   CHECK_LT(image->depth(), kTex2DArrayMaxDepth);
-  diminison_ = image->depth();
   for (int i = 0; i < image->depth(); ++i) {
     const ImageLevelData* data = image->GetLevelData(0);
     subres[i].pSysMem = data->dim_data(i);
     subres[i].SysMemPitch = data->dim_data_size();
     subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
   }
-  CHECK_EQ(image->depth(), options().diminison);
+  CHECK_EQ(image->depth(), this->diminison());
   return InitFromData(subres);
+}
+
+bool D3DTexture2DArray::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
+  DCHECK(NULL == native_handle());
+  HRESULT hr = S_OK;
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  ID3D11Device* d3d_device = rs->GetDevice();
+  InitTexture2DDescFromOptions(options(), &texdesc_);
+  texdesc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+  
+  hr = d3d_device->CreateTexture2D(&texdesc_, data, &texres_);
+  HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
+  return true;
 }
 
 // class D3D11Texture3D
 D3DTexture3D::D3DTexture3D(const Options& opt, D3DRenderSystem* rs)
-    : Texture(opt),
-	  texres_(NULL),
+    : Texture3D(opt),
+      texres_(NULL),
       render_system_(rs) {
 }
 
 D3DTexture3D::~D3DTexture3D() {
   SAFE_RELEASE(texres_);
-}
-
-bool D3DTexture3D::Init() {
-  return InitFromData(NULL);
 }
 
 bool D3DTexture3D::InitFromImage(const ImageData* image) {
@@ -215,52 +210,84 @@ bool D3DTexture3D::InitFromImage(const ImageData* image) {
 
 bool D3DTexture3D::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
   HRESULT hr = S_OK;
-  DCHECK(NULL == texres_);
+  DCHECK(NULL == native_handle());
   ID3D11Device* d3d_device = render_system_->GetDevice();
-  InitTexDesc();
-
   ID3D11Texture3D* tex = NULL;
-  hr = d3d_device->CreateTexture3D(&tex_desc_, data, &tex);
+  InitTexture3DDescFromOptions(options(), &texdesc_);
+  hr = d3d_device->CreateTexture3D(&texdesc_, data, &tex);
   HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
 
   texres_ = tex;
   return true;
 }
-  
-
-void D3DTexture3D::InitTexDesc() {
-  ZeroMemory(&tex_desc_, sizeof(tex_desc_));
-  tex_desc_.BindFlags = D3D10_BIND_SHADER_RESOURCE;
-  tex_desc_.CPUAccessFlags = 0;
-  tex_desc_.Depth = options_.size.depth;
-  tex_desc_.Height = options_.size.height;
-  tex_desc_.Width = options_.size.width;
-  tex_desc_.Format = TranslateTexFormat(options_.format);
-  tex_desc_.Usage = TranslateUsage(options_.usage);
-  tex_desc_.MipLevels = 1;
-  tex_desc_.MiscFlags = 0;
-}
 
 GpuResLockDataPtr D3DTexture3D::map(MapType type) {
-  return GpuResLockDataPtr();
-}
-
-void D3DTexture3D::unmap() {
-}
-
-NativeGpuResourceHandle D3DTexture3D::native_handle() {
-  return (NativeGpuResourceHandle)texres_;
-}
-
-void D3DTexture3D::SetName(const std::string& name) {
-  DCHECK(texres_);
-  texres_->SetPrivateData(WKPDID_D3DDebugObjectName,
-                          (UINT)name.length(), name.c_str());
-}
-
-bool D3DTexture3D::CopyTo(GpuResource* texres) {
   CHECK(false);
-  return false;
+  return NULL;
+}
+void D3DTexture3D::unmap() {
+  CHECK(false);
+}
+
+namespace {
+bool TextureCopyTo(Texture* src, GpuResource* destres) {
+  DCHECK_EQ(destres->resource_type(), GpuResType::kTexture);
+  Texture* dest = (Texture*)destres;
+  if (src->type() != dest->type()) {
+    DLOG(INFO) << "cannot Copy Texture to diffuse type texture.";
+    return false;
+  }
+
+  if (dest->size() != src->size()) {
+    DLOG(INFO) << "cannot Copy Texture to the one with diffuse dimension.";
+    return false;
+  }
+
+  D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
+  ID3D11DeviceContext* d3d_context = rs->GetContext();
+  ID3D11Resource* src_native = (ID3D11Resource*)src->native_handle();
+  ID3D11Resource* dest_native = (ID3D11Resource*)dest->native_handle();
+  if (src->options().sample_desc.count == dest->options().sample_desc.count) {
+    d3d_context->CopyResource(src_native, dest_native);
+  } else if (src->options().sample_desc.count > 1 
+             && dest->options().sample_desc.count == 1) {
+    d3d_context->ResolveSubresource(
+        src_native, 0, dest_native, 0, TranslateTexFormat(dest->options().format));
+  } else {
+    CHECK(false) << "not support";
+  }
+  return true;
+}
+
+void InitTexture2DDescFromOptions(const Texture::Options& options,
+                                  D3D11_TEXTURE2D_DESC *desc) {
+  ZeroMemory(desc, sizeof(D3D11_TEXTURE2D_DESC));
+  desc->Width     = options.size.width;
+  desc->Height    = options.size.height;
+  desc->MipLevels = options.mipmap_level;
+  desc->ArraySize = 2;
+  desc->Format    = TranslateTexFormat(options.format);
+  desc->SampleDesc.Count   = options.sample_desc.count;
+  desc->SampleDesc.Quality = options.sample_desc.quality;
+  desc->Usage          = TranslateUsage(options.usage);
+  desc->BindFlags      = TranslateBindTarget(options.target);
+  desc->CPUAccessFlags = TranslateCPUAccess(options.cpu_access);
+  desc->MiscFlags      = options.genmipmap ? D3D11_RESOURCE_MISC_GENERATE_MIPS : 0;
+}
+
+void InitTexture3DDescFromOptions(const Texture::Options& options,
+                                  D3D11_TEXTURE3D_DESC *desc) {
+  ZeroMemory(desc, sizeof(D3D11_TEXTURE3D_DESC));
+  desc->BindFlags = D3D10_BIND_SHADER_RESOURCE;
+  desc->CPUAccessFlags = 0;
+  desc->Depth = options.size.depth;
+  desc->Height = options.size.height;
+  desc->Width = options.size.width;
+  desc->Format = TranslateTexFormat(options.format);
+  desc->Usage = TranslateUsage(options.usage);
+  desc->MipLevels = 1;
+  desc->MiscFlags = 0;
+}
 }
 }  // namespace d3d11
 }  // namespace azer
