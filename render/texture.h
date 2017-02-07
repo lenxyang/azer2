@@ -11,6 +11,7 @@
 #include "azer/base/string.h"
 #include "azer/render/common.h"
 #include "azer/render/gpu_resource.h"
+#include "azer/render/sampler_state.h"
 
 namespace azer {
 
