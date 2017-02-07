@@ -69,6 +69,7 @@ source_set("render") {
     "structured_buffer.h",
     "transform_holder.cc",
     "transform_holder.h",
+    "sampler_state.cc",
     "shader.cc",
     "shader.h",
     "shader_param_table.cc",
