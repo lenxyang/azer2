@@ -68,8 +68,14 @@ class AZER_EXPORT RenderSystem {
   // create gpu buffers
   virtual VertexLayoutPtr CreateVertexLayout(VertexDesc* desc) = 0;
   // textures functions
-  virtual TexturePtr CreateTexture(const Texture::Options& opt,
-                                   const ImageData* image) = 0;
+  virtual Texture2DPtr CreateTexture2D(const Texture::Options& opt,
+                                       const ImageData* image) = 0;
+  virtual Texture2DArrayPtr CreateTexture2DArray(const Texture::Options& opt,
+                                                 const ImageData* image) = 0;
+  virtual TextureCubemapPtr CreateTextureCubemap(const Texture::Options& opt,
+                                                 const ImageData* image) = 0;
+  virtual Texture3DPtr CreateTexture3D(const Texture::Options& opt,
+                                       const ImageData* image) = 0;
   virtual GpuBufferPtr CreateBuffer(const GpuResOptions&, int count, int strip,
                                     const uint8_t* data) = 0;
   virtual SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) = 0;

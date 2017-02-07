@@ -118,45 +118,56 @@ TechniquePtr D3DRenderSystem::CreateTechnique() {
   return ptr;
 }
 
-TexturePtr D3DRenderSystem::CreateTexture(const Texture::Options& opt,
-                                          const ImageData* img) {
-  Texture::Options texopt = opt;
+namespace {
+void InitTexOptionFromImg(Texture::Options* texopt, const ImageData* img) {
   if (img) {
-    if (texopt.size.width == 0 && texopt.size.height == 0) {
-      texopt.size = TexSize(img->width(), img->height(), 1);
+    if (texopt->size.width == 0 && texopt->size.height == 0) {
+      texopt->size = TexSize(img->width(), img->height(), 1);
     }
-    if (texopt.format != TexFormat::kUndefined) {
-      texopt.format = (TexFormat)img->data_format();
+    if (texopt->format != TexFormat::kUndefined) {
+      texopt->format = (TexFormat)img->data_format();
     }
-    if (texopt.type != TexType::kUnknown) {
-      texopt.type = (TexType)img->textype();
-    }
-    CHECK_EQ(texopt.size.width, img->width());
-    CHECK_EQ(texopt.size.height, img->height());
-    CHECK_EQ(texopt.format, (TexFormat)img->data_format());
-    CHECK_EQ(texopt.type, (TexType)img->textype());
+    CHECK_EQ(texopt->size.width, img->width());
+    CHECK_EQ(texopt->size.height, img->height());
+    CHECK_EQ(texopt->format, (TexFormat)img->data_format());
   }
-  scoped_refptr<Texture> tex;
-  if (texopt.type == TexType::k2D) {
-    tex = new D3DTexture2D(texopt, this);
-  } else if (texopt.type == TexType::k2DArray) {
-    tex = new D3DTexture2DArray(texopt, this);
-  } else if (texopt.type == TexType::kCubemap) {
-    tex = new D3DTextureCubeMap(texopt, this);
-  } else if (texopt.type == TexType::k3D) {
-    tex = new D3DTexture3D(texopt, this);
-  } else {
-    NOTREACHED();
-    return TexturePtr();
-  }
-  bool ret = false;
-  if (img) {
-    ret = tex->InitFromImage(img);
-  } else {
-    ret = tex->Init();
-  }
+} 
+}
 
-  return (ret ? tex : TexturePtr());
+Texture2DPtr D3DRenderSystem::CreateTexture2D(const Texture::Options& opt,
+                                              const ImageData* img) {
+  Texture::Options texopt = opt;
+  InitTexOptionFromImg(&texopt, img);
+  Texture2DPtr tex = new D3DTexture2D(texopt, this);
+  bool ret = tex->Init(img);
+  return (ret ? tex : NULL);
+}
+
+Texture2DArrayPtr D3DRenderSystem::CreateTexture2DArray(const Texture::Options& opt,
+                                                        const ImageData* img) {
+  Texture::Options texopt = opt;
+  InitTexOptionFromImg(&texopt, img);
+  Texture2DArrayPtr tex = new D3DTexture2DArray(texopt, this);
+  bool ret = tex->Init(img);
+  return (ret ? tex : NULL);
+}
+
+TextureCubemapPtr D3DRenderSystem::CreateTextureCubemap(const Texture::Options& opt,
+                                                        const ImageData* img) {
+  Texture::Options texopt = opt;
+  InitTexOptionFromImg(&texopt, img);
+  TextureCubemapPtr tex = new D3DTextureCubeMap(texopt, this);
+  bool ret = tex->Init(img);
+  return (ret ? tex : NULL);
+}
+
+Texture3DPtr D3DRenderSystem::CreateTexture3D(const Texture::Options& opt,
+                                              const ImageData* img) {
+  Texture::Options texopt = opt;
+  InitTexOptionFromImg(&texopt, img);
+  Texture3DPtr tex = new D3DTexture3D(texopt, this);
+  bool ret = tex->Init(img);
+  return (ret ? tex : NULL);
 }
 
 SamplerStatePtr D3DRenderSystem::CreateSamplerState(

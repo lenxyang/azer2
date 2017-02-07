@@ -19,8 +19,7 @@ class D3DTexture2D: public Texture2D {
 
   NativeGpuResourceHandle native_handle() override { return texres_;}
   void SetName(const std::string& name) override;
-  bool InitFromImage(const ImageData* image) override;
-  bool Init() override;
+  bool Init(const ImageData* image) override;
   GpuResLockDataPtr map(MapType type) override;
   void unmap() override;
   void Attach(ID3D11Texture2D* tex);
@@ -44,8 +43,7 @@ class D3DTexture2DArray : public Texture2DArray {
   // common override
   NativeGpuResourceHandle native_handle() override { return texres_;}
   void SetName(const std::string& name) override;
-  bool InitFromImage(const ImageData* image) override;
-  bool Init() override;
+  bool Init(const ImageData* image) override;
   GpuResLockDataPtr map(MapType type) override;
   void unmap() override;
   void Attach(ID3D11Texture2D* tex);
@@ -67,8 +65,7 @@ class D3DTextureCubeMap : public TextureCubemap {
 
   NativeGpuResourceHandle native_handle() override { return texres_;}
   void SetName(const std::string& name) override;
-  bool InitFromImage(const ImageData* image) override;
-  bool Init() override;
+  bool Init(const ImageData* image) override;
   GpuResLockDataPtr map(MapType type) override;
   void unmap() override;
   void Attach(ID3D11Texture2D* tex);
@@ -93,8 +90,7 @@ class D3DTexture3D: public Texture3D {
   void SetName(const std::string& name) override;
   GpuResLockDataPtr map(MapType type) override;
   void unmap() override;
-  bool InitFromImage(const ImageData* image) override;
-  bool Init() override;
+  bool Init(const ImageData* image) override;
   
   void Attach(ID3D11Texture3D* tex);
   void Detach();

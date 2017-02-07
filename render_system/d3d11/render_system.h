@@ -39,8 +39,15 @@ class D3DRenderSystem : public RenderSystem {
   BlendingPtr CreateBlending(const Blending::BlendDesc& desc) override;
   VertexLayoutPtr CreateVertexLayout(VertexDesc* desc) override;
   // texutre functions
-  TexturePtr CreateTexture(const Texture::Options& opt,
-                           const ImageData* image) override;
+  Texture2DPtr CreateTexture2D(const Texture::Options& opt,
+                               const ImageData* image) override;
+  Texture2DArrayPtr CreateTexture2DArray(const Texture::Options& opt,
+                                         const ImageData* image) override;
+  TextureCubemapPtr CreateTextureCubemap(const Texture::Options& opt,
+                                  const ImageData* image) override;
+  Texture3DPtr CreateTexture3D(const Texture::Options& opt,
+                               const ImageData* image) override;
+
   SamplerStatePtr CreateSamplerState(const SamplerState::Options& opt) override;
   TextureViewPtr CreateTextureView(const TextureView::Options& opt, 
                                    Texture* tex) override;

@@ -17,8 +17,6 @@ namespace azer {
 
 class RenderSystem;
 class ImageData;
-class Texture;
-typedef scoped_refptr<Texture> TexturePtr;
 
 enum class TexFormat {
   kUndefined = 0,
@@ -130,8 +128,7 @@ public:
   // for debug
   bool Save(const ::base::FilePath& path);
   const Options& options() const { return options_;}
-  virtual bool InitFromImage(const ImageData* image) = 0;
-  virtual bool Init() = 0;
+  virtual bool Init(const ImageData* image) = 0;
  protected:
   Options options_;
   TexType type_;
@@ -166,6 +163,12 @@ class AZER_EXPORT TextureCubemap : public Texture {
  private:
   DISALLOW_COPY_AND_ASSIGN(TextureCubemap);
 };
+
+typedef scoped_refptr<Texture> TexturePtr;
+typedef scoped_refptr<Texture2D> Texture2DPtr;
+typedef scoped_refptr<Texture2DArray> Texture2DArrayPtr;
+typedef scoped_refptr<TextureCubemap> TextureCubemapPtr;
+typedef scoped_refptr<Texture3D> Texture3DPtr;
 
 AZER_EXPORT uint32_t SizeofTexFormat(TexFormat format);
 AZER_EXPORT std::ostream& operator << (std::ostream& os, TexFormat format);

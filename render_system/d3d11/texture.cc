@@ -21,9 +21,6 @@ void class_name::SetName(const std::string& name) {                     \
   DCHECK(texres_);                                                      \
   texres_->SetPrivateData(WKPDID_D3DDebugObjectName,                    \
                           (UINT)name.length(), name.c_str());           \
-}                                                                       \
-bool class_name::Init() {                                               \
-  return InitFromData(NULL);                                            \
 }
 
 #define IMPLEMENT_ATTACH(class_name)                                    \
@@ -107,18 +104,22 @@ bool D3DTexture2D::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
   return true;
 }
 
-bool D3DTexture2D::InitFromImage(const ImageData* image) {
+bool D3DTexture2D::Init(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  int count = 0;
-  D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
-  DCHECK_LT(image->level_count(), static_cast<int>(arraysize(subres)));
-  for (int i = 0; i < image->level_count(); ++i, ++count) {
-    const ImageLevelData* data = image->GetLevelData(i);
-    subres[i].pSysMem = data->dim_data(0);
-    subres[i].SysMemPitch = data->row_bytes();
-    subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
+  if (image) {
+    int count = 0;
+    D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
+    DCHECK_LT(image->level_count(), static_cast<int>(arraysize(subres)));
+    for (int i = 0; i < image->level_count(); ++i, ++count) {
+      const ImageLevelData* data = image->GetLevelData(i);
+      subres[i].pSysMem = data->dim_data(0);
+      subres[i].SysMemPitch = data->row_bytes();
+      subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
+    }
+    return InitFromData(subres);
+  } else {
+    return InitFromData(NULL);
   }
-  return InitFromData(subres);
 }
 
 // class D3D11TextureCubeMap
@@ -126,18 +127,22 @@ D3DTextureCubeMap::D3DTextureCubeMap(const Options& opt, D3DRenderSystem* rs)
     : TextureCubemap(opt) {
 }
 
-bool D3DTextureCubeMap::InitFromImage(const ImageData* image) {
+bool D3DTextureCubeMap::Init(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  D3D11_SUBRESOURCE_DATA subres[6] = { 0 };
-  for (int i = 0; i < 6; ++i) {
-    const ImageLevelData* data = image->GetLevelData(i);
+  if (image) {
+    D3D11_SUBRESOURCE_DATA subres[6] = { 0 };
+    for (int i = 0; i < 6; ++i) {
+      const ImageLevelData* data = image->GetLevelData(i);
 
-    subres[i].pSysMem = data->dim_data(0);
-    subres[i].SysMemPitch = data->row_bytes();
-    subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
+      subres[i].pSysMem = data->dim_data(0);
+      subres[i].SysMemPitch = data->row_bytes();
+      subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
+    }
+
+    return InitFromData(subres);
+  } else {
+    return InitFromData(NULL);
   }
-
-  return InitFromData(subres);
 }
 
 bool D3DTextureCubeMap::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
@@ -158,18 +163,22 @@ D3DTexture2DArray::D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs)
     : Texture2DArray(opt, opt.size.depth) {
 }
 
-bool D3DTexture2DArray::InitFromImage(const ImageData* image) {
-  // [reference] MSDN: How to: Initialize a Texture Programmatically
-  D3D11_SUBRESOURCE_DATA subres[kTex2DArrayMaxDepth] = { 0 };
-  CHECK_LT(image->depth(), kTex2DArrayMaxDepth);
-  for (int i = 0; i < image->depth(); ++i) {
-    const ImageLevelData* data = image->GetLevelData(0);
-    subres[i].pSysMem = data->dim_data(i);
-    subres[i].SysMemPitch = data->dim_data_size();
-    subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
+bool D3DTexture2DArray::Init(const ImageData* image) {
+  if (image) {
+    // [reference] MSDN: How to: Initialize a Texture Programmatically
+    D3D11_SUBRESOURCE_DATA subres[kTex2DArrayMaxDepth] = { 0 };
+    CHECK_LT(image->depth(), kTex2DArrayMaxDepth);
+    for (int i = 0; i < image->depth(); ++i) {
+      const ImageLevelData* data = image->GetLevelData(0);
+      subres[i].pSysMem = data->dim_data(i);
+      subres[i].SysMemPitch = data->dim_data_size();
+      subres[i].SysMemSlicePitch = 0;  // no meaning for 2D
+    }
+    CHECK_EQ(image->depth(), this->diminison());
+    return InitFromData(subres);
+  } else {
+    return InitFromData(NULL);
   }
-  CHECK_EQ(image->depth(), this->diminison());
-  return InitFromData(subres);
 }
 
 bool D3DTexture2DArray::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
@@ -196,16 +205,20 @@ D3DTexture3D::~D3DTexture3D() {
   SAFE_RELEASE(texres_);
 }
 
-bool D3DTexture3D::InitFromImage(const ImageData* image) {
+bool D3DTexture3D::Init(const ImageData* image) {
   // [reference] MSDN: How to: Initialize a Texture Programmatically
-  D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
-  for (int i = 0; i < image->level_count(); ++i) {
-    const ImageLevelData* data = image->GetLevelData(i);
-    subres[i].pSysMem = data->dim_data(0);
-    subres[i].SysMemPitch = data->row_bytes();
-    subres[i].SysMemSlicePitch = data->row_bytes() * data->height();
+  if (image) {
+    D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
+    for (int i = 0; i < image->level_count(); ++i) {
+      const ImageLevelData* data = image->GetLevelData(i);
+      subres[i].pSysMem = data->dim_data(0);
+      subres[i].SysMemPitch = data->row_bytes();
+      subres[i].SysMemSlicePitch = data->row_bytes() * data->height();
+    }
+    return InitFromData(subres);
+  } else {
+    return InitFromData(NULL);
   }
-  return InitFromData(subres);
 }
 
 bool D3DTexture3D::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
