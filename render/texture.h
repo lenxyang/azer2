@@ -143,8 +143,15 @@ class AZER_EXPORT Texture2D : public Texture {
   DISALLOW_COPY_AND_ASSIGN(Texture2D);
 };
 
+
 class AZER_EXPORT Texture2DArray : public Texture {
  public:
+  struct Slice {
+    int first_slice;
+    int array_size;
+    int mip_slice;
+  };
+    
   Texture2DArray(const Options& options, int diminison);
  private:
   DISALLOW_COPY_AND_ASSIGN(Texture2DArray);

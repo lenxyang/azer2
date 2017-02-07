@@ -40,7 +40,7 @@ bool D3DResTextureView::Init(D3DRenderSystem* rs) {
   }
   ID3D11Device* d3d_device = rs->GetDevice();
   TexType textype = (options().type == TexType::kUnknown) ?
-      texture()->options().type : options().type;
+      texture()->type() : options().type;
   switch (textype) {
     case TexType::k2D:
       InitFor2D(&view_desc);
@@ -121,7 +121,7 @@ bool D3DTextureUAResView::Init(D3DRenderSystem* rs) {
   desc.Texture2D.MipSlice = 0;
 
   HRESULT hr = d3d_device->CreateUnorderedAccessView(
-      tex->GetResource(), &desc, &uav_view_);
+      (ID3D11Resource*)tex->native_handle(), &desc, &uav_view_);
   HRESULT_HANDLE(hr, ERROR, "CreateUnorderedAccessView failed ");
   return true;
 }

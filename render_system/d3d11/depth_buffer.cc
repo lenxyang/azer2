@@ -149,7 +149,7 @@ bool D3DDepthBuffer::Init(D3DTexture2D* tex) {
   texture_ = tex;
   ID3D11Device* d3d_device = render_system_->GetDevice();
   HRESULT hr;
-  texres_ = tex->GetResource();
+  texres_ = (ID3D11Texture2D*)tex->native_handle();
   texres_->AddRef();
   D3D11_DEPTH_STENCIL_VIEW_DESC dvsd;
   memset(&dvsd, 0, sizeof(dvsd));
@@ -161,7 +161,7 @@ bool D3DDepthBuffer::Init(D3DTexture2D* tex) {
   }
 
   TexType type = (options().type != TexType::kUnknown) ?
-      options().type : tex->options().type;
+      options().type : tex->type();
   TexFormat format = (options().format != TexFormat::kUndefined) ?
       options().format : tex->options().format;
   dvsd.Format = TranslateTexFormat(format);
@@ -174,14 +174,14 @@ bool D3DDepthBuffer::Init(D3DTexture2D* tex) {
 	  dvsd.Texture2DArray.MipSlice = 0;
 	  dvsd.Texture2DArray.FirstArraySlice = 0;
 	  dvsd.Texture2DArray.ArraySize = 1;
-	  CHECK_GT(tex->options().diminison, 0);
+	  CHECK_GT(tex->diminison(), 0);
   } else if (type == TexType::k2DArray) {
     dvsd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
     dvsd.Texture2DArray.MipSlice = 0;
     dvsd.Texture2DArray.FirstArraySlice = 0;
     // dvsd.Texture2DArray.ArraySize = tex->options().diminison;
     dvsd.Texture2DArray.ArraySize = 1;
-    CHECK_GT(tex->options().diminison, 0);
+    CHECK_GT(tex->diminison(), 0);
   } else {
     CHECK(false) << "Unsupport TexType[" << type << " for depth";
   }

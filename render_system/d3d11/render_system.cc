@@ -259,13 +259,25 @@ DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& op
 }
 
 RenderTargetPtr D3DRenderSystem::CreateRenderTarget(
-    const RenderTarget::Options& opt, Texture* texture) {
+    const RenderTarget::Options& opt, Texture2D* texture) {
   DCHECK(texture) << "Try Create DepthBuffer With None Texture";
   scoped_refptr<D3DRenderTarget> rt(new D3DRenderTarget(opt, false, this));
   if (rt->Init((D3DTexture2D*)texture)) {
     return rt;
   } else {
-    return RenderTargetPtr();
+    return NULL;
+  }
+}
+
+RenderTargetPtr D3DRenderSystem::CreateRenderTarget(const RenderTarget::Options& opt, 
+                                                    const Texture2DArray::Slice& slice, 
+                                                    Texture2DArray* texture) {
+  DCHECK(texture) << "Try Create DepthBuffer With None Texture";
+  scoped_refptr<D3DRenderTarget> rt(new D3DRenderTarget(opt, false, this));
+  if (rt->Init((D3DTexture2DArray*)texture, slice)) {
+    return rt;
+  } else {
+    return NULL;
   }
 }
 

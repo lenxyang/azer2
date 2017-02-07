@@ -151,6 +151,7 @@ bool D3DTextureCubeMap::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   ID3D11Device* d3d_device = rs->GetDevice();
   InitTexture2DDescFromOptions(options(), &texdesc_);
+  texdesc_.ArraySize = 6;
   texdesc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
   
   hr = d3d_device->CreateTexture2D(&texdesc_, data, &texres_);
@@ -187,7 +188,7 @@ bool D3DTexture2DArray::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
   D3DRenderSystem* rs = (D3DRenderSystem*)RenderSystem::Current();
   ID3D11Device* d3d_device = rs->GetDevice();
   InitTexture2DDescFromOptions(options(), &texdesc_);
-  texdesc_.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+  texdesc_.ArraySize = this->size().depth;
   
   hr = d3d_device->CreateTexture2D(&texdesc_, data, &texres_);
   HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
@@ -278,7 +279,7 @@ void InitTexture2DDescFromOptions(const Texture::Options& options,
   desc->Width     = options.size.width;
   desc->Height    = options.size.height;
   desc->MipLevels = options.mipmap_level;
-  desc->ArraySize = 2;
+  desc->ArraySize = 1;
   desc->Format    = TranslateTexFormat(options.format);
   desc->SampleDesc.Count   = options.sample_desc.count;
   desc->SampleDesc.Quality = options.sample_desc.quality;

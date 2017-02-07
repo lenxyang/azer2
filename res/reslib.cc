@@ -45,7 +45,7 @@ Texture* ResLib::GetTexture(int32_t id) {
       memory->front(), static_cast<int32_t>(memory->size()));
   Texture::Options opt;
   opt.target = kBindTargetShaderResource;
-  TexturePtr tex = rs->CreateTexture(opt, img.get());
+  TexturePtr tex = rs->CreateTexture2D(opt, img.get());
   texture_.insert(std::make_pair(id, tex));
   return tex.get();
 }

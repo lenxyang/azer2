@@ -59,7 +59,10 @@ class AZER_EXPORT RenderSystem {
   virtual DepthBufferPtr CreateDepthBuffer(const DepthBuffer::Options& opt, 
                                            Texture* texture) = 0;
   virtual RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
-                                             Texture* texture) = 0;
+                                             Texture2D* texture) = 0;
+  virtual RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
+                                             const Texture2DArray::Slice& slice, 
+                                             Texture2DArray* texture) = 0;
   virtual RendererPtr CreateRenderer(RenderTargetPtrs* targets,
                                      DepthBuffer* depth) = 0;
   virtual BlendingPtr CreateBlending(const Blending::BlendDesc& desc) = 0;

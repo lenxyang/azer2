@@ -37,7 +37,7 @@ RendererPtr D3DSwapChain::CreateSurfaceRenderer(Surface* surface) {
   opt.format = TexFormat::kR24UNormG8Uint;
   opt.target = kBindTargetDepthStencil | kBindTargetShaderResource;
   scoped_refptr<D3DTexture2D> tex = new D3DTexture2D(opt, render_system_);
-  if (!tex->InitFromData(NULL)) {
+  if (!tex->Init(NULL)) {
     return RendererPtr();
   }
 
