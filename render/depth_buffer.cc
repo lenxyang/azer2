@@ -5,8 +5,7 @@
 
 namespace azer {
 DepthBuffer::Options::Options() 
-    : type(TexType::kUnknown),
-      format(TexFormat::kUndefined),
+    : format(TexFormat::kUndefined),
       depth_readonly(false),
       stencil_readonly(false) {
 }

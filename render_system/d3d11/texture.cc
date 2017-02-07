@@ -124,7 +124,10 @@ bool D3DTexture2D::Init(const ImageData* image) {
 
 // class D3D11TextureCubeMap
 D3DTextureCubeMap::D3DTextureCubeMap(const Options& opt, D3DRenderSystem* rs)
-    : TextureCubemap(opt) {
+    : TextureCubemap(opt),
+	texres_(NULL) {
+  CHECK_EQ(opt.size.width, opt.size.height);
+  CHECK_EQ(opt.size.depth, 1);
 }
 
 bool D3DTextureCubeMap::Init(const ImageData* image) {
@@ -161,7 +164,8 @@ bool D3DTextureCubeMap::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
 
 // class D3D11TextureCubeMap
 D3DTexture2DArray::D3DTexture2DArray(const Options& opt, D3DRenderSystem* rs)
-    : Texture2DArray(opt, opt.size.depth) {
+    : Texture2DArray(opt, opt.size.depth),
+	texres_(NULL) {
 }
 
 bool D3DTexture2DArray::Init(const ImageData* image) {

@@ -57,7 +57,10 @@ class AZER_EXPORT RenderSystem {
   virtual RasterizerStatePtr CreateRasterizerState() = 0;
   virtual DepthStencilStatePtr CreateDepthStencilState() = 0;
   virtual DepthBufferPtr CreateDepthBuffer(const DepthBuffer::Options& opt, 
-                                           Texture* texture) = 0;
+                                           Texture2D* texture) = 0;
+  virtual DepthBufferPtr CreateDepthBuffer(const DepthBuffer::Options& opt, 
+                                           const Texture2DArray::Slice& slice, 
+                                           Texture2DArray* texture) = 0;
   virtual RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
                                              Texture2D* texture) = 0;
   virtual RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 

@@ -247,14 +247,27 @@ DepthStencilStatePtr D3DRenderSystem::CreateDepthStencilState() {
 }
 
 DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& opt, 
-                                                  Texture* texture) {
+                                                  Texture2D* texture) {
   DCHECK(texture) << "Try Create DepthBuffer With None Texture";
   DCHECK(texture->options().target & kBindTargetDepthStencil);
   scoped_refptr<D3DDepthBuffer> depth(new D3DDepthBuffer(opt, this));
   if (depth->Init((D3DTexture2D*)texture)) {
     return depth;
   } else {
-    return DepthBufferPtr();
+    return NULL;
+  }
+}
+
+DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& opt, 
+                                                  const Texture2DArray::Slice& slice, 
+                                                  Texture2DArray* texture) {
+  DCHECK(texture) << "Try Create DepthBuffer With None Texture";
+  DCHECK(texture->options().target & kBindTargetDepthStencil);
+  scoped_refptr<D3DDepthBuffer> depth(new D3DDepthBuffer(opt, this));
+  if (depth->Init((D3DTexture2DArray*)texture, slice)) {
+    return depth;
+  } else {
+    return NULL;
   }
 }
 

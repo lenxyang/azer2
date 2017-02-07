@@ -10,6 +10,7 @@ class Surface;
 
 namespace d3d11 {
 class D3DTexture2D;
+class D3DTexture2DArray;
 class D3DRenderSystem;
 class D3DRenderer;
 
@@ -42,6 +43,7 @@ class D3DDepthBuffer : public DepthBuffer {
   ~D3DDepthBuffer() override;
 
   bool Init(D3DTexture2D* tex);
+  bool Init(D3DTexture2DArray* tex, const Texture2DArray::Slice& slice);
   void SetName(const std::string& name) override;
   void Clear(D3DRenderer*, bool clear_depth, bool clear_stencil, float depth_val,
              int stencil_val);
@@ -49,6 +51,7 @@ class D3DDepthBuffer : public DepthBuffer {
   ID3D11DepthStencilView* GetD3DDepthStencilView() { return target_;}
   NativeGpuResourceViewHandle native_handle() override;
  private:
+  void InitDepthStencilViewDesc(D3D11_DEPTH_STENCIL_VIEW_DESC *desc);
   ID3D11DepthStencilView* target_;
   ID3D11Resource* texres_;
   D3DRenderSystem* render_system_;

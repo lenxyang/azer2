@@ -31,7 +31,11 @@ class D3DRenderSystem : public RenderSystem {
   RasterizerStatePtr CreateRasterizerState() override;
   DepthStencilStatePtr CreateDepthStencilState() override;
   DepthBufferPtr CreateDepthBuffer(const DepthBuffer::Options& opt, 
-                                   Texture* texture) override;
+                                   Texture2D* texture) override;
+  DepthBufferPtr CreateDepthBuffer(const DepthBuffer::Options& opt, 
+                                   const Texture2DArray::Slice& slice, 
+                                   Texture2DArray* texture) override;
+
   RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
                                      Texture2D* texture) override;
   RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
