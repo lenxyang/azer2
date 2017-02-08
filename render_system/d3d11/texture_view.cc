@@ -74,7 +74,7 @@ void D3DResTextureView::InitFor2D(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
 
 void D3DResTextureView::InitFor2DArray(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
   bool msaa = (texture()->options().sample_desc.count > 1);
-  D3DTexture2D* tex = ((D3DTexture2D*)texture());
+  D3DTexture2DArray* tex = ((D3DTexture2DArray*)texture());
   const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
   if (msaa) {
     desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY;
@@ -88,7 +88,7 @@ void D3DResTextureView::InitFor2DArray(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
 }
 
 void D3DResTextureView::InitForCubeMap(D3D11_SHADER_RESOURCE_VIEW_DESC* desc) {
-  D3DTexture2D* tex = ((D3DTexture2D*)texture());
+  D3DTextureCubeMap* tex = ((D3DTextureCubeMap*)texture());
   const D3D11_TEXTURE2D_DESC& texdesc = tex->desc();
   desc->ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
   desc->TextureCube.MipLevels = texdesc.MipLevels;
