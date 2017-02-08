@@ -30,11 +30,12 @@ void D3DRenderTarget::Clear(const azer::Vector4& color) {
   d3d_context->ClearRenderTargetView(target_, (float*)&color);
 }
 
-bool D3DRenderTarget::Init(D3DTexture2DArray* tex, const Texture2DArray::Slice& slice) {
+bool D3DRenderTarget::InitFor2DArray(Texture* tex, const Texture2DArraySlice& slice) {
   DCHECK(!default_render_target_);
   DCHECK(target_ == NULL);
   DCHECK(texres_ == NULL);
 
+  CHECK(tex->type() == TexType::k2DArray || tex->type() == TexType::kCubemap);
   ID3D11Device* d3d_device = render_system_->GetDevice();
   HRESULT hr = S_OK;
   DCHECK(texture_.get() == NULL);

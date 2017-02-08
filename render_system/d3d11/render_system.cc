@@ -258,13 +258,13 @@ DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& op
   }
 }
 
-DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& opt, 
-                                                  const Texture2DArray::Slice& slice, 
-                                                  Texture2DArray* texture) {
+DepthBufferPtr D3DRenderSystem::CreateDepthBuffer(const DepthBuffer::Options& opt,
+                                                  Texture* texture,
+                                                  const Texture2DArraySlice& slice) {
   DCHECK(texture) << "Try Create DepthBuffer With None Texture";
   DCHECK(texture->options().target & kBindTargetDepthStencil);
   scoped_refptr<D3DDepthBuffer> depth(new D3DDepthBuffer(opt, this));
-  if (depth->Init((D3DTexture2DArray*)texture, slice)) {
+  if (depth->InitFor2DArray(texture, slice)) {
     return depth;
   } else {
     return NULL;
@@ -282,12 +282,12 @@ RenderTargetPtr D3DRenderSystem::CreateRenderTarget(
   }
 }
 
-RenderTargetPtr D3DRenderSystem::CreateRenderTarget(const RenderTarget::Options& opt, 
-                                                    const Texture2DArray::Slice& slice, 
-                                                    Texture2DArray* texture) {
+RenderTargetPtr D3DRenderSystem::CreateRenderTarget(
+    const RenderTarget::Options& opt, Texture* texture,
+    const Texture2DArraySlice& slice) {
   DCHECK(texture) << "Try Create DepthBuffer With None Texture";
   scoped_refptr<D3DRenderTarget> rt(new D3DRenderTarget(opt, false, this));
-  if (rt->Init((D3DTexture2DArray*)texture, slice)) {
+  if (rt->InitFor2DArray(texture, slice)) {
     return rt;
   } else {
     return NULL;

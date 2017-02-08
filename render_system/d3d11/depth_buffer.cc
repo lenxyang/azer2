@@ -160,9 +160,10 @@ void D3DDepthBuffer::InitDepthStencilViewDesc(D3D11_DEPTH_STENCIL_VIEW_DESC *des
   }
 }
 
-bool D3DDepthBuffer::Init(D3DTexture2DArray* tex, const Texture2DArray::Slice& slice) {
+bool D3DDepthBuffer::InitFor2DArray(Texture* tex, const Texture2DArraySlice& slice) {
   DCHECK(!texture_.get());
   DCHECK(tex->options().target & kBindTargetDepthStencil);
+  CHECK(tex->type() == TexType::k2DArray || tex->type() == TexType::kCubemap);
   texture_ = tex;
   ID3D11Device* d3d_device = render_system_->GetDevice();
   HRESULT hr;

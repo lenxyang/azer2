@@ -33,14 +33,14 @@ class D3DRenderSystem : public RenderSystem {
   DepthBufferPtr CreateDepthBuffer(const DepthBuffer::Options& opt, 
                                    Texture2D* texture) override;
   DepthBufferPtr CreateDepthBuffer(const DepthBuffer::Options& opt, 
-                                   const Texture2DArray::Slice& slice, 
-                                   Texture2DArray* texture) override;
+                                   Texture* texture,
+                                   const Texture2DArraySlice& slice) override;
 
   RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
                                      Texture2D* texture) override;
   RenderTargetPtr CreateRenderTarget(const RenderTarget::Options& opt, 
-                                     const Texture2DArray::Slice& slice, 
-                                     Texture2DArray* texture) override;
+                                     Texture* texture,
+                                     const Texture2DArraySlice& slice) override;
 
   RendererPtr CreateRenderer(RenderTargetPtrs* targets, DepthBuffer* depth) override;
   BlendingPtr CreateBlending(const Blending::BlendDesc& desc) override;

@@ -43,7 +43,7 @@ class D3DDepthBuffer : public DepthBuffer {
   ~D3DDepthBuffer() override;
 
   bool Init(D3DTexture2D* tex);
-  bool Init(D3DTexture2DArray* tex, const Texture2DArray::Slice& slice);
+  bool InitFor2DArray(Texture* tex, const Texture2DArraySlice& slice);
   void SetName(const std::string& name) override;
   void Clear(D3DRenderer*, bool clear_depth, bool clear_stencil, float depth_val,
              int stencil_val);

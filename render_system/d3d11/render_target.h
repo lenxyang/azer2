@@ -25,7 +25,7 @@ class D3DRenderTarget : public RenderTarget {
   void Clear(const azer::Vector4& color) override;
 
   bool Init(D3DTexture2D* tex);
-  bool Init(D3DTexture2DArray* tex, const Texture2DArray::Slice& slice);
+  bool InitFor2DArray(Texture* tex, const Texture2DArraySlice& slice);
   ID3D11RenderTargetView* GetD3DRenderTargetView() { return target_;}
   NativeGpuResourceViewHandle native_handle() override;
  protected:

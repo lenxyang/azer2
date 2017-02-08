@@ -101,6 +101,16 @@ struct AZER_EXPORT TexSize {
 AZER_EXPORT bool operator == (const TexSize& t1, const TexSize& t2);
 AZER_EXPORT bool operator != (const TexSize& t1, const TexSize& t2);
 
+struct AZER_EXPORT Texture2DArraySlice {
+  int first_slice;
+  int array_size;
+  int mip_slice;
+
+  Texture2DArraySlice()
+      : first_slice(0), array_size(0), mip_slice(0) {}
+  Texture2DArraySlice(int first, int size, int mip)
+      : first_slice(first), array_size(size), mip_slice(mip) {}
+};
 
 class AZER_EXPORT Texture : public GpuResource {
  public:
@@ -146,12 +156,6 @@ class AZER_EXPORT Texture2D : public Texture {
 
 class AZER_EXPORT Texture2DArray : public Texture {
  public:
-  struct Slice {
-    int first_slice;
-    int array_size;
-    int mip_slice;
-  };
-    
   Texture2DArray(const Options& options, int diminison);
  private:
   DISALLOW_COPY_AND_ASSIGN(Texture2DArray);
