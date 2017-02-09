@@ -199,4 +199,13 @@ Matrix4 Transform::OrthoProjRH(float width, float height, float zn, float zf) {
                  0.0f,         0.0f,          1.0f / z_range,    zn / z_range,
                  0.0f,         0.0f,          0.0f,              1.0f);
 }
+
+Matrix4 Transform::OrthoOffCenterRH(float l, float r, float b, float t, 
+                                    float zn, float zf) {
+  const float z_range = (zn - zf);
+  return Matrix4(2.0f / (r - 1.0f), 0.0f,              0.0f,            0.0f, 
+                 0.0f,              2.0f / (t - b),    0.0f,            0.0f,
+                 0.0f,              0.0f,              1.0f / z_range,  0.0f,
+                 (1 + r) / (1 - r), (t + b) / (b - t), zn / z_range,    1.0f);
+}
 }  // namespace azer

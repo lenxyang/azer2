@@ -1,5 +1,6 @@
-#include "azer/render_system/d3d11/texture.cc"
+#include "azer/render_system/d3d11/texture.h"
 
+#include "azer/base/image.h"
 #include "azer/render_system/d3d11/common.h"
 #include "azer/render_system/d3d11/dx3d_util.h"
 #include "azer/render_system/d3d11/enum_transform.h"
@@ -81,8 +82,5 @@ void D3DTexture3D::unmap() {
   CHECK(false);
 }
 
-bool D3DTexture3D::CopyTo(GpuResource* texres) {
-  return UtilityTextureCopyTo(this, texres);
-}
 }  // namespace d3d11
 }  // namespace azer

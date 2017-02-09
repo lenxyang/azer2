@@ -72,7 +72,7 @@ class AZER_EXPORT Effect : public ::base::RefCounted<Effect> {
   virtual ShaderClosurePtr InitPixelStage(Shader* shader);
   virtual ShaderClosurePtr InitComputeStage(Shader* shader);
 
-  // 设置 shader 的参数的值
+  // 将参数的值保存到 GPU Buffer 当中
   virtual void ApplyShaderParamTable(Renderer* renderer);
 
   std::vector<ShaderClosurePtr> shaders_;

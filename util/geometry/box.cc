@@ -83,7 +83,7 @@ int indices[] = {0, 2, 1, 0, 3, 2,  // front
 int32_t edge_indices[] = {0, 1, 1, 2, 2, 3, 3, 0,
                           0, 4, 1, 5, 2, 6, 7, 3,
                           4, 5, 5, 6, 6, 7, 7, 4,};
-                          
+
 int32_t CalcBoxVertexCount() { return static_cast<int32_t>(arraysize(indices));}
 int32_t CalcBoxIndexCount() { return 0;}
 int32_t CalcBoxFrameIndexCount() { return static_cast<int32_t>(
@@ -275,5 +275,12 @@ EntityDataPtr CreateBox(VertexDesc* desc, const Matrix4& mat) {
 
 EntityDataPtr CreateBoxFrame(VertexDesc* desc, const Matrix4& mat) {
   return CreateHexaHedronFrame(desc, box_position, mat);
+}
+
+int* GetHexaHedronTriangleListIndex() {
+  return indices;
+}
+int* GetHexaHedronFramelineIndex() {
+  return edge_indices;
 }
 }  // namespace azer

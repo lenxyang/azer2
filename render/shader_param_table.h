@@ -21,7 +21,9 @@ class ShaderResView;
 class ShaderParamType {
  public:
   enum Type {
-    kFloat = 1,
+    kLastGuard = -1,
+    kUnknown =  0,
+    kFloat   =  1,
     kVector2 = kVec2,
     kVector3 = kVec3,
     kVector4 = kVec4,
@@ -52,34 +54,19 @@ AZER_EXPORT int32_t GpuTableItemTypeSize(const ShaderParamType::Type type);
 
 class AZER_EXPORT ShaderParamTable : public ::base::RefCounted<ShaderParamTable> {
  public:
-  struct Desc {
+  struct AZER_EXPORT Desc {
     char name[64];
     ShaderParamType::Type type;
     int element_size;
     int32_t num;
     uint32_t offset;
 
-    Desc(const char* n, ShaderParamType::Type t, int32_t off, int elenum)
-        : type(t), element_size(-1),  num(elenum), offset(off) {
-      strncpy(name, n, sizeof(name) - 1);
-      element_size = GpuTableItemTypeSize(t);
-    }
-
-    Desc(const char* n, int32_t off, int size, int elenum)
-        : type(ShaderParamType::kSelfDefined)
-        , element_size(size), num(elenum), offset(off) {
-      strncpy(name, n, sizeof(name) - 1);
-    }
-
-    Desc(const Desc& desc) {
-      strncpy(this->name, desc.name, sizeof(name));
-      this->type = desc.type;
-      this->element_size = desc.element_size;
-      this->num = desc.num;
-      this->offset = desc.offset;
-    }
+    Desc(const char* n, ShaderParamType::Type t, int32_t off, int elenum);
+    Desc(const char* n, int32_t off, int size, int elenum);
+    Desc(const Desc& desc);
   };
 
+  explicit ShaderParamTable(const Desc* desc);
   ShaderParamTable(int32_t num, const Desc* desc);
   virtual ~ShaderParamTable() {}
 

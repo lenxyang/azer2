@@ -51,6 +51,8 @@ class Transform {
   static Matrix4 PerspectiveRH(Radians fovy, float aspect, float near, float far);
   static Matrix4 PerspectiveRH(Degree fovy, float aspect, float near, float far);
   static Matrix4 OrthoProjRH(float width, float height, float z_near, float z_far);
+  static Matrix4 OrthoOffCenterRH(float left, float right, float bottom, float top, 
+                                  float near, float far);
  private:
   Transform() {}
 };

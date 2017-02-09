@@ -101,6 +101,16 @@ Texture::Options InitTexOptForRenderTarget(const gfx::Size& size) {
   return opt;
 }
 
+// class Texture1D
+Texture1D::Texture1D(const Options& options)
+    : Texture(options, TexType::k1D, 1) {
+}
+
+// class Texture1DArray
+Texture1DArray::Texture1DArray(const Options& options, int dim)
+    : Texture(options, TexType::k1DArray, dim) {
+}
+
 // class Texture2D
 Texture2D::Texture2D(const Options& options)
     : Texture(options, TexType::k2D, 1) {

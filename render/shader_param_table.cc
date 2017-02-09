@@ -6,6 +6,54 @@
 #include "azer/render/gpu_buffer.h"
 
 namespace azer {
+ShaderParamTable::Desc::Desc(const char* n, ShaderParamType::Type t, 
+                             int32_t off, int elenum)
+    : type(t), element_size(-1),  num(elenum), offset(off) {
+  if (n)
+    strncpy(name, n, sizeof(name) - 1);
+  element_size = GpuTableItemTypeSize(t);
+}
+
+ShaderParamTable::Desc::Desc(const char* n, int32_t off, int size, int elenum)
+    : type(ShaderParamType::kSelfDefined)
+    , element_size(size), num(elenum), offset(off) {
+  if (name)
+    strncpy(name, n, sizeof(name) - 1);
+}
+
+ShaderParamTable::Desc::Desc(const Desc& desc) {
+  if (desc.name)
+    strncpy(this->name, desc.name, sizeof(name));
+  this->type = desc.type;
+  this->element_size = desc.element_size;
+  this->num = desc.num;
+  this->offset = desc.offset;
+}
+
+ShaderParamTable::ShaderParamTable(const Desc* desc) {
+  uint32_t offset = 0;
+  const Desc* curr = desc;
+  while (curr->type != ShaderParamType::kLastGuard) {
+    const int32_t size = GpuTableItemDescSize(*curr);
+    const int32_t total_size = size * curr->num;
+    DCHECK_LE(offset, curr->offset);
+    offset = curr->offset;
+    DCHECK(offset != -1);
+    constants_.push_back(Variable(*curr, size, total_size, offset));
+    offset += total_size;
+    ++curr;
+  }
+  size_ = AZER_ALIGN_8(offset);
+  data_.reset(new uint8_t[size_]);
+
+  RenderSystem* rs = RenderSystem::Current();
+  CHECK(rs) << "RenderSystem Not Initialized";
+  static GpuResOptions resopt;
+  resopt.target = kBindTargetContantBuffer;
+  resopt.type = GpuResType::kConstantTable;
+  gpu_buffer_ = rs->CreateBuffer(resopt, 1, size_, NULL);
+  CHECK(gpu_buffer_.get()) << "Initializer GpuBuffer for ShaderParam Failed";
+}
 
 ShaderParamTable::ShaderParamTable(int32_t num, const Desc* desc) {
   uint32_t offset = 0;
@@ -116,6 +164,7 @@ int32_t GpuTableItemTypeSize(const ShaderParamType::Type type) {
     case ShaderParamType::kSampler3D: return sizeof(uint32_t);
     case ShaderParamType::kSamplerCube: return sizeof(uint32_t);
     case ShaderParamType::kSelfDefined:
+    case ShaderParamType::kLastGuard:
       return -1;
     default:
       CHECK(false) << "No such ShaderParamType: " << (int32_t)type;

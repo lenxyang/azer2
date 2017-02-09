@@ -146,13 +146,26 @@ public:
   DISALLOW_COPY_AND_ASSIGN(Texture);
 };
 
+class AZER_EXPORT Texture1D : public Texture {
+ public:
+  explicit Texture1D(const Options& options);
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Texture1D);
+};
+
+class AZER_EXPORT Texture1DArray : public Texture {
+ public:
+  explicit Texture1DArray(const Options& options, int dim);
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Texture1DArray);
+};
+
 class AZER_EXPORT Texture2D : public Texture {
  public:
   explicit Texture2D(const Options& options);
  private:
   DISALLOW_COPY_AND_ASSIGN(Texture2D);
 };
-
 
 class AZER_EXPORT Texture2DArray : public Texture {
  public:

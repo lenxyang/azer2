@@ -13,6 +13,8 @@ class VertexDesc;
 // near_right_bottom, near_left_bottom,
 // far_left_top, far_right_top,
 // far_right_bottom, far_left_bottom,
+int* GetHexaHedronTriangleListIndex();
+int* GetHexaHedronFramelineIndex();
 Subset AppendGeoHexaHedronSubset(VertexPack* vp, const Vector4* posvec,
                                  const Matrix4& mat = Matrix4::kIdentity);
 
@@ -29,6 +31,7 @@ void AppendGeoBoxFrameData(EntityData* data, const Matrix4& mat);
 EntityDataPtr CreateBox(VertexDesc* desc, const Matrix4& m = Matrix4::kIdentity);
 EntityDataPtr CreateBoxFrame(VertexDesc* d, const Matrix4& m = Matrix4::kIdentity);
 
+// 创建任意六面体
 EntityDataPtr CreateHexaHedron(VertexDesc* d, const Vector4* vecpos,
                                const Matrix4& m);
 EntityDataPtr CreateHexaHedronFrame(VertexDesc* d, const Vector4* vecpos,
