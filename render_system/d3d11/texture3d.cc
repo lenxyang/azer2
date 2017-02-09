@@ -76,8 +76,13 @@ GpuResLockDataPtr D3DTexture3D::map(MapType type) {
   CHECK(false);
   return NULL;
 }
+
 void D3DTexture3D::unmap() {
   CHECK(false);
+}
+
+bool D3DTexture3D::CopyTo(GpuResource* texres) {
+  return UtilityTextureCopyTo(this, texres);
 }
 }  // namespace d3d11
 }  // namespace azer

@@ -43,7 +43,7 @@ void class_name::Detach() {                                             \
   texres_ = NULL;                                                       \
 }                                                                       \
 bool class_name::CopyTo(GpuResource* texres) {                          \
-  return TextureCopyTo(this, texres);                                   \
+  return UtilityTextureCopyTo(this, texres);                                   \
 }
 
 namespace azer {
@@ -178,8 +178,7 @@ bool D3DTexture2DArray::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
   return true;
 }
 
-namespace {
-bool TextureCopyTo(Texture* src, GpuResource* destres) {
+bool UtilityTextureCopyTo(Texture* src, GpuResource* destres) {
   DCHECK_EQ(destres->resource_type(), GpuResType::kTexture);
   Texture* dest = (Texture*)destres;
   if (src->type() != dest->type()) {
@@ -208,6 +207,7 @@ bool TextureCopyTo(Texture* src, GpuResource* destres) {
   return true;
 }
 
+namespace {
 void InitTexture2DDescFromOptions(const Texture::Options& options,
                                   D3D11_TEXTURE2D_DESC *desc) {
   ZeroMemory(desc, sizeof(D3D11_TEXTURE2D_DESC));

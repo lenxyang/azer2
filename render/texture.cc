@@ -121,7 +121,6 @@ Texture3D::Texture3D(const Options& options)
     : Texture(options, TexType::k3D, 1) {
 }
 
-
 const char* GetTexFormatName(TexFormat format) {
   switch (format) {
     case TexFormat::kBGRA8Sint: return "kTexBGRA8Sint";

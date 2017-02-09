@@ -106,5 +106,6 @@ class D3DTexture3D: public Texture3D {
   DISALLOW_COPY_AND_ASSIGN(D3DTexture3D);
 };
 
+bool UtilityTextureCopyTo(Texture* src, GpuResource* destres);
 }  // namespace d3d11
 }  // namespace azer
