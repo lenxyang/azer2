@@ -21,26 +21,7 @@ void class_name::SetName(const std::string& name) {                     \
   DCHECK(texres_);                                                      \
   texres_->SetPrivateData(WKPDID_D3DDebugObjectName,                    \
                           (UINT)name.length(), name.c_str());           \
-}
-
-#define IMPLEMENT_ATTACH(class_name)                                    \
-void class_name::Attach(ID3D11Texture2D* tex) {                         \
-  DCHECK(texres_ == NULL);                                              \
-  DCHECK(tex != NULL);                                                  \
-  texres_ = tex;                                                        \
-  texres_->AddRef();                                                    \
 }                                                                       \
-void class_name::Detach() {                                             \
-  SAFE_RELEASE(texres_);                                                \
-  texres_ = NULL;                                                       \
-}
-
-#define IMPLEMENT_COPYTO(class_name)                                    \
-bool class_name::CopyTo(GpuResource* texres) {                          \
-  return TextureCopyTo(this, texres);                                   \
-}
-
-#define IMPLEMENT_TEXMAP(class_name)                               \
 GpuResLockDataPtr class_name::map(MapType flags) {                      \
   map_helper_ = new GpuResLockHelper(resource_options(), texres_);      \
   return map_helper_->map(flags);                                       \
@@ -51,6 +32,19 @@ void class_name::unmap() {                                              \
   map_helper_->unmap();                                                 \
   map_helper_ = NULL;                                                   \
 }                                                                       \
+void class_name::Attach(ID3D11Texture2D* tex) {                         \
+  DCHECK(texres_ == NULL);                                              \
+  DCHECK(tex != NULL);                                                  \
+  texres_ = tex;                                                        \
+  texres_->AddRef();                                                    \
+}                                                                       \
+void class_name::Detach() {                                             \
+  SAFE_RELEASE(texres_);                                                \
+  texres_ = NULL;                                                       \
+}                                                                       \
+bool class_name::CopyTo(GpuResource* texres) {                          \
+  return TextureCopyTo(this, texres);                                   \
+}
 
 namespace azer {
 namespace d3d11 {
@@ -59,26 +53,11 @@ namespace {
 bool TextureCopyTo(Texture* src, GpuResource* destres);
 void InitTexture2DDescFromOptions(const Texture::Options& options,
                                   D3D11_TEXTURE2D_DESC *desc);
-void InitTexture3DDescFromOptions(const Texture::Options& options,
-                                  D3D11_TEXTURE3D_DESC *desc);
 }
 
 IMPLEMENT_TEXMEMBER(D3DTexture2D);
-IMPLEMENT_TEXMAP(D3DTexture2D);
-IMPLEMENT_COPYTO(D3DTexture2D);
-IMPLEMENT_ATTACH(D3DTexture2D);
-
 IMPLEMENT_TEXMEMBER(D3DTexture2DArray);
-IMPLEMENT_TEXMAP(D3DTexture2DArray);
-IMPLEMENT_COPYTO(D3DTexture2DArray);
-IMPLEMENT_ATTACH(D3DTexture2DArray);
-
 IMPLEMENT_TEXMEMBER(D3DTextureCubeMap);
-IMPLEMENT_TEXMAP(D3DTextureCubeMap);
-IMPLEMENT_COPYTO(D3DTextureCubeMap);
-IMPLEMENT_ATTACH(D3DTextureCubeMap);
-
-IMPLEMENT_TEXMEMBER(D3DTexture3D);
 
 // class D3DTexture2D
 D3DTexture2D::D3DTexture2D(const Options& opt, D3DRenderSystem* rs)
@@ -199,54 +178,6 @@ bool D3DTexture2DArray::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
   return true;
 }
 
-// class D3D11Texture3D
-D3DTexture3D::D3DTexture3D(const Options& opt, D3DRenderSystem* rs)
-    : Texture3D(opt),
-      texres_(NULL),
-      render_system_(rs) {
-}
-
-D3DTexture3D::~D3DTexture3D() {
-  SAFE_RELEASE(texres_);
-}
-
-bool D3DTexture3D::Init(const ImageData* image) {
-  // [reference] MSDN: How to: Initialize a Texture Programmatically
-  if (image) {
-    D3D11_SUBRESOURCE_DATA subres[128] = { 0 };
-    for (int i = 0; i < image->level_count(); ++i) {
-      const ImageLevelData* data = image->GetLevelData(i);
-      subres[i].pSysMem = data->dim_data(0);
-      subres[i].SysMemPitch = data->row_bytes();
-      subres[i].SysMemSlicePitch = data->row_bytes() * data->height();
-    }
-    return InitFromData(subres);
-  } else {
-    return InitFromData(NULL);
-  }
-}
-
-bool D3DTexture3D::InitFromData(const D3D11_SUBRESOURCE_DATA* data) {
-  HRESULT hr = S_OK;
-  DCHECK(NULL == native_handle());
-  ID3D11Device* d3d_device = render_system_->GetDevice();
-  ID3D11Texture3D* tex = NULL;
-  InitTexture3DDescFromOptions(options(), &texdesc_);
-  hr = d3d_device->CreateTexture3D(&texdesc_, data, &tex);
-  HRESULT_HANDLE(hr, ERROR, "CreateTexture2D failed ");
-
-  texres_ = tex;
-  return true;
-}
-
-GpuResLockDataPtr D3DTexture3D::map(MapType type) {
-  CHECK(false);
-  return NULL;
-}
-void D3DTexture3D::unmap() {
-  CHECK(false);
-}
-
 namespace {
 bool TextureCopyTo(Texture* src, GpuResource* destres) {
   DCHECK_EQ(destres->resource_type(), GpuResType::kTexture);
@@ -291,20 +222,6 @@ void InitTexture2DDescFromOptions(const Texture::Options& options,
   desc->BindFlags      = TranslateBindTarget(options.target);
   desc->CPUAccessFlags = TranslateCPUAccess(options.cpu_access);
   desc->MiscFlags      = options.genmipmap ? D3D11_RESOURCE_MISC_GENERATE_MIPS : 0;
-}
-
-void InitTexture3DDescFromOptions(const Texture::Options& options,
-                                  D3D11_TEXTURE3D_DESC *desc) {
-  ZeroMemory(desc, sizeof(D3D11_TEXTURE3D_DESC));
-  desc->BindFlags = D3D10_BIND_SHADER_RESOURCE;
-  desc->CPUAccessFlags = 0;
-  desc->Depth = options.size.depth;
-  desc->Height = options.size.height;
-  desc->Width = options.size.width;
-  desc->Format = TranslateTexFormat(options.format);
-  desc->Usage = TranslateUsage(options.usage);
-  desc->MipLevels = 1;
-  desc->MiscFlags = 0;
 }
 }
 }  // namespace d3d11

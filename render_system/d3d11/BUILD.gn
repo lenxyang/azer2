@@ -39,6 +39,7 @@ shared_library("d3d11") {
     "texture_view.cc",
     "texture_view.h",
     "texture.cc",
+    "texture3d.cc",
     "texture.h",
     "vertex_layout.cc",
     "vertex_layout.h",
