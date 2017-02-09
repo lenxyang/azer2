@@ -219,6 +219,10 @@ const Matrix4& Camera::GetViewMatrix() const {
   return view_mat_;
 }
 
+const Matrix4& Camera::GetProjectionMatrix() const {
+  return frustum_.projection();
+}
+
 const Matrix4& Camera::GetProjViewMatrix() const { 
   if (modified_) {
     const_cast<Camera*>(this)->UpdateMatrix();

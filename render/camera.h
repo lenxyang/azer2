@@ -34,6 +34,7 @@ class AZER_EXPORT Camera {
 
   const Matrix4& GetViewMatrix() const;
   const Matrix4& GetProjViewMatrix() const;
+  const Matrix4& GetProjectionMatrix() const;
 
   const Vector3& position() const;
   Vector3 right() const;

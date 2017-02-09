@@ -89,7 +89,7 @@ int32_t CalcBoxIndexCount() { return 0;}
 int32_t CalcBoxFrameIndexCount() { return static_cast<int32_t>(
     arraysize(edge_indices));}
 
-void CalcTriangleListNormal(int32_t base, int32_t vcount, int* indices,
+void CalcTriangleListNormal(int32_t base, int vcount, int* indices,
                             VertexPack* vpack) {
   VertexPos npos;
   if (!GetSemanticIndex("normal", 0, vpack->desc(), &npos)) {
@@ -179,9 +179,42 @@ Subset AppendGeoHexaHedronSubset(VertexPack* vpack, const Vector4* posvec,
   return subset;
 }
 
+Subset AppendGeoHexaHedronIndexedSubset(VertexPack* vpack, IndexPack* ipack,
+                                        const Vector4* posvec, const Matrix4& mat) {
+  VertexPos normal_pos, tex0_pos;
+  GetSemanticIndex("normal", 0, vpack->desc(), &normal_pos);
+  GetSemanticIndex("texcoord", 0, vpack->desc(), &tex0_pos);
+  Subset subset;
+  subset.vertex_base = vpack->index();
+  for (int i = 0; i < 8; ++i) {
+    DCHECK(!vpack->end());
+    Vector4 pos = mat * posvec[i];
+    vpack->WriteVector3Or4(pos, VertexPos(0, 0));
+    UpdateVertexBounds(pos, &subset.vmin, &subset.vmax);
+    vpack->WriteVector2(texcoord0[i], tex0_pos);
+    vpack->WriteVector3Or4(Vector4(0, 0, 0, 0), normal_pos);
+    vpack->next(1);
+  }
+  subset.vertex_count = vpack->index() - subset.vertex_base;
+  
+  subset.index_base = ipack->index();
+  for (uint32_t i = 0; i < arraysize(indices); ++i) {
+    CHECK(ipack->WriteAndAdvance(indices[i]));
+  }
+  subset.index_count = arraysize(indices);
+  
+
+  return subset;
+}
+
 Subset AppendGeoBoxSubset(VertexPack* vp, IndexPack* ipack, 
                           const Matrix4& mat) {
   return AppendGeoHexaHedronSubset(vp, box_position, mat);
+}
+
+Subset AppendGeoBoxIndexedSubset(VertexPack* vp, IndexPack* ipack, 
+                                 const Matrix4& mat) {
+  return AppendGeoHexaHedronIndexedSubset(vp, ipack, box_position, mat);
 }
 
 Subset AppendGeoHexaHedronFrameSubset(VertexPack* vpack, IndexPack* ipack, 
@@ -207,10 +240,23 @@ Subset AppendGeoHexaHedronFrameSubset(VertexPack* vpack, IndexPack* ipack,
   return subset;
 }
 
+void AppendGeoBoxIndexedData(EntityData* data, const Matrix4& mat) {
+  VertexPack vpack(data->vdata());
+  IndexPack ipack(data->idata());
+  const int kVertexCount = CalcBoxVertexCount();
+  const int kIndexCount = arraysize(indices);
+  data->vdata()->extend(kVertexCount);
+  data->idata()->extend(kIndexCount);
+  vpack.move(data->vdata()->vertex_count() - kVertexCount);
+  ipack.move(data->idata()->count() - kIndexCount);
+  Subset sub = AppendGeoBoxIndexedSubset(&vpack, &ipack, mat);
+  data->AddSubset(sub);
+}
+
 void AppendGeoBoxData(EntityData* data, const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  const int32_t kVertexCount = CalcBoxVertexCount();
+  const int kVertexCount = CalcBoxVertexCount();
   data->vdata()->extend(kVertexCount);
   vpack.move(data->vdata()->vertex_count() - kVertexCount);
   Subset sub = AppendGeoBoxSubset(&vpack, &ipack, mat);
@@ -221,10 +267,24 @@ void AppendGeoHexaHedronData(EntityData* data, const Vector4* vecpos,
                              const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  const int32_t kVertexCount = CalcBoxVertexCount();
+  const int kVertexCount = CalcBoxVertexCount();
   data->vdata()->extend(kVertexCount);
   vpack.move(data->vdata()->vertex_count() - kVertexCount);
   Subset sub = AppendGeoHexaHedronSubset(&vpack, vecpos, mat);
+  data->AddSubset(sub);
+}
+
+void AppendGeoHexaHedronIndexedData(EntityData* data, const Vector4* vecpos, 
+                                    const Matrix4& mat) {
+  VertexPack vpack(data->vdata());
+  IndexPack ipack(data->idata());
+  const int kVertexCount = CalcBoxVertexCount();
+  const int kIndexCount = (int)arraysize(indices);
+  data->vdata()->extend(kVertexCount);
+  data->idata()->extend(kIndexCount);
+  vpack.move(data->vdata()->vertex_count() - kVertexCount);
+  ipack.move(data->idata()->count() - kIndexCount);
+  Subset sub = AppendGeoHexaHedronIndexedSubset(&vpack, &ipack, vecpos, mat);
   data->AddSubset(sub);
 }
 
@@ -232,8 +292,8 @@ void AppendGeoHexaHedronFrameData(EntityData* data, const Vector4* posvec,
                                   const Matrix4& mat) {
   VertexPack vpack(data->vdata());
   IndexPack ipack(data->idata());
-  const int32_t kVertexCount = 8;
-  const int32_t kIndexCount = CalcBoxFrameIndexCount();
+  const int kVertexCount = 8;
+  const int kIndexCount = CalcBoxFrameIndexCount();
   data->vdata()->extend(kVertexCount);
   data->idata()->extend(kIndexCount);
   vpack.move(data->vdata()->vertex_count() - kVertexCount);
@@ -261,6 +321,15 @@ EntityDataPtr CreateHexaHedronFrame(VertexDesc* desc, const Vector4* vecpos,
   IndicesDataPtr idata(new IndicesData(1));
   EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
   AppendGeoHexaHedronData(data.get(), vecpos, mat);
+  return data;
+}
+
+
+EntityDataPtr CreateBoxIndexed(VertexDesc* desc, const Matrix4& mat) {
+  VertexDataPtr vdata(new VertexData(desc, 1));
+  IndicesDataPtr idata(new IndicesData(1));
+  EntityDataPtr data(new EntityData(vdata.get(), idata.get()));
+  AppendGeoBoxIndexedData(data.get(), mat);
   return data;
 }
 
