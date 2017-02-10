@@ -23,8 +23,8 @@ source_set("render") {
   sources = [
     "blending.cc",
     "blending.h",
-    "bounding_volumn.cc",
-    "bounding_volumn.h",
+    "bounding_volume.cc",
+    "bounding_volume.h",
     "camera.cc",
     "camera.h",
     "common.cc",

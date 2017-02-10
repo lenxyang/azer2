@@ -1,6 +1,6 @@
 #include "azer/util/geometry/util.h"
 
-#include "azer/render/bounding_volumn.h"
+#include "azer/render/bounding_volume.h"
 #include "azer/render/indices_buffer.h"
 #include "azer/render/index_pack.h"
 #include "azer/render/vertex_buffer.h"

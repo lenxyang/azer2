@@ -2,7 +2,7 @@
 
 #include "base/logging.h"
 #include "azer/effect/effect_params_adapter.h"
-#include "azer/render/bounding_volumn.h"
+#include "azer/render/bounding_volume.h"
 #include "azer/render/render_system.h"
 #include "azer/render/vertex_buffer.h"
 

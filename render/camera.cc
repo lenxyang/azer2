@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "azer/math/math.h"
-#include "azer/render/bounding_volumn.h"
+#include "azer/render/bounding_volume.h"
 
 namespace azer {
 

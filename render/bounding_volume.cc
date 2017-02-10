@@ -1,10 +1,10 @@
-#include "azer/render/bounding_volumn.h"
+#include "azer/render/bounding_volume.h"
 
 #include <limits>
 #include "base/logging.h"
 
 namespace azer {
-BoundingVolumn::BoundingVolumn(BoundingVolumnType type)
+BoundingVolume::BoundingVolume(BoundingVolumeType type)
     : type_(type) {
 }
 
@@ -18,7 +18,7 @@ const int kIndices[] = {0, 2, 1, 0, 3, 2,  // front
 };
 
 AxisAlignedBoundingBox::AxisAlignedBoundingBox(Vector3 vmin, Vector3 vmax) 
-    : BoundingVolumn(kAxisAlignedBoundingBox), vmin_(vmin), vmax_(vmax) {
+    : BoundingVolume(kAxisAlignedBoundingBox), vmin_(vmin), vmax_(vmax) {
   Vector3 pt[8]; 
   pt[0] = Vector3(vmin_.x, vmax_.y,  vmax_.z);
   pt[1] = Vector3(vmax_.x, vmax_.y,  vmax_.z);

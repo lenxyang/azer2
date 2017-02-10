@@ -15,22 +15,22 @@ class Renderer;
 class Matrix4;
 class Frustum;
 
-enum BoundingVolumnType {
-  kNoBoundingVolumn,
+enum BoundingVolumeType {
+  kNoBoundingVolume,
   kBoundingSphere,
   kAxisAlignedBoundingBox,
   kOrientedBoundingBox,
 };
 
-class AZER_EXPORT BoundingVolumn {
+class AZER_EXPORT BoundingVolume {
  public:
-  BoundingVolumnType type() const { return type_;}
+  BoundingVolumeType type() const { return type_;}
  protected:
-  explicit BoundingVolumn(BoundingVolumnType type);
-  BoundingVolumnType type_;
+  explicit BoundingVolume(BoundingVolumeType type);
+  BoundingVolumeType type_;
 };
 
-class AZER_EXPORT AxisAlignedBoundingBox : public BoundingVolumn {
+class AZER_EXPORT AxisAlignedBoundingBox : public BoundingVolume {
  public:
   AxisAlignedBoundingBox(Vector3 vmin, Vector3 vmax);
 
